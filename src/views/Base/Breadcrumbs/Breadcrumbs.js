@@ -9,9 +9,15 @@ class Breadcrumbs extends Component {
           <Col xs="12">
             <Card>
               <CardHeader>
-                <i className="fa fa-align-justify"></i><strong>Breadcrumbs</strong>
+                <i className="fa fa-align-justify"></i>
+                <strong>Breadcrumbs</strong>
                 <div className="card-header-actions">
-                  <a href="https://reactstrap.github.io/components/breadcrumbs/" rel="noreferrer noopener" target="_blank" className="card-header-action">
+                  <a
+                    href="https://reactstrap.github.io/components/breadcrumbs/"
+                    rel="noreferrer noopener"
+                    target="_blank"
+                    className="card-header-action"
+                  >
                     <small className="text-muted">docs</small>
                   </a>
                 </div>
@@ -33,10 +39,18 @@ class Breadcrumbs extends Component {
                   <BreadcrumbItem active>Data</BreadcrumbItem>
                 </Breadcrumb>
                 <Breadcrumb tag="nav">
-                  <BreadcrumbItem tag="a" href="#">Home</BreadcrumbItem>
-                  <BreadcrumbItem tag="a" href="#">Library</BreadcrumbItem>
-                  <BreadcrumbItem tag="a" href="#">Data</BreadcrumbItem>
-                  <BreadcrumbItem active tag="span">Bootstrap</BreadcrumbItem>
+                  <BreadcrumbItem tag="a" href="#">
+                    Home
+                  </BreadcrumbItem>
+                  <BreadcrumbItem tag="a" href="#">
+                    Library
+                  </BreadcrumbItem>
+                  <BreadcrumbItem tag="a" href="#">
+                    Data
+                  </BreadcrumbItem>
+                  <BreadcrumbItem active tag="span">
+                    Bootstrap
+                  </BreadcrumbItem>
                 </Breadcrumb>
               </CardBody>
             </Card>

@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 // import { renderRoutes } from 'react-router-config';
-import './App.scss';
-import history from './common/history'
-import { Provider } from 'react-redux'
-import store from './redux/store'
 
-const loading = () => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
+import history from './common/history';
+import store from './redux/store';
+import './App.scss';
+
+const loading = (): React.ReactElement => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
 
 // Containers
 const Layout = React.lazy(() => import('./containers'));
@@ -17,9 +18,8 @@ const Register = React.lazy(() => import('./views/Pages/Register'));
 const Page404 = React.lazy(() => import('./views/Pages/Page404'));
 const Page500 = React.lazy(() => import('./views/Pages/Page500'));
 
-class App extends Component {
-
-  render() {
+class App extends React.Component {
+  public render(): React.ReactElement {
     return (
       <Provider store={store}>
         <Router history={history}>
@@ -34,9 +34,8 @@ class App extends Component {
           </React.Suspense>
         </Router>
       </Provider>
-    )
+    );
   }
-
 }
 
-export default App
+export default App;

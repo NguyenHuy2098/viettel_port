@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { mount } from 'enzyme'
+import { mount } from 'enzyme';
 import Dropdowns from './Dropdowns';
 
 it('renders without crashing', () => {
@@ -10,12 +10,12 @@ it('renders without crashing', () => {
 });
 it('toggle click without crashing', () => {
   const wrapper = mount(<Dropdowns />);
-  for (let i=0; i<5; i++) {
+  for (let i = 0; i < 5; i++) {
     let Dropdown = wrapper.find('button.dropdown-toggle').at(i);
     Dropdown.simulate('click');
     expect(wrapper.state().dropdownOpen[i]).toEqual(true);
   }
-  for (let i=0; i<2; i++) {
+  for (let i = 0; i < 2; i++) {
     let Dropdown = wrapper.find('[data-toggle="dropdown"]').at(0);
     Dropdown.simulate('click');
     expect(wrapper.state().dropdownOpen[5]).toEqual(true);
@@ -23,5 +23,5 @@ it('toggle click without crashing', () => {
     DropdownItem.simulate('click');
     expect(wrapper.state().dropdownOpen[5]).toEqual(false);
   }
-  wrapper.unmount()
+  wrapper.unmount();
 });

@@ -16,7 +16,6 @@ const defaultProps = {
 
 class Widget03 extends Component {
   render() {
-
     // eslint-disable-next-line
     const { children, className, cssModule, dataBox, ...attributes } = this.props;
 
@@ -25,7 +24,7 @@ class Widget03 extends Component {
     const variant = data.variant;
 
     if (!variant || ['facebook', 'twitter', 'linkedin', 'google-plus'].indexOf(variant) < 0) {
-      return (null);
+      return null;
     }
 
     const back = 'bg-' + variant;

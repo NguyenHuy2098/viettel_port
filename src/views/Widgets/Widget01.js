@@ -27,7 +27,18 @@ const defaultProps = {
 
 class Widget01 extends Component {
   render() {
-    const { className, cssModule, header, mainText, smallText, color, value, children, variant, ...attributes } = this.props;
+    const {
+      className,
+      cssModule,
+      header,
+      mainText,
+      smallText,
+      color,
+      value,
+      children,
+      variant,
+      ...attributes
+    } = this.props;
 
     // demo purposes only
     const progress = { style: '', color: color, value: value };
