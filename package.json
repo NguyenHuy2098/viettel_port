@@ -47,6 +47,8 @@
     "typescript": "^3.5.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "@types/react-redux": "^7.0.9",
     "@types/react-router-dom": "^4.3.3",
     "@typescript-eslint/eslint-plugin": "^1.10.2",
@@ -66,6 +68,7 @@
   },
   "scripts": {
     "build": "env-cmd -e production react-scripts build",
+    "commit": "npx git-cz",
     "eject": "react-scripts eject",
     "lint": "npm run lint:eslint:fix -- .",
     "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern public/ --ext .js,.jsx,.tsx,.ts",
@@ -75,9 +78,15 @@
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand"
   },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
   "lint-staged": {
