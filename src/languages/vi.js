@@ -1,7 +1,7 @@
 const vi = {
   translation: {
-    "Welcome to React": "Welcome to React and react-i18next - VI"
-  }
-}
+    'Welcome to React': 'Welcome to React and react-i18next - VI',
+  },
+};
 
-export default vi
+export default vi;

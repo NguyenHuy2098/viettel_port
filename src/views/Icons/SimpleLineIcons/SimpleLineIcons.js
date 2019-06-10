@@ -11,7 +11,6 @@ class SimpleLineIcons extends Component {
           </CardHeader>
           <CardBody>
             <Row className="text-center">
-
               <Col xs="6" sm="4" md="3">
                 <i className="icon-user icons font-2xl d-block mt-4"></i>icon-user
               </Col>
@@ -743,7 +742,6 @@ class SimpleLineIcons extends Component {
               <Col xs="6" sm="4" md="3">
                 <i className="icon-social-dropbox icons font-2xl d-block mt-4"></i>icon-social-dropbox
               </Col>
-
             </Row>
           </CardBody>
         </Card>

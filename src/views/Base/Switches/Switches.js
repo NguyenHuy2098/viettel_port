@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
-import { AppSwitch } from '@coreui/react'
+import { AppSwitch } from '@coreui/react';
 
 class Switches extends Component {
   render() {
     return (
       <div className="animated fadeIn">
-
         <Row>
           <Col xs="12" md="6">
             <Card>
-              <CardHeader>
-                Switch default
-              </CardHeader>
+              <CardHeader>Switch default</CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} color={'primary'} checked />
                 <AppSwitch className={'mx-1'} color={'secondary'} checked />
@@ -28,9 +25,7 @@ class Switches extends Component {
           </Col>
           <Col xs="12" md="6">
             <Card>
-              <CardHeader>
-                Switch pills
-              </CardHeader>
+              <CardHeader>Switch pills</CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} checked />
                 <AppSwitch className={'mx-1'} variant={'pill'} color={'secondary'} checked />
@@ -47,8 +42,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                3d Switch
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                3d Switch{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} defaultChecked />
@@ -59,15 +56,20 @@ class Switches extends Component {
                 <AppSwitch className={'mx-1'} variant={'3d'} color={'danger'} defaultChecked />
                 <AppSwitch className={'mx-1'} variant={'3d'} color={'light'} defaultChecked />
                 <AppSwitch className={'mx-1'} variant={'3d'} color={'dark'} defaultChecked />
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'}  />
+                <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} />
               </CardBody>
             </Card>
           </Col>
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                3d Switch <small><code>disabled</code></small>
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                3d Switch{' '}
+                <small>
+                  <code>disabled</code>
+                </small>{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked disabled />
@@ -86,8 +88,13 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                3d Switch <small><code>outline="alt"</code></small>
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                3d Switch{' '}
+                <small>
+                  <code>outline="alt"</code>
+                </small>{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked outline={'alt'} />
@@ -105,46 +112,212 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                3d Switch <small><code>label</code></small>
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                3d Switch{' '}
+                <small>
+                  <code>label</code>
+                </small>{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'secondary'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'success'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'warning'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'info'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'danger'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'light'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'dark'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} label dataOn={'\u2713'} dataOff={'\u2715'}/>
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'primary'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'secondary'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'success'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'warning'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'info'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'danger'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'light'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'dark'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  color={'primary'}
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
               </CardBody>
             </Card>
           </Col>
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                3d Switch <small><code>outline="alt" label</code></small>
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                3d Switch{' '}
+                <small>
+                  <code>outline="alt" label</code>
+                </small>{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'primary'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'secondary'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'success'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'warning'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'info'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'danger'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'light'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'dark'} defaultChecked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'primary'} label dataOn={'\u2713'} dataOff={'\u2715'}/>
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'primary'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'secondary'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'success'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'warning'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'info'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'danger'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'light'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'dark'}
+                  defaultChecked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'3d'}
+                  outline={'alt'}
+                  color={'primary'}
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
               </CardBody>
             </Card>
           </Col>
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                3d Switch <small><code>outline="alt" label</code></small>
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                3d Switch{' '}
+                <small>
+                  <code>outline="alt" label</code>
+                </small>{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'3d'} outline={'alt'} color={'primary'} defaultChecked label />
@@ -162,8 +335,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch outline
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch outline{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} color={'primary'} outline checked />
@@ -181,8 +356,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch outline pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch outline pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline checked />
@@ -200,8 +377,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch outline alternative
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch outline alternative{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} color={'primary'} outline={'alt'} checked />
@@ -220,8 +399,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch outline alternative - pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch outline alternative - pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline={'alt'} checked />
@@ -240,8 +421,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} color={'primary'} label checked />
@@ -259,8 +442,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} label checked />
@@ -278,8 +463,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} color={'primary'} outline label checked />
@@ -297,8 +484,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline label checked />
@@ -316,8 +505,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline alternative pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline alternative pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} color={'primary'} outline={'alt'} label checked />
@@ -335,8 +526,10 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline alternative pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline alternative pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
                 <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline={'alt'} label checked />
@@ -355,38 +548,195 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline alternative
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline alternative{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
-                <AppSwitch className={'mx-1'} color={'primary'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'secondary'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'success'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'warning'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'info'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} color={'danger'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'light'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'dark'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'primary'} outline disabled label dataOn={'\u2713'} dataOff={'\u2715'}/>
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'primary'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'secondary'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'success'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'warning'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'info'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'danger'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'light'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'dark'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'primary'}
+                  outline
+                  disabled
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
               </CardBody>
             </Card>
           </Col>
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline alternative pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline alternative pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'secondary'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'success'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'warning'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'info'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'danger'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'light'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'dark'} outline checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline disabled label dataOn={'\u2713'} dataOff={'\u2715'}/>
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'primary'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'secondary'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'success'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'warning'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'info'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'danger'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'light'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'dark'}
+                  outline
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'primary'}
+                  outline
+                  disabled
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
               </CardBody>
             </Card>
           </Col>
@@ -394,99 +744,244 @@ class Switches extends Component {
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline alternative
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline alternative{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
-                <AppSwitch className={'mx-1'} color={'primary'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'secondary'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'success'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'warning'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'info'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} color={'danger'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'light'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'dark'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'}/>
-                <AppSwitch className={'mx-1'} color={'primary'} outline={'alt'} disabled label dataOn={'\u2713'} dataOff={'\u2715'}/>
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'primary'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'secondary'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'success'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'warning'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'info'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'danger'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'light'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'dark'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  color={'primary'}
+                  outline={'alt'}
+                  disabled
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
               </CardBody>
             </Card>
           </Col>
           <Col xs="12" md="6">
             <Card>
               <CardHeader>
-                Switch with text outline alternative pills
-                {' '}<a href="https://coreui.io/pro/react/" className="badge badge-danger">CoreUI Pro</a>
+                Switch with text outline alternative pills{' '}
+                <a href="https://coreui.io/pro/react/" className="badge badge-danger">
+                  CoreUI Pro
+                </a>
               </CardHeader>
               <CardBody>
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'secondary'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'success'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'warning'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'info'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'danger'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'light'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'dark'} outline={'alt'} checked label dataOn={'\u2713'} dataOff={'\u2715'} />
-                <AppSwitch className={'mx-1'} variant={'pill'} color={'primary'} outline={'alt'} disabled label dataOn={'\u2713'} dataOff={'\u2715'}/>
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'primary'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'secondary'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'success'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'warning'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'info'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'danger'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'light'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'dark'}
+                  outline={'alt'}
+                  checked
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
+                <AppSwitch
+                  className={'mx-1'}
+                  variant={'pill'}
+                  color={'primary'}
+                  outline={'alt'}
+                  disabled
+                  label
+                  dataOn={'\u2713'}
+                  dataOff={'\u2715'}
+                />
               </CardBody>
             </Card>
           </Col>
 
           <Col xs="12">
             <Card>
-              <CardHeader>
-                Sizes
-              </CardHeader>
+              <CardHeader>Sizes</CardHeader>
               <CardBody className="p-0">
                 <Table hover striped className="table-align-middle mb-0">
                   <thead>
-                  <tr>
-                    <th>Size</th>
-                    <th>Example</th>
-                    <th>Props</th>
-                  </tr>
+                    <tr>
+                      <th>Size</th>
+                      <th>Example</th>
+                      <th>Props</th>
+                    </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>
-                      Large
-                    </td>
-                    <td>
-                      <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked size={'lg'} />
-                    </td>
-                    <td>
-                      Add <code>size={'lg'}</code>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Normal
-                    </td>
-                    <td>
-                      <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked  />
-                    </td>
-                    <td>
-                      -
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      Small
-                    </td>
-                    <td>
-                      <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked size={'sm'} />
-                    </td>
-                    <td>
-                      Add <code>size={'sm'}</code>
-                    </td>
-                  </tr>
+                    <tr>
+                      <td>Large</td>
+                      <td>
+                        <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked size={'lg'} />
+                      </td>
+                      <td>
+                        Add <code>size={'lg'}</code>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Normal</td>
+                      <td>
+                        <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked />
+                      </td>
+                      <td>-</td>
+                    </tr>
+                    <tr>
+                      <td>Small</td>
+                      <td>
+                        <AppSwitch className={'mx-1'} variant={'3d'} color={'primary'} checked size={'sm'} />
+                      </td>
+                      <td>
+                        Add <code>size={'sm'}</code>
+                      </td>
+                    </tr>
                   </tbody>
                 </Table>
               </CardBody>
             </Card>
           </Col>
-
         </Row>
       </div>
-
     );
   }
 }

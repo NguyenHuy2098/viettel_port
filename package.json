@@ -1,15 +1,14 @@
 {
-  "name": "API-Admin",
+  "name": "SIP-Admin",
   "version": "2.5.0",
-  "description": "API-Admin",
-  "author": "API-Admin",
-  "homepage": "https://coreui.io",
-  "copyright": "API-Admin",
-  "license": "MIT",
+  "description": "SIP-Admin",
+  "author": "SIP-Admin",
+  "copyright": "vtpostek",
+  "license": "UNLICENSED",
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/vtptek/SPI-Admin"
+    "url": "https://gitlab.com/vtptek/SIP-Admin"
   },
   "dependencies": {
     "@coreui/coreui": "^2.1.9",
@@ -48,24 +47,54 @@
     "typescript": "^3.5.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
     "@types/react-redux": "^7.0.9",
     "@types/react-router-dom": "^4.3.3",
+    "@typescript-eslint/eslint-plugin": "^1.10.2",
+    "@typescript-eslint/parser": "^1.10.2",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-config-react-app": "^4.0.1",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-lodash": "^5.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^2.4.0",
+    "lint-staged": "^8.2.0",
+    "prettier": "^1.18.2",
     "react-scripts": "^3.0.1",
     "redux-devtools-extension": "^2.13.8"
   },
   "scripts": {
-    "start": "env-cmd -e development react-scripts start",
     "build": "env-cmd -e production react-scripts build",
+    "commit": "npx git-cz",
+    "eject": "react-scripts eject",
+    "lint": "npm run lint:eslint:fix -- .",
+    "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern public/ --ext .js,.jsx,.tsx,.ts",
+    "lint:eslint:fix": "npm run lint:eslint -- --fix",
+    "start": "env-cmd -e development react-scripts start",
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
-    "test:debug": "react-scripts --inspect-brk test --runInBand",
-    "eject": "react-scripts eject"
+    "test:debug": "react-scripts --inspect-brk test --runInBand"
   },
-  "bugs": {
-    "url": "https://gitlab.com/vtptek/SPI-Admin/issues"
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --ignore-path .gitignore --ignore-pattern static/ --ext .js,.ts,.tsx --fix",
+      "jest --passWithNoTests",
+      "git add"
+    ]
   },
   "browserslist": [
     ">0.2%",

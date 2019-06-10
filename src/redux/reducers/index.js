@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux'
-import { hello, helloSaga } from './hello/index'
+import { combineReducers } from 'redux';
+import { hello, helloSaga } from './hello/index';
 
-const reducers = combineReducers({ hello, helloSaga })
+const reducers = combineReducers({ hello, helloSaga });
 
-export default reducers
+export default reducers;

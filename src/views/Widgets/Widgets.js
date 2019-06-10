@@ -6,9 +6,8 @@ import Widget03 from './Widget03';
 import Widget04 from './Widget04';
 import { Line } from 'react-chartjs-2';
 
-
 // Brand Card Chart
-const makeSocialBoxData = (dataSetNo) => {
+const makeSocialBoxData = dataSetNo => {
   const socialBoxData = [
     { data: [65, 59, 84, 84, 51, 55, 40], label: 'facebook' },
     { data: [1, 13, 9, 17, 34, 41, 38], label: 'twitter' },
@@ -43,11 +42,13 @@ const socialChartOpts = {
     xAxes: [
       {
         display: false,
-      }],
+      },
+    ],
     yAxes: [
       {
         display: false,
-      }],
+      },
+    ],
   },
   elements: {
     point: {
@@ -76,8 +77,13 @@ class Widgets extends Component {
             </Widget01>
           </Col>
           <Col xs="12" sm="6" lg="3">
-            <Widget01 color="danger" value="95" header="1.9 TB" mainText="Danger!"
-                      smallText="This is your final warning..." />
+            <Widget01
+              color="danger"
+              value="95"
+              header="1.9 TB"
+              mainText="Danger!"
+              smallText="This is your final warning..."
+            />
           </Col>
           <Col xs="12" sm="6" lg="3">
             <Widget01 color="primary" variant="inverse" header="89.9%" />
@@ -91,8 +97,14 @@ class Widgets extends Component {
             </Widget01>
           </Col>
           <Col xs="12" sm="6" lg="3">
-            <Widget01 color="info" variant="inverse" value="95" header="1.9 TB" mainText="Danger!"
-                      smallText="This is your final warning..." />
+            <Widget01
+              color="info"
+              variant="inverse"
+              value="95"
+              header="1.9 TB"
+              mainText="Danger!"
+              smallText="This is your final warning..."
+            />
           </Col>
         </Row>
         <Row>
@@ -149,28 +161,28 @@ class Widgets extends Component {
         </Row>
         <Row>
           <Col xs={12} sm={6} md={3}>
-            <Widget03 dataBox={() => ({ variant: 'facebook', friends: '89k', feeds: '459' })} >
+            <Widget03 dataBox={() => ({ variant: 'facebook', friends: '89k', feeds: '459' })}>
               <div className="chart-wrapper">
                 <Line data={makeSocialBoxData(0)} options={socialChartOpts} height={90} />
               </div>
             </Widget03>
           </Col>
           <Col xs={12} sm={6} md={3}>
-            <Widget03 dataBox={() => ({ variant: 'twitter', followers: '973k', tweets: '1.792' })} >
+            <Widget03 dataBox={() => ({ variant: 'twitter', followers: '973k', tweets: '1.792' })}>
               <div className="chart-wrapper">
                 <Line data={makeSocialBoxData(1)} options={socialChartOpts} height={90} />
               </div>
             </Widget03>
           </Col>
           <Col xs={12} sm={6} md={3}>
-            <Widget03 dataBox={() => ({ variant: 'linkedin', contacts: '500+', feeds: '292' })} >
+            <Widget03 dataBox={() => ({ variant: 'linkedin', contacts: '500+', feeds: '292' })}>
               <div className="chart-wrapper">
                 <Line data={makeSocialBoxData(2)} options={socialChartOpts} height={90} />
               </div>
             </Widget03>
           </Col>
           <Col xs={12} sm={6} md={3}>
-            <Widget03 dataBox={() => ({ variant: 'google-plus', followers: '894', circles: '92' })} >
+            <Widget03 dataBox={() => ({ variant: 'google-plus', followers: '894', circles: '92' })}>
               <div className="chart-wrapper">
                 <Line data={makeSocialBoxData(3)} options={socialChartOpts} height={90} />
               </div>
@@ -178,50 +190,84 @@ class Widgets extends Component {
           </Col>
         </Row>
         <CardGroup className="mb-4">
-          <Widget04 icon="icon-people" color="info" header="87.500" value="25">Visitors</Widget04>
-          <Widget04 icon="icon-user-follow" color="success" header="385" value="25">New Clients</Widget04>
-          <Widget04 icon="icon-basket-loaded" color="warning" header="1238" value="25">Products sold</Widget04>
-          <Widget04 icon="icon-pie-chart" color="primary" header="28%" value="25">Returning Visitors</Widget04>
-          <Widget04 icon="icon-speedometer" color="danger" header="5:34:11" value="25">Avg. Time</Widget04>
+          <Widget04 icon="icon-people" color="info" header="87.500" value="25">
+            Visitors
+          </Widget04>
+          <Widget04 icon="icon-user-follow" color="success" header="385" value="25">
+            New Clients
+          </Widget04>
+          <Widget04 icon="icon-basket-loaded" color="warning" header="1238" value="25">
+            Products sold
+          </Widget04>
+          <Widget04 icon="icon-pie-chart" color="primary" header="28%" value="25">
+            Returning Visitors
+          </Widget04>
+          <Widget04 icon="icon-speedometer" color="danger" header="5:34:11" value="25">
+            Avg. Time
+          </Widget04>
         </CardGroup>
         <Row>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-people" color="info" header="87.500" value="25">Visitors</Widget04>
+            <Widget04 icon="icon-people" color="info" header="87.500" value="25">
+              Visitors
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-user-follow" color="success" header="385" value="25">New Clients</Widget04>
+            <Widget04 icon="icon-user-follow" color="success" header="385" value="25">
+              New Clients
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-basket-loaded" color="warning" header="1238" value="25">Products sold</Widget04>
+            <Widget04 icon="icon-basket-loaded" color="warning" header="1238" value="25">
+              Products sold
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-pie-chart" color="primary" header="28%" value="25">Returning Visitors</Widget04>
+            <Widget04 icon="icon-pie-chart" color="primary" header="28%" value="25">
+              Returning Visitors
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-speedometer" color="danger" header="5:34:11" value="25">Avg. Time</Widget04>
+            <Widget04 icon="icon-speedometer" color="danger" header="5:34:11" value="25">
+              Avg. Time
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-speech" color="info" header="972" value="25">Comments</Widget04>
+            <Widget04 icon="icon-speech" color="info" header="972" value="25">
+              Comments
+            </Widget04>
           </Col>
         </Row>
         <Row>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-people" color="info" header="87.500" value="25" invert>Visitors</Widget04>
+            <Widget04 icon="icon-people" color="info" header="87.500" value="25" invert>
+              Visitors
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-user-follow" color="success" header="385" value="25" invert>New Clients</Widget04>
+            <Widget04 icon="icon-user-follow" color="success" header="385" value="25" invert>
+              New Clients
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-basket-loaded" color="warning" header="1238" value="25" invert>Products sold</Widget04>
+            <Widget04 icon="icon-basket-loaded" color="warning" header="1238" value="25" invert>
+              Products sold
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-pie-chart" color="primary" header="28%" value="25" invert>Returning Visitors</Widget04>
+            <Widget04 icon="icon-pie-chart" color="primary" header="28%" value="25" invert>
+              Returning Visitors
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-speedometer" color="danger" header="5:34:11" value="25" invert>Avg. Time</Widget04>
+            <Widget04 icon="icon-speedometer" color="danger" header="5:34:11" value="25" invert>
+              Avg. Time
+            </Widget04>
           </Col>
           <Col sm="6" md="2">
-            <Widget04 icon="icon-speech" color="info" header="972" value="25" invert>Comments</Widget04>
+            <Widget04 icon="icon-speech" color="info" header="972" value="25" invert>
+              Comments
+            </Widget04>
           </Col>
         </Row>
       </div>

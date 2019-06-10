@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Collapses from './Collapses';
-import {mount} from 'enzyme/build';
+import { mount } from 'enzyme/build';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
@@ -19,7 +19,7 @@ describe('toggle clicks', function() {
     expect(wrapper.state().collapse).toEqual(false);
     collapse.simulate('click');
     expect(wrapper.state().collapse).toEqual(true);
-    wrapper.unmount()
+    wrapper.unmount();
   });
   it('fade without crashing', () => {
     const wrapper = mount(<Collapses />);
@@ -28,7 +28,7 @@ describe('toggle clicks', function() {
     expect(wrapper.state().fadeIn).toEqual(false);
     fade.simulate('click');
     expect(wrapper.state().fadeIn).toEqual(true);
-    wrapper.unmount()
+    wrapper.unmount();
   });
   it('accordion without crashing', () => {
     const wrapper = mount(<Collapses />);
@@ -52,7 +52,7 @@ describe('toggle clicks', function() {
     expect(wrapper.state().accordion[0]).toEqual(true);
     expect(wrapper.state().accordion[1]).toEqual(false);
     expect(wrapper.state().accordion[2]).toEqual(false);
-    wrapper.unmount()
+    wrapper.unmount();
   });
   it('custom without crashing', () => {
     const wrapper = mount(<Collapses />);
@@ -68,6 +68,6 @@ describe('toggle clicks', function() {
     accordion.simulate('click');
     expect(wrapper.state().custom[0]).toEqual(false);
     expect(wrapper.state().custom[1]).toEqual(true);
-    wrapper.unmount()
+    wrapper.unmount();
   });
 });

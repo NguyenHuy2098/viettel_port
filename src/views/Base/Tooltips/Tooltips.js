@@ -23,7 +23,12 @@ class TooltipItem extends React.Component {
         <Button className="mr-1" color="secondary" id={'Tooltip-' + this.props.id}>
           {this.props.item.text}
         </Button>
-        <Tooltip placement={this.props.item.placement} isOpen={this.state.tooltipOpen} target={'Tooltip-' + this.props.id} toggle={this.toggle}>
+        <Tooltip
+          placement={this.props.item.placement}
+          isOpen={this.state.tooltipOpen}
+          target={'Tooltip-' + this.props.id}
+          toggle={this.toggle}
+        >
           Tooltip Content!
         </Tooltip>
       </span>
@@ -32,7 +37,6 @@ class TooltipItem extends React.Component {
 }
 
 class Tooltips extends Component {
-
   constructor(props) {
     super(props);
 
@@ -62,7 +66,7 @@ class Tooltips extends Component {
 
   toggle(i) {
     const newArray = this.state.tooltipOpen.map((element, index) => {
-      return (index === i ? !element : false);
+      return index === i ? !element : false;
     });
     this.setState({
       tooltipOpen: newArray,
@@ -74,9 +78,15 @@ class Tooltips extends Component {
       <div className="animated fadeIn">
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Tooltips</strong>
+            <i className="fa fa-align-justify"></i>
+            <strong>Tooltips</strong>
             <div className="card-header-actions">
-              <a href="https://reactstrap.github.io/components/tooltips/" rel="noreferrer noopener" target="_blank" className="card-header-action">
+              <a
+                href="https://reactstrap.github.io/components/tooltips/"
+                rel="noreferrer noopener"
+                target="_blank"
+                className="card-header-action"
+              >
                 <small className="text-muted">docs</small>
               </a>
             </div>
@@ -84,27 +94,44 @@ class Tooltips extends Component {
           <CardBody>
             {/*eslint-disable-next-line*/}
             <p>Somewhere in here is a <a href="#" id="TooltipExample">tooltip</a>.</p>
-            <Tooltip placement="right" isOpen={this.state.tooltipOpen[0]} target="TooltipExample" toggle={() => {this.toggle(0);}}>
+            <Tooltip
+              placement="right"
+              isOpen={this.state.tooltipOpen[0]}
+              target="TooltipExample"
+              toggle={() => {
+                this.toggle(0);
+              }}
+            >
               Hello world!
             </Tooltip>
           </CardBody>
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Tooltip</strong>
+            <i className="fa fa-align-justify"></i>
+            <strong>Tooltip</strong>
             <small> disable autohide</small>
           </CardHeader>
           <CardBody>
             {/*eslint-disable-next-line*/}
             <p>Sometimes you need to allow users to select text within a <a href="#" id="DisabledAutoHideExample">tooltip</a>.</p>
-            <Tooltip placement="top" isOpen={this.state.tooltipOpen[1]} autohide={false} target="DisabledAutoHideExample" toggle={() => {this.toggle(1);}}>
+            <Tooltip
+              placement="top"
+              isOpen={this.state.tooltipOpen[1]}
+              autohide={false}
+              target="DisabledAutoHideExample"
+              toggle={() => {
+                this.toggle(1);
+              }}
+            >
               Try to select this text!
             </Tooltip>
           </CardBody>
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Tooltip</strong>
+            <i className="fa fa-align-justify"></i>
+            <strong>Tooltip</strong>
             <small> list</small>
           </CardHeader>
           <CardBody>
@@ -115,7 +142,8 @@ class Tooltips extends Component {
         </Card>
         <Card>
           <CardHeader>
-            <i className="fa fa-align-justify"></i><strong>Tooltip</strong>
+            <i className="fa fa-align-justify"></i>
+            <strong>Tooltip</strong>
             <small> uncontrolled</small>
           </CardHeader>
           <CardBody>
