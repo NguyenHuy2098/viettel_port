@@ -19,6 +19,7 @@ module.exports = {
     'import/newline-after-import': 'error',
     'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
     'max-lines-per-function': ['error', { max: 30 }],
+    'react/jsx-no-bind': 'error',
   },
   settings: {
     react: {

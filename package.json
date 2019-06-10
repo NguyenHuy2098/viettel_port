@@ -58,6 +58,8 @@
     "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-lodash": "^5.1.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^2.4.0",
+    "lint-staged": "^8.2.0",
     "prettier": "^1.18.2",
     "react-scripts": "^3.0.1",
     "redux-devtools-extension": "^2.13.8"
@@ -73,8 +75,17 @@
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand"
   },
-  "bugs": {
-    "url": "https://gitlab.com/vtptek/SPI-Admin/issues"
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --ignore-path .gitignore --ignore-pattern static/ --ext .js,.ts,.tsx --fix",
+      "jest --passWithNoTests",
+      "git add"
+    ]
   },
   "browserslist": [
     ">0.2%",

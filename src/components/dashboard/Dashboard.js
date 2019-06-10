@@ -1,8 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import store from '../../redux/store';
-import { actionHello } from '../../redux/reducers/hello/actions';
 import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+
+import store from 'redux/store';
+import { actionHello } from 'redux/reducers/hello/actions';
 
 const Dashboard = props => {
   const handleChangeData = () => {
@@ -15,6 +16,10 @@ const Dashboard = props => {
 
   const { t, i18n } = useTranslation();
 
+  const handleChangeLanguage = () => {
+    return i18n.changeLanguage(i18n.language === 'en' ? 'vi' : 'en');
+  };
+
   return (
     <div>
       <h1>Home</h1>
@@ -23,7 +28,7 @@ const Dashboard = props => {
       {<h2>{props.helloSaga}</h2>}
       <button onClick={handleChangeDataAsync}>Test Saga</button>
       <h3>{t('Welcome to React')}</h3>
-      <button onClick={() => i18n.changeLanguage(i18n.language === 'en' ? 'vi' : 'en')}>Change language</button>
+      <button onClick={handleChangeLanguage}>Change language</button>
     </div>
   );
 };
