@@ -1,44 +1,30 @@
 import React from 'react';
-// import { useTranslation } from 'react-i18next';
-// import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { AppState } from 'redux/store';
 
-// import store from 'redux/store';
-// import { actionHello } from 'redux/reducers/hello/actions';
+interface Props {
+  text: string;
+}
 
-const Dashboard = () => {
-  // const handleChangeData = () => {
-  //   store.dispatch(actionHello());
-  // };
+const { t } = useTranslation();
 
-  // const handleChangeDataAsync = () => {
-  //   store.dispatch({ type: 'INCREMENT_ASYNC' });
-  // };
+class Dashboard extends React.PureComponent<Props> {
+  public render(): React.ReactElement {
+    return (
+      <div>
+        <h1>About</h1>
+        {this.props.text}
+        <h3>{t('Welcome to React')}</h3>
+      </div>
+    );
+  }
+}
 
-  // const { t, i18n } = useTranslation();
-
-  // const handleChangeLanguage = () => {
-  //   return i18n.changeLanguage(i18n.language === 'en' ? 'vi' : 'en');
-  // };
-
-  return (
-    <div>
-      <h1>Home</h1>
-      {/* <h2>{props.hello}</h2>
-      <button onClick={handleChangeData}>Test Redux</button>
-      {<h2>{props.helloSaga}</h2>}
-      <button onClick={handleChangeDataAsync}>Test Saga</button>
-      <h3>{t('Welcome to React')}</h3>
-      <button onClick={handleChangeLanguage}>Change language</button> */}
-    </div>
-  );
+const mapStateToProps = (state: AppState): Props => {
+  return {
+    text: state.hello.text,
+  };
 };
 
-// const mapStateToProps = state => {
-//   return {
-//     hello: state.hello,
-//     helloSaga: state.helloSaga,
-//   };
-// };
-
-// export default connect(mapStateToProps)(Dashboard);
-export default Dashboard;
+export default connect(mapStateToProps)(Dashboard);

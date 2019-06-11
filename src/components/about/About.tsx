@@ -1,29 +1,29 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { useTranslation } from "react-i18next";
-export interface Props { hello: string; helloSaga: string; }
+import * as React from 'react';
+import { connect } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
-const { t } = useTranslation()
+import { AppState } from 'redux/store';
 
-const mapStateToProps = state => {
-  return {
-    hello: state.hello,
-    helloSaga: state.helloSaga
-  }
+export interface Props {
+  hello: string;
 }
 
-class About extends Component<Props, {}> {
-  render() {
+const { t } = useTranslation();
+
+class About extends React.PureComponent<Props> {
+  public render(): React.ReactElement {
     return (
       <div>
         <h1>About</h1>
-        {
-          this.props.hello + this.props.helloSaga
-        }
+        {this.props.hello}
         <h3>{t('Welcome to React')}</h3>
       </div>
-    )
+    );
   }
 }
 
-export default connect(mapStateToProps)(About)
+const mapStateToProps = (state: AppState): Props => ({
+  hello: state.hello.text,
+});
+
+export default connect(mapStateToProps)(About);
