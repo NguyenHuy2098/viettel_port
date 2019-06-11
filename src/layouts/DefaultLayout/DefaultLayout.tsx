@@ -34,25 +34,6 @@ class DefaultLayout extends React.PureComponent<Props> {
     this.props.history.push('/login');
   }
 
-  public renderRouter(): void {
-    routes.map(
-      (route, idx: number): React.ReactNode => {
-        return route.component ? (
-          // @ts-ignore
-          <Route
-            key={idx}
-            path={route.path}
-            exact={route.exact}
-            name={route.name}
-            // eslint-disable-next-line react/jsx-no-bind
-            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-            render={props => <route.component {...props} />}
-          />
-        ) : null;
-      },
-    );
-  }
-
   public render(): React.ReactElement {
     return (
       <div className="app">
@@ -75,7 +56,22 @@ class DefaultLayout extends React.PureComponent<Props> {
             <Container fluid>
               <React.Suspense fallback={this.loading()}>
                 <Switch>
-                  {this.renderRouter()}
+                  {routes.map(
+                    (route, idx: number): React.ReactNode => {
+                      return route.component ? (
+                        // @ts-ignore
+                        <Route
+                          key={idx}
+                          path={route.path}
+                          exact={route.exact}
+                          name={route.name}
+                          // eslint-disable-next-line react/jsx-no-bind
+                          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+                          render={props => <route.component {...props} />}
+                        />
+                      ) : null;
+                    },
+                  )}
                   <Redirect from="/" to="/dashboard" />
                 </Switch>
               </React.Suspense>

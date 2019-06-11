@@ -36,8 +36,8 @@ import React from 'react';
 // const Users = React.lazy(() => import('./views/Users/Users'));
 // const User = React.lazy(() => import('./views/Users/User'));
 
-const Dashboard = React.lazy(() => import('./components/dashboard/Dashboard'));
-const About = React.lazy(() => import('./components/about/About'));
+const Dashboard = React.lazy(() => import('./containers/dashboard/Dashboard'));
+const About = React.lazy(() => import('./containers/about/About'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [

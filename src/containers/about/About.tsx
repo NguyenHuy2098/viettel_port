@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { AppState } from 'redux/store';
+import { AppState } from '../../redux/store';
 
 export interface Props {
   hello: string;
