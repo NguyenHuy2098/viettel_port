@@ -10,19 +10,29 @@ import './App.scss';
 const loading = (): React.ReactElement => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
 
 // Containers
-const Layout = React.lazy(() => import('./containers'));
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const Layout = React.lazy(() => import('./layouts'));
 
 // Pages
-const Login = React.lazy(() => import('./views/Login'));
-const Register = React.lazy(() => import('./views/Register'));
-const Page404 = React.lazy(() => import('./views/Page404'));
-const Page500 = React.lazy(() => import('./views/Page500'));
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const Login = React.lazy(() => import('./containers/Login/Login'));
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const Register = React.lazy(() => import('./containers/Register/Register'));
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const Page404 = React.lazy(() => import('./containers/Page404/Page404'));
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+const Page500 = React.lazy(() => import('./containers/Page500/Page500'));
 
 class App extends React.Component {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderLogin = (props: any): React.ReactElement => <Login {...props} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderRegister = (props: any): React.ReactElement => <Register {...props} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderPage404 = (props: any): React.ReactElement => <Page404 {...props} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderPage500 = (props: any): React.ReactElement => <Page500 {...props} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderLayout = (props: any): React.ReactElement => <Layout {...props} />;
 
   public render(): React.ReactElement {

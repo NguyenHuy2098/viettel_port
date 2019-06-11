@@ -113,7 +113,6 @@ class DefaultHeader extends React.PureComponent<Props> {
   );
 
   public render(): React.ReactElement {
-    const { children, ...attributes } = this.props;
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
