@@ -44,6 +44,8 @@ unit-test:
 semantic-release:
   image: node:lts-stretch
   stage: release
+  only:
+    - master
   script:
     - yarn changelog
     - yarn semantic-release --dry-run
