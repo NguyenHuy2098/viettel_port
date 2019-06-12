@@ -54,6 +54,9 @@
   "devDependencies": {
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
+    "@semantic-release/changelog": "^3.0.2",
+    "@semantic-release/git": "^7.0.8",
+    "@semantic-release/gitlab": "^3.1.2",
     "@types/enzyme": "^3.9.3",
     "@types/react-redux": "^7.0.9",
     "@types/react-router-dom": "^4.3.3",
@@ -71,20 +74,31 @@
     "lint-staged": "^8.2.0",
     "prettier": "^1.18.2",
     "react-scripts": "^3.0.1",
-    "redux-devtools-extension": "^2.13.8"
+    "redux-devtools-extension": "^2.13.8",
+    "semantic-release": "^15.13.12",
+    "standard-changelog": "^2.0.11"
   },
   "scripts": {
     "build": "env-cmd -e production react-scripts build",
+    "changelog": "standard-changelog && git add CHANGELOG.md",
     "commit": "npx git-cz",
     "eject": "react-scripts eject",
     "lint": "npm run lint:eslint:fix -- .",
     "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern public/ --ext .js,.jsx,.tsx,.ts",
     "lint:eslint:fix": "npm run lint:eslint -- --fix",
+    "semantic-release": "semantic-release",
+    "serve": "npx serve -s build --no-clipboard",
     "start": "env-cmd -e development react-scripts start",
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand"
   },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 9",
+    "not op_mini all"
+  ],
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
@@ -99,22 +113,33 @@
   "lint-staged": {
     "*.{js,ts,tsx}": [
       "eslint --ignore-path .gitignore --ignore-pattern static/ --ext .js,.ts,.tsx --fix",
-      "jest --passWithNoTests",
       "git add"
     ]
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 9",
-    "not op_mini all"
-  ],
   "jest": {
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!**/*index.js",
       "!src/serviceWorker.js",
       "!src/polyfill.js"
+    ]
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "CHANGELOG.md",
+            "package.json",
+            "README.md",
+            "yarn.lock"
+          ]
+        }
+      ]
     ]
   }
 }
