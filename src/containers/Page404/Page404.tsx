@@ -2,6 +2,20 @@ import React from 'react';
 import { Button, Col, Container, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 
 class Page404 extends React.PureComponent {
+  private renderInputGroup = (): React.ReactElement => (
+    <InputGroup className="input-prepend">
+      <InputGroupAddon addonType="prepend">
+        <InputGroupText>
+          <i className="fa fa-search" />
+        </InputGroupText>
+      </InputGroupAddon>
+      <Input type="text" placeholder="What are you looking for?" />
+      <InputGroupAddon addonType="append">
+        <Button color="info">Search</Button>
+      </InputGroupAddon>
+    </InputGroup>
+  );
+
   public render(): React.ReactElement {
     return (
       <div className="app flex-row align-items-center">
@@ -13,17 +27,7 @@ class Page404 extends React.PureComponent {
                 <h4 className="pt-3">Oops! You're lost.</h4>
                 <p className="text-muted float-left">The page you are looking for was not found.</p>
               </div>
-              <InputGroup className="input-prepend">
-                <InputGroupAddon addonType="prepend">
-                  <InputGroupText>
-                    <i className="fa fa-search" />
-                  </InputGroupText>
-                </InputGroupAddon>
-                <Input type="text" placeholder="What are you looking for?" />
-                <InputGroupAddon addonType="append">
-                  <Button color="info">Search</Button>
-                </InputGroupAddon>
-              </InputGroup>
+              {this.renderInputGroup()}
             </Col>
           </Row>
         </Container>

@@ -14,9 +14,9 @@ import {
   // @ts-ignore
 } from '@coreui/react';
 // sidebar nav config
-import navigation from '../../_nav';
+import navigation from '_nav';
 // routes config
-import routes from '../../routes';
+import routes from 'routes';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
@@ -32,6 +32,30 @@ class DefaultLayout extends React.PureComponent<Props> {
     event.preventDefault();
     this.props.history.push('/login');
   }
+
+  private renderRouter = (): React.ReactElement => (
+    <React.Suspense fallback={this.loading()}>
+      <Switch>
+        {routes.map(
+          (route, idx: number): React.ReactNode => {
+            return route.component ? (
+              // @ts-ignore
+              <Route
+                key={idx}
+                path={route.path}
+                exact={route.exact}
+                name={route.name}
+                // eslint-disable-next-line react/jsx-no-bind
+                // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+                render={props => <route.component {...props} />}
+              />
+            ) : null;
+          },
+        )}
+        <Redirect from="/" to="/dashboard" />
+      </Switch>
+    </React.Suspense>
+  );
 
   public render(): React.ReactElement {
     return (
@@ -51,29 +75,7 @@ class DefaultLayout extends React.PureComponent<Props> {
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-            <Container fluid>
-              <React.Suspense fallback={this.loading()}>
-                <Switch>
-                  {routes.map(
-                    (route, idx: number): React.ReactNode => {
-                      return route.component ? (
-                        // @ts-ignore
-                        <Route
-                          key={idx}
-                          path={route.path}
-                          exact={route.exact}
-                          name={route.name}
-                          // eslint-disable-next-line react/jsx-no-bind
-                          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-                          render={props => <route.component {...props} />}
-                        />
-                      ) : null;
-                    },
-                  )}
-                  <Redirect from="/" to="/dashboard" />
-                </Switch>
-              </React.Suspense>
-            </Container>
+            <Container fluid>{this.renderRouter()}</Container>
           </main>
         </div>
       </div>

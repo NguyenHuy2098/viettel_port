@@ -20,28 +20,34 @@ interface Props {
 }
 
 class Login extends React.PureComponent<Props> {
+  private renderInputGroup = (): React.ReactElement => (
+    <React.Fragment>
+      <InputGroup className="mb-3">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>
+            <i className="icon-user" />
+          </InputGroupText>
+        </InputGroupAddon>
+        <Input type="text" placeholder="Username" autoComplete="username" />
+      </InputGroup>
+      <InputGroup className="mb-4">
+        <InputGroupAddon addonType="prepend">
+          <InputGroupText>
+            <i className="icon-lock" />
+          </InputGroupText>
+        </InputGroupAddon>
+        <Input type="password" placeholder="Password" autoComplete="current-password" />
+      </InputGroup>
+    </React.Fragment>
+  );
+
   private renderTopContent = (): React.ReactElement => (
     <Card className="p-4">
       <CardBody>
         <Form>
           <h1>Login</h1>
           <p className="text-muted">Sign In to your account</p>
-          <InputGroup className="mb-3">
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText>
-                <i className="icon-user" />
-              </InputGroupText>
-            </InputGroupAddon>
-            <Input type="text" placeholder="Username" autoComplete="username" />
-          </InputGroup>
-          <InputGroup className="mb-4">
-            <InputGroupAddon addonType="prepend">
-              <InputGroupText>
-                <i className="icon-lock" />
-              </InputGroupText>
-            </InputGroupAddon>
-            <Input type="password" placeholder="Password" autoComplete="current-password" />
-          </InputGroup>
+          {this.renderInputGroup()}
           <Row>
             <Col xs="6">
               <Button color="primary" className="px-4">

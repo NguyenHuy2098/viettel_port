@@ -55,29 +55,33 @@ class Register extends React.PureComponent {
     </Form>
   );
 
+  private renderCard = (): React.ReactElement => (
+    <Card className="mx-4">
+      <CardBody className="p-4">{this.renderForm()}</CardBody>
+      <CardFooter className="p-4">
+        <Row>
+          <Col xs="12" sm="6">
+            <Button className="btn-facebook mb-1" block>
+              <span>facebook</span>
+            </Button>
+          </Col>
+          <Col xs="12" sm="6">
+            <Button className="btn-twitter mb-1" block>
+              <span>twitter</span>
+            </Button>
+          </Col>
+        </Row>
+      </CardFooter>
+    </Card>
+  );
+
   public render(): React.ReactElement {
     return (
       <div className="app flex-row align-items-center">
         <Container>
           <Row className="justify-content-center">
             <Col md="9" lg="7" xl="6">
-              <Card className="mx-4">
-                <CardBody className="p-4">{this.renderForm()}</CardBody>
-                <CardFooter className="p-4">
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook mb-1" block>
-                        <span>facebook</span>
-                      </Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter mb-1" block>
-                        <span>twitter</span>
-                      </Button>
-                    </Col>
-                  </Row>
-                </CardFooter>
-              </Card>
+              {this.renderCard()}
             </Col>
           </Row>
         </Container>
