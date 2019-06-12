@@ -80,6 +80,7 @@
     "lint": "npm run lint:eslint:fix -- .",
     "lint:eslint": "eslint --ignore-path .gitignore --ignore-pattern public/ --ext .js,.jsx,.tsx,.ts",
     "lint:eslint:fix": "npm run lint:eslint -- --fix",
+    "serve": "npx serve -s build --no-clipboard",
     "start": "env-cmd -e development react-scripts start",
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
