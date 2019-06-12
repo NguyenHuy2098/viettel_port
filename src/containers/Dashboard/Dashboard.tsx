@@ -8,57 +8,64 @@ interface Props {
   text: string;
 }
 
-interface State {
-  modalCreateNew: boolean;
-}
-
 const mapStateToProps = (state: AppState): Props => {
   return {
     text: state.hello.text,
   };
 };
 
-class Dashboard extends React.PureComponent<Props, State> {
-  public state: State = {
-    modalCreateNew: false,
-  };
+// eslint-disable-next-line max-lines-per-function
+const Dashboard: React.FC<Props> = (props): JSX.Element => {
+  const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
 
-  private toggle = (): void => {
-    this.setState(
-      (prevState: State): State => ({
-        modalCreateNew: !prevState.modalCreateNew,
-      }),
+  function toggle(): void {
+    setmodalCreateNew(!modalCreateNew);
+  }
+
+  function renderModal(): JSX.Element {
+    return (
+      <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew">
+        <ModalHeader toggle={toggle}>Tạo bảng kê nội tỉnh</ModalHeader>
+        <ModalBody>
+          <FormGroup>
+            <Label>Bưu cục đến</Label>
+            <Input type="select">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+            </Input>
+          </FormGroup>
+          <FormGroup>
+            <Label>Ghi chú</Label>
+            <Input type="textarea" placeholder="Nhập ghi chú" />
+          </FormGroup>
+        </ModalBody>
+        <ModalFooter>
+          <Button onClick={toggle}>Ghi lại</Button>
+        </ModalFooter>
+      </Modal>
     );
-  };
+  }
 
-  private renderSipHeaderModal = (): React.ReactElement => (
-    <Modal isOpen={this.state.modalCreateNew} toggle={this.toggle} className="sipTitleModalCreateNew">
-      <ModalHeader toggle={this.toggle}>Tạo bảng kê nội tỉnh</ModalHeader>
-      <ModalBody>
-        <FormGroup>
-          <Label>Bưu cục đến</Label>
-          <Input type="select">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </Input>
-        </FormGroup>
-        <FormGroup>
-          <Label>Ghi chú</Label>
-          <Input type="textarea" placeholder="Nhập ghi chú" />
-        </FormGroup>
-      </ModalBody>
-      <ModalFooter>
-        <Button onClick={this.toggle}>Ghi lại</Button>
-      </ModalFooter>
-    </Modal>
-  );
+  function renderAction(): JSX.Element {
+    return (
+      <>
+        <Button>
+          <i className="fa fa-print fa-lg color-green" />
+        </Button>
+        <Button>
+          <i className="fa fa-pencil fa-lg color-blue" />
+        </Button>
+        <Button>
+          <i className="fa fa-trash-o fa-lg color-red" />
+        </Button>
+      </>
+    );
+  }
 
-  private renderSipHeader = (): React.ReactElement => (
+  return (
     <div>
-      <h1 className="sipTitle">Đóng bảng kê {this.props.text}</h1>
+      <h1 className="sipTitle">Đóng bảng kê {props.text}</h1>
       <div className="sipTitleRightBlock">
         <Button className="sipTitleRightBlockBtnIcon">
           <i className="fa fa-trash-o" />
@@ -70,7 +77,7 @@ class Dashboard extends React.PureComponent<Props, State> {
           <i className="fa fa-search" />
           <Input type="text" placeholder="Tìm kiếm bảng kê" />
         </div>
-        <Button onClick={this.toggle}>
+        <Button onClick={toggle}>
           <i className="fa fa-plus" />
           Tạo bảng kê
         </Button>
@@ -78,64 +85,43 @@ class Dashboard extends React.PureComponent<Props, State> {
           <i className="fa fa-download" />
           Ghi lại
         </Button>
-        {this.renderSipHeaderModal()}
+        {renderModal()}
       </div>
       <div className="row mt-3" />
+      <p className="text-right">
+        Tổng số: <span>56</span>
+      </p>
+      <div className="mt-3" />
+      <div className="sipTableContainer">
+        <Table striped hover>
+          <thead>
+            <tr>
+              <th>Mã bảng kê</th>
+              <th>Bưu cục đi</th>
+              <th>Bưu cục đến</th>
+              <th>Số lượng</th>
+              <th>Người nhập</th>
+              <th>Ngày nhập</th>
+              <th>Ghi chú</th>
+              <th>Quản trị</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>BK-2683077-TTKT1</td>
+              <td>TTKT1</td>
+              <td>TTKT3</td>
+              <td>25</td>
+              <td>Nguyễn Văn An</td>
+              <td>19/6/2019</td>
+              <td>Hàng giá trị cao</td>
+              <td className="SipTableFunctionIcon">{renderAction()}</td>
+            </tr>
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
-
-  private renderTable = (): React.ReactElement => (
-    <Table striped hover>
-      <thead>
-        <tr>
-          <th>Mã bảng kê</th>
-          <th>Bưu cục đi</th>
-          <th>Bưu cục đến</th>
-          <th>Số lượng</th>
-          <th>Người nhập</th>
-          <th>Ngày nhập</th>
-          <th>Ghi chú</th>
-          <th>Quản trị</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>BK-2683077-TTKT1</td>
-          <td>TTKT1</td>
-          <td>TTKT3</td>
-          <td>25</td>
-          <td>Nguyễn Văn An</td>
-          <td>19/6/2019</td>
-          <td>Hàng giá trị cao</td>
-          <td className="SipTableFunctionIcon">
-            <Button>
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
-            <Button>
-              <i className="fa fa-pencil fa-lg color-blue" />
-            </Button>
-            <Button>
-              <i className="fa fa-trash-o fa-lg color-red" />
-            </Button>
-          </td>
-        </tr>
-      </tbody>
-    </Table>
-  );
-
-  public render(): React.ReactNode {
-    // const { t, i18n } = useTranslation();
-    return (
-      <div>
-        {this.renderSipHeader()}
-        <p className="text-right">
-          Tổng số: <span>56</span>
-        </p>
-        <div className="mt-3" />
-        <div className="sipTableContainer">{this.renderTable()}</div>
-      </div>
-    );
-  }
-}
+};
 
 export default connect(mapStateToProps)(Dashboard);
