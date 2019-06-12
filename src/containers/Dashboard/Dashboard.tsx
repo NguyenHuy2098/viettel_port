@@ -2,7 +2,7 @@ import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
-import { AppState } from '../../redux/store';
+import { AppState } from 'redux/store';
 
 interface Props {
   text: string;
