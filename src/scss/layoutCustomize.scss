@@ -4,7 +4,19 @@ a, button {
 .app-header.navbar {
   padding-right: 15px;
 }
-.sip-header-search {
+.no-margin {
+  margin: 0 !important;
+}
+.color-green {
+  color: #2C9859 !important;
+}
+.color-blue {
+  color: #3D88E1 !important;
+}
+.color-red {
+  color: #EB3C66 !important;
+}
+.sipHeaderSearch {
   position: relative;
   width: 280px;
   padding: 10px 0 10px 10px;
@@ -26,7 +38,7 @@ a, button {
     width: 27px;
   }
 }
-.sip-header-noti {
+.sipHeaderNoti {
   margin-right: 10px !important;
   .dropdown-menu {
     width: 300px;
@@ -41,7 +53,7 @@ a, button {
     }
   }
 }
-.sip-header-user {
+.sipHeaderUser {
   & > .nav-link {
     font-size: 16px;
     i {
@@ -66,4 +78,136 @@ a, button {
       }
     }
   }
+  .main {
+    background-color: #E9EFFB;
+    .container-fluid {
+      padding: 20px;
+    }
+  }
 }
+.sipTitle {
+  color: #4A4A4A;
+  font-size: 18px;
+  display: inline-block;
+}
+.sipTitleRightBlock {
+  float: right;
+  display: flex;
+  & > .btn {
+    color: #fff !important;
+    background: #2DB4A1 !important;
+    font-weight: 600;
+    margin-left: 15px;
+    i {
+      margin-right: 5px;
+    }
+    &.sipTitleRightBlockBtnIcon {
+      background: #FFFFFF !important;
+      border: 1px solid #E4E8EB;
+      box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+      padding: 0 10px;
+      i {
+        color: #A1A6AB;
+        margin: 0;
+        font-size: 16px;
+      }
+    }
+  }
+  .sipTitleRightBlockInput {
+    width: 280px;
+    position: relative;
+    margin-left: 15px;
+    i {
+      color: #9B9B9B;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
+    input.form-control {
+      padding: 0 10px 0 30px;
+    }
+  }
+}
+.sipTitleModalCreateNew {
+  max-width: 568px;
+  margin: 100px auto;
+  .modal-content {
+    border: none;
+    .modal-header {
+      background: linear-gradient(180deg, #18A796 0%, #47C4AE 100%);
+      padding: 10px 15px;
+      .modal-title {
+        font-size: 18px;
+        color: #fff;
+        font-weight: 600;
+      }
+      .close {
+        color: #fff;
+        opacity: 0.8;
+        font-size: 24px;
+        padding: 0px;
+        margin: 0;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    .modal-body {
+      padding: 20px 20px 0;
+      .form-group {
+        label {
+          color: #299F9A;
+          font-weight: 600;
+        }
+      }
+    }
+    .modal-footer {
+      border-top: none;
+      padding: 0 20px 20px;
+      justify-content: center;
+      .btn-secondary {
+        background: linear-gradient(180deg, #18A796 0%, #47C4AE 100%);
+        color: #fff !important;
+        text-transform: uppercase;
+        padding: 8px 20px;
+        font-weight: 600;
+      }
+    }
+  }
+}
+.sipTableContainer {
+  background: #fff;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  border-radius: 3px;
+  width: 100%;
+  overflow: auto;
+  .table {
+    color: #191919;
+    margin: 0;
+    min-width: 800px;
+    th {
+      border-top: none;
+      color: #299F9A;
+      font-weight: 600;
+    }
+    .SipTableFunctionIcon {
+      .btn {
+        padding: 0;
+        background: none;
+        border: none;
+        box-shadow: none;
+        margin: 0 10px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+
+
+
+
+
+
+
+

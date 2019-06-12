@@ -18,12 +18,12 @@ class DefaultHeader extends React.PureComponent<Props> {
     <Nav className="ml-auto" navbar>
       <NavItem className="d-md-down-none">
         <NavLink to="#" className="nav-link">
-          <i className="fa fa-heart-o fa-lg"></i>
+          <i className="fa fa-heart-o fa-lg" />
         </NavLink>
       </NavItem>
       <NavItem className="d-md-down-none">
         <NavLink to="#" className="nav-link">
-          <i className="fa fa-clock-o fa-lg"></i>
+          <i className="fa fa-clock-o fa-lg" />
         </NavLink>
       </NavItem>
       {this.renderHeaderNoti()}
@@ -32,9 +32,9 @@ class DefaultHeader extends React.PureComponent<Props> {
   );
 
   public renderHeaderNoti = (): React.ReactElement => (
-    <AppHeaderDropdown direction="down" className="sip-header-noti">
+    <AppHeaderDropdown direction="down" className="sipHeaderNoti">
       <DropdownToggle nav>
-        <i className="fa fa-bell-o fa-lg"></i>
+        <i className="fa fa-bell-o fa-lg" />
         <Badge pill color="danger">
           5
         </Badge>
@@ -65,45 +65,45 @@ class DefaultHeader extends React.PureComponent<Props> {
   );
 
   public renderHeaderUser = (): React.ReactElement => (
-    <AppHeaderDropdown direction="down" className="sip-header-user">
+    <AppHeaderDropdown direction="down" className="sipHeaderUser">
       <DropdownToggle nav>
         <span>Kevin Tran</span>
-        <i className="fa fa-caret-down fa-lg"></i>
+        <i className="fa fa-caret-down fa-lg" />
       </DropdownToggle>
       <DropdownMenu right style={{ right: 'auto' }}>
         <DropdownItem header tag="div" className="text-center">
           <strong>Account</strong>
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-bell-o"></i> Updates<Badge color="info">42</Badge>
+          <i className="fa fa-bell-o" /> Updates<Badge color="info">42</Badge>
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-envelope-o"></i> Messages<Badge color="success">42</Badge>
+          <i className="fa fa-envelope-o" /> Messages<Badge color="success">42</Badge>
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-tasks"></i> Tasks<Badge color="danger">42</Badge>
+          <i className="fa fa-tasks" /> Tasks<Badge color="danger">42</Badge>
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-comments"></i> Comments<Badge color="warning">42</Badge>
+          <i className="fa fa-comments" /> Comments<Badge color="warning">42</Badge>
         </DropdownItem>
         <DropdownItem header tag="div" className="text-center">
           <strong>Settings</strong>
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-user"></i> Profile
+          <i className="fa fa-user" /> Profile
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-wrench"></i> Settings
+          <i className="fa fa-wrench" /> Settings
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-usd"></i> Payments<Badge color="secondary">42</Badge>
+          <i className="fa fa-usd" /> Payments<Badge color="secondary">42</Badge>
         </DropdownItem>
         <DropdownItem>
-          <i className="fa fa-file"></i> Projects<Badge color="primary">42</Badge>
+          <i className="fa fa-file" /> Projects<Badge color="primary">42</Badge>
         </DropdownItem>
         <DropdownItem divider />
         <DropdownItem>
-          <i className="fa fa-shield"></i> Lock Account
+          <i className="fa fa-shield" /> Lock Account
         </DropdownItem>
         <DropdownItem onClick={this.handleLogout}>
           <i className="fa fa-lock" /> Logout
@@ -122,10 +122,10 @@ class DefaultHeader extends React.PureComponent<Props> {
         />
         <AppSidebarToggler className="d-md-down-none" display="lg" />
 
-        <FormGroup className="sip-header-search">
+        <FormGroup className="sipHeaderSearch">
           <Input type="text" placeholder="Tra cứu đơn hàng" />
           <Button>
-            <i className="fa fa-search fa-lg"></i>
+            <i className="fa fa-search fa-lg" />
           </Button>
         </FormGroup>
         {this.renderNav()}

@@ -10,7 +10,6 @@ import {
   AppSidebarForm,
   AppSidebarHeader,
   AppSidebarMinimizer,
-  AppBreadcrumb2 as AppBreadcrumb,
   AppSidebarNav2 as AppSidebarNav,
   // @ts-ignore
 } from '@coreui/react';
@@ -52,7 +51,6 @@ class DefaultLayout extends React.PureComponent<Props> {
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-            <AppBreadcrumb appRoutes={routes} router={router} />
             <Container fluid>
               <React.Suspense fallback={this.loading()}>
                 <Switch>
