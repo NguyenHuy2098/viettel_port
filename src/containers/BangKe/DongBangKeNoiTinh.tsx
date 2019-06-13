@@ -76,19 +76,20 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
   }
   return (
     <div>
-      <h1 className="sipTitle">{t('Đóng bảng kê nội tỉnh')}</h1>
-      <div className="sipTitleRightBlock">
-        <div className="sipTitleRightBlockInput">
-          <i className="fa fa-search" />
-          <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
+      <div className="row mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Đóng bảng kê nội tỉnh')}</h1>
+        <div className="sipTitleRightBlock">
+          <div className="sipTitleRightBlockInput">
+            <i className="fa fa-search" />
+            <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
+          </div>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Tạo bảng kê nội tỉnh')}
+          </Button>
+          {renderModal()}
         </div>
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          {t('Tạo bảng kê nội tỉnh')}
-        </Button>
-        {renderModal()}
       </div>
-      <div className="row mt-3" />
       <p className="text-right">
         {t('Tổng số')}: <span>56</span>
       </p>

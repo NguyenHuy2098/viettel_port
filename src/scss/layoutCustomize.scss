@@ -1,11 +1,21 @@
 a, button {
   transition: all 0.1s linear 0s;
 }
+body {
+  color: #4A4A4A;
+  word-break: break-all;
+}
 .app-header.navbar {
   padding-right: 15px;
 }
 .no-margin {
   margin: 0 !important;
+}
+.no-padding {
+  padding: 0 !important;
+}
+.color-orange {
+  color: #FD8301 !important;
 }
 .color-green {
   color: #2C9859 !important;
@@ -15,6 +25,66 @@ a, button {
 }
 .color-red {
   color: #EB3C66 !important;
+}
+.bg-white {
+  background-color: #fff;
+}
+.color-bluegreen {
+  colr: #2DB4A1 !important;
+}
+.form-check-label {
+  box-sizing: border-box;
+  input.form-check-input[type='radio'] {
+    box-sizing: border-box;
+    font: normal normal normal 14px/1 FontAwesome;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    font-size: 20px;
+    position: relative;
+    margin: 0 6px 0 0;
+    top: 2px;
+    color: #888;
+    outline: none;
+    &:after {
+      content: "\F10C";
+    }
+    &:checked {
+      color: #299F9A;
+      &:after {
+        content: "\F192";
+      }
+    }
+  }
+}
+.form-check-label {
+  box-sizing: border-box;
+  input.form-check-input[type='checkbox'] {
+    box-sizing: border-box;
+    font: normal normal normal 14px/1 FontAwesome;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    font-size: 20px;
+    position: relative;
+    margin: 0 6px 0 0;
+    top: 2px;
+    color: #888;
+    outline: none;
+    &:after {
+      content: "\F096";
+    }
+    &:checked {
+      color: #299F9A;
+      &:after {
+        content: "\F14A";
+      }
+    }
+  }
 }
 .sipHeaderSearch {
   position: relative;
@@ -84,6 +154,10 @@ a, button {
       padding: 20px;
     }
   }
+}
+.sipTitleContainer {
+  display: block;
+  margin: 0;
 }
 .sipTitle {
   color: #4A4A4A;
@@ -202,6 +276,10 @@ a, button {
     }
   }
 }
+.sipLine {
+  border-bottom: 1px solid #D6D6D6;
+  width: 100%;
+}
 .app-header .navbar-brand {
   width: 195px;
 }
@@ -218,6 +296,14 @@ html:not([dir="rtl"]) .sidebar {
   }
   .sidebar-fixed .sidebar {
     width: 240px;
+  }
+  .sidebar-minimized .sidebar .nav-item:hover {
+    width: 250px;
+    overflow: visible;
+    .nav-link {
+      background: #2DB4A1;
+      color: #fff;
+    }
   }
 }
 
