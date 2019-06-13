@@ -15,13 +15,13 @@ const Layout = React.lazy(() => import('./layouts'));
 
 // Pages
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Login = React.lazy(() => import('./containers/Login/Login'));
+const Login = React.lazy(() => import('containers/Login'));
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Register = React.lazy(() => import('./containers/Register/Register'));
+const Register = React.lazy(() => import('containers/Register'));
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Page404 = React.lazy(() => import('./containers/Page404/Page404'));
+const Page404 = React.lazy(() => import('containers/Page404'));
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Page500 = React.lazy(() => import('./containers/Page500/Page500'));
+const Page500 = React.lazy(() => import('containers/Page500'));
 
 class App extends React.Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
