@@ -38,12 +38,14 @@ import React from 'react';
 
 const Dashboard = React.lazy(() => import('./containers/Dashboard/Dashboard'));
 const About = React.lazy(() => import('./containers/About/About'));
+const PhieuGuiTrongNuocPa2 = React.lazy(() => import('./containers/PhieuGuiTrongNuocPa2/Index'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/about', name: 'About', component: About },
+  { path: '/phieu-gui-trong-nuoc-pa2', name: 'PhieuGuiTrongNuocPa2', component: PhieuGuiTrongNuocPa2 },
   // { path: '/theme', exact: true, name: 'Theme', component: Colors },
   // { path: '/theme/colors', name: 'Colors', component: Colors },
   // { path: '/theme/typography', name: 'Typography', component: Typography },
