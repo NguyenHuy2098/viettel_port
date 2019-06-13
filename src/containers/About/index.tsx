@@ -31,7 +31,6 @@ const About: React.FC<Props> = (props): JSX.Element => {
     try {
       const valid = await schema.validate({ name, number });
       setError('');
-      console.log(valid);
     } catch (error) {
       setError(error.message);
     }

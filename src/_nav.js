@@ -88,5 +88,13 @@ export default {
         variant: 'info',
       },
     },
+    {
+      name: 'Danh sách phiếu gửi trong bảng kê',
+      url: '/danh-sach-phieu-gui-trong-bang-ke',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
   ],
 };
