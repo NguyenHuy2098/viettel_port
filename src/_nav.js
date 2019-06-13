@@ -73,6 +73,14 @@ export default {
       },
     },
     {
+      name: 'Thông tin tải',
+      url: '/thong-tin-tai',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
+    {
       name: 'Đóng chuyển thư',
       url: '/mail-truck-closing',
       icon: 'icon-drop',
