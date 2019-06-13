@@ -56,5 +56,13 @@ export default {
         variant: 'info',
       },
     },
+    {
+      name: 'Đóng tải',
+      url: '/close-sack',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
   ],
 };
