@@ -3,16 +3,8 @@ import { useState } from 'react';
 import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 
-export interface Props {
-  title: string;
-}
-
-interface Click extends React.MouseEventHandler<any> {
-  value: string;
-}
-
 // eslint-disable-next-line max-lines-per-function
-const OrderShippingInformation: React.FC<Props> = (props): JSX.Element => {
+const OrderShippingInformation: React.FC = (props): JSX.Element => {
   const [isTab, setTab] = useState<number | string>('1');
   const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
     setTab(value);
@@ -23,7 +15,7 @@ const OrderShippingInformation: React.FC<Props> = (props): JSX.Element => {
       <Row className="sipOrderShippingInformationTitle">
         <Col>
           <i className="fa fa-arrow-left backIcon" />
-          <h1 className="sipTitle">{props.title}</h1>
+          <h1 className="sipTitle">Danh sách phiếu gửi trong bảng kê</h1>
         </Col>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
