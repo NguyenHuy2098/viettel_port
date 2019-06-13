@@ -4,9 +4,10 @@ const Dashboard = React.lazy(() => import('containers/Dashboard/index'));
 const About = React.lazy(() => import('containers/About/index'));
 const DongBangKeNoiTinh = React.lazy(() => import('containers/BangKe/DongBangKeNoiTinh'));
 const DongBangKe = React.lazy(() => import('containers/BangKe/DongBangKe'));
-const PhieuGuiTrongNuocPa2 = React.lazy(() => import('containers/PhieuGuiTrongNuocPa2/Index'));
+const PhieuGuiTrongNuocPa2 = React.lazy(() => import('containers/PhieuGuiTrongNuocPa2'));
 const InputRevenue = React.lazy(() => import('containers/InputRevenue'));
 const ThongTinBangKe = React.lazy(() => import('containers/BangKe/ThongTinBangKe'));
+const CloseSack = React.lazy(() => import('containers/CloseSack'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -18,6 +19,7 @@ const routes = [
   { path: '/dong-bang-ke', name: 'Đóng bảng kê', component: DongBangKe },
   { path: '/input-revenue', name: 'InputRevenue', component: InputRevenue },
   { path: '/thong-tin-bang-ke', name: 'Đóng bảng kê nội tỉnh', component: ThongTinBangKe },
+  { path: '/close-sack', name: 'CloseSack', component: CloseSack },
 ];
 
 export default routes;
