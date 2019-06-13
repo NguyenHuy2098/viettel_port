@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
-const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
+const DongBangKe: React.FC = (): JSX.Element => {
   const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
   const { t } = useTranslation();
 
@@ -15,7 +15,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
   function renderModal(): JSX.Element {
     return (
       <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew">
-        <ModalHeader toggle={toggle}>{t('Tạo bảng kê nội tỉnh')}</ModalHeader>
+        <ModalHeader toggle={toggle}>{t('Tạo bảng kê')}</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Label>{t('Bưu cục đến')}</Label>
@@ -76,7 +76,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
   }
   return (
     <div>
-      <h1 className="sipTitle">{t('Đóng bảng kê nội tỉnh')}</h1>
+      <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
       <div className="sipTitleRightBlock">
         <div className="sipTitleRightBlockInput">
           <i className="fa fa-search" />
@@ -84,7 +84,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
         </div>
         <Button onClick={toggle}>
           <i className="fa fa-plus" />
-          {t('Tạo bảng kê nội tỉnh')}
+          {t('Tạo bảng kê')}
         </Button>
         {renderModal()}
       </div>
@@ -126,4 +126,4 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
   );
 };
 
-export default DongBangKeNoiTinh;
+export default DongBangKe;
