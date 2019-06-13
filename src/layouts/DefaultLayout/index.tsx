@@ -1,5 +1,6 @@
 import React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import * as router from 'react-router-dom';
 import { History } from 'history';
 import { Container } from 'reactstrap';
@@ -35,13 +36,23 @@ class Index extends React.PureComponent<Props> {
       <Switch>
         {routes.map(
           (route, idx: number): React.ReactNode => {
-            function renderComponent(props: Props): JSX.Element {
-              // @ts-ignore
-              return <route.component {...props} />;
-            }
+            /* eslint-disable react/jsx-no-bind */
             return route.component ? (
-              <Route key={idx} path={route.path} exact={route.exact} name={route.name} render={renderComponent} />
+              <Route
+                key={idx}
+                path={route.path}
+                exact={route.exact}
+                render={(props: RouteComponentProps): JSX.Element => (
+                  <>
+                    <Helmet>
+                      <title>{route.name}</title>
+                    </Helmet>
+                    <route.component {...props} />
+                  </>
+                )}
+              />
             ) : null;
+            /* eslint-enable react/jsx-no-bind */
           },
         )}
         <Redirect from="/" to="/dashboard" />
