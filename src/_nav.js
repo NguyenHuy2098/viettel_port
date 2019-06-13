@@ -72,5 +72,13 @@ export default {
         variant: 'info',
       },
     },
+    {
+      name: 'Đóng chuyển thư',
+      url: '/mail-truck-closing',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
   ],
 };
