@@ -1,12 +1,11 @@
 export default {
   items: [
     {
-      name: 'Dashboard',
+      name: 'Nhập phiếu gửi',
       url: '/dashboard',
-      icon: 'icon-speedometer',
+      icon: 'icon-pencil',
       badge: {
         variant: 'info',
-        text: 'NEW',
       },
     },
     {
@@ -15,7 +14,13 @@ export default {
       icon: 'icon-drop',
       badge: {
         variant: 'info',
-        text: 'NEW',
+      },
+    },
+    {
+      name: 'Phiếu gửi trong nước PA2',
+      url: '/phieu-gui-trong-nuoc-pa2',
+      badge: {
+        variant: 'info',
       },
     },
     // {
