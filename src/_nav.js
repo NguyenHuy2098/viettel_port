@@ -64,5 +64,13 @@ export default {
         variant: 'info',
       },
     },
+    {
+      name: 'Danh sách tải kiện',
+      url: '/danh-sach-tai-kien',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
   ],
 };
