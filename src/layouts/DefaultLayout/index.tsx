@@ -25,7 +25,7 @@ interface Props {
   history: History;
 }
 
-class DefaultLayout extends React.PureComponent<Props> {
+class Index extends React.PureComponent<Props> {
   private loading = (): React.ReactElement => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
   private signOut(event: MouseEvent): void {
@@ -83,4 +83,4 @@ class DefaultLayout extends React.PureComponent<Props> {
   }
 }
 
-export default DefaultLayout;
+export default Index;
