@@ -33,8 +33,24 @@ export default {
       },
     },
     {
+      name: 'Đóng bảng kê',
+      url: '/dong-bang-ke',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
+    {
       name: 'Nhập doanh thu',
       url: '/input-revenue',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
+    {
+      name: 'Thông tin bảng kê',
+      url: '/thong-tin-bang-ke',
       icon: 'icon-drop',
       badge: {
         variant: 'info',

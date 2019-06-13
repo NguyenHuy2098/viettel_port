@@ -16,6 +16,11 @@ const en = {
     'Người nhập': 'Người nhập',
     'Ngày nhập': 'Ngày nhập',
     'Quản trị': 'Quản trị',
+    'Thông tin bảng kê': 'Thông tin bảng kê',
+    'Số vận đơn': 'Số vận đơn',
+    'Trọng lượng': 'Trọng lượng',
+    'Ngày tạo': 'Ngày tạo',
+    'Ngày gửi': 'Ngày gửi',
   },
 };
 

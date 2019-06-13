@@ -76,7 +76,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
   }
   return (
     <div>
-      <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
+      <h1 className="sipTitle">{t('Đóng bảng kê nội tỉnh')}</h1>
       <div className="sipTitleRightBlock">
         <div className="sipTitleRightBlockInput">
           <i className="fa fa-search" />
@@ -84,7 +84,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
         </div>
         <Button onClick={toggle}>
           <i className="fa fa-plus" />
-          {t('Tạo bảng kê')}
+          {t('Tạo bảng kê nội tỉnh')}
         </Button>
         {renderModal()}
       </div>
