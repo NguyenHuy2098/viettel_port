@@ -89,12 +89,11 @@ export default {
       },
     },
     {
-      name: 'Forwarding order list in Manifest',
+      name: 'Danh sách phiếu gửi trong bảng kê',
       url: '/danh-sach-phieu-gui-trong-bang-ke',
       icon: 'icon-drop',
       badge: {
         variant: 'info',
-        text: 'NEW',
       },
     },
   ],

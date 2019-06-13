@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Row, Table } from 'reactstrap';
+import { Button, Input, InputGroup, InputGroupText, Col, Row, Table } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
 const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
@@ -39,6 +39,7 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
     <Table striped hover>
       <thead>
         <tr>
+          <th></th>
           <th>Mã bảng kê</th>
           <th>Bưu cục đi</th>
           <th>Bưu cục đến</th>
@@ -51,6 +52,11 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
       </thead>
       <tbody>
         <tr>
+          <td>
+            <InputGroupText>
+              <Input addon type="checkbox" aria-label="Checkbox for following text input" />
+            </InputGroupText>
+          </td>
           <td>BK-2683077-TTKT1</td>
           <td>TTKT1</td>
           <td>TTKT3</td>
@@ -68,19 +74,47 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
     <>
       <Row>
         <Col>
-          <h1 className="sipTitle">{t('Danh sách phiếu gửi trong bảng kê')}</h1>
+          <h1 className="sipTitle">
+            <Button className="btn btn-ghost-dark">
+              <i className="fa fa-arrow-left" />
+            </Button>
+            <span>{t('Danh sách phiếu gửi trong bảng kê')}</span>
+          </h1>
           <div className="sipTitleRightBlock">{renderTopController()}</div>
         </Col>
       </Row>
 
-      <Row className="mt-3">
-        <Col className="col-4">{t('Mã bảng kê')}</Col>
-        <Col className="col-4">abc</Col>
-        <Col className="col-4">abc</Col>
+      <Row className="m-0 mt-3 pt-3 pb-3 bg-white">
+        <Col className="col-4">
+          <div>
+            {t('Mã bảng kê')}: {'V00596290'}
+          </div>
+          <div>
+            {t('Ngày tạo')}: {'24/04/2019'}
+          </div>
+        </Col>
+        <Col className="col-4">
+          <div>
+            {t('Bưu cục đến')}: {'HUB1'}
+          </div>
+          <div>
+            {t('Ghi chú')}: {'Chuyển hoàn về bưu cục gốc'}
+          </div>
+        </Col>
+        <Col className="col-4">
+          <div>
+            {t('Tổng số')}: {'3'}
+          </div>
+        </Col>
       </Row>
 
-      <Row className="mt-3">
-        <Col>abc</Col>
+      <Row className="m-0 mt-3 pt-3 pb-3 bg-white">
+        <Col>
+          <InputGroup>
+            <Input placeholder={t('Quét mã phiếu gửi')} />
+            <Button>{t('Quét mã')}</Button>
+          </InputGroup>
+        </Col>
       </Row>
 
       <Row className="mt-3">
