@@ -88,5 +88,14 @@ export default {
         variant: 'info',
       },
     },
+    {
+      name: 'Forwarding order list in Manifest',
+      url: '/danh-sach-phieu-gui-trong-bang-ke',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+        text: 'NEW',
+      },
+    },
   ],
 };
