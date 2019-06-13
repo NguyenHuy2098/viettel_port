@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import * as router from 'react-router-dom';
@@ -13,10 +12,8 @@ import {
   AppSidebarNav2 as AppSidebarNav,
   // @ts-ignore
 } from '@coreui/react';
-// sidebar nav config
-import navigation from '_nav';
-// routes config
-import routes from 'routes';
+import routes from './routes';
+import navigation from './navigation';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
@@ -38,17 +35,12 @@ class Index extends React.PureComponent<Props> {
       <Switch>
         {routes.map(
           (route, idx: number): React.ReactNode => {
-            return route.component ? (
+            function renderComponent(props: Props): JSX.Element {
               // @ts-ignore
-              <Route
-                key={idx}
-                path={route.path}
-                exact={route.exact}
-                name={route.name}
-                // eslint-disable-next-line react/jsx-no-bind
-                // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-                render={props => <route.component {...props} />}
-              />
+              return <route.component {...props} />;
+            }
+            return route.component ? (
+              <Route key={idx} path={route.path} exact={route.exact} name={route.name} render={renderComponent} />
             ) : null;
           },
         )}

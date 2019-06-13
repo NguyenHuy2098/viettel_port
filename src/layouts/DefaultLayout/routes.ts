@@ -10,7 +10,7 @@ const CloseSack = React.lazy(() => import('containers/CloseSack'));
 const DanhSachTaiKien = React.lazy(() => import('containers/CloseSack/DanhSachTaiKien'));
 const MailTruckClosing = React.lazy(() => import('containers/MailTruckClosing'));
 const ThongTinTai = React.lazy(() => import('containers/NhanTaiKien/ThongTinTai'));
-const ForwardingOrderListInManifest = React.lazy(() => import('./containers/ForwardingOrderListInManifest'));
+const ForwardingOrderListInManifest = React.lazy(() => import('../../containers/ForwardingOrderListInManifest'));
 const DanhSachBangKe = React.lazy(() => import('containers/DongTai/DanhSachBangKe'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config

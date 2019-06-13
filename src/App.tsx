@@ -25,6 +25,8 @@ const Page500 = React.lazy(() => import('containers/Page500'));
 
 class App extends React.Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private renderDefaultLayout = (props: any): React.ReactElement => <DefaultLayout {...props} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderLogin = (props: any): React.ReactElement => <Login {...props} />;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderRegister = (props: any): React.ReactElement => <Register {...props} />;
@@ -32,8 +34,6 @@ class App extends React.Component {
   private renderPage404 = (props: any): React.ReactElement => <Page404 {...props} />;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderPage500 = (props: any): React.ReactElement => <Page500 {...props} />;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private renderDefaultLayout = (props: any): React.ReactElement => <DefaultLayout {...props} />;
 
   public render(): React.ReactElement {
     return (
