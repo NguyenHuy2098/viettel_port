@@ -9,3 +9,53 @@
   background: #fff;
   padding: 10px;
 }
+.sipSendingCoupon {
+  background: #fff;
+  margin: 0 0 30px;
+  .row {
+    margin: 0;
+    width: 100%;
+  }
+  .sipSendingCouponItem {
+    width: 28%;
+    float: left;
+    margin: 10px 0 0;
+    min-width: 270px;
+    max-width: 350px;
+    div[class^='col'], div[class*=' col'] {
+      padding: 5px 0 0 15px;
+      input.form-control {
+        text-align: right;
+        padding: 0 10px;
+        position: relative;
+        top: -5px;
+      }
+    }
+  }
+  .sipLine {
+    margin: 20px 0 0;
+  }
+}
+.sipInputContainer {
+  background: #fff;
+  padding: 15px;
+}
+.sipInputBlock {
+  margin-bottom: 10px;
+  h3 {
+    color: #299F9A;
+    font-size: 14px;
+  }
+}
+.sipInputItem {
+  margin-bottom: 10px;
+  & > label {
+    padding-right: 0;
+  }
+  & > div {
+    box-sizing: border-box;
+    input.form-control {
+      box-sizing: border-box;
+    }
+  }
+}

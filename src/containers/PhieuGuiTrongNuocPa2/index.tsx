@@ -1,7 +1,19 @@
 import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import {
+  Button,
+  Col,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Row,
+  Table,
+} from 'reactstrap';
 import { AppState } from 'redux/store';
 
 interface Props {
@@ -16,122 +28,208 @@ const mapStateToProps = (state: AppState): Props => {
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuocPa2: React.FC<Props> = (props): JSX.Element => {
-  const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
-
-  function toggle(): void {
-    setmodalCreateNew(!modalCreateNew);
-  }
-
-  function renderModal(): JSX.Element {
+  function renderSendingCoupon(): JSX.Element {
     return (
-      <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew">
-        <ModalHeader toggle={toggle}>Tạo bảng kê nội tỉnh</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <Label>Bưu cục đến</Label>
-            <Input type="select">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label>Ghi chú</Label>
-            <Input type="textarea" placeholder="Nhập ghi chú" />
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={toggle}>Ghi lại</Button>
-        </ModalFooter>
-      </Modal>
+      <Row className="sipSendingCoupon">
+        <Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5">Cước chính:</Col>
+            <Col xs="7">12.000 đ</Col>
+          </Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5">Điều chỉnh:</Col>
+            <Col xs="7">
+              <Input type="text" value="0.00 đ" />
+            </Col>
+          </Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5">Phụ phí khác:</Col>
+            <Col xs="7">
+              <Input type="text" value="0.00 đ" />
+            </Col>
+          </Row>
+        </Row>
+        <Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5">Phí gia tăng:</Col>
+            <Col xs="7">0.00 đ</Col>
+          </Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5">Phí xăng dầu:</Col>
+            <Col xs="7">5.000 đ</Col>
+          </Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5">VAT:</Col>
+            <Col xs="7">0.00 đ</Col>
+          </Row>
+        </Row>
+        <div className="sipLine row" />
+        <Row>
+          <Row className="sipSendingCouponItem mb-3">
+            <Col xs="6">Tổng cước</Col>
+            <Col xs="6" className="color-orange">
+              29.000 đ
+            </Col>
+          </Row>
+        </Row>
+      </Row>
     );
   }
 
-  function renderAction(): JSX.Element {
+  function renderSenderInput(): JSX.Element {
     return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
+      <div className="sipInputBlock">
+        <h3>Người gửi</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Mã khách hàng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập mã khách hàng" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Điện thoại
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập số điện thoại " />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Họ tên
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Họ tên" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Địa chỉ
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)" />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  function renderReceiverInput(): JSX.Element {
+    return (
+      <div className="sipInputBlock">
+        <h3>Người nhận</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Điện thoại
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập số điện thoại " />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Họ tên
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nguyễn Văn Nam" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Địa chỉ
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="" />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  function renderCodPriceInput(): JSX.Element {
+    return (
+      <div className="sipInputBlock">
+        <h3>Tiền thu hộ & giá cước</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Tiền thu hộ
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập số tiền thu hộ (đ)" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Người trả cước
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="4" xs="6">
+            <Label check>
+              <Input type="radio" name="codPrice" /> Người gửi
+            </Label>
+          </Col>
+          <Col lg="4" xs="6">
+            <Label check>
+              <Input type="radio" name="codPrice" /> Người nhận
+            </Label>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  function renderSendingCouponInfo(): JSX.Element {
+    return (
+      <Col md="6" xs="12">
+        <div className="sipInputContainer">
+          <div className="sipInputBlock">
+            <h3>Thông tin phiếu gửi</h3>
+            <Row className="sipInputItem">
+              <Label xs="12" lg="4">
+                Mã phiếu gửi
+              </Label>
+              <Col lg="8">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </div>
+          {renderSenderInput()}
+          {renderReceiverInput()}
+          {renderCodPriceInput()}
+        </div>
+      </Col>
     );
   }
 
   return (
     <div>
-      <h1 className="sipTitle">Phiếu gửi trong nước PA2 {props.text}</h1>
-      <div className="sipTitleRightBlock">
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-trash-o" />
-        </Button>
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-print" />
-        </Button>
-        <div className="sipTitleRightBlockInput">
-          <i className="fa fa-search" />
-          <Input type="text" placeholder="Tìm kiếm bảng kê" />
+      <div className="row mb-3 sipTitleContainer">
+        <h1 className="sipTitle">Phiếu gửi trong nước</h1>
+        <div className="sipTitleRightBlock">
+          <Button>
+            <i className="fa fa-refresh" />
+            Làm mới
+          </Button>
+          <Button>
+            <i className="fa fa-download" />
+            Ghi lại
+          </Button>
         </div>
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          Tạo bảng kê
-        </Button>
-        <Button>
-          <i className="fa fa-download" />
-          Ghi lại
-        </Button>
-        {renderModal()}
       </div>
-      <div className="row mt-3" />
-      <p className="text-right">
-        Tổng số: <span>56</span>
-      </p>
-      <div className="mt-3" />
-      <div className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>Mã bảng kê</th>
-              <th>Bưu cục đi</th>
-              <th>Bưu cục đến</th>
-              <th>Số lượng</th>
-              <th>Người nhập</th>
-              <th>Ngày nhập</th>
-              <th>Ghi chú</th>
-              <th>Quản trị</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-          <tbody>
-            <tr>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </div>
+      {renderSendingCoupon()}
+      <Row>
+        {renderSendingCouponInfo()}
+        {renderSendingCouponInfo()}
+      </Row>
     </div>
   );
 };
