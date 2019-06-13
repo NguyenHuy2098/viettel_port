@@ -12,6 +12,7 @@ const DanhSachTaiKien = React.lazy(() => import('containers/CloseSack/DanhSachTa
 const MailTruckClosing = React.lazy(() => import('containers/MailTruckClosing'));
 const ThongTinTai = React.lazy(() => import('containers/NhanTaiKien/ThongTinTai'));
 const ForwardingOrderListInManifest = React.lazy(() => import('./containers/ForwardingOrderListInManifest'));
+const DanhSachBangKe = React.lazy(() => import('containers/DongTai/DanhSachBangKe'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -32,6 +33,7 @@ const routes = [
     name: 'Forwarding order list in Manifest',
     component: ForwardingOrderListInManifest,
   },
+  { path: '/danh-sach-bang-ke', name: 'DanhSachBangKe', component: DanhSachBangKe },
 ];
 
 export default routes;

@@ -89,6 +89,14 @@ export default {
       },
     },
     {
+      name: 'Danh sách bảng kê',
+      url: '/danh-sach-bang-ke',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
+    {
       name: 'Danh sách phiếu gửi trong bảng kê',
       url: '/danh-sach-phieu-gui-trong-bang-ke',
       icon: 'icon-drop',
