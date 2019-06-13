@@ -40,5 +40,13 @@ export default {
         variant: 'info',
       },
     },
+    {
+      name: 'Thông tin bảng kê',
+      url: '/thong-tin-bang-ke',
+      icon: 'icon-drop',
+      badge: {
+        variant: 'info',
+      },
+    },
   ],
 };
