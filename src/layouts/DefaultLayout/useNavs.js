@@ -77,6 +77,9 @@ const nav = t => {
       {
         name: t('Nhận chuyến thư'),
         url: '/nhan-chuyen-thu',
+        icon: 'icon-drop',
+      },
+      {
         name: t('Khai thác chuyển thư đến'),
         url: '/freight-order-receive',
         icon: 'icon-drop',
