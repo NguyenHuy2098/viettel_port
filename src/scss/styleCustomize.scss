@@ -6,7 +6,7 @@
   }
 }
 .sipDescriptionServiceShipping {
-  border-bottom: 1px solid #D6D6D6;
+  border-bottom: 1px solid #d6d6d6;
   margin: 0px;
   div {
     margin-top: 19px;
@@ -19,17 +19,17 @@
   input {
     margin-top: 16px;
     margin-left: 19px;
-    background-color: #F5F5F5;
+    background-color: #f5f5f5;
   }
   button {
     margin-top: 16px;
     margin-left: 16px;
-    background-color: #2DB4A1;
+    background-color: #2db4a1;
     border-radius: 5px;
     color: #fff;
   }
 }
-.sipShippingInformationAndScanCode{
+.sipShippingInformationAndScanCode {
   margin-top: 13px;
   background-color: #fff;
   height: 124px;
@@ -58,7 +58,8 @@
     margin: 10px 0 0;
     min-width: 270px;
     max-width: 350px;
-    div[class^='col'], div[class*=' col'] {
+    div[class^='col'],
+    div[class*=' col'] {
       padding: 5px 0 0 15px;
       input.form-control {
         text-align: right;
@@ -79,7 +80,7 @@
 .sipInputBlock {
   margin-bottom: 10px;
   h3 {
-    color: #299F9A;
+    color: #299f9a;
     font-size: 14px;
   }
 }
@@ -95,4 +96,26 @@
     }
   }
 }
-
+.sipShippingInformationTitle {
+  margin-right: 0px;
+  background-color: #fff;
+}
+.sipFindOrder {
+  margin: 11px 0;
+  background-color: #fff;
+  height: 65px;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  border-radius: 3px;
+  input {
+    margin-top: 16px;
+    margin-left: 19px;
+    background-color: #f5f5f5;
+  }
+  button {
+    margin-top: 16px;
+    margin-left: 16px;
+    background-color: #2db4a1;
+    border-radius: 5px;
+    color: #fff;
+  }
+}

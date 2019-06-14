@@ -4,8 +4,8 @@ import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabP
 import classnames from 'classnames';
 
 // eslint-disable-next-line max-lines-per-function
-const OrderShippingInformation: React.FC = (props): JSX.Element => {
-  const [isTab, setTab] = useState<number | string>('1');
+const DanhSachPhieuGui: React.FC = (): JSX.Element => {
+  const [isTab, setTab] = useState<string>('1');
   const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
     setTab(value);
   };
@@ -42,7 +42,7 @@ const OrderShippingInformation: React.FC = (props): JSX.Element => {
     );
   }
 
-  function renderScanCode() {
+  function renderScanCode(): JSX.Element {
     return (
       <Row className="sipScanCode">
         <Col xs="6" sm="4">
@@ -147,4 +147,4 @@ const OrderShippingInformation: React.FC = (props): JSX.Element => {
     </div>
   );
 };
-export default OrderShippingInformation;
+export default DanhSachPhieuGui;
