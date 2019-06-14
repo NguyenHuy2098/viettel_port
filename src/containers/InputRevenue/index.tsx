@@ -50,15 +50,12 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
         </Button>
       </div>
       <div className="row mt-3" />
-      <div className="row">
-        <div className="col-sm-4">
+      <div className="row sipBgWhiteContainer">
+        <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Quét mã phiếu gửi" />
+          <Button color="primary">Quét mã</Button>
         </div>
-        <Button className="col-sm-1">
-          <i className="fa fa-search" />
-          Quét mã
-        </Button>
-        <p className="col-sm-7 text-right">
+        <p className="pull-right">
           Tổng số phiếu gửi: <span>2</span>
         </p>
       </div>

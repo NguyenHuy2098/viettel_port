@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Table, Row, Col } from 'reactstrap';
+import { Button, Input, Table, Row, Col, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
@@ -35,7 +35,10 @@ const ThongTinBangKe: React.FC = (): JSX.Element => {
           <tbody>
             <tr>
               <td>
-                <input type="checkbox" />
+                <Label check>
+                  {/* eslint-disable-next-line react/jsx-max-depth */}
+                  <Input type="checkbox" />
+                </Label>
               </td>
               <td>BK-2683077-TTKT1</td>
               <td>TTKT1</td>
@@ -68,22 +71,33 @@ const ThongTinBangKe: React.FC = (): JSX.Element => {
       <div className="row mt-3" />
       <div className="sipSummaryContent">
         <Row>
-          <Col className="col-1">{t('Mã bảng kê')}: </Col>
-          <Col className="col-3">BK_1209_BNH</Col>
-          <Col className="col-1">{t('Bưu cục đến')}: </Col>
-          <Col className="col-1">TQN</Col>
-          <Col className="col-5" />
-          <Col className="col-1">{t('Tổng số')}: 5</Col>
-        </Row>
-        <Row>
-          <Col className="col-1">{t('Ngày tạo')}: </Col>
-          <Col className="col-3">24/04/2019</Col>
-          <Col className="col-1">{t('Ngày gửi')}: </Col>
-          <Col className="col-1">24/04/2019</Col>
-        </Row>
-        <Row>
-          <Col className="col-1">{t('Ghi chú')}: </Col>
-          <Col className="col-3">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
+          <Col md="5" xs="12">
+            <Row>
+              <Col xs="5">{t('Mã bảng kê')}: </Col>
+              <Col xs="7">BK_1209_BNH</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ngày tạo')}: </Col>
+              <Col xs="7">24/04/2019</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ghi chú')}: </Col>
+              <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
+            </Row>
+          </Col>
+          <Col md="3" xs="12">
+            <Row>
+              <Col xs="5">{t('Bưu cục đến')}: </Col>
+              <Col xs="7">TQN</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ngày gửi')}: </Col>
+              <Col xs="7">24/04/2019</Col>
+            </Row>
+          </Col>
+          <Col md="4" xs="12" className="text-right">
+            {t('Tổng số')}: 5
+          </Col>
         </Row>
       </div>
       {renderTable()}

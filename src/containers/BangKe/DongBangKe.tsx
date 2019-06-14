@@ -39,8 +39,13 @@ const DongBangKe: React.FC = (): JSX.Element => {
 
   function renderPagination(): JSX.Element {
     return (
-      <Pagination aria-label="Page navigation example">
-        <PaginationItem>
+      <Pagination className="sipPagination">
+        <PaginationItem className="sipPaginationPrev pull-left">
+          <PaginationLink previous href="#">
+            <i className="fa fa-arrow-left"></i>
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem active>
           <PaginationLink href="#">1</PaginationLink>
         </PaginationItem>
         <PaginationItem>
@@ -54,6 +59,11 @@ const DongBangKe: React.FC = (): JSX.Element => {
         </PaginationItem>
         <PaginationItem>
           <PaginationLink href="#">5</PaginationLink>
+        </PaginationItem>
+        <PaginationItem className="sipPaginationNext pull-right">
+          <PaginationLink next href="#">
+            <i className="fa fa-arrow-right"></i>
+          </PaginationLink>
         </PaginationItem>
       </Pagination>
     );
