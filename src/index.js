@@ -13,6 +13,8 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
 
+console.log(process.env.REACT_APP_ENV);
+
 if (process.env.REACT_APP_ENV === 'production') {
   serviceWorker.register();
 } else {

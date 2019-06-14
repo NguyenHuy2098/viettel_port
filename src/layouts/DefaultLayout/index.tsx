@@ -13,77 +13,84 @@ import {
   AppSidebarNav2 as AppSidebarNav,
   // @ts-ignore
 } from '@coreui/react';
-import routes from './routes';
-import navigation from './navigation';
+// sidebar nav config
+// routes config
+import useRoutes from './useRoutes';
+import useNavs from './useNavs';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
+
+const loading = (): React.ReactElement => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
 
 interface Props {
   history: History;
 }
 
-class Index extends React.PureComponent<Props> {
-  private loading = (): React.ReactElement => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
+// eslint-disable-next-line max-lines-per-function
+const DefaultLayout: React.FC<Props> = (props): JSX.Element => {
+  const routes = useRoutes();
+  const navs = useNavs();
 
-  private signOut(event: MouseEvent): void {
+  function signOut(event: MouseEvent): void {
     event.preventDefault();
-    this.props.history.push('/login');
+    props.history.push('/login');
   }
 
-  private renderRouter = (): React.ReactElement => (
-    <React.Suspense fallback={this.loading()}>
-      <Switch>
-        {routes.map(
-          (route, idx: number): React.ReactNode => {
-            /* eslint-disable react/jsx-no-bind */
-            return route.component ? (
-              <Route
-                key={idx}
-                path={route.path}
-                exact={route.exact}
-                render={(props: RouteComponentProps): JSX.Element => (
-                  <>
-                    <Helmet>
-                      <title>{route.name}</title>
-                    </Helmet>
-                    <route.component {...props} />
-                  </>
-                )}
-              />
-            ) : null;
-            /* eslint-enable react/jsx-no-bind */
-          },
-        )}
-        <Redirect from="/" to="/dashboard" />
-      </Switch>
-    </React.Suspense>
-  );
-
-  public render(): React.ReactElement {
+  function renderRouter(): React.ReactElement {
     return (
-      <div className="app">
-        <AppHeader fixed>
-          <React.Suspense fallback={this.loading()}>
-            <DefaultHeader onLogout={this.signOut} />
-          </React.Suspense>
-        </AppHeader>
-        <div className="app-body">
-          <AppSidebar fixed display="lg">
-            <AppSidebarHeader />
-            <AppSidebarForm />
-            <React.Suspense fallback={this.loading()}>
-              <AppSidebarNav navConfig={navigation} {...this.props} router={router} />
-            </React.Suspense>
-            <AppSidebarMinimizer />
-          </AppSidebar>
-          <main className="main">
-            <Container fluid>{this.renderRouter()}</Container>
-          </main>
-        </div>
-      </div>
+      <React.Suspense fallback={loading()}>
+        <Switch>
+          {routes.map(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (route: any, idx: number): React.ReactNode => {
+              /* eslint-disable react/jsx-no-bind */
+              return route.component ? (
+                <Route
+                  key={idx}
+                  path={route.path}
+                  exact={route.exact}
+                  render={(props: RouteComponentProps): JSX.Element => (
+                    <>
+                      <Helmet>
+                        <title>{route.name}</title>
+                      </Helmet>
+                      <route.component {...props} />
+                    </>
+                  )}
+                />
+              ) : null;
+              /* eslint-enable react/jsx-no-bind */
+            },
+          )}
+          <Redirect from="/" to="/dashboard" />
+        </Switch>
+      </React.Suspense>
     );
   }
-}
 
-export default Index;
+  return (
+    <div className="app">
+      <AppHeader fixed>
+        <React.Suspense fallback={loading()}>
+          <DefaultHeader onLogout={signOut} />
+        </React.Suspense>
+      </AppHeader>
+      <div className="app-body">
+        <AppSidebar fixed display="lg">
+          <AppSidebarHeader />
+          <AppSidebarForm />
+          <React.Suspense fallback={loading()}>
+            <AppSidebarNav navConfig={navs} {...props} router={router} />
+          </React.Suspense>
+          <AppSidebarMinimizer />
+        </AppSidebar>
+        <main className="main">
+          <Container fluid>{renderRouter()}</Container>
+        </main>
+      </div>
+    </div>
+  );
+};
+
+export default DefaultLayout;
