@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Input, Label, Table, Row, Col } from 'reactstrap';
+import { Button, Input, Label, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
