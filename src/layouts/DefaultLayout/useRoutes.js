@@ -15,6 +15,7 @@ const ForwardingOrderListInManifest = React.lazy(() => import('../../containers/
 const DanhSachBangKe = React.lazy(() => import('containers/DongTai/DanhSachBangKe'));
 const OperationSack = React.lazy(() => import('containers/OperationSack'));
 const KhaiThacDi = React.lazy(() => import('containers/OrderShippingInformation'));
+const FreightOrderReceive = React.lazy(() => import('containers/FreightOrderReceive'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = t => {
@@ -38,6 +39,7 @@ const routes = t => {
     { path: '/danh-sach-bang-ke', name: t('DanhSachBangKe'), component: DanhSachBangKe },
     { path: '/operation-sack', name: 'Khai thác tải', component: OperationSack },
     { path: '/khai-thac-di', name: 'Khai thác đi', component: KhaiThacDi },
+    { path: '/freight-order-receive', name: 'Khai thác chuyển thư đến', component: FreightOrderReceive },
   ];
 };
 

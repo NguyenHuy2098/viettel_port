@@ -70,6 +70,11 @@ const nav = t => {
         icon: 'icon-drop',
       },
       {
+        name: t('Khai thác chuyển thư đến'),
+        url: '/freight-order-receive',
+        icon: 'icon-drop',
+      },
+      {
         name: t('Khai thác đi'),
         url: '/khai-thac-di',
         icon: 'icon-drop',
