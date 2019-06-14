@@ -15,6 +15,11 @@ const nav = t => {
         icon: '',
       },
       {
+        name: 'Phiếu gửi quốc tế',
+        url: '/international-forwarding-order',
+        icon: 'icon-plane',
+      },
+      {
         name: t('Đóng bảng kê nội tỉnh'),
         url: '/dong-bang-ke-noi-tinh',
         icon: 'icon-drop',

@@ -5,6 +5,7 @@ const Dashboard = React.lazy(() => import('containers/Dashboard/index'));
 const DongBangKeNoiTinh = React.lazy(() => import('containers/BangKe/DongBangKeNoiTinh'));
 const DongBangKe = React.lazy(() => import('containers/BangKe/DongBangKe'));
 const PhieuGuiTrongNuocPa2 = React.lazy(() => import('containers/PhieuGuiTrongNuocPa2'));
+const InternationalForwardingOrder = React.lazy(() => import('containers/InternationalForwardingOrder'));
 const InputRevenue = React.lazy(() => import('containers/InputRevenue'));
 const ThongTinBangKe = React.lazy(() => import('containers/BangKe/ThongTinBangKe'));
 const CloseSack = React.lazy(() => import('containers/CloseSack'));
@@ -28,6 +29,11 @@ const routes = t => {
     { path: '/', exact: true, name: t('Home') },
     { path: '/dashboard', name: t('Dashboard'), component: Dashboard },
     { path: '/phieu-gui-trong-nuoc-pa2', name: t('PhieuGuiTrongNuocPa2'), component: PhieuGuiTrongNuocPa2 },
+    {
+      path: '/international-forwarding-order',
+      name: 'InternationalForwardingOrder',
+      component: InternationalForwardingOrder,
+    },
     { path: '/dong-bang-ke-noi-tinh', name: t('Đóng bảng kê nội tỉnh'), component: DongBangKeNoiTinh },
     { path: '/dong-bang-ke', name: t('Đóng bảng kê'), component: DongBangKe },
     { path: '/input-revenue', name: t('InputRevenue'), component: InputRevenue },
