@@ -65,29 +65,30 @@ const Dashboard: React.FC<Props> = (props): JSX.Element => {
 
   return (
     <div>
-      <h1 className="sipTitle">Đóng bảng kê {props.text}</h1>
-      <div className="sipTitleRightBlock">
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-trash-o" />
-        </Button>
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-print" />
-        </Button>
-        <div className="sipTitleRightBlockInput">
-          <i className="fa fa-search" />
-          <Input type="text" placeholder="Tìm kiếm bảng kê" />
+      <div className="row mb-3 sipTitleContainer">
+        <h1 className="sipTitle">Đóng bảng kê {props.text}</h1>
+        <div className="sipTitleRightBlock">
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-trash-o" />
+          </Button>
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-print" />
+          </Button>
+          <div className="sipTitleRightBlockInput">
+            <i className="fa fa-search" />
+            <Input type="text" placeholder="Tìm kiếm bảng kê" />
+          </div>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            Tạo bảng kê
+          </Button>
+          <Button>
+            <i className="fa fa-download" />
+            Ghi lại
+          </Button>
+          {renderModal()}
         </div>
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          Tạo bảng kê
-        </Button>
-        <Button>
-          <i className="fa fa-download" />
-          Ghi lại
-        </Button>
-        {renderModal()}
       </div>
-      <div className="row mt-3" />
       <p className="text-right">
         Tổng số: <span>56</span>
       </p>
