@@ -20,6 +20,7 @@ const NhanChuyenThu = React.lazy(() => import('containers/ShippingInformation'))
 const FreightOrderReceive = React.lazy(() => import('containers/FreightOrderReceive'));
 const PageNoData = React.lazy(() => import('containers/PageNoData'));
 const CommunicateCustomer = React.lazy(() => import('containers/CommunicateCustomer'));
+const OrderInformation = React.lazy(() => import('containers/OrderInformation'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = t => {
@@ -47,6 +48,7 @@ const routes = t => {
     { path: '/freight-order-receive', name: 'Khai thác chuyển thư đến', component: FreightOrderReceive },
     { path: '/no-data', name: 'Chưa có dữ liệu', component: PageNoData },
     { path: '/tiep-xuc-khach-hang', name: 'Tiếp xúc khách hàng', component: CommunicateCustomer },
+    { path: '/order-information', name: 'Thông tin đơn hàng', component: OrderInformation },
   ];
 };
 
