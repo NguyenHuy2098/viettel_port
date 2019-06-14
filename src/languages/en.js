@@ -6,7 +6,7 @@ const en = {
     'Ghi chú': 'Ghi chú',
     'Ghi lại': 'Ghi lại',
     'Nhập ghi chú': 'Nhập ghi chú',
-    'Đóng bảng kê': 'Đóng bảng kê',
+    'Đóng bảng kê': 'Đóng bảng kê - en',
     'Tìm kiếm bảng kê': 'Tìm kiếm bảng kê',
     'Tạo bảng kê': 'Tạo bảng kê',
     'Tổng số': 'Tổng số',

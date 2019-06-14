@@ -11,7 +11,7 @@ const loading = (): React.ReactElement => <div className="animated fadeIn pt-3 t
 
 // Containers
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const DefaultLayout = React.lazy(() => import('./layouts/DefaultLayout'));
+const DefaultLayout = React.lazy(() => import('layouts/DefaultLayout'));
 
 // Pages
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
