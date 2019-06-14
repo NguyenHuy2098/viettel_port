@@ -62,7 +62,7 @@ const DefaultLayout: React.FC<Props> = (props): JSX.Element => {
             /* eslint-enable react/jsx-no-bind */
           },
         )}
-        <Redirect from="/" to="/dashboard" />
+        <Redirect from="/" to="/dong-bang-ke" />
       </Switch>
     );
   }

@@ -15,7 +15,7 @@ const mapStateToProps = (state: AppState): Props => {
 };
 
 // eslint-disable-next-line max-lines-per-function
-const PhieuGuiTrongNuocPa2: React.FC<Props> = (props): JSX.Element => {
+const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
   function renderSendingCoupon(): JSX.Element {
     return (
       <Row className="sipSendingCoupon">
@@ -222,4 +222,4 @@ const PhieuGuiTrongNuocPa2: React.FC<Props> = (props): JSX.Element => {
   );
 };
 
-export default connect(mapStateToProps)(PhieuGuiTrongNuocPa2);
+export default connect(mapStateToProps)(PhieuGuiTrongNuoc);
