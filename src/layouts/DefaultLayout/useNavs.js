@@ -84,6 +84,11 @@ const nav = t => {
         url: '/freight-order-receive',
         icon: 'icon-drop',
       },
+      {
+        name: t('Tiếp xúc khách hàng'),
+        url: '/tiep-xuc-khach-hang',
+        icon: 'icon-drop',
+      },
     ],
   };
 };
