@@ -85,6 +85,11 @@ const nav = t => {
         icon: 'icon-drop',
       },
       {
+        name: t('Thông tin đơn hàng'),
+        url: '/order-information',
+        icon: 'icon-drop',
+      },
+      {
         name: t('Tiếp xúc khách hàng'),
         url: '/tiep-xuc-khach-hang',
         icon: 'icon-drop',
