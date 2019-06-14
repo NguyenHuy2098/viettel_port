@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Input, Table, Row, Col } from 'reactstrap';
+import { Button, Input, Label, Table, Row, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
@@ -34,7 +34,10 @@ const OperationSack: React.FC = (): JSX.Element => {
           <tbody>
             <tr>
               <td>
-                <input type="checkbox" />
+                <Label check>
+                  {/* eslint-disable-next-line react/jsx-max-depth */}
+                  <Input type="checkbox" />
+                </Label>
               </td>
               <td>TAI_4587_KDV</td>
               <td>KDV</td>
@@ -54,15 +57,12 @@ const OperationSack: React.FC = (): JSX.Element => {
       <h1 className="sipTitle">{t('Khai thác tải')}</h1>
       <div className="row mt-3" />
       <div className="mt-3" />
-      <div className="sipTableSearch">
-        <Row>
-          <Col className="col-3">
-            <Input type="text" placeholder={t('Mã tải')} />
-          </Col>
-          <Col className="col-1">
-            <Button>{t('Tìm kiếm')}</Button>
-          </Col>
-        </Row>
+
+      <div className="row sipBgWhiteContainer">
+        <div className="sipScanCodeContainer">
+          <Input type="text" placeholder="Mã tải" />
+          <Button color="primary">Quét mã</Button>
+        </div>
       </div>
       {renderTable()}
     </div>

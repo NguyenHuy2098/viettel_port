@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input, InputGroup, InputGroupText, Col, Row, Table } from 'reactstrap';
+import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
 const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
@@ -53,9 +53,9 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
       <tbody>
         <tr>
           <td>
-            <InputGroupText>
-              <Input addon type="checkbox" aria-label="Checkbox for following text input" />
-            </InputGroupText>
+            <Label check>
+              <Input type="checkbox" />
+            </Label>
           </td>
           <td>BK-2683077-TTKT1</td>
           <td>TTKT1</td>
@@ -84,38 +84,40 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
         </Col>
       </Row>
 
-      <Row className="m-0 mt-3 pt-3 pb-3 bg-white">
-        <Col className="col-4">
-          <div>
-            {t('Mã bảng kê')}: {'V00596290'}
-          </div>
-          <div>
-            {t('Ngày tạo')}: {'24/04/2019'}
-          </div>
-        </Col>
-        <Col className="col-4">
-          <div>
-            {t('Bưu cục đến')}: {'HUB1'}
-          </div>
-          <div>
-            {t('Ghi chú')}: {'Chuyển hoàn về bưu cục gốc'}
-          </div>
-        </Col>
-        <Col className="col-4">
-          <div>
-            {t('Tổng số')}: {'3'}
-          </div>
-        </Col>
-      </Row>
+      <div className="sipSummaryContent">
+        <Row>
+          <Col md="4" xs="12">
+            <Row>
+              <Col xs="5">{t('Mã bảng kê')}: </Col>
+              <Col xs="7">{'V00596290'}</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ngày tạo')}: </Col>
+              <Col xs="7">2{'24/04/2019'}</Col>
+            </Row>
+          </Col>
+          <Col md="5" xs="12">
+            <Row>
+              <Col xs="5">{t('Bưu cục đến')}: </Col>
+              <Col xs="7">HUB1</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ghi chú')}: </Col>
+              <Col xs="7">{'Chuyển hoàn về bưu cục gốc'}</Col>
+            </Row>
+          </Col>
+          <Col md="3" xs="12" className="text-right">
+            {t('Tổng số')}: 3
+          </Col>
+        </Row>
+      </div>
 
-      <Row className="m-0 mt-3 pt-3 pb-3 bg-white">
-        <Col>
-          <InputGroup>
-            <Input placeholder={t('Quét mã phiếu gửi')} />
-            <Button>{t('Quét mã')}</Button>
-          </InputGroup>
-        </Col>
-      </Row>
+      <div className="row sipBgWhiteContainer">
+        <div className="sipScanCodeContainer">
+          <Input type="text" placeholder="Quét mã phiếu gửi" />
+          <Button color="primary">Quét mã</Button>
+        </div>
+      </div>
 
       <Row className="mt-3">
         <Col>

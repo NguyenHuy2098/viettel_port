@@ -3,10 +3,15 @@ a, button {
 }
 body {
   color: #4A4A4A;
-  word-break: break-all;
+  word-break: break-word;
+  word-wrap: break-word;
 }
 .app-header.navbar {
   padding-right: 15px;
+}
+.btn-primary {
+  background: linear-gradient(180deg, #18A796 0%, #47C4AE 100%);
+  border-color: #299F9A;
 }
 .no-margin {
   margin: 0 !important;
@@ -289,6 +294,67 @@ body {
 }
 html:not([dir="rtl"]) .sidebar {
   margin-left: -240px;
+}
+.sipPagination {
+  background: #fff;
+  padding: 15px;
+  .pagination {
+    margin: 0;
+    text-align: center;
+    display: block;
+    .page-item {
+      display: inline-block;
+      margin: 0 1px;
+      .page-link {
+        border: none;
+        font-size: 18px;
+        color: #52575A;
+        font-weight: 600;
+        padding: 0 5px;
+        height: 36px;
+        min-width: 36px;
+        line-height: 34px;
+      }
+      &.active .page-link {
+        background: none;
+        border: 1px solid #94979B;
+      }
+    }
+    .sipPaginationNext, .sipPaginationPrev {
+      margin-top: 2px;
+      .page-link {
+        background: linear-gradient(180deg, #18A796 0%, #47C4AE 100%);
+        color: #fff;
+        border-radius: 4px;
+        min-width: 32px;
+        height: 32px;
+        line-height: 30px;
+      }
+    }
+  }
+}
+.sipBgWhiteContainer {
+  background: #fff;
+  padding: 15px;
+  margin: 0;
+  display: block;
+  margin-bottom: 15px;
+}
+.sipScanCodeContainer {
+  width: 320px;
+  max-width: 100%;
+  margin-right: 15px;
+  display: inline-block;
+  input.form-control {
+    margin-right: 15px;
+    float: left;
+    width: calc(100% - 100px);
+  }
+  .btn {
+    white-space: nowrap;
+    width: 80px;
+    padding: 6px 0;
+  }
 }
 
 @media screen and (min-width: 992px) {
