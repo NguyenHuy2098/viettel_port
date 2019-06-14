@@ -1,7 +1,6 @@
 import React from 'react';
 
-const Dashboard = React.lazy(() => import('containers/Dashboard/index'));
-const About = React.lazy(() => import('containers/About/index'));
+const Dashboard = React.lazy(() => import('containers/Dashboard'));
 const DongBangKeNoiTinh = React.lazy(() => import('containers/BangKe/DongBangKeNoiTinh'));
 const DongBangKe = React.lazy(() => import('containers/BangKe/DongBangKe'));
 const PhieuGuiTrongNuocPa2 = React.lazy(() => import('containers/PhieuGuiTrongNuocPa2'));
@@ -11,14 +10,13 @@ const CloseSack = React.lazy(() => import('containers/CloseSack'));
 const DanhSachTaiKien = React.lazy(() => import('containers/CloseSack/DanhSachTaiKien'));
 const MailTruckClosing = React.lazy(() => import('containers/MailTruckClosing'));
 const ThongTinTai = React.lazy(() => import('containers/NhanTaiKien/ThongTinTai'));
-const ForwardingOrderListInManifest = React.lazy(() => import('./containers/ForwardingOrderListInManifest'));
+const ForwardingOrderListInManifest = React.lazy(() => import('../../containers/ForwardingOrderListInManifest'));
 const DanhSachBangKe = React.lazy(() => import('containers/DongTai/DanhSachBangKe'));
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/about', name: 'About', component: About },
   { path: '/phieu-gui-trong-nuoc-pa2', name: 'PhieuGuiTrongNuocPa2', component: PhieuGuiTrongNuocPa2 },
   { path: '/dong-bang-ke-noi-tinh', name: 'Đóng bảng kê nội tỉnh', component: DongBangKeNoiTinh },
   { path: '/dong-bang-ke', name: 'Đóng bảng kê', component: DongBangKe },

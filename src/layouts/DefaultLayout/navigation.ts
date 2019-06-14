@@ -6,11 +6,6 @@ export default {
       icon: 'icon-pencil',
     },
     {
-      name: 'About',
-      url: '/about',
-      icon: 'icon-drop',
-    },
-    {
       name: 'Phiếu gửi trong nước PA2',
       url: '/phieu-gui-trong-nuoc-pa2',
       icon: '',
