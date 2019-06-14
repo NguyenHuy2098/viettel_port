@@ -39,33 +39,31 @@ const DefaultLayout: React.FC<Props> = (props): JSX.Element => {
 
   function renderRouter(): React.ReactElement {
     return (
-      <React.Suspense fallback={loading()}>
-        <Switch>
-          {routes.map(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            (route: any, idx: number): React.ReactNode => {
-              /* eslint-disable react/jsx-no-bind */
-              return route.component ? (
-                <Route
-                  key={idx}
-                  path={route.path}
-                  exact={route.exact}
-                  render={(props: RouteComponentProps): JSX.Element => (
-                    <>
-                      <Helmet>
-                        <title>{route.name}</title>
-                      </Helmet>
-                      <route.component {...props} />
-                    </>
-                  )}
-                />
-              ) : null;
-              /* eslint-enable react/jsx-no-bind */
-            },
-          )}
-          <Redirect from="/" to="/dashboard" />
-        </Switch>
-      </React.Suspense>
+      <Switch>
+        {routes.map(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (route: any, idx: number): React.ReactNode => {
+            /* eslint-disable react/jsx-no-bind */
+            return route.component ? (
+              <Route
+                key={idx}
+                path={route.path}
+                exact={route.exact}
+                render={(props: RouteComponentProps): JSX.Element => (
+                  <>
+                    <Helmet>
+                      <title>{route.name}</title>
+                    </Helmet>
+                    <route.component {...props} />
+                  </>
+                )}
+              />
+            ) : null;
+            /* eslint-enable react/jsx-no-bind */
+          },
+        )}
+        <Redirect from="/" to="/dashboard" />
+      </Switch>
     );
   }
 

@@ -1,27 +1,87 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
+import Loading from 'components/Loading';
+import Loadable from 'react-loadable';
 
-const Dashboard = React.lazy(() => import('containers/Dashboard/index'));
-const DongBangKeNoiTinh = React.lazy(() => import('containers/BangKe/DongBangKeNoiTinh'));
-const DongBangKe = React.lazy(() => import('containers/BangKe/DongBangKe'));
-const PhieuGuiTrongNuocPa2 = React.lazy(() => import('containers/PhieuGuiTrongNuocPa2'));
-const InternationalForwardingOrder = React.lazy(() => import('containers/InternationalForwardingOrder'));
-const InputRevenue = React.lazy(() => import('containers/InputRevenue'));
-const ThongTinBangKe = React.lazy(() => import('containers/BangKe/ThongTinBangKe'));
-const CloseSack = React.lazy(() => import('containers/CloseSack'));
-const DanhSachTaiKien = React.lazy(() => import('containers/CloseSack/DanhSachTaiKien'));
-const MailTruckClosing = React.lazy(() => import('containers/MailTruckClosing'));
-const ThongTinTai = React.lazy(() => import('containers/NhanTaiKien/ThongTinTai'));
-const ForwardingOrderListInManifest = React.lazy(() => import('../../containers/ForwardingOrderListInManifest'));
-const DanhSachBangKe = React.lazy(() => import('containers/DongTai/DanhSachBangKe'));
-const OperationSack = React.lazy(() => import('containers/OperationSack'));
-const DanhSachPhieuGui = React.lazy(() => import('containers/BangKe/DanhSachPhieuGui'));
-const NhanChuyenThu = React.lazy(() => import('containers/ShippingInformation'));
-
-const FreightOrderReceive = React.lazy(() => import('containers/FreightOrderReceive'));
-const PageNoData = React.lazy(() => import('containers/PageNoData'));
-const CommunicateCustomer = React.lazy(() => import('containers/CommunicateCustomer'));
-const OrderInformation = React.lazy(() => import('containers/OrderInformation'));
+const DanhSachPhieuGui = Loadable({
+  loader: () => import('containers/BangKe/DanhSachPhieuGui'),
+  loading: Loading,
+});
+const NhanChuyenThu = Loadable({
+  loader: () => import('containers/ShippingInformation'),
+  loading: Loading,
+});
+const InternationalForwardingOrder = Loadable({
+  loader: () => import('containers/InternationalForwardingOrder'),
+  loading: Loading,
+});
+const CommunicateCustomer = Loadable({
+  loader: () => import('containers/CommunicateCustomer'),
+  loading: Loading,
+});
+const OrderInformation = Loadable({
+  loader: () => import('containers/OrderInformation'),
+  loading: Loading,
+});
+const Dashboard = Loadable({
+  loader: () => import('containers/Dashboard/index'),
+  loading: Loading,
+});
+const DongBangKeNoiTinh = Loadable({
+  loader: () => import('containers/BangKe/DongBangKeNoiTinh'),
+  loading: Loading,
+});
+const DongBangKe = Loadable({
+  loader: () => import('containers/BangKe/DongBangKe'),
+  loading: Loading,
+});
+const PhieuGuiTrongNuocPa2 = Loadable({
+  loader: () => import('containers/PhieuGuiTrongNuocPa2'),
+  loading: Loading,
+});
+const InputRevenue = Loadable({
+  loader: () => import('containers/InputRevenue'),
+  loading: Loading,
+});
+const ThongTinBangKe = Loadable({
+  loader: () => import('containers/BangKe/ThongTinBangKe'),
+  loading: Loading,
+});
+const CloseSack = Loadable({
+  loader: () => import('containers/CloseSack'),
+  loading: Loading,
+});
+const DanhSachTaiKien = Loadable({
+  loader: () => import('containers/CloseSack/DanhSachTaiKien'),
+  loading: Loading,
+});
+const MailTruckClosing = Loadable({
+  loader: () => import('containers/MailTruckClosing'),
+  loading: Loading,
+});
+const ThongTinTai = Loadable({
+  loader: () => import('containers/NhanTaiKien/ThongTinTai'),
+  loading: Loading,
+});
+const ForwardingOrderListInManifest = Loadable({
+  loader: () => import('containers/ForwardingOrderListInManifest'),
+  loading: Loading,
+});
+const DanhSachBangKe = Loadable({
+  loader: () => import('containers/DongTai/DanhSachBangKe'),
+  loading: Loading,
+});
+const OperationSack = Loadable({
+  loader: () => import('containers/OperationSack'),
+  loading: Loading,
+});
+const FreightOrderReceive = Loadable({
+  loader: () => import('containers/FreightOrderReceive'),
+  loading: Loading,
+});
+const PageNoData = Loadable({
+  loader: () => import('containers/PageNoData'),
+  loading: Loading,
+});
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = t => {
