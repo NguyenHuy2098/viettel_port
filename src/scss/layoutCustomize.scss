@@ -139,17 +139,36 @@ body {
 .app-body {
   .sidebar {
     background: #fff;
+    .nav-dropdown-items {
+      background: #F9F9F9 !important;
+    }
     .nav-link {
-      color: #4A4A4A;
-      border-left: 4px solid transparent;
-      background: #F9F9F9;
+      color: #4A4A4A !important;
+      border-left: 4px solid transparent !important;
+      background: #F9F9F9 !important;
+      padding: 12px 8px;
       i {
-        color: inherit !important;
+        color: #299F9A !important;
+        font-size: 18px;
+        margin-right: 12px;
       }
-      &:hover, &.active {
-        border-color: #299F9A;
-        background: #fff;
-        color: #299F9A;
+      &:hover {
+        border-color: #299F9A !important;
+        background: #fff !important;
+        color: #299F9A !important;
+      }
+      &.active {
+        color: #FD8301 !important;
+      }
+    }
+    .nav-dropdown {
+      .nav-dropdown-toggle {
+        background: #fff !important;
+      }
+      &.open .nav-dropdown-toggle {
+        border-color: #299F9A !important;
+        background: #fff !important;
+        color: #299F9A !important;
       }
     }
   }
@@ -357,6 +376,31 @@ html:not([dir="rtl"]) .sidebar {
   }
 }
 
+.sipTabContainer {
+  background-color: #fff;
+  .nav-tabs {
+    border-bottom: 3px solid #D3D3D3;
+    .nav-item {
+      margin-bottom: -3px;
+      .nav-link {
+        border: none;
+        border-bottom: 3px solid #D3D3D3;
+        color: #6B6F83;
+        padding: 10px 20px;
+        &.active {
+          border-bottom-color: #FD8301;
+          color: #4A4A4A;
+        }
+      }
+    }
+  }
+  .tab-content {
+    .tab-pane {
+      padding: 0;
+    }
+  }
+}
+
 @media screen and (min-width: 992px) {
   html:not([dir="rtl"]) .sidebar-lg-show.sidebar-fixed .main, html:not([dir="rtl"]) .sidebar-lg-show.sidebar-fixed .app-footer, html:not([dir="rtl"]) .sidebar-show.sidebar-fixed .main, html:not([dir="rtl"]) .sidebar-show.sidebar-fixed .app-footer {
     margin-left: 240px;
@@ -371,6 +415,17 @@ html:not([dir="rtl"]) .sidebar {
       background: #2DB4A1;
       color: #fff;
     }
+  }
+  .sidebar-minimized .sidebar .nav-dropdown-items {
+    .nav-item  {
+      width: 250px;
+      .nav-link {
+        width: 250px;
+      }
+    }
+  }
+  .sidebar-minimized .sidebar .nav-link .nav-icon {
+    width: 30px;
   }
 }
 

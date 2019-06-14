@@ -22,10 +22,6 @@ const OrderInformation = Loadable({
   loader: () => import('containers/OrderInformation'),
   loading: Loading,
 });
-const Dashboard = Loadable({
-  loader: () => import('containers/Dashboard/index'),
-  loading: Loading,
-});
 const DongBangKeNoiTinh = Loadable({
   loader: () => import('containers/BangKe/DongBangKeNoiTinh'),
   loading: Loading,
@@ -34,8 +30,8 @@ const DongBangKe = Loadable({
   loader: () => import('containers/BangKe/DongBangKe'),
   loading: Loading,
 });
-const PhieuGuiTrongNuocPa2 = Loadable({
-  loader: () => import('containers/PhieuGuiTrongNuocPa2'),
+const PhieuGuiTrongNuoc = Loadable({
+  loader: () => import('containers/PhieuGuiTrongNuoc'),
   loading: Loading,
 });
 const InputRevenue = Loadable({
@@ -87,8 +83,7 @@ const PageNoData = Loadable({
 const routes = t => {
   return [
     { path: '/', exact: true, name: t('Home') },
-    { path: '/dashboard', name: t('Dashboard'), component: Dashboard },
-    { path: '/phieu-gui-trong-nuoc-pa2', name: t('PhieuGuiTrongNuocPa2'), component: PhieuGuiTrongNuocPa2 },
+    { path: '/phieu-gui-trong-nuoc', name: t('PhieuGuiTrongNuoc'), component: PhieuGuiTrongNuoc },
     {
       path: '/international-forwarding-order',
       name: 'InternationalForwardingOrder',

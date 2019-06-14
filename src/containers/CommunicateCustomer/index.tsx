@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
+import { Button, Col, Input, Label, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import { map } from 'lodash';
 
@@ -79,6 +79,7 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
         <Table striped hover>
           <thead>
             <tr>
+              <th />
               <th>{t('Số vận đơn')}</th>
               <th>{t('Bưu cục đến')}</th>
               <th>{t('Số lượng')}</th>
@@ -91,9 +92,11 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
             {map(tempData, item => (
               <tr key={item.numberPos}>
                 <td>
-                  <input type="checkbox" className="mr-2" />
-                  {item.numberPos}
+                  <Label check>
+                    <Input type="checkbox" />
+                  </Label>
                 </td>
+                <td>{item.numberPos}</td>
                 <td> {item.destination}</td>
                 <td>{item.count}</td>
                 <td>{item.weight} g</td>
@@ -109,34 +112,36 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
   return (
     <div>
       {renderTitle()}
-      <Nav tabs className="tabOrderShippingInformation">
-        <NavItem>
-          <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
-            Khách
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
-            THD (0)
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('3')}>
-            HQM (11)
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('4')}>
-            HPM (2)
-          </NavLink>
-        </NavItem>
-      </Nav>
-      <TabContent activeTab={isTab}>
-        <TabPane tabId="1">{renderTable()}</TabPane>
-        <TabPane tabId="2">{renderTable()}</TabPane>
-        <TabPane tabId="3">{renderTable()}</TabPane>
-        <TabPane tabId="4">{renderTable()}</TabPane>
-      </TabContent>
+      <div className="sipTabContainer">
+        <Nav tabs>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
+              Khách
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
+              THD (0)
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('3')}>
+              HQM (11)
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('4')}>
+              HPM (2)
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={isTab}>
+          <TabPane tabId="1">{renderTable()}</TabPane>
+          <TabPane tabId="2">{renderTable()}</TabPane>
+          <TabPane tabId="3">{renderTable()}</TabPane>
+          <TabPane tabId="4">{renderTable()}</TabPane>
+        </TabContent>
+      </div>
     </div>
   );
 };

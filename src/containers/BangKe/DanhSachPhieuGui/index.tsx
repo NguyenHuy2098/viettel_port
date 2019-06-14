@@ -6,7 +6,7 @@ import classnames from 'classnames';
 // eslint-disable-next-line max-lines-per-function
 const DanhSachPhieuGui: React.FC = (): JSX.Element => {
   const [isTab, setTab] = useState<string>('1');
-  const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>): void => {
     setTab(value);
   };
 
@@ -125,25 +125,27 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
     <div>
       {renderTitle()}
       {renderShippingInformationAndScanCode()}
-      <Nav tabs className="tabOrderShippingInformation">
-        <NavItem>
-          <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
-            TWQ (3)
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
-            THD (0)
-          </NavLink>
-        </NavItem>
-      </Nav>
-      <TabContent activeTab={isTab}>
-        <TabPane tabId="1">{renderTable()}</TabPane>
-        <TabPane tabId="2">
-          {renderTable()}
-          {renderTable()}
-        </TabPane>
-      </TabContent>
+      <div className="sipTabContainer">
+        <Nav tabs>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
+              TWQ (3)
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
+              THD (0)
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={isTab}>
+          <TabPane tabId="1">{renderTable()}</TabPane>
+          <TabPane tabId="2">
+            {renderTable()}
+            {renderTable()}
+          </TabPane>
+        </TabContent>
+      </div>
     </div>
   );
 };
