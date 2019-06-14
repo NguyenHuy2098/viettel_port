@@ -167,7 +167,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
       <div className="sipInputBlock">
         <h3>
           Dịch vụ
-          <a className="pull-right">
+          <a className="pull-right" href="/">
             Tất cả dịch vụ <span className="color-orange">></span>
           </a>
         </h3>
