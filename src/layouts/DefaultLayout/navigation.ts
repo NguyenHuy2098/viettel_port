@@ -60,5 +60,10 @@ export default {
       url: '/danh-sach-phieu-gui-trong-bang-ke',
       icon: 'icon-drop',
     },
+    {
+      name: 'Khai thác tải',
+      url: '/operation-sack',
+      icon: 'icon-drop',
+    },
   ],
 };
