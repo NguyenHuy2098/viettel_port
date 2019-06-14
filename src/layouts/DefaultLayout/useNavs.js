@@ -69,6 +69,11 @@ const nav = t => {
         url: '/operation-sack',
         icon: 'icon-drop',
       },
+      {
+        name: t('Khai thác đi'),
+        url: '/khai-thac-di',
+        icon: 'icon-drop',
+      },
     ],
   };
 };
