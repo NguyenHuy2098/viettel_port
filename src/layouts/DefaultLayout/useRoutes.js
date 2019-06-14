@@ -14,7 +14,9 @@ const ThongTinTai = React.lazy(() => import('containers/NhanTaiKien/ThongTinTai'
 const ForwardingOrderListInManifest = React.lazy(() => import('../../containers/ForwardingOrderListInManifest'));
 const DanhSachBangKe = React.lazy(() => import('containers/DongTai/DanhSachBangKe'));
 const OperationSack = React.lazy(() => import('containers/OperationSack'));
-const KhaiThacDi = React.lazy(() => import('containers/OrderShippingInformation'));
+const DanhSachPhieuGui = React.lazy(() => import('containers/BangKe/DanhSachPhieuGui'));
+const NhanChuyenThu = React.lazy(() => import('containers/ShippingInformation'));
+
 const FreightOrderReceive = React.lazy(() => import('containers/FreightOrderReceive'));
 const PageNoData = React.lazy(() => import('containers/PageNoData'));
 
@@ -39,7 +41,8 @@ const routes = t => {
     },
     { path: '/danh-sach-bang-ke', name: t('DanhSachBangKe'), component: DanhSachBangKe },
     { path: '/operation-sack', name: 'Khai thác tải', component: OperationSack },
-    { path: '/khai-thac-di', name: 'Khai thác đi', component: KhaiThacDi },
+    { path: '/danh-sach-phieu-gui', name: 'Danh sách phiếu gửi', component: DanhSachPhieuGui },
+    { path: '/nhan-chuyen-thu', name: 'Nhận chuyến thư', component: NhanChuyenThu },
     { path: '/freight-order-receive', name: 'Khai thác chuyển thư đến', component: FreightOrderReceive },
     { path: '/no-data', name: 'Chưa có dữ liệu', component: PageNoData },
   ];
