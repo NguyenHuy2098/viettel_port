@@ -16,7 +16,12 @@ ReactDOM.render(<App />, document.getElementById('root'));
 console.log(process.env.REACT_APP_ENV);
 
 if (process.env.REACT_APP_ENV === 'production') {
-  serviceWorker.register();
+  serviceWorker.register({
+    onUpdate: () => {
+      // Some UI notification comes here, then reload
+      window.location.reload();
+    },
+  });
 } else {
   serviceWorker.unregister();
 }
