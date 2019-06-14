@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input, InputGroup, InputGroupText, Col, Row, Table, Label } from 'reactstrap';
+import { Button, Input, Col, Row, Label } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
 const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
@@ -11,17 +11,17 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
       <Row className="sipSendingCoupon">
         <Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">Cước chính:</Col>
+            <Col xs="5">{t('Cước chính')}:</Col>
             <Col xs="7">12.000 đ</Col>
           </Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">Điều chỉnh:</Col>
+            <Col xs="5">{t('Điều chỉnh')}:</Col>
             <Col xs="7">
               <Input type="text" value="0.00 đ" />
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">Phụ phí khác:</Col>
+            <Col xs="5">{t('Phụ phí khác')}:</Col>
             <Col xs="7">
               <Input type="text" value="0.00 đ" />
             </Col>
@@ -29,11 +29,11 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
         </Row>
         <Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">Phí gia tăng:</Col>
+            <Col xs="5">{t('Phí gia tăng')}:</Col>
             <Col xs="7">0.00 đ</Col>
           </Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">Phí xăng dầu:</Col>
+            <Col xs="5">{t('Phí xăng dầu')}:</Col>
             <Col xs="7">5.000 đ</Col>
           </Row>
           <Row className="sipSendingCouponItem">
@@ -44,7 +44,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
         <div className="sipLine row" />
         <Row>
           <Row className="sipSendingCouponItem mb-3">
-            <Col xs="6">Tổng cước</Col>
+            <Col xs="6">{t('Tổng cước')}</Col>
             <Col xs="6" className="color-orange">
               29.000 đ
             </Col>
@@ -57,14 +57,14 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
   function renderReceiverInput(): JSX.Element {
     return (
       <div className="sipInputBlock">
-        <h3>Người nhận</h3>
+        <h3>{t('Người nhận')}</h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            Điện thoại
+            {t('Điện thoại')}
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder="Nhập số điện thoại " />
+            <Input type="text" placeholder={t('Nhập số điện thoại')} />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -73,7 +73,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder="Nguyễn Văn Nam" />
+            <Input type="text" placeholder={t('Nguyễn Văn Nam')} />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -95,70 +95,45 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
         <h3>Người gửi</h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            Mã khách hàng
+            {t('Mã khách hàng')}
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder="Nhập mã khách hàng" />
+            <Input type="text" placeholder={t('Nhập mã khách hàng')} />
           </Col>
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            Điện thoại
+            {t('Điện thoại')}
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder="Nhập số điện thoại " />
+            <Input type="text" placeholder={t('Nhập số điện thoại ')} />
           </Col>
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            Họ tên
+            {t('Họ tên')}
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder="Họ tên" />
+            <Input type="text" placeholder={t('Họ tên')} />
           </Col>
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            Địa chỉ
+            {t('Địa chỉ')}
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder="Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)" />
-          </Col>
-        </Row>
-      </div>
-    );
-  }
-
-  function renderCodPriceInput(): JSX.Element {
-    return (
-      <div className="sipInputBlock">
-        <h3>Tiền thu hộ & giá cước</h3>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            Tiền thu hộ
-          </Label>
-          <Col lg="8">
-            <Input type="text" placeholder="Nhập số tiền thu hộ (đ)" />
-          </Col>
-        </Row>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            Người trả cước
-            <span className="color-red"> *</span>
-          </Label>
-          <Col lg="4" xs="6">
-            <Label check>
-              <Input type="radio" name="codPrice" /> Người gửi
-            </Label>
-          </Col>
-          <Col lg="4" xs="6">
-            <Label check>
-              <Input type="radio" name="codPrice" /> Người nhận
-            </Label>
+            <Input type="text" placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')} />
+            <p>
+              {t('Nếu bạn không tìm thấy địa chỉ gợi ý')}
+              <a className="color-bluegreen" href="/">
+                &nbsp; {t('nhấn vào đây')}&nbsp;
+              </a>
+              {t('để tự nhập')}
+            </p>
           </Col>
         </Row>
       </div>
@@ -170,10 +145,10 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
       <Col md="6" xs="12">
         <div className="sipInputContainer">
           <div className="sipInputBlock">
-            <h3>Thông tin phiếu gửi</h3>
+            <h3>{t('Thông tin phiếu gửi')}</h3>
             <Row className="sipInputItem">
               <Label xs="12" lg="4">
-                Mã phiếu gửi
+                {t('Mã phiếu gửi')}
               </Label>
               <Col lg="8">
                 <Input type="text" placeholder="" />
@@ -190,7 +165,12 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
   function renderTransportService(): JSX.Element {
     return (
       <div className="sipInputBlock">
-        <h3>Dịch vụ</h3>
+        <h3>
+          Dịch vụ
+          <a className="pull-right">
+            Tất cả dịch vụ <span className="color-orange">></span>
+          </a>
+        </h3>
         <Row className="sipInputItem">
           <Col lg="6" xs="6">
             <Label check>
