@@ -27,13 +27,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
           <Row className="sipSendingCouponItem">
             <Col xs="5">Điều chỉnh:</Col>
             <Col xs="7">
-              <Input type="text" value="0.00 đ" />
+              <Input type="text" defaultValue="0.00 đ" />
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
             <Col xs="5">Phụ phí khác:</Col>
             <Col xs="7">
-              <Input type="text" value="0.00 đ" />
+              <Input type="text" defaultValue="0.00 đ" />
             </Col>
           </Row>
         </Row>

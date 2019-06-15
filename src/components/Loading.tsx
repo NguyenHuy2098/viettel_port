@@ -5,11 +5,16 @@ interface Props {
 }
 
 function Loading(props: Props): JSX.Element {
+  function handleRefresh(): void {
+    window.location.reload();
+  }
+
   if (props.error) {
-    setTimeout((): void => {
-      window.location.reload();
-    }, 0);
-    return <div></div>;
+    return (
+      <div>
+        <button onClick={handleRefresh}>Refresh</button>
+      </div>
+    );
   } else {
     return <div className="animated fadeIn pt-1 text-center">Loading...</div>;
   }

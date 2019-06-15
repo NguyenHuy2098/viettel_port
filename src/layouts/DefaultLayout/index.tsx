@@ -17,11 +17,7 @@ import {
 // routes config
 import useRoutes from './useRoutes';
 import useNavs from './useNavs';
-
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const DefaultHeader = React.lazy(() => import('./DefaultHeader'));
-
-const loading = (): React.ReactElement => <div className="animated fadeIn pt-1 text-center">Loading...</div>;
+import DefaultHeader from './DefaultHeader';
 
 interface Props {
   history: History;
@@ -70,17 +66,13 @@ const DefaultLayout: React.FC<Props> = (props): JSX.Element => {
   return (
     <div className="app">
       <AppHeader fixed>
-        <React.Suspense fallback={loading()}>
-          <DefaultHeader onLogout={signOut} />
-        </React.Suspense>
+        <DefaultHeader onLogout={signOut} />
       </AppHeader>
       <div className="app-body">
         <AppSidebar fixed display="lg">
           <AppSidebarHeader />
           <AppSidebarForm />
-          <React.Suspense fallback={loading()}>
-            <AppSidebarNav navConfig={navs} {...props} router={router} />
-          </React.Suspense>
+          <AppSidebarNav navConfig={navs} {...props} router={router} />
           <AppSidebarMinimizer />
         </AppSidebar>
         <main className="main">
