@@ -22,6 +22,10 @@ const OrderInformation = Loadable({
   loader: () => import('containers/OrderInformation'),
   loading: Loading,
 });
+const OrderInformationTabType = Loadable({
+  loader: () => import('containers/OrderInformationTabType'),
+  loading: Loading,
+});
 const DongBangKeNoiTinh = Loadable({
   loader: () => import('containers/BangKe/DongBangKeNoiTinh'),
   loading: Loading,
@@ -114,6 +118,7 @@ const routes = t => {
     { path: '/no-data', name: t('Chưa có dữ liệu'), component: PageNoData },
     { path: '/tiep-xuc-khach-hang', name: t('Tiếp xúc khách hàng'), component: CommunicateCustomer },
     { path: '/order-information', name: t('Thông tin đơn hàng'), component: OrderInformation },
+    { path: '/order-information-2', name: t('Thông tin đơn hàng 2'), component: OrderInformationTabType },
     { path: '/tach-phieu-gui', name: t('Tách phiếu gửi'), component: SplitCoupon },
   ];
 };
