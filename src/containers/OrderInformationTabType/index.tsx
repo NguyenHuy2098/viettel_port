@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Button, Table, Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
+import { Button, Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import HistoryImpactTable from '../../components/OrderInfomationTabType/HistoryImpactTable';
 import TripInfoTable from '../../components/OrderInfomationTabType/TripInfoTable';
