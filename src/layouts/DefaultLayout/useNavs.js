@@ -94,6 +94,10 @@ const nav = t => {
         name: t('Tiếp xúc khách hàng'),
         url: '/tiep-xuc-khach-hang',
       },
+      {
+        name: t('Tách phiếu gửi'),
+        url: '/tach-phieu-gui',
+      },
     ],
   };
 };

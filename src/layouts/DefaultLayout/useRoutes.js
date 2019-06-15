@@ -78,6 +78,10 @@ const PageNoData = Loadable({
   loader: () => import('containers/PageNoData'),
   loading: Loading,
 });
+const SplitCoupon = Loadable({
+  loader: () => import('containers/SplitCoupon'),
+  loading: Loading,
+});
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = t => {
@@ -86,7 +90,7 @@ const routes = t => {
     { path: '/phieu-gui-trong-nuoc', name: t('PhieuGuiTrongNuoc'), component: PhieuGuiTrongNuoc },
     {
       path: '/international-forwarding-order',
-      name: t('InternationalForwardingOrder'),
+      name: 'InternationalForwardingOrder',
       component: InternationalForwardingOrder,
     },
     { path: '/dong-bang-ke-noi-tinh', name: t('Đóng bảng kê nội tỉnh'), component: DongBangKeNoiTinh },
@@ -103,13 +107,14 @@ const routes = t => {
       component: ForwardingOrderListInManifest,
     },
     { path: '/danh-sach-bang-ke', name: t('DanhSachBangKe'), component: DanhSachBangKe },
-    { path: '/operation-sack', name: t('Khai thác tải'), component: OperationSack },
-    { path: '/danh-sach-phieu-gui', name: t('Danh sách phiếu gửi'), component: DanhSachPhieuGui },
-    { path: '/nhan-chuyen-thu', name: t('Nhận chuyến thư'), component: NhanChuyenThu },
-    { path: '/freight-order-receive', name: t('Khai thác chuyển thư đến'), component: FreightOrderReceive },
-    { path: '/no-data', name: t('Chưa có dữ liệu'), component: PageNoData },
-    { path: '/tiep-xuc-khach-hang', name: t('Tiếp xúc khách hàng'), component: CommunicateCustomer },
-    { path: '/order-information', name: t('Thông tin đơn hàng'), component: OrderInformation },
+    { path: '/operation-sack', name: 'Khai thác tải', component: OperationSack },
+    { path: '/danh-sach-phieu-gui', name: 'Danh sách phiếu gửi', component: DanhSachPhieuGui },
+    { path: '/nhan-chuyen-thu', name: 'Nhận chuyến thư', component: NhanChuyenThu },
+    { path: '/freight-order-receive', name: 'Khai thác chuyển thư đến', component: FreightOrderReceive },
+    { path: '/no-data', name: 'Chưa có dữ liệu', component: PageNoData },
+    { path: '/tiep-xuc-khach-hang', name: 'Tiếp xúc khách hàng', component: CommunicateCustomer },
+    { path: '/order-information', name: 'Thông tin đơn hàng', component: OrderInformation },
+    { path: '/tach-phieu-gui', name: 'Tách phiếu gửi', component: SplitCoupon },
   ];
 };
 
