@@ -114,7 +114,7 @@ const routes = t => {
     { path: '/no-data', name: t('Chưa có dữ liệu'), component: PageNoData },
     { path: '/tiep-xuc-khach-hang', name: t('Tiếp xúc khách hàng'), component: CommunicateCustomer },
     { path: '/order-information', name: t('Thông tin đơn hàng'), component: OrderInformation },
-    { path: '/tach-phieu-gui', name: 'Tách phiếu gửi', component: SplitCoupon },
+    { path: '/tach-phieu-gui', name: t('Tách phiếu gửi'), component: SplitCoupon },
   ];
 };
 
