@@ -91,6 +91,11 @@ const nav = t => {
         url: '/order-information',
       },
       {
+        name: t('Thông tin đơn hàng 2'),
+        url: '/order-information-2',
+        icon: 'icon-info',
+      },
+      {
         name: t('Tiếp xúc khách hàng'),
         url: '/tiep-xuc-khach-hang',
       },
