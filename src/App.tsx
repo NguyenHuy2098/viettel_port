@@ -1,27 +1,37 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
-// import { renderRoutes } from 'react-router-config';
-
+import Loadable from 'react-loadable';
 import history from './common/history';
 import store from './redux/store';
 import './App.scss';
+import Loading from './components/Loading';
 
-const loading = (): React.ReactElement => <div className="animated fadeIn pt-3 text-center">Loading...</div>;
-
-// Containers
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const DefaultLayout = React.lazy(() => import('layouts/DefaultLayout'));
-
-// Pages
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Login = React.lazy(() => import('containers/Login'));
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Register = React.lazy(() => import('containers/Register'));
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Page404 = React.lazy(() => import('containers/Page404'));
-// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-const Page500 = React.lazy(() => import('containers/Page500'));
+const Login = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('containers/Login'),
+  loading: Loading,
+});
+const Register = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('containers/Register'),
+  loading: Loading,
+});
+const Page404 = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('containers/Page404'),
+  loading: Loading,
+});
+const Page500 = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('containers/Page500'),
+  loading: Loading,
+});
+const DefaultLayout = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('layouts/DefaultLayout'),
+  loading: Loading,
+});
 
 class App extends React.Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -35,19 +45,25 @@ class App extends React.Component {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private renderPage500 = (props: any): React.ReactElement => <Page500 {...props} />;
 
+  public componentDidCatch(): JSX.Element {
+    return (
+      <div>
+        <button>Error</button>
+      </div>
+    );
+  }
+
   public render(): React.ReactElement {
     return (
       <Provider store={store}>
         <Router history={history}>
-          <React.Suspense fallback={loading()}>
-            <Switch>
-              <Route exact path="/login" render={this.renderLogin} />
-              <Route exact path="/register" render={this.renderRegister} />} />
-              <Route exact path="/404" render={this.renderPage404} />
-              <Route exact path="/500" render={this.renderPage500} />
-              <Route path="/" render={this.renderDefaultLayout} />} />
-            </Switch>
-          </React.Suspense>
+          <Switch>
+            <Route exact path="/login" render={this.renderLogin} />
+            <Route exact path="/register" render={this.renderRegister} />} />
+            <Route exact path="/404" render={this.renderPage404} />
+            <Route exact path="/500" render={this.renderPage500} />
+            <Route path="/" render={this.renderDefaultLayout} />} />
+          </Switch>
         </Router>
       </Provider>
     );
