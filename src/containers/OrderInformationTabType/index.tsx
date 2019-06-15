@@ -8,14 +8,14 @@ import TripInfoTable from '../../components/OrderInfomationTabType/TripInfoTable
 // eslint-disable-next-line max-lines-per-function
 const OrderInformationTabType: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [TH, setTH] = useState([true, false]);
+  const [tab, setTab] = useState<number>(1);
 
   function handleClickToTripInfoTab() {
-    setTH([true, false]);
+    setTab(1);
   }
 
   function handleClickToHistoryImpactTab() {
-    setTH([false, true]);
+    setTab(2);
   }
 
   function renderOrderInformation(): JSX.Element {
@@ -241,7 +241,7 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
       </Row>
       <div className="row mt-3" />
       <div className="mt-3" />
-      {TH[1] && (
+      {tab === 2 && (
         <>
           <h1 className="sipTitle">{t('Thông tin liên hệ')}</h1>
           <Row>{renderInformationContact()}</Row>
@@ -251,7 +251,7 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
           <HistoryImpactTable />
         </>
       )}
-      {TH[0] && (
+      {tab === 1 && (
         <>
           <div className="row mt-3" />
           <div className="mt-3" />
