@@ -5,6 +5,9 @@
     margin-right: 16px;
     font-size: 15px;
   }
+  i {
+    margin-top: 3px;
+  }
 }
 .sipDescriptionServiceShipping {
   border-bottom: 1px solid #d6d6d6;
@@ -39,6 +42,8 @@
   border-radius: 3px;
 }
 .sipSummaryContent {
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  border-radius: 3px;
   background: #fff;
   margin-bottom: 15px;
   padding: 10px;
@@ -115,5 +120,87 @@
     background-color: #2db4a1;
     border-radius: 5px;
     color: #fff;
+  }
+}
+.sipFindCoupon {
+  margin: 11px 0;
+  background-color: #fff;
+  height: 65px;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  border-radius: 3px;
+  label {
+    margin-top: 22px;
+    margin-left: 10px;
+    font-weight: 500;
+    color: #4A4A4A;
+  }
+  input {
+    margin-top: 16px;
+    margin-left: 19px;
+    background-color: #fff;
+    color: #9B9B9B;
+  }
+  button {
+    margin-top: 16px;
+    margin-left: 16px;
+    background-color: #2db4a1;
+    border-radius: 5px;
+    color: #fff;
+  }
+}
+.couponInformation {
+  div {
+    font-weight: 500;
+    color: #4A4A4A;
+    margin-bottom: 5px;
+  }
+}
+.sipSplitCoupon {
+  margin-top: -20px;
+  margin-bottom: 5px;
+  label {
+    margin-top: 22px;
+    margin-left: 15px;
+    font-weight: 500;
+    color: #4A4A4A;
+  }
+  input {
+    margin-top: 16px;
+    margin-left: 45px;
+    width: 360px;
+    background-color: #fff;
+    color: #9B9B9B;
+  }
+  button {
+    margin-top: 16px;
+    margin-left: 66px;
+    background-color: #2db4a1;
+    border-radius: 5px;
+    color: #fff;
+  }
+}
+.sipSplitCouponTrashButton {
+  button {
+    box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+    border-radius: 6px;
+    background: #fff;
+    border: none;
+    i {
+      color: #A1A6AB;
+    }
+  }
+}
+.couponTitle {
+  div {
+    color: #299F9A;
+    font-weight: 500;
+  }
+  margin-bottom: 21px !important;
+}
+.couponContent {
+  div {
+    color: #4A4A4A;
+    font-weight: 500;
+    margin-bottom: 13px;
   }
 }
