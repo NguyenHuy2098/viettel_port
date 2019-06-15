@@ -11,7 +11,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       <Row className="sipOrderShippingInformationTitle">
         <Col>
           <i className="fa fa-arrow-left backIcon" />
-          <h1 className="sipTitle">Thông tin chuyến thư</h1>
+          <h1 className="sipTitle">{t('Thông tin chuyến thư')}</h1>
         </Col>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
@@ -19,11 +19,12 @@ const ShippingInformation: React.FC = (): JSX.Element => {
           </Button>
           <Button>
             <i className="fa fa-truck" />
-            Nhận chuyến thư
+
+            {t('Nhận chuyến thư')}
           </Button>
           <Button>
             <i className="fa fa-download" />
-            Hoàn thành nhận tải kiện
+            {t('Hoàn thành nhận tải kiện')}
           </Button>
         </div>
       </Row>
@@ -34,16 +35,17 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     return (
       <Row className="sipOrderShippingInformationTitle">
         <Col>
-          <h1 className="sipTitle">Thông tin tải kiện</h1>
+          <h1 className="sipTitle">{t('Thông tin tải kiện')}</h1>
         </Col>
         <div className="sipTitleRightBlock">
           <Button>
             <i className="fa fa-shopping-bag" />
-            Nhận tải kiện
+            {t('Nhận tải kiện')}
           </Button>
           <Button>
             <i className="fa fa-barcode" />
-            Quét mã
+
+            {t('Quét mã')}
           </Button>
         </div>
       </Row>
@@ -95,7 +97,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
           <Input type="text" placeholder="Nhập mã tải kiện" />
         </Col>
         <Col className="scanCodeButton">
-          <Button>Tìm kiếm</Button>
+          <Button>{t('Tìm kiếm')}</Button>
         </Col>
       </Row>
     );
@@ -119,14 +121,14 @@ const ShippingInformation: React.FC = (): JSX.Element => {
           <thead>
             <tr>
               <th />
-              <th>Mã tải kiện</th>
-              <th>Bưu cục đi</th>
-              <th>Bưu cục đến</th>
-              <th>Số lượng</th>
-              <th>Trọng lượng</th>
-              <th>Ngày tạo</th>
-              <th>Ghi chú</th>
-              <th>Quản trị</th>
+              <th>{t('Mã tải kiện')}</th>
+              <th>{t('Bưu cục đi')}</th>
+              <th>{t('Bưu cục đến')}</th>
+              <th>{t('Số lượng')}</th>
+              <th>{t('Trọng lượng')}</th>
+              <th>{t('Ngày tạo')}</th>
+              <th>{t('Ghi chú')}</th>
+              <th>{t('Quản trị')}</th>
             </tr>
           </thead>
           <tbody>

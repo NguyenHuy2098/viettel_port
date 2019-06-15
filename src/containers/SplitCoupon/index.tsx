@@ -8,9 +8,13 @@ const SplitCoupon: React.FC = (): JSX.Element => {
 
   function renderShippingInformationTitle(): JSX.Element {
     return (
-      <Row className="sipOrderShippingInformationTitle">
-        <i className="fa fa-arrow-left backIcon" />
-        <h1 className="sipTitle">Tách phiếu gửi</h1>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Tách phiếu gửi')}
+        </h1>
       </Row>
     );
   }
@@ -19,7 +23,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     return (
       <Row className="sipOrderShippingInformationTitle">
         <Col>
-          <h1 className="sipTitle">Danh sách phiếu gửi</h1>
+          <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
         </Col>
         <div className="sipTitleRightBlock">
           <div className="sipSplitCouponTrashButton">
@@ -29,11 +33,11 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           </div>
           <Button>
             <i className="fa fa-barcode" />
-            In mã vạch
+            {t('In mã vạch')}
           </Button>
           <Button>
             <i className="fa fa-print" />
-            In mã phiếu
+            {t(' In mã phiếu')}
           </Button>
         </div>
       </Row>
@@ -73,12 +77,12 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           </Col>
         </Row>
         <Row className="sipSplitCoupon">
-          <Label>Số lượng tách</Label>
+          <Label>{t('Số lượng tách')}</Label>
           <Col xs="6" sm="4">
             <Input type="text" />
           </Col>
           <Col className="scanCodeButton">
-            <Button>Tách phiếu</Button>
+            <Button>{t('Tách phiếu')}</Button>
           </Col>
         </Row>
       </div>
@@ -89,14 +93,15 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     return (
       <Row className="sipFindCoupon">
         <Label>
-          Mã phiếu gửi
+          {t('Mã phiếu gửi')}
+
           <span className="color-red"> *</span>
         </Label>
         <Col xs="6" sm="4">
           <Input type="text" placeholder="Nhập mã phiếu gửi" />
         </Col>
         <Col className="scanCodeButton">
-          <Button>Tìm kiếm</Button>
+          <Button>{t('Tìm kiếm')}</Button>
         </Col>
       </Row>
     );
@@ -116,8 +121,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         <Row className="couponInformation">
           <Col lg="8" md="5" xs="12">
             <Row className="couponTitle">
-              <Col xs="5">Mã phiếu gửi</Col>
-              <Col xs="7">Trọng lượng</Col>
+              <Col xs="5">{t('Mã phiếu gửi')}</Col>
+              <Col xs="7">{t('Trọng lượng')}</Col>
             </Row>
             <Row className="couponContent">
               <Col xs="5">
