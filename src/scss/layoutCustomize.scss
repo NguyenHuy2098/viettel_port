@@ -37,6 +37,9 @@ body {
 .color-bluegreen {
   color: #2DB4A1 !important;
 }
+.display-block {
+  display: block !important;
+}
 .form-check-label {
   box-sizing: border-box;
   input.form-check-input[type='radio'] {
@@ -180,16 +183,26 @@ body {
   }
 }
 .sipTitleContainer {
-  display: block;
   margin: 0;
 }
 .sipTitle {
   color: #4A4A4A;
   font-size: 18px;
   display: inline-block;
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+  .btn {
+    box-shadow: none;
+    padding: 0 5px;
+    background: none !important;
+    border: none;
+    margin-right: 8px;
+    position: relative;
+    top: -3px;
+  }
 }
 .sipTitleRightBlock {
-  float: right;
   display: flex;
   & > .btn {
     color: #fff !important;

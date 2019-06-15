@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
@@ -85,20 +85,21 @@ const DongBangKe: React.FC = (): JSX.Element => {
     );
   }
   return (
-    <div>
-      <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
-      <div className="sipTitleRightBlock">
-        <div className="sipTitleRightBlockInput">
-          <i className="fa fa-search" />
-          <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
+    <>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
+        <div className="sipTitleRightBlock">
+          <div className="sipTitleRightBlockInput">
+            <i className="fa fa-search" />
+            <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
+          </div>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Tạo bảng kê')}
+          </Button>
+          {renderModal()}
         </div>
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          {t('Tạo bảng kê')}
-        </Button>
-        {renderModal()}
-      </div>
-      <div className="row mt-3" />
+      </Row>
       <p className="text-right">
         {t('Tổng số')}: <span>56</span>
       </p>
@@ -132,7 +133,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
         </Table>
       </div>
       {renderPagination()}
-    </div>
+    </>
   );
 };
 

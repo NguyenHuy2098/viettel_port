@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Input, Label, Table } from 'reactstrap';
+import { Button, Input, Label, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
@@ -54,16 +54,16 @@ const OperationSack: React.FC = (): JSX.Element => {
 
   return (
     <div>
-      <h1 className="sipTitle">{t('Khai thác tải')}</h1>
-      <div className="row mt-3" />
-      <div className="mt-3" />
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Khai thác tải')}</h1>
+      </Row>
 
-      <div className="row sipBgWhiteContainer">
+      <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Mã tải" />
           <Button color="primary">Quét mã</Button>
         </div>
-      </div>
+      </Row>
       {renderTable()}
     </div>
   );

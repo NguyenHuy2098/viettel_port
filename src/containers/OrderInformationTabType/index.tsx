@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Button, Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
+import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import HistoryImpactTable from '../../components/OrderInfomationTabType/HistoryImpactTable';
 import TripInfoTable from '../../components/OrderInfomationTabType/TripInfoTable';
@@ -201,44 +202,48 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
         </Col>
       </Row>
       <div className="mt-3" />
-      <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
-      <div className="sipTitleRightBlock">
-        <Button>
-          <i className="fa fa-eye" />
-          {t('Xem phiếu gửi')}
-        </Button>
-        <Button>
-          <i className="fa fa-pencil" />
-          {t('Sửa phiếu gửi')}
-        </Button>
-        <Button>
-          <i className="fa fa-barcode" />
-          {t('In mã vạch')}
-        </Button>
-        <Button>
-          <i className="fa fa-print" />
-          {t('In mã phiếu')}
-        </Button>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
+        <div className="sipTitleRightBlock">
+          <Button>
+            <i className="fa fa-eye" />
+            {t('Xem phiếu gửi')}
+          </Button>
+          <Button>
+            <i className="fa fa-pencil" />
+            {t('Sửa phiếu gửi')}
+          </Button>
+          <Button>
+            <i className="fa fa-barcode" />
+            {t('In mã vạch')}
+          </Button>
+          <Button>
+            <i className="fa fa-print" />
+            {t('In mã phiếu')}
+          </Button>
+        </div>
+      </Row>
+      <div className="sipTabContainer">
+        <Nav tabs>
+          <NavItem>
+            <NavLink className={classnames({ active: tab === 1 })} onClick={handleClickToTripInfoTab}>
+              {t('Thông tin hành trình')}
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: tab === 2 })} onClick={handleClickToHistoryImpactTab}>
+              {t('Lịch sử tác động')}
+            </NavLink>
+          </NavItem>
+        </Nav>
       </div>
-      <div className="row mt-3" />
-      <div className="mt-3" />
-      <Row className="sipInputContainer">
-        <Row>
-          <Nav tabs>
-            <NavItem>
-              <NavLink onClick={handleClickToTripInfoTab}>{t('Thông tin hành trình')}</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink onClick={handleClickToHistoryImpactTab}>{t('Lịch sử tác động')}</NavLink>
-            </NavItem>
-          </Nav>
-        </Row>
+      <div className="sipInputContainer">
         <Row>
           {renderOrderInformation()}
           {renderSenderCustomer()}
           {renderReceiveCustomer()}
         </Row>
-      </Row>
+      </div>
       <div className="row mt-3" />
       <div className="mt-3" />
       {tab === 2 && (

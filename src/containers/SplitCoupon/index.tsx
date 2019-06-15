@@ -21,10 +21,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
 
   function renderListCouponTitle(): JSX.Element {
     return (
-      <Row className="sipOrderShippingInformationTitle">
-        <Col>
-          <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
-        </Col>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
         <div className="sipTitleRightBlock">
           <div className="sipSplitCouponTrashButton">
             <Button>

@@ -57,18 +57,22 @@ const ThongTinBangKe: React.FC = (): JSX.Element => {
 
   return (
     <>
-      <h1 className="sipTitle">
-        <i className="fa fa-arrow-left"></i> {t('Thông tin bảng kê')}
-      </h1>
-      <div className="sipTitleRightBlock">
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-trash-o" />
-        </Button>
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-print" />
-        </Button>
-      </div>
-      <div className="row mt-3" />
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Thông tin bảng kê')}
+        </h1>
+        <div className="sipTitleRightBlock">
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-trash-o" />
+          </Button>
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-print" />
+          </Button>
+        </div>
+      </Row>
       <div className="sipSummaryContent">
         <Row>
           <Col md="5" xs="12">

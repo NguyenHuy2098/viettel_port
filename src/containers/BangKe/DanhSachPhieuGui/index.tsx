@@ -12,11 +12,13 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
 
   function renderTitle(): JSX.Element {
     return (
-      <Row className="sipOrderShippingInformationTitle">
-        <Col>
-          <i className="fa fa-arrow-left backIcon" />
-          <h1 className="sipTitle">Danh sách phiếu gửi trong bảng kê</h1>
-        </Col>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          Danh sách phiếu gửi trong bảng kê
+        </h1>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
@@ -122,7 +124,7 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
     );
   }
   return (
-    <div>
+    <>
       {renderTitle()}
       {renderShippingInformationAndScanCode()}
       <div className="sipTabContainer">
@@ -146,7 +148,7 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
           </TabPane>
         </TabContent>
       </div>
-    </div>
+    </>
   );
 };
 export default DanhSachPhieuGui;

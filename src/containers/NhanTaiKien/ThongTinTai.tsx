@@ -94,22 +94,23 @@ const ThongTinTai: React.FC = (): JSX.Element => {
     );
   }
   return (
-    <div>
-      <h1 className="sipTitle">{t('Thông tin tải/kiện')}</h1>
-      <div className="sipTitleRightBlock">
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-print" />
-        </Button>
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          {t('Nhận tải')}
-        </Button>
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          {t('Hoàn thành nhận BK/PG')}
-        </Button>
-      </div>
-      <div className="row mt-3" />
+    <>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Thông tin tải/kiện')}</h1>
+        <div className="sipTitleRightBlock">
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-print" />
+          </Button>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Nhận tải')}
+          </Button>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Hoàn thành nhận BK/PG')}
+          </Button>
+        </div>
+      </Row>
       <div className="sipSummaryContent">
         <Row>
           <Col md="5" xs="12">
@@ -142,28 +143,30 @@ const ThongTinTai: React.FC = (): JSX.Element => {
         </Row>
       </div>
       <div className="row mt-3" />
-      <h1 className="sipTitle">{t('Thông tin bảng kê/ phiếu gửi')}</h1>
-      <div className="sipTitleRightBlock sipTitleRightBlock2">
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          {t('Nhận BK/PG')}
-        </Button>
-        <Button onClick={toggle}>
-          <i className="fa fa-plus" />
-          {t('Quét mã')}
-        </Button>
-      </div>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Thông tin bảng kê/ phiếu gửi')}</h1>
+        <div className="sipTitleRightBlock sipTitleRightBlock2">
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Nhận BK/PG')}
+          </Button>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Quét mã')}
+          </Button>
+        </div>
+      </Row>
       <div className="row mt-3" />
-      <div className="row sipBgWhiteContainer">
+      <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Quét mã phiếu gửi" />
           <Button color="primary">Quét mã</Button>
         </div>
-      </div>
+      </Row>
       <div className="row mt-3" />
       {renderTable()}
       {renderPagination()}
-    </div>
+    </>
   );
 };
 

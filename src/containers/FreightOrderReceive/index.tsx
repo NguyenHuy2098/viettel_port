@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Input, Table, Label } from 'reactstrap';
+import { Button, Input, Row, Table, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
@@ -53,19 +53,21 @@ const FreightOrderReceive: React.FC = (): JSX.Element => {
   }
 
   return (
-    <div>
-      <h1 className="sipTitle">{t('Khai thác chuyển thư đến')}</h1>
+    <>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Khai thác chuyển thư đến')}</h1>
+      </Row>
       <div className="row mt-3" />
       <div className="mt-3" />
 
-      <div className="row sipBgWhiteContainer">
+      <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Mã chuyển thư" />
           <Button color="primary">Tìm kiếm</Button>
         </div>
-      </div>
+      </Row>
       {renderTable()}
-    </div>
+    </>
   );
 };
 

@@ -47,10 +47,8 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
 
   function renderTitle(): JSX.Element {
     return (
-      <Row className="sipOrderShippingInformationTitle mb-2">
-        <Col>
-          <h1 className="sipTitle">{t('Tiếp xúc khách hàng')}</h1>
-        </Col>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Tiếp xúc khách hàng')}</h1>
         <div className="sipTitleRightBlock">
           <Button>{t('Ghi lại')}</Button>
           <Button>{t('In bảng kê')}</Button>
@@ -125,12 +123,12 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('3')}>
+            <NavLink className={classnames({ active: isTab === '3' })} onClick={handleClickTab('3')}>
               HQM (11)
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('4')}>
+            <NavLink className={classnames({ active: isTab === '4' })} onClick={handleClickTab('4')}>
               HPM (2)
             </NavLink>
           </NavItem>
