@@ -1,62 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
-import {
-  Button,
-  Col,
-  Dropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  Input,
-  Nav,
-  NavLink,
-  NavItem,
-  Row,
-  Table,
-  TabContent,
-  TabPane,
-} from 'reactstrap';
+import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
 const InternalRecord: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [isOpenDropdown, setOpenDropdown] = useState<boolean>(false);
   const [isTab, setTab] = useState<string>('1');
-  const handleClickDropdown = (preIsOpenDropdown: boolean) => {
-    setOpenDropdown(!preIsOpenDropdown);
-  };
   const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>): void => {
     setTab(value);
   };
-
-  function openDropdown() {
-    handleClickDropdown(isOpenDropdown);
-  }
-
-  function renderDropdown(): JSX.Element {
-    return (
-      <>
-        <Dropdown isOpen={isOpenDropdown} toggle={openDropdown}>
-          <DropdownToggle caret />
-          <DropdownMenu>
-            <DropdownItem>Foo Action</DropdownItem>
-            <DropdownItem>Bar Action</DropdownItem>
-            <DropdownItem>Quo Action</DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-      </>
-    );
-  }
-
-  function renderInput(): JSX.Element {
-    return (
-      <Col xs="6" sm="4" className="inputStyle">
-        <Input type="text" />
-      </Col>
-    );
-  }
 
   function renderFindRecordContent(): JSX.Element {
     return (
@@ -71,25 +25,30 @@ const InternalRecord: React.FC = (): JSX.Element => {
           <Col xs="6" sm="4">
             <Row className="findRecordContentDetail">
               <Col xs="4">{t('Từ ngày')}: </Col>
-              <Col xs="8" className="dropdownStyle">
-                {renderDropdown()}
+              <Col xs="8">
+                <Input type="text" />
               </Col>
             </Row>
             <Row className="findRecordContentDetail">
               <Col xs="4">{t('Bưu cục lập')}: </Col>
-              <Col xs="8">{renderInput()}</Col>
+              <Col xs="8">
+                <Input type="text" />
+              </Col>
             </Row>
           </Col>
           <Col xs="6" sm="4">
             <Row className="findRecordContentDetail">
-              <Col xs="5">{t('Đến ngày')}: </Col>
-              <Col xs="7" className="dropdownStyle">
-                {renderDropdown()}
+              <Col xs="4">{t('Đến ngày')}: </Col>
+              <Col xs="8">
+                <Input type="text" />
               </Col>
             </Row>
             <Row className="findRecordContentDetail">
-              <Col xs="5">{t('Bưu cục bị lập')}: </Col>
-              <Col xs="7">{renderInput()}</Col>
+              <Col xs="4">{t('Bưu cục bị lập')}: </Col>
+              <Col xs="8">
+                {' '}
+                <Input type="text" />
+              </Col>
             </Row>
           </Col>
           <Col sm="4" className="searchButton">
