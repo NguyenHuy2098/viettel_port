@@ -47,8 +47,8 @@ class DefaultHeader extends React.PureComponent<Props, State> {
           <i className="fa fa-clock-o fa-lg" />
         </NavLink>
       </NavItem>
-      {this.renderHeaderNoti()}
-      {this.renderHeaderUser()}
+      <NavItem className="sipHeaderNoti">{this.renderHeaderNoti()}</NavItem>
+      <NavItem>{this.renderHeaderUser()}</NavItem>
     </Nav>
   );
 
@@ -61,13 +61,13 @@ class DefaultHeader extends React.PureComponent<Props, State> {
   public renderHeaderNoti = (): React.ReactElement => {
     return (
       <ButtonDropdown isOpen={this.state.dropdownOpenNoti} toggle={this.toggleDropdownOpenNoti}>
-        <DropdownToggle>
+        <DropdownToggle nav>
           <i className="fa fa-bell-o fa-lg" />
           <Badge pill color="danger">
             5
           </Badge>
         </DropdownToggle>
-        <DropdownMenu>
+        <DropdownMenu right>
           <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
             <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
             <span>
@@ -110,12 +110,12 @@ class DefaultHeader extends React.PureComponent<Props, State> {
   };
 
   public renderHeaderUser = (): React.ReactElement => (
-    <ButtonDropdown isOpen={this.state.dropdownOpenMenu} toggle={this.toggleDropdownOpenMenu}>
-      <DropdownToggle>
+    <ButtonDropdown isOpen={this.state.dropdownOpenMenu} toggle={this.toggleDropdownOpenMenu} className="sipHeaderUser">
+      <DropdownToggle nav>
         <span>Kevin Tran</span>
         <i className="fa fa-caret-down fa-lg" />
       </DropdownToggle>
-      <DropdownMenu>
+      <DropdownMenu right>
         <DropdownItem header tag="div" className="text-center">
           <strong>Account</strong>
         </DropdownItem>

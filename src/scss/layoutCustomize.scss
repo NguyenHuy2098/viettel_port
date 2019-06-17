@@ -118,6 +118,15 @@ body {
 }
 .sipHeaderNoti {
   margin-right: 10px !important;
+  .nav-link {
+    .badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -16px;
+      margin-left: 0;
+    }
+  }
   .dropdown-menu {
     width: 300px;
     .dropdown-item {

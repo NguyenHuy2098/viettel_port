@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Input, Label, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
+import { Button, Input, Label, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import { map } from 'lodash';
 
