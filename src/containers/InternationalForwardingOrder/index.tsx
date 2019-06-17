@@ -258,7 +258,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
 
   return (
     <>
-      <div className="row mb-3 sipTitleContainer">
+      <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">Phiếu gửi quốc tế</h1>
         <div className="sipTitleRightBlock">
           <Button>
@@ -270,7 +270,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
             Ghi lại
           </Button>
         </div>
-      </div>
+      </Row>
       {renderSendingCoupon()}
       <Row>
         {renderSendingCouponInfo()}

@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
-import { Button, Input, Table } from 'reactstrap';
+import { Button, Input, Row, Table } from 'reactstrap';
 import { AppState } from 'redux/store';
 
 interface Props {
@@ -30,27 +30,28 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
   }
 
   return (
-    <div>
-      <h1 className="sipTitle">Nhập doanh thu {props.text}</h1>
-      <div className="sipTitleRightBlock">
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-trash-o" />
-        </Button>
-        <Button>
-          <i className="fa fa-file-excel-o" />
-          Lấy file mẫu
-        </Button>
-        <Button>
-          <i className="fa fa-file-archive-o" />
-          Nhập từ excel
-        </Button>
-        <Button>
-          <i className="fa fa-download" />
-          Hoàn thành
-        </Button>
-      </div>
-      <div className="row mt-3" />
-      <div className="row sipBgWhiteContainer">
+    <>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">Nhập doanh thu {props.text}</h1>
+        <div className="sipTitleRightBlock">
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-trash-o" />
+          </Button>
+          <Button>
+            <i className="fa fa-file-excel-o" />
+            Lấy file mẫu
+          </Button>
+          <Button>
+            <i className="fa fa-file-archive-o" />
+            Nhập từ excel
+          </Button>
+          <Button>
+            <i className="fa fa-download" />
+            Hoàn thành
+          </Button>
+        </div>
+      </Row>
+      <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Quét mã phiếu gửi" />
           <Button color="primary">Quét mã</Button>
@@ -58,7 +59,7 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
         <p className="pull-right">
           Tổng số phiếu gửi: <span>2</span>
         </p>
-      </div>
+      </Row>
       <div className="mt-3" />
       <div className="sipTableContainer">
         <Table striped hover>
@@ -95,7 +96,7 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
           </tbody>
         </Table>
       </div>
-    </div>
+    </>
   );
 };
 

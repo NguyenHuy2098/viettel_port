@@ -63,23 +63,27 @@ const DanhSachTaiKien: React.FC = (): JSX.Element => {
   }
 
   return (
-    <div>
-      <h1 className="sipTitle">
-        <i className="fa fa-arrow-left"></i> {t('Danh sách tải kiện trong chuyển thư')}
-      </h1>
-      <div className="sipTitleRightBlock">
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-trash-o" />
-        </Button>
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-print" />
-        </Button>
-        <Button>
-          <i className="fa fa-download" />
-          Ghi lại
-        </Button>
-      </div>
-      <div className="row mt-3" />
+    <>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Danh sách tải kiện trong chuyển thư')}
+        </h1>
+        <div className="sipTitleRightBlock">
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-trash-o" />
+          </Button>
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-print" />
+          </Button>
+          <Button>
+            <i className="fa fa-download" />
+            Ghi lại
+          </Button>
+        </div>
+      </Row>
       <div className="mt-3" />
       <div className="sipSummaryContent">
         <Row>
@@ -112,14 +116,14 @@ const DanhSachTaiKien: React.FC = (): JSX.Element => {
           </Col>
         </Row>
       </div>
-      <div className="row sipBgWhiteContainer">
+      <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Quét mã phiếu gửi" />
           <Button color="primary">Quét mã</Button>
         </div>
-      </div>
+      </Row>
       {renderTable()}
-    </div>
+    </>
   );
 };
 

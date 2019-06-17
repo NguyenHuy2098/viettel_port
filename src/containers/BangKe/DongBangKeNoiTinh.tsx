@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
+import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
@@ -85,8 +85,8 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
     );
   }
   return (
-    <div>
-      <div className="row mb-3 sipTitleContainer">
+    <>
+      <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng bảng kê nội tỉnh')}</h1>
         <div className="sipTitleRightBlock">
           <div className="sipTitleRightBlockInput">
@@ -99,7 +99,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
           </Button>
           {renderModal()}
         </div>
-      </div>
+      </Row>
       <p className="text-right">
         {t('Tổng số')}: <span>56</span>
       </p>
@@ -133,7 +133,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
         </Table>
       </div>
       {renderPagination()}
-    </div>
+    </>
   );
 };
 

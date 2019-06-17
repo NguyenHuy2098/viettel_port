@@ -72,16 +72,14 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
 
   return (
     <>
-      <Row>
-        <Col>
-          <h1 className="sipTitle">
-            <Button className="btn btn-ghost-dark">
-              <i className="fa fa-arrow-left" />
-            </Button>
-            <span>{t('Danh sách phiếu gửi trong bảng kê')}</span>
-          </h1>
-          <div className="sipTitleRightBlock">{renderTopController()}</div>
-        </Col>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Danh sách phiếu gửi trong bảng kê')}
+        </h1>
+        <div className="sipTitleRightBlock">{renderTopController()}</div>
       </Row>
 
       <div className="sipSummaryContent">
@@ -112,12 +110,12 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
         </Row>
       </div>
 
-      <div className="row sipBgWhiteContainer">
+      <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Quét mã phiếu gửi" />
           <Button color="primary">Quét mã</Button>
         </div>
-      </div>
+      </Row>
 
       <Row className="mt-3">
         <Col>

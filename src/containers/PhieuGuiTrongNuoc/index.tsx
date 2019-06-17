@@ -199,8 +199,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
   }
 
   return (
-    <div>
-      <div className="row mb-3 sipTitleContainer">
+    <>
+      <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">Phiếu gửi trong nước</h1>
         <div className="sipTitleRightBlock">
           <Button>
@@ -212,13 +212,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
             Ghi lại
           </Button>
         </div>
-      </div>
+      </Row>
       {renderSendingCoupon()}
       <Row>
         {renderSendingCouponInfo()}
         {renderSendingCouponInfo()}
       </Row>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Col, Input, Row, Table } from 'reactstrap';
+import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
@@ -8,18 +8,19 @@ const ShippingInformation: React.FC = (): JSX.Element => {
 
   function renderShippingInformationTitle(): JSX.Element {
     return (
-      <Row className="sipOrderShippingInformationTitle">
-        <Col>
-          <i className="fa fa-arrow-left backIcon" />
-          <h1 className="sipTitle">{t('Thông tin chuyến thư')}</h1>
-        </Col>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Thông tin chuyến thư')}
+        </h1>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
           <Button>
             <i className="fa fa-truck" />
-
             {t('Nhận chuyến thư')}
           </Button>
           <Button>
@@ -33,10 +34,8 @@ const ShippingInformation: React.FC = (): JSX.Element => {
 
   function renderOrderInformationTitle(): JSX.Element {
     return (
-      <Row className="sipOrderShippingInformationTitle">
-        <Col>
-          <h1 className="sipTitle">{t('Thông tin tải kiện')}</h1>
-        </Col>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Thông tin tải kiện')}</h1>
         <div className="sipTitleRightBlock">
           <Button>
             <i className="fa fa-shopping-bag" />
@@ -44,7 +43,6 @@ const ShippingInformation: React.FC = (): JSX.Element => {
           </Button>
           <Button>
             <i className="fa fa-barcode" />
-
             {t('Quét mã')}
           </Button>
         </div>
@@ -92,13 +90,11 @@ const ShippingInformation: React.FC = (): JSX.Element => {
 
   function renderFindOrder(): JSX.Element {
     return (
-      <Row className="sipFindOrder">
-        <Col xs="6" sm="4">
+      <Row className="sipBgWhiteContainer">
+        <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Nhập mã tải kiện" />
-        </Col>
-        <Col className="scanCodeButton">
-          <Button>{t('Tìm kiếm')}</Button>
-        </Col>
+          <Button color="primary">Quét mã</Button>
+        </div>
       </Row>
     );
   }
@@ -133,8 +129,11 @@ const ShippingInformation: React.FC = (): JSX.Element => {
           </thead>
           <tbody>
             <tr>
-              <td className="custom-checkbox">
-                <input type="checkbox" />
+              <td>
+                <Label check>
+                  {/* eslint-disable-next-line react/jsx-max-depth */}
+                  <Input type="checkbox" />
+                </Label>
               </td>
               <td>41100035876</td>
               <td>TTKT1</td>
@@ -147,7 +146,10 @@ const ShippingInformation: React.FC = (): JSX.Element => {
             </tr>
             <tr>
               <td>
-                <input type="checkbox" />
+                <Label check>
+                  {/* eslint-disable-next-line react/jsx-max-depth */}
+                  <Input type="checkbox" />
+                </Label>
               </td>
               <td>41100035876</td>
               <td>TTKT1</td>
@@ -159,8 +161,11 @@ const ShippingInformation: React.FC = (): JSX.Element => {
               <td className="SipTableFunctionIcon">{renderAction()}</td>
             </tr>
             <tr>
-              <td className="custom-checkbox">
-                <input type="checkbox" />
+              <td>
+                <Label check>
+                  {/* eslint-disable-next-line react/jsx-max-depth */}
+                  <Input type="checkbox" />
+                </Label>
               </td>
               <td>41100035876</td>
               <td>TTKT1</td>
