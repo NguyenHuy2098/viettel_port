@@ -15,18 +15,22 @@ import {
   Table,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { getPosts } from 'redux/reducers/posts/actions';
+import { makeSelectPostList } from 'redux/reducers/posts/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
+  const postList = useSelector(makeSelectPostList);
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
+  React.useEffect((): void => {
     dispatch(getPosts(null));
-  });
+  }, [dispatch]);
+
+  console.log(postList);
 
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);

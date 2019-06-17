@@ -53,6 +53,7 @@
     "redux": "^4.0.1",
     "redux-saga": "^1.0.3",
     "redux-unfold-saga": "^1.2.5",
+    "reselect": "^4.0.0",
     "simple-line-icons": "^2.4.1",
     "typescript": "^3.5.2",
     "yup": "^0.27.0"

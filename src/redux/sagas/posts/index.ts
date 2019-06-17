@@ -1,20 +1,22 @@
+import url from 'url';
 import { SagaIterator } from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
-import { unfoldSaga } from 'redux-unfold-saga';
+import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
 import { GET_POSTS } from 'redux/reducers/posts/actions';
+import { REACT_APP_API_ENDPOINT } from 'utils/env';
 import request from 'utils/request';
 
-function* takeGetPosts() {
+function* takeGetPosts(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   yield unfoldSaga(
     {
       handler: async () => {
         const results = await request({
-          url: 'https://jsonplaceholder.typicode.com/posts',
+          url: url.resolve(REACT_APP_API_ENDPOINT, '/posts'),
           method: 'GET',
         });
         return results.data;
       },
-      key: GET_POSTS,
+      key: action.type,
     },
     {},
   );
