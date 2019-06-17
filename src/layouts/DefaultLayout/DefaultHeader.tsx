@@ -1,17 +1,38 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Badge, Button, DropdownItem, DropdownMenu, DropdownToggle, FormGroup, Input, Nav, NavItem } from 'reactstrap';
+import {
+  Badge,
+  Button,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  FormGroup,
+  Input,
+  Nav,
+  NavItem,
+  ButtonDropdown,
+} from 'reactstrap';
 // @ts-ignore
-import { AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
+import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from '../../assets/img/logo.png';
 
 interface Props {
   onLogout: Function;
 }
 
-class DefaultHeader extends React.PureComponent<Props> {
+interface State {
+  dropdownOpenMenu: boolean;
+  dropdownOpenNoti: boolean;
+}
+
+class DefaultHeader extends React.PureComponent<Props, State> {
   private handleLogout = (): void => {
     this.props.onLogout();
+  };
+
+  public state = {
+    dropdownOpenMenu: false,
+    dropdownOpenNoti: false,
   };
 
   public renderNav = (): React.ReactElement => (
@@ -31,46 +52,70 @@ class DefaultHeader extends React.PureComponent<Props> {
     </Nav>
   );
 
-  public renderHeaderNoti = (): React.ReactElement => (
-    <AppHeaderDropdown direction="down" className="sipHeaderNoti">
-      <DropdownToggle nav>
-        <i className="fa fa-bell-o fa-lg" />
-        <Badge pill color="danger">
-          5
-        </Badge>
-      </DropdownToggle>
-      <DropdownMenu right style={{ right: 'auto' }}>
-        <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-          <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-          <span>Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin</span>
-        </DropdownItem>
-        <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-          <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-          <span>Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin</span>
-        </DropdownItem>
-        <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-          <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-          <span>Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin</span>
-        </DropdownItem>
-        <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-          <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-          <span>Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin</span>
-        </DropdownItem>
-        <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-          <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
-          <span>Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin</span>
-        </DropdownItem>
-      </DropdownMenu>
-    </AppHeaderDropdown>
-  );
+  public toggleDropdownOpenNoti = (): void => {
+    this.setState({
+      dropdownOpenNoti: !this.state.dropdownOpenNoti,
+    });
+  };
+
+  public renderHeaderNoti = (): React.ReactElement => {
+    return (
+      <ButtonDropdown isOpen={this.state.dropdownOpenNoti} toggle={this.toggleDropdownOpenNoti}>
+        <DropdownToggle>
+          <i className="fa fa-bell-o fa-lg" />
+          <Badge pill color="danger">
+            5
+          </Badge>
+        </DropdownToggle>
+        <DropdownMenu>
+          <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <span>
+              Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
+            </span>
+          </DropdownItem>
+          <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <span>
+              Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
+            </span>
+          </DropdownItem>
+          <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <span>
+              Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
+            </span>
+          </DropdownItem>
+          <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <span>
+              Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
+            </span>
+          </DropdownItem>
+          <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <span>
+              Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
+            </span>
+          </DropdownItem>
+        </DropdownMenu>
+      </ButtonDropdown>
+    );
+  };
+
+  public toggleDropdownOpenMenu = (): void => {
+    this.setState({
+      dropdownOpenMenu: !this.state.dropdownOpenMenu,
+    });
+  };
 
   public renderHeaderUser = (): React.ReactElement => (
-    <AppHeaderDropdown direction="down" className="sipHeaderUser">
-      <DropdownToggle nav>
+    <ButtonDropdown isOpen={this.state.dropdownOpenMenu} toggle={this.toggleDropdownOpenMenu}>
+      <DropdownToggle>
         <span>Kevin Tran</span>
         <i className="fa fa-caret-down fa-lg" />
       </DropdownToggle>
-      <DropdownMenu right style={{ right: 'auto' }}>
+      <DropdownMenu>
         <DropdownItem header tag="div" className="text-center">
           <strong>Account</strong>
         </DropdownItem>
@@ -109,7 +154,7 @@ class DefaultHeader extends React.PureComponent<Props> {
           <i className="fa fa-lock" /> Logout
         </DropdownItem>
       </DropdownMenu>
-    </AppHeaderDropdown>
+    </ButtonDropdown>
   );
 
   public render(): React.ReactElement {
