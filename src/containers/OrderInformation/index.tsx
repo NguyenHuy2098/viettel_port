@@ -8,7 +8,7 @@ const OrderInformation: React.FC = (): JSX.Element => {
 
   function renderTable(): JSX.Element {
     return (
-      <div className="sipTableContainer">
+      <Row className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
@@ -36,7 +36,7 @@ const OrderInformation: React.FC = (): JSX.Element => {
             </tr>
           </tbody>
         </Table>
-      </div>
+      </Row>
     );
   }
 

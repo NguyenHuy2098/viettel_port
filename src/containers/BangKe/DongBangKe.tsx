@@ -128,7 +128,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
         {t('Tổng số')}: <span>56</span>
       </p>
       <div className="mt-3" />
-      <div className="sipTableContainer">
+      <Row className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
@@ -156,7 +156,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
           </tbody>
         </Table>
         {renderPagination()}
-      </div>
+      </Row>
     </>
   );
 };

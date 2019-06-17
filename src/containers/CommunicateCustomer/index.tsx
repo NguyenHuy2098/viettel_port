@@ -73,7 +73,7 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
 
   function renderTable(): JSX.Element {
     return (
-      <div className="sipTableContainer">
+      <Row className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
@@ -104,7 +104,7 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
             ))}
           </tbody>
         </Table>
-      </div>
+      </Row>
     );
   }
   return (

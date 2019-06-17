@@ -343,9 +343,22 @@ body {
 html:not([dir="rtl"]) .sidebar {
   margin-left: -240px;
 }
+.sipFlatBtn {
+  padding: 0;
+  font-size: inherit;
+  background: none !important;
+  border: none;
+  line-height: inherit;
+  font-weight: inherit;
+  color: #299f9a !important;
+  box-shadow: none !important;
+  position: relative;
+  top: -1px;
+}
 .sipPagination {
   background: #fff;
   padding: 15px;
+  width: 100%;
   .pagination {
     margin: 0;
     text-align: center;

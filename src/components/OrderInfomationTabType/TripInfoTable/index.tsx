@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Table } from 'reactstrap';
+import { Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 // eslint-disable-next-line max-lines-per-function
 const TripInfoTable: React.FC = (props): JSX.Element => {
   const { t } = useTranslation();
   return (
-    <div className="sipTableContainer">
+    <Row className="sipTableContainer">
       <Table striped hover>
         <thead>
           <tr>
@@ -31,7 +31,7 @@ const TripInfoTable: React.FC = (props): JSX.Element => {
           </tr>
         </tbody>
       </Table>
-    </div>
+    </Row>
   );
 };
 export default TripInfoTable;

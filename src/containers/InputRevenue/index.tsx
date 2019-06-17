@@ -61,7 +61,7 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
         </p>
       </Row>
       <div className="mt-3" />
-      <div className="sipTableContainer">
+      <Row className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
@@ -95,7 +95,7 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
             </tr>
           </tbody>
         </Table>
-      </div>
+      </Row>
     </>
   );
 };

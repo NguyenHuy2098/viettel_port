@@ -102,9 +102,40 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
           </Label>
           <Col lg="8">
             <Input type="text" placeholder="Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)" />
+            <p className="sipInputItemDescription">
+              (Nếu bạn không tìm thấy địa chỉ gợi ý, <Button className="sipFlatBtn">nhấn vào đây</Button> để tự nhập)
+            </p>
           </Col>
         </Row>
       </div>
+    );
+  }
+
+  function renderReceiverAddress(): JSX.Element {
+    return (
+      <Row className="sipInputItemGroup">
+        <Col xs="12" md="4">
+          <Input type="select">
+            <option>Tỉnh</option>
+            <option>2</option>
+            <option>3</option>
+          </Input>
+        </Col>
+        <Col xs="12" md="4">
+          <Input type="select">
+            <option>Quận/huyện</option>
+            <option>2</option>
+            <option>3</option>
+          </Input>
+        </Col>
+        <Col xs="12" md="4">
+          <Input type="select">
+            <option>Phường/xã</option>
+            <option>2</option>
+            <option>3</option>
+          </Input>
+        </Col>
+      </Row>
     );
   }
 
@@ -135,8 +166,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
             Địa chỉ
             <span className="color-red"> *</span>
           </Label>
+          <Col lg="8">{renderReceiverAddress()}</Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4" />
           <Col lg="8">
-            <Input type="text" placeholder="" />
+            <Input type="text" placeholder="Số nhà, tên đường" />
           </Col>
         </Row>
       </div>
@@ -161,12 +196,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="4" xs="6">
-            <Label check>
+            <Label check xs="12" className="pl-0 pr-0">
               <Input type="radio" name="codPrice" /> Người gửi
             </Label>
           </Col>
           <Col lg="4" xs="6">
-            <Label check>
+            <Label check xs="12" className="pl-0 pr-0">
               <Input type="radio" name="codPrice" /> Người nhận
             </Label>
           </Col>
@@ -176,6 +211,29 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
   }
 
   function renderSendingCouponInfo(): JSX.Element {
+    return (
+      <Col md="6" xs="12">
+        <div className="sipContentContainer">
+          <div className="sipInputBlock">
+            <h3>Thông tin phiếu gửi</h3>
+            <Row className="sipInputItem">
+              <Label xs="12" lg="4">
+                Mã phiếu gửi
+              </Label>
+              <Col lg="8">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </div>
+          {renderSenderInput()}
+          {renderReceiverInput()}
+          {renderCodPriceInput()}
+        </div>
+      </Col>
+    );
+  }
+
+  function renderPackageInfo(): JSX.Element {
     return (
       <Col md="6" xs="12">
         <div className="sipContentContainer">
@@ -216,7 +274,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
       {renderSendingCoupon()}
       <Row>
         {renderSendingCouponInfo()}
-        {renderSendingCouponInfo()}
+        {renderPackageInfo()}
       </Row>
     </>
   );

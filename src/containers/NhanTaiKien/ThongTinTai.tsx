@@ -56,7 +56,7 @@ const ThongTinTai: React.FC = (): JSX.Element => {
 
   function renderTable(): JSX.Element {
     return (
-      <div className="sipTableContainer">
+      <Row className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
@@ -91,7 +91,7 @@ const ThongTinTai: React.FC = (): JSX.Element => {
           </tbody>
         </Table>
         {renderPagination()}
-      </div>
+      </Row>
     );
   }
   return (
@@ -112,37 +112,35 @@ const ThongTinTai: React.FC = (): JSX.Element => {
           </Button>
         </div>
       </Row>
-      <div className="sipSummaryContent">
-        <Row>
-          <Col md="5" xs="12">
-            <Row>
-              <Col xs="5">{t('Mã bảng kê')}: </Col>
-              <Col xs="7">BK_1209_BNH</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Ngày tạo')}: </Col>
-              <Col xs="7">24/04/2019</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Ghi chú')}: </Col>
-              <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
-            </Row>
-          </Col>
-          <Col md="3" xs="12">
-            <Row>
-              <Col xs="5">{t('Bưu cục đến')}: </Col>
-              <Col xs="7">TQN</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Ngày gửi')}: </Col>
-              <Col xs="7">24/04/2019</Col>
-            </Row>
-          </Col>
-          <Col md="4" xs="12" className="text-right">
-            {t('Tổng số')}: 5
-          </Col>
-        </Row>
-      </div>
+      <Row className="sipSummaryContent">
+        <Col md="5" xs="12">
+          <Row>
+            <Col xs="5">{t('Mã bảng kê')}: </Col>
+            <Col xs="7">BK_1209_BNH</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ngày tạo')}: </Col>
+            <Col xs="7">24/04/2019</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ghi chú')}: </Col>
+            <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
+          </Row>
+        </Col>
+        <Col md="3" xs="12">
+          <Row>
+            <Col xs="5">{t('Bưu cục đến')}: </Col>
+            <Col xs="7">TQN</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ngày gửi')}: </Col>
+            <Col xs="7">24/04/2019</Col>
+          </Row>
+        </Col>
+        <Col md="4" xs="12" className="text-right">
+          {t('Tổng số')}: 5
+        </Col>
+      </Row>
       <div className="row mt-3" />
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thông tin bảng kê/ phiếu gửi')}</h1>

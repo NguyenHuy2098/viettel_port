@@ -83,7 +83,7 @@ const CloseSack: React.FC<Props> = (props): JSX.Element => {
         Tổng số: <span>56</span>
       </p>
       <div className="mt-3" />
-      <div className="sipTableContainer">
+      <Row className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
@@ -120,7 +120,7 @@ const CloseSack: React.FC<Props> = (props): JSX.Element => {
             </tr>
           </tbody>
         </Table>
-      </div>
+      </Row>
     </div>
   );
 };
