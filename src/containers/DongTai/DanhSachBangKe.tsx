@@ -88,6 +88,7 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
             </tr>
           </tbody>
         </Table>
+        {renderPagination()}
       </div>
     );
   }
@@ -148,7 +149,6 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
       </Row>
       <div className="row mt-3" />
       {renderTable()}
-      {renderPagination()}
     </>
   );
 };

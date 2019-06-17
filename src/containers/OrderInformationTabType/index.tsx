@@ -26,34 +26,34 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
           <div className="sipInputBlock">
             <h3>Thông tin đơn hàng</h3>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Trạng thái')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 {t('Giao bưu tá phát')}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Trọng lượng')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 900 g
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Tổng cước')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 15.000 đ
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Tiền thu hộ')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 0 đ
               </Col>
             </Row>
@@ -70,34 +70,34 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
           <div className="sipInputBlock">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Họ & tên')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 {t('Nguyễn Văn An')}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Điện thoại')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 {t('0987654314')}:
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Email')}:
               </Col>
-              <Col xs="12" lg="8">
+              <Col xs="12" lg="7">
                 {t('hiepsiden@gmail.com')}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Địa chỉ')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 {t('Số 10, ngõ 2 phố Quần Ngựa, Văn Cao, Ba Đình, Hà Nội')}
               </Col>
             </Row>
@@ -114,34 +114,34 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
           <div className="sipInputBlock">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Họ & tên')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 {t('Trần Văn Thao')}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Điện thoại')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 {t('0987654314')}:
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Email')}:
               </Col>
-              <Col xs="12" lg="8">
+              <Col xs="12" lg="7">
                 {t('hiepsimu@gmail.com')}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" lg="3">
+              <Col xs="12" lg="5">
                 {t('Địa chỉ')}:
               </Col>
-              <Col xs="12" lg="9">
+              <Col xs="12" lg="7">
                 {t('Số 10, ngõ 2 phố Quần Ngựa, Văn Cao, Ba Đình, Hà Nội')}
               </Col>
             </Row>
@@ -153,44 +153,42 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
 
   function renderInformationContact(): JSX.Element {
     return (
-      <Col xs="12">
-        <div className="sipInputContainer">
-          <div className="sipInputBlock">
-            <Row className="sipInputItem">
-              <Col xs="12" lg="3">
-                {t('Bưu cục phát')}:
-              </Col>
-              <Col xs="12" lg="9">
-                {t('TN2')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" lg="3">
-                {t('Bưu tá phát')}:
-              </Col>
-              <Col xs="12" lg="9">
-                {t('Huy NT・098843700')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" lg="3">
-                {t('Bưu cục gốc')}:
-              </Col>
-              <Col xs="12" lg="8">
-                {t('DTHNI')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" lg="3">
-                {t('Giám đốc gốc')}:
-              </Col>
-              <Col xs="12" lg="9">
-                {t('Nga PT・098800982')}
-              </Col>
-            </Row>
-          </div>
+      <div className="sipContentContainer">
+        <div className="sipInputBlock">
+          <Row className="sipInputItem">
+            <Col xs="12" lg="5">
+              {t('Bưu cục phát')}:
+            </Col>
+            <Col xs="12" lg="7">
+              {t('TN2')}
+            </Col>
+          </Row>
+          <Row className="sipInputItem">
+            <Col xs="12" lg="5">
+              {t('Bưu tá phát')}:
+            </Col>
+            <Col xs="12" lg="7">
+              {t('Huy NT・098843700')}
+            </Col>
+          </Row>
+          <Row className="sipInputItem">
+            <Col xs="12" lg="5">
+              {t('Bưu cục gốc')}:
+            </Col>
+            <Col xs="12" lg="7">
+              {t('DTHNI')}
+            </Col>
+          </Row>
+          <Row className="sipInputItem">
+            <Col xs="12" lg="5">
+              {t('Giám đốc gốc')}:
+            </Col>
+            <Col xs="12" lg="7">
+              {t('Nga PT・098800982')}
+            </Col>
+          </Row>
         </div>
-      </Col>
+      </div>
     );
   }
 
@@ -236,9 +234,7 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
             </NavLink>
           </NavItem>
         </Nav>
-      </div>
-      <div className="sipInputContainer">
-        <Row>
+        <Row className="sipContentContainer no-padding">
           {renderOrderInformation()}
           {renderSenderCustomer()}
           {renderReceiveCustomer()}
@@ -249,7 +245,7 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
       {tab === 2 && (
         <>
           <h1 className="sipTitle">{t('Thông tin liên hệ')}</h1>
-          <Row>{renderInformationContact()}</Row>
+          {renderInformationContact()}
           <div className="row mt-3" />
           <div className="mt-3" />
           <h1 className="sipTitle">{t('Lịch sử tác động')}</h1>
@@ -258,8 +254,6 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
       )}
       {tab === 1 && (
         <>
-          <div className="row mt-3" />
-          <div className="mt-3" />
           <h1 className="sipTitle">{t('Thông tin hành trình')}</h1>
           <TripInfoTable />
         </>
