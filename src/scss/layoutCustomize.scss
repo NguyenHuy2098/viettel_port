@@ -5,6 +5,7 @@ body {
   color: #4A4A4A;
   word-break: break-word;
   word-wrap: break-word;
+  font-family: 'Core Sans GS', Helvetica, Arial, sans-serif;
 }
 .app-header.navbar {
   padding-right: 15px;
@@ -183,6 +184,9 @@ body {
         color: #299F9A !important;
       }
     }
+    .sidebar-minimizer {
+      display: none;
+    }
   }
   .main {
     background-color: #E9EFFB;
@@ -301,6 +305,7 @@ body {
   border-radius: 3px;
   width: 100%;
   overflow: auto;
+  margin: 0 0 15px;
   .table {
     color: #191919;
     margin: 0;
@@ -377,9 +382,16 @@ html:not([dir="rtl"]) .sidebar {
 .sipBgWhiteContainer {
   background: #fff;
   padding: 15px;
-  margin: 0;
+  margin: 0 0 15px;
   display: block;
-  margin-bottom: 15px;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+}
+.sipContentContainer {
+  position: relative;
+  background: #fff;
+  padding: 15px;
+  margin: 0 0 15px;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
 }
 .sipScanCodeContainer {
   width: 320px;
@@ -399,7 +411,10 @@ html:not([dir="rtl"]) .sidebar {
 }
 
 .sipTabContainer {
-  background-color: #fff;
+  position: relative;
+  background: #fff;
+  margin: 0 0 15px;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
   .nav-tabs {
     border-bottom: 3px solid #D3D3D3;
     .nav-item {
@@ -419,6 +434,10 @@ html:not([dir="rtl"]) .sidebar {
   .tab-content {
     .tab-pane {
       padding: 0;
+      .sipTableContainer {
+        margin: 0;
+        box-shadow: none;
+      }
     }
   }
 }

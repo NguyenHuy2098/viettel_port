@@ -131,8 +131,8 @@ const DongBangKe: React.FC = (): JSX.Element => {
             </tr>
           </tbody>
         </Table>
+        {renderPagination()}
       </div>
-      {renderPagination()}
     </>
   );
 };

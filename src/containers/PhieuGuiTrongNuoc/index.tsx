@@ -18,7 +18,7 @@ const mapStateToProps = (state: AppState): Props => {
 const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
   function renderSendingCoupon(): JSX.Element {
     return (
-      <Row className="sipSendingCoupon">
+      <Row className="sipSendingCoupon sipContentContainer no-padding">
         <Row>
           <Row className="sipSendingCouponItem">
             <Col xs="5">Cước chính:</Col>
@@ -178,7 +178,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
   function renderSendingCouponInfo(): JSX.Element {
     return (
       <Col md="6" xs="12">
-        <div className="sipInputContainer">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>Thông tin phiếu gửi</h3>
             <Row className="sipInputItem">

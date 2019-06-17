@@ -8,7 +8,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
 
   function renderSendingCoupon(): JSX.Element {
     return (
-      <Row className="sipSendingCoupon">
+      <Row className="sipSendingCoupon sipContentContainer no-padding">
         <Row>
           <Row className="sipSendingCouponItem">
             <Col xs="5">{t('Cước chính')}:</Col>
@@ -143,7 +143,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
   function renderSendingCouponInfo(): JSX.Element {
     return (
       <Col md="6" xs="12">
-        <div className="sipInputContainer">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>{t('Thông tin phiếu gửi')}</h3>
             <Row className="sipInputItem">
@@ -219,7 +219,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
   function renderProductInfo(): JSX.Element {
     return (
       <Col md="6" xs="12">
-        <div className="sipInputContainer">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>Thông tin hàng hóa</h3>
             <Row className="sipInputItem">

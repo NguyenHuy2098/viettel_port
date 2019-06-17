@@ -43,7 +43,7 @@ const OrderInformation: React.FC = (): JSX.Element => {
   function renderOrderInformation(): JSX.Element {
     return (
       <Col md="4" xs="12" className="mb-4">
-        <div className="sipInputContainer">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>Thông tin đơn hàng</h3>
             <Row className="sipInputItem">
@@ -87,7 +87,7 @@ const OrderInformation: React.FC = (): JSX.Element => {
   function renderSenderCustomer(): JSX.Element {
     return (
       <Col md="4" xs="12" className="mb-4">
-        <div className="sipInputContainer">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
@@ -131,7 +131,7 @@ const OrderInformation: React.FC = (): JSX.Element => {
   function renderReceiveCustomer(): JSX.Element {
     return (
       <Col md="4" xs="12" className="mb-4">
-        <div className="sipInputContainer">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
@@ -175,7 +175,7 @@ const OrderInformation: React.FC = (): JSX.Element => {
   function renderInformationContact(): JSX.Element {
     return (
       <Col xs="12">
-        <div className="sipInputContainer">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <Row className="sipInputItem">
               <Col xs="12" lg="5">
@@ -252,7 +252,6 @@ const OrderInformation: React.FC = (): JSX.Element => {
       <h1 className="sipTitle">{t('Thông tin liên hệ')}</h1>
       <Row>{renderInformationContact()}</Row>
       <div className="row mt-3" />
-      <div className="mt-3" />
       <h1 className="sipTitle">{t('Hành trình')}</h1>
       {renderTable()}
     </div>
