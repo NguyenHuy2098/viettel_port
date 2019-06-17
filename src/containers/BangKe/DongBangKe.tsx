@@ -1,15 +1,35 @@
 import * as React from 'react';
-import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Table, Row } from 'reactstrap';
+import {
+  Button,
+  FormGroup,
+  Input,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Pagination,
+  PaginationItem,
+  PaginationLink,
+  Row,
+  Table,
+} from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { useDispatch } from 'react-redux';
+import { getPosts } from 'redux/reducers/posts/actions';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {
-  const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    dispatch(getPosts(null));
+  });
 
   function toggle(): void {
-    setmodalCreateNew(!modalCreateNew);
+    setModalCreateNew(!modalCreateNew);
   }
 
   function renderModal(): JSX.Element {
