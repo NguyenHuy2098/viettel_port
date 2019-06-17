@@ -125,31 +125,29 @@ const InternalRecord: React.FC = (): JSX.Element => {
 
   function renderFindRecord(): JSX.Element {
     return (
-      <div className="sipShippingInformationAndScanCode">
-        <div className="sipTabContainer">
-          <Nav tabs>
-            <NavItem>
-              <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
-                {t('Biên bản bị lập')}
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
-                {t('Biên bản đã lập')}
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink className={classnames({ active: isTab === '3' })} onClick={handleClickTab('3')}>
-                {t('Kết luận biên bản')}
-              </NavLink>
-            </NavItem>
-          </Nav>
-          <TabContent activeTab={isTab}>
-            <TabPane tabId="1">{renderFindRecordContent()}</TabPane>
-            <TabPane tabId="2">{renderFindRecordContent()}</TabPane>
-            <TabPane tabId="3">{renderFindRecordContent()}</TabPane>
-          </TabContent>
-        </div>
+      <div className="sipTabContainer">
+        <Nav tabs>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
+              {t('Biên bản bị lập')}
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
+              {t('Biên bản đã lập')}
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink className={classnames({ active: isTab === '3' })} onClick={handleClickTab('3')}>
+              {t('Kết luận biên bản')}
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={isTab}>
+          <TabPane tabId="1">{renderFindRecordContent()}</TabPane>
+          <TabPane tabId="2">{renderFindRecordContent()}</TabPane>
+          <TabPane tabId="3">{renderFindRecordContent()}</TabPane>
+        </TabContent>
       </div>
     );
   }
