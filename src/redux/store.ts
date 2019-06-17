@@ -1,8 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'; // https://github.com/zalmoxisus/redux-devtools-extension
-
-import reducers from './reducers/index';
+import reducers from './reducers';
 import rootSagas from './sagas';
 
 export type AppState = ReturnType<typeof reducers>;

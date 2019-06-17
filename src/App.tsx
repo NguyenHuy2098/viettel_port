@@ -1,11 +1,11 @@
 import React from 'react';
+import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
-import Loadable from 'react-loadable';
-import history from './common/history';
-import store from './redux/store';
-import './App.scss';
 import Loading from './components/Loading';
+import store from './redux/store';
+import history from './utils/history';
+import './App.scss';
 
 const Login = Loadable({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
