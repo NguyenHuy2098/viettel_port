@@ -86,6 +86,10 @@ const SplitCoupon = Loadable({
   loader: () => import('containers/SplitCoupon'),
   loading: Loading,
 });
+const InternalRecord = Loadable({
+  loader: () => import('containers/Operating/InternalRecord'),
+  loading: Loading,
+});
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = t => {
@@ -120,6 +124,7 @@ const routes = t => {
     { path: '/order-information', name: t('Thông tin đơn hàng'), component: OrderInformation },
     { path: '/order-information-2', name: t('Thông tin đơn hàng 2'), component: OrderInformationTabType },
     { path: '/tach-phieu-gui', name: t('Tách phiếu gửi'), component: SplitCoupon },
+    { path: '/bien-ban-noi-bo', name: t('Biên bản nội bộ'), component: InternalRecord },
   ];
 };
 

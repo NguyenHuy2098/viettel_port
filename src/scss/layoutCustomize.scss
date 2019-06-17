@@ -314,8 +314,10 @@ body {
       border-top: none;
       color: #299F9A;
       font-weight: 600;
+      text-align: center;
     }
     .SipTableFunctionIcon {
+      white-space: nowrap;
       .btn {
         padding: 0;
         background: none;
