@@ -44,7 +44,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
 
   function renderCouponInformation(): JSX.Element {
     return (
-      <div className="sipSummaryContent">
+      <Row className="sipSummaryContent">
         <Row className="couponInformation">
           <Col lg="4" md="5" xs="12">
             <Row>
@@ -83,7 +83,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
             <Button>{t('Tách phiếu')}</Button>
           </Col>
         </Row>
-      </div>
+      </Row>
     );
   }
 
@@ -115,7 +115,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
 
   function renderListCoupon(): JSX.Element {
     return (
-      <div className="sipSummaryContent">
+      <Row className="sipSummaryContent">
         <Row className="couponInformation">
           <Col lg="8" md="5" xs="12">
             <Row className="couponTitle">
@@ -151,7 +151,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
             </Row>
           </Col>
         </Row>
-      </div>
+      </Row>
     );
   }
 

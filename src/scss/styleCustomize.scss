@@ -26,12 +26,12 @@
   box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
   border-radius: 3px;
   background: #fff;
-  margin-bottom: 15px;
-  padding: 10px;
+  padding: 15px 0;
+  margin: 0 0 15px;
 }
 .sipSendingCoupon {
   background: #fff;
-  margin: 0 0 30px;
+  margin: 0 0 20px;
   .row {
     margin: 0;
     width: 100%;
@@ -42,8 +42,7 @@
     margin: 10px 0 0;
     min-width: 270px;
     max-width: 350px;
-    div[class^='col'],
-    div[class*=' col'] {
+    div[class^='col'], div[class*=' col'] {
       padding: 5px 0 0 15px;
       input.form-control {
         text-align: right;
@@ -78,7 +77,21 @@
     input.form-control {
       box-sizing: border-box;
     }
+    select.form-control {
+      padding: 0 0 0 7px;
+    }
   }
+}
+.sipInputItemGroup {
+  margin: 0 -5px;
+  div[class^='col'], div[class*=' col'] {
+    padding: 0 5px;
+  }
+}
+.sipInputItemDescription {
+  font-size: 11px;
+  font-weight: 500;
+  margin: 5px 0;
 }
 .sipShippingInformationTitle {
   margin-right: 0px;

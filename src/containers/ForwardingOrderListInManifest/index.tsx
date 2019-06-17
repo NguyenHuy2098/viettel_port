@@ -82,33 +82,31 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
         <div className="sipTitleRightBlock">{renderTopController()}</div>
       </Row>
 
-      <div className="sipSummaryContent">
-        <Row>
-          <Col md="4" xs="12">
-            <Row>
-              <Col xs="5">{t('Mã bảng kê')}: </Col>
-              <Col xs="7">{'V00596290'}</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Ngày tạo')}: </Col>
-              <Col xs="7">2{'24/04/2019'}</Col>
-            </Row>
-          </Col>
-          <Col md="5" xs="12">
-            <Row>
-              <Col xs="5">{t('Bưu cục đến')}: </Col>
-              <Col xs="7">HUB1</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Ghi chú')}: </Col>
-              <Col xs="7">{'Chuyển hoàn về bưu cục gốc'}</Col>
-            </Row>
-          </Col>
-          <Col md="3" xs="12" className="text-right">
-            {t('Tổng số')}: 3
-          </Col>
-        </Row>
-      </div>
+      <Row className="sipSummaryContent">
+        <Col md="4" xs="12">
+          <Row>
+            <Col xs="5">{t('Mã bảng kê')}: </Col>
+            <Col xs="7">{'V00596290'}</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ngày tạo')}: </Col>
+            <Col xs="7">2{'24/04/2019'}</Col>
+          </Row>
+        </Col>
+        <Col md="5" xs="12">
+          <Row>
+            <Col xs="5">{t('Bưu cục đến')}: </Col>
+            <Col xs="7">HUB1</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ghi chú')}: </Col>
+            <Col xs="7">{'Chuyển hoàn về bưu cục gốc'}</Col>
+          </Row>
+        </Col>
+        <Col md="3" xs="12" className="text-right">
+          {t('Tổng số')}: 3
+        </Col>
+      </Row>
 
       <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
@@ -117,11 +115,7 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
         </div>
       </Row>
 
-      <Row className="mt-3">
-        <Col>
-          <div className="sipTableContainer">{renderDataTable()}</div>
-        </Col>
-      </Row>
+      <Row className="sipTableContainer">{renderDataTable()}</Row>
     </>
   );
 };
