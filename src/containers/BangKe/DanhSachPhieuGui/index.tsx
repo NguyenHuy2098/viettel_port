@@ -44,24 +44,20 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderScanCode(): JSX.Element {
-    return (
-      <Row className="sipScanCode">
-        <Col xs="6" sm="4">
-          <Input type="text" placeholder="Quét mã phiếu gửi" />
-        </Col>
-        <Col className="scanCodeButton">
-          <Button>Quét mã</Button>
-        </Col>
-      </Row>
-    );
-  }
-
   function renderShippingInformationAndScanCode(): JSX.Element {
     return (
-      <div className="sipShippingInformationAndScanCode">
+      <div className="sipSendingCoupon sipContentContainer no-padding">
         {renderDescriptionServiceShipping()}
-        {renderScanCode()}
+        <Row>
+          <Row className="sipScanCode mb-3">
+            <Col xs="6" sm="4">
+              <Input type="text" placeholder="Quét mã phiếu gửi" />
+            </Col>
+            <Col className="scanCodeButton">
+              <Button>Quét mã</Button>
+            </Col>
+          </Row>
+        </Row>
       </div>
     );
   }

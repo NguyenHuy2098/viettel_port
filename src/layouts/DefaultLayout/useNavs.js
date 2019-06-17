@@ -103,6 +103,10 @@ const nav = t => {
         name: t('Tách phiếu gửi'),
         url: '/tach-phieu-gui',
       },
+      {
+        name: t('Biên bản nội bộ'),
+        url: '/bien-ban-noi-bo',
+      },
     ],
   };
 };
