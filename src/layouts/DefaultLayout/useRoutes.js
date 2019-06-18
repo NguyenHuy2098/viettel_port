@@ -5,7 +5,7 @@ import Loadable from 'react-loadable';
 // =============== DieuHanh =====================
 
 const CommunicateCustomer = Loadable({
-  loader: () => import('containers/DieuHanh/KhieuNaiKhachHang'),
+  loader: () => import('containers/DieuHanh/TiepXucKhachHang'),
   loading: Loading,
 });
 const InternalRecord = Loadable({

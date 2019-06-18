@@ -1,9 +1,16 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Label, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
-import { map } from 'lodash';
+
+interface ItemType {
+  numberPos: string;
+  destination: string;
+  count: number;
+  weight: number;
+  date: string;
+}
 
 const tempData = [
   {
@@ -38,11 +45,6 @@ const tempData = [
 
 // eslint-disable-next-line max-lines-per-function
 const CommunicateCustomer: React.FC = (props): JSX.Element => {
-  const [isTab, setTab] = useState<number | string>('1');
-  const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>) => {
-    setTab(value);
-  };
-
   const { t } = useTranslation();
 
   function renderTitle(): JSX.Element {
@@ -87,57 +89,79 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
             </tr>
           </thead>
           <tbody>
-            {map(tempData, item => (
-              <tr key={item.numberPos}>
-                <td>
-                  <Label check>
-                    <Input type="checkbox" />
-                  </Label>
-                </td>
-                <td>{item.numberPos}</td>
-                <td> {item.destination}</td>
-                <td>{item.count}</td>
-                <td>{item.weight} g</td>
-                <td>{item.date}</td>
-                <td className="SipTableFunctionIcon">{renderAction()}</td>
-              </tr>
-            ))}
+            {tempData.map(
+              (item: ItemType): JSX.Element => {
+                return (
+                  <tr key={item.numberPos}>
+                    <td>
+                      <Label check>
+                        <Input type="checkbox" />
+                      </Label>
+                    </td>
+                    <td>{item.numberPos}</td>
+                    <td> {item.destination}</td>
+                    <td>{item.count}</td>
+                    <td>{item.weight} g</td>
+                    <td>{item.date}</td>
+                    <td className="SipTableFunctionIcon">{renderAction()}</td>
+                  </tr>
+                );
+              },
+            )}
           </tbody>
         </Table>
       </Row>
     );
   }
+
+  const [tab, setTab] = useState<number>(1);
+  function handleClickTab(tab: number): void {
+    setTab(tab);
+  }
+
   return (
     <div>
       {renderTitle()}
       <div className="sipTabContainer">
         <Nav tabs>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
+            <NavLink
+              className={classnames({ active: tab === 1 })}
+              onClick={useCallback((): void => handleClickTab(1), [])}
+            >
               Khách
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
+            <NavLink
+              className={classnames({ active: tab === 2 })}
+              onClick={useCallback((): void => handleClickTab(2), [])}
+            >
               THD (0)
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '3' })} onClick={handleClickTab('3')}>
+            <NavLink
+              className={classnames({ active: tab === 3 })}
+              onClick={useCallback((): void => handleClickTab(3), [])}
+            >
               HQM (11)
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '4' })} onClick={handleClickTab('4')}>
+            <NavLink
+              className={classnames({ active: tab === 4 })}
+              onClick={useCallback((): void => handleClickTab(4), [])}
+            >
               HPM (2)
             </NavLink>
           </NavItem>
         </Nav>
-        <TabContent activeTab={isTab}>
-          <TabPane tabId="1">{renderTable()}</TabPane>
-          <TabPane tabId="2">{renderTable()}</TabPane>
-          <TabPane tabId="3">{renderTable()}</TabPane>
-          <TabPane tabId="4">{renderTable()}</TabPane>
+        <TabContent activeTab={tab}>
+          <TabPane tabId={1}>{renderTable()}</TabPane>
+          <TabPane tabId={2}>{renderTable()}</TabPane>
+          <TabPane tabId={3}>{renderTable()}</TabPane>
+          <TabPane tabId={4}>{renderTable()}</TabPane>
         </TabContent>
       </div>
     </div>

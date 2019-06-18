@@ -1,15 +1,10 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachPhieuGui: React.FC = (): JSX.Element => {
-  const [isTab, setTab] = useState<string>('1');
-  const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>): void => {
-    setTab(value);
-  };
-
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
@@ -119,6 +114,12 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
       </Row>
     );
   }
+
+  const [tab, setTab] = useState<number>(1);
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
+  }
+
   return (
     <>
       {renderTitle()}
@@ -126,19 +127,25 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
       <div className="sipTabContainer">
         <Nav tabs>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
+            <NavLink
+              className={classnames({ active: tab === 1 })}
+              onClick={useCallback((): void => handleChangeTab(1), [])}
+            >
               TWQ (3)
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
+            <NavLink
+              className={classnames({ active: tab === 2 })}
+              onClick={useCallback((): void => handleChangeTab(2), [])}
+            >
               THD (0)
             </NavLink>
           </NavItem>
         </Nav>
-        <TabContent activeTab={isTab}>
-          <TabPane tabId="1">{renderTable()}</TabPane>
-          <TabPane tabId="2">
+        <TabContent activeTab={tab}>
+          <TabPane tabId={1}>{renderTable()}</TabPane>
+          <TabPane tabId={2}>
             {renderTable()}
             {renderTable()}
           </TabPane>

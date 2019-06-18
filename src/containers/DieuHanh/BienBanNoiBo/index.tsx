@@ -121,7 +121,7 @@ const InternalRecord: React.FC = (): JSX.Element => {
 
   const [tab, setTab] = useState<number>(1);
   function handleChangeTab(event: React.MouseEvent): void {
-    setTab(Number(event.currentTarget.getAttribute('tab')));
+    setTab(Number(event.currentTarget.getAttribute('value')));
   }
 
   function renderFindRecord(): JSX.Element {
@@ -129,25 +129,25 @@ const InternalRecord: React.FC = (): JSX.Element => {
       <div className="sipTabContainer">
         <Nav tabs>
           <NavItem>
-            <NavLink className={classnames({ active: tab === 1 })} onClick={handleChangeTab} tab={1}>
+            <NavLink className={classnames({ active: tab === 1 })} onClick={handleChangeTab} value={1}>
               {t('Biên bản bị lập')}
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: tab === 2 })} onClick={handleChangeTab} tab={2}>
+            <NavLink className={classnames({ active: tab === 2 })} onClick={handleChangeTab} value={2}>
               {t('Biên bản đã lập')}
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: tab === 3 })} onClick={handleChangeTab} tab={3}>
+            <NavLink className={classnames({ active: tab === 3 })} onClick={handleChangeTab} value={3}>
               {t('Kết luận biên bản')}
             </NavLink>
           </NavItem>
         </Nav>
         <TabContent activeTab={tab}>
           <TabPane tabId={1}>{renderFindRecordContent()}</TabPane>
-          <TabPane tabId={2}>{renderFindRecordContent()}</TabPane>
-          <TabPane tabId={3}>{renderFindRecordContent()}</TabPane>
+          <TabPane tabId={2}>{2}</TabPane>
+          <TabPane tabId={3}>{3}</TabPane>
         </TabContent>
       </div>
     );
@@ -161,4 +161,5 @@ const InternalRecord: React.FC = (): JSX.Element => {
     </div>
   );
 };
+
 export default InternalRecord;

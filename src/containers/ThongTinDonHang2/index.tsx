@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useCallback } from 'react';
 import { useState } from 'react';
 import { Button, Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
@@ -9,15 +9,6 @@ import TripInfoTable from '../../components/OrderInfomationTabType/TripInfoTable
 // eslint-disable-next-line max-lines-per-function
 const OrderInformationTabType: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<number>(1);
-
-  function handleClickToTripInfoTab() {
-    setTab(1);
-  }
-
-  function handleClickToHistoryImpactTab() {
-    setTab(2);
-  }
 
   function renderOrderInformation(): JSX.Element {
     return (
@@ -192,6 +183,11 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
     );
   }
 
+  const [tab, setTab] = useState<number>(1);
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
+  }
+
   return (
     <div>
       <Row className="sipInputItem">
@@ -224,12 +220,18 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
       <div className="sipTabContainer">
         <Nav tabs>
           <NavItem>
-            <NavLink className={classnames({ active: tab === 1 })} onClick={handleClickToTripInfoTab}>
+            <NavLink
+              className={classnames({ active: tab === 1 })}
+              onClick={useCallback((): void => handleChangeTab(1), [])}
+            >
               {t('Thông tin hành trình')}
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: tab === 2 })} onClick={handleClickToHistoryImpactTab}>
+            <NavLink
+              className={classnames({ active: tab === 2 })}
+              onClick={useCallback((): void => handleChangeTab(2), [])}
+            >
               {t('Lịch sử tác động')}
             </NavLink>
           </NavItem>
