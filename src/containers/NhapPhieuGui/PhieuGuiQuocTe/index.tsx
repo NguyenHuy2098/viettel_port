@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Col, Row, Label } from 'reactstrap';
@@ -74,6 +75,15 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
           </Label>
           <Col lg="8">
             <Input type="text" placeholder={t('Nguyễn Văn Nam')} />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Quốc gia
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder={t('Nhập nước đến')} />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -162,53 +172,125 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
     );
   }
 
-  function renderTransportService(): JSX.Element {
+  function renderPackageSize(): JSX.Element {
+    return (
+      <Row className="sipInputItemGroup">
+        <Col xs="12" md="4">
+          <Input type="text" placeholder="Dài (cm)" />
+        </Col>
+        <Col xs="12" md="4">
+          <Input type="text" placeholder="Rộng (cm)" />
+        </Col>
+        <Col xs="12" md="4">
+          <Input type="text" placeholder="Cao (cm)" />
+        </Col>
+      </Row>
+    );
+  }
+
+  function renderPackageInfo(): JSX.Element {
+    return (
+      <div className="sipInputBlock">
+        <h3>Thông tin hàng hóa</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="3">
+            Tên hàng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="9">
+            <Input type="text" placeholder="Nội dung hàng hóa" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="3">
+            Giá trị
+          </Label>
+          <Col lg="9">
+            <Input type="text" placeholder="Nhập giá trị (đ)" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="3">
+            Số lượng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="9">
+            <Input type="text" placeholder="Nhập số lượng" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="3">
+            Trọng lượng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="9">
+            <Input type="text" placeholder="Nhập  trọng lượng (g)" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="3">
+            Trọng lượng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="9">{renderPackageSize()}</Col>
+        </Row>
+      </div>
+    );
+  }
+
+  function renderSendingServices(): JSX.Element {
     return (
       <div className="sipInputBlock">
         <h3>
           Dịch vụ
-          <a className="pull-right" href="/">
-            Tất cả dịch vụ <span className="color-orange">></span>
-          </a>
+          <Button className="sipFlatBtn pull-right">
+            Tất cả dịch vụ
+            <i className="fa fa-angle-right color-orange ml-1 fa-lg"></i>
+          </Button>
         </h3>
         <Row className="sipInputItem">
-          <Col lg="6" xs="6">
-            <Label check>
-              <Input type="radio" name="codPrice" /> <b>VQE Quốc tế chuyên tuyến</b>
-            </Label>
+          <Label check xl="6" xs="12" className="pt-0 pb-0">
+            <Input type="radio" name="transportMethod" /> VQE Quốc tế chuyên tuyến
+          </Label>
+          <Col xl="6" xs="12">
+            <span className="font-xs">Dự kiến giao: 30 giờ</span>
+            <span className="pull-right color-orange">37.900 đ</span>
           </Col>
-          <Col lg="3" xs="6">
-            Dự kiến giao: 30 giờ
-          </Col>
-          <Col lg="3" xs="6" className="color-orange">
-            37.900
+        </Row>
+        <Row className="sipInputItem">
+          <Label check xl="6" xs="12" className="pt-0 pb-0">
+            <Input type="radio" name="transportMethod" /> VCN Chuyển phát nhanh
+          </Label>
+          <Col xl="6" xs="12">
+            <span className="font-xs">Dự kiến giao: 30 giờ</span>
+            <span className="pull-right color-orange">37.900 đ</span>
           </Col>
         </Row>
       </div>
     );
   }
 
-  function renderRequirement(): JSX.Element {
+  function renderDeliveryRequirement(): JSX.Element {
     return (
       <div className="sipInputBlock">
         <h3>Yêu cầu khi giao hàng</h3>
         <Row className="sipInputItem">
-          <Col lg="6" xs="6">
-            <Label check>
-              <Input type="radio" name="codPrice" /> <b>Cho khách xem hàng</b>
+          <Col lg="6" xs="12">
+            <Label check xs="12" className="pl-0 pr-0">
+              <Input type="radio" name="deliveryRequirement" /> Cho khách xem hàng
             </Label>
           </Col>
-          <Col lg="6" xs="6">
-            <Label check>
-              <Input type="radio" name="codPrice" /> <b>Không cho khách xem hàng</b>
+          <Col lg="6" xs="12">
+            <Label check xs="12" className="pl-0 pr-0">
+              <Input type="radio" name="deliveryRequirement" /> Không cho khách xem hàng
             </Label>
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="12" lg="3">
+          <Label xs="12" lg="4">
             Ghi chú khác
           </Label>
-          <Col lg="9">
+          <Col lg="8">
             <Input type="text" placeholder="Nhập ghi chú" />
           </Col>
         </Row>
@@ -220,37 +302,9 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
     return (
       <Col md="6" xs="12">
         <div className="sipContentContainer">
-          <div className="sipInputBlock">
-            <h3>Thông tin hàng hóa</h3>
-            <Row className="sipInputItem">
-              <Label xs="12" lg="3">
-                Tên hàng
-                <span className="color-red"> *</span>
-              </Label>
-              <Col lg="9">
-                <Input type="text" placeholder="Nội dung hoàng hóa" />
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Label xs="12" lg="3">
-                Giá trị
-              </Label>
-              <Col lg="9">
-                <Input type="text" placeholder="Nhập giá trị (đ)" />
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Label xs="12" lg="3">
-                Số lượng
-                <span className="color-red"> *</span>
-              </Label>
-              <Col lg="9">
-                <Input type="text" placeholder="1" />
-              </Col>
-            </Row>
-          </div>
-          {renderTransportService()}
-          {renderRequirement()}
+          {renderPackageInfo()}
+          {renderSendingServices()}
+          {renderDeliveryRequirement()}
         </div>
       </Col>
     );
