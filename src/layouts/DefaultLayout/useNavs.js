@@ -20,6 +20,10 @@ const nav = t => {
             name: t('Sủa biên bản'),
             url: '/sua-bien-ban',
           },
+          {
+            name: t('Xác minh biên bản'),
+            url: '/xac-minh-bien-ban',
+          },
         ],
       },
       {
