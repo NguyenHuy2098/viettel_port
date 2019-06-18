@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
-const DanhSachBangKe: React.FC = (): JSX.Element => {
+const ThongTinTai: React.FC = (): JSX.Element => {
   const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
   const { t } = useTranslation();
 
@@ -56,12 +56,13 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
 
   function renderTable(): JSX.Element {
     return (
-      <Row className="sipTableContainer">
+      <div className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
               <th></th>
               <th>{t('Mã BK/PG')}</th>
+              <th>{t('Bưu cục đi')}</th>
               <th>{t('Bưu cục đến')}</th>
               <th>{t('Số lượng')}</th>
               <th>{t('Trọng lượng')}</th>
@@ -79,6 +80,7 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
                 </Label>
               </td>
               <td>BK-2683077-TTKT1</td>
+              <td>TTKT1</td>
               <td>TTKT3</td>
               <td>25</td>
               <td>Nguyễn Văn An</td>
@@ -89,54 +91,71 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
           </tbody>
         </Table>
         {renderPagination()}
-      </Row>
+      </div>
     );
   }
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Danh sách bảng kêê/ phiếu gửi trong tải')}</h1>
+        <h1 className="sipTitle">{t('Thông tin tải/kiện')}</h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-trash-o" />
-          </Button>
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
           <Button onClick={toggle}>
-            <i className="fa fa-download" />
-            {t('Ghi lại')}
+            <i className="fa fa-plus" />
+            {t('Nhận tải')}
+          </Button>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Hoàn thành nhận BK/PG')}
           </Button>
         </div>
       </Row>
-      <Row className="sipSummaryContent">
-        <Col md="5" xs="12">
-          <Row>
-            <Col xs="5">{t('Mã bảng kê')}: </Col>
-            <Col xs="7">BK_1209_BNH</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">24/04/2019</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ghi chú')}: </Col>
-            <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
-          </Row>
-        </Col>
-        <Col md="3" xs="12">
-          <Row>
-            <Col xs="5">{t('Bưu cục đến')}: </Col>
-            <Col xs="7">TQN</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ngày gửi')}: </Col>
-            <Col xs="7">24/04/2019</Col>
-          </Row>
-        </Col>
-        <Col md="4" xs="12" className="text-right">
-          {t('Tổng số')}: 5
-        </Col>
+      <div className="sipSummaryContent">
+        <Row>
+          <Col md="5" xs="12">
+            <Row>
+              <Col xs="5">{t('Mã bảng kê')}: </Col>
+              <Col xs="7">BK_1209_BNH</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ngày tạo')}: </Col>
+              <Col xs="7">24/04/2019</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ghi chú')}: </Col>
+              <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
+            </Row>
+          </Col>
+          <Col md="3" xs="12">
+            <Row>
+              <Col xs="5">{t('Bưu cục đến')}: </Col>
+              <Col xs="7">TQN</Col>
+            </Row>
+            <Row>
+              <Col xs="5">{t('Ngày gửi')}: </Col>
+              <Col xs="7">24/04/2019</Col>
+            </Row>
+          </Col>
+          <Col md="4" xs="12" className="text-right">
+            {t('Tổng số')}: 5
+          </Col>
+        </Row>
+      </div>
+      <div className="row mt-3" />
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Thông tin bảng kê/ phiếu gửi')}</h1>
+        <div className="sipTitleRightBlock sipTitleRightBlock2">
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Nhận BK/PG')}
+          </Button>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Quét mã')}
+          </Button>
+        </div>
       </Row>
       <div className="row mt-3" />
       <Row className="sipBgWhiteContainer">
@@ -151,4 +170,4 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
   );
 };
 
-export default DanhSachBangKe;
+export default ThongTinTai;

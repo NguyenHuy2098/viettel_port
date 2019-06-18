@@ -5,6 +5,20 @@ const nav = t => {
   return {
     items: [
       {
+        name: 'Điều hành',
+        icon: 'fa fa-user-circle-o',
+        children: [
+          {
+            name: t('Tiếp xúc khách hàng'),
+            url: '/tiep-xuc-khach-hang',
+          },
+          {
+            name: t('Biên bản nội bộ'),
+            url: '/bien-ban-noi-bo',
+          },
+        ],
+      },
+      {
         name: 'Nhập phiếu gửi',
         icon: 'icon-note',
         children: [
@@ -14,11 +28,11 @@ const nav = t => {
           },
           {
             name: 'Phiếu gửi quốc tế',
-            url: '/international-forwarding-order',
+            url: '/phieu-gui-quoc-te',
           },
           {
             name: t('Nhập doanh thu'),
-            url: '/input-revenue',
+            url: '/nhap-doanh-thu',
           },
         ],
       },
@@ -31,16 +45,40 @@ const nav = t => {
             url: '/dong-bang-ke',
           },
           {
+            name: t('Đóng bảng kê nội tỉnh'),
+            url: '/dong-bang-ke-noi-tinh',
+          },
+          {
+            name: t('Thông tin bảng kê'),
+            url: '/thong-tin-bang-ke',
+          },
+          {
+            name: t('Danh sách bảng kê'),
+            url: '/danh-sach-bang-ke',
+          },
+          {
+            name: t('Danh sách phiếu gửi trong bảng kê'),
+            url: '/danh-sach-phieu-gui-trong-bang-ke',
+          },
+          {
+            name: t('Danh sách phiếu gửi'),
+            url: '/danh-sach-phieu-gui',
+          },
+          {
             name: t('Đóng tải'),
-            url: '/close-sack',
+            url: '/dong-tai',
           },
           {
             name: t('Đóng chuyển thư'),
-            url: '/mail-truck-closing',
+            url: '/dong-chuyen-thu',
           },
           {
-            name: t('Đóng bảng kê nội tỉnh'),
-            url: '/dong-bang-ke-noi-tinh',
+            name: t('Danh sách tải kiện'),
+            url: '/danh-sach-tai-kien',
+          },
+          {
+            name: t('Tách phiếu gửi'),
+            url: '/tach-phieu-gui',
           },
         ],
       },
@@ -52,60 +90,29 @@ const nav = t => {
             name: t('Nhận chuyến thư'),
             url: '/nhan-chuyen-thu',
           },
+          {
+            name: t('Khai thác chuyển thư đến'),
+            url: '/khai-thac-chuyen-thu-den',
+          },
+          {
+            name: t('Nhận tải kiện'),
+            url: '/nhan-tai-kien',
+          },
+          {
+            name: t('Khai thác tải'),
+            url: '/khai-thac-tai',
+          },
         ],
       },
       {
-        name: t('Thông tin bảng kê'),
-        url: '/thong-tin-bang-ke',
-      },
-      {
-        name: t('Danh sách tải kiện'),
-        url: '/danh-sach-tai-kien',
-      },
-      {
-        name: t('Thông tin tải'),
-        url: '/thong-tin-tai',
-      },
-      {
-        name: t('Danh sách bảng kê'),
-        url: '/danh-sach-bang-ke',
-      },
-      {
-        name: t('Danh sách phiếu gửi trong bảng kê'),
-        url: '/danh-sach-phieu-gui-trong-bang-ke',
-      },
-      {
-        name: t('Khai thác tải'),
-        url: '/operation-sack',
-      },
-      {
-        name: t('Danh sách phiếu gửi'),
-        url: '/danh-sach-phieu-gui',
-      },
-      {
-        name: t('Khai thác chuyển thư đến'),
-        url: '/freight-order-receive',
-      },
-      {
         name: t('Thông tin đơn hàng'),
-        url: '/order-information',
-      },
-      {
-        name: t('Thông tin đơn hàng 2'),
-        url: '/order-information-2',
+        url: '/thong-tin-don-hang',
         icon: 'icon-info',
       },
       {
-        name: t('Tiếp xúc khách hàng'),
-        url: '/tiep-xuc-khach-hang',
-      },
-      {
-        name: t('Tách phiếu gửi'),
-        url: '/tach-phieu-gui',
-      },
-      {
-        name: t('Biên bản nội bộ'),
-        url: '/bien-ban-noi-bo',
+        name: t('Thông tin đơn hàng 2'),
+        url: '/thong-tin-don-hang-2',
+        icon: 'icon-info',
       },
     ],
   };
