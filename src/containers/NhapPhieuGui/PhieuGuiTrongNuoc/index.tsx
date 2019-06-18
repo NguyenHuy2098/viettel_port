@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
@@ -139,6 +140,22 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
     );
   }
 
+  function renderPackageSize(): JSX.Element {
+    return (
+      <Row className="sipInputItemGroup">
+        <Col xs="12" md="4">
+          <Input type="text" placeholder="Dài (cm)" />
+        </Col>
+        <Col xs="12" md="4">
+          <Input type="text" placeholder="Rộng (cm)" />
+        </Col>
+        <Col xs="12" md="4">
+          <Input type="text" placeholder="Cao (cm)" />
+        </Col>
+      </Row>
+    );
+  }
+
   function renderReceiverInput(): JSX.Element {
     return (
       <div className="sipInputBlock">
@@ -233,24 +250,171 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
     );
   }
 
+  function renderPackageInfoDetail(): JSX.Element {
+    return (
+      <div className="sipInputBlock">
+        <h3>Thông tin hàng hóa</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Tên hàng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nội dung hàng hoá" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Giá trị
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập giá trị (đ)" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Số lượng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Số lượng" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Trọng lượng
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập  trọng lượng (g)" />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Kích thước
+          </Label>
+          <Col lg="8">{renderPackageSize()}</Col>
+        </Row>
+      </div>
+    );
+  }
+
+  function renderSendingServices(): JSX.Element {
+    return (
+      <div className="sipInputBlock">
+        <h3>
+          Dịch vụ
+          <Button className="sipFlatBtn pull-right">
+            Tất cả dịch vụ
+            <i className="fa fa-angle-right color-orange ml-1 fa-lg"></i>
+          </Button>
+        </h3>
+        <Row className="sipInputItem">
+          <Label check xl="6" xs="12" className="pt-0 pb-0">
+            <Input type="radio" name="transportMethod" /> VHT Phát hoả tốc hẹn giờ
+          </Label>
+          <Col xl="6" xs="12">
+            <span className="font-xs">Dự kiến giao: 30 giờ</span>
+            <span className="pull-right color-orange">37.900 đ</span>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label check xl="6" xs="12" className="pt-0 pb-0">
+            <Input type="radio" name="transportMethod" /> VCN Chuyển phát nhanh
+          </Label>
+          <Col xl="6" xs="12">
+            <span className="font-xs">Dự kiến giao: 30 giờ</span>
+            <span className="pull-right color-orange">37.900 đ</span>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
+  function renderAdditionalServices(): JSX.Element {
+    return (
+      <div className="sipInputBlock">
+        <h3>
+          Dịch vụ cộng thêm
+          <Button className="sipFlatBtn pull-right">
+            Xem bảng giá
+            <i className="fa fa-angle-right color-orange ml-1 fa-lg" />
+          </Button>
+        </h3>
+        <Row className="sipInputItem">
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">Bảo hiểm</span>
+          </Label>
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">Báo phát</span>
+          </Label>
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">GCH chuyển hoàn</span>
+          </Label>
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">Đồng kiểm</span>
+          </Label>
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">Thư ký</span>
+          </Label>
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">Giao bưu phẩm tại điểm giao dịch</span>
+          </Label>
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">Phát tận tay</span>
+          </Label>
+          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+            <Input type="checkbox" />
+            <span className="font-xs">Hàng giá trị cao</span>
+          </Label>
+        </Row>
+      </div>
+    );
+  }
+
+  function renderDeliveryRequirement(): JSX.Element {
+    return (
+      <div className="sipInputBlock">
+        <h3>Yêu cầu khi giao hàng</h3>
+        <Row className="sipInputItem">
+          <Col lg="6" xs="12">
+            <Label check xs="12" className="pl-0 pr-0">
+              <Input type="radio" name="deliveryRequirement" /> Cho khách xem hàng
+            </Label>
+          </Col>
+          <Col lg="6" xs="12">
+            <Label check xs="12" className="pl-0 pr-0">
+              <Input type="radio" name="deliveryRequirement" /> Không cho khách xem hàng
+            </Label>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            Ghi chú khác
+          </Label>
+          <Col lg="8">
+            <Input type="text" placeholder="Nhập ghi chú" />
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
   function renderPackageInfo(): JSX.Element {
     return (
       <Col md="6" xs="12">
         <div className="sipContentContainer">
-          <div className="sipInputBlock">
-            <h3>Thông tin phiếu gửi</h3>
-            <Row className="sipInputItem">
-              <Label xs="12" lg="4">
-                Mã phiếu gửi
-              </Label>
-              <Col lg="8">
-                <Input type="text" placeholder="" />
-              </Col>
-            </Row>
-          </div>
-          {renderSenderInput()}
-          {renderReceiverInput()}
-          {renderCodPriceInput()}
+          {renderPackageInfoDetail()}
+          {renderSendingServices()}
+          {renderAdditionalServices()}
+          {renderDeliveryRequirement()}
         </div>
       </Col>
     );

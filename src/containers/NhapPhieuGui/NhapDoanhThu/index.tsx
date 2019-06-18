@@ -32,7 +32,7 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">Nhập doanh thu {props.text}</h1>
+        <h1 className="sipTitle">Nhập doanh thu</h1>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-trash-o" />
