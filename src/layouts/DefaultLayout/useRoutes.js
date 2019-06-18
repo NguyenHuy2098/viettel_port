@@ -21,7 +21,7 @@ const TraCuuBienBan = Loadable({
   loading: Loading,
 });
 const SuaBienBan = Loadable({
-  loader: () => import('containers/DieuHanh/BienBanNoiBo/SuaBienBan'),
+  loader: () => import('containers/DieuHanh/BienBanNoiBo/SuaBienBan.tsx'),
   loading: Loading,
 });
 

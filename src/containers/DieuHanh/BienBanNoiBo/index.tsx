@@ -7,10 +7,6 @@ import { useTranslation } from 'react-i18next';
 // eslint-disable-next-line max-lines-per-function
 const InternalRecord: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [isTab, setTab] = useState<string>('1');
-  const handleClickTab = (value: string) => (event: React.MouseEvent<HTMLButtonElement>): void => {
-    setTab(value);
-  };
 
   function renderFindRecordContent(): JSX.Element {
     return (
@@ -123,30 +119,35 @@ const InternalRecord: React.FC = (): JSX.Element => {
     );
   }
 
+  const [tab, setTab] = useState<number>(1);
+  function handleChangeTab(event: React.MouseEvent): void {
+    setTab(Number(event.currentTarget.getAttribute('tab')));
+  }
+
   function renderFindRecord(): JSX.Element {
     return (
       <div className="sipTabContainer">
         <Nav tabs>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '1' })} onClick={handleClickTab('1')}>
+            <NavLink className={classnames({ active: tab === 1 })} onClick={handleChangeTab} tab={1}>
               {t('Biên bản bị lập')}
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '2' })} onClick={handleClickTab('2')}>
+            <NavLink className={classnames({ active: tab === 2 })} onClick={handleChangeTab} tab={2}>
               {t('Biên bản đã lập')}
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink className={classnames({ active: isTab === '3' })} onClick={handleClickTab('3')}>
+            <NavLink className={classnames({ active: tab === 3 })} onClick={handleChangeTab} tab={3}>
               {t('Kết luận biên bản')}
             </NavLink>
           </NavItem>
         </Nav>
-        <TabContent activeTab={isTab}>
-          <TabPane tabId="1">{renderFindRecordContent()}</TabPane>
-          <TabPane tabId="2">{renderFindRecordContent()}</TabPane>
-          <TabPane tabId="3">{renderFindRecordContent()}</TabPane>
+        <TabContent activeTab={tab}>
+          <TabPane tabId={1}>{renderFindRecordContent()}</TabPane>
+          <TabPane tabId={2}>{renderFindRecordContent()}</TabPane>
+          <TabPane tabId={3}>{renderFindRecordContent()}</TabPane>
         </TabContent>
       </div>
     );

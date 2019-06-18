@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
+import { Button, Input, Label, Col, Row } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
 const EditRecord: React.FC = (): React.ReactElement => {
