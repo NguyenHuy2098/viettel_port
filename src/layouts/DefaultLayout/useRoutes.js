@@ -12,6 +12,14 @@ const InternalRecord = Loadable({
   loader: () => import('containers/DieuHanh/BienBanNoiBo'),
   loading: Loading,
 });
+const LapBienBan = Loadable({
+  loader: () => import('containers/DieuHanh/BienBanNoiBo/LapBienBan'),
+  loading: Loading,
+});
+const TraCuuBienBan = Loadable({
+  loader: () => import('containers/DieuHanh/BienBanNoiBo/TraCuuBienBan'),
+  loading: Loading,
+});
 
 // =============== NhapPhieuGui =====================
 
@@ -139,6 +147,8 @@ const routes = t => {
     { path: '/thong-tin-don-hang-2', name: t('Thông tin đơn hàng 2'), component: OrderInformationTabType },
     { path: '/tach-phieu-gui', name: t('Tách phiếu gửi'), component: SplitCoupon },
     { path: '/bien-ban-noi-bo', name: t('Biên bản nội bộ'), component: InternalRecord },
+    { path: '/lap-bien-ban', name: t('Lập biên bản'), component: LapBienBan },
+    { path: '/tra-cuu-bien-ban', name: t('Tra cứu biên bản'), component: TraCuuBienBan },
   ];
 };
 
