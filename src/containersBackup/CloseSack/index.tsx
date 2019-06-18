@@ -2,7 +2,7 @@ import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from 'reactstrap';
-import { AppState } from '../../../redux/store';
+import { AppState } from 'redux/store';
 
 interface Props {
   text: string;
@@ -83,7 +83,7 @@ const CloseSack: React.FC<Props> = (props): JSX.Element => {
         Tổng số: <span>56</span>
       </p>
       <div className="mt-3" />
-      <Row className="sipTableContainer">
+      <div className="sipTableContainer">
         <Table striped hover>
           <thead>
             <tr>
@@ -120,7 +120,7 @@ const CloseSack: React.FC<Props> = (props): JSX.Element => {
             </tr>
           </tbody>
         </Table>
-      </Row>
+      </div>
     </div>
   );
 };
