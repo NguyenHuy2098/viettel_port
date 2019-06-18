@@ -9,6 +9,7 @@ import request from 'utils/request';
 function* takeGetPosts(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   yield unfoldSaga(
     {
+      // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       handler: async () => {
         const results = await request({
           url: url.resolve(REACT_APP_API_ENDPOINT, '/posts'),

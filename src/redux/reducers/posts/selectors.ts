@@ -1,10 +1,10 @@
 import { createSelector } from 'reselect';
 import { AppState } from 'redux/store';
-import { PostState } from './types';
+import { PostState, Posts } from './types';
 
-export const selectPosts = (state: AppState) => state.posts;
+export const selectPosts = (state: AppState): PostState => state.posts;
 
 export const makeSelectPostList = createSelector(
   selectPosts,
-  (posts: PostState) => posts.list,
+  (posts: PostState): Posts => posts.list,
 );
