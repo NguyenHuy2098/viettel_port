@@ -15,6 +15,12 @@ const nav = t => {
           {
             name: t('Biên bản nội bộ'),
             url: '/bien-ban-noi-bo',
+            children: [
+              {
+                name: t('Sủa biên bản'),
+                url: '/sua-bien-ban',
+              },
+            ],
           },
         ],
       },

@@ -20,6 +20,10 @@ const TraCuuBienBan = Loadable({
   loader: () => import('containers/DieuHanh/BienBanNoiBo/TraCuuBienBan'),
   loading: Loading,
 });
+const SuaBienBan = Loadable({
+  loader: () => import('containers/DieuHanh/BienBanNoiBo/SuaBienBan'),
+  loading: Loading,
+});
 
 // =============== NhapPhieuGui =====================
 
@@ -149,6 +153,7 @@ const routes = t => {
     { path: '/bien-ban-noi-bo', name: t('Biên bản nội bộ'), component: InternalRecord },
     { path: '/lap-bien-ban', name: t('Lập biên bản'), component: LapBienBan },
     { path: '/tra-cuu-bien-ban', name: t('Tra cứu biên bản'), component: TraCuuBienBan },
+    { path: '/sua-bien-ban', name: t('Sửa biên bản'), component: SuaBienBan },
   ];
 };
 
