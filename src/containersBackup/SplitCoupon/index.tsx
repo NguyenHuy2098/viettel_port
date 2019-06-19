@@ -45,7 +45,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   function renderCouponInformation(): JSX.Element {
     return (
       <div className="sipSummaryContent">
-        <Row className="couponInformation">
+        <Row className="sipCouponInformation">
           <Col lg="4" md="5" xs="12">
             <Row>
               <Col xs="5">{t('Mã phiếu')}: </Col>
@@ -116,13 +116,13 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   function renderListCoupon(): JSX.Element {
     return (
       <div className="sipSummaryContent">
-        <Row className="couponInformation">
+        <Row className="sipCouponInformation">
           <Col lg="8" md="5" xs="12">
-            <Row className="couponTitle">
+            <Row className="sipCouponTitle">
               <Col xs="5">{t('Mã phiếu gửi')}</Col>
               <Col xs="7">{t('Trọng lượng')}</Col>
             </Row>
-            <Row className="couponContent">
+            <Row className="sipCouponContent">
               <Col xs="5">
                 {renderCheckbox()}
                 V00596290_01
@@ -131,7 +131,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 <Input />
               </Col>
             </Row>
-            <Row className="couponContent">
+            <Row className="sipCouponContent">
               <Col xs="5">
                 {renderCheckbox()}
                 V00596290_01
@@ -140,7 +140,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 <Input />
               </Col>
             </Row>
-            <Row className="couponContent">
+            <Row className="sipCouponContent">
               <Col xs="5">
                 {renderCheckbox()}
                 V00596290_01

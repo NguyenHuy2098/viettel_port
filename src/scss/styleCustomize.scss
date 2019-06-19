@@ -125,7 +125,7 @@
     color: #fff;
   }
 }
-.couponInformation {
+.sipCouponInformation {
   div {
     font-weight: 500;
     color: #4a4a4a;
@@ -167,29 +167,34 @@
     }
   }
 }
-.couponTitle {
+.sipCouponTitle {
   div {
     color: #299f9a;
     font-weight: 500;
   }
   margin-bottom: 21px !important;
 }
-.couponContent {
+.sipCouponContent {
   div {
     color: #4a4a4a;
     font-weight: 500;
     margin-bottom: 13px;
   }
 }
-.findRecordTitle {
+.findRecordButton {
   margin-left: 8px;
   margin-top: 16px;
-  padding-bottom: 17px;
   button {
     margin-left: 12px;
-    background-color: #2db4a1;
+    background-color: #F5F5F5;
+    border: 1px solid #D6D6D6;
     border-radius: 5px;
-    color: #fff;
+    color: #919191;
+  }
+  button:hover {
+    color: #299F9A;
+    background: #DDF6F5;
+    border: 1px solid #299F9A;
   }
 }
 .findRecordContent {
@@ -199,21 +204,26 @@
   border-bottom: 1px solid #d6d6d6;
   padding-left: 6px;
   padding-bottom: 17px;
+  padding-top: 16px;
   .findRecordContentDetail {
     padding-bottom: 16px;
   }
 }
-.inputStyle {
-  padding: 0px;
-  input {
-    width: 190px;
-  }
-}
-.searchButton {
+.sipSearchButtonRecord {
   padding-left: 0;
   padding-top: 36px;
+  div {
+    margin-left: 8px;
+    margin-top: 16px;
+    padding-bottom: 17px;
+    button {
+    margin-left: 12px;
+    background-color: #2DB4A1;
+    border-radius: 5px;
+    color: #fff;}
+  }
 }
-.totalRecord {
+.sipTotalRecord {
   font-weight: 500;
   color: #4A4A4A;
   margin-left: 21px;

@@ -8,15 +8,44 @@ import { useTranslation } from 'react-i18next';
 const InternalRecord: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
 
-  function renderFindRecordContent(): JSX.Element {
+  const renderTopController = (): React.ReactElement => (
+    <>
+      <Button>
+        <i className="fa fa-plus" />
+        {t('Thêm mới')}
+      </Button>
+      <Button>
+        <i className="fa fa-search" />
+        {t('Tra cứu biên bản')}
+      </Button>
+    </>
+  );
+
+  function renderInternalRecordTitle(): JSX.Element {
+    return (
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Biên bản sai sót nghiệp vụ')}</h1>
+        <div className="sipTitleRightBlock">{renderTopController()}</div>
+      </Row>
+    );
+  }
+
+  function renderFindRecordButton(): JSX.Element {
     return (
       <>
-        <div className="findRecordTitle">
+        <div className="findRecordButton">
           <Button>{t('Nghiêm trọng')}</Button>
           <Button>{t('Kết luận sai')}</Button>
           <Button>{t('Đã hoàn thành')}</Button>
           <Button>{t('Mới lập')}</Button>
         </div>
+      </>
+    );
+  }
+
+  function renderFindRecordContent(): JSX.Element {
+    return (
+      <>
         <Row className="findRecordContent">
           <Col xs="6" sm="4">
             <Row className="findRecordContentDetail">
@@ -47,13 +76,13 @@ const InternalRecord: React.FC = (): JSX.Element => {
               </Col>
             </Row>
           </Col>
-          <Col sm="4" className="searchButton">
+          <Col sm="4" className="sipSearchButtonRecord">
             <div className="findRecordTitle">
               <Button>{t('Tìm kiếm')}</Button>
             </div>
           </Col>
         </Row>
-        <Row className="totalRecord">{t('Tổng số')}: 1</Row>
+        <Row className="sipTotalRecord">{t('Tổng số')}: 1</Row>
       </>
     );
   }
@@ -71,14 +100,6 @@ const InternalRecord: React.FC = (): JSX.Element => {
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
       </>
-    );
-  }
-
-  function renderInternalRecordTitle(): JSX.Element {
-    return (
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Biên bản sai sót nghiệp vụ')}</h1>
-      </Row>
     );
   }
 
@@ -145,9 +166,12 @@ const InternalRecord: React.FC = (): JSX.Element => {
           </NavItem>
         </Nav>
         <TabContent activeTab={tab}>
-          <TabPane tabId={1}>{renderFindRecordContent()}</TabPane>
+          <TabPane tabId={1}>
+            {renderFindRecordButton()}
+            {renderFindRecordContent()}
+          </TabPane>
           <TabPane tabId={2}>{2}</TabPane>
-          <TabPane tabId={3}>{3}</TabPane>
+          <TabPane tabId={3}>{renderFindRecordContent()}</TabPane>
         </TabContent>
       </div>
     );
