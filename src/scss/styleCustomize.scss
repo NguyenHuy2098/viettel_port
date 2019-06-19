@@ -42,7 +42,8 @@
     margin: 10px 0 0;
     min-width: 270px;
     max-width: 350px;
-    div[class^='col'], div[class*=' col'] {
+    div[class^='col'],
+    div[class*=' col'] {
       padding: 5px 0 0 15px;
       input.form-control {
         text-align: right;
@@ -86,7 +87,8 @@
 }
 .sipInputItemGroup {
   margin: 0 -5px;
-  div[class^='col'], div[class*=' col'] {
+  div[class^='col'],
+  div[class*=' col'] {
     padding: 0 5px;
   }
 }
@@ -186,15 +188,15 @@
   margin-top: 16px;
   button {
     margin-left: 12px;
-    background-color: #F5F5F5;
-    border: 1px solid #D6D6D6;
+    background-color: #f5f5f5;
+    border: 1px solid #d6d6d6;
     border-radius: 5px;
     color: #919191;
   }
   button:hover {
-    color: #299F9A;
-    background: #DDF6F5;
-    border: 1px solid #299F9A;
+    color: #299f9a;
+    background: #ddf6f5;
+    border: 1px solid #299f9a;
   }
 }
 .findRecordContent {
@@ -217,15 +219,16 @@
     margin-top: 16px;
     padding-bottom: 17px;
     button {
-    margin-left: 12px;
-    background-color: #2DB4A1;
-    border-radius: 5px;
-    color: #fff;}
+      margin-left: 12px;
+      background-color: #2db4a1;
+      border-radius: 5px;
+      color: #fff;
+    }
   }
 }
 .sipTotalRecord {
   font-weight: 500;
-  color: #4A4A4A;
+  color: #4a4a4a;
   margin-left: 21px;
   padding-top: 20px;
   padding-bottom: 7px;
@@ -235,4 +238,17 @@
   width: 1000px;
   max-width: 100%;
 }
-
+.sipSearchButtonComplainRecord {
+  button {
+    background-color: #2db4a1;
+    border-radius: 5px;
+    color: #fff;
+  }
+}
+.sipInformationTable {
+  font-weight: 500;
+  h6 {
+    font-size: 12px;
+    color: #299f9a;
+  }
+}
