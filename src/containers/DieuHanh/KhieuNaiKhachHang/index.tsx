@@ -3,14 +3,17 @@ import { useState } from 'react';
 import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
-
+import ModalAddNew from './ModalAddNew';
 // eslint-disable-next-line max-lines-per-function
 const ComplainCustomer: React.FC = (): JSX.Element => {
+  const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
   const { t } = useTranslation();
-
+  function toggle(): void {
+    setModalCreateNew(!modalCreateNew);
+  }
   const renderTopController = (): React.ReactElement => (
     <>
-      <Button>
+      <Button onClick={toggle}>
         <i className="fa fa-plus" />
         {t('Thêm mới')}
       </Button>
@@ -158,6 +161,7 @@ const ComplainCustomer: React.FC = (): JSX.Element => {
     <div>
       {renderInternalRecordTitle()}
       {renderFindRecord()}
+      <ModalAddNew modalCreateNew={modalCreateNew} toggle={toggle} />
     </div>
   );
 };
