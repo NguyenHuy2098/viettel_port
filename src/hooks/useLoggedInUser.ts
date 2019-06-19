@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
+import { User } from 'oidc-client';
 import { makeSelectUser } from 'redux/auth/selectors';
-import { UserType } from 'redux/auth/types';
 
 interface HookLoggedInUserType {
   isLoggedIn: boolean;
-  user: UserType | null;
+  user: User | undefined;
 }
 
 const useLoggedInUser = (): HookLoggedInUserType => {

@@ -14,8 +14,9 @@ import {
   Row,
 } from 'reactstrap';
 
-class Register extends React.PureComponent {
-  private renderForm = () => (
+// eslint-disable-next-line max-lines-per-function
+const Register: React.FC = (): JSX.Element => {
+  const renderForm = (): JSX.Element => (
     <Form>
       <h1>Register</h1>
       <p className="text-muted">Create your account</p>
@@ -55,9 +56,9 @@ class Register extends React.PureComponent {
     </Form>
   );
 
-  private renderCard = (): React.ReactElement => (
+  const renderCard = (): JSX.Element => (
     <Card className="mx-4">
-      <CardBody className="p-4">{this.renderForm()}</CardBody>
+      <CardBody className="p-4">{renderForm()}</CardBody>
       <CardFooter className="p-4">
         <Row>
           <Col xs="12" sm="6">
@@ -75,19 +76,17 @@ class Register extends React.PureComponent {
     </Card>
   );
 
-  public render(): React.ReactElement {
-    return (
-      <div className="app flex-row align-items-center">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md="9" lg="7" xl="6">
-              {this.renderCard()}
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="app flex-row align-items-center">
+      <Container>
+        <Row className="justify-content-center">
+          <Col md="9" lg="7" xl="6">
+            {renderCard()}
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
 
 export default Register;

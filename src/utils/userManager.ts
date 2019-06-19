@@ -15,7 +15,7 @@ const userManager = createUserManager({
   monitorSession: false,
   post_logout_redirect_uri: url.resolve(window.location.href, '/signout-callback'),
   redirect_uri: url.resolve(window.location.href, '/signin-callback'),
-  response_type: 'code id_token token',
+  response_type: 'id_token token',
   scope: 'offline_access openid profile public-api',
   silent_redirect_uri: url.resolve(window.location.href, '/silent-callback'),
   userStore: new WebStorageStateStore({ store: window.localStorage }),

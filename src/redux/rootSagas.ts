@@ -1,7 +1,8 @@
-import { all } from 'redux-saga/effects';
+import { SagaIterator } from 'redux-saga';
+import { all, call } from 'redux-saga/effects';
 import watchAuthSagaAsync from './auth/sagas';
 import watchPostSagaAsync from './posts/sagas';
 
-export default function* rootSagas(): IterableIterator<any> {
-  yield all([watchAuthSagaAsync(), watchPostSagaAsync()]);
+export default function* rootSagas(): SagaIterator {
+  yield all([call(watchAuthSagaAsync), call(watchPostSagaAsync)]);
 }

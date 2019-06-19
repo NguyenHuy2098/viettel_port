@@ -1,15 +1,16 @@
+import { UserState } from 'redux-oidc';
 import { UnfoldSagaActionType } from 'redux-unfold-saga';
 import produce from 'immer';
-import { AuthStateType } from './types';
 
-const initialState: AuthStateType = {
-  user: null,
+const initialState: UserState = {
+  user: undefined,
+  isLoadingUser: false,
 };
 
-function posts(state = initialState, action: UnfoldSagaActionType): AuthStateType {
+function posts(state = initialState, action: UnfoldSagaActionType): UserState {
   return produce(
     state,
-    (draftState: AuthStateType): AuthStateType => {
+    (draftState: UserState): UserState => {
       switch (action.type) {
         default:
           return draftState;
