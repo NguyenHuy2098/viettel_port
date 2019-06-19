@@ -125,7 +125,7 @@
     color: #fff;
   }
 }
-.couponInformation {
+.sipCouponInformation {
   div {
     font-weight: 500;
     color: #4a4a4a;
@@ -167,14 +167,14 @@
     }
   }
 }
-.couponTitle {
+.sipCouponTitle {
   div {
     color: #299f9a;
     font-weight: 500;
   }
   margin-bottom: 21px !important;
 }
-.couponContent {
+.sipCouponContent {
   div {
     color: #4a4a4a;
     font-weight: 500;
@@ -209,13 +209,7 @@
     padding-bottom: 16px;
   }
 }
-.inputStyle {
-  padding: 0px;
-  input {
-    width: 190px;
-  }
-}
-.searchButton {
+.sipSearchButtonRecord {
   padding-left: 0;
   padding-top: 36px;
   div {
@@ -229,7 +223,7 @@
     color: #fff;}
   }
 }
-.totalRecord {
+.sipTotalRecord {
   font-weight: 500;
   color: #4A4A4A;
   margin-left: 21px;

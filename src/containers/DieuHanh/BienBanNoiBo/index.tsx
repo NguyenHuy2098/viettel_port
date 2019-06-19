@@ -76,13 +76,13 @@ const InternalRecord: React.FC = (): JSX.Element => {
               </Col>
             </Row>
           </Col>
-          <Col sm="4" className="searchButton">
+          <Col sm="4" className="sipSearchButtonRecord">
             <div className="findRecordTitle">
               <Button>{t('Tìm kiếm')}</Button>
             </div>
           </Col>
         </Row>
-        <Row className="totalRecord">{t('Tổng số')}: 1</Row>
+        <Row className="sipTotalRecord">{t('Tổng số')}: 1</Row>
       </>
     );
   }
