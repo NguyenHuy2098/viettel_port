@@ -28,8 +28,7 @@ const DefaultLayout: React.FC<Props> = (props): JSX.Element => {
   const routes = useRoutes();
   const navs = useNavs();
 
-  function signOut(event: MouseEvent): void {
-    event.preventDefault();
+  function signOut(): void {
     props.history.push('/login');
   }
 

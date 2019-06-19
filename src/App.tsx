@@ -16,6 +16,11 @@ const DefaultLayout = Loadable({
   loader: () => import('layouts/DefaultLayout'),
   loading: Loading,
 });
+const BlankLayout = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('layouts/BlankLayout'),
+  loading: Loading,
+});
 const Login = Loadable({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   loader: () => import('containers/Login'),
@@ -54,7 +59,8 @@ const App: React.FC = (): JSX.Element => {
               <Route exact path="/404" component={Page404} />
               <Route exact path="/500" component={Page500} />
               <Route exact path="/signin-callback" component={LoginCallback} />
-              <PrivateRoute path="/" component={DefaultLayout} />
+              <PrivateRoute path="/" component={DefaultLayout} />} />
+              <Route path="/blank" component={BlankLayout} />
             </Switch>
           </Router>
         </OidcProvider>
