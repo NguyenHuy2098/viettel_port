@@ -6924,6 +6924,11 @@ immer@^3.1.3:
   resolved "https://registry.yarnpkg.com/immer/-/immer-3.1.3.tgz#59bc742b2aab6e2c676445edb653e588a23c70fc"
   integrity sha512-HG5SXTXTTVy9lGNwS075cNhQoV375jHsIJO3UtMjuUWJOuwlMr0u42FlsKTJcppt5AzsFAsmj9r4kHvsSHh3hQ==
 
+immutable@>=3.6.0:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
+  integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
+
 import-cwd@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/import-cwd/-/import-cwd-2.1.0.tgz#aa6cf36e722761285cb371ec6519f53e2435b0a9"
@@ -10046,6 +10051,13 @@ octokit-pagination-methods@^1.1.0:
   resolved "https://registry.yarnpkg.com/octokit-pagination-methods/-/octokit-pagination-methods-1.1.0.tgz#cf472edc9d551055f9ef73f6e42b4dbb4c80bea4"
   integrity sha512-fZ4qZdQ2nxJvtcasX7Ghl+WlWS/d9IgnBIwFZXVNNZUmzpno91SX5bc5vuxiuKoCtK78XxGGNuSCrDC7xYB3OQ==
 
+oidc-client@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.8.0.tgz#0c01730f59743c34e172e93c4dc7cb9b31fb33e7"
+  integrity sha512-RHGE3UU+NgFHUj4XxqOi+fgu/KGEpBoypXRXMVXlW3d/pU3M/Tw3L+K/PyOcyCsTWtS+KngD/9tPqsEcWt5eMg==
+  dependencies:
+    uuid "^3.3.2"
+
 on-finished@~2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/on-finished/-/on-finished-2.3.0.tgz#20f1336481b083cd75337992a16971aa2d906947"
@@ -12186,6 +12198,13 @@ redux-devtools-extension@^2.13.8:
   version "2.13.8"
   resolved "https://registry.yarnpkg.com/redux-devtools-extension/-/redux-devtools-extension-2.13.8.tgz#37b982688626e5e4993ff87220c9bbb7cd2d96e1"
   integrity sha512-8qlpooP2QqPtZHQZRhx3x3OP5skEV1py/zUdMY28WNAocbafxdG2tRD1MWE7sp8obGMNYuLWanhhQ7EQvT1FBg==
+
+redux-oidc@^3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/redux-oidc/-/redux-oidc-3.1.2.tgz#31a771b0e05a65879626262e1e63ba70a0936ffd"
+  integrity sha512-1kwm3SxzgUg4h1oFpPOOzofKyWJvwhVJ3BHnm/d+h29NjZ4BF3wfJbpdubnPUF0lMrl6KNOJTz8rVlkacj+f4g==
+  optionalDependencies:
+    immutable ">=3.6.0"
 
 redux-saga@^1.0.3:
   version "1.0.3"
