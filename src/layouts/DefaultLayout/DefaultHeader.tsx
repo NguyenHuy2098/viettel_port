@@ -112,8 +112,9 @@ class DefaultHeader extends React.PureComponent<Props, State> {
   public renderHeaderUser = (): React.ReactElement => (
     <ButtonDropdown isOpen={this.state.dropdownOpenMenu} toggle={this.toggleDropdownOpenMenu} className="sipHeaderUser">
       <DropdownToggle nav>
-        <span>Kevin Tran</span>
-        <i className="fa fa-caret-down fa-lg" />
+        <span className="hide-xs">Kevin Tran</span>
+        <i className="fa fa-caret-down fa-lg hide-xs" />
+        <i className="fa fa-user-o fa-lg show-xs" />
       </DropdownToggle>
       <DropdownMenu right>
         <DropdownItem header tag="div" className="text-center">

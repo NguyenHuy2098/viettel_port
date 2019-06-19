@@ -53,7 +53,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   function renderDescriptionOrderShipping(): JSX.Element {
     return (
       <Row className="sipSummaryContent">
-        <Col md="5" xs="12">
+        <Col lg="5" xs="12">
           <Row>
             <Col xs="5">{t('Mã bảng kê')}: </Col>
             <Col xs="7">BK_1209_BNH</Col>
@@ -67,7 +67,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
             <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
           </Row>
         </Col>
-        <Col md="3" xs="12">
+        <Col xl={3} lg={5} xs="12">
           <Row>
             <Col xs="5">{t('Bưu cục đến')}: </Col>
             <Col xs="7">TQN</Col>
@@ -77,7 +77,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
             <Col xs="7">24/04/2019</Col>
           </Row>
         </Col>
-        <Col md="4" xs="12" className="text-right">
+        <Col lg={2} xl={4} xs={12} className="text-right">
           {t('Tổng số')}: 5
         </Col>
       </Row>
