@@ -1,21 +1,9 @@
 import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from 'reactstrap';
-import { AppState } from '../../../redux/store';
-
-interface Props {
-  text: string;
-}
-
-const mapStateToProps = (state: AppState): Props => {
-  return {
-    text: state.hello.text,
-  };
-};
 
 // eslint-disable-next-line max-lines-per-function
-const MailTruckClosing: React.FC<Props> = (props): JSX.Element => {
+const MailTruckClosing = (): JSX.Element => {
   const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
 
   function toggle(): void {
@@ -66,7 +54,7 @@ const MailTruckClosing: React.FC<Props> = (props): JSX.Element => {
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">Đóng chuyển thư {props.text}</h1>
+        <h1 className="sipTitle">Đóng chuyển thư</h1>
         <div className="sipTitleRightBlock">
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
@@ -116,4 +104,4 @@ const MailTruckClosing: React.FC<Props> = (props): JSX.Element => {
   );
 };
 
-export default connect(mapStateToProps)(MailTruckClosing);
+export default MailTruckClosing;

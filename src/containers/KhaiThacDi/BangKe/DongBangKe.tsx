@@ -15,22 +15,11 @@ import {
   Table,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { getPosts } from 'redux/reducers/posts/actions';
-import { makeSelectPostList } from 'redux/reducers/posts/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {
-  const dispatch = useDispatch();
-  const postList = useSelector(makeSelectPostList);
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
-
-  React.useEffect((): void => {
-    dispatch(getPosts(null));
-  }, [dispatch]);
-
-  console.log(postList);
 
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
@@ -66,7 +55,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
       <Pagination className="sipPagination">
         <PaginationItem className="sipPaginationPrev pull-left">
           <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
+            <i className="fa fa-arrow-left" />
           </PaginationLink>
         </PaginationItem>
         <PaginationItem active>
@@ -86,7 +75,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
         </PaginationItem>
         <PaginationItem className="sipPaginationNext pull-right">
           <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
+            <i className="fa fa-arrow-right" />
           </PaginationLink>
         </PaginationItem>
       </Pagination>

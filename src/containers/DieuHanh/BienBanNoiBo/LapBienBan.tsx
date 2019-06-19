@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import {
   Button,
   Input,
@@ -14,20 +13,9 @@ import {
   FormGroup,
   ModalFooter,
 } from 'reactstrap';
-import { AppState } from '../../../redux/store';
-
-interface Props {
-  text: string;
-}
-
-const mapStateToProps = (state: AppState): Props => {
-  return {
-    text: state.hello.text,
-  };
-};
 
 // eslint-disable-next-line max-lines-per-function
-const LapBienBan: React.FC<Props> = (props): JSX.Element => {
+const LapBienBan: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
 
@@ -162,4 +150,4 @@ const LapBienBan: React.FC<Props> = (props): JSX.Element => {
   );
 };
 
-export default connect(mapStateToProps)(LapBienBan);
+export default LapBienBan;

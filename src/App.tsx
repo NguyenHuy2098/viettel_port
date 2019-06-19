@@ -3,6 +3,7 @@ import Loadable from 'react-loadable';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import Loading from './components/Loading';
+import PrivateRoute from './components/PrivateRoute';
 import store from './redux/store';
 import history from './utils/history';
 import './App.scss';
@@ -59,7 +60,7 @@ class App extends React.Component {
         <Router history={history}>
           <Switch>
             <Route exact path="/login" render={this.renderLogin} />
-            <Route exact path="/register" render={this.renderRegister} />} />
+            <PrivateRoute exact path="/register" render={this.renderRegister} />} />
             <Route exact path="/404" render={this.renderPage404} />
             <Route exact path="/500" render={this.renderPage500} />
             <Route path="/" render={this.renderDefaultLayout} />} />

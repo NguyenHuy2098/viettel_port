@@ -1,19 +1,25 @@
-import { createStore, applyMiddleware } from 'redux';
+import { configureStore } from 'redux-starter-kit';
 import createSagaMiddleware from 'redux-saga';
-import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly'; // https://github.com/zalmoxisus/redux-devtools-extension
-import reducers from './reducers';
-import rootSagas from './sagas';
-
-export type AppState = ReturnType<typeof reducers>;
+import { loadLoggedInUser } from 'utils/localStorageHelpers';
+import rootReducer from './rootReducers';
+import rootSaga from './rootSagas';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const middlewares = [];
+const preloadedState = {
+  auth: {
+    user: loadLoggedInUser(),
+  },
+};
 
-middlewares.push(sagaMiddleware);
+const store = configureStore({
+  middleware: [sagaMiddleware],
+  preloadedState,
+  reducer: rootReducer,
+});
 
-const store = createStore(reducers, composeWithDevTools(applyMiddleware(...middlewares)));
+sagaMiddleware.run(rootSaga);
 
-sagaMiddleware.run(rootSagas);
+export type AppStateType = ReturnType<typeof rootReducer>;
 
 export default store;
