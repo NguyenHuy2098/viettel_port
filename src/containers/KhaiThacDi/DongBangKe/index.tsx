@@ -16,8 +16,8 @@ import {
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPosts } from '../../../redux/reducers/posts/actions';
-import { makeSelectPostList } from '../../../redux/reducers/posts/selectors';
+import { getPosts } from 'redux/posts/actions';
+import { makeSelectPostList } from 'redux/posts/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {

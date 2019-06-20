@@ -1,21 +1,9 @@
 import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import { Button, Input, Row, Table } from 'reactstrap';
-import { AppState } from '../../../redux/store';
-
-interface Props {
-  text: string;
-}
-
-const mapStateToProps = (state: AppState): Props => {
-  return {
-    text: state.hello.text,
-  };
-};
 
 // eslint-disable-next-line max-lines-per-function
-const InputRevenue: React.FC<Props> = (props): JSX.Element => {
+const InputRevenue: React.FC = (): JSX.Element => {
   function renderAction(): JSX.Element {
     return (
       <>
@@ -100,4 +88,4 @@ const InputRevenue: React.FC<Props> = (props): JSX.Element => {
   );
 };
 
-export default connect(mapStateToProps)(InputRevenue);
+export default InputRevenue;

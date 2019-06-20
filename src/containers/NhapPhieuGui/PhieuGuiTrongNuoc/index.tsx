@@ -1,22 +1,10 @@
 /* eslint-disable max-lines */
 import * as React from 'react';
 // import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { AppState } from '../../../redux/store';
-
-interface Props {
-  text: string;
-}
-
-const mapStateToProps = (state: AppState): Props => {
-  return {
-    text: state.hello.text,
-  };
-};
 
 // eslint-disable-next-line max-lines-per-function
-const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
+const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function renderSendingCoupon(): JSX.Element {
     return (
       <Row className="sipSendingCoupon sipContentContainer no-padding">
@@ -444,4 +432,4 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props): JSX.Element => {
   );
 };
 
-export default connect(mapStateToProps)(PhieuGuiTrongNuoc);
+export default PhieuGuiTrongNuoc;

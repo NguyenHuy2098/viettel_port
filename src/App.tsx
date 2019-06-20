@@ -1,12 +1,21 @@
 import React from 'react';
 import Loadable from 'react-loadable';
+import { OidcProvider } from 'redux-oidc';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
-import Loading from './components/Loading';
-import store from './redux/store';
-import history from './utils/history';
+import { ConnectedRouter } from 'connected-react-router';
+import Loading from 'components/Loading';
+import PrivateRoute from 'components/PrivateRoute';
+import store from 'redux/store';
+import history from 'utils/history';
+import userManager from 'utils/userManager';
 import './App.scss';
 
+const DefaultLayout = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('layouts/DefaultLayout'),
+  loading: Loading,
+});
 const Login = Loadable({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   loader: () => import('containers/Login'),
@@ -27,47 +36,31 @@ const Page500 = Loadable({
   loader: () => import('containers/Page500'),
   loading: Loading,
 });
-const DefaultLayout = Loadable({
+const LoginCallback = Loadable({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  loader: () => import('layouts/DefaultLayout'),
+  loader: () => import('containers/LoginCallback'),
   loading: Loading,
 });
 
-class App extends React.Component {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private renderDefaultLayout = (props: any): React.ReactElement => <DefaultLayout {...props} />;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private renderLogin = (props: any): React.ReactElement => <Login {...props} />;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private renderRegister = (props: any): React.ReactElement => <Register {...props} />;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private renderPage404 = (props: any): React.ReactElement => <Page404 {...props} />;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private renderPage500 = (props: any): React.ReactElement => <Page500 {...props} />;
-
-  public componentDidCatch(): JSX.Element {
-    return (
-      <div>
-        <button>Error</button>
-      </div>
-    );
-  }
-
-  public render(): React.ReactElement {
-    return (
-      <Provider store={store}>
-        <Router history={history}>
-          <Switch>
-            <Route exact path="/login" render={this.renderLogin} />
-            <Route exact path="/register" render={this.renderRegister} />} />
-            <Route exact path="/404" render={this.renderPage404} />
-            <Route exact path="/500" render={this.renderPage500} />
-            <Route path="/" render={this.renderDefaultLayout} />} />
-          </Switch>
-        </Router>
-      </Provider>
-    );
-  }
-}
+const App: React.FC = (): JSX.Element => {
+  return (
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        <OidcProvider store={store} userManager={userManager}>
+          <Router history={history}>
+            <Switch>
+              <Route exact path="/login" component={Login} />
+              <PrivateRoute exact path="/register" component={Register} />} />
+              <Route exact path="/404" component={Page404} />
+              <Route exact path="/500" component={Page500} />
+              <Route exact path="/signin-callback" component={LoginCallback} />
+              <Route path="/" component={DefaultLayout} />} />
+            </Switch>
+          </Router>
+        </OidcProvider>
+      </ConnectedRouter>
+    </Provider>
+  );
+};
 
 export default App;

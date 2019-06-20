@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import {
   Button,
   Card,
@@ -14,13 +13,23 @@ import {
   InputGroupText,
   Row,
 } from 'reactstrap';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { login } from 'redux/auth/actions';
 
 interface Props {
   children: React.ReactElement;
 }
 
-class Login extends React.PureComponent<Props> {
-  private renderInputGroup = (): React.ReactElement => (
+// eslint-disable-next-line max-lines-per-function
+const Login: React.FC<Props> = (props: Props): JSX.Element => {
+  const dispatch = useDispatch();
+
+  const handleClickLogin = (): void => {
+    dispatch(login({}));
+  };
+
+  const renderInputGroup = (): React.ReactElement => (
     <React.Fragment>
       <InputGroup className="mb-3">
         <InputGroupAddon addonType="prepend">
@@ -41,16 +50,16 @@ class Login extends React.PureComponent<Props> {
     </React.Fragment>
   );
 
-  private renderTopContent = (): React.ReactElement => (
+  const renderTopContent = (): React.ReactElement => (
     <Card className="p-4">
       <CardBody>
         <Form>
           <h1>Login</h1>
           <p className="text-muted">Sign In to your account</p>
-          {this.renderInputGroup()}
+          {renderInputGroup()}
           <Row>
             <Col xs="6">
-              <Button color="primary" className="px-4">
+              <Button color="primary" className="px-4" onClick={handleClickLogin}>
                 Login
               </Button>
             </Col>
@@ -65,7 +74,7 @@ class Login extends React.PureComponent<Props> {
     </Card>
   );
 
-  private renderBottomContent = (): React.ReactElement => (
+  const renderBottomContent = (): React.ReactElement => (
     <Card className="text-white bg-primary py-5 d-md-down-none" style={{ width: '44%' }}>
       <CardBody className="text-center">
         <div>
@@ -84,22 +93,20 @@ class Login extends React.PureComponent<Props> {
     </Card>
   );
 
-  public render(): React.ReactElement {
-    return (
-      <div className="app flex-row align-items-center">
-        <Container>
-          <Row className="justify-content-center">
-            <Col md="8">
-              <CardGroup>
-                {this.renderTopContent()}
-                {this.renderBottomContent()}
-              </CardGroup>
-            </Col>
-          </Row>
-        </Container>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="app flex-row align-items-center">
+      <Container>
+        <Row className="justify-content-center">
+          <Col md="8">
+            <CardGroup>
+              {renderTopContent()}
+              {renderBottomContent()}
+            </CardGroup>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
 
 export default Login;
