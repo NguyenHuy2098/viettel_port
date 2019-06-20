@@ -14,6 +14,7 @@ import {
   // @ts-ignore
 } from '@coreui/react';
 import { logout } from 'redux/auth/actions';
+import routesMap from 'utils/routesMap';
 import useNavs from './useNavs';
 import useRoutes from './useRoutes';
 import DefaultHeader from './DefaultHeader';
@@ -53,7 +54,7 @@ const DefaultLayout: React.FC = (props): JSX.Element => {
             /* eslint-enable react/jsx-no-bind */
           },
         )}
-        <Redirect from="/" to="/dong-bang-ke" />
+        <Redirect from={routesMap.home} to="/dong-bang-ke" />
       </Switch>
     );
   }

@@ -7,12 +7,12 @@ import { SIPRoutePropsType } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 
-const Login = Loadable({
-  loader: (): any => import('containers/Login'),
+const Page404 = Loadable({
+  loader: (): any => import('containers/Page404'),
   loading: Loading,
 });
-const LoginCallback = Loadable({
-  loader: (): any => import('containers/LoginCallback'),
+const Page500 = Loadable({
+  loader: (): any => import('containers/Page500'),
   loading: Loading,
 });
 
@@ -20,8 +20,8 @@ const LoginCallback = Loadable({
 
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
-    { path: routesMap.login, name: t('Login'), component: Login },
-    { path: routesMap.loginCallback, name: t('Logging in...'), component: LoginCallback },
+    { path: routesMap.error404, name: t('Not found!'), component: Page404 },
+    { path: routesMap.error500, name: t('Something wrong!'), component: Page500 },
   ];
 };
 

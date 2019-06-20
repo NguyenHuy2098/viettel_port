@@ -25,18 +25,9 @@ const DefaultLayout = Loadable({
   loader: () => import('layouts/DefaultLayout'),
   loading: Loading,
 });
-
-/**
- * Containers
- */
-const Page404 = Loadable({
+const ErrorLayout = Loadable({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  loader: () => import('containers/Page404'),
-  loading: Loading,
-});
-const Page500 = Loadable({
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  loader: () => import('containers/Page500'),
+  loader: () => import('layouts/ErrorLayout'),
   loading: Loading,
 });
 
@@ -47,9 +38,8 @@ const App: React.FC = (): JSX.Element => {
         <OidcProvider store={store} userManager={userManager}>
           <Router history={history}>
             <Switch>
-              <Route exact path="/404" component={Page404} />
-              <Route exact path="/500" component={Page500} />
               <Route path={routesMap.auth} component={AuthLayout} />
+              <Route path={routesMap.error} component={ErrorLayout} />
               <PrivateRoute path={routesMap.home} component={DefaultLayout} />} />
             </Switch>
           </Router>
