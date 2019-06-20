@@ -33,7 +33,7 @@ const AuthLayout: React.FC = (): JSX.Element => {
             /* eslint-enable react/jsx-no-bind */
           },
         )}
-        <Redirect from={routesMap.auth} to={routesMap.login} />
+        <Redirect from={routesMap.auth} to={routesMap.error404} />
       </Switch>
     );
   }

@@ -3,6 +3,7 @@ import Loadable from 'react-loadable';
 import i18next from 'i18next';
 import Loading from 'components/Loading';
 import routesMap from 'utils/routesMap';
+
 import { SIPRoutePropsType } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any*/
@@ -133,12 +134,16 @@ const PageNoData = Loadable({
   loader: (): any => import('containers/PageNoData'),
   loading: Loading,
 });
+const Home = Loadable({
+  loader: (): any => import('containers/Home'),
+  loading: Loading,
+});
 
 /* eslint-enable @typescript-eslint/no-explicit-any*/
 
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
-    { path: routesMap.home, exact: true, name: t('Home') },
+    { path: routesMap.home, exact: true, name: t('Home'), component: Home },
     { path: '/phieu-gui-trong-nuoc', name: t('Phiếu gửi trong nước'), component: PhieuGuiTrongNuoc },
     {
       path: '/phieu-gui-quoc-te',

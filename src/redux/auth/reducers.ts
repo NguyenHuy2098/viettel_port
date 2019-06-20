@@ -7,7 +7,7 @@ const initialState: UserState = {
   isLoadingUser: false,
 };
 
-function posts(state = initialState, action: UnfoldSagaActionType): UserState {
+function userLogin(state = initialState, action: UnfoldSagaActionType): UserState {
   return produce(
     state,
     (draftState: UserState): UserState => {
@@ -19,4 +19,4 @@ function posts(state = initialState, action: UnfoldSagaActionType): UserState {
   );
 }
 
-export default posts;
+export default userLogin;

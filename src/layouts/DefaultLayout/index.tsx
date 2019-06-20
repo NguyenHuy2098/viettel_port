@@ -54,7 +54,7 @@ const DefaultLayout: React.FC = (props): JSX.Element => {
             /* eslint-enable react/jsx-no-bind */
           },
         )}
-        <Redirect from={routesMap.home} to="/dong-bang-ke" />
+        <Redirect from={routesMap.home} to={routesMap.error404} />
       </Switch>
     );
   }
