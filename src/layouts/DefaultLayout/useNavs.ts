@@ -18,7 +18,7 @@ const nav = (t: i18next.TFunction): any => {
           },
           {
             name: t('Biên bản nội bộ'),
-            url: 'routesMap.InternalRecord',
+            url: routesMap.InternalRecord,
           },
           {
             name: t('Sửa biên bản'),
