@@ -24,12 +24,15 @@ const nav = t => {
             name: t('Xác minh biên bản'),
             url: '/xac-minh-bien-ban',
           },
+          {
+            name: t('Khiếu nại khách hàng'),
+            url: '/khieu-nai-khach-hang',
+          },
+          {
+            name: t('Chi tiết khiếu nại'),
+            url: '/chi-tiet-khieu-nai',
+          },
         ],
-      },
-      {
-        name: t('Khiếu nại khách hàng'),
-        url: '/khieu-nai-khach-hang',
-        icon: 'icon-note',
       },
       {
         name: 'Nhập phiếu gửi',

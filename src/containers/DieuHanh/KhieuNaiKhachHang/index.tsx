@@ -4,6 +4,7 @@ import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabP
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import ModalAddNew from './ModalAddNew';
+
 // eslint-disable-next-line max-lines-per-function
 const ComplainCustomer: React.FC = (): JSX.Element => {
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);

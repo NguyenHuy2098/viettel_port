@@ -32,6 +32,10 @@ const KhieuNaiKhachHang = Loadable({
   loader: () => import('containers/DieuHanh/KhieuNaiKhachHang'),
   loading: Loading,
 });
+const ChiTietKhieuNai = Loadable({
+  loader: () => import('containers/DieuHanh/KhieuNaiKhachHang/ChiTiet'),
+  loading: Loading,
+});
 
 // =============== NhapPhieuGui =====================
 
@@ -164,6 +168,7 @@ const routes = t => {
     { path: '/sua-bien-ban', name: t('Sửa biên bản'), component: SuaBienBan },
     { path: '/xac-minh-bien-ban', name: t('Xác minh biên bản'), component: XacMinhBienBan },
     { path: '/khieu-nai-khach-hang', name: t('Khiếu nại khách hàng'), component: KhieuNaiKhachHang },
+    { path: '/chi-tiet-khieu-nai', name: t('Chi tiết khiếu nại'), component: ChiTietKhieuNai },
   ];
 };
 
