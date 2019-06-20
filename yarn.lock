@@ -1822,10 +1822,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@^16.8.20":
-  version "16.8.20"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.20.tgz#4f633ecbd0a4d56d0ccc50fff6f9321bbcd7d583"
-  integrity sha512-ZLmI+ubSJpfUIlQuULDDrdyuFQORBuGOvNnMue8HeA0GVrAJbWtZQhcBvnBPNRBI/GrfSfrKPFhthzC2SLEtLQ==
+"@types/react@^16.8.21":
+  version "16.8.21"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.21.tgz#aefb32519a4111964993be5b2bd3f172f81c34ff"
+  integrity sha512-+jAtgtJ3htE+VEP/bMzBBOANGkaTbMOGYWVrmhCVtp2WE//lNG6Irw9kBEaLR7lQGjjkt/BlSSHPgArFNOKhkg==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -6868,10 +6868,17 @@ i18next-scanner@^2.10.2:
     vinyl "^2.2.0"
     vinyl-fs "^3.0.1"
 
-i18next@*, i18next@^17.0.3:
+i18next@*:
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/i18next/-/i18next-17.0.3.tgz#82d67826d13e8ca2cd2a3c87871533414e952d03"
   integrity sha512-vQyW6a4ZLt3Dxnd6GXSnhbW5DwGYC4uLPKk1MFE5pfFbR9CEiNatdwwUZDQfrcNOh2x0eOGDFYeCEyLlkLvDQA==
+  dependencies:
+    "@babel/runtime" "^7.3.1"
+
+i18next@^17.0.4:
+  version "17.0.4"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-17.0.4.tgz#c690b9de0c950ff8abe626562d03c4144dd75030"
+  integrity sha512-+lwmv3FT8Sv/HwVPjkR6rtEFhgOqt9L/CTehzyxvL/NdkeUYbFZJfE57MsBToB6LFWg3d0sZJIVgYqCpWzUyLQ==
   dependencies:
     "@babel/runtime" "^7.3.1"
 
@@ -10082,10 +10089,10 @@ octokit-pagination-methods@^1.1.0:
   resolved "https://registry.yarnpkg.com/octokit-pagination-methods/-/octokit-pagination-methods-1.1.0.tgz#cf472edc9d551055f9ef73f6e42b4dbb4c80bea4"
   integrity sha512-fZ4qZdQ2nxJvtcasX7Ghl+WlWS/d9IgnBIwFZXVNNZUmzpno91SX5bc5vuxiuKoCtK78XxGGNuSCrDC7xYB3OQ==
 
-oidc-client@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.8.0.tgz#0c01730f59743c34e172e93c4dc7cb9b31fb33e7"
-  integrity sha512-RHGE3UU+NgFHUj4XxqOi+fgu/KGEpBoypXRXMVXlW3d/pU3M/Tw3L+K/PyOcyCsTWtS+KngD/9tPqsEcWt5eMg==
+oidc-client@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/oidc-client/-/oidc-client-1.8.2.tgz#5a73c33858fe0e25489fdc6de31c8ce3075f6e0b"
+  integrity sha512-WwoSY8S6QyNN3qpne88YurjNqjTf6z1Xr0y+OrFVvdnVPYcefkTtXlZ5iOwR2JrmP4vBuq2j8eTjUJyDZFrFNQ==
   dependencies:
     uuid "^3.3.2"
 
