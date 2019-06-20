@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
-import routesMap from "../../utils/routesMap";
+import routesMap from '../../utils/routesMap';
 
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 

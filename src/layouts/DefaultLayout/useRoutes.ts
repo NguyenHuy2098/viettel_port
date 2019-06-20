@@ -143,7 +143,7 @@ const Home = Loadable({
 
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
-    { path: routesMap.home, exact: true, name: t('Home') },
+    { path: routesMap.home, exact: true, name: t('Home'), component: Home },
     { path: routesMap.PhieuGuiTrongNuoc, name: t('Phiếu gửi trong nước'), component: PhieuGuiTrongNuoc },
     {
       path: routesMap.InternationalForwardingOrder,
