@@ -1,23 +1,21 @@
-import { REACT_APP_SSO_CLIENT_ID, REACT_APP_SSO_URL } from './env';
+import { AppStateType } from '../redux/store';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const loadLoggedInUser = (): any => {
+export const loadState = (): AppStateType | undefined => {
   try {
-    const serializedState = localStorage.getItem(`oidc.user:${REACT_APP_SSO_URL}:${REACT_APP_SSO_CLIENT_ID}`);
-    if (!serializedState) {
-      return null;
+    const serializedState = localStorage.getItem('state');
+    if (serializedState === null) {
+      return undefined;
     }
     return JSON.parse(serializedState);
-  } catch {
-    return null;
+  } catch (err) {
+    return undefined;
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const saveLoggedInUser = (state: any): void => {
+export const saveState = (state: AppStateType): void => {
   try {
     const serializedState = JSON.stringify(state);
-    localStorage.setItem(`oidc.user:${REACT_APP_SSO_URL}:${REACT_APP_SSO_CLIENT_ID}`, serializedState);
+    localStorage.setItem('state', serializedState);
   } catch {
     // ignore write errors
   }

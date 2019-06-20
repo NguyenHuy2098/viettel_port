@@ -40,7 +40,7 @@ const App: React.FC = (): JSX.Element => {
             <Switch>
               <Route path={routesMap.auth} component={AuthLayout} />
               <Route path={routesMap.error} component={ErrorLayout} />
-              <PrivateRoute path={routesMap.home} component={DefaultLayout} />} />
+              <PrivateRoute path={routesMap.home} component={DefaultLayout} />
             </Switch>
           </Router>
         </OidcProvider>
