@@ -1,7 +1,10 @@
 import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
+
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 
 // eslint-disable-next-line max-lines-per-function
-const nav = t => {
+const nav = (t: i18next.TFunction): any => {
   return {
     items: [
       {
@@ -134,9 +137,11 @@ const nav = t => {
   };
 };
 
-const useNavs = () => {
+const useNavs = (): any => {
   const { t } = useTranslation();
   return nav(t);
 };
+
+/* eslint-enable @typescript-eslint/no-explicit-any*/
 
 export default useNavs;

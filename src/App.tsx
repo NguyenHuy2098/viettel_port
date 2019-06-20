@@ -8,29 +8,27 @@ import Loading from 'components/Loading';
 import PrivateRoute from 'components/PrivateRoute';
 import store from 'redux/store';
 import history from 'utils/history';
+import routesMap from 'utils/routesMap';
 import userManager from 'utils/userManager';
 import './App.scss';
 
+/**
+ * Layouts
+ */
+const AuthLayout = Loadable({
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  loader: () => import('layouts/AuthLayout'),
+  loading: Loading,
+});
 const DefaultLayout = Loadable({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   loader: () => import('layouts/DefaultLayout'),
   loading: Loading,
 });
-const BlankLayout = Loadable({
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  loader: () => import('layouts/BlankLayout'),
-  loading: Loading,
-});
-const Login = Loadable({
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  loader: () => import('containers/Login'),
-  loading: Loading,
-});
-const Register = Loadable({
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  loader: () => import('containers/Register'),
-  loading: Loading,
-});
+
+/**
+ * Containers
+ */
 const Page404 = Loadable({
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   loader: () => import('containers/Page404'),
@@ -41,11 +39,6 @@ const Page500 = Loadable({
   loader: () => import('containers/Page500'),
   loading: Loading,
 });
-const LoginCallback = Loadable({
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  loader: () => import('containers/LoginCallback'),
-  loading: Loading,
-});
 
 const App: React.FC = (): JSX.Element => {
   return (
@@ -54,13 +47,10 @@ const App: React.FC = (): JSX.Element => {
         <OidcProvider store={store} userManager={userManager}>
           <Router history={history}>
             <Switch>
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
               <Route exact path="/404" component={Page404} />
               <Route exact path="/500" component={Page500} />
-              <Route exact path="/signin-callback" component={LoginCallback} />
-              <PrivateRoute path="/" component={DefaultLayout} />} />
-              <Route path="/blank" component={BlankLayout} />
+              <Route path={routesMap.auth} component={AuthLayout} />
+              <PrivateRoute path={routesMap.home} component={DefaultLayout} />} />
             </Switch>
           </Router>
         </OidcProvider>

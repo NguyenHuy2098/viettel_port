@@ -14,8 +14,10 @@ import {
   Row,
 } from 'reactstrap';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { login } from 'redux/auth/actions';
+import useLoggedInUser from 'hooks/useLoggedInUser';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   children: React.ReactElement;
@@ -24,6 +26,11 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const Login: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
+  const { isLoggedIn } = useLoggedInUser();
+
+  if (isLoggedIn) {
+    return <Redirect to={routesMap.home} />;
+  }
 
   const handleClickLogin = (): void => {
     dispatch(login({}));

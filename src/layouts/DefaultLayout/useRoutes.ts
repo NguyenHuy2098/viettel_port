@@ -1,31 +1,36 @@
 import { useTranslation } from 'react-i18next';
-import Loading from 'components/Loading';
 import Loadable from 'react-loadable';
+import i18next from 'i18next';
+import Loading from 'components/Loading';
+import routesMap from 'utils/routesMap';
+import { SIPRoutePropsType } from '../types';
+
+/* eslint-disable @typescript-eslint/no-explicit-any*/
 
 // =============== DieuHanh =====================
 
 const CommunicateCustomer = Loadable({
-  loader: () => import('containers/DieuHanh/TiepXucKhachHang'),
+  loader: (): any => import('containers/DieuHanh/TiepXucKhachHang'),
   loading: Loading,
 });
 const InternalRecord = Loadable({
-  loader: () => import('containers/DieuHanh/BienBanNoiBo'),
+  loader: (): any => import('containers/DieuHanh/BienBanNoiBo'),
   loading: Loading,
 });
 const LapBienBan = Loadable({
-  loader: () => import('containers/DieuHanh/BienBanNoiBo/LapBienBan'),
+  loader: (): any => import('containers/DieuHanh/BienBanNoiBo/LapBienBan'),
   loading: Loading,
 });
 const TraCuuBienBan = Loadable({
-  loader: () => import('containers/DieuHanh/BienBanNoiBo/TraCuuBienBan'),
+  loader: (): any => import('containers/DieuHanh/BienBanNoiBo/TraCuuBienBan'),
   loading: Loading,
 });
 const SuaBienBan = Loadable({
-  loader: () => import('containers/DieuHanh/BienBanNoiBo/SuaBienBan.tsx'),
+  loader: (): any => import('containers/DieuHanh/BienBanNoiBo/SuaBienBan'),
   loading: Loading,
 });
 const XacMinhBienBan = Loadable({
-  loader: () => import('containers/DieuHanh/BienBanNoiBo/XacMinhBienBan.tsx'),
+  loader: (): any => import('containers/DieuHanh/BienBanNoiBo/XacMinhBienBan'),
   loading: Loading,
 });
 const KhieuNaiKhachHang = Loadable({
@@ -40,99 +45,100 @@ const ChiTietKhieuNai = Loadable({
 // =============== NhapPhieuGui =====================
 
 const PhieuGuiTrongNuoc = Loadable({
-  loader: () => import('containers/NhapPhieuGui/PhieuGuiTrongNuoc'),
+  loader: (): any => import('containers/NhapPhieuGui/PhieuGuiTrongNuoc'),
   loading: Loading,
 });
 const InternationalForwardingOrder = Loadable({
-  loader: () => import('containers/NhapPhieuGui/PhieuGuiQuocTe'),
+  loader: (): any => import('containers/NhapPhieuGui/PhieuGuiQuocTe'),
   loading: Loading,
 });
 const InputRevenue = Loadable({
-  loader: () => import('containers/NhapPhieuGui/NhapDoanhThu'),
+  loader: (): any => import('containers/NhapPhieuGui/NhapDoanhThu'),
   loading: Loading,
 });
 
 // =============== KhaiThacDi =====================
 
 const DongBangKe = Loadable({
-  loader: () => import('containers/KhaiThacDi/BangKe/DongBangKe'),
+  loader: (): any => import('containers/KhaiThacDi/BangKe/DongBangKe'),
   loading: Loading,
 });
 const DongBangKeNoiTinh = Loadable({
-  loader: () => import('containers/KhaiThacDi/BangKe/DongBangKeNoiTinh'),
+  loader: (): any => import('containers/KhaiThacDi/BangKe/DongBangKeNoiTinh'),
   loading: Loading,
 });
 const ThongTinBangKe = Loadable({
-  loader: () => import('containers/KhaiThacDi/BangKe/ThongTinBangKe'),
+  loader: (): any => import('containers/KhaiThacDi/BangKe/ThongTinBangKe'),
   loading: Loading,
 });
 const DanhSachBangKe = Loadable({
-  loader: () => import('containers/KhaiThacDi/DongTai/DanhSachBangKe'),
+  loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachBangKe'),
   loading: Loading,
 });
 const ForwardingOrderListInManifest = Loadable({
-  loader: () => import('containers/KhaiThacDi/DanhSachPhieGuiTrongBangKe'),
+  loader: (): any => import('containers/KhaiThacDi/DanhSachPhieGuiTrongBangKe'),
   loading: Loading,
 });
 const DanhSachPhieuGui = Loadable({
-  loader: () => import('containers/KhaiThacDi/BangKe/DanhSachPhieuGui'),
+  loader: (): any => import('containers/KhaiThacDi/BangKe/DanhSachPhieuGui'),
   loading: Loading,
 });
 const CloseSack = Loadable({
-  loader: () => import('containers/KhaiThacDi/DongTai2'),
+  loader: (): any => import('containers/KhaiThacDi/DongTai2'),
   loading: Loading,
 });
 const MailTruckClosing = Loadable({
-  loader: () => import('containers/KhaiThacDi/DongChuyenThu'),
+  loader: (): any => import('containers/KhaiThacDi/DongChuyenThu'),
   loading: Loading,
 });
 const DanhSachTaiKien = Loadable({
-  loader: () => import('containers/KhaiThacDi/DongTai2/DanhSachTaiKien'),
+  loader: (): any => import('containers/KhaiThacDi/DongTai2/DanhSachTaiKien'),
   loading: Loading,
 });
 const SplitCoupon = Loadable({
-  loader: () => import('containers/KhaiThacDi/TachPhieuGui'),
+  loader: (): any => import('containers/KhaiThacDi/TachPhieuGui'),
   loading: Loading,
 });
 
 // =============== KhaiThacDen =====================
 
 const NhanChuyenThu = Loadable({
-  loader: () => import('containers/KhaiThacDen/NhanChuyenThu'),
+  loader: (): any => import('containers/KhaiThacDen/NhanChuyenThu'),
   loading: Loading,
 });
 const FreightOrderReceive = Loadable({
-  loader: () => import('containers/KhaiThacDen/KhaiThacChuyenThuDen'),
+  loader: (): any => import('containers/KhaiThacDen/KhaiThacChuyenThuDen'),
   loading: Loading,
 });
 const ThongTinTai = Loadable({
-  loader: () => import('containers/KhaiThacDen/NhanTaiKien/ThongTinTai'),
+  loader: (): any => import('containers/KhaiThacDen/NhanTaiKien/ThongTinTai'),
   loading: Loading,
 });
 const OperationSack = Loadable({
-  loader: () => import('containers/KhaiThacDen/KhaiThacDen'),
+  loader: (): any => import('containers/KhaiThacDen/KhaiThacDen'),
   loading: Loading,
 });
 
 // =========== unsorted components ==========
 
 const OrderInformation = Loadable({
-  loader: () => import('containers/ThongTinDonHang'),
+  loader: (): any => import('containers/ThongTinDonHang'),
   loading: Loading,
 });
 const OrderInformationTabType = Loadable({
-  loader: () => import('containers/ThongTinDonHang2'),
+  loader: (): any => import('containers/ThongTinDonHang2'),
   loading: Loading,
 });
 const PageNoData = Loadable({
-  loader: () => import('containers/PageNoData'),
+  loader: (): any => import('containers/PageNoData'),
   loading: Loading,
 });
 
-// https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
-const routes = t => {
+/* eslint-enable @typescript-eslint/no-explicit-any*/
+
+const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
-    { path: '/', exact: true, name: t('Home') },
+    { path: routesMap.home, exact: true, name: t('Home') },
     { path: '/phieu-gui-trong-nuoc', name: t('Phiếu gửi trong nước'), component: PhieuGuiTrongNuoc },
     {
       path: '/phieu-gui-quoc-te',
@@ -172,7 +178,7 @@ const routes = t => {
   ];
 };
 
-const useRoutes = () => {
+const useRoutes = (): SIPRoutePropsType[] => {
   const { t } = useTranslation();
   return routes(t);
 };
