@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
+import routesMap from '../../utils/routesMap';
 
 /* eslint-disable @typescript-eslint/no-explicit-any*/
 
@@ -13,27 +14,27 @@ const nav = (t: i18next.TFunction): any => {
         children: [
           {
             name: t('Tiếp xúc khách hàng'),
-            url: '/tiep-xuc-khach-hang',
+            url: routesMap.CommunicateCustomer,
           },
           {
             name: t('Biên bản nội bộ'),
-            url: '/bien-ban-noi-bo',
+            url: routesMap.InternalRecord,
           },
           {
-            name: t('Sủa biên bản'),
-            url: '/sua-bien-ban',
+            name: t('Sửa biên bản'),
+            url: routesMap.SuaBienBan,
           },
           {
             name: t('Xác minh biên bản'),
-            url: '/xac-minh-bien-ban',
+            url: routesMap.XacMinhBienBan,
           },
           {
             name: t('Khiếu nại khách hàng'),
-            url: '/khieu-nai-khach-hang',
+            url: routesMap.KhieuNaiKhachHang,
           },
           {
             name: t('Chi tiết khiếu nại'),
-            url: '/chi-tiet-khieu-nai',
+            url: routesMap.ChiTietKhieuNai,
           },
         ],
       },
@@ -43,15 +44,15 @@ const nav = (t: i18next.TFunction): any => {
         children: [
           {
             name: t('Phiếu gửi trong nước'),
-            url: '/phieu-gui-trong-nuoc',
+            url: routesMap.PhieuGuiTrongNuoc,
           },
           {
             name: 'Phiếu gửi quốc tế',
-            url: '/phieu-gui-quoc-te',
+            url: routesMap.InternationalForwardingOrder,
           },
           {
             name: t('Nhập doanh thu'),
-            url: '/nhap-doanh-thu',
+            url: routesMap.InputRevenue,
           },
         ],
       },
@@ -61,43 +62,43 @@ const nav = (t: i18next.TFunction): any => {
         children: [
           {
             name: t('Đóng bảng kê'),
-            url: '/dong-bang-ke',
+            url: routesMap.DongBangKe,
           },
           {
             name: t('Đóng bảng kê nội tỉnh'),
-            url: '/dong-bang-ke-noi-tinh',
+            url: routesMap.DongBangKeNoiTinh,
           },
           {
             name: t('Thông tin bảng kê'),
-            url: '/thong-tin-bang-ke',
+            url: routesMap.ThongTinBangKe,
           },
           {
             name: t('Danh sách bảng kê'),
-            url: '/danh-sach-bang-ke',
+            url: routesMap.DanhSachBangKe,
           },
           {
             name: t('Danh sách phiếu gửi trong bảng kê'),
-            url: '/danh-sach-phieu-gui-trong-bang-ke',
+            url: routesMap.ForwardingOrderListInManifest,
           },
           {
             name: t('Danh sách phiếu gửi'),
-            url: '/danh-sach-phieu-gui',
+            url: routesMap.DanhSachPhieuGui,
           },
           {
             name: t('Đóng tải'),
-            url: '/dong-tai',
+            url: routesMap.CloseSack,
           },
           {
             name: t('Đóng chuyển thư'),
-            url: '/dong-chuyen-thu',
+            url: routesMap.MailTruckClosing,
           },
           {
             name: t('Danh sách tải kiện'),
-            url: '/danh-sach-tai-kien',
+            url: routesMap.DanhSachTaiKien,
           },
           {
             name: t('Tách phiếu gửi'),
-            url: '/tach-phieu-gui',
+            url: routesMap.SplitCoupon,
           },
         ],
       },
@@ -107,30 +108,30 @@ const nav = (t: i18next.TFunction): any => {
         children: [
           {
             name: t('Nhận chuyến thư'),
-            url: '/nhan-chuyen-thu',
+            url: routesMap.NhanChuyenThu,
           },
           {
             name: t('Khai thác chuyển thư đến'),
-            url: '/khai-thac-chuyen-thu-den',
+            url: routesMap.FreightOrderReceive,
           },
           {
             name: t('Nhận tải kiện'),
-            url: '/nhan-tai-kien',
+            url: routesMap.ThongTinTai,
           },
           {
             name: t('Khai thác tải'),
-            url: '/khai-thac-tai',
+            url: routesMap.OperationSack,
           },
         ],
       },
       {
         name: t('Thông tin đơn hàng'),
-        url: '/thong-tin-don-hang',
+        url: routesMap.OrderInformation,
         icon: 'icon-info',
       },
       {
         name: t('Thông tin đơn hàng 2'),
-        url: '/thong-tin-don-hang-2',
+        url: routesMap.OrderInformationTabType,
         icon: 'icon-info',
       },
     ],
