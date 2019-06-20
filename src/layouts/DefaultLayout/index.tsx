@@ -1,9 +1,9 @@
 import React from 'react';
+import { Container } from 'reactstrap';
 import { Helmet } from 'react-helmet';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router-dom';
 import * as router from 'react-router-dom';
-import { History } from 'history';
-import { Container } from 'reactstrap';
+import { useDispatch } from 'react-redux';
 import {
   AppHeader,
   AppSidebar,
@@ -13,24 +13,20 @@ import {
   AppSidebarNav2 as AppSidebarNav,
   // @ts-ignore
 } from '@coreui/react';
-// sidebar nav config
-// routes config
-import useRoutes from './useRoutes';
+import { logout } from 'redux/auth/actions';
+import routesMap from 'utils/routesMap';
 import useNavs from './useNavs';
+import useRoutes from './useRoutes';
 import DefaultHeader from './DefaultHeader';
 
-interface Props {
-  history: History;
-}
-
 // eslint-disable-next-line max-lines-per-function
-const DefaultLayout: React.FC<Props> = (props): JSX.Element => {
-  const routes = useRoutes();
+const DefaultLayout: React.FC = (props): JSX.Element => {
+  const dispatch = useDispatch();
   const navs = useNavs();
+  const routes = useRoutes();
 
-  function signOut(event: MouseEvent): void {
-    event.preventDefault();
-    props.history.push('/login');
+  function signOut(): void {
+    dispatch(logout({}));
   }
 
   function renderRouter(): React.ReactElement {
@@ -58,7 +54,7 @@ const DefaultLayout: React.FC<Props> = (props): JSX.Element => {
             /* eslint-enable react/jsx-no-bind */
           },
         )}
-        <Redirect from="/" to="/dong-bang-ke" />
+        <Redirect from={routesMap.home} to="/dong-bang-ke" />
       </Switch>
     );
   }

@@ -15,7 +15,6 @@ const LoginCallback: React.FC = (): JSX.Element => {
   return (
     <>
       <Helmet>
-        <title>Logging in...</title>
         <meta name="description" content="Logging in by SSO" />
       </Helmet>
 
