@@ -1,5 +1,4 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 import {
   Badge,
   Button,
@@ -12,55 +11,36 @@ import {
   NavItem,
   ButtonDropdown,
 } from 'reactstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 // @ts-ignore
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-import logo from '../../assets/img/logo.png';
+import logo from 'assets/img/logo.png';
+import { logout } from 'redux/auth/actions';
+import { makeSelectProfile } from 'redux/auth/selectors';
 
-interface Props {
-  onLogout: Function;
-}
+// eslint-disable-next-line max-lines-per-function
+const DefaultHeader: React.FC = (): JSX.Element => {
+  const dispatch = useDispatch();
+  const profile = useSelector(makeSelectProfile);
+  const [dropdownOpenMenu, setDropdownOpenMenu] = React.useState<boolean>(false);
+  const [dropdownOpenNotifications, setDropdownOpenNotifications] = React.useState<boolean>(false);
 
-interface State {
-  dropdownOpenMenu: boolean;
-  dropdownOpenNoti: boolean;
-}
-
-class DefaultHeader extends React.PureComponent<Props, State> {
-  private handleLogout = (): void => {
-    this.props.onLogout();
+  const handleLogout = (): void => {
+    dispatch(logout({}));
   };
 
-  public state = {
-    dropdownOpenMenu: false,
-    dropdownOpenNoti: false,
+  const toggleDropdownOpenNotifications = (): void => {
+    setDropdownOpenNotifications(!dropdownOpenNotifications);
   };
 
-  public renderNav = (): React.ReactElement => (
-    <Nav className="ml-auto" navbar>
-      <NavItem className="d-md-down-none">
-        <NavLink to="#" className="nav-link">
-          <i className="fa fa-heart-o fa-lg" />
-        </NavLink>
-      </NavItem>
-      <NavItem className="d-md-down-none">
-        <NavLink to="#" className="nav-link">
-          <i className="fa fa-clock-o fa-lg" />
-        </NavLink>
-      </NavItem>
-      <NavItem className="sipHeaderNoti">{this.renderHeaderNoti()}</NavItem>
-      <NavItem>{this.renderHeaderUser()}</NavItem>
-    </Nav>
-  );
-
-  public toggleDropdownOpenNoti = (): void => {
-    this.setState({
-      dropdownOpenNoti: !this.state.dropdownOpenNoti,
-    });
+  const toggleDropdownOpenMenu = (): void => {
+    setDropdownOpenMenu(!dropdownOpenMenu);
   };
 
-  public renderHeaderNoti = (): React.ReactElement => {
+  const renderHeaderNotifications = (): JSX.Element => {
     return (
-      <ButtonDropdown isOpen={this.state.dropdownOpenNoti} toggle={this.toggleDropdownOpenNoti}>
+      <ButtonDropdown isOpen={dropdownOpenNotifications} toggle={toggleDropdownOpenNotifications}>
         <DropdownToggle nav>
           <i className="fa fa-bell-o fa-lg" />
           <Badge pill color="danger">
@@ -103,16 +83,10 @@ class DefaultHeader extends React.PureComponent<Props, State> {
     );
   };
 
-  public toggleDropdownOpenMenu = (): void => {
-    this.setState({
-      dropdownOpenMenu: !this.state.dropdownOpenMenu,
-    });
-  };
-
-  public renderHeaderUser = (): React.ReactElement => (
-    <ButtonDropdown isOpen={this.state.dropdownOpenMenu} toggle={this.toggleDropdownOpenMenu} className="sipHeaderUser">
+  const renderHeaderUser = (): JSX.Element => (
+    <ButtonDropdown isOpen={dropdownOpenMenu} toggle={toggleDropdownOpenMenu} className="sipHeaderUser">
       <DropdownToggle nav>
-        <span className="hide-xs">Kevin Tran</span>
+        <span className="hide-xs">{profile && profile.name}</span>
         <i className="fa fa-caret-down fa-lg hide-xs" />
         <i className="fa fa-user-o fa-lg show-xs" />
       </DropdownToggle>
@@ -151,33 +125,48 @@ class DefaultHeader extends React.PureComponent<Props, State> {
         <DropdownItem>
           <i className="fa fa-shield" /> Lock Account
         </DropdownItem>
-        <DropdownItem onClick={this.handleLogout}>
+        <DropdownItem onClick={handleLogout}>
           <i className="fa fa-lock" /> Logout
         </DropdownItem>
       </DropdownMenu>
     </ButtonDropdown>
   );
 
-  public render(): React.ReactElement {
-    return (
-      <React.Fragment>
-        <AppSidebarToggler className="d-lg-none" display="md" mobile />
-        <AppNavbarBrand
-          full={{ src: logo, width: 89, height: 25, alt: 'VTP' }}
-          minimized={{ src: logo, width: 30, height: 30, alt: 'VTP' }}
-        />
-        <AppSidebarToggler className="d-md-down-none" display="lg" />
+  const renderNav = (): JSX.Element => (
+    <Nav className="ml-auto" navbar>
+      <NavItem className="d-md-down-none">
+        <NavLink to="#" className="nav-link">
+          <i className="fa fa-heart-o fa-lg" />
+        </NavLink>
+      </NavItem>
+      <NavItem className="d-md-down-none">
+        <NavLink to="#" className="nav-link">
+          <i className="fa fa-clock-o fa-lg" />
+        </NavLink>
+      </NavItem>
+      <NavItem className="sipHeaderNoti">{renderHeaderNotifications()}</NavItem>
+      <NavItem>{renderHeaderUser()}</NavItem>
+    </Nav>
+  );
 
-        <FormGroup className="sipHeaderSearch">
-          <Input type="text" placeholder="Tra cứu đơn hàng" />
-          <Button>
-            <i className="fa fa-search fa-lg" />
-          </Button>
-        </FormGroup>
-        {this.renderNav()}
-      </React.Fragment>
-    );
-  }
-}
+  return (
+    <>
+      <AppSidebarToggler className="d-lg-none" display="md" mobile />
+      <AppNavbarBrand
+        full={{ src: logo, width: 89, height: 25, alt: 'VTP' }}
+        minimized={{ src: logo, width: 30, height: 30, alt: 'VTP' }}
+      />
+      <AppSidebarToggler className="d-md-down-none" display="lg" />
+
+      <FormGroup className="sipHeaderSearch">
+        <Input type="text" placeholder="Tra cứu đơn hàng" />
+        <Button>
+          <i className="fa fa-search fa-lg" />
+        </Button>
+      </FormGroup>
+      {renderNav()}
+    </>
+  );
+};
 
 export default DefaultHeader;

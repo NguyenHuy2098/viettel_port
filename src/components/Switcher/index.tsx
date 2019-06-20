@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import { Helmet } from 'react-helmet';
 import { SIPRoutePropsType } from 'layouts/types';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   routes: SIPRoutePropsType[];
@@ -34,7 +35,7 @@ const Switcher: React.FC<Props> = (props: Props): JSX.Element => {
           /* eslint-enable react/jsx-no-bind */
         },
       )}
-      <Redirect to="/not-found" />
+      <Redirect to={routesMap.error404} />
     </Switch>
   );
 };

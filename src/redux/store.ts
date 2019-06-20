@@ -3,21 +3,19 @@ import { configureStore } from 'redux-starter-kit';
 import createSagaMiddleware from 'redux-saga';
 import { routerMiddleware } from 'connected-react-router';
 import history from 'utils/history';
+import { loadState, saveState } from 'utils/localStorageHelpers';
 import userManager from 'utils/userManager';
 import createRootReducer from './rootReducers';
 import rootSaga from './rootSagas';
-import { loadState, saveState } from '../utils/localStorageHelpers';
 
-const persistedState = loadState();
-
+const preloadedState = loadState();
 const sagaMiddleware = createSagaMiddleware();
-
 const rootReducer = createRootReducer(history);
 
 const store = configureStore({
   middleware: [sagaMiddleware, routerMiddleware(history)],
+  preloadedState,
   reducer: rootReducer,
-  preloadedState: persistedState,
 });
 
 store.subscribe((): void => {
