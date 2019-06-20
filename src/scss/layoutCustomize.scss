@@ -162,11 +162,14 @@ body {
       color: #4A4A4A !important;
       border-left: 4px solid transparent !important;
       background: #F9F9F9 !important;
-      padding: 12px 8px;
+      padding: 12px 8px 12px 38px;
+      position: relative;
       i {
         color: #299F9A !important;
         font-size: 18px;
-        margin-right: 12px;
+        position: absolute;
+        top: 12px;
+        left: 10px;
       }
       &:hover {
         border-color: #299F9A !important;
@@ -180,11 +183,23 @@ body {
     .nav-dropdown {
       .nav-dropdown-toggle {
         background: #fff !important;
+        &:before {
+          font: normal normal normal 14px/1 FontAwesome;
+          background: none;
+          content: "\F054";
+          width: auto;
+          height: auto;
+          font-size: 10px;
+        }
       }
       &.open .nav-dropdown-toggle {
         border-color: #299F9A !important;
         background: #fff !important;
         color: #299F9A !important;
+        &:before {
+          -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+        }
       }
     }
     .sidebar-minimizer {
@@ -233,6 +248,7 @@ body {
       border: 1px solid #E4E8EB;
       box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
       padding: 0 10px;
+      height: 35px;
       i {
         color: #A1A6AB;
         margin: 0;
@@ -244,6 +260,7 @@ body {
     width: 280px;
     position: relative;
     margin-left: 15px;
+    display: inline-block;
     i {
       color: #9B9B9B;
       position: absolute;
@@ -318,6 +335,9 @@ body {
       color: #299F9A;
       font-weight: 600;
     }
+    th, td {
+      padding: 8px;
+    }
     .SipTableFunctionIcon {
       white-space: nowrap;
       .btn {
@@ -333,7 +353,6 @@ body {
 }
 .sipLine {
   border-bottom: 1px solid #D6D6D6;
-  width: 100%;
 }
 
 .app-header .navbar-brand {
@@ -452,6 +471,9 @@ html:not([dir="rtl"]) .sidebar {
   .tab-content {
     .tab-pane {
       padding: 0;
+      &.sipTabContent {
+        padding: 15px;
+      }
       .sipTableContainer {
         margin: 0;
         box-shadow: none;
@@ -488,7 +510,145 @@ html:not([dir="rtl"]) .sidebar {
   }
 }
 
+@media screen and (min-width: 576px) {
+  html:not([dir="rtl"]) .sidebar-sm-show.sidebar-fixed .main, html:not([dir="rtl"]) .sidebar-sm-show.sidebar-fixed .app-footer, html:not([dir="rtl"]) .sidebar-show.sidebar-fixed .main, html:not([dir="rtl"]) .sidebar-show.sidebar-fixed .app-footer {
+    margin-left: 240px;
+  }
+}
 
+/*____________________________________ULTRA LARGE DESKTOP_______________________________________________________________________*/
+
+@media screen and (min-width: 1500px) {
+
+}
+
+/*____________________________________LARGE DESKTOP_______________________________________________________________________*/
+
+@media screen and (min-width: 1200px) {
+
+}
+
+/*_____________________________________PC____________________________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+
+
+@media screen and (min-width: 992px) {
+  .hide-pc {
+    display: none !important;
+  }
+  .show-xs {
+    display: none !important;
+  }
+
+}
+
+@media screen and (max-width: 1200px) and (min-width: 992px) {
+
+
+}
+
+/*_____________________________________TABLET & MOBILE_______________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+
+@media screen and (max-width: 991.98px) {
+
+  .no-margin-mobile {
+    margin: 0 !important;
+  }
+  .hide-mobile {
+    display: none !important;
+  }
+  /*____________________________________________________________________________________________________*/
+
+  .sidebar {
+    width: 240px;
+  }
+  .app-header .navbar-brand {
+    display: none;
+  }
+  .sipTabContainer .nav-tabs {
+    white-space: nowrap;
+    overflow: auto;
+    width: 100%;
+    display: block;
+    padding-bottom: 3px;
+    border: none;
+    .nav-item {
+      display: inline-block;
+    }
+  }
+  .sipTableContainer .table .SipTableFunctionIcon .btn {
+    margin: 0 5px;
+  }
+
+
+}
+
+/*_____________________________________TABLET________________________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+
+@media screen and (max-width: 992px) and (min-width: 768px) {
+
+  .show-xs {
+    display: none !important;
+  }
+  /*_____________________________________________________________________________________*/
+
+
+
+
+
+}
+
+/*_____________________________________MOBILE________________________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+
+@media screen and (max-width: 768px) {
+
+  .no-padding-xs {
+    padding: 0 !important;
+  }
+  .no-margin-xs {
+    margin: 0 !important;
+  }
+  .hide-xs {
+    display: none !important;
+  }
+
+  /*_____________________________________________________________________________________*/
+
+  .sipTitle {
+    flex: 0 0 100%;
+    width: 100%;
+  }
+  .sipTitleRightBlock {
+    display: block;
+    flex: 0 0 100%;
+    max-width: 100%;
+    text-align: right;
+    & > * {
+      margin-bottom: 5px;
+    }
+  }
+  .sipBgWhiteContainer {
+    display: flex;
+  }
+
+}
+
+/*_____________________________________SMALL MOBILE__________________________________________________________*/
+/*___________________________________________________________________________________________________________*/
+
+@media screen and (max-width: 500px) {
+  .sipHeaderSearch {
+    display: none !important;
+  }
+
+
+}
 
 
 

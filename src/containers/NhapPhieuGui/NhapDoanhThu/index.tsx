@@ -44,7 +44,7 @@ const InputRevenue: React.FC = (): JSX.Element => {
           <Input type="text" placeholder="Quét mã phiếu gửi" />
           <Button color="primary">Quét mã</Button>
         </div>
-        <p className="pull-right">
+        <p className="pull-right mt-2 mb-0">
           Tổng số phiếu gửi: <span>2</span>
         </p>
       </Row>

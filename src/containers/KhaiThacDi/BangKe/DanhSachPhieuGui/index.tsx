@@ -32,27 +32,22 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
 
   function renderDescriptionServiceShipping(): JSX.Element {
     return (
-      <Row className="sipDescriptionServiceShipping">
-        <Col sm="4">Line: 02 - Nội vùng - Thái Bình - Nam Định</Col>
-        <Col xs="3">Dịch vụ: Thư - Hoả tốc</Col>
+      <Row>
+        <Col lg="5">Line: 02 - Nội vùng - Thái Bình - Nam Định</Col>
+        <Col lg="5">Dịch vụ: Thư - Hoả tốc</Col>
       </Row>
     );
   }
 
   function renderShippingInformationAndScanCode(): JSX.Element {
     return (
-      <div className="sipSendingCoupon sipContentContainer no-padding">
+      <div className="sipContentContainer">
         {renderDescriptionServiceShipping()}
-        <Row>
-          <Row className="sipScanCode mb-3">
-            <Col xs="6" sm="4">
-              <Input type="text" placeholder="Quét mã phiếu gửi" />
-            </Col>
-            <Col className="scanCodeButton">
-              <Button>Quét mã</Button>
-            </Col>
-          </Row>
-        </Row>
+        <Row className="sipLine mt-3 mb-3" />
+        <div className="sipScanCodeContainer">
+          <Input type="text" placeholder="Quét mã phiếu gửi" />
+          <Button color="primary">Quét mã</Button>
+        </div>
       </div>
     );
   }

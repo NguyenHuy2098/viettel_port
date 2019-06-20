@@ -152,7 +152,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
 
   function renderSendingCouponInfo(): JSX.Element {
     return (
-      <Col md="6" xs="12">
+      <Col xl="6" xs="12">
         <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>{t('Thông tin phiếu gửi')}</h3>
@@ -193,46 +193,46 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
       <div className="sipInputBlock">
         <h3>Thông tin hàng hóa</h3>
         <Row className="sipInputItem">
-          <Label xs="12" lg="3">
+          <Label xs="12" lg="4">
             Tên hàng
             <span className="color-red"> *</span>
           </Label>
-          <Col lg="9">
+          <Col lg="8">
             <Input type="text" placeholder="Nội dung hàng hóa" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="12" lg="3">
+          <Label xs="12" lg="4">
             Giá trị
           </Label>
-          <Col lg="9">
+          <Col lg="8">
             <Input type="text" placeholder="Nhập giá trị (đ)" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="12" lg="3">
+          <Label xs="12" lg="4">
             Số lượng
             <span className="color-red"> *</span>
           </Label>
-          <Col lg="9">
+          <Col lg="8">
             <Input type="text" placeholder="Nhập số lượng" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="12" lg="3">
+          <Label xs="12" lg="4">
             Trọng lượng
             <span className="color-red"> *</span>
           </Label>
-          <Col lg="9">
+          <Col lg="8">
             <Input type="text" placeholder="Nhập  trọng lượng (g)" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="12" lg="3">
+          <Label xs="12" lg="4">
             Trọng lượng
             <span className="color-red"> *</span>
           </Label>
-          <Col lg="9">{renderPackageSize()}</Col>
+          <Col lg="8">{renderPackageSize()}</Col>
         </Row>
       </div>
     );
@@ -300,7 +300,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
 
   function renderProductInfo(): JSX.Element {
     return (
-      <Col md="6" xs="12">
+      <Col xl="6" xs="12">
         <div className="sipContentContainer">
           {renderPackageInfo()}
           {renderSendingServices()}

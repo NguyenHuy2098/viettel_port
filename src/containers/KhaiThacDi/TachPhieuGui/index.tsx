@@ -24,11 +24,9 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
         <div className="sipTitleRightBlock">
-          <div className="sipSplitCouponTrashButton">
-            <Button>
-              <i className="fa fa-trash-o fa-lg color-white" />
-            </Button>
-          </div>
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-trash-o" />
+          </Button>
           <Button>
             <i className="fa fa-barcode" />
             {t('In mã vạch')}
@@ -45,112 +43,108 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   function renderCouponInformation(): JSX.Element {
     return (
       <Row className="sipSummaryContent">
-        <Row className="sipCouponInformation">
-          <Col lg="4" md="5" xs="12">
-            <Row>
-              <Col xs="5">{t('Mã phiếu')}: </Col>
-              <Col xs="7">V00596290</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Mã phiếu')}: </Col>
-              <Col xs="7">V00596290</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Trọng lượng')}: </Col>
-            </Row>
-          </Col>
-          <Col lg="4" md="3" xs="12">
-            <Row>
-              <Col xs="5">{t('Ngày gửi')}: </Col>
-              <Col xs="7">24/04/2019</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Ngày gửi')}: </Col>
-              <Col xs="7">24/04/2019</Col>
-            </Row>
-            <Row>
-              <Col xs="5">{t('Trọng lượng')}: </Col>
-              <Col xs="7">750 g</Col>
-            </Row>
-          </Col>
-        </Row>
-        <Row className="sipSplitCoupon">
-          <Label>{t('Số lượng tách')}</Label>
-          <Col xs="6" sm="4">
+        <Col lg="4" xs="12">
+          <Row>
+            <Col xs="6">{t('Mã phiếu')}: </Col>
+            <Col xs="6">V00596290</Col>
+          </Row>
+          <Row>
+            <Col xs="6">{t('Mã phiếu')}: </Col>
+            <Col xs="6">V00596290</Col>
+          </Row>
+          <Row>
+            <Col xs="6">{t('Trọng lượng')}: </Col>
+          </Row>
+        </Col>
+        <Col lg="4" xs="12">
+          <Row>
+            <Col xs="6">{t('Ngày gửi')}: </Col>
+            <Col xs="6">24/04/2019</Col>
+          </Row>
+          <Row>
+            <Col xs="6">{t('Ngày gửi')}: </Col>
+            <Col xs="6">24/04/2019</Col>
+          </Row>
+          <Row>
+            <Col xs="6">{t('Trọng lượng')}: </Col>
+            <Col xs="6">750 g</Col>
+          </Row>
+        </Col>
+        <Col xs={12} className="mt-3">
+          <Label className="mr-3">
+            {t('Mã phiếu gửi')}
+            <span className="color-red"> *</span>
+          </Label>
+          <div className="sipScanCodeContainer">
             <Input type="text" />
-          </Col>
-          <Col className="scanCodeButton">
-            <Button>{t('Tách phiếu')}</Button>
-          </Col>
-        </Row>
+            <Button color="primary">Tách phiếu</Button>
+          </div>
+        </Col>
       </Row>
     );
   }
 
   function renderFindCoupon(): JSX.Element {
     return (
-      <Row className="sipFindCoupon">
-        <Label>
+      <Row className="sipBgWhiteContainer">
+        <Label className="mr-3">
           {t('Mã phiếu gửi')}
-
           <span className="color-red"> *</span>
         </Label>
-        <Col xs="6" sm="4">
+        <div className="sipScanCodeContainer">
           <Input type="text" placeholder="Nhập mã phiếu gửi" />
-        </Col>
-        <Col className="scanCodeButton">
-          <Button>{t('Tìm kiếm')}</Button>
-        </Col>
+          <Button color="primary">Quét mã</Button>
+        </div>
       </Row>
-    );
-  }
-
-  function renderCheckbox(): JSX.Element {
-    return (
-      <Label check>
-        <Input type="checkbox" />
-      </Label>
     );
   }
 
   function renderListCoupon(): JSX.Element {
     return (
       <Row className="sipSummaryContent">
-        <Row className="sipCouponInformation">
-          <Col lg="8" md="5" xs="12">
-            <Row className="sipCouponTitle">
-              <Col xs="5">{t('Mã phiếu gửi')}</Col>
-              <Col xs="7">{t('Trọng lượng')}</Col>
-            </Row>
-            <Row className="sipCouponContent">
-              <Col xs="5">
-                {renderCheckbox()}
+        <Col lg="8" xs="12">
+          <Row className="color-bluegreen mb-3">
+            <Col xs="6" lg="5">
+              {t('Mã phiếu gửi')}
+            </Col>
+            <Col xs="6" lg="7">
+              {t('Trọng lượng')}
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col xs="6" lg="5">
+              <Label check>
+                <Input type="checkbox" />
                 V00596290_01
-              </Col>
-              <Col xs="4">
-                <Input />
-              </Col>
-            </Row>
-            <Row className="sipCouponContent">
-              <Col xs="5">
-                {renderCheckbox()}
+              </Label>
+            </Col>
+            <Col xs="6" lg="7">
+              <Input className="text-center" type="text" value="250 g" />
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col xs="6" lg="5">
+              <Label check>
+                <Input type="checkbox" />
                 V00596290_01
-              </Col>
-              <Col xs="4">
-                <Input />
-              </Col>
-            </Row>
-            <Row className="sipCouponContent">
-              <Col xs="5">
-                {renderCheckbox()}
+              </Label>
+            </Col>
+            <Col xs="6" lg="7">
+              <Input className="text-center" type="text" value="50 g" />
+            </Col>
+          </Row>
+          <Row className="mb-2">
+            <Col xs="6" lg="5">
+              <Label check>
+                <Input type="checkbox" />
                 V00596290_01
-              </Col>
-              <Col xs="4">
-                <Input />
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+              </Label>
+            </Col>
+            <Col xs="6" lg="7">
+              <Input className="text-center" type="text" value="400 g" />
+            </Col>
+          </Row>
+        </Col>
       </Row>
     );
   }

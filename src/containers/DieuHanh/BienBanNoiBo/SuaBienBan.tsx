@@ -9,10 +9,41 @@ const EditRecord: React.FC = (): React.ReactElement => {
   const renderTopController = (): React.ReactElement => (
     <>
       <Button>
-        <i className="fa fa-cloud-upload" />
+        <i className="fa fa-refresh" />
         {t('Cập nhật')}
       </Button>
     </>
+  );
+
+  const renderReportSolution = (): React.ReactElement => (
+    <Row className="sipContentContainer">
+      <Col xl={5} md="8" xs="12" className="no-padding">
+        <Row className="mb-3">
+          <Label xs="12" lg="5">
+            {t('Loại lỗi vi phạm')}
+          </Label>
+          <Col lg="7">
+            <Input type="select">
+              <option>Chọn lỗi</option>
+              <option>1</option>
+              <option>2</option>
+            </Input>
+          </Col>
+        </Row>
+        <Row>
+          <Label xs="12" lg="5">
+            {t('Chọn lỗi vi phạm')}
+          </Label>
+          <Col lg="7">
+            <Input type="select">
+              <option>Chọn lỗi</option>
+              <option>1</option>
+              <option>2</option>
+            </Input>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 
   return (
@@ -28,7 +59,7 @@ const EditRecord: React.FC = (): React.ReactElement => {
       </Row>
 
       <Row className="sipSummaryContent">
-        <Col md="5" xs="12">
+        <Col xl="5" md="6" xs="12">
           <Row>
             <Col xs="5">{t('Mã biên bản')}: </Col>
             <Col xs="7">{'13955485'}</Col>
@@ -42,7 +73,7 @@ const EditRecord: React.FC = (): React.ReactElement => {
             <Col xs="7">{'Chuyển hoàn về bưu cục gốc '}</Col>
           </Row>
         </Col>
-        <Col md="5" xs="12">
+        <Col xl="5" md="6" xs="12">
           <Row>
             <Col xs="5">{t('Mã phiếu gửi')}: </Col>
             <Col xs="7">13900014</Col>
@@ -53,27 +84,7 @@ const EditRecord: React.FC = (): React.ReactElement => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Biện pháp xử lý')}</h1>
       </Row>
-
-      <Row className="sipContentContainer">
-        <Col md="5" xs="12" className="">
-          <Row className="mb-3">
-            <Label xs="12" lg="4">
-              {t('Loại lỗi vi phạm')}
-            </Label>
-            <Col lg="8">
-              <Input type="text" />
-            </Col>
-          </Row>
-          <Row>
-            <Label xs="12" lg="4">
-              {t('Chọn lỗi vi phạm')}
-            </Label>
-            <Col lg="8">
-              <Input type="text" />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
+      {renderReportSolution()}
     </>
   );
 };

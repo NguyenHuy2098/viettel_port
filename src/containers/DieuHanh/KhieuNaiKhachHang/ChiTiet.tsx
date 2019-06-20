@@ -27,42 +27,55 @@ const ComplainDetail: React.FC = (): JSX.Element => {
       </Row>
     );
   }
+  // eslint-disable-next-line max-lines-per-function
   function renderRecordDetail(): JSX.Element {
     return (
       <div className="sipContentContainer">
         <Row className="sipInputItem">
-          <Label xs="2">{t('Nội dung')}</Label>
-          <Col xs="6">
+          <Label lg="2" md="4">
+            {t('Nội dung')}
+          </Label>
+          <Col lg="6" md="7">
             <Input type="textarea" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="2">{t('Gia hạn')}</Label>
-          <Col xs="6">
+          <Label lg="2" md="4">
+            {t('Gia hạn')}
+          </Label>
+          <Col lg="6" md="7">
             <Input type="text" placeholder="Chọn lý do gia hạn" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="2">{t('Loại khiếu nại')}</Label>
-          <Col xs="6">
+          <Label lg="2" md="4">
+            {t('Loại khiếu nại')}
+          </Label>
+          <Col lg="6" md="7">
             <Input type="text" placeholder="Khiếu nại khâu nhận" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="2">{t('Chọn khiếu nại')}</Label>
-          <Col xs="6">
+          <Label lg="2" md="4">
+            {t('Chọn khiếu nại')}
+          </Label>
+          <Col lg="6" md="7">
             <Input type="text" placeholder="Cập nhận sai trạng thái đơn hàng" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="2">{t('Đơn vị mắc lỗi')}</Label>
-          <Col xs="6">
+          <Label lg="2" md="4">
+            {t('Đơn vị mắc lỗi')}
+          </Label>
+          <Col lg="6" md="7">
             <Input type="text" placeholder="Chọn đơn vị mắc lỗi" />
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Label xs="2">{t('Cá nhân mắc lỗi')}</Label>
-          <Col xs="6">
+          <Label lg="2" md="4">
+            {t('Cá nhân mắc lỗi')}
+          </Label>
+          <Col lg="6" md="7">
             <Input type="text" placeholder="Nhập tên người mắc lỗi" />
           </Col>
         </Row>

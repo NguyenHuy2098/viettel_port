@@ -217,7 +217,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
 
   function renderSendingCouponInfo(): JSX.Element {
     return (
-      <Col md="6" xs="12">
+      <Col xl="6" xs="12">
         <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>Thông tin phiếu gửi</h3>
@@ -397,7 +397,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
 
   function renderPackageInfo(): JSX.Element {
     return (
-      <Col md="6" xs="12">
+      <Col xl="6" xs="12">
         <div className="sipContentContainer">
           {renderPackageInfoDetail()}
           {renderSendingServices()}
