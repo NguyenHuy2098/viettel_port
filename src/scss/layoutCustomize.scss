@@ -273,8 +273,9 @@ body {
   }
 }
 .sipTitleModalCreateNew {
-  max-width: 568px;
+  width: 568px;
   margin: 100px auto;
+  max-width: calc(100% - 20px);
   .modal-content {
     border: none;
     .modal-header {
@@ -350,6 +351,9 @@ body {
       }
     }
   }
+}
+.modal .sipTableContainer {
+  box-shadow: none;
 }
 .sipLine {
   border-bottom: 1px solid #D6D6D6;

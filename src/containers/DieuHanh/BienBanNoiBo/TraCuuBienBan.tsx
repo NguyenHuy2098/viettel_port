@@ -88,7 +88,7 @@ const LapBienBan: React.FC = (): JSX.Element => {
 
   function renderModal(): JSX.Element {
     return (
-      <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew modalCustom">
+      <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew sipModalReportLookUp">
         <ModalHeader toggle={toggle}>{t('Tra cứu biên bản')}</ModalHeader>
         <ModalBody>
           <Row className="mb-3 sipTitleContainer">
@@ -116,10 +116,9 @@ const LapBienBan: React.FC = (): JSX.Element => {
   function renderAction(): JSX.Element {
     return (
       <>
-        <Button onClick={toggle}>
+        <Button>
           <i className="fa fa-eye fa-lg color-orange" />
         </Button>
-        {renderModal()}
         <Button>
           <i className="fa fa-check fa-lg color-green" />
         </Button>
@@ -130,50 +129,78 @@ const LapBienBan: React.FC = (): JSX.Element => {
     );
   }
 
+  // eslint-disable-next-line max-lines-per-function
+  function renderReportFilterSearch(): JSX.Element {
+    return (
+      <div className="sipContentContainer">
+        <Row>
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Từ ngày
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Đến ngày
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+        <Row>
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Bưu cục lập
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Bưu cục bị lập
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </Col>
+          <Col md={2} xs={12} className="mb-3">
+            <Button color="primary">Tìm kiếm</Button>
+            {/* fake button to open Report popup - please delete when finish popup function */}
+            <Button onClick={toggle} className="ml-3">
+              Open popup
+            </Button>
+          </Col>
+        </Row>
+        <Row className="sipLine mt-2 mb-3" />
+        <Row>
+          <Col>
+            Tổng số: <span>1</span>
+          </Col>
+        </Row>
+      </div>
+    );
+  }
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Tra cứu biên bản')}</h1>
       </Row>
-      <div className="sipContentContainer">
-        <Row className="sipInputItem">
-          <Col xs="5" lg="2">
-            <Label>{t('Từ ngày')}</Label>
-          </Col>
-          <Col xs="5" lg="2">
-            <Input type="text" placeholder={t('20/01/2019')} />
-          </Col>
-          <Col xs="5" lg="2">
-            <Label>{t('Đến ngày')}</Label>
-          </Col>
-          <Col xs="5" lg="2">
-            <Input type="text" placeholder={t('20/01/2019')} />
-          </Col>
-        </Row>
-        <Row className="sipInputItem">
-          <Col xs="5" lg="2">
-            <Label>{t('Bưu cục lập')}</Label>
-          </Col>
-          <Col xs="5" lg="2">
-            <Input type="text" />
-          </Col>
-          <Col xs="5" lg="2">
-            <Label>{t('Bưu cục bị lập')}</Label>
-          </Col>
-          <Col xs="5" lg="2">
-            <Input type="text" />
-          </Col>
-          <Col xs="5" lg="2">
-            <Button color="primary">Tìm kiếm</Button>
-          </Col>
-        </Row>
-        <Row className="sipLine mt-3 mb-3" />
-        <Row className="sipInputItem">
-          <Col md="4" xs="12" className="text-left">
-            {t('Tổng số')}: 1
-          </Col>
-        </Row>
-      </div>
+      {renderReportFilterSearch()}
+      {renderModal()}
       <div className="mt-3" />
       <Row className="sipTableContainer">
         <Table striped hover>
