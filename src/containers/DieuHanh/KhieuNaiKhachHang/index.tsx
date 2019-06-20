@@ -37,17 +37,23 @@ const ComplainCustomer: React.FC = (): JSX.Element => {
   function renderFindRecordContent(): JSX.Element {
     return (
       <>
-        <Row className="findRecordContent">
-          <Col xs="3">
-            <Input type="text" placeholder="Chọn mức độ" />
+        <Row className="pt-3 pr-3 pl-3 pb-1">
+          <Col xl={3} md={5} xs={12} className="mb-2">
+            <Input type="select">
+              <option>Chọn mức độ</option>
+              <option>1</option>
+              <option>2</option>
+            </Input>
           </Col>
-          <Col xs="3">
-            <Input type="text" placeholder="Chọn trạng thái" />
+          <Col xl={3} md={5} xs={12} className="mb-2">
+            <Input type="select">
+              <option>Chọn trạng thái</option>
+              <option>1</option>
+              <option>2</option>
+            </Input>
           </Col>
-          <Col xs="3">
-            <div className="sipSearchButtonComplainRecord">
-              <Button>{t('Tìm kiếm')}</Button>
-            </div>
+          <Col md={2} xs={12} className="mb-2">
+            <Button color="primary">Quét mã</Button>
           </Col>
         </Row>
       </>

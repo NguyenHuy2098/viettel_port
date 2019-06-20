@@ -9,7 +9,7 @@ const VerificationRecord: React.FC = (): React.ReactElement => {
   const renderTopController = (): React.ReactElement => (
     <>
       <Button>
-        <i className="fa fa-cloud-upload" />
+        <i className="fa fa-refresh" />
         {t('Cập nhật')}
       </Button>
     </>
@@ -17,44 +17,52 @@ const VerificationRecord: React.FC = (): React.ReactElement => {
 
   const renderCheckbox = (): React.ReactElement => (
     <Row className="pl-3 pt-3">
-      <Col xs="4">
+      <Col lg={4} md={6} xs="12">
         <Label check>
           <Input type="checkbox" />
+          {t('Biên bản lập đúng')}
         </Label>
-        {t('Biên bản lập đúng')}
       </Col>
-      <Col xs="4">
+      <Col lg={4} md={6} xs="12">
         <Label check>
           <Input type="checkbox" />
+          {t('Biên bản lập sai')}
         </Label>
-        {t('Biên bản lập sai')}
       </Col>
     </Row>
   );
 
   const renderContentRecord = (): React.ReactElement => (
     <div className="pl-3">
-      <Col md="5" xs="12">
+      <Col xl={5} md="8" xs="12" className="no-padding">
         <Row className="mb-3">
-          <Label xs="12" lg="4">
+          <Label xs="12" lg="5">
             {t('Loại lỗi vi phạm')}
           </Label>
-          <Col lg="8">
-            <Input type="text" />
+          <Col lg="7">
+            <Input type="select">
+              <option>Chọn lỗi</option>
+              <option>1</option>
+              <option>2</option>
+            </Input>
           </Col>
         </Row>
         <Row className="mb-3">
-          <Label xs="12" lg="4">
+          <Label xs="12" lg="5">
             {t('Chọn lỗi vi phạm')}
           </Label>
-          <Col lg="8">
-            <Input type="text" />
+          <Col lg="7">
+            <Input type="select">
+              <option>Chọn lỗi</option>
+              <option>1</option>
+              <option>2</option>
+            </Input>
           </Col>
         </Row>
-        <Row>
+        <Row className="mb-3">
           <Label xs="12" lg="7">
             {t('Mã biên bản lập lại')}
-            <p>
+            <p className="no-margin">
               <small>{t('(Dành cho trường hợp lập lại biên bản)')}</small>
             </p>
           </Label>
@@ -79,7 +87,7 @@ const VerificationRecord: React.FC = (): React.ReactElement => {
       </Row>
 
       <Row className="sipSummaryContent">
-        <Col md="5" xs="12">
+        <Col xl="5" md="6" xs="12">
           <Row>
             <Col xs="5">{t('Mã biên bản')}: </Col>
             <Col xs="7">{'13955485'}</Col>
@@ -93,7 +101,7 @@ const VerificationRecord: React.FC = (): React.ReactElement => {
             <Col xs="7">{'Chuyển hoàn về bưu cục gốc '}</Col>
           </Row>
         </Col>
-        <Col md="5" xs="12">
+        <Col xl="5" md="6" xs="12">
           <Row>
             <Col xs="5">{t('Mã phiếu gửi')}: </Col>
             <Col xs="7">13900014</Col>

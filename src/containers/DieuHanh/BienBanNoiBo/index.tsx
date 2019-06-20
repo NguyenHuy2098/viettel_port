@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
+import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane, Label } from 'reactstrap';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
@@ -35,7 +35,7 @@ const InternalRecord: React.FC = (): JSX.Element => {
       <>
         <div className="findRecordButton">
           <Button>{t('Nghiêm trọng')}</Button>
-          <Button>{t('Kết luận sai')}</Button>
+          <Button className="active">{t('Kết luận sai')}</Button>
           <Button>{t('Đã hoàn thành')}</Button>
           <Button>{t('Mới lập')}</Button>
         </div>
@@ -43,46 +43,63 @@ const InternalRecord: React.FC = (): JSX.Element => {
     );
   }
 
+  // eslint-disable-next-line max-lines-per-function
   function renderFindRecordContent(): JSX.Element {
     return (
       <>
-        <Row className="findRecordContent">
-          <Col xs="6" sm="4">
-            <Row className="findRecordContentDetail">
-              <Col xs="4">{t('Từ ngày')}: </Col>
-              <Col xs="8">
-                <Input type="text" />
-              </Col>
-            </Row>
-            <Row className="findRecordContentDetail">
-              <Col xs="4">{t('Bưu cục lập')}: </Col>
-              <Col xs="8">
-                <Input type="text" />
+        <Row>
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Từ ngày
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
               </Col>
             </Row>
           </Col>
-          <Col xs="6" sm="4">
-            <Row className="findRecordContentDetail">
-              <Col xs="4">{t('Đến ngày')}: </Col>
-              <Col xs="8">
-                <Input type="text" />
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Đến ngày
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
               </Col>
             </Row>
-            <Row className="findRecordContentDetail">
-              <Col xs="4">{t('Bưu cục bị lập')}: </Col>
-              <Col xs="8">
-                {' '}
-                <Input type="text" />
-              </Col>
-            </Row>
-          </Col>
-          <Col sm="4" className="sipSearchButtonRecord">
-            <div className="findRecordTitle">
-              <Button>{t('Tìm kiếm')}</Button>
-            </div>
           </Col>
         </Row>
-        <Row className="sipTotalRecord">{t('Tổng số')}: 1</Row>
+        <Row>
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Bưu cục lập
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </Col>
+          <Col xl={4} md={5} xs={12} className="mb-3">
+            <Row>
+              <Label xs="12" md="5">
+                Bưu cục bị lập
+              </Label>
+              <Col md="7">
+                <Input type="text" placeholder="" />
+              </Col>
+            </Row>
+          </Col>
+          <Col md={2} xs={12} className="mb-3">
+            <Button color="primary">Tìm kiếm</Button>
+          </Col>
+        </Row>
+        <Row className="sipLine mt-2 mb-3" />
+        <Row>
+          <Col>
+            Tổng số: <span>1</span>
+          </Col>
+        </Row>
       </>
     );
   }
@@ -166,12 +183,16 @@ const InternalRecord: React.FC = (): JSX.Element => {
           </NavItem>
         </Nav>
         <TabContent activeTab={tab}>
-          <TabPane tabId={1}>
+          <TabPane tabId={1} className="sipTabContent">
             {renderFindRecordButton()}
             {renderFindRecordContent()}
           </TabPane>
-          <TabPane tabId={2}>{2}</TabPane>
-          <TabPane tabId={3}>{renderFindRecordContent()}</TabPane>
+          <TabPane tabId={2} className="sipTabContent">
+            {2}
+          </TabPane>
+          <TabPane tabId={3} className="sipTabContent">
+            {renderFindRecordContent()}
+          </TabPane>
         </TabContent>
       </div>
     );

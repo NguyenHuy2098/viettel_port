@@ -335,6 +335,9 @@ body {
       color: #299F9A;
       font-weight: 600;
     }
+    th, td {
+      padding: 8px;
+    }
     .SipTableFunctionIcon {
       white-space: nowrap;
       .btn {
@@ -563,6 +566,20 @@ html:not([dir="rtl"]) .sidebar {
   }
   .app-header .navbar-brand {
     display: none;
+  }
+  .sipTabContainer .nav-tabs {
+    white-space: nowrap;
+    overflow: auto;
+    width: 100%;
+    display: block;
+    padding-bottom: 3px;
+    border: none;
+    .nav-item {
+      display: inline-block;
+    }
+  }
+  .sipTableContainer .table .SipTableFunctionIcon .btn {
+    margin: 0 5px;
   }
 
 

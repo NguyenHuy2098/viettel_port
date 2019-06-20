@@ -92,31 +92,18 @@
    }
  }
 .findRecordButton {
-  margin-left: 8px;
-  margin-top: 16px;
+  margin-bottom: 8px;
   button {
-    margin-left: 12px;
-    background-color: #f5f5f5;
-    border: 1px solid #d6d6d6;
+    margin: 0 12px 8px 0;
+    background-color: #F5F5F5;
+    border: 1px solid #D6D6D6;
     border-radius: 5px;
     color: #919191;
-  }
-  button:hover {
-    color: #299f9a;
-    background: #ddf6f5;
-    border: 1px solid #299f9a;
-  }
-}
-.findRecordContent {
-  margin: 0;
-  font-weight: 500;
-  color: #6b6f83;
-  border-bottom: 1px solid #d6d6d6;
-  padding-left: 6px;
-  padding-bottom: 17px;
-  padding-top: 16px;
-  .findRecordContentDetail {
-    padding-bottom: 16px;
+    &:hover, &.active {
+      color: #299F9A !important;
+      background: #DDF6F5 !important;
+      border: 1px solid #299F9A !important;
+    }
   }
 }
 .sipSearchButtonRecord {
