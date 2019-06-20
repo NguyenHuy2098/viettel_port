@@ -27,6 +27,11 @@ const nav = t => {
         ],
       },
       {
+        name: t('Khiếu nại khách hàng'),
+        url: '/khieu-nai-khach-hang',
+        icon: 'icon-note',
+      },
+      {
         name: 'Nhập phiếu gửi',
         icon: 'icon-note',
         children: [

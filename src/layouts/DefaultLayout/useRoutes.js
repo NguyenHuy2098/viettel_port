@@ -28,6 +28,10 @@ const XacMinhBienBan = Loadable({
   loader: () => import('containers/DieuHanh/BienBanNoiBo/XacMinhBienBan.tsx'),
   loading: Loading,
 });
+const KhieuNaiKhachHang = Loadable({
+  loader: () => import('containers/DieuHanh/KhieuNaiKhachHang'),
+  loading: Loading,
+});
 
 // =============== NhapPhieuGui =====================
 
@@ -159,6 +163,7 @@ const routes = t => {
     { path: '/tra-cuu-bien-ban', name: t('Tra cứu biên bản'), component: TraCuuBienBan },
     { path: '/sua-bien-ban', name: t('Sửa biên bản'), component: SuaBienBan },
     { path: '/xac-minh-bien-ban', name: t('Xác minh biên bản'), component: XacMinhBienBan },
+    { path: '/khieu-nai-khach-hang', name: t('Khiếu nại khách hàng'), component: KhieuNaiKhachHang },
   ];
 };
 
