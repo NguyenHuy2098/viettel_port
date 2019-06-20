@@ -9,3 +9,9 @@ export const makeSelectUser = createSelector(
   selectAuth,
   (auth: UserState): User | undefined => auth.user,
 );
+
+export const makeSelectProfile = createSelector(
+  makeSelectUser,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (user: User | undefined): any => (user ? user.profile : undefined),
+);
