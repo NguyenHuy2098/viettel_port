@@ -50,11 +50,11 @@ const App: React.FC = (): JSX.Element => {
           <Router history={history}>
             <Switch>
               <Route exact path="/login" component={Login} />
-              <PrivateRoute exact path="/register" component={Register} />} />
+              <Route exact path="/register" component={Register} />
               <Route exact path="/404" component={Page404} />
               <Route exact path="/500" component={Page500} />
               <Route exact path="/signin-callback" component={LoginCallback} />
-              <Route path="/" component={DefaultLayout} />} />
+              <PrivateRoute path="/" component={DefaultLayout} />
             </Switch>
           </Router>
         </OidcProvider>
