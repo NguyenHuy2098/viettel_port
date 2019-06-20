@@ -66,10 +66,10 @@ const LapBienBan: React.FC = (): JSX.Element => {
       </Row>
       <div className="sipContentContainer">
         <Row className="sipInputItem">
-          <Col xs="5" lg="2">
+          <Col xs="12" md="5" lg="3" xl={2}>
             <Label>{t('Lập cho bưu cục')}</Label>
           </Col>
-          <Col xs="5" lg="4">
+          <Col xs={12} md="5" lg="4">
             <Input type="select">
               <option>1</option>
               <option>2</option>
@@ -78,10 +78,10 @@ const LapBienBan: React.FC = (): JSX.Element => {
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Col xs="5" lg="2">
+          <Col xs="12" md="5" lg="3" xl={2}>
             <Label>{t('Loại lỗi vi phạm')}</Label>
           </Col>
-          <Col xs="5" lg="4">
+          <Col xs={12} md="5" lg="4">
             <Input type="select">
               <option>Nhận bưu gửi</option>
               <option>2</option>
@@ -90,10 +90,10 @@ const LapBienBan: React.FC = (): JSX.Element => {
           </Col>
         </Row>
         <Row className="sipInputItem">
-          <Col xs="5" lg="2">
+          <Col xs="12" md="5" lg="3" xl={2}>
             <Label>{t('Chọn lỗi vi phạm')}</Label>
           </Col>
-          <Col xs="5" lg="4">
+          <Col xs={12} md="5" lg="4">
             <Input type="select">
               <option>Nhận bưu gửi thiếu hóa đơn</option>
               <option>2</option>

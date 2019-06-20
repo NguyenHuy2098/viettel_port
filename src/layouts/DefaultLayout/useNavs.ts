@@ -36,6 +36,14 @@ const nav = (t: i18next.TFunction): any => {
             name: t('Chi tiết khiếu nại'),
             url: routesMap.ChiTietKhieuNai,
           },
+          {
+            name: t('Lập biên bản'),
+            url: '/lap-bien-ban',
+          },
+          {
+            name: t('Tra cứu biên bản'),
+            url: '/tra-cuu-bien-ban',
+          },
         ],
       },
       {
