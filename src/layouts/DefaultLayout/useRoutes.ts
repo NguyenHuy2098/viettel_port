@@ -35,11 +35,11 @@ const xacMinhBienBan = Loadable({
   loading: Loading,
 });
 const khieuNaiKhachHang = Loadable({
-  loader: () => import('containers/DieuHanh/KhieuNaiKhachHang'),
+  loader: (): any => import('containers/DieuHanh/KhieuNaiKhachHang'),
   loading: Loading,
 });
 const chiTietKhieuNai = Loadable({
-  loader: () => import('containers/DieuHanh/KhieuNaiKhachHang/ChiTiet'),
+  loader: (): any => import('containers/DieuHanh/KhieuNaiKhachHang/ChiTiet'),
   loading: Loading,
 });
 
