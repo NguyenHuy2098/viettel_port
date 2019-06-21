@@ -1,6 +1,7 @@
 import url from 'url';
 import { createUserManager } from 'redux-oidc';
 import { WebStorageStateStore } from 'oidc-client';
+import routesMap from './routesMap';
 
 import { REACT_APP_SSO_URL, REACT_APP_SSO_CLIENT_ID, REACT_APP_SSO_CLIENT_SECRET } from './env';
 
@@ -13,11 +14,12 @@ const userManager = createUserManager({
   filterProtocolClaims: true,
   loadUserInfo: true,
   monitorSession: false,
-  post_logout_redirect_uri: url.resolve(window.location.href, '/signout-callback'),
-  redirect_uri: url.resolve(window.location.href, '/signin-callback'),
+  post_logout_redirect_uri: url.resolve(window.location.href, routesMap.logoutCallback),
+  prompt: 'login',
+  redirect_uri: url.resolve(window.location.href, routesMap.loginCallback),
   response_type: 'id_token token',
   scope: 'offline_access openid profile public-api',
-  silent_redirect_uri: url.resolve(window.location.href, '/silent-callback'),
+  silent_redirect_uri: url.resolve(window.location.href, routesMap.silentCallback),
   userStore: new WebStorageStateStore({ store: window.localStorage }),
 });
 /* eslint-enable @typescript-eslint/camelcase */
