@@ -16,7 +16,18 @@ function Loading(props: Props): JSX.Element {
       </div>
     );
   } else {
-    return <div className="animated fadeIn pt-1 text-center">Loading...</div>;
+    return (
+      <div className="ant-skeleton ant-skeleton-active">
+        <div className="ant-skeleton-content">
+          <h3 className="ant-skeleton-title">Temp</h3>
+          <ul className="ant-skeleton-paragraph">
+            <li />
+            <li />
+            <li style={{ width: '61%' }} />
+          </ul>
+        </div>
+      </div>
+    );
   }
 }
 

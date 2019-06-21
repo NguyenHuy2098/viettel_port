@@ -42,6 +42,10 @@ const chiTietKhieuNai = Loadable({
   loader: (): any => import('containers/DieuHanh/KhieuNaiKhachHang/ChiTiet'),
   loading: Loading,
 });
+const BaoCao = Loadable({
+  loader: (): any => import('containers/BaoCao'),
+  loading: Loading,
+});
 
 // =============== NhapPhieuGui =====================
 
@@ -180,6 +184,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.xacMinhBienBan, name: t('Xác minh biên bản'), component: xacMinhBienBan },
     { path: routesMap.khieuNaiKhachHang, name: t('Khiếu nại khách hàng'), component: khieuNaiKhachHang },
     { path: routesMap.chiTietKhieuNai, name: t('Chi tiết khiếu nại'), component: chiTietKhieuNai },
+    { path: '/bao-cao', name: t('Báo cáo'), component: BaoCao },
   ];
 };
 

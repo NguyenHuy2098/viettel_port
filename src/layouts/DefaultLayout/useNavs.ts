@@ -13,10 +13,6 @@ const nav = (t: i18next.TFunction): any => {
         icon: 'fa fa-user-circle-o',
         children: [
           {
-            name: t('Tiếp xúc khách hàng'),
-            url: routesMap.communicateCustomer,
-          },
-          {
             name: t('Biên bản nội bộ'),
             url: routesMap.internalRecord,
           },
@@ -129,6 +125,26 @@ const nav = (t: i18next.TFunction): any => {
           {
             name: t('Khai thác tải'),
             url: routesMap.operationSack,
+          },
+        ],
+      },
+      {
+        name: 'Báo cáo',
+        icon: 'fa fa-sticky-note-o',
+        children: [
+          {
+            name: t('Báo cáo (chưa có gì)'),
+            url: '/bao-cao',
+          },
+        ],
+      },
+      {
+        name: 'Khách hàng',
+        icon: 'fa fa-handshake-o',
+        children: [
+          {
+            name: t('Tiếp xúc khách hàng'),
+            url: routesMap.communicateCustomer,
           },
         ],
       },
