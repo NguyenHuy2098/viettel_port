@@ -261,6 +261,7 @@ body {
     position: relative;
     margin-left: 15px;
     display: inline-block;
+    max-width: calc(100% - 15px);
     i {
       color: #9B9B9B;
       position: absolute;
@@ -624,6 +625,9 @@ html:not([dir="rtl"]) .sidebar {
 
   /*_____________________________________________________________________________________*/
 
+  .app-body .main .container-fluid {
+    padding: 20px 15px;
+  }
   .sipTitle {
     flex: 0 0 100%;
     width: 100%;

@@ -1822,10 +1822,10 @@
     "@types/prop-types" "*"
     csstype "^2.2.0"
 
-"@types/react@^16.8.21":
-  version "16.8.21"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.21.tgz#aefb32519a4111964993be5b2bd3f172f81c34ff"
-  integrity sha512-+jAtgtJ3htE+VEP/bMzBBOANGkaTbMOGYWVrmhCVtp2WE//lNG6Irw9kBEaLR7lQGjjkt/BlSSHPgArFNOKhkg==
+"@types/react@^16.8.22":
+  version "16.8.22"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.22.tgz#7f18bf5ea0c1cad73c46b6b1c804a3ce0eec6d54"
+  integrity sha512-C3O1yVqk4sUXqWyx0wlys76eQfhrQhiDhDlHBrjER76lR2S2Agiid/KpOU9oCqj1dISStscz7xXz1Cg8+sCQeA==
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -12281,10 +12281,10 @@ redux-thunk@^2.2.0:
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-2.3.0.tgz#51c2c19a185ed5187aaa9a2d08b666d0d6467622"
   integrity sha512-km6dclyFnmcvxhAcrQV2AkZmPQjzPDjgVlQtR0EQjxZPyJ0BnMf3in1ryuR8A2qU0HldVRfxYXbFSKlI3N7Slw==
 
-redux-unfold-saga@^1.2.5:
-  version "1.2.5"
-  resolved "https://registry.yarnpkg.com/redux-unfold-saga/-/redux-unfold-saga-1.2.5.tgz#dd782a35f17cbf979169e550d32e134ccf377ad1"
-  integrity sha512-DTAiQZDFQ4DYPbn11R8ScKRu6r6ZWXvTNE6zMWK2uugQJpI87Emyguh1wA24bDDLi3WNIqL/p1zgzkjUwD98Ig==
+redux-unfold-saga@^1.2.7:
+  version "1.2.7"
+  resolved "https://registry.yarnpkg.com/redux-unfold-saga/-/redux-unfold-saga-1.2.7.tgz#c3452356feaa141cd4366d57eb46842606c8af70"
+  integrity sha512-uc+b1FM0IdPUMCB8r7j60fLTxqrBcJxEVqf8ohPXVTD7/swyr/mOvxDcO4rg+sdfDk0TlcAUI1j4UqOWvCOl7g==
   dependencies:
     redux "^4.0.1"
     redux-saga "^1.0.3"

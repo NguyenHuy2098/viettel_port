@@ -20,7 +20,8 @@ function* takeLogout(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   yield unfoldSaga(
     {
       handler: async (): Promise<void> => {
-        await userManager.signoutRedirect();
+        await userManager.removeUser();
+        await userManager.revokeAccessToken();
       },
       key: action.type,
     },

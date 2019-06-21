@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 import Loading from 'components/Loading';
-import PrivateRoute from 'components/PrivateRoute';
+// import PrivateRoute from 'components/PrivateRoute';
 import store from 'redux/store';
 import history from 'utils/history';
 import routesMap from 'utils/routesMap';
@@ -40,7 +40,7 @@ const App: React.FC = (): JSX.Element => {
             <Switch>
               <Route path={routesMap.auth} component={AuthLayout} />
               <Route path={routesMap.error} component={ErrorLayout} />
-              <PrivateRoute path={routesMap.home} component={DefaultLayout} />
+              <Route path={routesMap.home} component={DefaultLayout} />
             </Switch>
           </Router>
         </OidcProvider>
