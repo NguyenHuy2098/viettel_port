@@ -10,127 +10,127 @@ import { SIPRoutePropsType } from '../types';
 
 // =============== DieuHanh =====================
 
-const CommunicateCustomer = Loadable({
+const communicateCustomer = Loadable({
   loader: (): any => import('containers/DieuHanh/TiepXucKhachHang'),
   loading: Loading,
 });
-const InternalRecord = Loadable({
+const internalRecord = Loadable({
   loader: (): any => import('containers/DieuHanh/BienBanNoiBo'),
   loading: Loading,
 });
-const LapBienBan = Loadable({
+const lapBienBan = Loadable({
   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/LapBienBan'),
   loading: Loading,
 });
-const TraCuuBienBan = Loadable({
+const traCuuBienBan = Loadable({
   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/TraCuuBienBan'),
   loading: Loading,
 });
-const SuaBienBan = Loadable({
+const suaBienBan = Loadable({
   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/SuaBienBan'),
   loading: Loading,
 });
-const XacMinhBienBan = Loadable({
+const xacMinhBienBan = Loadable({
   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/XacMinhBienBan'),
   loading: Loading,
 });
-const KhieuNaiKhachHang = Loadable({
+const khieuNaiKhachHang = Loadable({
   loader: () => import('containers/DieuHanh/KhieuNaiKhachHang'),
   loading: Loading,
 });
-const ChiTietKhieuNai = Loadable({
+const chiTietKhieuNai = Loadable({
   loader: () => import('containers/DieuHanh/KhieuNaiKhachHang/ChiTiet'),
   loading: Loading,
 });
 
 // =============== NhapPhieuGui =====================
 
-const PhieuGuiTrongNuoc = Loadable({
+const phieuGuiTrongNuoc = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/PhieuGuiTrongNuoc'),
   loading: Loading,
 });
-const InternationalForwardingOrder = Loadable({
+const internationalForwardingOrder = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/PhieuGuiQuocTe'),
   loading: Loading,
 });
-const InputRevenue = Loadable({
+const inputRevenue = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/NhapDoanhThu'),
   loading: Loading,
 });
 
 // =============== KhaiThacDi =====================
 
-const DongBangKe = Loadable({
+const dongBangKe = Loadable({
   loader: (): any => import('containers/KhaiThacDi/BangKe/DongBangKe'),
   loading: Loading,
 });
-const DongBangKeNoiTinh = Loadable({
+const dongBangKeNoiTinh = Loadable({
   loader: (): any => import('containers/KhaiThacDi/BangKe/DongBangKeNoiTinh'),
   loading: Loading,
 });
-const ThongTinBangKe = Loadable({
+const thongTinBangKe = Loadable({
   loader: (): any => import('containers/KhaiThacDi/BangKe/ThongTinBangKe'),
   loading: Loading,
 });
-const DanhSachBangKe = Loadable({
+const danhSachBangKe = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachBangKe'),
   loading: Loading,
 });
-const ForwardingOrderListInManifest = Loadable({
+const forwardingOrderListInManifest = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DanhSachPhieGuiTrongBangKe'),
   loading: Loading,
 });
-const DanhSachPhieuGui = Loadable({
+const danhSachPhieuGui = Loadable({
   loader: (): any => import('containers/KhaiThacDi/BangKe/DanhSachPhieuGui'),
   loading: Loading,
 });
-const CloseSack = Loadable({
+const closeSack = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongTai2'),
   loading: Loading,
 });
-const MailTruckClosing = Loadable({
+const mailTruckClosing = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongChuyenThu'),
   loading: Loading,
 });
-const DanhSachTaiKien = Loadable({
+const danhSachTaiKien = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongTai2/DanhSachTaiKien'),
   loading: Loading,
 });
-const SplitCoupon = Loadable({
+const splitCoupon = Loadable({
   loader: (): any => import('containers/KhaiThacDi/TachPhieuGui'),
   loading: Loading,
 });
 
 // =============== KhaiThacDen =====================
 
-const NhanChuyenThu = Loadable({
+const nhanChuyenThu = Loadable({
   loader: (): any => import('containers/KhaiThacDen/NhanChuyenThu'),
   loading: Loading,
 });
-const FreightOrderReceive = Loadable({
+const freightOrderReceive = Loadable({
   loader: (): any => import('containers/KhaiThacDen/KhaiThacChuyenThuDen'),
   loading: Loading,
 });
-const ThongTinTai = Loadable({
+const thongTinTai = Loadable({
   loader: (): any => import('containers/KhaiThacDen/NhanTaiKien/ThongTinTai'),
   loading: Loading,
 });
-const OperationSack = Loadable({
+const operationSack = Loadable({
   loader: (): any => import('containers/KhaiThacDen/KhaiThacDen'),
   loading: Loading,
 });
 
 // =========== unsorted components ==========
 
-const OrderInformation = Loadable({
+const orderInformation = Loadable({
   loader: (): any => import('containers/ThongTinDonHang'),
   loading: Loading,
 });
-const OrderInformationTabType = Loadable({
+const orderInformationTabType = Loadable({
   loader: (): any => import('containers/ThongTinDonHang2'),
   loading: Loading,
 });
-const PageNoData = Loadable({
+const pageNoData = Loadable({
   loader: (): any => import('containers/PageNoData'),
   loading: Loading,
 });
@@ -144,42 +144,42 @@ const Home = Loadable({
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
     { path: routesMap.home, exact: true, name: t('Home'), component: Home },
-    { path: routesMap.PhieuGuiTrongNuoc, name: t('Phiếu gửi trong nước'), component: PhieuGuiTrongNuoc },
+    { path: routesMap.phieuGuiTrongNuoc, name: t('Phiếu gửi trong nước'), component: phieuGuiTrongNuoc },
     {
-      path: routesMap.InternationalForwardingOrder,
+      path: routesMap.internationalForwardingOrder,
       name: t('Phiếu gửi quốc tế'),
-      component: InternationalForwardingOrder,
+      component: internationalForwardingOrder,
     },
-    { path: routesMap.DongBangKeNoiTinh, name: t('Đóng bảng kê nội tỉnh'), component: DongBangKeNoiTinh },
-    { path: routesMap.DongBangKe, name: t('Đóng bảng kê'), component: DongBangKe },
-    { path: routesMap.InputRevenue, name: t('Nhập doanh thu'), component: InputRevenue },
-    { path: routesMap.ThongTinBangKe, name: t('Thông tin bảng kê'), component: ThongTinBangKe },
-    { path: routesMap.CloseSack, name: t('Đóng tải'), component: CloseSack },
-    { path: routesMap.DanhSachTaiKien, name: t('Danh sách tải kiện'), component: DanhSachTaiKien },
-    { path: routesMap.MailTruckClosing, name: t('Đóng chuyển thư'), component: MailTruckClosing },
-    { path: routesMap.ThongTinTai, name: t('Nhận tải kiện'), component: ThongTinTai },
+    { path: routesMap.dongBangKeNoiTinh, name: t('Đóng bảng kê nội tỉnh'), component: dongBangKeNoiTinh },
+    { path: routesMap.dongBangKe, name: t('Đóng bảng kê'), component: dongBangKe },
+    { path: routesMap.inputRevenue, name: t('Nhập doanh thu'), component: inputRevenue },
+    { path: routesMap.thongTinBangKe, name: t('Thông tin bảng kê'), component: thongTinBangKe },
+    { path: routesMap.closeSack, name: t('Đóng tải'), component: closeSack },
+    { path: routesMap.danhSachTaiKien, name: t('Danh sách tải kiện'), component: danhSachTaiKien },
+    { path: routesMap.mailTruckClosing, name: t('Đóng chuyển thư'), component: mailTruckClosing },
+    { path: routesMap.thongTinTai, name: t('Nhận tải kiện'), component: thongTinTai },
     {
-      path: routesMap.ForwardingOrderListInManifest,
+      path: routesMap.forwardingOrderListInManifest,
       name: t('Danh sách phiếu gửi trong bảng kê'),
-      component: ForwardingOrderListInManifest,
+      component: forwardingOrderListInManifest,
     },
-    { path: routesMap.DanhSachBangKe, name: t('Danh sách bảng kê'), component: DanhSachBangKe },
-    { path: routesMap.OperationSack, name: t('Khai thác tải'), component: OperationSack },
-    { path: routesMap.DanhSachPhieuGui, name: t('Danh sách phiếu gửi'), component: DanhSachPhieuGui },
-    { path: routesMap.NhanChuyenThu, name: t('Nhận chuyến thư'), component: NhanChuyenThu },
-    { path: routesMap.FreightOrderReceive, name: t('Khai thác chuyển thư đến'), component: FreightOrderReceive },
-    { path: routesMap.PageNoData, name: t('Chưa có dữ liệu'), component: PageNoData },
-    { path: routesMap.CommunicateCustomer, name: t('Tiếp xúc khách hàng'), component: CommunicateCustomer },
-    { path: routesMap.OrderInformation, name: t('Thông tin đơn hàng'), component: OrderInformation },
-    { path: routesMap.OrderInformationTabType, name: t('Thông tin đơn hàng 2'), component: OrderInformationTabType },
-    { path: routesMap.SplitCoupon, name: t('Tách phiếu gửi'), component: SplitCoupon },
-    { path: routesMap.InternalRecord, name: t('Biên bản nội bộ'), component: InternalRecord },
-    { path: routesMap.LapBienBan, name: t('Lập biên bản'), component: LapBienBan },
-    { path: routesMap.TraCuuBienBan, name: t('Tra cứu biên bản'), component: TraCuuBienBan },
-    { path: routesMap.SuaBienBan, name: t('Sửa biên bản'), component: SuaBienBan },
-    { path: routesMap.XacMinhBienBan, name: t('Xác minh biên bản'), component: XacMinhBienBan },
-    { path: routesMap.KhieuNaiKhachHang, name: t('Khiếu nại khách hàng'), component: KhieuNaiKhachHang },
-    { path: routesMap.ChiTietKhieuNai, name: t('Chi tiết khiếu nại'), component: ChiTietKhieuNai },
+    { path: routesMap.danhSachBangKe, name: t('Danh sách bảng kê'), component: danhSachBangKe },
+    { path: routesMap.operationSack, name: t('Khai thác tải'), component: operationSack },
+    { path: routesMap.danhSachPhieuGui, name: t('Danh sách phiếu gửi'), component: danhSachPhieuGui },
+    { path: routesMap.nhanChuyenThu, name: t('Nhận chuyến thư'), component: nhanChuyenThu },
+    { path: routesMap.freightOrderReceive, name: t('Khai thác chuyển thư đến'), component: freightOrderReceive },
+    { path: routesMap.pageNoData, name: t('Chưa có dữ liệu'), component: pageNoData },
+    { path: routesMap.communicateCustomer, name: t('Tiếp xúc khách hàng'), component: communicateCustomer },
+    { path: routesMap.orderInformation, name: t('Thông tin đơn hàng'), component: orderInformation },
+    { path: routesMap.orderInformationTabType, name: t('Thông tin đơn hàng 2'), component: orderInformationTabType },
+    { path: routesMap.splitCoupon, name: t('Tách phiếu gửi'), component: splitCoupon },
+    { path: routesMap.internalRecord, name: t('Biên bản nội bộ'), component: internalRecord },
+    { path: routesMap.lapBienBan, name: t('Lập biên bản'), component: lapBienBan },
+    { path: routesMap.traCuuBienBan, name: t('Tra cứu biên bản'), component: traCuuBienBan },
+    { path: routesMap.suaBienBan, name: t('Sửa biên bản'), component: suaBienBan },
+    { path: routesMap.xacMinhBienBan, name: t('Xác minh biên bản'), component: xacMinhBienBan },
+    { path: routesMap.khieuNaiKhachHang, name: t('Khiếu nại khách hàng'), component: khieuNaiKhachHang },
+    { path: routesMap.chiTietKhieuNai, name: t('Chi tiết khiếu nại'), component: chiTietKhieuNai },
   ];
 };
 
