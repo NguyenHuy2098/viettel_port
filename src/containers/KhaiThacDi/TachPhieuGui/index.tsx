@@ -119,7 +119,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
               </Label>
             </Col>
             <Col xs="6" lg="7">
-              <Input className="text-center" type="text" value="250 g" />
+              <Input className="text-center" type="text" defaultValue="250 g" />
             </Col>
           </Row>
           <Row className="mb-2">
@@ -130,7 +130,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
               </Label>
             </Col>
             <Col xs="6" lg="7">
-              <Input className="text-center" type="text" value="50 g" />
+              <Input className="text-center" type="text" defaultValue="50 g" />
             </Col>
           </Row>
           <Row className="mb-2">
@@ -141,7 +141,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
               </Label>
             </Col>
             <Col xs="6" lg="7">
-              <Input className="text-center" type="text" value="400 g" />
+              <Input className="text-center" type="text" defaultValue="400 g" />
             </Col>
           </Row>
         </Col>
