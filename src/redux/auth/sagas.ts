@@ -29,7 +29,7 @@ function* takeLogout(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   );
 }
 
-export default function* watchPostSagaAsync(): SagaIterator {
+export default function* watchAuthSagaAsync(): SagaIterator {
   yield takeLatest(LOG_IN, takeLogin);
   yield takeLatest(LOG_OUT, takeLogout);
 }
