@@ -11,11 +11,16 @@ function* takeGetPosts(action: UnfoldSagaActionType): Iterable<SagaIterator> {
     {
       // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
       handler: async () => {
-        const results = await request({
-          url: url.resolve(REACT_APP_API_ENDPOINT, '/posts'),
-          method: 'GET',
-        });
-        return results.data;
+        try {
+          const results = await request({
+            url: url.resolve(REACT_APP_API_ENDPOINT, '/api/RESTAdapter/MIOA_ZTMI046'),
+            method: 'POST',
+            data: { IV_TOR_ID: '4600000037' },
+          });
+          return results.data;
+        } catch (error) {
+          console.log(error.response);
+        }
       },
       key: action.type,
     },

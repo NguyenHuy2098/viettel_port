@@ -18,10 +18,12 @@ const userManager = createUserManager({
   prompt: 'login',
   redirect_uri: url.resolve(window.location.href, routesMap.loginCallback),
   response_type: 'id_token token',
-  scope: 'offline_access openid profile public-api',
+  scope: 'openid profile public-api sso-api se-public-api',
   silent_redirect_uri: url.resolve(window.location.href, routesMap.silentCallback),
   userStore: new WebStorageStateStore({ store: window.localStorage }),
 });
 /* eslint-enable @typescript-eslint/camelcase */
+
+console.log(userManager);
 
 export default userManager;

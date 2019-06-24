@@ -15,15 +15,22 @@ import {
   Table,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { getPosts } from 'redux/posts/actions';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
+
+  React.useEffect((): void => {
+    dispatch(getPosts(null));
+  }, [dispatch]);
 
   function renderModal(): JSX.Element {
     return (
