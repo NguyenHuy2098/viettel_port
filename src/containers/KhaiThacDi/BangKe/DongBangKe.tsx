@@ -15,15 +15,23 @@ import {
   Table,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { getPosts } from 'redux/posts/actions';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
 
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
+
+  React.useEffect((): void => {
+    const data = { IV_TOR_ID: '4600000037' };
+    dispatch(getPosts(data));
+  }, [dispatch]);
 
   function renderModal(): JSX.Element {
     return (
