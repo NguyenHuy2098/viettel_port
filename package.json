@@ -60,6 +60,7 @@
     "reselect": "^4.0.0",
     "simple-line-icons": "^2.4.1",
     "typescript": "^3.5.2",
+    "xlsx-populate": "^1.19.1",
     "yup": "^0.27.0"
   },
   "devDependencies": {
@@ -68,14 +69,13 @@
     "@semantic-release/changelog": "^3.0.4",
     "@semantic-release/git": "^7.0.12",
     "@semantic-release/gitlab": "^3.1.5",
-    "@types/enzyme": "^3.9.3",
+    "@types/enzyme": "^3.9.4",
     "@types/react-helmet": "^5.0.8",
     "@types/react-redux": "^7.1.0",
     "@types/react-router-dom": "^4.3.4",
     "@types/reactstrap": "^8.0.1",
-    "@typescript-eslint/eslint-plugin": "^1.10.2",
-    "@typescript-eslint/parser": "^1.10.2",
-    "eslint": "^5.16.0",
+    "@typescript-eslint/eslint-plugin": "^1.11.0",
+    "@typescript-eslint/parser": "^1.11.0",
     "eslint-config-prettier": "^5.0.0",
     "eslint-config-react-app": "^4.0.1",
     "eslint-plugin-import": "^2.17.3",
@@ -91,7 +91,7 @@
     "standard-changelog": "^2.0.11"
   },
   "scripts": {
-    "build": "env-cmd -e production react-scripts build && node ./addPreloadLinks.js",
+    "build": "env-cmd -e production react-scripts build",
     "changelog": "standard-changelog && git add CHANGELOG.md",
     "commit": "npx git-cz",
     "eject": "react-scripts eject",

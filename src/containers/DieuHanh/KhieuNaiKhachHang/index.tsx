@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
+import ExportExcel from 'utils/exportExcel';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import ModalAddNew from './ModalAddNew';
@@ -9,9 +10,19 @@ import ModalAddNew from './ModalAddNew';
 const ComplainCustomer: React.FC = (): JSX.Element => {
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
   const { t } = useTranslation();
+
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function handleData(workbook: any): void {
+    workbook
+      .sheet('Sheet1')
+      .cell('A1')
+      .value('This is neat!');
+  }
+
   const renderTopController = (): React.ReactElement => (
     <>
       <Button onClick={toggle}>
@@ -19,8 +30,10 @@ const ComplainCustomer: React.FC = (): JSX.Element => {
         {t('Thêm mới')}
       </Button>
       <Button>
-        <i className="fa fa-share-square" />
-        {t('Xuất báo cáo')}
+        <ExportExcel handleData={handleData}>
+          <i className="fa fa-share-square" />
+          {t('Xuất báo cáo')}
+        </ExportExcel>
       </Button>
     </>
   );
