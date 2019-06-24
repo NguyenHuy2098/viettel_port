@@ -2,6 +2,7 @@ import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
 import store from 'redux/store';
 
 function request(options: AxiosRequestConfig): AxiosPromise {
+  options.method = options.method || 'POST';
   let accessToken = '';
   try {
     accessToken = store.getState().auth.user.access_token;
