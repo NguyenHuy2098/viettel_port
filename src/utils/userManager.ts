@@ -24,6 +24,4 @@ const userManager = createUserManager({
 });
 /* eslint-enable @typescript-eslint/camelcase */
 
-console.log(userManager);
-
 export default userManager;
