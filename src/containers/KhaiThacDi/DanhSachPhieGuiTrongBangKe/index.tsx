@@ -90,7 +90,7 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
           </Row>
           <Row>
             <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">2{'24/04/2019'}</Col>
+            <Col xs="7">{'24/04/2019'}</Col>
           </Row>
         </Col>
         <Col md="5" xs="12">

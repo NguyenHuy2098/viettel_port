@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Button } from 'reactstrap';
 
 interface Props {
   error: boolean;
@@ -11,8 +12,11 @@ function Loading(props: Props): JSX.Element {
 
   if (props.error) {
     return (
-      <div>
-        <button onClick={handleRefresh}>Refresh</button>
+      <div className="text-center">
+        <h4 className="mb-3">Vui lòng tải lại trang!</h4>
+        <Button color="primary" onClick={handleRefresh}>
+          Refresh
+        </Button>
       </div>
     );
   } else {

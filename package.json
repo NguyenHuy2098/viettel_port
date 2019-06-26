@@ -67,7 +67,7 @@
     "@commitlint/cli": "^8.0.0",
     "@commitlint/config-conventional": "^8.0.0",
     "@semantic-release/changelog": "^3.0.4",
-    "@semantic-release/git": "^7.0.12",
+    "@semantic-release/git": "^7.0.13",
     "@semantic-release/gitlab": "^3.1.5",
     "@types/enzyme": "^3.9.4",
     "@types/react-helmet": "^5.0.8",
@@ -76,7 +76,7 @@
     "@types/reactstrap": "^8.0.1",
     "@typescript-eslint/eslint-plugin": "^1.11.0",
     "@typescript-eslint/parser": "^1.11.0",
-    "eslint-config-prettier": "^5.1.0",
+    "eslint-config-prettier": "^6.0.0",
     "eslint-config-react-app": "^4.0.1",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jsx-a11y": "^6.2.1",
@@ -87,7 +87,7 @@
     "lint-staged": "^8.2.1",
     "prettier": "^1.18.2",
     "react-scripts": "^3.0.1",
-    "semantic-release": "^15.13.16",
+    "semantic-release": "^15.13.17",
     "standard-changelog": "^2.0.11"
   },
   "scripts": {
