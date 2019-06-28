@@ -24,13 +24,13 @@ module.exports = {
     debug: true,
     func: {
       list: ['i18next.t', 'i18n.t', 't'],
-      extensions: ['.js', '.jsx', 'ts', 'tsx'],
+      extensions: ['.js', '.jsx', '.tsx', '.ts'],
     },
     trans: {
       component: 'Trans',
       i18nKey: 'i18nKey',
       defaultsKey: 'defaults',
-      extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      extensions: ['.js', '.jsx'],
       fallbackKey: function(ns, value) {
         return value;
       },
