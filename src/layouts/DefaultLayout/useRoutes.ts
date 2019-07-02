@@ -84,8 +84,8 @@ const danhSachBangKe = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachBangKe'),
   loading: Loading,
 });
-const forwardingOrderListInManifest = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/DanhSachPhieGuiTrongBangKe'),
+const danhSachPhieuGuiTrongBangKe = Loadable({
+  loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc/DanhSachPhieuGuiTrongBangKe'),
   loading: Loading,
 });
 const danhSachPhieuGui = Loadable({
@@ -167,9 +167,9 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.mailTruckClosing, name: t('Đóng chuyển thư'), component: mailTruckClosing },
     { path: routesMap.thongTinTai, name: t('Nhận tải kiện'), component: thongTinTai },
     {
-      path: routesMap.forwardingOrderListInManifest,
+      path: routesMap.danhSachPhieuGuiTrongBangKe,
       name: t('Danh sách phiếu gửi trong bảng kê'),
-      component: forwardingOrderListInManifest,
+      component: danhSachPhieuGuiTrongBangKe,
     },
     { path: routesMap.danhSachBangKe, name: t('Danh sách bảng kê'), component: danhSachBangKe },
     { path: routesMap.operationSack, name: t('Khai thác tải'), component: operationSack },

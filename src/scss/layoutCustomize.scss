@@ -44,6 +44,14 @@ body {
 .display-inline-block {
   display: inline-block !important;
 }
+.sipFlatContainer {
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+.sipBoxShadow {
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053) !important;
+}
 .form-check-label {
   box-sizing: border-box;
   input.form-check-input[type='radio'] {
@@ -460,6 +468,7 @@ html:not([dir="rtl"]) .sidebar {
   box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
   .nav-tabs {
     border-bottom: 3px solid #D3D3D3;
+    background: #fff;
     .nav-item {
       margin-bottom: -3px;
       .nav-link {

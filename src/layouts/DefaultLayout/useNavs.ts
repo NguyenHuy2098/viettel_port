@@ -62,6 +62,10 @@ const nav = (t: i18next.TFunction): any => {
             name: t('Nhận tại bưu cục gốc'),
             url: routesMap.nhanTaiBuuCucGoc,
           },
+          {
+            name: t('Danh sách phiếu gửi trong bảng kê'),
+            url: routesMap.danhSachPhieuGuiTrongBangKe,
+          },
         ],
       },
       {
@@ -83,10 +87,6 @@ const nav = (t: i18next.TFunction): any => {
           {
             name: t('Danh sách bảng kê'),
             url: routesMap.danhSachBangKe,
-          },
-          {
-            name: t('Danh sách phiếu gửi trong bảng kê'),
-            url: routesMap.forwardingOrderListInManifest,
           },
           {
             name: t('Danh sách phiếu gửi'),
