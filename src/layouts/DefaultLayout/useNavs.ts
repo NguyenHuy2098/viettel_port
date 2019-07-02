@@ -58,6 +58,10 @@ const nav = (t: i18next.TFunction): any => {
             name: t('Nhập doanh thu'),
             url: routesMap.inputRevenue,
           },
+          {
+            name: t('Nhận tại bưu cục gốc'),
+            url: routesMap.nhanTaiBuuCucGoc,
+          },
         ],
       },
       {

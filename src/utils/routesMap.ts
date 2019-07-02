@@ -36,4 +36,5 @@ export default {
   xacMinhBienBan: '/xac-minh-bien-ban',
   khieuNaiKhachHang: '/khieu-nai-khach-hang',
   chiTietKhieuNai: '/chi-tiet-khieu-nai',
+  nhanTaiBuuCucGoc: '/nhan-tai-buu-cuc-goc',
 };

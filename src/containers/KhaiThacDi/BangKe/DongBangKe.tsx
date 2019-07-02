@@ -29,7 +29,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
   }
 
   React.useEffect((): void => {
-    const data = { IV_TOR_ID: '4600000037' };
+    const data = { IV_TOR_ID: '4600000500' };
     dispatch(getPosts(data));
   }, [dispatch]);
 
