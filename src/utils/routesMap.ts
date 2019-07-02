@@ -18,7 +18,7 @@ export default {
   danhSachTaiKien: '/danh-sach-tai-kien',
   mailTruckClosing: '/dong-chuyen-thu',
   thongTinTai: '/nhan-tai-kien',
-  forwardingOrderListInManifest: '/danh-sach-phieu-gui-trong-bang-ke',
+  danhSachPhieuGuiTrongBangKe: '/danh-sach-phieu-gui-trong-bang-ke',
   danhSachBangKe: '/danh-sach-bang-ke',
   operationSack: '/khai-thac-tai',
   danhSachPhieuGui: '/danh-sach-phieu-gui',

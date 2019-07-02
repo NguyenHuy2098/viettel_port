@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
-const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
+const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
   const { t } = useTranslation();
 
   const renderTopController = (): React.ReactElement => (
@@ -24,9 +24,6 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
   const renderTableRowControllers = (): JSX.Element => (
     <>
       <Button>
-        <i className="fa fa-print fa-lg color-green" />
-      </Button>
-      <Button>
         <i className="fa fa-pencil fa-lg color-blue" />
       </Button>
       <Button>
@@ -40,13 +37,11 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
       <thead>
         <tr>
           <th></th>
-          <th>Mã bảng kê</th>
-          <th>Bưu cục đi</th>
-          <th>Bưu cục đến</th>
+          <th>Mã phiếu gửi</th>
+          <th>Điểm đến</th>
           <th>Số lượng</th>
-          <th>Người nhập</th>
-          <th>Ngày nhập</th>
-          <th>Ghi chú</th>
+          <th>Trọng lượng</th>
+          <th>Ngày gửi</th>
           <th>Quản trị</th>
         </tr>
       </thead>
@@ -57,13 +52,11 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
               <Input type="checkbox" />
             </Label>
           </td>
-          <td>BK-2683077-TTKT1</td>
-          <td>TTKT1</td>
-          <td>TTKT3</td>
-          <td>25</td>
-          <td>Nguyễn Văn An</td>
+          <td>0026830775</td>
+          <td>BNE</td>
+          <td>2</td>
+          <td>250g</td>
           <td>19/6/2019</td>
-          <td>Hàng giá trị cao</td>
           <td className="SipTableFunctionIcon">{renderTableRowControllers()}</td>
         </tr>
       </tbody>
@@ -89,22 +82,22 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
             <Col xs="7">{'V00596290'}</Col>
           </Row>
           <Row>
-            <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">{'24/04/2019'}</Col>
+            <Col xs="5">{t('Trọng lượng')}: </Col>
+            <Col xs="7">{'1400g'}</Col>
           </Row>
         </Col>
         <Col md="5" xs="12">
           <Row>
-            <Col xs="5">{t('Bưu cục đến')}: </Col>
+            <Col xs="5">{t('Điểm đến')}: </Col>
             <Col xs="7">HUB1</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ghi chú')}: </Col>
-            <Col xs="7">{'Chuyển hoàn về bưu cục gốc'}</Col>
+            <Col xs="7">{'Thư hỏa tốc'}</Col>
           </Row>
         </Col>
         <Col md="3" xs="12" className="text-right">
-          {t('Tổng số')}: 3
+          {t('Tổng số')}: 45
         </Col>
       </Row>
 
@@ -120,4 +113,4 @@ const ForwardingOrderListInManifest: React.FC = (): React.ReactElement => {
   );
 };
 
-export default ForwardingOrderListInManifest;
+export default DanhSachPhieuGuiTrongBangKe;
