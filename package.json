@@ -91,7 +91,8 @@
     "standard-changelog": "^2.0.11"
   },
   "scripts": {
-    "build": "env-cmd -e production react-scripts build",
+    "build:development": "env-cmd -e development react-scripts build",
+    "build:production": "env-cmd -e production react-scripts build",
     "changelog": "standard-changelog && git add CHANGELOG.md",
     "commit": "npx git-cz",
     "eject": "react-scripts eject",

@@ -43,7 +43,7 @@ unit-test:
 build-source:latest:
   stage: build-source
   script:
-    - yarn build
+    - yarn build:development
   artifacts:
     paths:
       - build/
@@ -53,7 +53,7 @@ build-source:production:
   only:
     - tags
   script:
-    - yarn build
+    - yarn build:production
   artifacts:
     paths:
       - build/
