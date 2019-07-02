@@ -61,6 +61,10 @@ const inputRevenue = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/NhapDoanhThu'),
   loading: Loading,
 });
+const OriginalPostOffice = Loadable({
+  loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc'),
+  loading: Loading,
+});
 
 // =============== KhaiThacDi =====================
 
@@ -185,6 +189,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.khieuNaiKhachHang, name: t('Khiếu nại khách hàng'), component: khieuNaiKhachHang },
     { path: routesMap.chiTietKhieuNai, name: t('Chi tiết khiếu nại'), component: chiTietKhieuNai },
     { path: '/bao-cao', name: t('Báo cáo'), component: BaoCao },
+    { path: routesMap.nhanTaiBuuCucGoc, name: t('Nhận tại bưu cục gốc'), component: OriginalPostOffice },
   ];
 };
 
