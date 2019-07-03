@@ -29,13 +29,6 @@ function DanhSachBangKe(): JSX.Element {
         onFailure: (error: HttpRequestErrorType): void => {
           setError(error.message);
         },
-        onBeginning(): void {
-          console.log('begin nhe');
-        },
-        onSuccess: (data: any): void => {
-          console.log(data);
-          debugger;
-        },
       }),
     );
   }, [dispatch]);
