@@ -1,30 +1,28 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Nav, NavItem, NavLink, Row, TabContent, Table, TabPane } from 'reactstrap';
-import { getListBangKe } from 'redux/bangKe/actions';
-import { AppStateType } from 'redux/store';
+import { getListBangKe } from 'redux/danhSachBangKe/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import classnames from 'classnames';
+import { map } from 'lodash';
+import { makeSelectRow } from 'redux/danhSachBangKe/selectors';
 
 // eslint-disable-next-line max-lines-per-function
-function OriginalPostOffice(): JSX.Element {
+function DanhSachBangKe(): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [error, setError] = useState<string>('');
 
-  const listBangKe = useSelector((state: AppStateType): AppStateType => {
-    return state.bangKe;
-  }, shallowEqual);
-
-  console.log(listBangKe);
+  const listRow = useSelector(makeSelectRow);
 
   useEffect((): void => {
     const payload = {
-      // IV_TOR_ID: '4700000500',
+      IV_TOR_ID: '',
       IV_TOR_TYPE: 'ZC1',
-      // IV_FR_LOC_ID: '3062',
-      // IV_CUST_STATUS: '',
+      IV_FR_LOC_ID: 'BDH',
+      IV_CUST_STATUS: '101',
+      IV_TO_LOC_ID: '',
     };
     dispatch(
       getListBangKe(payload, {
@@ -81,15 +79,22 @@ function OriginalPostOffice(): JSX.Element {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderManifestTableAction()}</td>
-            </tr>
+            {map(
+              listRow,
+              (item: API.RowMTZTMI047OUT, index): JSX.Element => {
+                return (
+                  <tr key={index}>
+                    <td>{item.TOR_ID}</td>
+                    <td>TTKT1</td>
+                    <td>25</td>
+                    <td>Nguyễn Văn An</td>
+                    <td>19/6/2019</td>
+                    <td>Hàng giá trị cao</td>
+                    <td className="SipTableFunctionIcon">{renderManifestTableAction()}</td>
+                  </tr>
+                );
+              },
+            )}
           </tbody>
         </Table>
       </Row>
@@ -200,4 +205,4 @@ function OriginalPostOffice(): JSX.Element {
   );
 }
 
-export default OriginalPostOffice;
+export default DanhSachBangKe;

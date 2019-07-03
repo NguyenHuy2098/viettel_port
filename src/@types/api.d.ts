@@ -7,8 +7,8 @@ declare namespace API {
     GRO_WEI_VAL?: string;
     GRO_WEI_UNI?: string;
     LIFECYCLE?: number; // int32
-    SRC_LOC_IDTRQ?: number; // int32
-    DES_LOC_IDTRQ?: number; // int32
+    SRC_LOC_IDTRQ?: string;
+    DES_LOC_IDTRQ?: string;
     ITEM_TEXT?: string;
     DATETIME_CHLC?: string;
     ZONLO?: string;
@@ -24,6 +24,12 @@ declare namespace API {
     EVENT_REASON?: string;
     Location?: string;
     LOCATION_DESCRIPTION?: string;
+  }
+  export interface GenUserRequest {
+    Number?: number; // int32
+  }
+  export interface GenUserVoSoResponse {
+    Users?: UserVoSoViewModel[];
   }
   export interface ITEMMTZFII016OUT {
     ZUONR?: number; // int32
@@ -191,7 +197,7 @@ declare namespace API {
      */
     MT_ZTMI011_OUT?: MTZTMI011OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -257,7 +263,7 @@ declare namespace API {
   export interface MIOAZTMI012Response {
     MT_ZTMI012_OUT?: MTZTMI012OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -301,7 +307,7 @@ declare namespace API {
      */
     MT_ZTMI016_OUT?: MTZTMI016OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -373,7 +379,7 @@ declare namespace API {
      */
     MT_ZTMI016_OUT?: MTZTMI017OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -393,7 +399,7 @@ declare namespace API {
      */
     MT_ZTMI018_OUT?: MTZTMI018OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -441,7 +447,7 @@ declare namespace API {
      */
     MT_ZTMI019_OUT?: MTZTMI019OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -461,7 +467,7 @@ declare namespace API {
      */
     MT_ZTMI022_OUT?: MTZTMI022OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -485,7 +491,7 @@ declare namespace API {
      */
     MT_ZTMI023_OUT?: MTZTMI023OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -509,7 +515,7 @@ declare namespace API {
      */
     MT_ZTMI024_OUT?: MTZTMI024OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -533,7 +539,7 @@ declare namespace API {
      */
     Row?: RowResponseZTMI029;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -547,7 +553,7 @@ declare namespace API {
   export interface MIOAZTMI030Response {
     MT_ZTMI030_OUT?: MTZTMI030OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -568,7 +574,7 @@ declare namespace API {
   export interface MIOAZTMI031Response {
     MT_ZTMI031_OUT?: MTZTMI031OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -592,7 +598,7 @@ declare namespace API {
      */
     Row?: RowResponseZTMI035[];
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -628,7 +634,7 @@ declare namespace API {
      */
     MT_ZTMI036_OUT?: MTZTMI036OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -645,7 +651,7 @@ declare namespace API {
   export interface MIOAZTMI038Response {
     MT_ZTMI038_OUT?: MTZTMI038OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -693,7 +699,7 @@ declare namespace API {
      */
     Row?: RowResponseZTMI039;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -733,7 +739,27 @@ declare namespace API {
      */
     Row?: RowResponseZTMI040[];
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface MIOAZTMI045Request {
+    /**
+     *
+     */
+    Row?: RowRequestZTMI045[];
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface MIOAZTMI045Response {
+    /**
+     *
+     */
+    MT_ZTMI045_OUT?: MTZTMI045OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -751,7 +777,7 @@ declare namespace API {
   export interface MIOAZTMI045V03Response {
     MT_ZTMI045_OUT?: MTZTMI045V03OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -768,7 +794,7 @@ declare namespace API {
   export interface MIOAZTMI046Response {
     MT_ZTMI046_OUT?: MTZTMI046OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -787,6 +813,10 @@ declare namespace API {
      */
     IV_FR_LOC_ID?: string;
     /**
+     * Mã điểm đến
+     */
+    IV_TO_LOC_ID?: string;
+    /**
      * Trạng thái tải/bảng kê/chuyến thư
      */
     IV_CUST_STATUS?: string;
@@ -797,7 +827,7 @@ declare namespace API {
   export interface MIOAZTMI047Response {
     MT_ZTMI047_OUT?: MTZTMI047OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -831,7 +861,7 @@ declare namespace API {
   export interface MIOAZTMI048Response {
     MT_ZTMI048_OUT?: MTZTMI048OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -848,7 +878,7 @@ declare namespace API {
   export interface MIOAZTMI049Response {
     MT_ZTMI049_OUT?: MTZTMI049OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -862,7 +892,7 @@ declare namespace API {
   export interface MIOAZTMI051Response {
     MT_ZTMI051_OUT?: MTZTMI051OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -879,7 +909,7 @@ declare namespace API {
   export interface MIOAZTMI054Response {
     MT_ZTMI045_OUT?: MTZTMI054OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -908,7 +938,7 @@ declare namespace API {
   export interface MIOAZTMI055Response {
     MT_ZTMI055_OUT?: MTZTMI055OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -965,7 +995,7 @@ declare namespace API {
   export interface MIOAZTMI058Response {
     MT_ZTMI058_OUT?: MTZTMI058OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -1046,7 +1076,32 @@ declare namespace API {
   export interface MIOAZTMI062Response {
     MT_ZTMI062_OUT?: MTZTMI062OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface MIOAZTMI063Request {
+    /**
+     *
+     */
+    Row?: RowRequestZTMI063;
+    /**
+     * Mã bưu cục
+     */
+    IV_LOC_ID?: string;
+    /**
+     * Mã user
+     */
+    IV_USER?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface MIOAZTMI063Response {
+    MT_ZTMI063_OUT?: ZTMI063OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -1065,7 +1120,7 @@ declare namespace API {
     EV_ERROR?: string;
     Row?: RowZTMI094OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -1198,6 +1253,16 @@ declare namespace API {
     EV_ERROR?: number; // int32
     Row?: RowResponseZTMI038;
   }
+  export interface MTZTMI045OUT {
+    /**
+     * 01 là thành công, 00 là lỗi
+     */
+    EV_ERROR?: string;
+    /**
+     *
+     */
+    Row?: RowMTZTMI045OUT[];
+  }
   export interface MTZTMI045V03OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI045V03OUT[];
@@ -1208,7 +1273,7 @@ declare namespace API {
   }
   export interface MTZTMI047OUT {
     EV_ERROR?: number; // int32
-    Row?: RowMTZTMI047OUT;
+    Row?: RowMTZTMI047OUT[];
   }
   export interface MTZTMI048OUT {
     EV_ERROR?: number; // int32
@@ -1360,6 +1425,56 @@ declare namespace API {
     Execution?: Execution[];
     Item?: ItemMTZTMI031OUT[];
   }
+  export interface RowMTZTMI045OUT {
+    /**
+     * Loại địa điểm
+     */
+    LOCTYPE?: string;
+    /**
+     * Mã địa điểm
+     */
+    LOCNO?: string;
+    /**
+     * Tên địa điểm
+     */
+    DESCR40?: string;
+    /**
+     * Longtitude
+     */
+    XPOS?: string;
+    /**
+     * Latitude
+     */
+    YPOS?: string;
+    /**
+     * Số nhà
+     */
+    HOUSE_NUM1?: number; // int32
+    /**
+     * Tên đường phố
+     */
+    STREET?: string;
+    /**
+     * Mã phường/xã
+     */
+    REGIOGROUP?: number; // int32
+    /**
+     * Mã tỉnh/thành
+     */
+    CITY?: string;
+    /**
+     * Mã quận huyện
+     */
+    DISTRICT?: string;
+    /**
+     * Mã quốc gia
+     */
+    COUNTRY?: string;
+    /**
+     * Mã khách hàng
+     */
+    PARTNER?: string;
+  }
   export interface RowMTZTMI045V03OUT {
     LOCTYPE?: string;
     LOCNO?: string;
@@ -1382,8 +1497,8 @@ declare namespace API {
     DATETIME_CHLC?: string;
     NET_WEI_VAL?: string;
     NET_WEI_UNI?: string;
-    LOG_LOCID_SRC?: number; // int32
-    LOG_LOCID_DES?: number; // int32
+    LOG_LOCID_SRC?: string;
+    LOG_LOCID_DES?: string;
     EXEC_CONT?: string;
     ZONLO?: string;
     CHILDS?: Child[];
@@ -1530,6 +1645,18 @@ declare namespace API {
      * Mã User
      */
     USER_ID?: string;
+  }
+  export interface RowRequestZTMI045 {
+    /**
+     * Loại địa điểm (Ví dụ V001 là bưu cục, V002 là cửa hàng….), lưu ý chọn trong danh sách location type đã được định nghĩa từ trước
+     */
+    IV_LOCTYPE?: string;
+  }
+  export interface RowRequestZTMI063 {
+    /**
+     *
+     */
+    TOR_ID?: string;
   }
   export interface RowResponseZTMI018OUT {
     /**
@@ -1940,7 +2067,7 @@ declare namespace API {
   export interface SIOAZFII016Response {
     MT_ZFII016_OUT?: MTZFII016OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -1954,7 +2081,7 @@ declare namespace API {
   export interface SIOAZTMI027Response {
     MT_ZTMI027_OUT?: MTZTMI027OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -1963,7 +2090,8 @@ declare namespace API {
     /**
      * Lấy toàn bộ mã dịch vụ
      */
-    GET?: {};
+    GET?: {
+    };
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -1971,7 +2099,7 @@ declare namespace API {
   export interface SIOAZTMI068Response {
     MT_ZTMI068_OUT?: MTZTMI068OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -2020,7 +2148,7 @@ declare namespace API {
   export interface SIOZTMI028Response {
     MT_ZTMI028_OUT?: MTZTMI028OUT;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
@@ -2173,6 +2301,19 @@ declare namespace API {
      */
     MEASUOM?: string;
   }
+  export interface UserSapMappingGetRequest {
+    UserName?: string;
+    Email?: string;
+    Phone?: string;
+  }
+  export interface UserSapMappingGetResponse {
+    User?: UserViewModel;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
   export interface UserViewModel {
     UserId?: string;
     SapUserId?: string;
@@ -2188,6 +2329,45 @@ declare namespace API {
     FullName?: string;
     Language?: string;
   }
+  export interface UserVoSoAddOrChangeRequest {
+    Check?: string;
+    ProvinceId?: string;
+    DistrictId?: string;
+    WardId?: string;
+    Igree?: string;
+    Name?: string;
+    Email?: string;
+    Password?: string;
+    Repassword?: string;
+    Phone?: string;
+    Address?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface UserVoSoAddOrChangeResponse {
+    Message?: string;
+    Success?: boolean;
+    User?: UserVoSoViewModel;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface UserVoSoViewModel {
+    Check?: string;
+    ProvinceId?: string;
+    DistrictId?: string;
+    WardId?: string;
+    Igree?: string;
+    Name?: string;
+    Email?: string;
+    Password?: string;
+    Repassword?: string;
+    Phone?: string;
+    Address?: string;
+  }
   export interface UsersGetBPCodeRequest {
     LanguageId?: string;
     LanguageDefaultId?: string;
@@ -2196,13 +2376,28 @@ declare namespace API {
   export interface UsersGetBPCodeResponse {
     User?: UserViewModel;
     Status?: boolean;
-    ErrorCode?: 0 | 1 | 2 | 3; // int32
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
   }
+  export interface ZTMI063OUT {
+    EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE;
+  }
 }
 declare namespace Paths {
+  namespace AutoGenUserVoSo {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.GenUserRequest;
+    }
+    namespace Responses {
+      export type $200 = Definitions.GenUserVoSoResponse;
+    }
+  }
   namespace GetBPCode {
     export interface BodyParameters {
       request?: Parameters.Request;
@@ -2212,6 +2407,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.UsersGetBPCodeResponse;
+    }
+  }
+  namespace GetUser {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.UserSapMappingGetRequest;
+    }
+    namespace Responses {
+      export type $200 = Definitions.UserSapMappingGetResponse;
     }
   }
   namespace MIOAZTMI011 {
@@ -2401,6 +2607,17 @@ declare namespace Paths {
       export type $200 = Definitions.MIOAZTMI040Response;
     }
   }
+  namespace MIOAZTMI045 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.MIOAZTMI045Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.MIOAZTMI045Response;
+    }
+  }
   namespace MIOAZTMI045V03 {
     export interface BodyParameters {
       request?: Parameters.Request;
@@ -2511,6 +2728,17 @@ declare namespace Paths {
       export type $200 = Definitions.MIOAZTMI062Response;
     }
   }
+  namespace MIOAZTMI063 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.MIOAZTMI063Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.MIOAZTMI063Response;
+    }
+  }
   namespace MIOAZTMI094 {
     export interface BodyParameters {
       request?: Parameters.Request;
@@ -2566,4 +2794,16 @@ declare namespace Paths {
       export type $200 = Definitions.SIOZTMI028Response;
     }
   }
+  namespace SignUpVoSo {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.UserVoSoAddOrChangeRequest;
+    }
+    namespace Responses {
+      export type $200 = Definitions.UserVoSoAddOrChangeResponse;
+    }
+  }
 }
+

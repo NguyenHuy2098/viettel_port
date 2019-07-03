@@ -1,12 +1,11 @@
 import { createActionTypeOnSuccess, UnfoldSagaActionType } from 'redux-unfold-saga';
 import produce from 'immer';
-import { AppStateType } from 'redux/store';
 import { GET_LIST_BANG_KE } from './actions';
 
-export default function(state = [], action: UnfoldSagaActionType): AppStateType {
+export default function(state = {}, action: UnfoldSagaActionType): API.MIOAZTMI047Response {
   return produce(
     state,
-    (draftState: AppStateType): AppStateType => {
+    (draftState: API.MIOAZTMI047Response): API.MIOAZTMI047Response => {
       switch (action.type) {
         case createActionTypeOnSuccess(GET_LIST_BANG_KE):
           draftState = action.payload;
