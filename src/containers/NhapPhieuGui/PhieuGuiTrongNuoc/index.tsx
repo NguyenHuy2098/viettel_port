@@ -103,21 +103,21 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function renderReceiverAddress(): JSX.Element {
     return (
       <Row className="sipInputItemGroup">
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="select">
             <option>Tỉnh</option>
             <option>2</option>
             <option>3</option>
           </Input>
         </Col>
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="select">
             <option>Quận/huyện</option>
             <option>2</option>
             <option>3</option>
           </Input>
         </Col>
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="select">
             <option>Phường/xã</option>
             <option>2</option>
@@ -131,13 +131,13 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function renderPackageSize(): JSX.Element {
     return (
       <Row className="sipInputItemGroup">
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="text" placeholder="Dài (cm)" />
         </Col>
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="text" placeholder="Rộng (cm)" />
         </Col>
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="text" placeholder="Cao (cm)" />
         </Col>
       </Row>
@@ -166,7 +166,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input type="text" placeholder="Nguyễn Văn Nam" />
           </Col>
         </Row>
-        <Row className="sipInputItem">
+        <Row className="sipInputItem mb-0">
           <Label xs="12" lg="4">
             Địa chỉ
             <span className="color-red"> *</span>
@@ -277,7 +277,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input type="text" placeholder="Nhập  trọng lượng (g)" />
           </Col>
         </Row>
-        <Row className="sipInputItem">
+        <Row className="sipInputItem mb-0">
           <Label xs="12" lg="4">
             Kích thước
           </Label>

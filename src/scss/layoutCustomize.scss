@@ -70,6 +70,10 @@ body {
     outline: none;
     &:after {
       content: "\F10C";
+      background: #fff;
+      position: relative;
+      top: -2px;
+      left: -2px;
     }
     &:checked {
       color: #299F9A;
@@ -97,6 +101,10 @@ body {
     outline: none;
     &:after {
       content: "\F096";
+      background: #fff;
+      position: relative;
+      top: -2px;
+      left: -2px;
     }
     &:checked {
       color: #299F9A;

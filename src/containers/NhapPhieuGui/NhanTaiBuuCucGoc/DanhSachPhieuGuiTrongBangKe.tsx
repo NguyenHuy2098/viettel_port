@@ -1,10 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
+import { getListPhieuGuiTrongBangKe } from 'redux/danhSachPhieuGuiTrongBangKe/actions';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [error, setError] = useState<string>('');
+
+  useEffect((): void => {
+    const payload = {
+      IV_TOR_ID: '4700000500',
+    };
+    dispatch(
+      getListPhieuGuiTrongBangKe(payload, {
+        onBeginning(): void {
+          console.log('Start dispatch');
+        },
+        onSuccess: (data: any): void => {
+          console.log(data);
+        },
+        onFailure: (errorObj: HttpRequestErrorType): void => {
+          console.log('Có lỗi xảy ra');
+          console.log(error);
+          setError(errorObj.message);
+        },
+      }),
+    );
+  }, [dispatch, error]);
 
   const renderTopController = (): React.ReactElement => (
     <>

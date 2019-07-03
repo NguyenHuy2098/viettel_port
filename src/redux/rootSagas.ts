@@ -4,6 +4,7 @@ import watchAuthSagaAsync from './auth/sagas';
 import watchErrorsSagaAsync from './errors/sagas';
 import watchPostSagaAsync from './posts/sagas';
 import watchBangKeSagaAsync from './danhSachBangKe/sagas';
+import watchDanhSachPhieuGuiTrongBangKeSagaAsync from './danhSachPhieuGuiTrongBangKe/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -11,5 +12,6 @@ export default function* rootSagas(): SagaIterator {
     call(watchErrorsSagaAsync),
     call(watchPostSagaAsync),
     call(watchBangKeSagaAsync),
+    call(watchDanhSachPhieuGuiTrongBangKeSagaAsync),
   ]);
 }
