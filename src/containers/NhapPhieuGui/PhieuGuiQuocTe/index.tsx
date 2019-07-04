@@ -175,13 +175,13 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
   function renderPackageSize(): JSX.Element {
     return (
       <Row className="sipInputItemGroup">
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="text" placeholder="Dài (cm)" />
         </Col>
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="text" placeholder="Rộng (cm)" />
         </Col>
-        <Col xs="12" md="4">
+        <Col xs="12" md="4" className="mb-2">
           <Input type="text" placeholder="Cao (cm)" />
         </Col>
       </Row>
@@ -227,7 +227,7 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
             <Input type="text" placeholder="Nhập  trọng lượng (g)" />
           </Col>
         </Row>
-        <Row className="sipInputItem">
+        <Row className="sipInputItem mb-0">
           <Label xs="12" lg="4">
             Trọng lượng
             <span className="color-red"> *</span>

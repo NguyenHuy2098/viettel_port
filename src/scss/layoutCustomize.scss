@@ -55,7 +55,6 @@ body {
 .form-check-label {
   box-sizing: border-box;
   input.form-check-input[type='radio'] {
-    box-sizing: border-box;
     font: normal normal normal 14px/1 FontAwesome;
     appearance: none;
     -moz-appearance: none;
@@ -70,6 +69,12 @@ body {
     outline: none;
     &:after {
       content: "\F10C";
+      background: #fff;
+      position: relative;
+      top: -2px;
+      left: -2px;
+      height: 14px;
+      display: inline-block;
     }
     &:checked {
       color: #299F9A;
@@ -78,11 +83,7 @@ body {
       }
     }
   }
-}
-.form-check-label {
-  box-sizing: border-box;
   input.form-check-input[type='checkbox'] {
-    box-sizing: border-box;
     font: normal normal normal 14px/1 FontAwesome;
     appearance: none;
     -moz-appearance: none;
@@ -97,6 +98,12 @@ body {
     outline: none;
     &:after {
       content: "\F096";
+      background: #fff;
+      position: relative;
+      top: -2px;
+      left: -2px;
+      height: 14px;
+      display: inline-block;
     }
     &:checked {
       color: #299F9A;

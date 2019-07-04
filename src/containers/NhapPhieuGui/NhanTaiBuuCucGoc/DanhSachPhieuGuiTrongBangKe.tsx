@@ -1,36 +1,77 @@
-import React from 'react';
+/* eslint-disable @typescript-eslint/camelcase */
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { get, map, size } from 'lodash';
+import { useGetManifestForwardingOrderList } from 'redux/MIOA_ZTMI046/selectors';
+import { push } from 'connected-react-router';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
-const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
+function DanhSachPhieuGuiTrongBangKe(): JSX.Element {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [error, setError] = useState<string>('');
 
-  const renderTopController = (): React.ReactElement => (
-    <>
-      <Button className="sipTitleRightBlockBtnIcon">
-        <i className="fa fa-trash-o" />
-      </Button>
-      <Button className="sipTitleRightBlockBtnIcon">
-        <i className="fa fa-print" />
-      </Button>
-      <Button>
-        <i className="fa fa-download" />
-        {t('Ghi lại')}
-      </Button>
-    </>
-  );
+  const manifestForwardingOrderList = useGetManifestForwardingOrderList();
 
-  const renderTableRowControllers = (): JSX.Element => (
-    <>
-      <Button>
-        <i className="fa fa-pencil fa-lg color-blue" />
-      </Button>
-      <Button>
-        <i className="fa fa-trash-o fa-lg color-red" />
-      </Button>
-    </>
-  );
+  useEffect((): void => {
+    const payload = {
+      IV_TOR_ID: '4600000501',
+    };
+    dispatch(
+      action_MIOA_ZTMI046(payload, {
+        // onBeginning(): void {
+        //   console.log('Start dispatch');
+        // },
+        // onSuccess: (data: any): void => {
+        //   console.log(data);
+        // },
+        onFailure: (errorObj: HttpRequestErrorType): void => {
+          console.log('Chắc chắn đã có lỗi xảy ra!');
+          console.log(error);
+          setError(errorObj.message);
+        },
+      }),
+    );
+  }, [dispatch, error]);
+
+  function redirectToPreviousLocation(): void {
+    dispatch(push(routesMap.phieuGuiTrongNuoc));
+  }
+
+  function renderTopController(): JSX.Element {
+    return (
+      <>
+        <Button className="sipTitleRightBlockBtnIcon">
+          <i className="fa fa-trash-o" />
+        </Button>
+        <Button className="sipTitleRightBlockBtnIcon">
+          <i className="fa fa-print" />
+        </Button>
+        <Button>
+          <i className="fa fa-download" />
+          {t('Ghi lại')}
+        </Button>
+      </>
+    );
+  }
+
+  function renderTableRowControllers(): JSX.Element {
+    return (
+      <>
+        <Button onClick={redirectToPreviousLocation}>
+          <i className="fa fa-pencil fa-lg color-blue" />
+        </Button>
+        <Button>
+          <i className="fa fa-trash-o fa-lg color-red" />
+        </Button>
+      </>
+    );
+  }
 
   const renderDataTable = (): JSX.Element => (
     <Table striped hover>
@@ -46,19 +87,26 @@ const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          </td>
-          <td>0026830775</td>
-          <td>BNE</td>
-          <td>2</td>
-          <td>250g</td>
-          <td>19/6/2019</td>
-          <td className="SipTableFunctionIcon">{renderTableRowControllers()}</td>
-        </tr>
+        {map(
+          get(manifestForwardingOrderList, 'Row.CHILDS'),
+          (item: API.Child, index): JSX.Element => {
+            return (
+              <tr key={index}>
+                <td>
+                  <Label check>
+                    <Input type="checkbox" />
+                  </Label>
+                </td>
+                <td>{item.TOR_ID}</td>
+                <td>BNE</td>
+                <td>2</td>
+                <td>250g</td>
+                <td>19/6/2019</td>
+                <td className="SipTableFunctionIcon">{renderTableRowControllers()}</td>
+              </tr>
+            );
+          },
+        )}
       </tbody>
     </Table>
   );
@@ -79,25 +127,29 @@ const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
         <Col md="4" xs="12">
           <Row>
             <Col xs="5">{t('Mã bảng kê')}: </Col>
-            <Col xs="7">{'V00596290'}</Col>
+            <Col xs="7">{get(manifestForwardingOrderList, 'Row.TOR_ID')}</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Trọng lượng')}: </Col>
-            <Col xs="7">{'1400g'}</Col>
+            <Col xs="7">
+              {parseFloat(get(manifestForwardingOrderList, 'Row.NET_WEI_VAL', 0)).toFixed(1)}
+              &nbsp;
+              {get(manifestForwardingOrderList, 'Row.NET_WEI_UNI')}
+            </Col>
           </Row>
         </Col>
         <Col md="5" xs="12">
           <Row>
             <Col xs="5">{t('Điểm đến')}: </Col>
-            <Col xs="7">HUB1</Col>
+            <Col xs="7">{get(manifestForwardingOrderList, 'Row.LOG_LOCID_DES')}</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ghi chú')}: </Col>
-            <Col xs="7">{'Thư hỏa tốc'}</Col>
+            <Col xs="7">{get(manifestForwardingOrderList, 'Row.EXEC_CONT')}</Col>
           </Row>
         </Col>
         <Col md="3" xs="12" className="text-right">
-          {t('Tổng số')}: 45
+          {t('Tổng số')}: {size(get(manifestForwardingOrderList, 'Row.childs', []))}
         </Col>
       </Row>
 
@@ -111,6 +163,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
       <Row className="sipTableContainer">{renderDataTable()}</Row>
     </>
   );
-};
+}
 
 export default DanhSachPhieuGuiTrongBangKe;
