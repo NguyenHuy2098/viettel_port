@@ -1,20 +1,22 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Nav, NavItem, NavLink, Row, TabContent, Table, TabPane } from 'reactstrap';
-import { getListBangKe } from 'redux/danhSachBangKe/actions';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import { map } from 'lodash';
-import { makeSelectRow } from 'redux/danhSachBangKe/selectors';
+import { useGet_MT_ZTMI047_OUT_Row } from 'redux/MIOA_ZTMI047/selectors';
+import { push } from 'connected-react-router';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 function DanhSachBangKe(): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [error, setError] = useState<string>('');
 
-  const listRow = useSelector(makeSelectRow);
+  const listManifest = useGet_MT_ZTMI047_OUT_Row();
 
   useEffect((): void => {
     const payload = {
@@ -25,9 +27,9 @@ function DanhSachBangKe(): JSX.Element {
       IV_TO_LOC_ID: '',
     };
     dispatch(
-      getListBangKe(payload, {
+      action_MIOA_ZTMI047(payload, {
         onFailure: (error: HttpRequestErrorType): void => {
-          setError(error.message);
+          console.log(error.messages);
         },
       }),
     );
@@ -46,16 +48,52 @@ function DanhSachBangKe(): JSX.Element {
     setTab(tab);
   }
 
-  function renderManifestTableAction(): JSX.Element {
+  function handleRedirectDetail(): void {
+    dispatch(push(routesMap.danhSachPhieuGuiTrongBangKe));
+  }
+
+  const handleDeleteManifet = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+    return (): void => {
+      const payload = {
+        IV_FLAG: '3',
+        IV_TOR_TYPE: 'ZC1',
+        IV_TOR_ID_CU: item.TOR_ID,
+        IV_SLOCATION: '',
+        IV_DLOCATION: '',
+        IV_DESCRIPTION: '',
+        T_ITEM: {
+          ITEM_ID: '',
+          ITEM_TYPE: '',
+        },
+      };
+      if (!window.confirm('Bạn có chắc chắn?')) return;
+      dispatch(
+        action_MIOA_ZTMI016(payload, {
+          onFinish: (): void => {
+            const payload = {
+              IV_TOR_ID: '',
+              IV_TOR_TYPE: 'ZC1',
+              IV_FR_LOC_ID: 'BDH',
+              IV_CUST_STATUS: '101',
+              IV_TO_LOC_ID: '',
+            };
+            dispatch(action_MIOA_ZTMI047(payload));
+          },
+        }),
+      );
+    };
+  };
+
+  function renderManifestTableAction(item: API.RowMTZTMI047OUT): JSX.Element {
     return (
       <>
         <Button>
           <i className="fa fa-print fa-lg color-green" />
         </Button>
-        <Button>
+        <Button onClick={handleRedirectDetail}>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <Button>
+        <Button onClick={handleDeleteManifet(item)}>
           <i className="fa fa-trash-o fa-lg color-red" />
         </Button>
       </>
@@ -65,7 +103,6 @@ function DanhSachBangKe(): JSX.Element {
   function renderManifestTable(): JSX.Element {
     return (
       <Row className="sipTableContainer sipBoxShadow">
-        {error && <p style={{ color: 'red' }}>{error}</p>}
         <Table striped hover>
           <thead>
             <tr>
@@ -80,17 +117,17 @@ function DanhSachBangKe(): JSX.Element {
           </thead>
           <tbody>
             {map(
-              listRow,
+              listManifest,
               (item: API.RowMTZTMI047OUT, index): JSX.Element => {
                 return (
                   <tr key={index}>
                     <td>{item.TOR_ID}</td>
-                    <td>TTKT1</td>
-                    <td>25</td>
-                    <td>Nguyễn Văn An</td>
-                    <td>19/6/2019</td>
-                    <td>Hàng giá trị cao</td>
-                    <td className="SipTableFunctionIcon">{renderManifestTableAction()}</td>
+                    <td>{item.LOG_LOCID_DES}</td>
+                    <td>{item.ITEM_NO}</td>
+                    <td></td>
+                    <td>{item.DATETIME_CHLC}</td>
+                    <td>{item.EXEC_CONT}</td>
+                    <td className="SipTableFunctionIcon">{renderManifestTableAction(item)}</td>
                   </tr>
                 );
               },
@@ -108,7 +145,7 @@ function DanhSachBangKe(): JSX.Element {
           <Input type="text" placeholder="Mã bảng kê" />
           <Button color="primary">Tìm kiếm</Button>
         </div>
-        <p className="pull-right m-0">Tổng số: 45</p>
+        <p className="pull-right m-0">Tổng số: {listManifest && listManifest.length}</p>
       </div>
     );
   }
@@ -129,7 +166,6 @@ function DanhSachBangKe(): JSX.Element {
   function renderForwardingOrderTable(): JSX.Element {
     return (
       <Row className="sipTableContainer sipBoxShadow">
-        {error && <p style={{ color: 'red' }}>{error}</p>}
         <Table striped hover>
           <thead>
             <tr>
@@ -163,7 +199,7 @@ function DanhSachBangKe(): JSX.Element {
           <Input type="text" placeholder="Quét mã phiếu gửi" />
           <Button color="primary">Quét mã</Button>
         </div>
-        <p className="pull-right m-0">Tổng số: 45</p>
+        <p className="pull-right m-0">Tổng số: 50</p>
       </div>
     );
   }
@@ -175,7 +211,7 @@ function DanhSachBangKe(): JSX.Element {
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: tab === 1 })}
+              className={classNames({ active: tab === 1 })}
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
               Quét mã
@@ -183,7 +219,7 @@ function DanhSachBangKe(): JSX.Element {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: tab === 2 })}
+              className={classNames({ active: tab === 2 })}
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               Danh sách bảng kê

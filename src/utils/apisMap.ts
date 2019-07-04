@@ -1,7 +1,16 @@
 import url from 'url';
+import { map, zipObject } from 'lodash';
 import { REACT_APP_API_ENDPOINT } from './env';
 
-export default {
-  MIOA_ZTMI046: url.resolve(REACT_APP_API_ENDPOINT, 'MIOA_ZTMI046'),
-  MIOA_ZTMI047: url.resolve(REACT_APP_API_ENDPOINT, 'MIOA_ZTMI047'),
-};
+/**
+ * Add more api name here
+ */
+const apis = ['MIOA_ZTMI016', 'MIOA_ZTMI046', 'MIOA_ZTMI047'];
+
+/**
+ * Convert api name array to apis map
+ * Ex: { "MIOA_ZTMI016": "https://viettelpost.vn/api/MIOA_ZTMI016" }
+ */
+const apisMap = zipObject(apis, map(apis, (item: string): string => url.resolve(REACT_APP_API_ENDPOINT, item)));
+
+export default apisMap;

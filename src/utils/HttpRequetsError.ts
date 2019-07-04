@@ -6,14 +6,14 @@ class BaseError {
 
 class HttpRequestError extends BaseError {
   // eslint-disable-next-line @typescript-eslint/no-parameter-properties
-  public constructor(public status: string, public message: string) {
+  public constructor(public status: string, public messages: []) {
     super();
   }
 }
 
 export interface HttpRequestErrorType {
   status: string;
-  message: string;
+  messages: [];
 }
 
 export default HttpRequestError;

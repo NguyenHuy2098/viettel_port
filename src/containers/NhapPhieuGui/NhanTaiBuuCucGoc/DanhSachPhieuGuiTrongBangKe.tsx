@@ -1,12 +1,11 @@
-/* eslint-disable @typescript-eslint/camelcase */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { get, map, size } from 'lodash';
-import { useGetManifestForwardingOrderList } from 'redux/MIOA_ZTMI046/selectors';
+import { useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
@@ -14,11 +13,10 @@ import routesMap from 'utils/routesMap';
 function DanhSachPhieuGuiTrongBangKe(): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [error, setError] = useState<string>('');
 
-  const manifestForwardingOrderList = useGetManifestForwardingOrderList();
+  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
 
-  useEffect((): void => {
+  React.useEffect((): void => {
     const payload = {
       IV_TOR_ID: '4600000501',
     };
@@ -30,14 +28,13 @@ function DanhSachPhieuGuiTrongBangKe(): JSX.Element {
         // onSuccess: (data: any): void => {
         //   console.log(data);
         // },
-        onFailure: (errorObj: HttpRequestErrorType): void => {
+        onFailure: (error: HttpRequestErrorType): void => {
           console.log('Chắc chắn đã có lỗi xảy ra!');
           console.log(error);
-          setError(errorObj.message);
         },
       }),
     );
-  }, [dispatch, error]);
+  }, [dispatch]);
 
   function redirectToPreviousLocation(): void {
     dispatch(push(routesMap.phieuGuiTrongNuoc));

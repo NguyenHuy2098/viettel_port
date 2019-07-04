@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { createAction } from 'redux-unfold-saga';
 
 export const ACTION_MIOA_ZTMI046 = 'ACTION_MIOA_ZTMI046';

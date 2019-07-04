@@ -5,7 +5,6 @@ import routesMap from './routesMap';
 
 import { REACT_APP_SSO_URL, REACT_APP_SSO_CLIENT_ID, REACT_APP_SSO_CLIENT_SECRET } from './env';
 
-/* eslint-disable @typescript-eslint/camelcase */
 const userManager = createUserManager({
   authority: REACT_APP_SSO_URL,
   automaticSilentRenew: true,
@@ -22,6 +21,5 @@ const userManager = createUserManager({
   silent_redirect_uri: url.resolve(window.location.href, routesMap.silentCallback),
   userStore: new WebStorageStateStore({ store: window.localStorage }),
 });
-/* eslint-enable @typescript-eslint/camelcase */
 
 export default userManager;
