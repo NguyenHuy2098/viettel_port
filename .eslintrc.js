@@ -14,6 +14,8 @@ module.exports = {
     sourceType: 'module', // Allows for the use of imports
   },
   rules: {
+    // Turning off these rules is just an unexpected action. This hurts so bad! :(
+    '@typescript-eslint/camelcase': 'off',
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     'import/imports-first': ['error', 'absolute-first'],
     'import/newline-after-import': 'error',

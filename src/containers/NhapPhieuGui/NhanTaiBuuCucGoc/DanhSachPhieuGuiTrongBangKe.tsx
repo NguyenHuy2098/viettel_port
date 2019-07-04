@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
@@ -6,7 +5,7 @@ import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { get, map, size } from 'lodash';
-import { useGetManifestForwardingOrderList } from 'redux/MIOA_ZTMI046/selectors';
+import { useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
@@ -16,7 +15,7 @@ function DanhSachPhieuGuiTrongBangKe(): JSX.Element {
   const { t } = useTranslation();
   const [error, setError] = useState<string>('');
 
-  const manifestForwardingOrderList = useGetManifestForwardingOrderList();
+  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
 
   useEffect((): void => {
     const payload = {
