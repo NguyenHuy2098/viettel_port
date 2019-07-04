@@ -2,27 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
-import { getListPhieuGuiTrongBangKe } from 'redux/danhSachPhieuGuiTrongBangKe/actions';
+import { getListPhieuGuiTrongBangKe } from 'redux/MIOA_ZTMI046/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { map } from 'lodash';
+import { useGetManifestForwardingOrderList } from 'redux/MIOA_ZTMI046/selectors';
 
 // eslint-disable-next-line max-lines-per-function
-const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
+function DanhSachPhieuGuiTrongBangKe(): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [error, setError] = useState<string>('');
 
+  const manifestForwardingOrderList = useGetManifestForwardingOrderList();
+
   useEffect((): void => {
     const payload = {
-      IV_TOR_ID: '4700000500',
+      IV_TOR_ID: '4600000501',
     };
     dispatch(
       getListPhieuGuiTrongBangKe(payload, {
-        onBeginning(): void {
-          console.log('Start dispatch');
-        },
-        onSuccess: (data: any): void => {
-          console.log(data);
-        },
+        // onBeginning(): void {
+        //   console.log('Start dispatch');
+        // },
+        // onSuccess: (data: any): void => {
+        //   console.log(data);
+        // },
         onFailure: (errorObj: HttpRequestErrorType): void => {
           console.log('Có lỗi xảy ra');
           console.log(error);
@@ -32,31 +36,35 @@ const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
     );
   }, [dispatch, error]);
 
-  const renderTopController = (): React.ReactElement => (
-    <>
-      <Button className="sipTitleRightBlockBtnIcon">
-        <i className="fa fa-trash-o" />
-      </Button>
-      <Button className="sipTitleRightBlockBtnIcon">
-        <i className="fa fa-print" />
-      </Button>
-      <Button>
-        <i className="fa fa-download" />
-        {t('Ghi lại')}
-      </Button>
-    </>
-  );
+  function renderTopController(): JSX.Element {
+    return (
+      <>
+        <Button className="sipTitleRightBlockBtnIcon">
+          <i className="fa fa-trash-o" />
+        </Button>
+        <Button className="sipTitleRightBlockBtnIcon">
+          <i className="fa fa-print" />
+        </Button>
+        <Button>
+          <i className="fa fa-download" />
+          {t('Ghi lại')}
+        </Button>
+      </>
+    );
+  }
 
-  const renderTableRowControllers = (): JSX.Element => (
-    <>
-      <Button>
-        <i className="fa fa-pencil fa-lg color-blue" />
-      </Button>
-      <Button>
-        <i className="fa fa-trash-o fa-lg color-red" />
-      </Button>
-    </>
-  );
+  function renderTableRowControllers(): JSX.Element {
+    return (
+      <>
+        <Button>
+          <i className="fa fa-pencil fa-lg color-blue" />
+        </Button>
+        <Button>
+          <i className="fa fa-trash-o fa-lg color-red" />
+        </Button>
+      </>
+    );
+  }
 
   const renderDataTable = (): JSX.Element => (
     <Table striped hover>
@@ -72,19 +80,23 @@ const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          </td>
-          <td>0026830775</td>
-          <td>BNE</td>
-          <td>2</td>
-          <td>250g</td>
-          <td>19/6/2019</td>
-          <td className="SipTableFunctionIcon">{renderTableRowControllers()}</td>
-        </tr>
+        {map(manifestForwardingOrderList, (item: API.Child, index) => {
+          return (
+            <tr key={index}>
+              <td>
+                <Label check>
+                  <Input type="checkbox" />
+                </Label>
+              </td>
+              <td>{item.TOR_ID}</td>
+              <td>BNE</td>
+              <td>2</td>
+              <td>250g</td>
+              <td>19/6/2019</td>
+              <td className="SipTableFunctionIcon">{renderTableRowControllers()}</td>
+            </tr>
+          );
+        })}
       </tbody>
     </Table>
   );
@@ -137,6 +149,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC = (): React.ReactElement => {
       <Row className="sipTableContainer">{renderDataTable()}</Row>
     </>
   );
-};
+}
 
 export default DanhSachPhieuGuiTrongBangKe;
