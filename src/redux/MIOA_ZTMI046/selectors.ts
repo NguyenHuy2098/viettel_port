@@ -1,14 +1,9 @@
 import { useSelector, shallowEqual } from 'react-redux';
 import { AppStateType } from 'redux/store';
+import { get } from 'lodash';
 
-export function useGetManifestForwardingOrderList() {
-  const listRows: API.Child[] | null = useSelector((state: AppStateType) => {
-    return (
-      state.danhSachPhieuGuiTrongBangKe &&
-      state.danhSachPhieuGuiTrongBangKe.MT_ZTMI046_OUT &&
-      state.danhSachPhieuGuiTrongBangKe.MT_ZTMI046_OUT.Row &&
-      state.danhSachPhieuGuiTrongBangKe.MT_ZTMI046_OUT.Row.CHILDS
-    );
+export function useGetManifestForwardingOrderList(): API.MTZTMI046OUT | {} {
+  return useSelector((state: AppStateType): API.MTZTMI046OUT | {} => {
+    return get(state, 'danhSachPhieuGuiTrongBangKe.MT_ZTMI046_OUT', {});
   }, shallowEqual);
-  return listRows;
 }
