@@ -1,40 +1,32 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { match } from 'react-router-dom';
 import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { get, map, size } from 'lodash';
 import { useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
+interface Props {
+  match: match;
+}
+
 // eslint-disable-next-line max-lines-per-function
-function DanhSachPhieuGuiTrongBangKe(): JSX.Element {
+function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const manifestId = get(props, 'match.params.manifestId', '');
 
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
 
   React.useEffect((): void => {
     const payload = {
-      IV_TOR_ID: '4600000501',
+      IV_TOR_ID: manifestId,
     };
-    dispatch(
-      action_MIOA_ZTMI046(payload, {
-        // onBeginning(): void {
-        //   console.log('Start dispatch');
-        // },
-        // onSuccess: (data: any): void => {
-        //   console.log(data);
-        // },
-        onFailure: (error: HttpRequestErrorType): void => {
-          console.log('Chắc chắn đã có lỗi xảy ra!');
-          console.log(error);
-        },
-      }),
-    );
-  }, [dispatch]);
+    dispatch(action_MIOA_ZTMI046(payload));
+  }, [dispatch, manifestId]);
 
   function redirectToPreviousLocation(): void {
     dispatch(push(routesMap.phieuGuiTrongNuoc));
@@ -75,12 +67,12 @@ function DanhSachPhieuGuiTrongBangKe(): JSX.Element {
       <thead>
         <tr>
           <th></th>
-          <th>Mã phiếu gửi</th>
-          <th>Điểm đến</th>
-          <th>Số lượng</th>
-          <th>Trọng lượng</th>
-          <th>Ngày gửi</th>
-          <th>Quản trị</th>
+          <th>{t('Mã phiếu gửi')}</th>
+          <th>{t('Điểm đến')}</th>
+          <th>{t('Số lượng')}</th>
+          <th>{t('Trọng lượng')}</th>
+          <th>{t('Ngày gửi')}</th>
+          <th>{t('Quản trị')}</th>
         </tr>
       </thead>
       <tbody>

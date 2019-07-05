@@ -62,10 +62,6 @@ const nav = (t: i18next.TFunction): any => {
             name: t('Nhận tại bưu cục gốc'),
             url: routesMap.nhanTaiBuuCucGoc,
           },
-          {
-            name: t('Danh sách phiếu gửi trong bảng kê'),
-            url: routesMap.danhSachPhieuGuiTrongBangKe,
-          },
         ],
       },
       {
