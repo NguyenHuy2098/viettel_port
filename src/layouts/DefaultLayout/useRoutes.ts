@@ -61,8 +61,8 @@ const inputRevenue = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/NhapDoanhThu'),
   loading: Loading,
 });
-const DanhSachBangKe = Loadable({
-  loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc/DanhSachBangKe'),
+const NhanTaiBuuCucGoc = Loadable({
+  loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc'),
   loading: Loading,
 });
 
@@ -167,7 +167,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.mailTruckClosing, name: t('Đóng chuyển thư'), component: mailTruckClosing },
     { path: routesMap.thongTinTai, name: t('Nhận tải kiện'), component: thongTinTai },
     {
-      path: routesMap.danhSachPhieuGuiTrongBangKe,
+      path: `${routesMap.danhSachPhieuGuiTrongBangKe}/:manifestId`,
       name: t('Danh sách phiếu gửi trong bảng kê'),
       component: danhSachPhieuGuiTrongBangKe,
     },
@@ -189,7 +189,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.khieuNaiKhachHang, name: t('Khiếu nại khách hàng'), component: khieuNaiKhachHang },
     { path: routesMap.chiTietKhieuNai, name: t('Chi tiết khiếu nại'), component: chiTietKhieuNai },
     { path: '/bao-cao', name: t('Báo cáo'), component: BaoCao },
-    { path: routesMap.nhanTaiBuuCucGoc, name: t('Nhận tại bưu cục gốc'), component: DanhSachBangKe },
+    { path: routesMap.nhanTaiBuuCucGoc, name: t('Nhận tại bưu cục gốc'), component: NhanTaiBuuCucGoc },
   ];
 };
 
