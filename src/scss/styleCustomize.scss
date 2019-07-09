@@ -149,3 +149,77 @@
     color: #299f9a;
   }
 }
+//Drashboard
+.topDashBroad{
+  display: grid;
+  grid-template-columns: 20% 20% 20% 20% 20%;
+  grid-template-rows: auto;
+  min-height: 50px;
+  padding: 10px 0;
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  box-shadow: 0 0 8px 1px #cdd2df;
+  margin-bottom: 10px;
+  .itemCol{
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #787b85;
+    border-right: 1px solid #e1e1e1;
+    &:last-child{
+      border-right: 0;
+    }
+
+    span{
+      i{
+        margin-right: 10px;
+      }
+      .icon-1{
+        color: #e74a72 !important;
+      }
+      .icon-2{
+        color: #a775d5 !important;
+      }
+      .icon-3{
+        color: #2bb37e !important;
+      }
+      .icon-4{
+        color: #4389da !important;
+      }
+      .icon-5{
+        color: #b4a25f !important;
+      }
+
+    }
+    .numCol{
+      font-size: 22px;
+      color: #332a28;
+      line-height: 2;
+    }
+  }
+}
+.chartLine{
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows:  auto;
+  grid-column-gap: 10px;
+  .chart-item{
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 1px #cdd2df;
+
+  }
+}
+
+.highcharts-credits {
+  display: none!important;
+}
+//.highcharts-legend{
+//  width: 100%!important;
+//  transform: translate(0,90%)!important;
+//}
+//.highcharts-legend-item{
+//  width: 50%;
+//}
