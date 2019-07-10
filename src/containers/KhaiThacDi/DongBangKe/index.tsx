@@ -1,5 +1,6 @@
 import * as React from 'react';
 import {
+  Badge,
   Button,
   FormGroup,
   Input,
@@ -8,16 +9,22 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Row,
-  Table,
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import classNames from 'classnames';
+import { useCallback } from 'react';
+import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
+import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 
 // eslint-disable-next-line max-lines-per-function
-const DongBangKe: React.FC = (): JSX.Element => {
+const TaoBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
 
@@ -50,102 +57,77 @@ const DongBangKe: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderPagination(): JSX.Element {
-    return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-    );
-  }
-
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
   return (
     <>
+      <Button onClick={toggle}>
+        <i className="fa fa-plus" />
+        {t('Tạo bảng kê')}
+      </Button>
+      {renderModal()}
+    </>
+  );
+};
+
+// eslint-disable-next-line max-lines-per-function
+const DongBangKe: React.FC = (): JSX.Element => {
+  const { t } = useTranslation();
+
+  const [tab, setTab] = useState<number>(1);
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
+  }
+
+  function renderTitle(): JSX.Element {
+    return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
         <div className="sipTitleRightBlock">
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-trash-o" />
+          </Button>
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
+            <Input type="text" placeholder={t('Tra cứu bảng kê')} />
           </div>
-          <Button onClick={toggle}>
-            <i className="fa fa-plus" />
-            {t('Tạo bảng kê')}
-          </Button>
-          {renderModal()}
+          <TaoBangKe />
         </div>
       </Row>
-      <p className="text-right">
-        {t('Tổng số')}: <span>56</span>
-      </p>
-      <div className="mt-3" />
-      <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>{t('Mã bảng kê')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-        {renderPagination()}
-      </Row>
+    );
+  }
+
+  return (
+    <>
+      {renderTitle()}
+      <div className="sipTabContainer sipFlatContainer">
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 1 })}
+              onClick={useCallback((): void => handleChangeTab(1), [])}
+            >
+              {t('Bảng kê chưa hoàn thành')}
+              <Badge color="primary">56</Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 2 })}
+              onClick={useCallback((): void => handleChangeTab(2), [])}
+            >
+              {t('Bưu gửi chưa đóng BK')}
+              <Badge color="primary">03</Badge>
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={tab} className="sipFlatContainer">
+          <TabPane tabId={1}>
+            <BangKeChuaHoanThanh />
+          </TabPane>
+          <TabPane tabId={2}>
+            <BuuGuiChuaDongBangKe />
+          </TabPane>
+        </TabContent>
+      </div>
     </>
   );
 };

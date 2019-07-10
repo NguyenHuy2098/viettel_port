@@ -1,30 +1,14 @@
 import * as React from 'react';
-import {
-  Button,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
-  Row,
-  Table,
-} from 'reactstrap';
-import { map } from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
+import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { map, get } from 'lodash';
 import { useGet_MT_ZTMI047_OUT_Row } from 'redux/MIOA_ZTMI047/selectors';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
   const dispatch = useDispatch();
 
   React.useEffect((): void => {
@@ -35,50 +19,15 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
       IV_CUST_STATUS: '101',
       IV_TO_LOC_ID: '',
     };
-    dispatch(
-      action_MIOA_ZTMI047(payload, {
-        onFailure: (error: HttpRequestErrorType): void => {
-          console.log(error.messages);
-        },
-      }),
-    );
+    dispatch(action_MIOA_ZTMI047(payload));
   }, [dispatch]);
-
-  function toggle(): void {
-    setModalCreateNew(!modalCreateNew);
-  }
-
-  function renderModal(): JSX.Element {
-    return (
-      <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew">
-        <ModalHeader toggle={toggle}>{t('Tạo bảng kê')}</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <Label>{t('Bưu cục đến')}</Label>
-            <Input type="select">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label>{t('Ghi chú')}</Label>
-            <Input type="textarea" placeholder={t('Nhập ghi chú')} />
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button onClick={toggle}>{t('Ghi lại')}</Button>
-        </ModalFooter>
-      </Modal>
-    );
-  }
 
   function renderPagination(): JSX.Element {
     return (
       <Pagination className="sipPagination">
         <PaginationItem className="sipPaginationPrev pull-left">
           <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
+            <i className="fa fa-arrow-left" />
           </PaginationLink>
         </PaginationItem>
         <PaginationItem active>
@@ -98,7 +47,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
         </PaginationItem>
         <PaginationItem className="sipPaginationNext pull-right">
           <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
+            <i className="fa fa-arrow-right" />
           </PaginationLink>
         </PaginationItem>
       </Pagination>
@@ -123,34 +72,16 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
 
   const listManifest = useGet_MT_ZTMI047_OUT_Row();
 
-  return (
-    <>
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
-        <div className="sipTitleRightBlock">
-          <div className="sipTitleRightBlockInput">
-            <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
-          </div>
-          <Button onClick={toggle}>
-            <i className="fa fa-plus" />
-            {t('Tạo bảng kê')}
-          </Button>
-          {renderModal()}
-        </div>
-      </Row>
-      <p className="text-right">
-        {t('Tổng số')}: <span>56</span>
-      </p>
-      <div className="mt-3" />
-      <Row className="sipTableContainer">
+  function renderTable(): JSX.Element {
+    return (
+      <>
         <Table striped hover>
           <thead>
             <tr>
+              <th />
               <th>{t('Mã bảng kê')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
+              <th>{t('Điểm đến')}</th>
+              <th>{t('SL')}</th>
               <th>{t('Người nhập')}</th>
               <th>{t('Ngày nhập')}</th>
               <th>{t('Ghi chú')}</th>
@@ -160,16 +91,21 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           <tbody>
             {map(
               listManifest,
-              (item, index): JSX.Element => {
+              (item: API.RowMTZTMI047OUT, index): JSX.Element => {
                 return (
                   <tr key={index}>
-                    <td>BK-2683077-TTKT1</td>
-                    <td>TTKT1</td>
-                    <td>TTKT3</td>
-                    <td>25</td>
-                    <td>Nguyễn Văn An</td>
-                    <td>19/6/2019</td>
-                    <td>Hàng giá trị cao</td>
+                    <td className="text-center">
+                      <Label check>
+                        {/* eslint-disable-next-line react/jsx-max-depth */}
+                        <Input type="checkbox" />
+                      </Label>
+                    </td>
+                    <td>{item.TOR_ID}</td>
+                    <td></td>
+                    <td>{item.ITEM_NO}</td>
+                    <td></td>
+                    <td>{item.DATETIME_CHLC}</td>
+                    <td>{item.EXEC_CONT}</td>
                     <td className="SipTableFunctionIcon">{renderAction()}</td>
                   </tr>
                 );
@@ -178,7 +114,27 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           </tbody>
         </Table>
         {renderPagination()}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Row className="sipContentContainer">
+        <Col lg={4} xs={12} className="p-0">
+          <div className="sipTitleRightBlockInput m-0">
+            <i className="fa fa-search" />
+            <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
+          </div>
+        </Col>
+        <Col>
+          <p className="text-right mt-2 mb-0">
+            {t('Tổng số')}: <span>{get(listManifest, 'length', 0)}</span>
+          </p>
+        </Col>
       </Row>
+      <div className="mt-3" />
+      <Row className="sipTableContainer">{renderTable()}</Row>
     </>
   );
 };
