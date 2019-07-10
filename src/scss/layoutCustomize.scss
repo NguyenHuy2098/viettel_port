@@ -468,9 +468,19 @@ html:not([dir="rtl"]) .sidebar {
         border-bottom: 3px solid #D3D3D3;
         color: #6B6F83;
         padding: 10px 20px;
+        .badge {
+          background-color: #999;
+          padding: 5px 5px 3px;
+          margin-left: 8px;
+          font-size: 13px;
+          border-radius: 8px;
+        }
         &.active {
           border-bottom-color: #FD8301;
           color: #4A4A4A;
+          .badge {
+            background-color: #299F9A;
+          }
         }
       }
     }

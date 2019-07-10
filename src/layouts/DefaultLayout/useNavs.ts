@@ -94,11 +94,11 @@ const nav = (t: i18next.TFunction): any => {
           },
           {
             name: t('Đóng tải'),
-            url: routesMap.closeSack,
+            url: routesMap.dongTai,
           },
           {
-            name: t('Đóng chuyển thư'),
-            url: routesMap.mailTruckClosing,
+            name: t('Đóng chuyến thư'),
+            url: routesMap.dongChuyenThu,
           },
           {
             name: t('Danh sách tải kiện'),
