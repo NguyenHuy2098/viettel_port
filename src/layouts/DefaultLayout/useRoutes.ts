@@ -81,7 +81,7 @@ const thongTinBangKe = Loadable({
   loading: Loading,
 });
 const danhSachBangKe = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachBangKe'),
+  loader: (): any => import('containers/KhaiThacDi/DanhSachBangKe/DanhSachBangKe'),
   loading: Loading,
 });
 const danhSachPhieuGuiTrongBangKe = Loadable({
@@ -92,16 +92,16 @@ const danhSachPhieuGui = Loadable({
   loader: (): any => import('containers/KhaiThacDi/BangKe/DanhSachPhieuGui'),
   loading: Loading,
 });
-const closeSack = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/DongTai2'),
+const dongTai = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongTai'),
   loading: Loading,
 });
-const mailTruckClosing = Loadable({
+const dongChuyenThu = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongChuyenThu'),
   loading: Loading,
 });
 const danhSachTaiKien = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/DongTai2/DanhSachTaiKien'),
+  loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachTaiKien'),
   loading: Loading,
 });
 const splitCoupon = Loadable({
@@ -162,9 +162,9 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.dongBangKe, name: t('Đóng bảng kê'), component: dongBangKe },
     { path: routesMap.inputRevenue, name: t('Nhập doanh thu'), component: inputRevenue },
     { path: routesMap.thongTinBangKe, name: t('Thông tin bảng kê'), component: thongTinBangKe },
-    { path: routesMap.closeSack, name: t('Đóng tải'), component: closeSack },
+    { path: routesMap.dongTai, name: t('Đóng tải'), component: dongTai },
     { path: routesMap.danhSachTaiKien, name: t('Danh sách tải kiện'), component: danhSachTaiKien },
-    { path: routesMap.mailTruckClosing, name: t('Đóng chuyển thư'), component: mailTruckClosing },
+    { path: routesMap.dongChuyenThu, name: t('Đóng chuyến thư'), component: dongChuyenThu },
     { path: routesMap.thongTinTai, name: t('Nhận tải kiện'), component: thongTinTai },
     {
       path: `${routesMap.danhSachPhieuGuiTrongBangKe}/:manifestId`,

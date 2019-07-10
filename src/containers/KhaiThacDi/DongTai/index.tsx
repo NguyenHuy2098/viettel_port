@@ -27,7 +27,7 @@ import classNames from 'classnames';
 import { useCallback } from 'react';
 
 // eslint-disable-next-line max-lines-per-function
-const DongChuyenThu: React.FC = (): JSX.Element => {
+const DongTai: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
 
   const [tab, setTab] = useState<number>(1);
@@ -44,7 +44,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   function renderModal(): JSX.Element {
     return (
       <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew">
-        <ModalHeader toggle={toggle}>{t('Tạo bảng kê')}</ModalHeader>
+        <ModalHeader toggle={toggle}>{t('Tạo tải')}</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Label>{t('Bưu cục đến')}</Label>
@@ -69,18 +69,18 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Đóng chuyến thư')}</h1>
+        <h1 className="sipTitle">{t('Đóng tải')}</h1>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-trash-o" />
           </Button>
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu chuyến thư')} />
+            <Input type="text" placeholder={t('Tra cứu tải')} />
           </div>
           <Button onClick={toggle}>
             <i className="fa fa-plus" />
-            {t('Tạo bảng kê')}
+            {t('Tạo tải')}
           </Button>
           {renderModal()}
         </div>
@@ -143,7 +143,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
           <thead>
             <tr>
               <th />
-              <th>{t('Mã chuyến thư')}</th>
+              <th>{t('Mã tải')}</th>
               <th>{t('Điểm đến')}</th>
               <th>{t('SL')}</th>
               <th>{t('Người nhập')}</th>
@@ -182,7 +182,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
           <Col lg={4} xs={12} className="p-0">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} />
+              <Input type="text" placeholder={t('Tìm kiếm tải')} />
             </div>
           </Col>
           <Col>
@@ -207,7 +207,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               className={classNames({ active: tab === 1 })}
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
-              {t('CT chưa hoàn thành')}
+              {t('Tải chưa hoàn thành')}
               <Badge color="primary">56</Badge>
             </NavLink>
           </NavItem>
@@ -216,8 +216,8 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               className={classNames({ active: tab === 2 })}
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
-              {t('Tải/kiện chưa đóng chuyến thư')}
-              <Badge color="primary">03</Badge>
+              {t('Bảng kê/bưu gửi chưa đóng tải')}
+              <Badge color="primary">45</Badge>
             </NavLink>
           </NavItem>
         </Nav>
@@ -232,4 +232,4 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   );
 };
 
-export default DongChuyenThu;
+export default DongTai;
