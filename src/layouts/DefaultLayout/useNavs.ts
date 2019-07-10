@@ -11,6 +11,7 @@ const nav = (t: i18next.TFunction): any => {
       {
         name: 'Trang chủ',
         icon: 'fa fa-home',
+        url: routesMap.home,
       },
       {
         name: 'Điều hành',
@@ -38,11 +39,11 @@ const nav = (t: i18next.TFunction): any => {
           },
           {
             name: t('Lập biên bản'),
-            url: '/lap-bien-ban',
+            url: routesMap.lapBienBan,
           },
           {
             name: t('Tra cứu biên bản'),
-            url: '/tra-cuu-bien-ban',
+            url: routesMap.traCuuBienBan,
           },
         ],
       },
@@ -138,7 +139,7 @@ const nav = (t: i18next.TFunction): any => {
         children: [
           {
             name: t('Báo cáo (chưa có gì)'),
-            url: '/bao-cao',
+            url: routesMap.baoCao,
           },
         ],
       },

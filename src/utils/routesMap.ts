@@ -37,4 +37,5 @@ export default {
   khieuNaiKhachHang: '/khieu-nai-khach-hang',
   chiTietKhieuNai: '/chi-tiet-khieu-nai',
   nhanTaiBuuCucGoc: '/nhan-tai-buu-cuc-goc',
+  baoCao: '/bao-cao',
 };

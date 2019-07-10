@@ -101,7 +101,7 @@ const dongChuyenThu = Loadable({
   loading: Loading,
 });
 const danhSachTaiKien = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachTaiKien'),
+  loader: (): any => import('containers/KhaiThacDi/DanhSachTaiKien'),
   loading: Loading,
 });
 const splitCoupon = Loadable({
