@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {
   Button,
+  Col,
   FormGroup,
   Input,
   Label,
@@ -12,13 +13,27 @@ import {
   PaginationItem,
   PaginationLink,
   Row,
+  TabContent,
+  TabPane,
   Table,
+  Nav,
+  NavItem,
+  NavLink,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import classNames from 'classnames';
+import { useCallback } from 'react';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+
+  const [tab, setTab] = useState<number>(1);
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
+  }
+
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
 
   function toggle(): void {
@@ -47,6 +62,28 @@ const DongBangKe: React.FC = (): JSX.Element => {
           <Button onClick={toggle}>{t('Ghi lại')}</Button>
         </ModalFooter>
       </Modal>
+    );
+  }
+
+  function renderTitle(): JSX.Element {
+    return (
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
+        <div className="sipTitleRightBlock">
+          <Button className="sipTitleRightBlockBtnIcon">
+            <i className="fa fa-trash-o" />
+          </Button>
+          <div className="sipTitleRightBlockInput">
+            <i className="fa fa-search" />
+            <Input type="text" placeholder={t('Tra cứu bảng kê')} />
+          </div>
+          <Button onClick={toggle}>
+            <i className="fa fa-plus" />
+            {t('Tạo bảng kê')}
+          </Button>
+          {renderModal()}
+        </div>
+      </Row>
     );
   }
 
@@ -97,34 +134,17 @@ const DongBangKe: React.FC = (): JSX.Element => {
       </>
     );
   }
-  return (
-    <>
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
-        <div className="sipTitleRightBlock">
-          <div className="sipTitleRightBlockInput">
-            <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
-          </div>
-          <Button onClick={toggle}>
-            <i className="fa fa-plus" />
-            {t('Tạo bảng kê')}
-          </Button>
-          {renderModal()}
-        </div>
-      </Row>
-      <p className="text-right">
-        {t('Tổng số')}: <span>56</span>
-      </p>
-      <div className="mt-3" />
-      <Row className="sipTableContainer">
+
+  function renderTable1(): JSX.Element {
+    return (
+      <>
         <Table striped hover>
           <thead>
             <tr>
+              <th />
               <th>{t('Mã bảng kê')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
+              <th>{t('Điểm đến')}</th>
+              <th>{t('SL')}</th>
               <th>{t('Người nhập')}</th>
               <th>{t('Ngày nhập')}</th>
               <th>{t('Ghi chú')}</th>
@@ -133,9 +153,14 @@ const DongBangKe: React.FC = (): JSX.Element => {
           </thead>
           <tbody>
             <tr>
+              <td className="text-center">
+                <Label check>
+                  {/* eslint-disable-next-line react/jsx-max-depth */}
+                  <Input type="checkbox" />
+                </Label>
+              </td>
               <td>BK-2683077-TTKT1</td>
               <td>TTKT1</td>
-              <td>TTKT3</td>
               <td>25</td>
               <td>Nguyễn Văn An</td>
               <td>19/6/2019</td>
@@ -145,7 +170,61 @@ const DongBangKe: React.FC = (): JSX.Element => {
           </tbody>
         </Table>
         {renderPagination()}
-      </Row>
+      </>
+    );
+  }
+
+  function renderTab1(): JSX.Element {
+    return (
+      <>
+        <Row className="sipContentContainer">
+          <Col lg={4} xs={12} className="p-0">
+            <div className="sipTitleRightBlockInput m-0">
+              <i className="fa fa-search" />
+              <Input type="text" placeholder={t('Tìm kiếm bảng kê')} />
+            </div>
+          </Col>
+          <Col>
+            <p className="text-right mt-2 mb-0">
+              {t('Tổng số')}: <span>56</span>
+            </p>
+          </Col>
+        </Row>
+        <div className="mt-3" />
+        <Row className="sipTableContainer">{renderTable1()}</Row>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {renderTitle()}
+      <div className="sipTabContainer sipFlatContainer">
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 1 })}
+              onClick={useCallback((): void => handleChangeTab(1), [])}
+            >
+              {t('Bảng kê chưa hoàn thành')}
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 2 })}
+              onClick={useCallback((): void => handleChangeTab(2), [])}
+            >
+              {t('Bưu gửi chưa đóng BK')}
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={tab} className="sipFlatContainer">
+          <TabPane tabId={1}>{renderTab1()}</TabPane>
+          <TabPane tabId={2}>
+            <h1>Tab 2</h1>
+          </TabPane>
+        </TabContent>
+      </div>
     </>
   );
 };

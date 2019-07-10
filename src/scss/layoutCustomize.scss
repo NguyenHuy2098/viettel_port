@@ -272,21 +272,21 @@ body {
       }
     }
   }
-  .sipTitleRightBlockInput {
-    width: 280px;
-    position: relative;
-    margin-left: 15px;
-    display: inline-block;
-    max-width: calc(100% - 15px);
-    i {
-      color: #9B9B9B;
-      position: absolute;
-      top: 10px;
-      left: 10px;
-    }
-    input.form-control {
-      padding: 0 10px 0 30px;
-    }
+}
+.sipTitleRightBlockInput {
+  width: 280px;
+  position: relative;
+  margin-left: 15px;
+  display: inline-block;
+  max-width: calc(100% - 15px);
+  i {
+    color: #9B9B9B;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+  input.form-control {
+    padding: 0 10px 0 30px;
   }
 }
 .sipTitleModalCreateNew {
