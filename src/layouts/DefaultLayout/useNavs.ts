@@ -9,6 +9,10 @@ const nav = (t: i18next.TFunction): any => {
   return {
     items: [
       {
+        name: 'Trang chủ',
+        icon: 'fa fa-home',
+      },
+      {
         name: 'Điều hành',
         icon: 'fa fa-user-circle-o',
         children: [
