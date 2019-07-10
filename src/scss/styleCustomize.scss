@@ -5,22 +5,27 @@
   padding: 15px 0;
   margin: 0 0 15px;
 }
+
 .sipSendingCoupon {
   background: #fff;
   margin: 0 0 20px;
+
   .row {
     margin: 0;
     width: 100%;
   }
+
   .sipSendingCouponItem {
     width: 28%;
     float: left;
     margin: 10px 0 0;
     min-width: 270px;
     max-width: 350px;
+
     div[class^='col'],
     div[class*=' col'] {
       padding: 5px 0 0 15px;
+
       input.form-control {
         text-align: right;
         padding: 0 10px;
@@ -29,16 +34,20 @@
       }
     }
   }
+
   .sipLine {
     margin: 20px 0 0;
   }
 }
+
 .sipInputContainer {
   background: #fff;
   padding: 15px;
 }
+
 .sipInputBlock {
   margin-bottom: 15px;
+
   h3 {
     color: #299f9a;
     font-size: 14px;
@@ -46,76 +55,98 @@
     margin-bottom: 10px;
   }
 }
+
 .sipInputItem {
   margin-bottom: 10px;
+
   & > label {
     padding-right: 0;
   }
+
   & > div {
     box-sizing: border-box;
+
     input.form-control {
       box-sizing: border-box;
     }
+
     select.form-control {
       padding: 0 0 0 7px;
     }
   }
 }
+
 .sipInputItemError {
-  color: #EB3C66;
+  color: #eb3c66;
 }
+
 .sipInputItemGroup {
   margin: 0 -5px;
+
   div[class^='col'],
   div[class*=' col'] {
     padding: 0 5px;
   }
 }
+
 .sipInputItemDescription {
   font-size: 11px;
   font-weight: 500;
   margin: 5px 0;
 }
+
 .sipShippingInformationTitle {
   margin-right: 0px;
   background-color: #fff;
 }
+
 .reportFilterSearchTitle {
-   margin-bottom: 15px;
-   button {
-     margin-right: 12px;
-     background: #F5F5F5;
-     border: 1px solid #D6D6D6;
-     color: #919191;
-     &.active, &:hover, &:focus {
-       background: #DDF6F5 !important;
-       border: 1px solid #299F9A !important;
-       color: #299F9A !important;
-     }
-   }
- }
-.findRecordButton {
-  margin-bottom: 8px;
+  margin-bottom: 15px;
+
   button {
-    margin: 0 12px 8px 0;
-    background-color: #F5F5F5;
-    border: 1px solid #D6D6D6;
-    border-radius: 5px;
+    margin-right: 12px;
+    background: #f5f5f5;
+    border: 1px solid #d6d6d6;
     color: #919191;
-    &:hover, &.active {
-      color: #299F9A !important;
-      background: #DDF6F5 !important;
-      border: 1px solid #299F9A !important;
+
+    &.active,
+    &:hover,
+    &:focus {
+      background: #ddf6f5 !important;
+      border: 1px solid #299f9a !important;
+      color: #299f9a !important;
     }
   }
 }
+
+.findRecordButton {
+  margin-bottom: 8px;
+
+  button {
+    margin: 0 12px 8px 0;
+    background-color: #f5f5f5;
+    border: 1px solid #d6d6d6;
+    border-radius: 5px;
+    color: #919191;
+
+    &:hover,
+    &.active {
+      color: #299f9a !important;
+      background: #ddf6f5 !important;
+      border: 1px solid #299f9a !important;
+    }
+  }
+}
+
 .sipSearchButtonRecord {
   padding-left: 0;
   padding-top: 36px;
+
   div {
     margin-left: 8px;
     margin-top: 16px;
     padding-bottom: 17px;
+
     button {
       margin-left: 12px;
       background-color: #2db4a1;
@@ -124,6 +155,7 @@
     }
   }
 }
+
 .sipTotalRecord {
   font-weight: 500;
   color: #4a4a4a;
@@ -135,6 +167,7 @@
 .sipModalReportLookUp {
   width: 1000px;
 }
+
 .sipSearchButtonComplainRecord {
   button {
     background-color: #2db4a1;
@@ -142,10 +175,105 @@
     color: #fff;
   }
 }
+
 .sipInformationTable {
   font-weight: 500;
+
   h6 {
     font-size: 12px;
     color: #299f9a;
+  }
+}
+
+//Drashboard
+.sipGenDashBoard {
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 15px;
+  background: #ffffff;
+  display: block;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  position: relative;
+}
+
+.sipFilter {
+  position: absolute;
+  width: 200px;
+  right: 15px;
+  top: 15px;
+  z-index: 2;
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .fa-calendar-o {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #a7aaaf !important;
+  }
+
+  .fa-caret-down {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #9ea3a8 !important;
+  }
+}
+
+.topDashBroad {
+  padding: 10px 0;
+  margin: 0;
+  background-color: #ffffff;
+  border-radius: 3px;
+  box-shadow: 0 0 8px 1px #cdd2df;
+  .itemCol {
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #787b85;
+    border-right: 1px solid #e1e1e1;
+
+    &:last-child {
+      border-right: 0;
+    }
+  }
+}
+
+.chartLine {
+  display: grid;
+  grid-template-columns: 33% 33% 33%;
+  grid-template-rows: auto;
+  grid-column-gap: 10px;
+
+  .chart-item {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0 0 8px 1px #cdd2df;
+  }
+}
+
+.highcharts-credits {
+  display: none !important;
+}
+
+@media screen and (max-width: 575px) {
+  .topDashBroad {
+    .itemCol {
+      border-right: 0;
+      border-bottom: 1px solid #e1e1e1;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+  .sipFilter {
+    right: 15px;
+    top: 55px;
   }
 }

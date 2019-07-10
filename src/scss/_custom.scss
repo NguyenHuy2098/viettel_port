@@ -1,1 +1,40 @@
-// Here you can add other styles
+// color-gray-xxx
+@each $color, $value in $grays {
+  .color-#{$color}-#{$value} {
+    color: $value;
+  }
+}
+
+$colors: map-merge(
+  $colors,
+  (
+    'blue': #3d88e1,
+    'bluegreen': #2db4a1,
+    'green': #2c9859,
+    'orange': #fd8301,
+    'red': #eb3c66,
+    'violet': #a775d5,
+  )
+);
+
+// color-xxx
+@each $color, $value in $colors {
+  .color-#{$color} {
+    color: $value;
+  }
+}
+
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    'primary': #2c9859,
+    'secondary': #fd8301,
+  )
+);
+
+// color-xxx
+@each $color, $value in $theme-colors {
+  .color-#{$color} {
+    color: $value;
+  }
+}
