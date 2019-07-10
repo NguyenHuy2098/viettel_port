@@ -150,16 +150,46 @@
   }
 }
 //Drashboard
+.sipGenDashBoard{
+  border-radius: 5px;
+  overflow: hidden;
+  padding: 15px;
+  margin: 0 0 15px;
+  background: #FFFFFF;
+  display: block;
+  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  position: relative;
+}
+.sipFilter{
+  position: absolute;
+  width: 200px;
+  right: 15px;
+  top: 15px;
+  z-index: 2;
+  select{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+  .fa-calendar-o{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: #a7aaaf !important;
+  }
+  .fa-caret-down{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    color: #9ea3a8!important;
+  }
+}
 .topDashBroad{
-  display: grid;
-  grid-template-columns: 20% 20% 20% 20% 20%;
-  grid-template-rows: auto;
-  min-height: 50px;
   padding: 10px 0;
+  margin: 0;
   background-color: #FFFFFF;
   border-radius: 3px;
   box-shadow: 0 0 8px 1px #cdd2df;
-  margin-bottom: 10px;
+  //margin-bottom: 20px;
   .itemCol{
     padding: 0 15px;
     display: flex;
@@ -200,6 +230,7 @@
     }
   }
 }
+
 .chartLine{
   display: grid;
   grid-template-columns: 33% 33% 33%;
@@ -216,10 +247,15 @@
 .highcharts-credits {
   display: none!important;
 }
-//.highcharts-legend{
-//  width: 100%!important;
-//  transform: translate(0,90%)!important;
-//}
-//.highcharts-legend-item{
-//  width: 50%;
-//}
+
+@media screen and (max-width: 575px) {
+  .topDashBroad {
+    .itemCol{
+      border-right: 0;
+      border-bottom: 1px solid #e1e1e1;
+      &:last-child{
+        border-bottom: 0;
+      }
+    }
+  }
+}
