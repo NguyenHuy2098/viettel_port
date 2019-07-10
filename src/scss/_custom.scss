@@ -1,1 +1,33 @@
-// Here you can add other styles
+$theme-colors: map-merge(
+  $theme-colors,
+  (
+    'primary': #2c9859,
+    'secondary': #fd8301,
+  )
+);
+
+@each $color, $value in $theme-colors {
+  .background-color-#{$color} {
+    background-color: $value;
+  }
+  .theme-color-#{$color} {
+    color: $value;
+  }
+}
+
+$sip-colors: map-merge(
+  $colors,
+  (
+    'orange': #fd8301,
+    'green': #2c9859,
+    'blue': #3d88e1,
+    'red': #eb3c66,
+    'bluegreen': #2db4a1,
+  )
+);
+
+@each $color, $value in $sip-colors {
+  .color-#{$color} {
+    color: $value;
+  }
+}

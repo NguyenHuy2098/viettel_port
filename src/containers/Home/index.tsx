@@ -9,7 +9,7 @@ const Home: React.FC = (): JSX.Element => {
     return (
       <Row className="topDashBroad mb-4">
         <Col xs="12" className=" col-sm itemCol">
-          <span>
+          <span className="background-color-primary">
             <i className="fa fa-file-text-o fa-lg mt-4 icon-1" />
             Bảng kê chưa đóng
           </span>
