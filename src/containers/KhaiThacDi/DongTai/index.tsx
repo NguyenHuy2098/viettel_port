@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Badge,
   Button,
@@ -20,6 +20,7 @@ import {
 } from 'reactstrap';
 import classNames from 'classnames';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorCountTaiChuaHoanThanh, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import BangKeBuuGuiChuaDongTai from './BangKeBuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
@@ -31,6 +32,8 @@ const DongTai: React.FC = (): JSX.Element => {
 
   const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(1);
+  const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
+  const countBangKeBuuGuiChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
 
   useEffect((): void => {
     const payload = {
@@ -44,8 +47,21 @@ const DongTai: React.FC = (): JSX.Element => {
         onFailure: (error: HttpRequestErrorType): void => {
           console.log(error.messages);
         },
-        onSuccess: (data: any): void => {
-          console.log(data);
+      }),
+    );
+  }, [dispatch]);
+
+  useEffect((): void => {
+    const payload = {
+      IV_TOR_ID: '',
+      IV_TOR_TYPE: 'ZC1',
+      IV_FR_LOC_ID: 'BDH',
+      IV_CUST_STATUS: '101',
+    };
+    dispatch(
+      action_MIOA_ZTMI047(payload, {
+        onFailure: (error: HttpRequestErrorType): void => {
+          console.log(error.messages);
         },
       }),
     );
@@ -117,7 +133,7 @@ const DongTai: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Tải chưa hoàn thành')}
-              <Badge color="primary">56</Badge>
+              <Badge color="primary">{countTaiChuaHoanThanh}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -126,7 +142,7 @@ const DongTai: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Bảng kê/bưu gửi chưa đóng tải')}
-              <Badge color="primary">45</Badge>
+              <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
             </NavLink>
           </NavItem>
         </Nav>

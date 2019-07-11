@@ -1,10 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
+import { map } from 'lodash';
+import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+
+  const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
+  const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
 
   function renderAction(): JSX.Element {
     return (
@@ -54,42 +61,43 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderTable1(): JSX.Element {
+  function renderTable(): JSX.Element {
     return (
-      <>
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th />
-              <th>{t('Mã tải')}</th>
-              <th>{t('Điểm đến')}</th>
-              <th>{t('SL')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="text-center">
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-        {renderPagination()}
-      </>
+      <Table striped hover>
+        <thead>
+          <tr>
+            <th />
+            <th>{t('Mã tải')}</th>
+            <th>{t('Điểm đến')}</th>
+            <th>{t('SL')}</th>
+            <th>{t('Người nhập')}</th>
+            <th>{t('Ngày nhập')}</th>
+            <th>{t('Ghi chú')}</th>
+            <th>{t('Quản trị')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {map(
+            listTaiChuaHoanThanh,
+            (bangeKe: API.RowMTZTMI047OUT): JSX.Element => (
+              <tr key={bangeKe.TOR_ID}>
+                <td className="text-center">
+                  <Label check>
+                    <Input type="checkbox" />
+                  </Label>
+                </td>
+                <td>{bangeKe.TOR_ID}</td>
+                <td>{bangeKe.LOG_LOCID_DES}</td>
+                <td>{bangeKe.ITEM_NO}</td>
+                <td>-</td>
+                <td>{moment(parseInt(bangeKe.DATETIME_CHLC || '0')).format()}</td>
+                <td>{bangeKe.EXEC_CONT || '-'}</td>
+                <td className="SipTableFunctionIcon">{renderAction()}</td>
+              </tr>
+            ),
+          )}
+        </tbody>
+      </Table>
     );
   }
 
@@ -104,12 +112,15 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>56</span>
+            {t('Tổng số')}: <span>{countTaiChuaHoanThanh}</span>
           </p>
         </Col>
       </Row>
       <div className="mt-3" />
-      <Row className="sipTableContainer">{renderTable1()}</Row>
+      <Row className="sipTableContainer">
+        {renderTable()}
+        {renderPagination()}
+      </Row>
     </>
   );
 };

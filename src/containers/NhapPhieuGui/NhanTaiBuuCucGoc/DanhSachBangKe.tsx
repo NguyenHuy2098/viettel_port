@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Row, Table } from 'reactstrap';
+import { push } from 'connected-react-router';
+import { map } from 'lodash';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { map } from 'lodash';
-import { useGet_MT_ZTMI047_OUT_Row } from 'redux/MIOA_ZTMI047/selectors';
-import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
@@ -15,7 +15,8 @@ function DanhSachBangKe(): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const listManifest = useGet_MT_ZTMI047_OUT_Row();
+  const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
+  const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
 
   useEffect((): void => {
     const payload = {
@@ -40,7 +41,7 @@ function DanhSachBangKe(): JSX.Element {
     };
   };
 
-  const handleDeleteManifet = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+  const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       const payload = {
         IV_FLAG: '3',
@@ -81,7 +82,7 @@ function DanhSachBangKe(): JSX.Element {
         <Button onClick={handleRedirectDetail(item)}>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <Button onClick={handleDeleteManifet(item)}>
+        <Button onClick={handleDeleteManifest(item)}>
           <i className="fa fa-trash-o fa-lg color-red" />
         </Button>
       </>
@@ -105,7 +106,7 @@ function DanhSachBangKe(): JSX.Element {
           </thead>
           <tbody>
             {map(
-              listManifest,
+              listBangKeChuaDongTai,
               (item: API.RowMTZTMI047OUT, index): JSX.Element => {
                 return (
                   <tr key={index}>
@@ -133,7 +134,7 @@ function DanhSachBangKe(): JSX.Element {
           <Input type="text" placeholder="Mã bảng kê" />
           <Button color="primary">Tìm kiếm</Button>
         </div>
-        <p className="pull-right m-0">Tổng số: {listManifest && listManifest.length}</p>
+        <p className="pull-right m-0">Tổng số: {countBangKeChuaDongTai}</p>
       </div>
     );
   }

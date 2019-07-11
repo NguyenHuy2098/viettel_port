@@ -296,7 +296,7 @@ declare namespace API {
     /**
      *
      */
-    T_ITEM?: TITEM;
+    T_ITEM?: TITEM[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -377,7 +377,7 @@ declare namespace API {
     /**
      *
      */
-    MT_ZTMI016_OUT?: MTZTMI017OUT;
+    MT_ZTMI017_OUT?: MTZTMI017OUT;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -456,7 +456,7 @@ declare namespace API {
     /**
      *
      */
-    Row?: RowRequestZTMI022;
+    row?: RowRequestZTMI022;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -657,34 +657,7 @@ declare namespace API {
     Version?: number; // int32
   }
   export interface MIOAZTMI039Request {
-    /**
-     * Số bưu gửi
-     */
-    FU_NO?: string;
-    /**
-     * Trạng thái 302 : Nhận không thành công ,304  : Nhận thành công ,606 : Giao thành công ,607  : Giao không thành công ,819 :  Giao thành công trong trường hợp chuyển hoàn,820 : Giao không thành công
-     */
-    Status?: string;
-    /**
-     * Trong trường hợp lỗi thì điền mã lỗi (lấy từ danh sách sẵn có )
-     */
-    Reason?: string;
-    /**
-     * Ghi chú
-     */
-    Note?: string;
-    /**
-     *
-     */
-    Link_URL?: string;
-    /**
-     * Tiền COD
-     */
-    COD_Amount?: string;
-    /**
-     * Tiền cước
-     */
-    Total_Amount?: string;
+    row?: RowMIOAZTMI039Request[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -693,11 +666,7 @@ declare namespace API {
     /**
      *
      */
-    EV_ERROR?: string;
-    /**
-     *
-     */
-    Row?: RowResponseZTMI039;
+    MT_ZTMI039_OUT?: MTZTMI039OUT;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -712,7 +681,7 @@ declare namespace API {
     /**
      * Username của bưu tá giao hàng
      */
-    DELIVERY_POSTMAN?: string;
+    Delivery_postman?: string;
     /**
      * Số trang
      */
@@ -729,6 +698,14 @@ declare namespace API {
      * Chuyển hoàn
      */
     Return?: string;
+    /**
+     *
+     */
+    IV_PAGENO?: string;
+    /**
+     *
+     */
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -737,7 +714,7 @@ declare namespace API {
     /**
      *
      */
-    Row?: RowResponseZTMI040[];
+    MT_ZTMI040_OUT?: MTZTMI040OUT;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -748,7 +725,7 @@ declare namespace API {
     /**
      *
      */
-    Row?: RowRequestZTMI045[];
+    row?: RowRequestZTMI045[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -833,6 +810,9 @@ declare namespace API {
     Version?: number; // int32
   }
   export interface MIOAZTMI048Request {
+    /**
+     *
+     */
     IV_TOR_ID?: string;
     /**
      * trang thái bắt buộc truyển
@@ -884,10 +864,7 @@ declare namespace API {
     Version?: number; // int32
   }
   export interface MIOAZTMI051Request {
-    Row?: RowZTMI051;
-    LanguageId?: string;
-    LanguageDefaultId?: string;
-    readonly LanguageCurrentId?: string;
+    row?: RowZTMI051;
   }
   export interface MIOAZTMI051Response {
     MT_ZTMI051_OUT?: MTZTMI051OUT;
@@ -901,10 +878,11 @@ declare namespace API {
     /**
      * Mã địa điểm bưu cục
      */
-    IV_POST?: string;
-    LanguageId?: string;
-    LanguageDefaultId?: string;
-    readonly LanguageCurrentId?: string;
+    iv_post?: string;
+    /**
+     *
+     */
+    iv_position?: string;
   }
   export interface MIOAZTMI054Response {
     MT_ZTMI045_OUT?: MTZTMI054OUT;
@@ -1085,7 +1063,7 @@ declare namespace API {
     /**
      *
      */
-    Row?: RowRequestZTMI063;
+    row?: RowRequestZTMI063;
     /**
      * Mã bưu cục
      */
@@ -1094,9 +1072,6 @@ declare namespace API {
      * Mã user
      */
     IV_USER?: string;
-    LanguageId?: string;
-    LanguageDefaultId?: string;
-    readonly LanguageCurrentId?: string;
   }
   export interface MIOAZTMI063Response {
     MT_ZTMI063_OUT?: ZTMI063OUT;
@@ -1166,7 +1141,7 @@ declare namespace API {
     /**
      *
      */
-    RETURN_MESSAGE?: RETURNMESSAGE;
+    RETURN_MESSAGE?: RETURNMESSAGE[];
   }
   export interface MTZTMI018OUT {
     /**
@@ -1183,16 +1158,16 @@ declare namespace API {
      *
      */
     EV_ERROR?: number; // int32
+    /**
+     *
+     */
+    RETURN_MESSAGE?: RETURNMESSAGE;
   }
   export interface MTZTMI022OUT {
     /**
      * 0: Là lỗi, 1: là OK
      */
     EV_ERROR?: number; // int32
-    /**
-     *
-     */
-    RETURN_MESSAGE?: RETURNMESSAGE;
   }
   export interface MTZTMI023OUT {
     /**
@@ -1235,15 +1210,11 @@ declare namespace API {
     /**
      * 01 – Thành công, 00 – Lỗi
      */
-    EV_ERROR?: number; // int32
+    ev_error?: number; // int32
     /**
      *
      */
-    EV_TOTAL_PAGE?: string;
-    /**
-     *
-     */
-    EV_TOTAL_ITEM?: string;
+    paging?: Paging;
     /**
      *
      */
@@ -1252,6 +1223,26 @@ declare namespace API {
   export interface MTZTMI038OUT {
     EV_ERROR?: number; // int32
     Row?: RowResponseZTMI038;
+  }
+  export interface MTZTMI039OUT {
+    /**
+     *
+     */
+    ev_error?: string;
+    /**
+     *
+     */
+    row?: RowResponseZTMI039;
+  }
+  export interface MTZTMI040OUT {
+    /**
+     *
+     */
+    row?: RowResponseZTMI040[];
+    /**
+     *
+     */
+    ev_error?: string;
   }
   export interface MTZTMI045OUT {
     /**
@@ -1277,14 +1268,13 @@ declare namespace API {
   }
   export interface MTZTMI048OUT {
     EV_ERROR?: number; // int32
-    Row?: RowMTZTMI048OUT;
+    Row?: RowMTZTMI048OUT[];
   }
   export interface MTZTMI049OUT {
     Row?: RowMTZTMI049OUT[];
   }
   export interface MTZTMI051OUT {
     EV_ERROR?: number; // int32
-    RETURN_MESSAGE?: RETURNMESSAGE;
   }
   export interface MTZTMI054OUT {
     EV_ERROR?: string;
@@ -1314,6 +1304,24 @@ declare namespace API {
     EV_TOTAL_PAGE?: string;
     EV_TOTAL_ITEM?: string;
   }
+  export interface Paging {
+    /**
+     *
+     */
+    IV_PAGENO?: string;
+    /**
+     *
+     */
+    IV_NO_PER_PAGE?: string;
+    /**
+     *
+     */
+    EV_TOTAL_PAGE?: string;
+    /**
+     *
+     */
+    EV_TOTAL_ITEM?: string;
+  }
   export interface RETURNMESSAGE {
     /**
      * Loại lỗi (E- Error; S-Success, W- Warning, I- Info, A- Abort)
@@ -1336,15 +1344,26 @@ declare namespace API {
     /**
      * Tham số 1 của nội dung lỗi
      */
-    MESSAGE_V1?: number; // int32
+    MESSAGE_V1?: number; // int64
     /**
      * Tham số 2 của nội dung lỗi
      */
-    MESSAGE_V2?: number; // int32
+    MESSAGE_V2?: string;
     /**
      * Tham số 3 của nội dung lỗi
      */
     MESSAGE_V3?: string;
+  }
+  export interface RowMIOAZTMI039Request {
+    FWO_no?: string;
+    FU_NO?: string;
+    Status?: string;
+    Reason?: string;
+    Note?: string;
+    Link_URL?: string;
+    COD_Amount?: string;
+    Total_Amount?: string;
+    USERID?: string;
   }
   export interface RowMTZFII016OUT {
     KUNNR?: string;
@@ -1449,7 +1468,23 @@ declare namespace API {
     /**
      * Số nhà
      */
-    HOUSE_NUM1?: number; // int32
+    HOUSE_NUM1?: string;
+    /**
+     * Số điện thoại
+     */
+    TEL_NUMBER?: string;
+    /**
+     *
+     */
+    TEL_NUMBER2?: string;
+    /**
+     *
+     */
+    FAX_NUMBER?: string;
+    /**
+     *
+     */
+    SMTP_ADDR?: string;
     /**
      * Tên đường phố
      */
@@ -1457,7 +1492,7 @@ declare namespace API {
     /**
      * Mã phường/xã
      */
-    REGIOGROUP?: number; // int32
+    REGIOGROUP?: string;
     /**
      * Mã tỉnh/thành
      */
@@ -1543,6 +1578,7 @@ declare namespace API {
     LOCNO?: string;
     UNAME?: string;
     NAME_TEXT?: string;
+    POSITION?: string;
   }
   export interface RowMTZTMI058OUT {
     FWO_TYPE?: string;
@@ -1696,7 +1732,7 @@ declare namespace API {
     /**
      * Mã địa chỉ hiện tại
      */
-    EXT_LOG_ID?: number; // int32
+    EXT_LOG_ID?: string;
     /**
      * Khối lượng
      */
@@ -1720,7 +1756,7 @@ declare namespace API {
     /**
      * Mã điểm đi
      */
-    FR_LOG_ID?: number; // int32
+    FR_LOG_ID?: string;
     /**
      * Chuỗi mã điểm đến
      */
@@ -1899,7 +1935,7 @@ declare namespace API {
     /**
      *
      */
-    Msg?: string;
+    message?: string;
   }
   export interface RowResponseZTMI040 {
     /**
@@ -2137,8 +2173,17 @@ declare namespace API {
      * Mô tả giải pháp khắc phục
      */
     SOLUTION?: string;
+    /**
+     *
+     */
     CORRECT_INCORRECT?: string;
+    /**
+     *
+     */
     EXPLAINATION_TEXT?: string;
+    /**
+     *
+     */
     CONCLUSION_TEXT?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
