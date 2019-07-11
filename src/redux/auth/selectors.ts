@@ -1,17 +1,11 @@
 import { UserState } from 'redux-oidc';
 import { User } from 'oidc-client';
-import { createSelector } from 'reselect';
+import { get } from 'lodash';
 import { AppStateType } from 'redux/store';
 
 export const selectAuth = (state: AppStateType): UserState => state.auth;
 
-export const makeSelectUser = createSelector(
-  selectAuth,
-  (auth: UserState): User | undefined => auth.user,
-);
+export const makeSelectUser = (state: AppStateType): User | undefined => get(selectAuth(state), 'user');
 
-export const makeSelectProfile = createSelector(
-  makeSelectUser,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (user: User | undefined): any => (user ? user.profile : undefined),
-);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const makeSelectProfile = (state: AppStateType): any => get(makeSelectUser(state), 'profile');
