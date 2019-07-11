@@ -50,10 +50,12 @@ function DanhSachBangKe(): JSX.Element {
         IV_SLOCATION: '',
         IV_DLOCATION: '',
         IV_DESCRIPTION: '',
-        T_ITEM: {
-          ITEM_ID: '',
-          ITEM_TYPE: '',
-        },
+        T_ITEM: [
+          {
+            ITEM_ID: '',
+            ITEM_TYPE: '',
+          },
+        ],
       };
       if (!window.confirm('Bạn có chắc chắn?')) return;
       dispatch(
