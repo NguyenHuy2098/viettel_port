@@ -2,7 +2,6 @@ import * as React from 'react';
 import {
   Badge,
   Button,
-  Col,
   FormGroup,
   Input,
   Label,
@@ -10,13 +9,9 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Row,
   TabContent,
   TabPane,
-  Table,
   Nav,
   NavItem,
   NavLink,
@@ -25,6 +20,10 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import classNames from 'classnames';
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { makeSelectorCountChuyenThuChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
+import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
+import TaiKienChuaDongChuyenThu from './TaiKienChuaDongChuyenThu';
 
 // eslint-disable-next-line max-lines-per-function
 const DongChuyenThu: React.FC = (): JSX.Element => {
@@ -36,7 +35,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   }
 
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
-
+  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
@@ -88,115 +87,6 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderPagination(): JSX.Element {
-    return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left" />
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right" />
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-    );
-  }
-
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
-
-  function renderTable1(): JSX.Element {
-    return (
-      <>
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th />
-              <th>{t('Mã chuyến thư')}</th>
-              <th>{t('Điểm đến')}</th>
-              <th>{t('SL')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="text-center">
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-        {renderPagination()}
-      </>
-    );
-  }
-
-  function renderTab1(): JSX.Element {
-    return (
-      <>
-        <Row className="sipContentContainer">
-          <Col lg={4} xs={12} className="p-0">
-            <div className="sipTitleRightBlockInput m-0">
-              <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} />
-            </div>
-          </Col>
-          <Col>
-            <p className="text-right mt-2 mb-0">
-              {t('Tổng số')}: <span>56</span>
-            </p>
-          </Col>
-        </Row>
-        <div className="mt-3" />
-        <Row className="sipTableContainer">{renderTable1()}</Row>
-      </>
-    );
-  }
-
   return (
     <>
       {renderTitle()}
@@ -208,7 +98,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
               {t('CT chưa hoàn thành')}
-              <Badge color="primary">56</Badge>
+              <Badge color="primary">{countChuyenThuChuaHoanThanh}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -222,9 +112,11 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
           </NavItem>
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={1}>{renderTab1()}</TabPane>
+          <TabPane tabId={1}>
+            <ChuyenThuChuaHoanThanh />
+          </TabPane>
           <TabPane tabId={2}>
-            <h1>Tab 2</h1>
+            <TaiKienChuaDongChuyenThu />
           </TabPane>
         </TabContent>
       </div>
