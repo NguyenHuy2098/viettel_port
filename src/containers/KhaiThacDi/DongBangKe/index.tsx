@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Badge,
   Button,
@@ -17,14 +17,17 @@ import {
   NavLink,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
 import classNames from 'classnames';
+import { makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
+
+  const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
 
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
@@ -70,7 +73,9 @@ const TaoBangKe: React.FC = (): JSX.Element => {
 const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
 
-  const [tab, setTab] = React.useState<number>(1);
+  const [tab, setTab] = useState<number>(1);
+  const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
+
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
@@ -104,7 +109,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Bảng kê chưa hoàn thành')}
-              <Badge color="primary">56</Badge>
+              <Badge color="primary">{countBangKeChuaDongTai}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>

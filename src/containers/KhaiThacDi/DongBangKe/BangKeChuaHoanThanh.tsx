@@ -1,17 +1,20 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { map } from 'lodash';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { map, get } from 'lodash';
-import { useGet_MT_ZTMI047_OUT_Row } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  React.useEffect((): void => {
+  const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
+  const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
+
+  useEffect((): void => {
     const payload = {
       IV_TOR_ID: '',
       IV_TOR_TYPE: 'ZC1',
@@ -70,8 +73,6 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     );
   }
 
-  const listManifest = useGet_MT_ZTMI047_OUT_Row();
-
   function renderTable(): JSX.Element {
     return (
       <>
@@ -90,7 +91,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           </thead>
           <tbody>
             {map(
-              listManifest,
+              listBangKeChuaDongTai,
               (item: API.RowMTZTMI047OUT, index): JSX.Element => {
                 return (
                   <tr key={index}>
@@ -129,7 +130,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{get(listManifest, 'length', 0)}</span>
+            {t('Tổng số')}: <span>{countBangKeChuaDongTai}</span>
           </p>
         </Col>
       </Row>
