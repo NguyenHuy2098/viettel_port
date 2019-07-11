@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { map } from 'lodash';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
 
   const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
   const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
+
+  function handleSearch(event: ChangeEvent<HTMLInputElement>): void {
+    const payload = {
+      IV_TOR_ID: event.target.value,
+      IV_TOR_TYPE: 'ZC2',
+      IV_FR_LOC_ID: 'BDH',
+      IV_CUST_STATUS: '101',
+    };
+    dispatch(action_MIOA_ZTMI047(payload));
+  }
 
   function renderAction(): JSX.Element {
     return (
@@ -79,19 +91,19 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         <tbody>
           {map(
             listTaiChuaHoanThanh,
-            (bangeKe: API.RowMTZTMI047OUT): JSX.Element => (
-              <tr key={bangeKe.TOR_ID}>
+            (bangKe: API.RowMTZTMI047OUT): JSX.Element => (
+              <tr key={bangKe.TOR_ID}>
                 <td className="text-center">
                   <Label check>
                     <Input type="checkbox" />
                   </Label>
                 </td>
-                <td>{bangeKe.TOR_ID}</td>
-                <td>{bangeKe.LOG_LOCID_DES}</td>
-                <td>{bangeKe.ITEM_NO}</td>
+                <td>{bangKe.TOR_ID}</td>
+                <td>{bangKe.LOG_LOCID_DES}</td>
+                <td>{bangKe.ITEM_NO}</td>
                 <td>-</td>
-                <td>{moment(parseInt(bangeKe.DATETIME_CHLC || '0')).format()}</td>
-                <td>{bangeKe.EXEC_CONT || '-'}</td>
+                <td>{moment(parseInt(bangKe.DATETIME_CHLC || '0')).format()}</td>
+                <td>{bangKe.EXEC_CONT || '-'}</td>
                 <td className="SipTableFunctionIcon">{renderAction()}</td>
               </tr>
             ),
@@ -107,7 +119,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         <Col lg={4} xs={12} className="p-0">
           <div className="sipTitleRightBlockInput m-0">
             <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tìm kiếm tải')} />
+            <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSearch} />
           </div>
         </Col>
         <Col>
