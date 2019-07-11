@@ -1,11 +1,13 @@
 import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { map } from 'lodash';
+import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -25,16 +27,70 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     dispatch(action_MIOA_ZTMI047(payload));
   }
 
-  function renderAction(): JSX.Element {
+  function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+    return (): void => {
+      console.log('print', tai.TOR_ID);
+    };
+  }
+
+  function editTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+    return (): void => {
+      console.log('edit', tai.TOR_ID);
+    };
+  }
+
+  function deleteTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+    return (): void => {
+      const payload = {
+        IV_FLAG: '3',
+        IV_TOR_TYPE: 'ZC2',
+        IV_TOR_ID_CU: tai.TOR_ID,
+        IV_SLOCATION: '',
+        IV_DLOCATION: '',
+        IV_DESCRIPTION: '',
+        T_ITEM: [
+          {
+            ITEM_ID: '',
+            ITEM_TYPE: '',
+          },
+        ],
+      };
+      if (!window.confirm('Bạn có chắc chắn?')) return;
+      dispatch(
+        action_MIOA_ZTMI016(payload, {
+          onFailure: (error: HttpRequestErrorType): void => {
+            console.log(error);
+          },
+          onSuccess: (): void => {
+            const payload = {
+              IV_TOR_ID: '',
+              IV_TOR_TYPE: 'ZC2',
+              IV_FR_LOC_ID: 'BDH',
+              IV_CUST_STATUS: '101',
+            };
+            dispatch(
+              action_MIOA_ZTMI047(payload, {
+                onFailure: (error: HttpRequestErrorType): void => {
+                  console.log(error.messages);
+                },
+              }),
+            );
+          },
+        }),
+      );
+    };
+  }
+
+  function renderAction(taiChuaHoanThan: API.RowMTZTMI047OUT): JSX.Element {
     return (
       <>
-        <Button>
+        <Button onClick={printTai(taiChuaHoanThan)}>
           <i className="fa fa-print fa-lg color-green" />
         </Button>
-        <Button>
+        <Button onClick={editTai(taiChuaHoanThan)}>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <Button>
+        <Button onClick={deleteTai(taiChuaHoanThan)}>
           <i className="fa fa-trash-o fa-lg color-red" />
         </Button>
       </>
@@ -91,20 +147,20 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         <tbody>
           {map(
             listTaiChuaHoanThanh,
-            (bangKe: API.RowMTZTMI047OUT): JSX.Element => (
-              <tr key={bangKe.TOR_ID}>
+            (tai: API.RowMTZTMI047OUT): JSX.Element => (
+              <tr key={tai.TOR_ID}>
                 <td className="text-center">
                   <Label check>
                     <Input type="checkbox" />
                   </Label>
                 </td>
-                <td>{bangKe.TOR_ID}</td>
-                <td>{bangKe.LOG_LOCID_DES}</td>
-                <td>{bangKe.ITEM_NO}</td>
+                <td>{tai.TOR_ID}</td>
+                <td>{tai.LOG_LOCID_DES}</td>
+                <td>{tai.ITEM_NO}</td>
                 <td>-</td>
-                <td>{moment(parseInt(bangKe.DATETIME_CHLC || '0')).format()}</td>
-                <td>{bangKe.EXEC_CONT || '-'}</td>
-                <td className="SipTableFunctionIcon">{renderAction()}</td>
+                <td>{moment(parseInt(tai.DATETIME_CHLC || '0')).format()}</td>
+                <td>{tai.EXEC_CONT || '-'}</td>
+                <td className="SipTableFunctionIcon">{renderAction(tai)}</td>
               </tr>
             ),
           )}
