@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Badge,
   Button,
@@ -18,13 +18,14 @@ import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import logo from 'assets/img/logo.png';
 import { logout } from 'redux/auth/actions';
 import { makeSelectProfile } from 'redux/auth/selectors';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const DefaultHeader: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const profile = useSelector(makeSelectProfile);
-  const [dropdownOpenMenu, setDropdownOpenMenu] = React.useState<boolean>(false);
-  const [dropdownOpenNotifications, setDropdownOpenNotifications] = React.useState<boolean>(false);
+  const [dropdownOpenMenu, setDropdownOpenMenu] = useState<boolean>(false);
+  const [dropdownOpenNotifications, setDropdownOpenNotifications] = useState<boolean>(false);
 
   const handleLogout = (): void => {
     dispatch(logout({}));
@@ -153,8 +154,9 @@ const DefaultHeader: React.FC = (): JSX.Element => {
     <>
       <AppSidebarToggler className="d-lg-none" display="md" mobile />
       <AppNavbarBrand
-        full={{ src: logo, width: 89, height: 25, alt: 'VTP' }}
+        full={{ src: logo, width: 150, alt: 'VTP' }}
         minimized={{ src: logo, width: 30, height: 30, alt: 'VTP' }}
+        href={routesMap.home}
       />
       <AppSidebarToggler className="d-md-down-none" display="lg" />
 
