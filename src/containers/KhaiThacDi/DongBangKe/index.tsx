@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   Badge,
   Button,
@@ -17,9 +17,7 @@ import {
   NavLink,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import classNames from 'classnames';
-import { useCallback } from 'react';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 
@@ -72,7 +70,7 @@ const TaoBangKe: React.FC = (): JSX.Element => {
 const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
 
-  const [tab, setTab] = useState<number>(1);
+  const [tab, setTab] = React.useState<number>(1);
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
@@ -103,7 +101,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 1 })}
-              onClick={useCallback((): void => handleChangeTab(1), [])}
+              onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Bảng kê chưa hoàn thành')}
               <Badge color="primary">56</Badge>
@@ -112,7 +110,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 2 })}
-              onClick={useCallback((): void => handleChangeTab(2), [])}
+              onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Bưu gửi chưa đóng BK')}
               <Badge color="primary">03</Badge>

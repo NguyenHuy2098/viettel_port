@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
