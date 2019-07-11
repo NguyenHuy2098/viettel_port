@@ -68,8 +68,8 @@ const NhanTaiBuuCucGoc = Loadable({
 
 // =============== KhaiThacDi =====================
 
-const dongBangKe = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/BangKe/DongBangKe'),
+const DongBangKe = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongBangKe/index'),
   loading: Loading,
 });
 const dongBangKeNoiTinh = Loadable({
@@ -159,7 +159,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
       component: internationalForwardingOrder,
     },
     { path: routesMap.dongBangKeNoiTinh, name: t('Đóng bảng kê nội tỉnh'), component: dongBangKeNoiTinh },
-    { path: routesMap.dongBangKe, name: t('Đóng bảng kê'), component: dongBangKe },
+    { path: routesMap.dongBangKe, name: t('Đóng bảng kê'), component: DongBangKe },
     { path: routesMap.inputRevenue, name: t('Nhập doanh thu'), component: inputRevenue },
     { path: routesMap.thongTinBangKe, name: t('Thông tin bảng kê'), component: thongTinBangKe },
     { path: routesMap.dongTai, name: t('Đóng tải'), component: dongTai },
