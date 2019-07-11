@@ -1,21 +1,24 @@
-import * as React from 'react';
-import { useDispatch } from 'react-redux';
-import { map } from 'lodash';
-import { push } from 'connected-react-router';
-import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { push } from 'connected-react-router';
+import { map } from 'lodash';
+import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { useGet_MT_ZTMI047_OUT_Row } from 'redux/MIOA_ZTMI047/selectors';
-import routesMap from 'utils/routesMap';
+import {
+  makeSelectorChuyenThuChuaHoanThanh,
+  makeSelectorCountChuyenThuChuaHoanThanh,
+} from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect((): void => {
     const payload = {
       IV_TOR_ID: '',
       IV_TOR_TYPE: 'ZC3',
@@ -32,8 +35,8 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     );
   }, [dispatch]);
 
-  const listManifest = useGet_MT_ZTMI047_OUT_Row();
-  console.log(listManifest);
+  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
+  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorChuyenThuChuaHoanThanh);
 
   function renderPagination(): JSX.Element {
     return (
@@ -155,7 +158,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
           </thead>
           <tbody>
             {map(
-              listManifest,
+              listChuyenThuChuaHoanThanh,
               (item: API.RowMTZTMI047OUT, index): JSX.Element => {
                 return (
                   <tr key={index}>
@@ -166,9 +169,9 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
                       </Label>
                     </td>
                     <td>{item.TOR_ID}</td>
-                    <td></td>
+                    <td />
                     <td>{item.ITEM_NO}</td>
-                    <td></td>
+                    <td />
                     <td>{item.DATETIME_CHLC}</td>
                     <td>{item.EXEC_CONT}</td>
                     <td className="SipTableFunctionIcon">{renderManifestTableAction(item)}</td>
@@ -194,7 +197,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>56</span>
+            {t('Tổng số')}: <span>{countChuyenThuChuaHoanThanh}</span>
           </p>
         </Col>
       </Row>

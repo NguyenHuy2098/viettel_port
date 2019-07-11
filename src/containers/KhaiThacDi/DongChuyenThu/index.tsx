@@ -20,6 +20,8 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import classNames from 'classnames';
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
+import { makeSelectorCountChuyenThuChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiKienChuaDongChuyenThu from './TaiKienChuaDongChuyenThu';
 
@@ -33,7 +35,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   }
 
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
-
+  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
@@ -96,7 +98,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
               {t('CT chưa hoàn thành')}
-              <Badge color="primary">56</Badge>
+              <Badge color="primary">{countChuyenThuChuaHoanThanh}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
