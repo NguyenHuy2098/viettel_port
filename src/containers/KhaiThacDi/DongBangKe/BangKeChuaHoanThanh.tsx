@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import ReactPaginate from 'react-paginate';
 import { map } from 'lodash';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
@@ -37,35 +38,31 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     dispatch(action_MIOA_ZTMI047(payload));
   }
 
+  function onPageChange(selectedItem: { selected: number }): void {
+    console.log(selectedItem);
+  }
+
   function renderPagination(): JSX.Element {
     return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left" />
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right" />
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
+      <nav className="sipPagination">
+        <ReactPaginate
+          pageCount={100}
+          pageRangeDisplayed={5}
+          marginPagesDisplayed={2}
+          containerClassName="pagination"
+          previousClassName="sipPaginationPrev pull-left page-item"
+          nextClassName="sipPaginationNext pull-right page-item"
+          previousLinkClassName="page-link"
+          nextLinkClassName="page-link"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousLabel={<i className="fa fa-arrow-left" />}
+          nextLabel={<i className="fa fa-arrow-right" />}
+          activeClassName="selected"
+          onPageChange={onPageChange}
+          breakClassName="page-item"
+        />
+      </nav>
     );
   }
 
