@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactPaginate, { ReactPaginateProps } from 'react-paginate';
 
-function Paginations(props: ReactPaginateProps): JSX.Element {
+function Pagination(props: ReactPaginateProps): JSX.Element {
   return (
     <nav className="sipPagination">
       <ReactPaginate
@@ -22,4 +22,4 @@ function Paginations(props: ReactPaginateProps): JSX.Element {
   );
 }
 
-export default Paginations;
+export default Pagination;

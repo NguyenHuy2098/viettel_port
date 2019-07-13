@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
 import { map } from 'lodash';
+import Pagination from 'components/Pagination';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import Paginations from 'components/Paginations';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -18,12 +18,16 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
 
   const getListBangKe = useCallback(
     function(payload = {}): void {
-      if (!payload.IV_TOR_ID) payload.IV_TOR_ID = '';
-      if (!payload.IV_TOR_TYPE) payload.IV_TOR_TYPE = 'ZC1';
-      if (!payload.IV_FR_LOC_ID) payload.IV_FR_LOC_ID = 'BDH';
-      if (!payload.IV_CUST_STATUS) payload.IV_CUST_STATUS = '101';
-      if (!payload.IV_TO_LOC_ID) payload.IV_TO_LOC_ID = '';
-      dispatch(action_MIOA_ZTMI047(payload));
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_TOR_ID: '',
+          IV_TOR_TYPE: 'ZC1',
+          IV_FR_LOC_ID: 'BDH',
+          IV_CUST_STATUS: '101',
+          IV_TO_LOC_ID: '',
+          ...payload,
+        }),
+      );
     },
     [dispatch],
   );
@@ -123,7 +127,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
             )}
           </tbody>
         </Table>
-        <Paginations pageRangeDisplayed={5} marginPagesDisplayed={2} pageCount={100} onPageChange={onPageChange} />
+        <Pagination pageRangeDisplayed={5} marginPagesDisplayed={2} pageCount={100} onPageChange={onPageChange} />
       </>
     );
   }
