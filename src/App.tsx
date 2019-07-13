@@ -35,6 +35,8 @@ const App: React.FC = (): JSX.Element => {
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
+        {/*
+        // @ts-ignore */}
         <OidcProvider store={store} userManager={userManager}>
           <Router history={history}>
             <Switch>
