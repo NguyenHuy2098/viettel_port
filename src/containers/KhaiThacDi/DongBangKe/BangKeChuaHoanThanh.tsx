@@ -7,7 +7,7 @@ import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
-import ModalPopupConfirm from './../../../components/ModalConfirm/ModalPopupConfirm';
+import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {

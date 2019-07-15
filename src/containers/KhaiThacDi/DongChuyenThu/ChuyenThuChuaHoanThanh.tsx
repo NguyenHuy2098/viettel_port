@@ -12,6 +12,7 @@ import {
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -92,7 +93,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   };
 
-  const handleDeleteManifet = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+  const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       const payload = {
         IV_FLAG: '3',
@@ -106,7 +107,6 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
           ITEM_TYPE: '',
         },
       };
-      if (!window.confirm('Bạn có chắc chắn?')) return;
       dispatch(
         action_MIOA_ZTMI016(payload, {
           onFinish: (): void => {
@@ -133,9 +133,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
         <Button onClick={handleRedirectDetail(item)}>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <Button onClick={handleDeleteManifet(item)}>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
+        <ModalPopupConfirm handleDoSomething={handleDeleteManifest(item)} />
       </>
     );
   }
