@@ -1,0 +1,47 @@
+import React, { useState } from 'react';
+import { Button, Modal, ModalHeader, ModalFooter } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+
+interface Props {
+  buttonLabel?: JSX.Element;
+  className?: string;
+  handleDoSomething: Function;
+  saveButton?: string;
+  cancelButton?: string;
+  titleModal?: string;
+}
+
+const ModalPopupConfirm: React.FC<Props> = (props: Props): JSX.Element => {
+  const [modal, setModal] = useState(false);
+  const { t } = useTranslation();
+
+  function toggle(): void {
+    setModal(!modal);
+  }
+
+  function handleDoSomething(): void {
+    props.handleDoSomething();
+    setModal(false);
+  }
+
+  return (
+    <>
+      <Button onClick={toggle}>
+        {props.buttonLabel ? props.buttonLabel : <i className="fa fa-trash-o fa-lg color-red" />}
+      </Button>
+      <Modal isOpen={modal} toggle={toggle} className={props.className}>
+        <ModalHeader toggle={toggle}>{props.titleModal ? props.titleModal : t('Bạn có muốn xóa không?')}</ModalHeader>
+        <ModalFooter>
+          <Button color="primary" onClick={handleDoSomething}>
+            {props.saveButton ? props.saveButton : t('Xóa')}
+          </Button>
+          <Button color="secondary" onClick={toggle}>
+            {props.cancelButton ? props.cancelButton : t('Hủy')}
+          </Button>
+        </ModalFooter>
+      </Modal>
+    </>
+  );
+};
+
+export default ModalPopupConfirm;
