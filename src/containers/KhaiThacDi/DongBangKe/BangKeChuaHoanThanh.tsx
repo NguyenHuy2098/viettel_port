@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import ReactPaginate from 'react-paginate';
+import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
 import { map } from 'lodash';
+import Pagination from 'components/Pagination';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -16,54 +16,33 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
   const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
 
-  useEffect((): void => {
-    const payload = {
-      IV_TOR_ID: '',
-      IV_TOR_TYPE: 'ZC1',
-      IV_FR_LOC_ID: 'BDH',
-      IV_CUST_STATUS: '101',
-      IV_TO_LOC_ID: '',
-    };
-    dispatch(action_MIOA_ZTMI047(payload));
-  }, [dispatch]);
+  const getListBangKe = useCallback(
+    function(payload = {}): void {
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_TOR_ID: '',
+          IV_TOR_TYPE: 'ZC1',
+          IV_FR_LOC_ID: 'BDH',
+          IV_CUST_STATUS: '101',
+          IV_TO_LOC_ID: '',
+          ...payload,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
+  useEffect((): void => getListBangKe(), [getListBangKe]);
 
   function handleSearchBangKe(e: React.ChangeEvent<HTMLInputElement>): void {
     const payload = {
       IV_TOR_ID: e.target.value,
-      IV_TOR_TYPE: 'ZC1',
-      IV_FR_LOC_ID: 'BDH',
-      IV_CUST_STATUS: '101',
-      IV_TO_LOC_ID: '',
     };
-    dispatch(action_MIOA_ZTMI047(payload));
+    getListBangKe(payload);
   }
 
   function onPageChange(selectedItem: { selected: number }): void {
     console.log(selectedItem);
-  }
-
-  function renderPagination(): JSX.Element {
-    return (
-      <nav className="sipPagination">
-        <ReactPaginate
-          pageCount={100}
-          pageRangeDisplayed={5}
-          marginPagesDisplayed={2}
-          containerClassName="pagination"
-          previousClassName="sipPaginationPrev pull-left page-item"
-          nextClassName="sipPaginationNext pull-right page-item"
-          previousLinkClassName="page-link"
-          nextLinkClassName="page-link"
-          pageClassName="page-item"
-          pageLinkClassName="page-link"
-          previousLabel={<i className="fa fa-arrow-left" />}
-          nextLabel={<i className="fa fa-arrow-right" />}
-          activeClassName="selected"
-          onPageChange={onPageChange}
-          breakClassName="page-item"
-        />
-      </nav>
-    );
   }
 
   const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
@@ -85,16 +64,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
       if (!window.confirm('Bạn có chắc chắn?')) return;
       dispatch(
         action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => {
-            const payload = {
-              IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC1',
-              IV_FR_LOC_ID: 'BDH',
-              IV_CUST_STATUS: '101',
-              IV_TO_LOC_ID: '',
-            };
-            dispatch(action_MIOA_ZTMI047(payload));
-          },
+          onFinish: (): void => getListBangKe(),
         }),
       );
     };
@@ -157,7 +127,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
             )}
           </tbody>
         </Table>
-        {renderPagination()}
+        <Pagination pageRangeDisplayed={5} marginPagesDisplayed={2} pageCount={100} onPageChange={onPageChange} />
       </>
     );
   }
