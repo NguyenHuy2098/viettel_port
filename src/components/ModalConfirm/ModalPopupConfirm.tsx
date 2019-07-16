@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalFooter, FormGroup, Label, Input, ModalBody } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 
 interface Props {
@@ -9,6 +9,7 @@ interface Props {
   saveButton?: string;
   cancelButton?: string;
   titleModal?: string;
+  contentConfirm?: string;
 }
 
 const ModalPopupConfirm: React.FC<Props> = (props: Props): JSX.Element => {
@@ -29,9 +30,12 @@ const ModalPopupConfirm: React.FC<Props> = (props: Props): JSX.Element => {
       <Button onClick={toggle}>
         {props.buttonLabel ? props.buttonLabel : <i className="fa fa-trash-o fa-lg color-red" />}
       </Button>
-      <Modal isOpen={modal} toggle={toggle} className={props.className}>
-        <ModalHeader toggle={toggle}>{props.titleModal ? props.titleModal : t('Bạn có muốn xóa không?')}</ModalHeader>
-        <ModalFooter>
+      <Modal isOpen={modal} toggle={toggle} className={props.className ? props.className : 'sipTitleModalCreateNew'}>
+        <ModalHeader toggle={toggle}>{props.titleModal ? props.titleModal : t('Xác nhận')}</ModalHeader>
+        <ModalBody>
+          <p>{props.contentConfirm ? props.contentConfirm : t('Bạn có muốn xóa không?')}</p>
+        </ModalBody>
+        <ModalFooter className="justify-content-end">
           <Button color="primary" onClick={handleDoSomething}>
             {props.saveButton ? props.saveButton : t('Xóa')}
           </Button>

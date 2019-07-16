@@ -93,26 +93,28 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   };
 
-  const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+  const handleDeleteChuyenThu = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       const payload = {
         IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC1',
+        IV_TOR_TYPE: 'ZC3',
         IV_TOR_ID_CU: item.TOR_ID,
         IV_SLOCATION: '',
         IV_DLOCATION: '',
         IV_DESCRIPTION: '',
-        T_ITEM: {
-          ITEM_ID: '',
-          ITEM_TYPE: '',
-        },
+        T_ITEM: [
+          {
+            ITEM_ID: '',
+            ITEM_TYPE: '',
+          },
+        ],
       };
       dispatch(
         action_MIOA_ZTMI016(payload, {
           onFinish: (): void => {
             const payload = {
               IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC1',
+              IV_TOR_TYPE: 'ZC3',
               IV_FR_LOC_ID: 'BDH',
               IV_CUST_STATUS: '101',
               IV_TO_LOC_ID: '',
@@ -133,7 +135,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
         <Button onClick={handleRedirectDetail(item)}>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <ModalPopupConfirm handleDoSomething={handleDeleteManifest(item)} />
+        <ModalPopupConfirm handleDoSomething={handleDeleteChuyenThu(item)} />
       </>
     );
   }
