@@ -7,6 +7,7 @@ import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
+import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -61,7 +62,6 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           },
         ],
       };
-      if (!window.confirm('Bạn có chắc chắn?')) return;
       dispatch(
         action_MIOA_ZTMI016(payload, {
           onFinish: (): void => getListBangKe(),
@@ -79,9 +79,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
         <Button>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <Button onClick={handleDeleteManifest(item)}>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
+        <ModalPopupConfirm handleDoSomething={handleDeleteManifest(item)} />
       </>
     );
   }
