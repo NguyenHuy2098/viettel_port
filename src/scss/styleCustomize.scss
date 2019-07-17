@@ -31,12 +31,13 @@
         padding: 0 10px;
         position: relative;
         top: -5px;
+        height: 30px;
       }
     }
   }
 
   .sipLine {
-    margin: 20px 0 0;
+    margin: 15px 0 0;
   }
 }
 
@@ -51,14 +52,16 @@
   h3 {
     color: #299f9a;
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 600;
     margin-bottom: 10px;
   }
 }
 
 .sipInputItem {
   margin-bottom: 10px;
-
+  .react-datepicker-wrapper, .react-datepicker__input-container {
+    width: 100%;
+  }
   & > label {
     padding-right: 0;
   }
@@ -78,6 +81,7 @@
 
 .sipInputItemError {
   color: #eb3c66;
+  margin-top: 3px;
 }
 
 .sipInputItemGroup {

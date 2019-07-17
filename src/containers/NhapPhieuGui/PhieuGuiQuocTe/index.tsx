@@ -243,9 +243,9 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
       <div className="sipInputBlock">
         <h3>
           Dịch vụ
-          <Button className="sipFlatBtn pull-right">
+          <Button className="sipFlatBtn pull-right text-normal">
             Tất cả dịch vụ
-            <i className="fa fa-angle-right color-orange ml-1 fa-lg"></i>
+            <i className="fa fa-angle-right ml-1 fa-lg"></i>
           </Button>
         </h3>
         <Row className="sipInputItem">
