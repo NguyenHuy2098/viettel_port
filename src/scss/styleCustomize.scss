@@ -59,7 +59,9 @@
 
 .sipInputItem {
   margin-bottom: 10px;
-
+  .react-datepicker-wrapper, .react-datepicker__input-container {
+    width: 100%;
+  }
   & > label {
     padding-right: 0;
   }
@@ -79,6 +81,7 @@
 
 .sipInputItemError {
   color: #eb3c66;
+  margin-top: 3px;
 }
 
 .sipInputItemGroup {
