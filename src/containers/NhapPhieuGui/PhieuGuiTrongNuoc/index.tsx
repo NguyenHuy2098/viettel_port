@@ -2,7 +2,6 @@
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { FormEvent, useState } from 'react';
-// import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { find, get } from 'lodash';
@@ -11,6 +10,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import ShowFormLocation from './ShowFormLocation';
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
@@ -295,19 +295,28 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       <Row className="sipSendingCoupon sipContentContainer no-padding">
         <Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">{t('Cước chính:')}</Col>
+            <Col xs="5">
+              {t('Cước chính')}
+              {t('HYPHEN', ':')}
+            </Col>
             <Col xs="7" className="text-semibold">
               12.000 đ
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">{t('Cước cộng thêm:')}</Col>
+            <Col xs="5">
+              {t('Cước cộng thêm')}
+              {t('HYPHEN', ':')}
+            </Col>
             <Col xs="7" className="text-semibold">
               2.000 đ
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">{t('Phụ phí khác:')}</Col>
+            <Col xs="5">
+              {t('Phụ phí khác')}
+              {t('HYPHEN', ':')}
+            </Col>
             <Col xs="7">
               <Input type="text" defaultValue={phuPhi} onChange={handleChangeTextboxValue(setPhuPhi)} />
               <div className="sipInputItemError">{handleErrorMessage(errors, 'phuPhi')}</div>
@@ -375,7 +384,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             Địa chỉ
             <span className="color-red"> *</span>
           </Label>
-          <Col lg="8">
+          <Col Col lg="8">
             <Input
               type="text"
               placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
@@ -383,7 +392,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
             <p className="sipInputItemDescription">
-              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')}, <Button className="sipFlatBtn">{t('nhấn vào đây')}</Button>{' '}
+              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')}, <ShowFormLocation />
               {t('để tự nhập')})
             </p>
           </Col>
@@ -466,7 +475,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiReceiver')}</div>
             <p className="sipInputItemDescription">
-              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')}, <Button className="sipFlatBtn">{t('nhấn vào đây')}</Button>{' '}
+              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')}, <ShowFormLocation />
               {t('để tự nhập')})
             </p>
           </Col>
