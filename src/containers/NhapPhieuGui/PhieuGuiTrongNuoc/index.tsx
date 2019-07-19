@@ -91,7 +91,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   }
   //__________________________________________________________
   const [phuPhi, setPhuPhi] = useState<string>('0.00');
-  const [maKhachHang, setMaKhachHang] = useState<string>('9999999999');
+  const [maKhachHang, setMaKhachHang] = useState<string>('');
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
   const [hoTenSender, setHoTenSender] = useState<string>('');
   const [diaChiSender, setDiaChiSender] = useState<string>('');
@@ -122,7 +122,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
 
   const data = {
     phuPhi,
-    maKhachHang,
+    maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
     dienThoaiSender,
     hoTenSender,
     diaChiSender,
