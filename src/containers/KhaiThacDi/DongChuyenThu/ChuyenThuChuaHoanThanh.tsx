@@ -92,7 +92,6 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
       dispatch(push(`${routesMap.danhSachPhieuGuiTrongBangKe}/${item.TOR_ID}`));
     };
   };
-
   const handleDeleteChuyenThu = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       const payload = {
