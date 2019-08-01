@@ -1,107 +1,118 @@
 import * as React from 'react';
-import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
+import { Button, Input, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { map } from 'lodash';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
+import { makeSelectorCountMT_ZTMI046 } from 'redux/MIOA_ZTMI046/selectors';
+import { HttpRequestErrorType } from '../../../utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  function renderShippingInformationTitle(): JSX.Element {
+  // useEffect((): void => {
+  //   dispatch(
+  //     action_MIOA_ZTMI022({
+  //       CU_NO: '',
+  //       FU_NO: '4800000037',
+  //       STATUS_ID: '1',
+  //       USER_ID: 'KT1',
+  //       LOC_ID: 'HUB1',
+  //     }),
+  //   );
+  // }, [dispatch]);
+
+  function renderPagination(): JSX.Element {
     return (
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">
-          <Button>
-            <i className="fa fa-arrow-left backIcon" />
-          </Button>
-          {t('Thông tin chuyến thư')}
-        </h1>
-        <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-print" />
-          </Button>
-          <Button>
-            <i className="fa fa-truck" />
-            {t('Nhận chuyến thư')}
-          </Button>
-          <Button>
-            <i className="fa fa-download" />
-            {t('Hoàn thành nhận tải kiện')}
-          </Button>
-        </div>
-      </Row>
+      <Pagination className="sipPagination">
+        <PaginationItem className="sipPaginationPrev pull-left">
+          <PaginationLink previous href="#">
+            <i className="fa fa-arrow-left"></i>
+          </PaginationLink>
+        </PaginationItem>
+        <PaginationItem active>
+          <PaginationLink href="#">1</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#">2</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#">3</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#">4</PaginationLink>
+        </PaginationItem>
+        <PaginationItem>
+          <PaginationLink href="#">5</PaginationLink>
+        </PaginationItem>
+        <PaginationItem className="sipPaginationNext pull-right">
+          <PaginationLink next href="#">
+            <i className="fa fa-arrow-right"></i>
+          </PaginationLink>
+        </PaginationItem>
+      </Pagination>
     );
   }
 
   function renderOrderInformationTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thông tin tải kiện')}</h1>
-        <div className="sipTitleRightBlock">
-          <Button>
-            <i className="fa fa-shopping-bag" />
-            {t('Nhận tải kiện')}
-          </Button>
-          <Button>
-            <i className="fa fa-barcode" />
-            {t('Quét mã')}
-          </Button>
-        </div>
+        <h1 className="sipTitle">{t('Thông tin chuyến thư')}</h1>
       </Row>
+    );
+  }
+  const [codeChuyenThu, setCodeChuyenThu] = React.useState<string>('4800000278');
+
+  function handleChangeCodeChuyenThu(e: any) {
+    setCodeChuyenThu(e.target.value);
+  }
+
+  const [error, setError] = React.useState<string>('');
+  function handleSearchCodeChuyenThu() {
+    const payload = {
+      IV_ID: codeChuyenThu,
+    };
+    const payload046 = {
+      IV_TOR_ID: codeChuyenThu,
+    };
+    dispatch(action_MIOA_ZTMI046(payload046));
+    dispatch(
+      action_MIOA_ZTMI023(payload, {
+        onFailure: (error: HttpRequestErrorType): void => {
+          setError(error.messages[0]);
+        },
+      }),
     );
   }
 
-  function renderDescriptionOrderShipping(): JSX.Element {
-    return (
-      <Row className="sipSummaryContent">
-        <Col lg="5" xs="12">
-          <Row>
-            <Col xs="5">{t('Mã bảng kê')}: </Col>
-            <Col xs="7">BK_1209_BNH</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">24/04/2019</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ghi chú')}: </Col>
-            <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
-          </Row>
-        </Col>
-        <Col xl={3} lg={5} xs="12">
-          <Row>
-            <Col xs="5">{t('Bưu cục đến')}: </Col>
-            <Col xs="7">TQN</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ngày gửi')}: </Col>
-            <Col xs="7">24/04/2019</Col>
-          </Row>
-        </Col>
-        <Col lg={2} xl={4} xs={12} className="text-right">
-          {t('Tổng số')}: 5
-        </Col>
-      </Row>
-    );
-  }
+  const dataNhanChuyenThu = useSelector(makeSelectorNhanChuyenThu, shallowEqual);
+  const countChuyenThu = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
+
+  // console.log(count);
 
   function renderFindOrder(): JSX.Element {
     return (
-      <Row className="sipBgWhiteContainer">
+      <Row className="sipBgWhiteContainer d-flex justify-content-between">
         <div className="sipScanCodeContainer">
-          <Input type="text" placeholder="Nhập mã tải kiện" />
-          <Button color="primary">Quét mã</Button>
+          <Input
+            type="text"
+            placeholder="Quét mã chuyến thư"
+            value={codeChuyenThu}
+            onChange={handleChangeCodeChuyenThu}
+          />
+          <Button onClick={handleSearchCodeChuyenThu} color="primary">
+            {t('Tìm kiếm')}
+          </Button>
+        </div>
+        <div className="sipTitleRightBlock sipTitleRightBlock2">
+          {t('Tổng số')}
+          {t('HYPHEN', ':')} <strong>3</strong>
         </div>
       </Row>
-    );
-  }
-
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-      </>
     );
   }
 
@@ -109,78 +120,42 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   function renderTable(): JSX.Element {
     return (
       <Row className="sipTableContainer">
+        {error && <div>{error}</div>}
         <Table striped hover>
           <thead>
             <tr>
-              <th />
-              <th>{t('Mã tải kiện')}</th>
+              <th>{t('Mã chuyến thư')}</th>
               <th>{t('Bưu cục đi')}</th>
               <th>{t('Bưu cục đến')}</th>
               <th>{t('Số lượng')}</th>
               <th>{t('Trọng lượng')}</th>
               <th>{t('Ngày tạo')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>41100035876</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>650 g</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-            <tr>
-              <td>
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>41100035876</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>650 g</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-            <tr>
-              <td>
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>41100035876</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>650 g</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
+            {map(
+              dataNhanChuyenThu,
+              (item: API.RowResponseZTMI023OUT, index): JSX.Element => {
+                return (
+                  <tr key={index}>
+                    <td>{item.TOR_ID}</td>
+                    <td>{item.FR_LOG_ID}</td>
+                    <td>{item.TO_LOG_ID}</td>
+                    <td>{countChuyenThu}</td>
+                    <td>{item.GRO_WEI_VAL}</td>
+                    <td>{item.CREATED_ON}</td>
+                  </tr>
+                );
+              },
+            )}
           </tbody>
         </Table>
+        {renderPagination()}
       </Row>
     );
   }
   return (
     <div>
-      {renderShippingInformationTitle()}
-      {renderDescriptionOrderShipping()}
       {renderOrderInformationTitle()}
       {renderFindOrder()}
       {renderTable()}

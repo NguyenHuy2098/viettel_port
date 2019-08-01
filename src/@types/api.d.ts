@@ -1177,7 +1177,7 @@ declare namespace API {
     /**
      *
      */
-    row?: RowResponseZTMI023OUT;
+    row?: RowResponseZTMI023OUT[];
   }
   export interface MTZTMI024OUT {
     /**

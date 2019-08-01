@@ -107,7 +107,8 @@
     "start": "env-cmd -e development react-scripts start",
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
-    "test:debug": "react-scripts --inspect-brk test --runInBand"
+    "test:debug": "react-scripts --inspect-brk test --runInBand",
+    "generate-type-api": "npx dtsgenerator --out src/@types/types.d.ts --url https://se.publicapi-in.viettelpost.vn/swagger/v1/swagger.json"
   },
   "browserslist": [
     ">0.2%",
