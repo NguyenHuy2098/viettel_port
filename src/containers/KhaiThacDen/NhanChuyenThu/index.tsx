@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Button, Input, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { push } from 'connected-react-router';
 import { map } from 'lodash';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
@@ -8,6 +9,7 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { makeSelectorCountMT_ZTMI046 } from 'redux/MIOA_ZTMI046/selectors';
 import { HttpRequestErrorType } from '../../../utils/HttpRequetsError';
+import routesMap from '../../../utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
@@ -115,12 +117,15 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       </Row>
     );
   }
-
+  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+    return (): void => {
+      dispatch(push(`${routesMap.thongTinTai}/${item.TOR_ID}`));
+    };
+  };
   // eslint-disable-next-line max-lines-per-function
   function renderTable(): JSX.Element {
     return (
       <Row className="sipTableContainer">
-        {error && <div>{error}</div>}
         <Table striped hover>
           <thead>
             <tr>
@@ -133,11 +138,12 @@ const ShippingInformation: React.FC = (): JSX.Element => {
             </tr>
           </thead>
           <tbody>
+            {error && <div className="text-center">{error}</div>}
             {map(
               dataNhanChuyenThu,
               (item: API.RowResponseZTMI023OUT, index): JSX.Element => {
                 return (
-                  <tr key={index}>
+                  <tr key={index} onClick={handleRedirectDetail(item)}>
                     <td>{item.TOR_ID}</td>
                     <td>{item.FR_LOG_ID}</td>
                     <td>{item.TO_LOG_ID}</td>
