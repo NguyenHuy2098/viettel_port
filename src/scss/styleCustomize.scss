@@ -265,6 +265,52 @@
   display: none !important;
 }
 
+
+.formLocation{
+  display: none;
+}
+.sipBoxSchedule{
+  position: relative;
+  &::before{
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: calc(100% - 30px);
+    background-color: #dddddd;
+    top: 15px;
+    left: 15px;
+  }
+  .itemTime{
+    &::before{
+      content: "";
+      width: 12px;
+      height: 12px;
+      background-color: #dddddd;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      left: 25px;
+    }
+    &.active{
+      &::before{
+        background-color: #44ab4a;
+        z-index: 1;
+      }
+      &::after{
+        background-color: #FFFFFF;
+        position: absolute;
+        content: "";
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        top: 2px;
+        left: 22px;
+        border: 1px solid #44ab4a;
+      }
+    }
+  }
+
+}
 @media screen and (max-width: 575px) {
   .topDashBroad {
     .itemCol {
@@ -280,8 +326,9 @@
     right: 15px;
     top: 55px;
   }
-}
-
-.formLocation{
-  display: none;
+  .sipBoxSchedule{
+    &::before{
+      height: calc(100% - 50px);
+    }
+  }
 }

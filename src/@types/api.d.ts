@@ -1260,7 +1260,7 @@ declare namespace API {
   }
   export interface MTZTMI046OUT {
     EV_ERROR?: number; // int32
-    Row?: RowMTZTMI046OUT;
+    Row?: RowMTZTMI046OUT[];
   }
   export interface MTZTMI047OUT {
     EV_ERROR?: number; // int32
