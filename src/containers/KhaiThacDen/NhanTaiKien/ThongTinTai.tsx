@@ -1,135 +1,54 @@
 import * as React from 'react';
-import { Button, Row, Col, Label, Table, Input } from 'reactstrap';
+import { Button, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { useState } from 'react';
+import classNames from 'classnames';
+import TaiKienDaNhan from './TaiKienDaNhan';
+import TaiKienChuaNhan from './TaiKienChuaNhan';
 
 // eslint-disable-next-line max-lines-per-function
 const ThongTinTai: React.FC = (): JSX.Element => {
   const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
   const { t } = useTranslation();
-
   function toggle(): void {
     setmodalCreateNew(!modalCreateNew);
   }
 
-  function renderPagination(): JSX.Element {
-    return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-    );
+  const [tab, setTab] = useState<number>(1);
+
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
   }
 
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-      </>
-    );
-  }
-
-  function renderTable(): JSX.Element {
-    return (
-      <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th></th>
-              <th>{t('Mã BK/PG')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
-              <th>{t('Trọng lượng')}</th>
-              <th>{t('Ngày tạo')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-        {renderPagination()}
-      </Row>
-    );
-  }
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thông tin tải/kiện')}</h1>
+        <h1 className="sipTitle">
+          <Button>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Thông tin chuyến thư')}
+        </h1>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
-          </Button>
-          <Button onClick={toggle}>
-            <i className="fa fa-plus" />
-            {t('Nhận tải')}
-          </Button>
-          <Button onClick={toggle}>
-            <i className="fa fa-plus" />
-            {t('Hoàn thành nhận BK/PG')}
           </Button>
         </div>
       </Row>
       <Row className="sipSummaryContent">
         <Col lg="5" xs="12">
           <Row>
-            <Col xs="5">{t('Mã bảng kê')}: </Col>
+            <Col xs="5">{t('Mã chuyến thư')}: </Col>
             <Col xs="7">BK_1209_BNH</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ngày tạo')}: </Col>
             <Col xs="7">24/04/2019</Col>
           </Row>
-          <Row>
-            <Col xs="5">{t('Ghi chú')}: </Col>
-            <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
-          </Row>
         </Col>
         <Col lg="5" xl={4} xs="12">
           <Row>
-            <Col xs="5">{t('Bưu cục đến')}: </Col>
+            <Col xs="5">{t('Bưu cục đi')}: </Col>
             <Col xs="7">TQN</Col>
           </Row>
           <Row>
@@ -143,27 +62,46 @@ const ThongTinTai: React.FC = (): JSX.Element => {
       </Row>
       <div className="row mt-3" />
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thông tin bảng kê/ phiếu gửi')}</h1>
+        <h1 className="sipTitle">{t('Thông tin tải kiện')}</h1>
         <div className="sipTitleRightBlock sipTitleRightBlock2">
           <Button onClick={toggle}>
-            <i className="fa fa-plus" />
-            {t('Nhận BK/PG')}
-          </Button>
-          <Button onClick={toggle}>
-            <i className="fa fa-plus" />
-            {t('Quét mã')}
+            <i className="fa fa-gift fa-lg"></i>
+            {t('Nhận tải kiện')}
           </Button>
         </div>
       </Row>
       <div className="row mt-3" />
-      <Row className="sipBgWhiteContainer">
-        <div className="sipScanCodeContainer">
-          <Input type="text" placeholder="Quét mã phiếu gửi" />
-          <Button color="primary">Quét mã</Button>
-        </div>
-      </Row>
-      <div className="row mt-3" />
-      {renderTable()}
+
+      <div className="sipTabContainer sipFlatContainer">
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 1 })}
+              onClick={React.useCallback((): void => handleChangeTab(1), [])}
+            >
+              {t('Tải kiện chưa nhận')}
+              <Badge color="primary">25</Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 2 })}
+              onClick={React.useCallback((): void => handleChangeTab(2), [])}
+            >
+              {t('Tải kiện đã nhận')}
+              <Badge color="primary">05</Badge>
+            </NavLink>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={tab} className="sipFlatContainer">
+          <TabPane tabId={1}>
+            <TaiKienDaNhan />
+          </TabPane>
+          <TabPane tabId={2}>
+            <TaiKienChuaNhan />
+          </TabPane>
+        </TabContent>
+      </div>
     </>
   );
 };
