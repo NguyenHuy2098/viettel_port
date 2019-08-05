@@ -163,6 +163,11 @@ const nav = (t: i18next.TFunction): any => {
         url: routesMap.orderInformationTabType,
         icon: 'icon-info',
       },
+      {
+        name: t('Thông tin đơn hàng new'),
+        url: routesMap.orderInformationNew,
+        icon: 'icon-info',
+      },
     ],
   };
 };

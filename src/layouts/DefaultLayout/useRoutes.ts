@@ -138,6 +138,10 @@ const orderInformationTabType = Loadable({
   loader: (): any => import('containers/ThongTinDonHang2'),
   loading: Loading,
 });
+const orderInformationNew = Loadable({
+  loader: (): any => import('containers/ThongTinDonHangNew'),
+  loading: Loading,
+});
 const pageNoData = Loadable({
   loader: (): any => import('containers/PageNoData'),
   loading: Loading,
@@ -179,6 +183,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.pageNoData, name: t('Chưa có dữ liệu'), component: pageNoData },
     { path: routesMap.communicateCustomer, name: t('Tiếp xúc khách hàng'), component: communicateCustomer },
     { path: routesMap.orderInformation, name: t('Thông tin đơn hàng'), component: orderInformation },
+    { path: routesMap.orderInformationNew, name: t('Thông tin đơn hàng new'), component: orderInformationNew },
     { path: routesMap.orderInformationTabType, name: t('Thông tin đơn hàng 2'), component: orderInformationTabType },
     { path: routesMap.splitCoupon, name: t('Tách phiếu gửi'), component: splitCoupon },
     { path: routesMap.internalRecord, name: t('Biên bản nội bộ'), component: internalRecord },

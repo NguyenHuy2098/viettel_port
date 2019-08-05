@@ -28,6 +28,7 @@ export default {
   communicateCustomer: '/tiep-xuc-khach-hang',
   orderInformation: '/thong-tin-don-hang',
   orderInformationTabType: '/thong-tin-don-hang-2',
+  orderInformationNew: '/thong-tin-don-hang-new',
   splitCoupon: '/tach-phieu-gui',
   internalRecord: '/bien-ban-noi-bo',
   lapBienBan: '/lap-bien-ban',
