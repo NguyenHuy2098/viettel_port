@@ -8,11 +8,7 @@ import BangKeChuaNhan from './BangKeChuaNhan';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
-  const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
   const { t } = useTranslation();
-  function toggle(): void {
-    setmodalCreateNew(!modalCreateNew);
-  }
 
   const [tab, setTab] = useState<number>(1);
 
