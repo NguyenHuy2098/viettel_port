@@ -127,6 +127,10 @@ const operationSack = Loadable({
   loader: (): any => import('containers/KhaiThacDen/KhaiThacDen'),
   loading: Loading,
 });
+const nhanBangKePhieuGui = Loadable({
+  loader: (): any => import('containers/KhaiThacDen/NhanBangKePhieuGui/NhanBangKePhieuGui'),
+  loading: Loading,
+});
 
 // =========== unsorted components ==========
 
@@ -170,6 +174,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.danhSachTaiKien, name: t('Danh sách tải kiện'), component: danhSachTaiKien },
     { path: routesMap.dongChuyenThu, name: t('Đóng chuyến thư'), component: dongChuyenThu },
     { path: routesMap.thongTinTai, name: t('Nhận tải kiện'), component: thongTinTai },
+    { path: routesMap.nhanBangKePhieuGui, name: t('Nhận bảng kê phiếu gưi'), component: nhanBangKePhieuGui },
     {
       path: `${routesMap.danhSachPhieuGuiTrongBangKe}/:manifestId`,
       name: t('Danh sách phiếu gửi trong bảng kê'),

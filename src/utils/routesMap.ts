@@ -18,6 +18,7 @@ export default {
   danhSachTaiKien: '/danh-sach-tai-kien',
   dongChuyenThu: '/dong-chuyen-thu',
   thongTinTai: '/nhan-tai-kien',
+  nhanBangKePhieuGui: '/nhan-bang-ke-phieu-gui',
   danhSachPhieuGuiTrongBangKe: '/danh-sach-phieu-gui-trong-bang-ke',
   danhSachBangKe: '/danh-sach-bang-ke',
   operationSack: '/khai-thac-tai',
