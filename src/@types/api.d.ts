@@ -2429,12 +2429,6 @@ declare namespace API {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
-  export interface SIOAZTMI027Request {
-    Row?: RowRequestZTMI027;
-    LanguageId?: string;
-    LanguageDefaultId?: string;
-    readonly LanguageCurrentId?: string;
-  }
   export interface VtpAddress {
     I: string;
     N: string;
@@ -2448,7 +2442,7 @@ declare namespace API {
     detailAddress: string;
     fullAddress: string;
   }
-  export interface VtpProvinceResponse {
+  export interface VtpAddressResponse {
     LocationModels: VtpAddress[];
     PageIndex: number;
     PageSize: number;

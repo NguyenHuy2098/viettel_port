@@ -16,7 +16,7 @@ import {
   Modal,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
+import { action_GET_PROVINCE, action_GET_DISTRICT, action_GET_WARD } from 'redux/SearchLocation/actions';
 import * as yup from 'yup';
 
 interface Props {
@@ -29,7 +29,7 @@ interface Props {
   detailAddress?: string;
 }
 // eslint-disable-next-line max-lines-per-function
-const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
+const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { onHide, onChoose, visible } = props;
@@ -106,16 +106,17 @@ const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   useEffect((): void => {
+    debugger;
     dispatch(
-      action_GET_ADDRESS(payloadProvince, {
-        onSuccess: (data: API.VtpProvinceResponse): void => {
+      action_GET_PROVINCE(payloadProvince, {
+        onSuccess: (data: API.VtpAddressResponse): void => {
           setFilteredProvince(get(data, 'LocationModels'));
         },
       }),
     );
     dispatch(
-      action_GET_ADDRESS(payloadDistrict, {
-        onSuccess: (data: API.VtpProvinceResponse): void => {
+      action_GET_DISTRICT(payloadDistrict, {
+        onSuccess: (data: API.VtpAddressResponse): void => {
           setFullDistrict(get(data, 'LocationModels'));
           if (province !== '0') {
             setFilteredDistrict(filter(get(data, 'LocationModels'), { P: province }));
@@ -125,8 +126,8 @@ const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
     );
     if (district !== '0') {
       dispatch(
-        action_GET_ADDRESS(payloadWard, {
-          onSuccess: (data: API.VtpProvinceResponse): void => {
+        action_GET_WARD(payloadWard, {
+          onSuccess: (data: API.VtpAddressResponse): void => {
             setFilteredWard(get(data, 'LocationModels'));
           },
         }),
@@ -155,8 +156,8 @@ const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
     if (event.currentTarget.value !== '0') {
       payloadWard.ParentId = event.currentTarget.value;
       dispatch(
-        action_GET_ADDRESS(payloadWard, {
-          onSuccess: (data: API.VtpProvinceResponse): void => {
+        action_GET_WARD(payloadWard, {
+          onSuccess: (data: API.VtpAddressResponse): void => {
             setFilteredWard(get(data, 'LocationModels'));
           },
         }),
@@ -245,13 +246,16 @@ const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
                 onChange={handleChangeProvince}
               >
                 <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
-                {map(filteredProvince, (item: API.VtpAddress, index: number) => {
-                  return (
-                    <option key={index} value={item.I || undefined}>
-                      {item.N}
-                    </option>
-                  );
-                })}
+                {map(
+                  filteredProvince,
+                  (item: API.VtpAddress, index: number): JSX.Element => {
+                    return (
+                      <option key={index} value={item.I || undefined}>
+                        {item.N}
+                      </option>
+                    );
+                  },
+                )}
               </Input>
               <div className="sipInputItemError">{handleErrorMessage(errors, 'province')}</div>
             </Col>
@@ -259,13 +263,16 @@ const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
               <Label for="districtSelect">{t('Chọn Quận / Huyện')}</Label>
               <Input type="select" name="select" id="districtSelect" value={district} onChange={handleChangeDistrict}>
                 <option value="0">{t('Quận / Huyện')}</option>
-                {map(filteredDistrict, (item: API.VtpAddress, index: number) => {
-                  return (
-                    <option key={index} value={item.I || undefined}>
-                      {item.N}
-                    </option>
-                  );
-                })}
+                {map(
+                  filteredDistrict,
+                  (item: API.VtpAddress, index: number): JSX.Element => {
+                    return (
+                      <option key={index} value={item.I || undefined}>
+                        {item.N}
+                      </option>
+                    );
+                  },
+                )}
               </Input>
               <div className="sipInputItemError">{handleErrorMessage(errors, 'district')}</div>
             </Col>
@@ -273,13 +280,16 @@ const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
               <Label for="wardSelect">{t('Phường/ Xã')}</Label>
               <Input type="select" name="select" id="wardSelect" value={ward} onChange={handleChangeWard}>
                 <option value="0">{t('Chọn Phường/ Xã')}</option>
-                {map(filteredWard, (item: API.VtpAddress, index: number) => {
-                  return (
-                    <option key={index} value={item.I || undefined}>
-                      {item.N}
-                    </option>
-                  );
-                })}
+                {map(
+                  filteredWard,
+                  (item: API.VtpAddress, index: number): JSX.Element => {
+                    return (
+                      <option key={index} value={item.I || undefined}>
+                        {item.N}
+                      </option>
+                    );
+                  },
+                )}
               </Input>
               <div className="sipInputItemError">{handleErrorMessage(errors, 'ward')}</div>
             </Col>
@@ -318,4 +328,4 @@ const ShowFormLocation: React.FC<Props> = (props: Props): JSX.Element => {
     </>
   );
 };
-export default ShowFormLocation;
+export default ChoosingAddressPopup;

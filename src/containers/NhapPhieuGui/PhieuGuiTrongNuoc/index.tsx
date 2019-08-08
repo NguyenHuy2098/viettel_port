@@ -10,7 +10,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import ShowFormLocation from './ShowFormLocation';
+import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
@@ -161,7 +161,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     }
   }
 
-  const data = {
+  const validateData = {
     phuPhi,
     maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
     dienThoaiSender,
@@ -195,7 +195,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   React.useEffect((): void => {
     if (isSubmit) {
       schema
-        .validate(data, { abortEarly: false })
+        .validate(validateData, { abortEarly: false })
         .then((): void => setErrors([]))
         .catch((error: yup.ValidationError): void => {
           setErrors(error.inner);
@@ -321,7 +321,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     setIsSubmit(true);
     // check validate
     schema
-      .validate(data, { abortEarly: false })
+      .validate(validateData, { abortEarly: false })
       .then((): void => {
         setErrors([]);
         handleSaveForwardingOrder();
@@ -447,7 +447,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               </Button>{' '}
               {t('để tự nhập')})
             </p>
-            <ShowFormLocation
+            <ChoosingAddressPopup
               visible={modalSender}
               onChoose={handleSenderAddressData}
               onHide={toggleSenderAddress}
@@ -517,7 +517,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               </Button>{' '}
               {t('để tự nhập')})
             </p>
-            <ShowFormLocation
+            <ChoosingAddressPopup
               visible={modalReceiver}
               onChoose={handleReceiverAddressData}
               onHide={toggleReceiverAddress}
