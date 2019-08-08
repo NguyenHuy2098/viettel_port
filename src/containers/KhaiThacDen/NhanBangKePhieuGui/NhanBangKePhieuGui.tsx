@@ -2,12 +2,26 @@ import * as React from 'react';
 import { Button, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
+import { match } from 'react-router';
+import { goBack } from 'connected-react-router';
+import { get } from 'lodash';
+import moment from 'moment';
 import BangKeDaNhan from './BangKeDaNhan';
 import BangKeChuaNhan from './BangKeChuaNhan';
+import {
+  makeSelectorCountBangKeChuaNhan,
+  makeSelectorCountBangKeDaNhan,
+  makeSelectorCountMT_ZTMI046,
+  useGet_MT_ZTMI046_OUT,
+} from '../../../redux/MIOA_ZTMI046/selectors';
 
+interface Props {
+  match: match;
+}
 // eslint-disable-next-line max-lines-per-function
-const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
+const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
   const [tab, setTab] = useState<number>(1);
@@ -15,12 +29,21 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
-
+  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
+  const getInfoBangKe = get(manifestForwardingOrderList, 'Row[0]');
+  // console.log(getInfoBangKe && getInfoBangKe.TOR_ID);
+  const countBangKe = useSelector(makeSelectorCountMT_ZTMI046);
+  const countBangKeChuaNhan = useSelector(makeSelectorCountBangKeChuaNhan);
+  const countBangKeDaNhan = useSelector(makeSelectorCountBangKeDaNhan);
+  const dispatch = useDispatch();
+  const handleBackTaiKien = (): void => {
+    dispatch(goBack());
+  };
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button>
+          <Button onClick={handleBackTaiKien}>
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           {t('Thông tin tải')}
@@ -35,25 +58,29 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
         <Col lg="5" xs="12">
           <Row>
             <Col xs="5">{t('Mã tải')}: </Col>
-            <Col xs="7">BK_1209_BNH</Col>
+            <Col xs="7">{getInfoBangKe && getInfoBangKe.TOR_ID}</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">24/04/2019</Col>
+            <Col xs="7">
+              {moment(getInfoBangKe && getInfoBangKe.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
+            </Col>
           </Row>
         </Col>
         <Col lg="5" xl={4} xs="12">
           <Row>
             <Col xs="5">{t('Bưu cục đi')}: </Col>
-            <Col xs="7">TQN</Col>
+            <Col xs="7">{getInfoBangKe && getInfoBangKe.LOG_LOCID_SRC}</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ngày gửi')}: </Col>
-            <Col xs="7">24/04/2019</Col>
+            <Col xs="7">
+              {moment(getInfoBangKe && getInfoBangKe.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
+            </Col>
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
-          {t('Tổng số')}: 5
+          {t('Tổng số')}: {countBangKe}
         </Col>
       </Row>
       <div className="row mt-3" />
@@ -70,7 +97,7 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Bảng kê / Phiếu gửi chưa nhận')}
-              <Badge color="primary">25</Badge>
+              <Badge color="primary">{countBangKeChuaNhan}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -79,16 +106,16 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Bảng kê / Phiếu gửi đã nhận')}
-              <Badge color="primary">05</Badge>
+              <Badge color="primary">{countBangKeDaNhan}</Badge>
             </NavLink>
           </NavItem>
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <BangKeDaNhan />
+            <BangKeChuaNhan />
           </TabPane>
           <TabPane tabId={2}>
-            <BangKeChuaNhan />
+            <BangKeDaNhan />
           </TabPane>
         </TabContent>
       </div>

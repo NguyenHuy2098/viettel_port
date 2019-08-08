@@ -1,10 +1,33 @@
 import * as React from 'react';
 import { Button, Row, Input, Pagination, PaginationItem, PaginationLink, Table, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { match } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { get, map } from 'lodash';
+import moment from 'moment';
+import { makeSelectorCountMT_ZTMI046, useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 
+interface Props {
+  match: match;
+}
 // eslint-disable-next-line max-lines-per-function
-const BangKeDaNhan: React.FC = (): JSX.Element => {
+const BangKeDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  const idTaiKien = get(props, 'match.params.idTaiKien');
+
+  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
+  const countPhieuGui = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
+
+  React.useEffect((): void => {
+    const payload = {
+      IV_TOR_ID: idTaiKien,
+    };
+    dispatch(action_MIOA_ZTMI046(payload));
+  }, [dispatch, idTaiKien]);
 
   function renderPagination(): JSX.Element {
     return (
@@ -66,22 +89,27 @@ const BangKeDaNhan: React.FC = (): JSX.Element => {
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
+            {map(get(manifestForwardingOrderList, 'Row[0].CHILDS'), (item: API.Child, index): JSX.Element | null => {
+              if (item.LIFECYCLE === 107) {
+                return (
+                  <tr key={index}>
+                    <td>
+                      <Label check>
+                        <Input type="checkbox" />
+                      </Label>
+                    </td>
+                    <td>{item.TOR_ID}</td>
+                    <td>{item.SRC_LOC_IDTRQ}</td>
+                    <td>{item.DES_LOC_IDTRQ}</td>
+                    <td>{countPhieuGui}</td>
+                    <td>{item.GRO_WEI_VAL}</td>
+                    <td>{moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</td>
+                    <td>{item.TOR_TYPE === 'ZC2' ? 'Tải' : 'Kiện'}</td>
+                    <td className="SipTableFunctionIcon">{renderAction()}</td>
+                  </tr>
+                );
+              } else return null;
+            })}
           </tbody>
         </Table>
         {renderPagination()}
@@ -102,4 +130,4 @@ const BangKeDaNhan: React.FC = (): JSX.Element => {
   );
 };
 
-export default BangKeDaNhan;
+export default withRouter(BangKeDaNhan);

@@ -126,6 +126,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   function renderTable(): JSX.Element {
     return (
       <Row className="sipTableContainer">
+        {error && <span className="text-center">{error}</span>}
         <Table striped hover>
           <thead>
             <tr>
@@ -138,7 +139,6 @@ const ShippingInformation: React.FC = (): JSX.Element => {
             </tr>
           </thead>
           <tbody>
-            {error && <div className="text-center">{error}</div>}
             {map(
               dataNhanChuyenThu,
               (item: API.RowResponseZTMI023OUT, index): JSX.Element => {

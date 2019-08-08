@@ -173,8 +173,12 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.dongTai, name: t('Đóng tải'), component: dongTai },
     { path: routesMap.danhSachTaiKien, name: t('Danh sách tải kiện'), component: danhSachTaiKien },
     { path: routesMap.dongChuyenThu, name: t('Đóng chuyến thư'), component: dongChuyenThu },
-    { path: routesMap.thongTinTai, name: t('Nhận tải kiện'), component: thongTinTai },
-    { path: routesMap.nhanBangKePhieuGui, name: t('Nhận bảng kê phiếu gưi'), component: nhanBangKePhieuGui },
+    { path: routesMap.thongTinTai + '/:idChuyenThu', name: t('Nhận tải kiện'), component: thongTinTai },
+    {
+      path: routesMap.nhanBangKePhieuGui + '/:idTaiKien',
+      name: t('Nhận bảng kê phiếu gưi'),
+      component: nhanBangKePhieuGui,
+    },
     {
       path: `${routesMap.danhSachPhieuGuiTrongBangKe}/:manifestId`,
       name: t('Danh sách phiếu gửi trong bảng kê'),

@@ -77,7 +77,7 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
       </thead>
       <tbody>
         {map(
-          get(manifestForwardingOrderList, 'Row.CHILDS'),
+          get(manifestForwardingOrderList, 'Row[0].CHILDS'),
           (item: API.Child, index): JSX.Element => {
             return (
               <tr key={index}>
