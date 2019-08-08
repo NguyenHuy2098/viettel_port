@@ -8,14 +8,14 @@ import { match } from 'react-router';
 import { goBack } from 'connected-react-router';
 import { get } from 'lodash';
 import moment from 'moment';
-import BangKeDaNhan from './BangKeDaNhan';
-import BangKeChuaNhan from './BangKeChuaNhan';
 import {
   makeSelectorCountBangKeChuaNhan,
   makeSelectorCountBangKeDaNhan,
   makeSelectorCountMT_ZTMI046,
   useGet_MT_ZTMI046_OUT,
-} from '../../../redux/MIOA_ZTMI046/selectors';
+} from 'redux/MIOA_ZTMI046/selectors';
+import BangKeDaNhan from './BangKeDaNhan';
+import BangKeChuaNhan from './BangKeChuaNhan';
 
 interface Props {
   match: match;

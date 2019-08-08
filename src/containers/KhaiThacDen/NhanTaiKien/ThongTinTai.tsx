@@ -9,15 +9,15 @@ import { get } from 'lodash';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { push } from 'connected-react-router';
 import moment from 'moment';
-import TaiKienDaNhan from './TaiKienDaNhan';
-import TaiKienChuaNhan from './TaiKienChuaNhan';
 import {
   makeSelectorCountMT_ZTMI046,
   useGet_MT_ZTMI046_OUT,
   makeSelectorCountKienChuaNhan,
   makeSelectorCountKienDaNhan,
-} from '../../../redux/MIOA_ZTMI046/selectors';
-import routesMap from '../../../utils/routesMap';
+} from 'redux/MIOA_ZTMI046/selectors';
+import routesMap from 'utils/routesMap';
+import TaiKienDaNhan from './TaiKienDaNhan';
+import TaiKienChuaNhan from './TaiKienChuaNhan';
 
 interface Props {
   match: match;
