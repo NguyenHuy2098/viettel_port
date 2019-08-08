@@ -11,12 +11,12 @@ export default function*(): SagaIterator {
     yield unfoldSaga(
       {
         handler: async (): Promise<API.MIOAZTMI046Response> => {
-          const results = await request({
+          const { data } = await request({
             url: apisMap.MIOA_ZTMI046,
             data: action.payload,
           });
-          if (results.data.Status) return results.data;
-          throw new HttpRequestError(results.data.ErrorCode, results.data.Messages[0]);
+          if (data.Status) return data;
+          throw new HttpRequestError(data.ErrorCode, data.Messages);
         },
         key: action.type,
       },
