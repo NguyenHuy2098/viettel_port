@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { Button, Input, Col, Row, Label } from 'reactstrap';
 import { find, get } from 'lodash';
-import ShowFormLocation from './ShowFormLocation';
+// import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 
 // eslint-disable-next-line max-lines-per-function
 const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
@@ -318,9 +318,21 @@ const InternationalForwardingOrder: React.FC = (): React.ReactElement => {
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
             <p className="sipInputItemDescription">
-              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')}, <ShowFormLocation />
+              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
+              {/*<Button onClick={toggleSenderAddress} className="sipFlatBtn">*/}
+              {/*  {t('nhấn vào đây')}*/}
+              {/*</Button>{' '}*/}
               {t('để tự nhập')})
             </p>
+            {/*<ChoosingAddressPopup*/}
+            {/*  visible={modalSender}*/}
+            {/*  onChoose={handleSenderAddressData}*/}
+            {/*  onHide={toggleSenderAddress}*/}
+            {/*  province={provinceSender}*/}
+            {/*  district={districtSender}*/}
+            {/*  ward={wardSender}*/}
+            {/*  detailAddress={detailAddressSender}*/}
+            {/*/>*/}
           </Col>
         </Row>
       </div>

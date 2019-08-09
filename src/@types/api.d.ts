@@ -2429,6 +2429,30 @@ declare namespace API {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+  export interface VtpAddress {
+    I: string;
+    N: string;
+    P?: string;
+    type: number;
+  }
+  export interface AddressPopupData {
+    province: string;
+    district: string;
+    ward: string;
+    detailAddress: string;
+    fullAddress: string;
+  }
+  export interface VtpAddressResponse {
+    LocationModels: VtpAddress[];
+    PageIndex: number;
+    PageSize: number;
+    TotalRow: number;
+    Status: boolean;
+    ErrorCode: number;
+    Messages: any[];
+    ObjectId?: any;
+    Version: number;
+  }
 }
 declare namespace Paths {
   namespace AutoGenUserVoSo {

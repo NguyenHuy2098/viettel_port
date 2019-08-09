@@ -39,9 +39,7 @@ const ModalPopupConfirm: React.FC<Props> = (props: Props): JSX.Element => {
           <Button color="primary" onClick={handleDoSomething}>
             {props.saveButton ? props.saveButton : t('Xóa')}
           </Button>
-          <Button color="secondary" onClick={toggle}>
-            {props.cancelButton ? props.cancelButton : t('Hủy')}
-          </Button>
+          <Button onClick={toggle}>{props.cancelButton ? props.cancelButton : t('Hủy')}</Button>
         </ModalFooter>
       </Modal>
     </>

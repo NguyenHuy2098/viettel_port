@@ -31,7 +31,9 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button onClick={toggle}>{t('Ghi lại')}</Button>
+          <Button color="primary" onClick={toggle}>
+            {t('Ghi lại')}
+          </Button>
         </ModalFooter>
       </Modal>
     );

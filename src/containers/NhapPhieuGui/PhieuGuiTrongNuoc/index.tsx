@@ -10,7 +10,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import ShowFormLocation from './ShowFormLocation';
+import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
@@ -20,58 +20,58 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const schema = yup.object().shape({
     phuPhi: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
-    maKhachHang: yup.string().required('Vui lòng nhập mã khách hàng'),
-    dienThoaiSender: yup.string().required('Vui lòng nhập số điện thoại'),
-    hoTenSender: yup.string().required('Vui lòng nhập họ tên'),
-    diaChiSender: yup.string().required('Vui lòng nhập địa chỉ'),
-    dienThoaiReceiver: yup.string().required('Vui lòng nhập số điện thoại'),
-    hoTenReceiver: yup.string().required('Vui lòng nhập họ tên'),
-    diaChiReceiver: yup.string().required('Vui lòng nhập địa chỉ'),
-    tenHang: yup.string().required('Vui lòng nhập tên hàng hóa'),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+    maKhachHang: yup.string().required(t('Vui lòng nhập mã khách hàng')),
+    dienThoaiSender: yup.string().required(t('Vui lòng nhập số điện thoại')),
+    hoTenSender: yup.string().required(t('Vui lòng nhập họ tên')),
+    diaChiSender: yup.string().required(t('Vui lòng nhập địa chỉ')),
+    dienThoaiReceiver: yup.string().required(t('Vui lòng nhập số điện thoại')),
+    hoTenReceiver: yup.string().required(t('Vui lòng nhập họ tên')),
+    diaChiReceiver: yup.string().required(t('Vui lòng nhập địa chỉ')),
+    tenHang: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
     soLuong: yup
       .number()
-      .required('Vui lòng nhập số lượng')
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số')
-      .integer('Vui lòng nhập số nguyên'),
+      .required(t('Vui lòng nhập số lượng'))
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số'))
+      .integer(t('Vui lòng nhập số nguyên')),
     giaTri: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
     tienThuHo: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
     trongLuong: yup
       .number()
-      .required('Vui lòng nhập trọng lượng')
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
+      .required(t('Vui lòng nhập trọng lượng'))
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
     kichThuocDai: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
     kichThuocRong: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
     kichThuocCao: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
     tongTien: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số'),
-    // maKhuyenMai: yup.string().required('Vui lòng nhập '),
-    // thoiGianPhat: yup.string().required('Vui lòng nhập '),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+    // maKhuyenMai: yup.string().required(t('Vui lòng nhập ')),
+    // thoiGianPhat: yup.string().required(t('Vui lòng nhập ')),
     soLuongTach: yup
       .number()
-      .min(0, 'Vui lòng nhập số lớn hơn 0')
-      .typeError('Vui lòng nhập định dạng số')
-      .integer('Vui lòng nhập số nguyên'),
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số'))
+      .integer(t('Vui lòng nhập số nguyên')),
   });
 
   //________when submit button clicked, enable input focus to validate
@@ -95,21 +95,29 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
   const [hoTenSender, setHoTenSender] = useState<string>('');
   const [diaChiSender, setDiaChiSender] = useState<string>('');
+  const [provinceSender, setProvinceSender] = useState<string>('');
+  const [districtSender, setDistrictSender] = useState<string>('');
+  const [wardSender, setWardSender] = useState<string>('');
+  const [detailAddressSender, setDetailAddressSender] = useState<string>('');
   const [dienThoaiReceiver, setDienThoaiReceiver] = useState<string>('');
   const [hoTenReceiver, setHoTenReceiver] = useState<string>('');
   const [diaChiReceiver, setDiaChiReceiver] = useState<string>('');
+  const [provinceReceiver, setProvinceReceiver] = useState<string>('');
+  const [districtReceiver, setDistrictReceiver] = useState<string>('');
+  const [wardReceiver, setWardReceiver] = useState<string>('');
+  const [detailAddressReceiver, setDetailAddressReceiver] = useState<string>('');
   const [tenHang, setTenHang] = useState<string>('');
-  const [soLuong, setSoLuong] = useState<string>('');
-  const [giaTri, setGiaTri] = useState<string>('');
-  const [tienThuHo, setTienThuHo] = useState<string>('');
-  const [trongLuong, setTrongLuong] = useState<string>('');
-  const [kichThuocDai, setKichThuocDai] = useState<string>('');
-  const [kichThuocRong, setKichThuocRong] = useState<string>('');
-  const [kichThuocCao, setKichThuocCao] = useState<string>('');
-  const [tongTien, setTongtien] = useState<string>('');
+  const [soLuong, setSoLuong] = useState<string | undefined>(undefined);
+  const [giaTri, setGiaTri] = useState<string | undefined>(undefined);
+  const [tienThuHo, setTienThuHo] = useState<string | undefined>(undefined);
+  const [trongLuong, setTrongLuong] = useState<string | undefined>(undefined);
+  const [kichThuocDai, setKichThuocDai] = useState<string | undefined>(undefined);
+  const [kichThuocRong, setKichThuocRong] = useState<string | undefined>(undefined);
+  const [kichThuocCao, setKichThuocCao] = useState<string | undefined>(undefined);
+  const [tongTien, setTongtien] = useState<string | undefined>(undefined);
   const [maKhuyenMai, setMaKhuyenMai] = useState<string>('');
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
-  const [soLuongTach, setSoLuongTach] = useState<string>('');
+  const [soLuongTach, setSoLuongTach] = useState<string | undefined>(undefined);
   //_____non-validated items
   const [maPhieuGui] = useState<string>('');
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
@@ -120,7 +128,40 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('giaoTaiNha');
   const [ghiChu, setGhiChu] = useState<string>('');
 
-  const data = {
+  const [modalSender, setModalSender] = useState<boolean>(false);
+  const [modalReceiver, setModalReceiver] = useState<boolean>(false);
+
+  function toggleSenderAddress(): void {
+    setModalSender(!modalSender);
+  }
+  function toggleReceiverAddress(): void {
+    setModalReceiver(!modalReceiver);
+  }
+
+  function handleSenderAddressData(data: API.AddressPopupData): void {
+    setProvinceSender(data.province);
+    setDistrictSender(data.district);
+    setWardSender(data.ward);
+    setDetailAddressSender(data.detailAddress);
+    setDiaChiSender(data.fullAddress);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  }
+  function handleReceiverAddressData(data: API.AddressPopupData): void {
+    setProvinceReceiver(data.province);
+    setDistrictReceiver(data.district);
+    setWardReceiver(data.ward);
+    setDetailAddressReceiver(data.detailAddress);
+    setDiaChiReceiver(data.fullAddress);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  }
+
+  const validateData = {
     phuPhi,
     maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
     dienThoaiSender,
@@ -154,7 +195,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   React.useEffect((): void => {
     if (isSubmit) {
       schema
-        .validate(data, { abortEarly: false })
+        .validate(validateData, { abortEarly: false })
         .then((): void => setErrors([]))
         .catch((error: yup.ValidationError): void => {
           setErrors(error.inner);
@@ -166,6 +207,22 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
+      // check validate
+      if (isSubmit) {
+        setCount(count + 1);
+      }
+    };
+  }
+
+  function handleChangeTextboxNumberValue(
+    setValueFunction: Function,
+  ): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      if (event.currentTarget.value === '') {
+        setValueFunction(undefined);
+      } else {
+        setValueFunction(event.currentTarget.value);
+      }
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -210,24 +267,24 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       POSTAL_CODE_SRC: null, // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
       TEL_SRC: dienThoaiSender,
       COUNTRY_SRC: null, // Mã đất nước gửi trong trường hợp khách hàng vãng lai
-      CITY_SRC: null, // trong trường hợp khách hàng vãng lai
-      DISTRICT_SRC: null, // trong trường hợp khách hàng vãng lai // trong trường hợp khách hàng vãng lai
-      WARD_SRC: null, // trong trường hợp khách hàng vãng lai
-      STREET_NAME_SRC: null, // trong trường hợp khách hàng vãng lai
+      CITY_SRC: provinceSender, // trong trường hợp khách hàng vãng lai
+      DISTRICT_SRC: districtSender, // trong trường hợp khách hàng vãng lai
+      WARD_SRC: wardSender, // trong trường hợp khách hàng vãng lai
+      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
       HOUSE_ID_SRC: null, // trong trường hợp khách hàng vãng lai
       POSTAL_CODE_DES: null, // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       TEL_DES: dienThoaiReceiver,
       COUNTRY_DES: null, // nhận trong trường hợp khách hàng vãng lai
-      CITY_DES: null, // nhận trong trường hợp khách hàng vãng lai
-      DISTRICT_DES: null, // nhận trong trường hợp khách hàng vãng lai
+      CITY_DES: provinceReceiver, // nhận trong trường hợp khách hàng vãng lai
+      DISTRICT_DES: districtReceiver, // nhận trong trường hợp khách hàng vãng lai
+      WARD_DES: wardReceiver, // Mã xã phường nhận trong trường hợp vãng lai
+      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
       FLAG_HEADER: '',
       PromoCode: maKhuyenMai,
       VOUCHER_ID: null,
       Campaign: null,
       Disctype: null,
       Description: null,
-      WARD_DES: '307', // Mã xã phường nhận trong trường hợp vãng lai
-      STREET_NAME_DES: 'test', // Địa chỉ nhận trong trường hợp vãng lai
       LOCATION_ID_SRC: null,
       LOCATION_ID_DES: null,
       REQUEST_PICK_DATE: null,
@@ -280,7 +337,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     setIsSubmit(true);
     // check validate
     schema
-      .validate(data, { abortEarly: false })
+      .validate(validateData, { abortEarly: false })
       .then((): void => {
         setErrors([]);
         handleSaveForwardingOrder();
@@ -318,7 +375,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               {t('HYPHEN', ':')}
             </Col>
             <Col xs="7">
-              <Input type="text" defaultValue={phuPhi} onChange={handleChangeTextboxValue(setPhuPhi)} />
+              <Input type="text" value={phuPhi} onChange={handleChangeTextboxValue(setPhuPhi)} />
               <div className="sipInputItemError">{handleErrorMessage(errors, 'phuPhi')}</div>
             </Col>
           </Row>
@@ -350,6 +407,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập mã khách hàng')}
+              value={maKhachHang}
               onChange={handleChangeTextboxValue(setMaKhachHang)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'maKhachHang')}</div>
@@ -364,6 +422,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập số điện thoại')}
+              value={dienThoaiSender}
               onChange={handleChangeTextboxValue(setDienThoaiSender)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'dienThoaiSender')}</div>
@@ -375,7 +434,12 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder={t('Nhập họ tên')} onChange={handleChangeTextboxValue(setHoTenSender)} />
+            <Input
+              type="text"
+              placeholder={t('Nhập họ tên')}
+              value={hoTenSender}
+              onChange={handleChangeTextboxValue(setHoTenSender)}
+            />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'hoTenSender')}</div>
           </Col>
         </Row>
@@ -384,50 +448,35 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             Địa chỉ
             <span className="color-red"> *</span>
           </Label>
-          <Col Col lg="8">
+          <Col lg="8">
             <Input
               type="text"
               placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
+              value={diaChiSender}
               onChange={handleChangeTextboxValue(setDiaChiSender)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
             <p className="sipInputItemDescription">
-              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')}, <ShowFormLocation />
+              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
+              <Button onClick={toggleSenderAddress} className="sipFlatBtn">
+                {t('nhấn vào đây')}
+              </Button>{' '}
               {t('để tự nhập')})
             </p>
+            <ChoosingAddressPopup
+              visible={modalSender}
+              onChoose={handleSenderAddressData}
+              onHide={toggleSenderAddress}
+              province={provinceSender}
+              district={districtSender}
+              ward={wardSender}
+              detailAddress={detailAddressSender}
+            />
           </Col>
         </Row>
       </div>
     );
   }
-
-  // function renderReceiverAddress(): JSX.Element {
-  //   return (
-  //     <Row className="sipInputItemGroup">
-  //       <Col xs="12" md="4" className="mb-2">
-  //         <Input type="select">
-  //           <option>{t('Tỉnh')}</option>
-  //           <option>2</option>
-  //           <option>3</option>
-  //         </Input>
-  //       </Col>
-  //       <Col xs="12" md="4" className="mb-2">
-  //         <Input type="select">
-  //           <option>{t('Quận/huyện')}</option>
-  //           <option>2</option>
-  //           <option>3</option>
-  //         </Input>
-  //       </Col>
-  //       <Col xs="12" md="4" className="mb-2">
-  //         <Input type="select">
-  //           <option>{t('Phường/xã')}</option>
-  //           <option>2</option>
-  //           <option>3</option>
-  //         </Input>
-  //       </Col>
-  //     </Row>
-  //   );
-  // }
 
   // eslint-disable-next-line max-lines-per-function
   function renderReceiverInput(): JSX.Element {
@@ -443,6 +492,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập số điện thoại')}
+              value={dienThoaiReceiver}
               onChange={handleChangeTextboxValue(setDienThoaiReceiver)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'dienThoaiReceiver')}</div>
@@ -457,6 +507,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nguyễn Văn Nam')}
+              value={hoTenReceiver}
               onChange={handleChangeTextboxValue(setHoTenReceiver)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'hoTenReceiver')}</div>
@@ -471,13 +522,26 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
+              value={diaChiReceiver}
               onChange={handleChangeTextboxValue(setDiaChiReceiver)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiReceiver')}</div>
             <p className="sipInputItemDescription">
-              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')}, <ShowFormLocation />
+              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
+              <Button onClick={toggleReceiverAddress} className="sipFlatBtn">
+                {t('nhấn vào đây')}
+              </Button>{' '}
               {t('để tự nhập')})
             </p>
+            <ChoosingAddressPopup
+              visible={modalReceiver}
+              onChoose={handleReceiverAddressData}
+              onHide={toggleReceiverAddress}
+              province={provinceReceiver}
+              district={districtReceiver}
+              ward={wardReceiver}
+              detailAddress={detailAddressReceiver}
+            />
           </Col>
         </Row>
       </div>
@@ -494,7 +558,11 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="select" onChange={handleChangeTextboxValue(setPhuongThucVanChuyen)}>
+            <Input
+              type="select"
+              value={phuongThucVanChuyen}
+              onChange={handleChangeTextboxValue(setPhuongThucVanChuyen)}
+            >
               <option value="VCN">VCN Chuyển phát nhanh</option>
               <option value="VHT">Chuyển phát hỏa tốc</option>
             </Input>
@@ -568,15 +636,30 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     return (
       <Row className="sipInputItemGroup">
         <Col xs="12" md="4" className="mb-2">
-          <Input type="text" placeholder={t('Dài (cm)')} onChange={handleChangeTextboxValue(setKichThuocDai)} />
+          <Input
+            type="text"
+            placeholder={t('Dài (cm)')}
+            value={kichThuocDai}
+            onChange={handleChangeTextboxNumberValue(setKichThuocDai)}
+          />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocDai')}</div>
         </Col>
         <Col xs="12" md="4" className="mb-2">
-          <Input type="text" placeholder={t('Rộng (cm)')} onChange={handleChangeTextboxValue(setKichThuocRong)} />
+          <Input
+            type="text"
+            placeholder={t('Rộng (cm)')}
+            value={kichThuocRong}
+            onChange={handleChangeTextboxNumberValue(setKichThuocRong)}
+          />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocRong')}</div>
         </Col>
         <Col xs="12" md="4" className="mb-2">
-          <Input type="text" placeholder={t('Cao (cm)')} onChange={handleChangeTextboxValue(setKichThuocCao)} />
+          <Input
+            type="text"
+            placeholder={t('Cao (cm)')}
+            value={kichThuocCao}
+            onChange={handleChangeTextboxNumberValue(setKichThuocCao)}
+          />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocCao')}</div>
         </Col>
       </Row>
@@ -617,7 +700,12 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder={t('Nội dung hàng hoá')} onChange={handleChangeTextboxValue(setTenHang)} />
+            <Input
+              type="text"
+              placeholder={t('Nội dung hàng hoá')}
+              value={tenHang}
+              onChange={handleChangeTextboxValue(setTenHang)}
+            />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tenHang')}</div>
           </Col>
         </Row>
@@ -627,7 +715,12 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder={t('Số lượng')} onChange={handleChangeTextboxValue(setSoLuong)} />
+            <Input
+              type="text"
+              placeholder={t('Số lượng')}
+              value={soLuong}
+              onChange={handleChangeTextboxNumberValue(setSoLuong)}
+            />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuong')}</div>
           </Col>
         </Row>
@@ -638,14 +731,20 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           <Col lg="8">
             <Row className="sipInputItemGroup">
               <Col xs="12" md="6" className="mb-2">
-                <Input type="text" placeholder={t('Nhập giá trị (đ)')} onChange={handleChangeTextboxValue(setGiaTri)} />
+                <Input
+                  type="text"
+                  placeholder={t('Nhập giá trị (đ)')}
+                  value={giaTri}
+                  onChange={handleChangeTextboxNumberValue(setGiaTri)}
+                />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
               </Col>
               <Col xs="12" md="6" className="mb-2">
                 <Input
                   type="text"
                   placeholder={t('Nhập tiền thu hộ (đ)')}
-                  onChange={handleChangeTextboxValue(setTienThuHo)}
+                  value={tienThuHo}
+                  onChange={handleChangeTextboxNumberValue(setTienThuHo)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'tienThuHo')}</div>
               </Col>
@@ -661,7 +760,8 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              onChange={handleChangeTextboxValue(setTrongLuong)}
+              value={trongLuong}
+              onChange={handleChangeTextboxNumberValue(setTrongLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
             <p className="sipInputItemDescription text-right">
@@ -693,7 +793,8 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập số tiền phải thu (đ)')}
-              onChange={handleChangeTextboxValue(setTongtien)}
+              value={tongTien}
+              onChange={handleChangeTextboxNumberValue(setTongtien)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tongTien')}</div>
           </Col>
@@ -703,7 +804,12 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             {t('Mã khuyến mãi')}
           </Label>
           <Col lg="8">
-            <Input type="text" placeholder={t('Mã khuyến mãi')} onChange={handleChangeTextboxValue(setMaKhuyenMai)} />
+            <Input
+              type="text"
+              placeholder={t('Mã khuyến mãi')}
+              value={maKhuyenMai}
+              onChange={handleChangeTextboxValue(setMaKhuyenMai)}
+            />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'maKhuyenMai')}</div>
           </Col>
         </Row>
@@ -795,7 +901,12 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             {t('Ghi chú khác')}
           </Label>
           <Col lg="8">
-            <Input type="text" onChange={handleChangeTextboxValue(setGhiChu)} placeholder={t('Nhập ghi chú')} />
+            <Input
+              type="text"
+              value={ghiChu}
+              onChange={handleChangeTextboxValue(setGhiChu)}
+              placeholder={t('Nhập ghi chú')}
+            />
           </Col>
         </Row>
       </div>
@@ -813,7 +924,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           <Col lg="8">
             <Row className="sipInputItemGroup">
               <Col xs="12" md="6" className="mb-2">
-                <Input type="text" onChange={handleChangeTextboxValue(setSoLuongTach)} />
+                <Input type="text" value={soLuongTach} onChange={handleChangeTextboxNumberValue(setSoLuongTach)} />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuongTach')}</div>
               </Col>
               <Col xs="12" md="6" className="mb-2">
