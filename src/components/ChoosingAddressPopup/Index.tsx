@@ -132,7 +132,8 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
         }),
       );
     }
-  }, [dispatch, district, payloadDistrict, payloadProvince, payloadWard, province]);
+    // eslint-disable-next-line
+  }, [dispatch]);
 
   const handleChangeProvince = (event: React.FormEvent<HTMLInputElement>): void => {
     setProvince(event.currentTarget.value);
