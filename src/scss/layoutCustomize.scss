@@ -350,12 +350,14 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
       border-top: none;
       padding: 0 20px 20px;
       justify-content: center;
-      .btn-secondary {
-        background: linear-gradient(180deg, #18A796 0%, #47C4AE 100%);
-        color: #fff !important;
+      .btn {
         text-transform: uppercase;
         padding: 8px 20px;
         font-weight: 600;
+        &.btn-primary {
+          background: linear-gradient(180deg, #18A796 0%, #47C4AE 100%);
+          color: #fff !important;
+        }
       }
     }
   }

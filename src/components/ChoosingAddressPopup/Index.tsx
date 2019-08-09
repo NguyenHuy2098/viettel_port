@@ -106,7 +106,6 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   useEffect((): void => {
-    debugger;
     dispatch(
       action_GET_PROVINCE(payloadProvince, {
         onSuccess: (data: API.VtpAddressResponse): void => {
@@ -313,16 +312,14 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
   }
   return (
     <>
-      <Modal isOpen={visible} toggle={onHide}>
+      <Modal className="sipTitleModalCreateNew" isOpen={visible}>
         <ModalHeader toggle={onHide}>Nhập địa chỉ</ModalHeader>
         <ModalBody>{renderFormLocation()}</ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleValidate}>
             {t('Ghi lại')}
           </Button>{' '}
-          <Button color="secondary" onClick={onHide}>
-            {t('Hủy')}
-          </Button>
+          <Button onClick={onHide}>{t('Hủy')}</Button>
         </ModalFooter>
       </Modal>
     </>

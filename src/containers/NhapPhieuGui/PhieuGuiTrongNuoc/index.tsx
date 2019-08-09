@@ -107,17 +107,17 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const [wardReceiver, setWardReceiver] = useState<string>('');
   const [detailAddressReceiver, setDetailAddressReceiver] = useState<string>('');
   const [tenHang, setTenHang] = useState<string>('');
-  const [soLuong, setSoLuong] = useState<string>('');
-  const [giaTri, setGiaTri] = useState<string>('');
-  const [tienThuHo, setTienThuHo] = useState<string>('');
-  const [trongLuong, setTrongLuong] = useState<string>('');
-  const [kichThuocDai, setKichThuocDai] = useState<string>('');
-  const [kichThuocRong, setKichThuocRong] = useState<string>('');
-  const [kichThuocCao, setKichThuocCao] = useState<string>('');
-  const [tongTien, setTongtien] = useState<string>('');
+  const [soLuong, setSoLuong] = useState<string | undefined>(undefined);
+  const [giaTri, setGiaTri] = useState<string | undefined>(undefined);
+  const [tienThuHo, setTienThuHo] = useState<string | undefined>(undefined);
+  const [trongLuong, setTrongLuong] = useState<string | undefined>(undefined);
+  const [kichThuocDai, setKichThuocDai] = useState<string | undefined>(undefined);
+  const [kichThuocRong, setKichThuocRong] = useState<string | undefined>(undefined);
+  const [kichThuocCao, setKichThuocCao] = useState<string | undefined>(undefined);
+  const [tongTien, setTongtien] = useState<string | undefined>(undefined);
   const [maKhuyenMai, setMaKhuyenMai] = useState<string>('');
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
-  const [soLuongTach, setSoLuongTach] = useState<string>('');
+  const [soLuongTach, setSoLuongTach] = useState<string | undefined>(undefined);
   //_____non-validated items
   const [maPhieuGui] = useState<string>('');
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
@@ -207,6 +207,22 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
+      // check validate
+      if (isSubmit) {
+        setCount(count + 1);
+      }
+    };
+  }
+
+  function handleChangeTextboxNumberValue(
+    setValueFunction: Function,
+  ): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      if (event.currentTarget.value === '') {
+        setValueFunction(undefined);
+      } else {
+        setValueFunction(event.currentTarget.value);
+      }
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -624,7 +640,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             type="text"
             placeholder={t('Dài (cm)')}
             value={kichThuocDai}
-            onChange={handleChangeTextboxValue(setKichThuocDai)}
+            onChange={handleChangeTextboxNumberValue(setKichThuocDai)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocDai')}</div>
         </Col>
@@ -633,7 +649,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             type="text"
             placeholder={t('Rộng (cm)')}
             value={kichThuocRong}
-            onChange={handleChangeTextboxValue(setKichThuocRong)}
+            onChange={handleChangeTextboxNumberValue(setKichThuocRong)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocRong')}</div>
         </Col>
@@ -642,7 +658,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             type="text"
             placeholder={t('Cao (cm)')}
             value={kichThuocCao}
-            onChange={handleChangeTextboxValue(setKichThuocCao)}
+            onChange={handleChangeTextboxNumberValue(setKichThuocCao)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocCao')}</div>
         </Col>
@@ -703,7 +719,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               type="text"
               placeholder={t('Số lượng')}
               value={soLuong}
-              onChange={handleChangeTextboxValue(setSoLuong)}
+              onChange={handleChangeTextboxNumberValue(setSoLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuong')}</div>
           </Col>
@@ -719,7 +735,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
                   type="text"
                   placeholder={t('Nhập giá trị (đ)')}
                   value={giaTri}
-                  onChange={handleChangeTextboxValue(setGiaTri)}
+                  onChange={handleChangeTextboxNumberValue(setGiaTri)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
               </Col>
@@ -728,7 +744,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
                   type="text"
                   placeholder={t('Nhập tiền thu hộ (đ)')}
                   value={tienThuHo}
-                  onChange={handleChangeTextboxValue(setTienThuHo)}
+                  onChange={handleChangeTextboxNumberValue(setTienThuHo)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'tienThuHo')}</div>
               </Col>
@@ -745,7 +761,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
               value={trongLuong}
-              onChange={handleChangeTextboxValue(setTrongLuong)}
+              onChange={handleChangeTextboxNumberValue(setTrongLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
             <p className="sipInputItemDescription text-right">
@@ -778,7 +794,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               type="text"
               placeholder={t('Nhập số tiền phải thu (đ)')}
               value={tongTien}
-              onChange={handleChangeTextboxValue(setTongtien)}
+              onChange={handleChangeTextboxNumberValue(setTongtien)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tongTien')}</div>
           </Col>
@@ -908,7 +924,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           <Col lg="8">
             <Row className="sipInputItemGroup">
               <Col xs="12" md="6" className="mb-2">
-                <Input type="text" value={soLuongTach} onChange={handleChangeTextboxValue(setSoLuongTach)} />
+                <Input type="text" value={soLuongTach} onChange={handleChangeTextboxNumberValue(setSoLuongTach)} />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuongTach')}</div>
               </Col>
               <Col xs="12" md="6" className="mb-2">
