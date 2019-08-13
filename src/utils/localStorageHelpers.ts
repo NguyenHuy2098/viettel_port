@@ -1,6 +1,6 @@
 import { AppStateType } from '../redux/store';
 
-export const loadState = (): AppStateType | undefined => {
+export const loadState = (): Partial<AppStateType> | undefined => {
   try {
     const serializedState = localStorage.getItem('state');
     if (serializedState === null) {
@@ -12,7 +12,7 @@ export const loadState = (): AppStateType | undefined => {
   }
 };
 
-export const saveState = (state: AppStateType): void => {
+export const saveState = (state: Partial<AppStateType>): void => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem('state', serializedState);

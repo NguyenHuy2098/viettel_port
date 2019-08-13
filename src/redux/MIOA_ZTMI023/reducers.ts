@@ -2,17 +2,26 @@ import { createActionTypeOnSuccess, UnfoldSagaActionType, createActionTypeOnFail
 import produce from 'immer';
 import { ACTION_MIOA_ZTMI023 } from './actions';
 
-export default function(state = {}, { payload, type }: UnfoldSagaActionType): API.MIOAZTMI023Response {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return produce(state, (draftState: any): any => {
-    switch (type) {
-      case createActionTypeOnSuccess(ACTION_MIOA_ZTMI023):
-        draftState.ZC3 = payload;
-        return draftState;
-      case createActionTypeOnFailure(ACTION_MIOA_ZTMI023):
-        return {};
-      default:
-        return draftState;
-    }
-  });
+export const defaultState: MIOAZTMI023StateType = {
+  ZC3: {},
+};
+
+export default function(
+  state: MIOAZTMI023StateType = defaultState,
+  { payload, type }: UnfoldSagaActionType,
+): MIOAZTMI023StateType {
+  return produce(
+    state,
+    (draftState: MIOAZTMI023StateType): MIOAZTMI023StateType => {
+      switch (type) {
+        case createActionTypeOnSuccess(ACTION_MIOA_ZTMI023):
+          draftState.ZC3 = payload;
+          return draftState;
+        case createActionTypeOnFailure(ACTION_MIOA_ZTMI023):
+          return defaultState;
+        default:
+          return draftState;
+      }
+    },
+  );
 }

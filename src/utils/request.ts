@@ -1,11 +1,12 @@
 import axios, { AxiosPromise, AxiosRequestConfig } from 'axios';
+import { get } from 'lodash';
 import store from 'redux/store';
 
 function request(options: AxiosRequestConfig): AxiosPromise {
   options.method = options.method || 'POST';
   let accessToken = '';
   try {
-    accessToken = store.getState().auth.user.access_token;
+    accessToken = get(store.getState(), 'auth.user.access_token');
   } catch (error) {
     console.log(error);
   }

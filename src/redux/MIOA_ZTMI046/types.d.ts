@@ -4,3 +4,7 @@ interface MIOAZTMI046PayloadType {
     IV_TOR_ID: string;
   };
 }
+
+interface MIOAZTMI046StateType {
+  response: API.MIOAZTMI046Response;
+}
