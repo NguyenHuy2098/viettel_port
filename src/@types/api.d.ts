@@ -136,6 +136,52 @@ declare namespace API {
      */
     FU_ID?: string;
   }
+  export interface LocationAddEsRequest {
+    I?: string;
+    N?: string;
+    P?: string;
+    type?: 1 | 2 | 3; // int32
+  }
+  export interface LocationAddEsResponse {
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface LocationAutoAddEsRequest {
+    /**
+     * Loại địa chỉ: 1-Tỉnh, 2-Huyện, 3-Xã
+     */
+    typeLocation?: 1 | 2 | 3; // int32
+  }
+  export interface LocationEsModel {
+    I?: string;
+    N?: string;
+    P?: string;
+    type?: 1 | 2 | 3; // int32
+  }
+  export interface LocationGetsEsRequest {
+    /**
+     * Loại địa chỉ: 0: Tất cả, 1-Tỉnh, 2-Huyện, 3-Xã
+     */
+    TypeLocation?: 1 | 2 | 3; // int32
+    Id?: string;
+    ParentId?: string;
+    PageIndex?: number; // int32
+    PageSize?: number; // int32
+  }
+  export interface LocationSearchEsResponse {
+    LocationModels?: LocationEsModel[];
+    PageIndex?: number; // int32
+    PageSize?: number; // int32
+    TotalRow?: number; // int32
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
   export interface MIOAZTMI011Request {
     /**
      * Mã loại đơn hàng: V001: Đơn hàng xã phường/xã của điểm nhận hàng
@@ -1544,8 +1590,8 @@ declare namespace API {
     DATETIME_CHLC?: string;
     NET_WEI_VAL?: string;
     NET_WEI_UNI?: string;
-    LOG_LOCID_SRC?: number; // int32
-    LOG_LOCID_DES?: number; // int32
+    LOG_LOCID_FR?: string;
+    LOG_LOCID_TO?: string;
     EXEC_CONT?: string;
     ITEM_NO?: string;
     ZONLO?: string;
@@ -2455,6 +2501,17 @@ declare namespace API {
   }
 }
 declare namespace Paths {
+  namespace AddIndexLocation {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.LocationAddEsRequest;
+    }
+    namespace Responses {
+      export type $200 = Definitions.LocationAddEsResponse;
+    }
+  }
   namespace AutoGenUserVoSo {
     export interface BodyParameters {
       request?: Parameters.Request;
@@ -2464,6 +2521,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.GenUserVoSoResponse;
+    }
+  }
+  namespace AutoIndexEsLocation {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.LocationAutoAddEsRequest;
+    }
+    namespace Responses {
+      export type $200 = Definitions.LocationAddEsResponse;
     }
   }
   namespace GetBPCode {
@@ -2860,6 +2928,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.SIOZTMI028Response;
+    }
+  }
+  namespace SearchLocation {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.LocationGetsEsRequest;
+    }
+    namespace Responses {
+      export type $200 = Definitions.LocationSearchEsResponse;
     }
   }
   namespace SignUpVoSo {

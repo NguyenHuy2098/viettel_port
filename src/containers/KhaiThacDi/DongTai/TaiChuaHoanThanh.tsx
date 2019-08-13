@@ -7,7 +7,7 @@ import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -39,7 +39,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   }
 
-  function deleteTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+  const handleDeleteTai = (tai: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       const payload = {
         IV_FLAG: '3',
@@ -55,44 +55,33 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
           },
         ],
       };
-      if (!window.confirm('Bạn có chắc chắn?')) return;
       dispatch(
         action_MIOA_ZTMI016(payload, {
-          onFailure: (error: HttpRequestErrorType): void => {
-            console.log(error);
-          },
-          onSuccess: (): void => {
+          onFinish: (): void => {
             const payload = {
               IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC2',
+              IV_TOR_TYPE: 'ZC3',
               IV_FR_LOC_ID: 'BDH',
               IV_CUST_STATUS: '101',
+              IV_TO_LOC_ID: '',
             };
-            dispatch(
-              action_MIOA_ZTMI047(payload, {
-                onFailure: (error: HttpRequestErrorType): void => {
-                  console.log(error.messages);
-                },
-              }),
-            );
+            dispatch(action_MIOA_ZTMI047(payload));
           },
         }),
       );
     };
-  }
+  };
 
-  function renderAction(taiChuaHoanThan: API.RowMTZTMI047OUT): JSX.Element {
+  function renderAction(taiChuaHoanThanh: API.RowMTZTMI047OUT): JSX.Element {
     return (
       <>
-        <Button onClick={printTai(taiChuaHoanThan)}>
+        <Button onClick={printTai(taiChuaHoanThanh)}>
           <i className="fa fa-print fa-lg color-green" />
         </Button>
-        <Button onClick={editTai(taiChuaHoanThan)}>
+        <Button onClick={editTai(taiChuaHoanThanh)}>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <Button onClick={deleteTai(taiChuaHoanThan)}>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
+        <ModalPopupConfirm handleDoSomething={handleDeleteTai(taiChuaHoanThanh)} />
       </>
     );
   }
@@ -155,7 +144,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
                   </Label>
                 </td>
                 <td>{tai.TOR_ID}</td>
-                <td>{tai.LOG_LOCID_DES}</td>
+                <td>{tai.LOG_LOCID_TO}</td>
                 <td>{tai.ITEM_NO}</td>
                 <td>-</td>
                 <td>{moment(parseInt(tai.DATETIME_CHLC || '0')).format()}</td>
@@ -173,9 +162,14 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     <>
       <Row className="sipContentContainer">
         <Col lg={4} xs={12} className="p-0">
-          <div className="sipTitleRightBlockInput m-0">
-            <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSearch} />
+          <div className="d-flex">
+            <div className="sipTitleRightBlockInput m-0">
+              <i className="fa fa-search" />
+              <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSearch} />
+            </div>
+            <Button color="primary" className="ml-2">
+              {t('Tìm kiếm')}
+            </Button>
           </div>
         </Col>
         <Col>

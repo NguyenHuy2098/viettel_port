@@ -143,7 +143,25 @@ const DongTai: React.FC = (): JSX.Element => {
               className={classNames({ active: tab === 2 })}
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
-              {t('Bảng kê/bưu gửi chưa đóng tải')}
+              {t('Bưu gửi chưa đóng tải')}
+              <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 3 })}
+              onClick={React.useCallback((): void => handleChangeTab(3), [])}
+            >
+              {t('Bảng kê chưa đóng tải')}
+              <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 4 })}
+              onClick={React.useCallback((): void => handleChangeTab(4), [])}
+            >
+              {t('Tải đã đóng')}
               <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
             </NavLink>
           </NavItem>

@@ -111,7 +111,7 @@ function DanhSachBangKe(): JSX.Element {
                 return (
                   <tr key={index}>
                     <td>{item.TOR_ID}</td>
-                    <td>{item.LOG_LOCID_DES}</td>
+                    <td>{item.LOG_LOCID_TO}</td>
                     <td>{item.ITEM_NO}</td>
                     <td></td>
                     <td>{item.DATETIME_CHLC}</td>

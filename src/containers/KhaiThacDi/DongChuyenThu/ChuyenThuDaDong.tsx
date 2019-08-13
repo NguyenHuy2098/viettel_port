@@ -1,21 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { push } from 'connected-react-router';
 import { map } from 'lodash';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import {
-  makeSelectorChuyenThuChuaHoanThanh,
-  makeSelectorCountChuyenThuChuaHoanThanh,
-} from 'redux/MIOA_ZTMI047/selectors';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import routesMap from 'utils/routesMap';
-import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
+import { makeSelectorChuyenThuDaDong, makeSelectorCountChuyenThuDaDong } from 'redux/MIOA_ZTMI047/selectors';
 import moment from 'moment';
 
 // eslint-disable-next-line max-lines-per-function
-const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
+const ChuyenThuDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -26,7 +19,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC3',
           IV_FR_LOC_ID: 'BDH',
-          IV_CUST_STATUS: '101',
+          IV_CUST_STATUS: '104',
           IV_TO_LOC_ID: '',
           ...payload,
         }),
@@ -37,8 +30,9 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
 
   useEffect((): void => getListChuyenThu(), [getListChuyenThu]);
 
-  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
-  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorChuyenThuChuaHoanThanh);
+  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuDaDong);
+  // eslint-disable-next-line no-undef
+  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorChuyenThuDaDong);
 
   function handleSearchChuyenThu(e: React.ChangeEvent<HTMLInputElement>): void {
     const payload = {
@@ -79,70 +73,12 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     );
   }
 
-  // function renderAction(): JSX.Element {
-  //   return (
-  //     <>
-  //       <Button>
-  //         <i className="fa fa-print fa-lg color-green" />
-  //       </Button>
-  //       <Button>
-  //         <i className="fa fa-pencil fa-lg color-blue" />
-  //       </Button>
-  //       <Button>
-  //         <i className="fa fa-trash-o fa-lg color-red" />
-  //       </Button>
-  //     </>
-  //   );
-  // }
-
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      dispatch(push(`${routesMap.danhSachPhieuGuiTrongBangKe}/${item.TOR_ID}`));
-    };
-  };
-  const handleDeleteChuyenThu = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      const payload = {
-        IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC3',
-        IV_TOR_ID_CU: item.TOR_ID,
-        IV_SLOCATION: '',
-        IV_DLOCATION: '',
-        IV_DESCRIPTION: '',
-        T_ITEM: [
-          {
-            ITEM_ID: '',
-            ITEM_TYPE: '',
-          },
-        ],
-      };
-      dispatch(
-        action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => {
-            const payload = {
-              IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC3',
-              IV_FR_LOC_ID: 'BDH',
-              IV_CUST_STATUS: '101',
-              IV_TO_LOC_ID: '',
-            };
-            dispatch(action_MIOA_ZTMI047(payload));
-          },
-        }),
-      );
-    };
-  };
-
   function renderManifestTableAction(item: API.RowMTZTMI047OUT): JSX.Element {
     return (
       <>
         <Button>
           <i className="fa fa-print fa-lg color-green" />
         </Button>
-        <Button onClick={handleRedirectDetail(item)}>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <ModalPopupConfirm handleDoSomething={handleDeleteChuyenThu(item)} />
       </>
     );
   }
@@ -177,7 +113,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
                     <td>{item.TOR_ID}</td>
                     <td>{item.LOG_LOCID_TO}</td>
                     <td>{item.ITEM_NO}</td>
-                    <td />
+                    <td></td>
                     <td>{moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</td>
                     <td>{item.EXEC_CONT}</td>
                     <td className="SipTableFunctionIcon">{renderManifestTableAction(item)}</td>
@@ -218,4 +154,4 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
   );
 };
 
-export default ChuyenThuChuaHoanThanh;
+export default ChuyenThuDaDong;

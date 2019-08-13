@@ -155,7 +155,7 @@ const BangKeBuuGuiChuaDongTai: React.FC = (): JSX.Element => {
                   </Label>
                 </td>
                 <td>{bangKe.TOR_ID}</td>
-                <td>{bangKe.LOG_LOCID_DES}</td>
+                <td>{bangKe.LOG_LOCID_TO}</td>
                 <td>{bangKe.ITEM_NO}</td>
                 <td>-</td>
                 <td>{moment(parseInt(bangKe.DATETIME_CHLC || '0')).format()}</td>
@@ -173,9 +173,14 @@ const BangKeBuuGuiChuaDongTai: React.FC = (): JSX.Element => {
     <>
       <Row className="sipContentContainer">
         <Col lg={4} xs={12} className="p-0">
-          <div className="sipTitleRightBlockInput m-0">
-            <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSearch} />
+          <div className="d-flex">
+            <div className="sipTitleRightBlockInput m-0">
+              <i className="fa fa-search" />
+              <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSearch} />
+            </div>
+            <Button color="primary" className="ml-2">
+              {t('Tìm kiếm')}
+            </Button>
           </div>
         </Col>
         <Col>

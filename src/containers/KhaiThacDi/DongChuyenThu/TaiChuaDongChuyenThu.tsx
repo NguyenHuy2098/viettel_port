@@ -5,17 +5,14 @@ import { push } from 'connected-react-router';
 import { map } from 'lodash';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import {
-  makeSelectorChuyenThuChuaHoanThanh,
-  makeSelectorCountChuyenThuChuaHoanThanh,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import routesMap from 'utils/routesMap';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import moment from 'moment';
 
 // eslint-disable-next-line max-lines-per-function
-const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
+const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -24,7 +21,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
       dispatch(
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC3',
+          IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '101',
           IV_TO_LOC_ID: '',
@@ -37,8 +34,9 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
 
   useEffect((): void => getListChuyenThu(), [getListChuyenThu]);
 
-  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
-  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorChuyenThuChuaHoanThanh);
+  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaDongTai);
+  // eslint-disable-next-line no-undef
+  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorBangKeChuaDongTai);
 
   function handleSearchChuyenThu(e: React.ChangeEvent<HTMLInputElement>): void {
     const payload = {
@@ -78,23 +76,6 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
       </Pagination>
     );
   }
-
-  // function renderAction(): JSX.Element {
-  //   return (
-  //     <>
-  //       <Button>
-  //         <i className="fa fa-print fa-lg color-green" />
-  //       </Button>
-  //       <Button>
-  //         <i className="fa fa-pencil fa-lg color-blue" />
-  //       </Button>
-  //       <Button>
-  //         <i className="fa fa-trash-o fa-lg color-red" />
-  //       </Button>
-  //     </>
-  //   );
-  // }
-
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       dispatch(push(`${routesMap.danhSachPhieuGuiTrongBangKe}/${item.TOR_ID}`));
@@ -104,7 +85,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     return (): void => {
       const payload = {
         IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC3',
+        IV_TOR_TYPE: 'ZC1',
         IV_TOR_ID_CU: item.TOR_ID,
         IV_SLOCATION: '',
         IV_DLOCATION: '',
@@ -121,7 +102,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
           onFinish: (): void => {
             const payload = {
               IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC3',
+              IV_TOR_TYPE: 'ZC1',
               IV_FR_LOC_ID: 'BDH',
               IV_CUST_STATUS: '101',
               IV_TO_LOC_ID: '',
@@ -218,4 +199,4 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
   );
 };
 
-export default ChuyenThuChuaHoanThanh;
+export default TaiChuaDongChuyenThu;

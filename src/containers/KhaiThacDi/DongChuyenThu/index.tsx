@@ -21,9 +21,15 @@ import { useState } from 'react';
 import classNames from 'classnames';
 import { useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { makeSelectorCountChuyenThuChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
+import {
+  makeSelectorCountChuyenThuChuaHoanThanh,
+  makeSelectorCountBangKeChuaDongTai,
+  makeSelectorCountChuyenThuDaDong,
+} from 'redux/MIOA_ZTMI047/selectors';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
-import TaiKienChuaDongChuyenThu from './TaiKienChuaDongChuyenThu';
+import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
+import KienChuaDongChuyenThu from './KienChuaDongChuyenThu';
+import ChuyenThuDaDong from './ChuyenThuDaDong';
 
 // eslint-disable-next-line max-lines-per-function
 const DongChuyenThu: React.FC = (): JSX.Element => {
@@ -36,6 +42,9 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
 
   const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
   const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
+  const countTaiChuaDong = useSelector(makeSelectorCountBangKeChuaDongTai);
+  const countChuyenThuDaDong = useSelector(makeSelectorCountChuyenThuDaDong);
+  // const countTaiChuaDong = 1;
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
@@ -43,7 +52,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   function renderModal(): JSX.Element {
     return (
       <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew">
-        <ModalHeader toggle={toggle}>{t('Tạo bảng kê')}</ModalHeader>
+        <ModalHeader toggle={toggle}>{t('Tạo chuyến thư')}</ModalHeader>
         <ModalBody>
           <FormGroup>
             <Label>{t('Bưu cục đến')}</Label>
@@ -81,7 +90,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
           </div>
           <Button onClick={toggle}>
             <i className="fa fa-plus" />
-            {t('Tạo bảng kê')}
+            {t('Tạo chuyến thư')}
           </Button>
           {renderModal()}
         </div>
@@ -108,8 +117,26 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               className={classNames({ active: tab === 2 })}
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
-              {t('Tải/kiện chưa đóng chuyến thư')}
+              {t('Tải chưa đóng chuyến thư')}
+              <Badge color="primary">{countTaiChuaDong}</Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 3 })}
+              onClick={useCallback((): void => handleChangeTab(3), [])}
+            >
+              {t('Kiện chưa đóng chuyến thư')}
               <Badge color="primary">03</Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 4 })}
+              onClick={useCallback((): void => handleChangeTab(4), [])}
+            >
+              {t('Chuyến Thư đã đóng')}
+              <Badge color="primary">{countChuyenThuDaDong}</Badge>
             </NavLink>
           </NavItem>
         </Nav>
@@ -118,7 +145,13 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
             <ChuyenThuChuaHoanThanh />
           </TabPane>
           <TabPane tabId={2}>
-            <TaiKienChuaDongChuyenThu />
+            <TaiChuaDongChuyenThu />
+          </TabPane>
+          <TabPane tabId={3}>
+            <KienChuaDongChuyenThu />
+          </TabPane>
+          <TabPane tabId={4}>
+            <ChuyenThuDaDong />
           </TabPane>
         </TabContent>
       </div>
