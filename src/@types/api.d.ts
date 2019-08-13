@@ -2496,6 +2496,7 @@ declare namespace API {
     Status: boolean;
     ErrorCode: number;
     Messages: any[];
+    any;
     ObjectId?: any;
     Version: number;
   }

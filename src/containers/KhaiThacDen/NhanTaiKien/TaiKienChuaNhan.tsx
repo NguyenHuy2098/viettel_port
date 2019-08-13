@@ -1,15 +1,16 @@
 import * as React from 'react';
-import { Button, Row, Input, Pagination, PaginationItem, PaginationLink, Table, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { match } from 'react-router-dom';
-import { withRouter } from 'react-router-dom';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { match, withRouter } from 'react-router-dom';
+import { Button, Row, Input, Pagination, PaginationItem, PaginationLink, Table, Label } from 'reactstrap';
+import { push } from 'connected-react-router';
 import { get, map } from 'lodash';
 import moment from 'moment';
+
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorCountMT_ZTMI046, useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
-import { push } from 'connected-react-router';
-import routesMap from '../../../utils/routesMap';
+import routesMap from 'utils/routesMap';
+import { ChangeEvent } from 'react';
 
 interface Props {
   match: match;
@@ -19,13 +20,9 @@ interface Props {
 const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-
   const idChuyenThu = get(props, 'match.params.idChuyenThu', '');
-
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
-  const counttaikien = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
-  // console.log(manifestForwardingOrderList);
-  // // debugger;
+  const countTaiKien = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
 
   React.useEffect((): void => {
     const payload = {
@@ -40,8 +37,8 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     console.log(idTaiKien);
   }
 
-  function handleChangeTaiKien(e: any): void {
-    setIdTaiKien(e.target.value);
+  function handleChangeTaiKien(event: ChangeEvent<HTMLInputElement>): void {
+    setIdTaiKien(event.target.value);
   }
 
   function renderPagination(): JSX.Element {
@@ -49,7 +46,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       <Pagination className="sipPagination">
         <PaginationItem className="sipPaginationPrev pull-left">
           <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
+            <i className="fa fa-arrow-left" />
           </PaginationLink>
         </PaginationItem>
         <PaginationItem active>
@@ -69,7 +66,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         </PaginationItem>
         <PaginationItem className="sipPaginationNext pull-right">
           <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
+            <i className="fa fa-arrow-right" />
           </PaginationLink>
         </PaginationItem>
       </Pagination>
@@ -121,7 +118,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
                     <td>{item.TOR_ID}</td>
                     <td>{item.SRC_LOC_IDTRQ}</td>
                     <td>{item.DES_LOC_IDTRQ}</td>
-                    <td>{counttaikien}</td>
+                    <td>{countTaiKien}</td>
                     <td>{item.GRO_WEI_VAL}</td>
                     <td>{moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</td>
                     <td>{item.TOR_TYPE === 'ZC2' ? 'Tải' : 'Kiện'}</td>

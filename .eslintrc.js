@@ -24,6 +24,7 @@ module.exports = {
     'react/boolean-prop-naming': 'error',
     'react/jsx-max-depth': ['error', { max: 5 }],
     'react/jsx-no-bind': 'error',
+    'react-hooks/exhaustive-deps': 'off', // Checks effect dependencies
   },
   settings: {
     react: {
