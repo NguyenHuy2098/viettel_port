@@ -156,7 +156,7 @@ const DefaultHeader: React.FC = (): JSX.Element => {
       <AppNavbarBrand
         full={{ src: logo, width: 150, alt: 'VTP' }}
         minimized={{ src: logo, width: 30, height: 30, alt: 'VTP' }}
-        href={routesMap.home}
+        href={routesMap.HOME}
       />
       <AppSidebarToggler className="d-md-down-none" display="lg" />
 

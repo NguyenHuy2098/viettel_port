@@ -23,7 +23,7 @@ const Login: React.FC<Props> = (): JSX.Element => {
   const { isLoggedIn } = useLoggedInUser();
 
   if (isLoggedIn) {
-    return <Redirect to={routesMap.home} />;
+    return <Redirect to={routesMap.HOME} />;
   }
 
   return <RedirectLogin />;

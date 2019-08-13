@@ -9,172 +9,172 @@ const nav = (t: i18next.TFunction): any => {
       {
         name: t('Trang chủ'),
         icon: 'fa fa-home',
-        url: routesMap.home,
+        url: routesMap.HOME,
       },
       {
         name: t('Điều hành'),
         icon: 'fa fa-user-circle-o',
-        url: routesMap.dieuHanh,
+        url: routesMap.DIEU_HANH,
         children: [
           {
             name: t('Biên bản nội bộ'),
-            url: routesMap.bienBanNoiBo,
+            url: routesMap.BIEN_BAN_NOI_BO,
           },
           {
             name: t('Sửa biên bản'),
-            url: routesMap.suaBienBan,
+            url: routesMap.SUA_BIEN_BAN,
           },
           {
             name: t('Xác minh biên bản'),
-            url: routesMap.xacMinhBienBan,
+            url: routesMap.XAC_MINH_BIEN_BAN,
           },
           {
             name: t('Khiếu nại khách hàng'),
-            url: routesMap.khieuNaiKhachHang,
+            url: routesMap.KHIEU_NAI_KHACH_HANG,
           },
           {
             name: t('Chi tiết khiếu nại'),
-            url: routesMap.chiTietKhieuNai,
+            url: routesMap.CHI_TIET_KHIEU_NAI,
           },
           {
             name: t('Lập biên bản'),
-            url: routesMap.lapBienBan,
+            url: routesMap.LAP_BIEN_BAN,
           },
           {
             name: t('Tra cứu biên bản'),
-            url: routesMap.traCuuBienBan,
+            url: routesMap.TRA_CUU_BIEN_BAN,
           },
         ],
       },
       {
         name: t('Nhập phiếu gửi'),
         icon: 'icon-note',
-        url: routesMap.nhapPhieuGui,
+        url: routesMap.NHAP_PHIEU_GUI,
         children: [
           {
             name: t('Phiếu gửi trong nước'),
-            url: routesMap.phieuGuiTrongNuoc,
+            url: routesMap.NHAP_PHIEU_GUI_TRONG_NUOC,
           },
           {
             name: 'Phiếu gửi quốc tế',
-            url: routesMap.phieuGuiQuocTe,
+            url: routesMap.NHAP_PHIEU_GUI_QUOC_TE,
           },
           {
             name: t('Nhập doanh thu'),
-            url: routesMap.nhapDoanhThu,
+            url: routesMap.NHAP_DOANH_THU,
           },
           {
             name: t('Nhận tại bưu cục gốc'),
-            url: routesMap.nhanTaiBuuCucGoc,
+            url: routesMap.NHAN_TAI_BUU_CUC_GOC,
           },
         ],
       },
       {
         name: t('Khai thác đi'),
         icon: 'fa fa-truck',
-        url: routesMap.khaiThacDi,
+        url: routesMap.KHAI_THAC_DI,
         children: [
           {
             name: t('Đóng bảng kê'),
-            url: routesMap.dongBangKe,
+            url: routesMap.DONG_BANG_KE,
           },
           {
             name: t('Đóng bảng kê nội tỉnh'),
-            url: routesMap.dongBangKeNoiTinh,
+            url: routesMap.DONG_BANG_KE_NOI_TINH,
           },
           {
             name: t('Thông tin bảng kê'),
-            url: routesMap.thongTinBangKe,
+            url: routesMap.THONG_TIN_BANG_KE,
           },
           {
             name: t('Danh sách bảng kê'),
-            url: routesMap.danhSachBangKe,
+            url: routesMap.DANH_SACH_BANG_KE,
           },
           {
             name: t('Danh sách phiếu gửi'),
-            url: routesMap.danhSachPhieuGui,
+            url: routesMap.DANH_SACH_PHIEU_GUI,
           },
           {
             name: t('Đóng tải'),
-            url: routesMap.dongTai,
+            url: routesMap.DONG_TAI,
           },
           {
             name: t('Đóng chuyến thư'),
-            url: routesMap.dongChuyenThu,
+            url: routesMap.DONG_CHUYEN_THU,
           },
           {
             name: t('Danh sách tải kiện'),
-            url: routesMap.danhSachTaiKien,
+            url: routesMap.DANH_SACH_TAI_KIEN,
           },
           {
             name: t('Tách phiếu gửi'),
-            url: routesMap.tachPhieuGui,
+            url: routesMap.TACH_PHIEU_GUI,
           },
         ],
       },
       {
         name: t('Khai thác đến'),
         icon: 'fa fa-cubes',
-        url: routesMap.khaiThacDen,
+        url: routesMap.KHAI_THAC_DEN,
         children: [
           {
             name: t('Nhận chuyến thư'),
-            url: routesMap.nhanChuyenThu,
+            url: routesMap.NHAN_CHUYEN_THU,
           },
           {
             name: t('Khai thác chuyển thư đến'),
-            url: routesMap.khaiThacChuyenThuDen,
+            url: routesMap.KHAI_THAC_CHUYEN_THU_DEN,
           },
           {
             name: t('Nhận tải kiện'),
-            url: routesMap.nhanTaiKien,
+            url: routesMap.NHAN_TAI_KIEN,
           },
           {
             name: t('Khai thác tải'),
-            url: routesMap.khaiThacTai,
+            url: routesMap.KHAI_THAC_TAI,
           },
           {
             name: t('Nhận bảng kê / Phiếu gửi'),
-            url: routesMap.nhanBangKePhieuGui,
+            url: routesMap.NHAN_BANG_KE_PHIEU_GUI,
           },
         ],
       },
       {
         name: t('Báo cáo'),
         icon: 'fa fa-sticky-note-o',
-        url: routesMap.baoCao,
+        url: routesMap.BAO_CAO,
         children: [
           {
             name: t('Báo cáo (chưa có gì)'),
-            url: routesMap.baoCao1,
+            url: routesMap.BAO_CAO_1,
           },
         ],
       },
       {
         name: t('Khách hàng'),
         icon: 'fa fa-handshake-o',
-        url: routesMap.khachHang,
+        url: routesMap.KHACH_HANG,
         children: [
           {
             name: t('Tiếp xúc khách hàng'),
-            url: routesMap.tiepXucKhachHang,
+            url: routesMap.TIEP_XUC_KHACH_HANG,
           },
         ],
       },
       {
         name: t('Thông tin đơn hàng'),
         icon: 'icon-info',
-        url: routesMap.thongTinDonHang,
+        url: routesMap.THONG_TIN_DON_HANG,
       },
       {
         name: t('Thông tin đơn hàng 2'),
         icon: 'icon-info',
-        url: routesMap.thongTinDonHang2,
+        url: routesMap.THONG_TIN_DON_HANG_2,
       },
       {
         name: t('Thông tin đơn hàng new'),
         icon: 'icon-info',
-        url: routesMap.thongTinDonHangNew,
+        url: routesMap.THONG_TIN_DON_HANG_NEW,
       },
     ],
   };

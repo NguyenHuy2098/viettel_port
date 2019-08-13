@@ -29,7 +29,7 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
   }, [dispatch, manifestId]);
 
   function redirectToPreviousLocation(): void {
-    dispatch(push(routesMap.phieuGuiTrongNuoc));
+    dispatch(push(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC));
   }
 
   function renderTopController(): JSX.Element {

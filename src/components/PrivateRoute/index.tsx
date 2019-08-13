@@ -10,7 +10,7 @@ const PrivateRoute = (props: RouteProps): JSX.Element => {
     return <Route {...props} />;
   }
 
-  return <Redirect to={routesMap.login} />;
+  return <Redirect to={routesMap.AUTH_LOGIN} />;
 };
 
 export default PrivateRoute;

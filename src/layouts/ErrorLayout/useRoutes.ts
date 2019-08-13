@@ -20,8 +20,8 @@ const Page500 = Loadable({
 
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
-    { path: routesMap.error404, name: t('Not found!'), component: Page404 },
-    { path: routesMap.error500, name: t('Something wrong!'), component: Page500 },
+    { path: routesMap.ERROR_404, name: t('Not found!'), component: Page404 },
+    { path: routesMap.ERROR_500, name: t('Something wrong!'), component: Page500 },
   ];
 };
 

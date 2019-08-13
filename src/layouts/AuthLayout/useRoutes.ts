@@ -20,8 +20,8 @@ const LoginCallback = Loadable({
 
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
-    { path: routesMap.login, name: t('Login'), component: Login },
-    { path: routesMap.loginCallback, name: t('Logging in...'), component: LoginCallback },
+    { path: routesMap.AUTH_LOGIN, name: t('Login'), component: Login },
+    { path: routesMap.AUTH_LOGIN_CALLBACK, name: t('Logging in...'), component: LoginCallback },
   ];
 };
 

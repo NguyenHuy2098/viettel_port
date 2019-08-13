@@ -50,79 +50,79 @@ export const KHACH_HANG = '/khach-hang';
 export const TIEP_XUC_KHACH_HANG = `${KHACH_HANG}/tiep-xuc-khach-hang`;
 
 export default {
-  root: '/',
-  home: '/home',
+  ROOT: '/',
+  HOME: '/home',
   /**
    * Error
    */
-  error: ERROR,
-  error404: ERROR_404,
-  error500: ERROR_500,
-  pageNoData: ERROR_NO_DATA,
+  ERROR,
+  ERROR_404,
+  ERROR_500,
+  ERROR_NO_DATA,
   /**
    * Authentication
    */
-  auth: AUTH,
-  login: AUTH_LOGIN,
-  loginCallback: AUTH_LOGIN_CALLBACK,
-  logoutCallback: AUTH_LOGOUT_CALLBACK,
-  silentCallback: AUTH_SILENT_CALLBACK,
+  AUTH,
+  AUTH_LOGIN,
+  AUTH_LOGIN_CALLBACK,
+  AUTH_LOGOUT_CALLBACK,
+  AUTH_SILENT_CALLBACK,
   /**
    * Báo cáo
    */
-  baoCao: BAO_CAO,
-  baoCao1: BAO_CAO_1,
+  BAO_CAO,
+  BAO_CAO_1,
   /**
    * Khai thác đi
    */
-  khaiThacDi: KHAI_THAC_DI,
-  dongBangKe: DONG_BANG_KE,
-  dongBangKeNoiTinh: DONG_BANG_KE_NOI_TINH,
-  thongTinBangKe: THONG_TIN_BANG_KE,
-  danhSachBangKe: DANH_SACH_BANG_KE,
-  danhSachPhieuGui: DANH_SACH_PHIEU_GUI,
-  danhSachPhieuGuiTrongBangKe: DANH_SACH_PHIEU_GUI_TRONG_BANG_KE,
-  dongTai: DONG_TAI,
-  dongChuyenThu: DONG_CHUYEN_THU,
-  danhSachTaiKien: DANH_SACH_TAI_KIEN,
-  tachPhieuGui: TACH_PHIEU_GUI,
+  KHAI_THAC_DI,
+  DONG_BANG_KE,
+  DONG_BANG_KE_NOI_TINH,
+  THONG_TIN_BANG_KE,
+  DANH_SACH_BANG_KE,
+  DANH_SACH_PHIEU_GUI,
+  DANH_SACH_PHIEU_GUI_TRONG_BANG_KE,
+  DONG_TAI,
+  DONG_CHUYEN_THU,
+  DANH_SACH_TAI_KIEN,
+  TACH_PHIEU_GUI,
   /**
    * Nhập phiếu gửi
    */
-  nhapPhieuGui: NHAP_PHIEU_GUI,
-  phieuGuiTrongNuoc: NHAP_PHIEU_GUI_TRONG_NUOC,
-  phieuGuiQuocTe: NHAP_PHIEU_GUI_QUOC_TE,
-  nhapDoanhThu: NHAP_DOANH_THU,
-  nhanTaiBuuCucGoc: NHAN_TAI_BUU_CUC_GOC,
+  NHAP_PHIEU_GUI,
+  NHAP_PHIEU_GUI_TRONG_NUOC,
+  NHAP_PHIEU_GUI_QUOC_TE,
+  NHAP_DOANH_THU,
+  NHAN_TAI_BUU_CUC_GOC,
   /**
    * Điều hành
    */
-  dieuHanh: DIEU_HANH,
-  bienBanNoiBo: BIEN_BAN_NOI_BO,
-  suaBienBan: SUA_BIEN_BAN,
-  xacMinhBienBan: XAC_MINH_BIEN_BAN,
-  khieuNaiKhachHang: KHIEU_NAI_KHACH_HANG,
-  chiTietKhieuNai: CHI_TIET_KHIEU_NAI,
-  lapBienBan: LAP_BIEN_BAN,
-  traCuuBienBan: TRA_CUU_BIEN_BAN,
+  DIEU_HANH,
+  BIEN_BAN_NOI_BO,
+  SUA_BIEN_BAN,
+  XAC_MINH_BIEN_BAN,
+  KHIEU_NAI_KHACH_HANG,
+  CHI_TIET_KHIEU_NAI,
+  LAP_BIEN_BAN,
+  TRA_CUU_BIEN_BAN,
   /**
    * Khai thác đến
    */
-  khaiThacDen: KHAI_THAC_DEN,
-  nhanChuyenThu: NHAN_CHUYEN_THU,
-  khaiThacChuyenThuDen: KHAI_THAC_CHUYEN_THU_DEN,
-  nhanTaiKien: NHAN_TAI_KIEN,
-  khaiThacTai: KHAI_THAC_TAI,
-  nhanBangKePhieuGui: NHAN_BANG_KE_PHIEU_GUI,
+  KHAI_THAC_DEN,
+  NHAN_CHUYEN_THU,
+  KHAI_THAC_CHUYEN_THU_DEN,
+  NHAN_TAI_KIEN,
+  KHAI_THAC_TAI,
+  NHAN_BANG_KE_PHIEU_GUI,
   /**
    * Khách hàng
    */
-  khachHang: KHACH_HANG,
-  tiepXucKhachHang: TIEP_XUC_KHACH_HANG,
+  KHACH_HANG,
+  TIEP_XUC_KHACH_HANG,
   /**
    * Thong tin don hang
    */
-  thongTinDonHang: '/thong-tin-don-hang',
-  thongTinDonHang2: '/thong-tin-don-hang-2',
-  thongTinDonHangNew: '/thong-tin-don-hang-new',
+  THONG_TIN_DON_HANG: '/thong-tin-don-hang',
+  THONG_TIN_DON_HANG_2: '/thong-tin-don-hang-2',
+  THONG_TIN_DON_HANG_NEW: '/thong-tin-don-hang-new',
 };

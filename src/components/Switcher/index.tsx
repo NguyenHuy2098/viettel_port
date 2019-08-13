@@ -35,7 +35,7 @@ const Switcher: React.FC<Props> = (props: Props): JSX.Element => {
           /* eslint-enable react/jsx-no-bind */
         },
       )}
-      <Redirect to={routesMap.error404} />
+      <Redirect to={routesMap.ERROR_404} />
     </Switch>
   );
 };

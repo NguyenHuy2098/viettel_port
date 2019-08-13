@@ -119,7 +119,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   }
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      dispatch(push(`${routesMap.nhanTaiKien}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.NHAN_TAI_KIEN}/${item.TOR_ID}`));
     };
   };
   // eslint-disable-next-line max-lines-per-function

@@ -40,9 +40,9 @@ const App: React.FC = (): JSX.Element => {
         <OidcProvider store={store} userManager={userManager}>
           <Router history={history}>
             <Switch>
-              <Route path={routesMap.auth} component={AuthLayout} />
-              <Route path={routesMap.error} component={ErrorLayout} />
-              <PrivateRoute path={routesMap.root} component={DefaultLayout} />
+              <Route path={routesMap.AUTH} component={AuthLayout} />
+              <Route path={routesMap.ERROR} component={ErrorLayout} />
+              <PrivateRoute path={routesMap.ROOT} component={DefaultLayout} />
             </Switch>
           </Router>
         </OidcProvider>

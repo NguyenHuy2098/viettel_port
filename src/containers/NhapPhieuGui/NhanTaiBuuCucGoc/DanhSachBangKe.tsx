@@ -38,7 +38,7 @@ function DanhSachBangKe(): JSX.Element {
 
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      dispatch(push(`${routesMap.danhSachPhieuGuiTrongBangKe}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
     };
   };
 

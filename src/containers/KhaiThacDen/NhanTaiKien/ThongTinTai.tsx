@@ -55,7 +55,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   }, [dispatch, idChuyenThu]);
 
   const handleBackChuyenThu = (): void => {
-    dispatch(push(routesMap.nhanChuyenThu));
+    dispatch(push(routesMap.NHAN_CHUYEN_THU));
   };
 
   return (
