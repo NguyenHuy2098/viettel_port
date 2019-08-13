@@ -167,7 +167,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.home, exact: true, name: t('Home'), component: Home },
     { path: routesMap.phieuGuiTrongNuoc, name: t('Phiếu gửi trong nước'), component: PhieuGuiTrongNuoc },
     {
-      path: routesMap.internationalForwardingOrder,
+      path: routesMap.phieuGuiQuocTe,
       name: t('Phiếu gửi quốc tế'),
       component: InternationalForwardingOrder,
     },
@@ -178,14 +178,14 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.dongTai, name: t('Đóng tải'), component: DongTai },
     { path: routesMap.danhSachTaiKien, name: t('Danh sách tải kiện'), component: DanhSachTaiKien },
     { path: routesMap.dongChuyenThu, name: t('Đóng chuyến thư'), component: DongChuyenThu },
-    { path: routesMap.thongTinTai + '/:idChuyenThu', name: t('Nhận tải kiện'), component: ThongTinTai },
+    { path: routesMap.nhanTaiKien, name: t('Nhận tải kiện'), component: ThongTinTai },
     {
-      path: routesMap.nhanBangKePhieuGui + '/:idTaiKien',
+      path: routesMap.nhanBangKePhieuGui,
       name: t('Nhận bảng kê phiếu gưi'),
       component: NhanBangKePhieuGui,
     },
     {
-      path: `${routesMap.danhSachPhieuGuiTrongBangKe}/:manifestId`,
+      path: routesMap.danhSachPhieuGuiTrongBangKe,
       name: t('Danh sách phiếu gửi trong bảng kê'),
       component: DanhSachPhieuGuiTrongBangKe,
     },

@@ -14,6 +14,7 @@ const nav = (t: i18next.TFunction): any => {
       {
         name: t('Điều hành'),
         icon: 'fa fa-user-circle-o',
+        url: routesMap.dieuHanh,
         children: [
           {
             name: t('Biên bản nội bộ'),
@@ -48,6 +49,7 @@ const nav = (t: i18next.TFunction): any => {
       {
         name: t('Nhập phiếu gửi'),
         icon: 'icon-note',
+        url: routesMap.nhapPhieuGui,
         children: [
           {
             name: t('Phiếu gửi trong nước'),
@@ -55,7 +57,7 @@ const nav = (t: i18next.TFunction): any => {
           },
           {
             name: 'Phiếu gửi quốc tế',
-            url: routesMap.internationalForwardingOrder,
+            url: routesMap.phieuGuiQuocTe,
           },
           {
             name: t('Nhập doanh thu'),
@@ -70,6 +72,7 @@ const nav = (t: i18next.TFunction): any => {
       {
         name: t('Khai thác đi'),
         icon: 'fa fa-truck',
+        url: routesMap.khaiThacDi,
         children: [
           {
             name: t('Đóng bảng kê'),
@@ -112,6 +115,7 @@ const nav = (t: i18next.TFunction): any => {
       {
         name: t('Khai thác đến'),
         icon: 'fa fa-cubes',
+        url: routesMap.khaiThacDen,
         children: [
           {
             name: t('Nhận chuyến thư'),
@@ -123,7 +127,7 @@ const nav = (t: i18next.TFunction): any => {
           },
           {
             name: t('Nhận tải kiện'),
-            url: routesMap.thongTinTai,
+            url: routesMap.nhanTaiKien,
           },
           {
             name: t('Khai thác tải'),
@@ -138,16 +142,18 @@ const nav = (t: i18next.TFunction): any => {
       {
         name: t('Báo cáo'),
         icon: 'fa fa-sticky-note-o',
+        url: routesMap.baoCao,
         children: [
           {
             name: t('Báo cáo (chưa có gì)'),
-            url: routesMap.baoCao,
+            url: routesMap.baoCao1,
           },
         ],
       },
       {
         name: t('Khách hàng'),
         icon: 'fa fa-handshake-o',
+        url: routesMap.khachHang,
         children: [
           {
             name: t('Tiếp xúc khách hàng'),
