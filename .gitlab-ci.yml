@@ -66,7 +66,26 @@ build-docker-image:latest:
   services:
     - docker:dind
   variables:
+    # When using dind service we need to instruct docker, to talk with the
+    # daemon started inside of the service. The daemon is available with
+    # a network connection instead of the default /var/run/docker.sock socket.
+    #
+    # The 'docker' hostname is the alias of the service container as described at
+    # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services
+    #
+    # Note that if you're using the Kubernetes executor, the variable should be set to
+    # tcp://localhost:2375/ because of how the Kubernetes executor connects services
+    # to the job container
+    # DOCKER_HOST: tcp://localhost:2375/
+    #
+    # For non-Kubernetes executors, we use tcp://docker:2375/
     DOCKER_HOST: tcp://docker:2375/
+    # When using dind, it's wise to use the overlayfs driver for
+    # improved performance.
+    DOCKER_DRIVER: overlay2
+    #
+    # This will instruct Docker not to start over TLS.
+    DOCKER_TLS_CERTDIR: ""
   stage: build-docker-image
   only:
     - master
@@ -85,7 +104,26 @@ build-docker-image:production:
   services:
     - docker:dind
   variables:
+    # When using dind service we need to instruct docker, to talk with the
+    # daemon started inside of the service. The daemon is available with
+    # a network connection instead of the default /var/run/docker.sock socket.
+    #
+    # The 'docker' hostname is the alias of the service container as described at
+    # https://docs.gitlab.com/ee/ci/docker/using_docker_images.html#accessing-the-services
+    #
+    # Note that if you're using the Kubernetes executor, the variable should be set to
+    # tcp://localhost:2375/ because of how the Kubernetes executor connects services
+    # to the job container
+    # DOCKER_HOST: tcp://localhost:2375/
+    #
+    # For non-Kubernetes executors, we use tcp://docker:2375/
     DOCKER_HOST: tcp://docker:2375/
+    # When using dind, it's wise to use the overlayfs driver for
+    # improved performance.
+    DOCKER_DRIVER: overlay2
+    #
+    # This will instruct Docker not to start over TLS.
+    DOCKER_TLS_CERTDIR: ""
   stage: build-docker-image
   only:
     - tags
@@ -100,12 +138,11 @@ build-docker-image:production:
 # Stage: release
 # Automatically bump version, update changelog and readme
 # Remove `--dry-run` when v1.0.0 release
-
 semantic-release:
   image: node:lts-stretch
   stage: release
   only:
-    - master
+    - staging
   script:
     - yarn changelog
     - yarn semantic-release --dry-run
