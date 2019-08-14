@@ -54,6 +54,18 @@
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 10px;
+    .addNewPackageTabItemBtn {
+      background: #299f9a !important;
+      border: none;
+      font-size: 12px;
+      float: right;
+      padding: 2px 8px;
+      color: #fff !important;
+      border-radius: 10px;
+      i {
+        margin-right: 4px;
+      }
+    }
   }
 }
 
@@ -309,7 +321,42 @@
       }
     }
   }
-
+}
+.packageTabTitle {
+  box-sizing: border-box;
+  a.nav-link {
+    height: 35px;
+    line-height: 33px;
+    padding: 0 10px;
+    border: 1px solid #c8ced3 !important;
+    margin: 0 10px 10px 0;
+    border-radius: 5px;
+    button {
+      padding: 0 3px;
+      border: none;
+      font-size: 12px;
+      margin-left: 5px;
+      background: none !important;
+      position: relative;
+      top: -2px;
+      color: inherit;
+    }
+    &.active {
+      color: #299f9a !important;
+      border-color: #299f9a !important;
+      pointer-events: none;
+    }
+    &.deletablePackageItem {
+      pointer-events: auto;
+    }
+  }
+}
+.packageTabContent {
+  border: none;
+  .tab-pane {
+    padding: 0;
+    margin-bottom: 15px;
+  }
 }
 @media screen and (max-width: 575px) {
   .topDashBroad {

@@ -3,19 +3,23 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
+import produce from 'immer';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { find, get } from 'lodash';
+import { find, get, map, set, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
+import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const isVnPhoneMobile = /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
 
   const schema = yup.object().shape({
     phuPhi: yup
@@ -23,10 +27,16 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
       .typeError(t('Vui lòng nhập định dạng số')),
     maKhachHang: yup.string().required(t('Vui lòng nhập mã khách hàng')),
-    dienThoaiSender: yup.string().required(t('Vui lòng nhập số điện thoại')),
+    dienThoaiSender: yup
+      .string()
+      .required(t('Vui lòng nhập số điện thoại'))
+      .matches(isVnPhoneMobile, t('Vui lòng nhập đúng định dạng số điện thoại')),
     hoTenSender: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiSender: yup.string().required(t('Vui lòng nhập địa chỉ')),
-    dienThoaiReceiver: yup.string().required(t('Vui lòng nhập số điện thoại')),
+    dienThoaiReceiver: yup
+      .string()
+      .required(t('Vui lòng nhập số điện thoại'))
+      .matches(isVnPhoneMobile, t('Vui lòng nhập đúng định dạng số điện thoại')),
     hoTenReceiver: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiReceiver: yup.string().required(t('Vui lòng nhập địa chỉ')),
     tenHang: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
@@ -74,10 +84,46 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       .integer(t('Vui lòng nhập số nguyên')),
   });
 
+  let packageItemErrors: API.PackageItemErrors[] = [];
+  const packageTabSchema = yup.object().shape({
+    Description: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
+    GOODS_VALUE: yup
+      .number()
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+    QUANTITY_OF_PACKAGE: yup
+      .number()
+      .required(t('Vui lòng nhập số lượng'))
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số'))
+      .integer(t('Vui lòng nhập số nguyên')),
+    COD: yup
+      .number()
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+    GROSS_WEIGHT: yup
+      .number()
+      .required(t('Vui lòng nhập trọng lượng'))
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+    Length: yup
+      .number()
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+    Width: yup
+      .number()
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+    Hight: yup
+      .number()
+      .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .typeError(t('Vui lòng nhập định dạng số')),
+  });
+
   //________when submit button clicked, enable input focus to validate
-  const [isSubmit, setIsSubmit] = useState(false);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
   //________hook to trigger input focus validating
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState<number>(0);
   //________Yup errors list after executing validating
   const [errors, setErrors] = useState<yup.ValidationError[]>([]);
   //________return corresponding error according to field name
@@ -107,29 +153,86 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const [wardReceiver, setWardReceiver] = useState<string>('');
   const [detailAddressReceiver, setDetailAddressReceiver] = useState<string>('');
   const [tenHang, setTenHang] = useState<string>('');
-  const [soLuong, setSoLuong] = useState<string | undefined>(undefined);
-  const [giaTri, setGiaTri] = useState<string | undefined>(undefined);
-  const [tienThuHo, setTienThuHo] = useState<string | undefined>(undefined);
-  const [trongLuong, setTrongLuong] = useState<string | undefined>(undefined);
-  const [kichThuocDai, setKichThuocDai] = useState<string | undefined>(undefined);
-  const [kichThuocRong, setKichThuocRong] = useState<string | undefined>(undefined);
-  const [kichThuocCao, setKichThuocCao] = useState<string | undefined>(undefined);
-  const [tongTien, setTongtien] = useState<string | undefined>(undefined);
+  const [soLuong, setSoLuong] = useState<string>('');
+  const [giaTri, setGiaTri] = useState<string>('');
+  const [tienThuHo, setTienThuHo] = useState<string>('');
+  const [trongLuong, setTrongLuong] = useState<string>('');
+  const [kichThuocDai, setKichThuocDai] = useState<string>('');
+  const [kichThuocRong, setKichThuocRong] = useState<string>('');
+  const [kichThuocCao, setKichThuocCao] = useState<string>('');
+  const [tongTien, setTongtien] = useState<string>('');
   const [maKhuyenMai, setMaKhuyenMai] = useState<string>('');
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
-  const [soLuongTach, setSoLuongTach] = useState<string | undefined>(undefined);
+  const [soLuongTach, setSoLuongTach] = useState<string>('');
   //_____non-validated items
   const [maPhieuGui] = useState<string>('');
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
   const [dichVuCongThem, setDichVuCongThem] = useState<string>('dongKiem');
-  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('hangHoa');
+  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V99');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
   const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('giaoTaiNha');
   const [ghiChu, setGhiChu] = useState<string>('');
-
+  //_______open Address modal
   const [modalSender, setModalSender] = useState<boolean>(false);
   const [modalReceiver, setModalReceiver] = useState<boolean>(false);
+  //______ Package item tab
+
+  const [activeTab, setActiveTab] = useState<string>('1');
+  const [packageItemArr, setPackageItemArr] = useState<API.PackageItem[]>([]);
+  const [packageItemErrorsList, setPackageItemErrorsList] = useState<API.PackageItemErrors[]>([]);
+  //________packageItem valid checking
+  let tabValid = true;
+
+  //__________________ package item partial events
+
+  const newPackageItem: API.PackageItem = {
+    Flag: 'I',
+    PACKAGING_MATERIAL: '',
+    Description: '',
+    PACKAGE_TYPE: '',
+    QUANTITY_OF_PACKAGE: '',
+    QUANTITY_OF_UNIT: '',
+    GROSS_WEIGHT: '',
+    GROSS_WEIGHT_OF_UNIT: 'g',
+    NET_WEIGHT: '100',
+    NET_WEIGHT_OF_UNIT: 'g',
+    Length: '',
+    Hight: '',
+    Width: '',
+    Note: '',
+    GOODS_VALUE: '',
+    Currency: 'VN',
+    COMODITY_CODE: '',
+    COD: '',
+  };
+  function addNewPackageItem(): void {
+    const newArr = produce(packageItemArr, (draftState): void => {
+      draftState.push(newPackageItem);
+    });
+    setPackageItemArr(newArr);
+  }
+  function removePackageItem(index: number): void {
+    const newArr = produce(packageItemArr, (draftState): void => {
+      draftState.splice(index, 1);
+    });
+    setPackageItemArr(newArr);
+  }
+  function adjustPackageItemValue(valueName: string, value: string | undefined, index: number): void {
+    const newArr = produce(packageItemArr, (draftState): void => {
+      set(draftState[index], valueName, value);
+    });
+    setPackageItemArr(newArr);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  }
+  function handleActiveTab(tab: string): void {
+    setActiveTab(tab);
+  }
+
+  //__________________ address popup events
 
   function toggleSenderAddress(): void {
     setModalSender(!modalSender);
@@ -171,17 +274,17 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     hoTenReceiver,
     diaChiReceiver,
     tenHang,
-    soLuong,
-    giaTri,
-    tienThuHo,
-    trongLuong,
-    kichThuocDai,
-    kichThuocRong,
-    kichThuocCao,
-    tongTien,
+    soLuong: soLuong === '' ? undefined : soLuong,
+    giaTri: giaTri === '' ? undefined : giaTri,
+    tienThuHo: tienThuHo === '' ? undefined : tienThuHo,
+    trongLuong: trongLuong === '' ? undefined : trongLuong,
+    kichThuocDai: kichThuocDai === '' ? undefined : kichThuocDai,
+    kichThuocRong: kichThuocRong === '' ? undefined : kichThuocRong,
+    kichThuocCao: kichThuocCao === '' ? undefined : kichThuocCao,
+    tongTien: tongTien === '' ? undefined : tongTien,
     maKhuyenMai,
     thoiGianPhat,
-    soLuongTach,
+    soLuongTach: soLuongTach === '' ? undefined : soLuongTach,
     //_____non-validated items
     maPhieuGui: '1',
     phuongThucVanChuyen,
@@ -191,7 +294,28 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     choXemHang,
     diemGiaoNhan,
   };
+  let packageItemValidate: API.PackageItem = {
+    Flag: 'I',
+    PACKAGING_MATERIAL: '',
+    Description: '',
+    PACKAGE_TYPE: '',
+    QUANTITY_OF_PACKAGE: '',
+    QUANTITY_OF_UNIT: '',
+    GROSS_WEIGHT: '',
+    GROSS_WEIGHT_OF_UNIT: 'g',
+    NET_WEIGHT: '100',
+    NET_WEIGHT_OF_UNIT: 'g',
+    Length: '',
+    Hight: '',
+    Width: '',
+    Note: '',
+    GOODS_VALUE: '',
+    Currency: 'VN',
+    COMODITY_CODE: '',
+    COD: '',
+  };
 
+  // eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
     if (isSubmit) {
       schema
@@ -200,6 +324,48 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         .catch((error: yup.ValidationError): void => {
           setErrors(error.inner);
         });
+      map(packageItemArr, (item: API.PackageItem, index: number): void => {
+        packageItemValidate = {
+          Flag: 'I',
+          PACKAGING_MATERIAL: '',
+          Description: item.Description,
+          PACKAGE_TYPE: '',
+          QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
+          QUANTITY_OF_UNIT: '',
+          GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
+          GROSS_WEIGHT_OF_UNIT: 'g',
+          NET_WEIGHT: '100',
+          NET_WEIGHT_OF_UNIT: 'g',
+          Length: item.Length === '' ? undefined : item.Length,
+          Hight: item.Hight === '' ? undefined : item.Hight,
+          Width: item.Width === '' ? undefined : item.Width,
+          Note: '',
+          GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
+          Currency: 'VN',
+          COMODITY_CODE: '',
+          COD: item.COD === '' ? undefined : item.COD,
+        };
+        packageTabSchema
+          .validate(packageItemValidate, { abortEarly: false })
+          .then((): void => {
+            packageItemErrors[index] = {
+              index,
+              errors: [],
+            };
+            if (index + 1 === size(packageItemArr)) {
+              setPackageItemErrorsList(packageItemErrors);
+            }
+          })
+          .catch((error: yup.ValidationError): void => {
+            packageItemErrors[index] = {
+              index,
+              errors: error.inner,
+            };
+            if (index + 1 === size(packageItemArr)) {
+              setPackageItemErrorsList(packageItemErrors);
+            }
+          });
+      });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
@@ -207,22 +373,6 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
-      // check validate
-      if (isSubmit) {
-        setCount(count + 1);
-      }
-    };
-  }
-
-  function handleChangeTextboxNumberValue(
-    setValueFunction: Function,
-  ): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      if (event.currentTarget.value === '') {
-        setValueFunction(undefined);
-      } else {
-        setValueFunction(event.currentTarget.value);
-      }
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -240,6 +390,35 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
+    const firstPackageItem = {
+      Flag: 'I',
+      PACKAGING_MATERIAL: '',
+      Description: tenHang,
+      PACKAGE_TYPE: '',
+      QUANTITY_OF_PACKAGE: soLuong,
+      QUANTITY_OF_UNIT: 'EA',
+      GROSS_WEIGHT: trongLuong,
+      GROSS_WEIGHT_OF_UNIT: 'g',
+      NET_WEIGHT: '100',
+      NET_WEIGHT_OF_UNIT: 'g',
+      Length: kichThuocDai,
+      Hight: kichThuocCao,
+      Width: kichThuocRong,
+      Note: ghiChu,
+      GOODS_VALUE: giaTri,
+      Currency: 'VND',
+      COMODITY_CODE: loaiHangHoa,
+      COD: tienThuHo,
+    };
+    const paramsPackageItem = {
+      SERVICE_TYPE: phuongThucVanChuyen,
+      QUANTITY_OF_PACKAGE: '1',
+      QUANTITY_OF_UNIT: 'ST',
+    };
+    const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
+      draftState.unshift(firstPackageItem);
+      draftState.push(paramsPackageItem);
+    });
     const payload = {
       ORDER_TYPE: 'V001',
       BUYERS_REFERENCE_NUMBER: maPhieuGui,
@@ -293,29 +472,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       CONFIRM_DELIV_DATE: null,
       FREIGH_TERM: nguoiThanhToan,
       CUS_ID: null, // Mã user trên hệ thống APP/Web
-      Item: [
-        {
-          Flag: null, // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
-          PACKAGING_MATERIAL: null, // Package_id trong trường hợp update thì truyền vào, trong trường hợp tạo mới đơn thì không cần truyền
-          Description: tenHang,
-          PACKAGE_TYPE: null, // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các
-          QUANTITY_OF_PACKAGE: '1', // Số lượng package, luôn là 1
-          QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
-          GROSS_WEIGHT: trongLuong,
-          GROSS_WEIGHT_OF_UNIT: 'g',
-          NET_WEIGHT: '100',
-          NET_WEIGHT_OF_UNIT: 'g',
-          Length: kichThuocDai,
-          Hight: kichThuocCao,
-          Width: kichThuocRong,
-          Note: ghiChu,
-          GOODS_VALUE: giaTri,
-          Currency: 'VND',
-          COMODITY_CODE: loaiHangHoa,
-          COD: tienThuHo,
-          SERVICE_TYPE: phuongThucVanChuyen,
-        },
-      ],
+      Item: payloadPackageItemArr,
       LanguageId: null,
       LanguageDefaultId: null,
     };
@@ -332,19 +489,91 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     );
   }
 
+  // eslint-disable-next-line max-lines-per-function
   function handleValidate(e: FormEvent): void {
     e.preventDefault();
     setIsSubmit(true);
-    // check validate
-    schema
-      .validate(validateData, { abortEarly: false })
-      .then((): void => {
-        setErrors([]);
-        handleSaveForwardingOrder();
-      })
-      .catch((error: yup.ValidationError): void => {
-        setErrors(error.inner);
+    tabValid = true;
+    if (packageItemArr.length) {
+      // eslint-disable-next-line max-lines-per-function
+      map(packageItemArr, (item: API.PackageItem, index: number): void => {
+        packageItemValidate = {
+          Flag: 'I',
+          PACKAGING_MATERIAL: '',
+          Description: item.Description,
+          PACKAGE_TYPE: '',
+          QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
+          QUANTITY_OF_UNIT: '',
+          GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
+          GROSS_WEIGHT_OF_UNIT: 'g',
+          NET_WEIGHT: '100',
+          NET_WEIGHT_OF_UNIT: 'g',
+          Length: item.Length === '' ? undefined : item.Length,
+          Hight: item.Hight === '' ? undefined : item.Hight,
+          Width: item.Width === '' ? undefined : item.Width,
+          Note: '',
+          GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
+          Currency: 'VN',
+          COMODITY_CODE: '',
+          COD: item.COD === '' ? undefined : item.COD,
+        };
+        packageTabSchema
+          .validate(packageItemValidate, { abortEarly: false })
+          .then((): void => {
+            packageItemErrors[index] = {
+              index,
+              errors: [],
+            };
+            if (index + 1 === size(packageItemArr)) {
+              setPackageItemErrorsList(packageItemErrors);
+              schema
+                .validate(validateData, { abortEarly: false })
+                .then((): void => {
+                  setErrors([]);
+                  if (tabValid) {
+                    handleSaveForwardingOrder();
+                  }
+                })
+                .catch((error: yup.ValidationError): void => {
+                  setErrors(error.inner);
+                });
+            }
+          })
+          .catch((error: yup.ValidationError): void => {
+            tabValid = false;
+            packageItemErrors[index] = {
+              index,
+              errors: error.inner,
+            };
+            if (index + 1 === size(packageItemArr)) {
+              setPackageItemErrorsList(packageItemErrors);
+              schema
+                .validate(validateData, { abortEarly: false })
+                .then((): void => {
+                  setErrors([]);
+                  if (tabValid) {
+                    handleSaveForwardingOrder();
+                  }
+                })
+                .catch((error: yup.ValidationError): void => {
+                  setErrors(error.inner);
+                });
+            }
+          });
       });
+    } else {
+      schema
+        .validate(validateData, { abortEarly: false })
+        .then((): void => {
+          setErrors([]);
+          if (tabValid) {
+            handleSaveForwardingOrder();
+          }
+        })
+        .catch((error: yup.ValidationError): void => {
+          setErrors(error.inner);
+        });
+    }
   }
 
   function renderSendingCoupon(): JSX.Element {
@@ -640,7 +869,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             type="text"
             placeholder={t('Dài (cm)')}
             value={kichThuocDai}
-            onChange={handleChangeTextboxNumberValue(setKichThuocDai)}
+            onChange={handleChangeTextboxValue(setKichThuocDai)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocDai')}</div>
         </Col>
@@ -649,7 +878,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             type="text"
             placeholder={t('Rộng (cm)')}
             value={kichThuocRong}
-            onChange={handleChangeTextboxNumberValue(setKichThuocRong)}
+            onChange={handleChangeTextboxValue(setKichThuocRong)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocRong')}</div>
         </Col>
@@ -658,9 +887,40 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             type="text"
             placeholder={t('Cao (cm)')}
             value={kichThuocCao}
-            onChange={handleChangeTextboxNumberValue(setKichThuocCao)}
+            onChange={handleChangeTextboxValue(setKichThuocCao)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocCao')}</div>
+        </Col>
+      </Row>
+    );
+  }
+
+  function renderPackageType(): JSX.Element {
+    return (
+      <Row>
+        <Col lg="5" xs="12" className="pr-0">
+          <Label check xs="12" className="pl-0 pr-0">
+            <Input
+              type="radio"
+              value="V99"
+              name="packageType"
+              defaultChecked
+              onChange={handleChangeTextboxValue(setLoaiHangHoa)}
+            />{' '}
+            {t('Hàng hóa')}
+          </Label>
+        </Col>
+        <Col lg="3" xs="12" className="pr-0">
+          <Label check xs="12" className="pl-0 pr-0">
+            <Input type="radio" value="V04" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
+            {t('Thư')}
+          </Label>
+        </Col>
+        <Col lg="4" xs="12" className="pr-0">
+          <Label check xs="12" className="pl-0 pr-0">
+            <Input type="radio" value="V99" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
+            {t('Kiện')}
+          </Label>
         </Col>
       </Row>
     );
@@ -670,28 +930,19 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function renderPackageInfoDetail(): JSX.Element {
     return (
       <div className="sipInputBlock">
-        <h3>{t('Thông tin hàng hóa')}</h3>
+        <h3>
+          {t('Thông tin hàng hóa')}
+          <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
+            <i className="fa fa-plus" />
+            {t('Thêm')}
+          </Button>
+        </h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Loại hàng')}
           </Label>
-          <Col lg="4" xs="6">
-            <Label check xs="12" className="pl-0 pr-0">
-              <Input
-                type="radio"
-                value="V99"
-                name="packageType"
-                defaultChecked
-                onChange={handleChangeTextboxValue(setLoaiHangHoa)}
-              />{' '}
-              {t('Hàng hóa')}
-            </Label>
-          </Col>
-          <Col lg="4" xs="6">
-            <Label check xs="12" className="pl-0 pr-0">
-              <Input type="radio" value="V04" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
-              {t('Thư')}
-            </Label>
+          <Col lg={8} xs={12}>
+            {renderPackageType()}
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -719,7 +970,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               type="text"
               placeholder={t('Số lượng')}
               value={soLuong}
-              onChange={handleChangeTextboxNumberValue(setSoLuong)}
+              onChange={handleChangeTextboxValue(setSoLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuong')}</div>
           </Col>
@@ -735,7 +986,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
                   type="text"
                   placeholder={t('Nhập giá trị (đ)')}
                   value={giaTri}
-                  onChange={handleChangeTextboxNumberValue(setGiaTri)}
+                  onChange={handleChangeTextboxValue(setGiaTri)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
               </Col>
@@ -744,7 +995,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
                   type="text"
                   placeholder={t('Nhập tiền thu hộ (đ)')}
                   value={tienThuHo}
-                  onChange={handleChangeTextboxNumberValue(setTienThuHo)}
+                  onChange={handleChangeTextboxValue(setTienThuHo)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'tienThuHo')}</div>
               </Col>
@@ -761,7 +1012,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
               value={trongLuong}
-              onChange={handleChangeTextboxNumberValue(setTrongLuong)}
+              onChange={handleChangeTextboxValue(setTrongLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
             <p className="sipInputItemDescription text-right">
@@ -794,7 +1045,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               type="text"
               placeholder={t('Nhập số tiền phải thu (đ)')}
               value={tongTien}
-              onChange={handleChangeTextboxNumberValue(setTongtien)}
+              onChange={handleChangeTextboxValue(setTongtien)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tongTien')}</div>
           </Col>
@@ -924,7 +1175,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           <Col lg="8">
             <Row className="sipInputItemGroup">
               <Col xs="12" md="6" className="mb-2">
-                <Input type="text" value={soLuongTach} onChange={handleChangeTextboxNumberValue(setSoLuongTach)} />
+                <Input type="text" value={soLuongTach} onChange={handleChangeTextboxValue(setSoLuongTach)} />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuongTach')}</div>
               </Col>
               <Col xs="12" md="6" className="mb-2">
@@ -942,6 +1193,16 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       <Col xl="6" xs="12">
         <div className="sipContentContainer">
           {renderPackageInfoDetail()}
+          <AdditionalPackageTabItems
+            removePackageItem={removePackageItem}
+            data={packageItemArr}
+            onChangeValue={adjustPackageItemValue}
+            isSubmit={isSubmit}
+            packageItemErrorsList={packageItemErrorsList}
+            parentCount={count}
+            activeTab={activeTab}
+            setActiveTab={handleActiveTab}
+          />
           {renderFeePayment()}
           {renderDeliveryRequirement()}
           {renderSplitPackage()}

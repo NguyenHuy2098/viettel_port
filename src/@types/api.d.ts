@@ -2481,6 +2481,31 @@ declare namespace API {
     P?: string;
     type: number;
   }
+  interface PackageItemErrors {
+    index: number;
+    errors: yup.ValidationError[];
+  }
+  export interface PackageItem {
+    Flag?: string;
+    PACKAGING_MATERIAL?: string;
+    Description?: string;
+    PACKAGE_TYPE?: string;
+    QUANTITY_OF_PACKAGE?: string | undefined;
+    QUANTITY_OF_UNIT?: string;
+    GROSS_WEIGHT?: string | undefined;
+    GROSS_WEIGHT_OF_UNIT?: string;
+    NET_WEIGHT?: string;
+    NET_WEIGHT_OF_UNIT?: string;
+    Length?: string | undefined;
+    Hight?: string | undefined;
+    Width?: string | undefined;
+    Note?: string;
+    GOODS_VALUE?: string | undefined;
+    Currency?: string;
+    COMODITY_CODE?: string;
+    COD?: string | undefined;
+    SERVICE_TYPE?: string;
+  }
   export interface AddressPopupData {
     province: string;
     district: string;
@@ -2495,8 +2520,10 @@ declare namespace API {
     TotalRow: number;
     Status: boolean;
     ErrorCode: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Messages: any[];
     any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ObjectId?: any;
     Version: number;
   }
