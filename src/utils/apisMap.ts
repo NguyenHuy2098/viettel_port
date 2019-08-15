@@ -13,6 +13,7 @@ const apis = [
   'MIOA_ZTMI047',
   'MIOA_ZTMI012',
   'SearchLocation',
+  'SIOA_ZTMI068',
 ];
 
 /**

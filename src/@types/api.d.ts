@@ -2475,6 +2475,27 @@ declare namespace API {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+  export interface TransportMethodItem {
+    SERVICE_TYPE: string;
+    SERVICE_TYPE_DES: string;
+    SERVICE_GROUP: string;
+    SERVICE_GROUP_DES: string;
+    TARGET_TIME?: any;
+  }
+
+  export interface MTZTMI068OUT {
+    EV_ERROR: number;
+    Row: TransportMethodItem[];
+  }
+
+  export interface MTZTMI068Response {
+    MT_ZTMI068_OUT: MTZTMI068OUT;
+    Status: boolean;
+    ErrorCode: number;
+    Messages: any[];
+    ObjectId?: any;
+    Version: number;
+  }
   export interface VtpAddress {
     I: string;
     N: string;

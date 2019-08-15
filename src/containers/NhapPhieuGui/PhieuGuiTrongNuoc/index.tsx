@@ -5,15 +5,17 @@ import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
 import produce from 'immer';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { find, get, map, set, size } from 'lodash';
+import { get, filter, find, forEach, map, set, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
+import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
 
+let dichVuCongThem: string[] = [];
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
@@ -22,6 +24,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const isVnPhoneMobile = /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
 
   const schema = yup.object().shape({
+    maPhieuGui: yup.string().required(t('Vui lòng nhập mã phiếu gửi')),
     phuPhi: yup
       .number()
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
@@ -71,17 +74,6 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       .number()
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
       .typeError(t('Vui lòng nhập định dạng số')),
-    tongTien: yup
-      .number()
-      .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số')),
-    // maKhuyenMai: yup.string().required(t('Vui lòng nhập ')),
-    // thoiGianPhat: yup.string().required(t('Vui lòng nhập ')),
-    soLuongTach: yup
-      .number()
-      .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số'))
-      .integer(t('Vui lòng nhập số nguyên')),
   });
 
   let packageItemErrors: API.PackageItemErrors[] = [];
@@ -136,6 +128,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     );
   }
   //__________________________________________________________
+  const [maPhieuGui, setMaPhieuGui] = useState<string>('');
   const [phuPhi, setPhuPhi] = useState<string>('0.00');
   const [maKhachHang, setMaKhachHang] = useState<string>('');
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
@@ -160,19 +153,20 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const [kichThuocDai, setKichThuocDai] = useState<string>('');
   const [kichThuocRong, setKichThuocRong] = useState<string>('');
   const [kichThuocCao, setKichThuocCao] = useState<string>('');
-  const [tongTien, setTongtien] = useState<string>('');
-  const [maKhuyenMai, setMaKhuyenMai] = useState<string>('');
+  // const [maKhuyenMai, setMaKhuyenMai] = useState<string>('');
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
-  const [soLuongTach, setSoLuongTach] = useState<string>('');
   //_____non-validated items
-  const [maPhieuGui] = useState<string>('');
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
-  const [dichVuCongThem, setDichVuCongThem] = useState<string>('dongKiem');
+  let loaiHinhDichVu = 'VCN';
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V99');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
-  const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('giaoTaiNha');
+  const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZDD');
   const [ghiChu, setGhiChu] = useState<string>('');
+  //______ Transport method
+
+  const [transportMethodArr, setTransportMethodArr] = useState<API.TransportMethodItem[]>([]);
+  const [uncheckAllAdditionalCheckbox, setUncheckAllAdditionalCheckbox] = useState<boolean | undefined>(undefined);
   //_______open Address modal
   const [modalSender, setModalSender] = useState<boolean>(false);
   const [modalReceiver, setModalReceiver] = useState<boolean>(false);
@@ -203,7 +197,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     Note: '',
     GOODS_VALUE: '',
     Currency: 'VN',
-    COMODITY_CODE: '',
+    COMODITY_CODE: 'V04',
     COD: '',
   };
   function addNewPackageItem(): void {
@@ -265,6 +259,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   }
 
   const validateData = {
+    maPhieuGui,
     phuPhi,
     maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
     dienThoaiSender,
@@ -281,14 +276,9 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     kichThuocDai: kichThuocDai === '' ? undefined : kichThuocDai,
     kichThuocRong: kichThuocRong === '' ? undefined : kichThuocRong,
     kichThuocCao: kichThuocCao === '' ? undefined : kichThuocCao,
-    tongTien: tongTien === '' ? undefined : tongTien,
-    maKhuyenMai,
+    // maKhuyenMai,
     thoiGianPhat,
-    soLuongTach: soLuongTach === '' ? undefined : soLuongTach,
     //_____non-validated items
-    maPhieuGui: '1',
-    phuongThucVanChuyen,
-    dichVuCongThem,
     loaiHangHoa,
     nguoiThanhToan,
     choXemHang,
@@ -311,9 +301,25 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     Note: '',
     GOODS_VALUE: '',
     Currency: 'VN',
-    COMODITY_CODE: '',
+    COMODITY_CODE: 'V04',
     COD: '',
   };
+
+  React.useEffect((): void => {
+    dispatch(
+      action_GET_TRANSPORT_METHOD(
+        { GET: null },
+        {
+          onFailure: (error: HttpRequestErrorType): void => {
+            console.log(error);
+          },
+          onSuccess: (data: API.MTZTMI068Response): void => {
+            setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
+          },
+        },
+      ),
+    );
+  }, []);
 
   // eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -380,6 +386,35 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     };
   }
 
+  function handleGenerateServiceType(transportMethod: string): void {
+    loaiHinhDichVu = transportMethod;
+    forEach(dichVuCongThem, (item: string, index: number): void => {
+      loaiHinhDichVu += '/' + item;
+    });
+  }
+
+  function handleChangeTransportMethod(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setValueFunction(event.currentTarget.value);
+      handleGenerateServiceType(event.currentTarget.value);
+    };
+  }
+
+  function handleChangeAdditionalService(event: React.FormEvent<HTMLInputElement>): void {
+    const value = event.currentTarget.value;
+    setUncheckAllAdditionalCheckbox(undefined);
+    if (event.currentTarget.checked) {
+      dichVuCongThem.push(value);
+    } else {
+      forEach(dichVuCongThem, (item: string, index: number): void => {
+        if (item === value) {
+          dichVuCongThem.splice(index, 1);
+        }
+      });
+    }
+    handleGenerateServiceType(phuongThucVanChuyen);
+  }
+
   function handleChangeDeliveryTime(date: Date): void {
     setThoiGianPhat(date);
     // check validate
@@ -411,7 +446,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       COD: tienThuHo,
     };
     const paramsPackageItem = {
-      SERVICE_TYPE: phuongThucVanChuyen,
+      SERVICE_TYPE: loaiHinhDichVu,
       QUANTITY_OF_PACKAGE: '1',
       QUANTITY_OF_UNIT: 'ST',
     };
@@ -459,7 +494,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       WARD_DES: wardReceiver, // Mã xã phường nhận trong trường hợp vãng lai
       STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
       FLAG_HEADER: '',
-      PromoCode: maKhuyenMai,
+      PromoCode: '',
       VOUCHER_ID: null,
       Campaign: null,
       Disctype: null,
@@ -468,7 +503,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       LOCATION_ID_DES: null,
       REQUEST_PICK_DATE: null,
       CONFIRM_PICK_DATE: null,
-      REQUEST_DELIV_DATE: null,
+      REQUEST_DELIV_DATE: thoiGianPhat,
       CONFIRM_DELIV_DATE: null,
       FREIGH_TERM: nguoiThanhToan,
       CUS_ID: null, // Mã user trên hệ thống APP/Web
@@ -574,6 +609,50 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           setErrors(error.inner);
         });
     }
+  }
+
+  function handleClearData(): void {
+    setIsSubmit(false);
+    setErrors([]);
+    setMaPhieuGui('');
+    setPhuPhi('');
+    setMaKhachHang('');
+    setDienThoaiSender('');
+    setHoTenSender('');
+    setDiaChiSender('');
+    setProvinceSender('');
+    setDistrictSender('');
+    setWardSender('');
+    setDetailAddressSender('');
+    setDienThoaiReceiver('');
+    setHoTenReceiver('');
+    setDiaChiReceiver('');
+    setProvinceReceiver('');
+    setDistrictReceiver('');
+    setWardReceiver('');
+    setDetailAddressReceiver('');
+    setTenHang('');
+    setSoLuong('');
+    setGiaTri('');
+    setTienThuHo('');
+    setTrongLuong('');
+    setKichThuocDai('');
+    setKichThuocRong('');
+    setKichThuocCao('');
+    setThoiGianPhat(new Date());
+    setPhuongThucVanChuyen('VCN');
+    loaiHinhDichVu = 'VCN';
+    dichVuCongThem = [];
+    setUncheckAllAdditionalCheckbox(false);
+    // setLoaiHangHoa('V99');
+    // setNguoiThanhToan('PP');
+    setChoXemHang('');
+    setDiemGiaoNhan('ZDD');
+    setGhiChu('');
+    setActiveTab('1');
+    setPackageItemArr([]);
+    setPackageItemErrorsList([]);
+    tabValid = true;
   }
 
   function renderSendingCoupon(): JSX.Element {
@@ -735,7 +814,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           <Col lg="8">
             <Input
               type="text"
-              placeholder={t('Nguyễn Văn Nam')}
+              placeholder={t('Nhập họ tên')}
               value={hoTenReceiver}
               onChange={handleChangeTextboxValue(setHoTenReceiver)}
             />
@@ -790,10 +869,22 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Input
               type="select"
               value={phuongThucVanChuyen}
-              onChange={handleChangeTextboxValue(setPhuongThucVanChuyen)}
+              onChange={handleChangeTransportMethod(setPhuongThucVanChuyen)}
             >
-              <option value="VCN">VCN Chuyển phát nhanh</option>
-              <option value="VHT">Chuyển phát hỏa tốc</option>
+              {map(
+                filter(
+                  transportMethodArr,
+                  (item: API.TransportMethodItem): boolean =>
+                    item.SERVICE_GROUP === 'V01' || item.SERVICE_GROUP === 'V02',
+                ),
+                (item: API.TransportMethodItem): JSX.Element => {
+                  return (
+                    <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
+                      {item.SERVICE_TYPE_DES}
+                    </option>
+                  );
+                },
+              )}
             </Input>
           </Col>
         </Row>
@@ -812,26 +903,22 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           </Button>
         </h3>
         <Row className="sipInputItem">
-          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
-            <Input type="checkbox" value="BH" onChange={handleChangeTextboxValue(setDichVuCongThem)} />
-            <span className="font-xs">Bảo hiểm</span>
-          </Label>
-          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
-            <Input type="checkbox" value="DK" onChange={handleChangeTextboxValue(setDichVuCongThem)} defaultChecked />
-            <span className="font-xs">Đồng kiểm</span>
-          </Label>
-          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
-            <Input type="checkbox" value="GHG" onChange={handleChangeTextboxValue(setDichVuCongThem)} />
-            <span className="font-xs">Giao hẹn giờ</span>
-          </Label>
-          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
-            <Input type="checkbox" value="HV" onChange={handleChangeTextboxValue(setDichVuCongThem)} />
-            <span className="font-xs">Giá trị cao</span>
-          </Label>
-          <Label check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
-            <Input type="checkbox" value="Other" onChange={handleChangeTextboxValue(setDichVuCongThem)} />
-            <span className="font-xs">Khác</span>
-          </Label>
+          {map(
+            filter(transportMethodArr, (item: API.TransportMethodItem): boolean => item.SERVICE_GROUP === 'V04'),
+            (item: API.TransportMethodItem): JSX.Element => {
+              return (
+                <Label key={item.SERVICE_TYPE} check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+                  <Input
+                    checked={uncheckAllAdditionalCheckbox}
+                    type="checkbox"
+                    value={item.SERVICE_TYPE}
+                    onChange={handleChangeAdditionalService}
+                  />
+                  <span className="font-xs">{item.SERVICE_TYPE_DES}</span>
+                </Label>
+              );
+            },
+          )}
         </Row>
       </div>
     );
@@ -846,16 +933,17 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             <Row className="sipInputItem">
               <Label xs="12" lg="4">
                 {t('Mã phiếu gửi')}
+                <span className="color-red"> *</span>
               </Label>
               <Col lg="8">
-                <Input type="text" />
+                <Input type="text" value={maPhieuGui} onChange={handleChangeTextboxValue(setMaPhieuGui)} />
+                <div className="sipInputItemError">{handleErrorMessage(errors, 'maPhieuGui')}</div>
               </Col>
             </Row>
           </div>
           {renderSenderInput()}
           {renderReceiverInput()}
-          {renderSendingServices()}
-          {renderAdditionalServices()}
+          {renderDeliveryRequirement()}
         </div>
       </Col>
     );
@@ -918,7 +1006,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         </Col>
         <Col lg="4" xs="12" className="pr-0">
           <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V99" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
+            <Input type="radio" value="V01" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
             {t('Kiện')}
           </Label>
         </Col>
@@ -1036,34 +1124,20 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     return (
       <div className="sipInputBlock">
         <h3>{t('Tiền phải thu & thanh toán cước')}</h3>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Tổng tiền phải thu')}
-          </Label>
-          <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Nhập số tiền phải thu (đ)')}
-              value={tongTien}
-              onChange={handleChangeTextboxValue(setTongtien)}
-            />
-            <div className="sipInputItemError">{handleErrorMessage(errors, 'tongTien')}</div>
-          </Col>
-        </Row>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Mã khuyến mãi')}
-          </Label>
-          <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Mã khuyến mãi')}
-              value={maKhuyenMai}
-              onChange={handleChangeTextboxValue(setMaKhuyenMai)}
-            />
-            <div className="sipInputItemError">{handleErrorMessage(errors, 'maKhuyenMai')}</div>
-          </Col>
-        </Row>
+        {/*<Row className="sipInputItem">*/}
+        {/*  <Label xs="12" lg="4">*/}
+        {/*    {t('Mã khuyến mãi')}*/}
+        {/*  </Label>*/}
+        {/*  <Col lg="8">*/}
+        {/*    <Input*/}
+        {/*      type="text"*/}
+        {/*      placeholder={t('Mã khuyến mãi')}*/}
+        {/*      value={maKhuyenMai}*/}
+        {/*      onChange={handleChangeTextboxValue(setMaKhuyenMai)}*/}
+        {/*    />*/}
+        {/*    <div className="sipInputItemError">{handleErrorMessage(errors, 'maKhuyenMai')}</div>*/}
+        {/*  </Col>*/}
+        {/*</Row>*/}
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Thanh toán cước')}
@@ -1141,9 +1215,11 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             {t('Điểm giao nhận')}
           </Label>
           <Col lg="8">
-            <Input type="select" onChange={handleChangeTextboxValue(setDiemGiaoNhan)}>
-              <option value="giaoTaiNha">Giao, gửi hàng tại nhà</option>
-              <option value="giaoChua">Giao ở chùa</option>
+            <Input type="select" value={diemGiaoNhan} onChange={handleChangeTextboxValue(setDiemGiaoNhan)}>
+              <option value="ZDD">{t('Giao, gửi hàng tại nhà')}</option>
+              <option value="ZPP">{t('Giao, gửi hàng tại bưu cục')}</option>
+              <option value="ZDP">{t('Giao hàng tại bưu cục')}</option>
+              <option value="ZPD">{t('Gửi hàng tại bưu cục')}</option>
             </Input>
           </Col>
         </Row>
@@ -1164,29 +1240,29 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderSplitPackage(): JSX.Element {
-    return (
-      <div className="sipInputBlock">
-        <h3>{t('Tách kiện')}</h3>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Số lượng tách')}
-          </Label>
-          <Col lg="8">
-            <Row className="sipInputItemGroup">
-              <Col xs="12" md="6" className="mb-2">
-                <Input type="text" value={soLuongTach} onChange={handleChangeTextboxValue(setSoLuongTach)} />
-                <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuongTach')}</div>
-              </Col>
-              <Col xs="12" md="6" className="mb-2">
-                <Button color="primary">{t('Tách kiện')}</Button>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
-      </div>
-    );
-  }
+  // function renderSplitPackage(): JSX.Element {
+  //   return (
+  //     <div className="sipInputBlock">
+  //       <h3>{t('Tách kiện')}</h3>
+  //       <Row className="sipInputItem">
+  //         <Label xs="12" lg="4">
+  //           {t('Số lượng tách')}
+  //         </Label>
+  //         <Col lg="8">
+  //           <Row className="sipInputItemGroup">
+  //             <Col xs="12" md="6" className="mb-2">
+  //               <Input type="text" value={soLuongTach} onChange={handleChangeTextboxValue(setSoLuongTach)} />
+  //               <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuongTach')}</div>
+  //             </Col>
+  //             <Col xs="12" md="6" className="mb-2">
+  //               <Button color="primary">{t('Tách kiện')}</Button>
+  //             </Col>
+  //           </Row>
+  //         </Col>
+  //       </Row>
+  //     </div>
+  //   );
+  // }
 
   function renderPackageInfo(): JSX.Element {
     return (
@@ -1203,9 +1279,9 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
             activeTab={activeTab}
             setActiveTab={handleActiveTab}
           />
+          {renderSendingServices()}
+          {renderAdditionalServices()}
           {renderFeePayment()}
-          {renderDeliveryRequirement()}
-          {renderSplitPackage()}
         </div>
       </Col>
     );
@@ -1222,7 +1298,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         {renderPackageInfo()}
       </Row>
       <div className="display-block sipTitleRightBlock text-right">
-        <Button>
+        <Button onClick={handleClearData}>
           <i className="fa fa-refresh" />
           Làm mới
         </Button>
