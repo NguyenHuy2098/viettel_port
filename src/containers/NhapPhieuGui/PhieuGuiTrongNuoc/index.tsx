@@ -284,26 +284,26 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     choXemHang,
     diemGiaoNhan,
   };
-  let packageItemValidate: API.PackageItem = {
-    Flag: 'I',
-    PACKAGING_MATERIAL: '',
-    Description: '',
-    PACKAGE_TYPE: '',
-    QUANTITY_OF_PACKAGE: '',
-    QUANTITY_OF_UNIT: '',
-    GROSS_WEIGHT: '',
-    GROSS_WEIGHT_OF_UNIT: 'g',
-    NET_WEIGHT: '100',
-    NET_WEIGHT_OF_UNIT: 'g',
-    Length: '',
-    Hight: '',
-    Width: '',
-    Note: '',
-    GOODS_VALUE: '',
-    Currency: 'VN',
-    COMODITY_CODE: 'V04',
-    COD: '',
-  };
+  // let packageItemValidate: API.PackageItem = {
+  //   Flag: 'I',
+  //   PACKAGING_MATERIAL: '',
+  //   Description: '',
+  //   PACKAGE_TYPE: '',
+  //   QUANTITY_OF_PACKAGE: '',
+  //   QUANTITY_OF_UNIT: '',
+  //   GROSS_WEIGHT: '',
+  //   GROSS_WEIGHT_OF_UNIT: 'g',
+  //   NET_WEIGHT: '100',
+  //   NET_WEIGHT_OF_UNIT: 'g',
+  //   Length: '',
+  //   Hight: '',
+  //   Width: '',
+  //   Note: '',
+  //   GOODS_VALUE: '',
+  //   Currency: 'VN',
+  //   COMODITY_CODE: 'V04',
+  //   COD: '',
+  // };
 
   React.useEffect((): void => {
     dispatch(
@@ -319,7 +319,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         },
       ),
     );
-  }, []);
+  }, [dispatch]);
 
   // eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -331,7 +331,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           setErrors(error.inner);
         });
       map(packageItemArr, (item: API.PackageItem, index: number): void => {
-        packageItemValidate = {
+        const packageItemValidate = {
           Flag: 'I',
           PACKAGING_MATERIAL: '',
           Description: item.Description,
@@ -532,7 +532,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     if (packageItemArr.length) {
       // eslint-disable-next-line max-lines-per-function
       map(packageItemArr, (item: API.PackageItem, index: number): void => {
-        packageItemValidate = {
+        const packageItemValidate = {
           Flag: 'I',
           PACKAGING_MATERIAL: '',
           Description: item.Description,
