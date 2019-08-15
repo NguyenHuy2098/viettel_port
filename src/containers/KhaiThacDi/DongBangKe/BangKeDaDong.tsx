@@ -12,7 +12,7 @@ import { push } from 'connected-react-router';
 import routesMap from '../../../utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
-const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
+const BangKeDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -87,7 +87,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   }
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.DANH_SACH_BANG_KE}/${item.TOR_ID}`));
     };
   };
   function renderTable(): JSX.Element {
@@ -119,9 +119,9 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
                       </Label>
                     </td>
                     <td>{item.TOR_ID}</td>
-                    <td>{item.LOG_LOCID_TO}</td>
+                    <td></td>
                     <td>{item.ITEM_NO}</td>
-                    <td>Chưa có</td>
+                    <td></td>
                     <td>{item.DATETIME_CHLC}</td>
                     <td>{item.EXEC_CONT}</td>
                     <td className="SipTableFunctionIcon">{renderAction(item)}</td>
@@ -148,7 +148,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
             <Button color="primary" className="ml-2">
               {t('Tìm kiếm')}
             </Button>
-            <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
+            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
               <i className="fa fa-trash-o" />
             </Button>
           </div>
@@ -165,4 +165,4 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   );
 };
 
-export default BangKeChuaHoanThanh;
+export default BangKeDaDong;

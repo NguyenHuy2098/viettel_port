@@ -2,14 +2,22 @@ import * as React from 'react';
 import { useState, useCallback } from 'react';
 import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
+import { useTranslation } from 'react-i18next';
+import { goBack } from 'connected-react-router';
+import { useDispatch } from 'react-redux';
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachPhieuGui: React.FC = (): JSX.Element => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const handleBack = (): void => {
+    dispatch(goBack());
+  };
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button>
+          <Button onClick={handleBack}>
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           Danh sách phiếu gửi trong bảng kê
@@ -32,9 +40,34 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
 
   function renderDescriptionServiceShipping(): JSX.Element {
     return (
-      <Row>
-        <Col lg="5">Line: 02 - Nội vùng - Thái Bình - Nam Định</Col>
-        <Col lg="5">Dịch vụ: Thư - Hoả tốc</Col>
+      <Row className="sipSummaryContent">
+        <Col lg="5" xs="12">
+          <Row>
+            <Col xs="5">{t('Mã bảng kê')}: </Col>
+            <Col xs="7">BK_1209_BNH</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ngày tạo')}: </Col>
+            <Col xs="7">24/04/2019</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ghi chú')}: </Col>
+            <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
+          </Row>
+        </Col>
+        <Col lg="5" xl={4} xs="12">
+          <Row>
+            <Col xs="5">{t('Bưu cục đến')}: </Col>
+            <Col xs="7">TQN</Col>
+          </Row>
+          <Row>
+            <Col xs="5">{t('Ngày gửi')}: </Col>
+            <Col xs="7">24/04/2019</Col>
+          </Row>
+        </Col>
+        <Col lg="2" xl={3} xs="12" className="text-right">
+          {t('Tổng số')}: 5
+        </Col>
       </Row>
     );
   }

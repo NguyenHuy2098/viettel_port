@@ -22,7 +22,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC1',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: 'BHD',
           IV_CUST_STATUS: '101',
           IV_TO_LOC_ID: '',
           ...payload,
@@ -184,6 +184,9 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
             </div>
             <Button color="primary" className="ml-2">
               {t('Tìm kiếm')}
+            </Button>
+            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
+              <i className="fa fa-trash-o" />
             </Button>
           </div>
         </Col>

@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Button, Row, Col, Label, Table, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { useDispatch } from 'react-redux';
+import { goBack } from 'connected-react-router';
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachBangKe: React.FC = (): JSX.Element => {
@@ -11,6 +13,10 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
   function toggle(): void {
     setmodalCreateNew(!modalCreateNew);
   }
+  const dispatch = useDispatch();
+  const handleBack = (): void => {
+    dispatch(goBack());
+  };
 
   function renderPagination(): JSX.Element {
     return (
@@ -95,7 +101,12 @@ const DanhSachBangKe: React.FC = (): JSX.Element => {
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Danh sách bảng kê/ phiếu gửi trong tải')}</h1>
+        <h1 className="sipTitle">
+          <Button onClick={handleBack}>
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Danh sách phiếu gửi trong bảng kê')}
+        </h1>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-trash-o" />

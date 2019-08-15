@@ -22,6 +22,7 @@ import classNames from 'classnames';
 import { makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
+import BangKeDaDong from './BangKeDaDong';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoBangKe: React.FC = (): JSX.Element => {
@@ -87,9 +88,6 @@ const DongBangKe: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-trash-o" />
-          </Button>
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
             <Input type="text" placeholder={t('Tra cứu bảng kê')} />
@@ -123,6 +121,15 @@ const DongBangKe: React.FC = (): JSX.Element => {
               <Badge color="primary">03</Badge>
             </NavLink>
           </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 3 })}
+              onClick={React.useCallback((): void => handleChangeTab(3), [])}
+            >
+              {t('Bảng Kê đã đóng')}
+              <Badge color="primary">03</Badge>
+            </NavLink>
+          </NavItem>
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
@@ -130,6 +137,9 @@ const DongBangKe: React.FC = (): JSX.Element => {
           </TabPane>
           <TabPane tabId={2}>
             <BuuGuiChuaDongBangKe />
+          </TabPane>
+          <TabPane tabId={3}>
+            <BangKeDaDong />
           </TabPane>
         </TabContent>
       </div>

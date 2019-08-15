@@ -20,10 +20,16 @@ import {
 } from 'reactstrap';
 import classNames from 'classnames';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorCountTaiChuaHoanThanh, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
+import {
+  makeSelectorCountTaiChuaHoanThanh,
+  makeSelectorCountBangKeChuaDongTai,
+  makeSelectorCountTaiDaDong,
+} from 'redux/MIOA_ZTMI047/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import BangKeBuuGuiChuaDongTai from './BangKeBuuGuiChuaDongTai';
+import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
+import BangKeChuaDongTai from './BangKeChuaDongTai';
+import TaiDaDong from './TaiDaDong';
 
 // eslint-disable-next-line max-lines-per-function
 const DongTai: React.FC = (): JSX.Element => {
@@ -34,6 +40,7 @@ const DongTai: React.FC = (): JSX.Element => {
   const [tab, setTab] = useState<number>(1);
   const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
   const countBangKeBuuGuiChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
+  const countTaiDaDong = useSelector(makeSelectorCountTaiDaDong);
 
   useEffect((): void => {
     const payload = {
@@ -107,9 +114,6 @@ const DongTai: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng tải')}</h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-trash-o" />
-          </Button>
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
             <Input type="text" placeholder={t('Tra cứu tải')} />
@@ -162,7 +166,7 @@ const DongTai: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(4), [])}
             >
               {t('Tải đã đóng')}
-              <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
+              <Badge color="primary">{countTaiDaDong}</Badge>
             </NavLink>
           </NavItem>
         </Nav>
@@ -171,7 +175,13 @@ const DongTai: React.FC = (): JSX.Element => {
             <TaiChuaHoanThanh />
           </TabPane>
           <TabPane tabId={2}>
-            <BangKeBuuGuiChuaDongTai />
+            <BuuGuiChuaDongTai />
+          </TabPane>
+          <TabPane tabId={3}>
+            <BangKeChuaDongTai />
+          </TabPane>
+          <TabPane tabId={4}>
+            <TaiDaDong />
           </TabPane>
         </TabContent>
       </div>

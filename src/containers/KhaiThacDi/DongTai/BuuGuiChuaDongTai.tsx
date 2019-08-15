@@ -6,47 +6,45 @@ import { map } from 'lodash';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
-import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
-import { push } from 'connected-react-router';
-import routesMap from '../../../utils/routesMap';
+import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
-const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
-  const dispatch = useDispatch();
+const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
-  const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
+  const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
+  const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
 
   function handleSearch(event: ChangeEvent<HTMLInputElement>): void {
     const payload = {
       IV_TOR_ID: event.target.value,
-      IV_TOR_TYPE: 'ZC2',
+      IV_TOR_TYPE: 'ZC1',
       IV_FR_LOC_ID: 'BDH',
       IV_CUST_STATUS: '101',
     };
     dispatch(action_MIOA_ZTMI047(payload));
   }
 
-  function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+  function printBangKe(bangKe: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
-      console.log('print', tai.TOR_ID);
+      console.log('print', bangKe.TOR_ID);
     };
   }
 
-  function editTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+  function editBangKe(bangKe: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
-      console.log('edit', tai.TOR_ID);
+      console.log('edit', bangKe.TOR_ID);
     };
   }
 
-  const handleDeleteTai = (tai: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+  function deleteBangKe(bangKe: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
       const payload = {
         IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC2',
-        IV_TOR_ID_CU: tai.TOR_ID,
+        IV_TOR_TYPE: 'ZC1',
+        IV_TOR_ID_CU: bangKe.TOR_ID,
         IV_SLOCATION: '',
         IV_DLOCATION: '',
         IV_DESCRIPTION: '',
@@ -57,33 +55,44 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
           },
         ],
       };
+      if (!window.confirm('Bạn có chắc chắn?')) return;
       dispatch(
         action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => {
+          onFailure: (error: HttpRequestErrorType): void => {
+            console.log(error);
+          },
+          onSuccess: (): void => {
             const payload = {
               IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC3',
+              IV_TOR_TYPE: 'ZC1',
               IV_FR_LOC_ID: 'BDH',
               IV_CUST_STATUS: '101',
-              IV_TO_LOC_ID: '',
             };
-            dispatch(action_MIOA_ZTMI047(payload));
+            dispatch(
+              action_MIOA_ZTMI047(payload, {
+                onFailure: (error: HttpRequestErrorType): void => {
+                  console.log(error.messages);
+                },
+              }),
+            );
           },
         }),
       );
     };
-  };
+  }
 
-  function renderAction(taiChuaHoanThanh: API.RowMTZTMI047OUT): JSX.Element {
+  function renderAction(bangKe: API.RowMTZTMI047OUT): JSX.Element {
     return (
       <>
-        <Button onClick={printTai(taiChuaHoanThanh)}>
+        <Button onClick={printBangKe(bangKe)}>
           <i className="fa fa-print fa-lg color-green" />
         </Button>
-        <Button onClick={editTai(taiChuaHoanThanh)}>
+        <Button onClick={editBangKe(bangKe)}>
           <i className="fa fa-pencil fa-lg color-blue" />
         </Button>
-        <ModalPopupConfirm handleDoSomething={handleDeleteTai(taiChuaHoanThanh)} />
+        <Button onClick={deleteBangKe(bangKe)}>
+          <i className="fa fa-trash-o fa-lg color-red" />
+        </Button>
       </>
     );
   }
@@ -119,11 +128,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
       </Pagination>
     );
   }
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI}/${item.TOR_ID}`));
-    };
-  };
+
   function renderTable(): JSX.Element {
     return (
       <Table striped hover>
@@ -141,21 +146,21 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         </thead>
         <tbody>
           {map(
-            listTaiChuaHoanThanh,
-            (tai: API.RowMTZTMI047OUT): JSX.Element => (
-              <tr key={tai.TOR_ID} onClick={handleRedirectDetail(tai)}>
+            listBangKeChuaDongTai,
+            (bangKe: API.RowMTZTMI047OUT): JSX.Element => (
+              <tr key={bangKe.TOR_ID}>
                 <td className="text-center">
                   <Label check>
                     <Input type="checkbox" />
                   </Label>
                 </td>
-                <td>{tai.TOR_ID}</td>
-                <td>{tai.LOG_LOCID_TO}</td>
-                <td>{tai.ITEM_NO}</td>
+                <td>{bangKe.TOR_ID}</td>
+                <td>{bangKe.LOG_LOCID_TO}</td>
+                <td>{bangKe.ITEM_NO}</td>
                 <td>-</td>
-                <td>{moment(parseInt(tai.DATETIME_CHLC || '0')).format()}</td>
-                <td>{tai.EXEC_CONT || '-'}</td>
-                <td className="SipTableFunctionIcon">{renderAction(tai)}</td>
+                <td>{moment(parseInt(bangKe.DATETIME_CHLC || '0')).format()}</td>
+                <td>{bangKe.EXEC_CONT || '-'}</td>
+                <td className="SipTableFunctionIcon">{renderAction(bangKe)}</td>
               </tr>
             ),
           )}
@@ -183,7 +188,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countTaiChuaHoanThanh}</span>
+            {t('Tổng số')}: <span>{countBangKeChuaDongTai}</span>
           </p>
         </Col>
       </Row>
@@ -196,4 +201,4 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   );
 };
 
-export default TaiChuaHoanThanh;
+export default BuuGuiChuaDongTai;

@@ -25,9 +25,11 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC3',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: 'BHD',
           IV_CUST_STATUS: '101',
           IV_TO_LOC_ID: '',
+          LanguageId: '',
+          LanguageDefaultId: '',
           ...payload,
         }),
       );
@@ -35,7 +37,9 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     [dispatch],
   );
 
-  useEffect((): void => getListChuyenThu(), [getListChuyenThu]);
+  useEffect((): void => {
+    getListChuyenThu();
+  }, [getListChuyenThu]);
 
   const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
   const listChuyenThuChuaHoanThanh = useSelector(makeSelectorChuyenThuChuaHoanThanh);
@@ -79,56 +83,38 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     );
   }
 
-  // function renderAction(): JSX.Element {
-  //   return (
-  //     <>
-  //       <Button>
-  //         <i className="fa fa-print fa-lg color-green" />
-  //       </Button>
-  //       <Button>
-  //         <i className="fa fa-pencil fa-lg color-blue" />
-  //       </Button>
-  //       <Button>
-  //         <i className="fa fa-trash-o fa-lg color-red" />
-  //       </Button>
-  //     </>
-  //   );
-  // }
-
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
-    };
-  };
   const handleDeleteChuyenThu = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      const payload = {
-        IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC3',
-        IV_TOR_ID_CU: item.TOR_ID,
-        IV_SLOCATION: '',
-        IV_DLOCATION: '',
-        IV_DESCRIPTION: '',
-        T_ITEM: [
-          {
-            ITEM_ID: '',
-            ITEM_TYPE: '',
-          },
-        ],
-      };
       dispatch(
-        action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => {
-            const payload = {
-              IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC3',
-              IV_FR_LOC_ID: 'BDH',
-              IV_CUST_STATUS: '101',
-              IV_TO_LOC_ID: '',
-            };
-            dispatch(action_MIOA_ZTMI047(payload));
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: '3',
+            IV_TOR_TYPE: 'ZC3',
+            IV_TOR_ID_CU: item.TOR_ID,
+            IV_SLOCATION: '',
+            IV_DLOCATION: '',
+            IV_DESCRIPTION: '',
+            T_ITEM: [
+              {
+                ITEM_ID: '',
+                ITEM_TYPE: '',
+              },
+            ],
           },
-        }),
+          {
+            onFinish: (): void => {
+              dispatch(
+                action_MIOA_ZTMI047({
+                  IV_TOR_ID: '',
+                  IV_TOR_TYPE: 'ZC3',
+                  IV_FR_LOC_ID: 'BHD',
+                  IV_TO_LOC_ID: '',
+                  IV_CUST_STATUS: '101',
+                }),
+              );
+            },
+          },
+        ),
       );
     };
   };
@@ -146,7 +132,11 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
       </>
     );
   }
-
+  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+    return (): void => {
+      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${item.TOR_ID}`));
+    };
+  };
   function renderTable1(): JSX.Element {
     return (
       <>
@@ -168,7 +158,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
               listChuyenThuChuaHoanThanh,
               (item: API.RowMTZTMI047OUT, index): JSX.Element => {
                 return (
-                  <tr key={index}>
+                  <tr key={index} onClick={handleRedirectDetail(item)}>
                     <td className="text-center">
                       <Label check>
                         <Input type="checkbox" />
@@ -203,6 +193,9 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
             </div>
             <Button color="primary" className="ml-2">
               {t('Tìm kiếm')}
+            </Button>
+            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
+              <i className="fa fa-trash-o" />
             </Button>
           </div>
         </Col>

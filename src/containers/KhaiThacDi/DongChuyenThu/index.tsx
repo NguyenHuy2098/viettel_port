@@ -19,8 +19,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import classNames from 'classnames';
+import { get } from 'lodash';
 import { useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { push } from 'connected-react-router';
 import {
   makeSelectorCountChuyenThuChuaHoanThanh,
   makeSelectorCountBangKeChuaDongTai,
@@ -30,11 +33,14 @@ import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
 import KienChuaDongChuyenThu from './KienChuaDongChuyenThu';
 import ChuyenThuDaDong from './ChuyenThuDaDong';
+import { action_MIOA_ZTMI016 } from '../../../redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI047 } from '../../../redux/MIOA_ZTMI047/actions';
+import routesMap from '../../../utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const DongChuyenThu: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-
+  const dispatch = useDispatch();
   const [tab, setTab] = useState<number>(1);
   function handleChangeTab(tab: number): void {
     setTab(tab);
@@ -44,10 +50,52 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
   const countTaiChuaDong = useSelector(makeSelectorCountBangKeChuaDongTai);
   const countChuyenThuDaDong = useSelector(makeSelectorCountChuyenThuDaDong);
-  // const countTaiChuaDong = 1;
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
+  const [textGhiChu, setTextGhiChu] = React.useState<string>('');
+  const [valueBuuCuc, setValueBuuCuc] = React.useState<string>('1');
+  function handleChangeText(e: any) {
+    setTextGhiChu(e.target.value);
+  }
+  function handleChangeBuuCuc(e: any) {
+    setValueBuuCuc(e.target.value);
+  }
+  const handleAddChuyenThu = (): ((event: React.MouseEvent) => void) => {
+    return (): void => {
+      const payload = {
+        IV_FLAG: '1',
+        IV_TOR_TYPE: 'ZC3',
+        IV_TOR_ID_CU: '',
+        IV_SLOCATION: 'BHD',
+        IV_DLOCATION: valueBuuCuc,
+        IV_DESCRIPTION: '',
+        EXEC_CONT: textGhiChu,
+        T_ITEM: [
+          {
+            ITEM_ID: '',
+            ITEM_TYPE: '',
+          },
+        ],
+      };
+
+      dispatch(
+        action_MIOA_ZTMI016(payload, {
+          onFinish: (): void => {
+            const payload = {
+              IV_TOR_ID: '',
+              IV_TOR_TYPE: 'ZC3',
+              IV_FR_LOC_ID: 'BHD',
+              IV_CUST_STATUS: '101',
+              IV_TO_LOC_ID: '',
+            };
+            dispatch(action_MIOA_ZTMI047(payload));
+          },
+        }),
+      );
+      setModalCreateNew(!modalCreateNew);
+    };
+  };
 
   function renderModal(): JSX.Element {
     return (
@@ -56,24 +104,74 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
         <ModalBody>
           <FormGroup>
             <Label>{t('Bưu cục đến')}</Label>
-            <Input type="select">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
+            <Input type="select" value={valueBuuCuc} onChange={handleChangeBuuCuc}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
             </Input>
           </FormGroup>
           <FormGroup>
             <Label>{t('Ghi chú')}</Label>
-            <Input type="textarea" placeholder={t('Nhập ghi chú')} />
+            <Input type="textarea" placeholder={t('Nhập ghi chú')} value={textGhiChu} onChange={handleChangeText} />
           </FormGroup>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={toggle}>
+          <Button color="primary" onClick={handleAddChuyenThu()}>
             {t('Ghi lại')}
           </Button>
         </ModalFooter>
       </Modal>
     );
+  }
+  const getListChuyenThu = useCallback(
+    function(payload = {}): void {
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_TOR_ID: '',
+          IV_TOR_TYPE: 'ZC3',
+          IV_FR_LOC_ID: 'BHD',
+          IV_CUST_STATUS: '101',
+          IV_TO_LOC_ID: '',
+          LanguageId: '',
+          LanguageDefaultId: '',
+          ...payload,
+        }),
+      );
+    },
+    [dispatch],
+  );
+
+  useEffect((): void => {
+    getListChuyenThu();
+  }, [getListChuyenThu]);
+
+  function handleSearchChuyenThu(e: any): void {
+    const payload = {
+      IV_TOR_ID: e.target.value,
+      IV_TOR_TYPE: 'ZC3',
+      IV_FR_LOC_ID: 'BHD',
+      IV_CUST_STATUS: '101',
+    };
+    const torId = e.target.value;
+    if (e.key === 'Enter') {
+      dispatch(
+        action_MIOA_ZTMI047(payload, {
+          onSuccess: (data: any): void => {
+            const check = get(data, 'data.MT_ZTMI047_OUT.Row', null);
+            if (check) {
+              dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${torId}`));
+            } else {
+              alert('Không tìm thấy');
+              getListChuyenThu();
+            }
+          },
+          onFailure: (error: any): void => {
+            alert('Lỗi!');
+            getListChuyenThu();
+          },
+        }),
+      );
+    }
   }
 
   function renderTitle(): JSX.Element {
@@ -81,12 +179,9 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng chuyến thư')}</h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-trash-o" />
-          </Button>
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu chuyến thư')} />
+            <Input type="text" placeholder={t('Tra cứu chuyến thư')} onKeyDown={handleSearchChuyenThu} />
           </div>
           <Button onClick={toggle}>
             <i className="fa fa-plus" />
