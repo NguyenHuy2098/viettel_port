@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { map } from 'lodash';
+import { push } from 'connected-react-router';
+import routesMap from 'utils/routesMap';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorTaiDaDong, makeSelectorCountTaiDaDong } from 'redux/MIOA_ZTMI047/selectors';
-import { push } from 'connected-react-router';
-import routesMap from '../../../utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {

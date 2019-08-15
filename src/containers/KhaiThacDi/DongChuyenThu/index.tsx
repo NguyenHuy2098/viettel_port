@@ -29,13 +29,13 @@ import {
   makeSelectorCountBangKeChuaDongTai,
   makeSelectorCountChuyenThuDaDong,
 } from 'redux/MIOA_ZTMI047/selectors';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import routesMap from 'utils/routesMap';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
 import KienChuaDongChuyenThu from './KienChuaDongChuyenThu';
 import ChuyenThuDaDong from './ChuyenThuDaDong';
-import { action_MIOA_ZTMI016 } from '../../../redux/MIOA_ZTMI016/actions';
-import { action_MIOA_ZTMI047 } from '../../../redux/MIOA_ZTMI047/actions';
-import routesMap from '../../../utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const DongChuyenThu: React.FC = (): JSX.Element => {
@@ -161,12 +161,12 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
             if (check) {
               dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${torId}`));
             } else {
-              alert('Không tìm thấy');
+              alert(t('Không tìm thấy'));
               getListChuyenThu();
             }
           },
           onFailure: (error: any): void => {
-            alert('Lỗi!');
+            alert(t('Lỗi!'));
             getListChuyenThu();
           },
         }),

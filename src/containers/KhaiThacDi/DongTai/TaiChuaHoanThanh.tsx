@@ -9,7 +9,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import { push } from 'connected-react-router';
-import routesMap from '../../../utils/routesMap';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {

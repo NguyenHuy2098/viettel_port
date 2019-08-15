@@ -9,7 +9,7 @@ import { get, map } from 'lodash';
 import moment from 'moment';
 import { makeSelectorCountMT_ZTMI046, useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 import { push } from 'connected-react-router';
-import routesMap from '../../../utils/routesMap';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   match: match;

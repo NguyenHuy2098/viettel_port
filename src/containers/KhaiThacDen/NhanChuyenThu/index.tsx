@@ -8,8 +8,8 @@ import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { makeSelectorCountMT_ZTMI046 } from 'redux/MIOA_ZTMI046/selectors';
-import { HttpRequestErrorType } from '../../../utils/HttpRequetsError';
-import routesMap from '../../../utils/routesMap';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
