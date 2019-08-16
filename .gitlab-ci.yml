@@ -85,7 +85,7 @@ build-docker-image:latest:
     DOCKER_DRIVER: overlay2
     #
     # This will instruct Docker not to start over TLS.
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_TLS_CERTDIR: ''
   stage: build-docker-image
   only:
     - master
@@ -123,7 +123,7 @@ build-docker-image:production:
     DOCKER_DRIVER: overlay2
     #
     # This will instruct Docker not to start over TLS.
-    DOCKER_TLS_CERTDIR: ""
+    DOCKER_TLS_CERTDIR: ''
   stage: build-docker-image
   only:
     - tags

@@ -27,6 +27,7 @@ function DanhSachBangKe(): JSX.Element {
       IV_TO_LOC_ID: '',
     };
     dispatch(action_MIOA_ZTMI047(payload));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {

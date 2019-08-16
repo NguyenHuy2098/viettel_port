@@ -50,6 +50,7 @@ const DongTai: React.FC = (): JSX.Element => {
       IV_CUST_STATUS: '101',
     };
     dispatch(action_MIOA_ZTMI047(payload));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect((): void => {
@@ -60,6 +61,7 @@ const DongTai: React.FC = (): JSX.Element => {
       IV_CUST_STATUS: '101',
     };
     dispatch(action_MIOA_ZTMI047(payload));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function handleChangeTab(tab: number): void {
