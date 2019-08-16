@@ -47,22 +47,18 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
             <Col xs="7">BK_1209_BNH</Col>
           </Row>
           <Row>
-            <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">24/04/2019</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ghi chú')}: </Col>
-            <Col xs="7">{t('Chuyển hoàn về bưu cục gốc')}: </Col>
+            <Col xs="5">{t('Trọng l')}: </Col>
+            <Col xs="7">1400 g</Col>
           </Row>
         </Col>
         <Col lg="5" xl={4} xs="12">
           <Row>
-            <Col xs="5">{t('Bưu cục đến')}: </Col>
+            <Col xs="5">{t('Điểm đến')}: </Col>
             <Col xs="7">TQN</Col>
           </Row>
           <Row>
-            <Col xs="5">{t('Ngày gửi')}: </Col>
-            <Col xs="7">24/04/2019</Col>
+            <Col xs="5">{t('Ghi chú')}: </Col>
+            <Col xs="7">{t('Thư - Hỏa tốc')}: </Col>
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">

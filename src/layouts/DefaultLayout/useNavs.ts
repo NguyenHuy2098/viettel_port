@@ -60,8 +60,8 @@ const nav = (t: i18next.TFunction): any => {
             url: routesMap.NHAP_PHIEU_GUI_QUOC_TE,
           },
           {
-            name: t('Nhập doanh thu'),
-            url: routesMap.NHAP_DOANH_THU,
+            name: t('Nhập từ file excel '),
+            url: routesMap.NHAP_TU_FILE_EXCEL,
           },
           {
             name: t('Nhận tại bưu cục gốc'),

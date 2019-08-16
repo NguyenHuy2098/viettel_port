@@ -57,8 +57,8 @@ const InternationalForwardingOrder = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/PhieuGuiQuocTe'),
   loading: Loading,
 });
-const NhapDoanhThu = Loadable({
-  loader: (): any => import('containers/NhapPhieuGui/NhapDoanhThu'),
+const NhapTuFileExcel = Loadable({
+  loader: (): any => import('containers/NhapPhieuGui/NhapTuFileExcel'),
   loading: Loading,
 });
 const NhanTaiBuuCucGoc = Loadable({
@@ -173,7 +173,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     },
     { path: routesMap.DONG_BANG_KE_NOI_TINH, name: t('Đóng bảng kê nội tỉnh'), component: DongBangKeNoiTinh },
     { path: routesMap.DONG_BANG_KE, name: t('Đóng bảng kê'), component: DongBangKe },
-    { path: routesMap.NHAP_DOANH_THU, name: t('Nhập doanh thu'), component: NhapDoanhThu },
+    { path: routesMap.NHAP_TU_FILE_EXCEL, name: t('Nhập từ file excel'), component: NhapTuFileExcel },
     { path: routesMap.THONG_TIN_BANG_KE, name: t('Thông tin bảng kê'), component: ThongTinBangKe },
     { path: routesMap.DONG_TAI, name: t('Đóng tải'), component: DongTai },
     { path: routesMap.DANH_SACH_TAI_KIEN, name: t('Danh sách tải kiện'), component: DanhSachTaiKien },

@@ -27,7 +27,7 @@ export const TACH_PHIEU_GUI = `${KHAI_THAC_DI}/tach-phieu-gui`;
 export const NHAP_PHIEU_GUI = '/nhap-phieu-gui';
 export const NHAP_PHIEU_GUI_TRONG_NUOC = `${NHAP_PHIEU_GUI}/phieu-gui-trong-nuoc`;
 export const NHAP_PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te`;
-export const NHAP_DOANH_THU = `${NHAP_PHIEU_GUI}/nhap-doanh-thu`;
+export const NHAP_TU_FILE_EXCEL = `${NHAP_PHIEU_GUI}/nhap-tu-file-excel`;
 export const NHAN_TAI_BUU_CUC_GOC = `${NHAP_PHIEU_GUI}/nhan-tai-buu-cuc-goc`;
 
 export const DIEU_HANH = '/dieu-hanh';
@@ -92,7 +92,7 @@ export default {
   NHAP_PHIEU_GUI,
   NHAP_PHIEU_GUI_TRONG_NUOC,
   NHAP_PHIEU_GUI_QUOC_TE,
-  NHAP_DOANH_THU,
+  NHAP_TU_FILE_EXCEL,
   NHAN_TAI_BUU_CUC_GOC,
   /**
    * Điều hành
