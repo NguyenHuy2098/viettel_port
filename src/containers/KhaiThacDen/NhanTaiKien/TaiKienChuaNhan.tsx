@@ -4,7 +4,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { match, withRouter } from 'react-router-dom';
 import { Button, Row, Input, Pagination, PaginationItem, PaginationLink, Table, Label } from 'reactstrap';
 import { push } from 'connected-react-router';
-import { get, map } from 'lodash';
+import { get, map, noop } from 'lodash';
 import moment from 'moment';
 
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
@@ -34,7 +34,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const [idTaiKien, setIdTaiKien] = React.useState<string>('');
 
   function handleSearchTaiKien(): void {
-    console.log(idTaiKien);
+    noop(idTaiKien);
   }
 
   function handleChangeTaiKien(event: ChangeEvent<HTMLInputElement>): void {

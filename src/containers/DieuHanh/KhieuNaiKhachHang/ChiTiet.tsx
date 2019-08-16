@@ -1,9 +1,8 @@
-import * as React from 'react';
+import React, { ChangeEvent, FormEvent, useState } from 'react';
 import { Button, Col, Input, Row, Label, Form } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
-import { find, get } from 'lodash';
+import { find, get, noop } from 'lodash';
 
 // eslint-disable-next-line max-lines-per-function
 const ComplainDetail: React.FC = (): JSX.Element => {
@@ -44,7 +43,7 @@ const ComplainDetail: React.FC = (): JSX.Element => {
 
   const [name, setName] = useState('');
   const [age, setAge] = useState('');
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState<yup.ValidationError[]>([]);
 
   function handleValidate(e: FormEvent): void {
     e.preventDefault();
@@ -55,24 +54,21 @@ const ComplainDetail: React.FC = (): JSX.Element => {
     };
     schema
       .validate(data, { abortEarly: false })
-      .then(data => console.log(data))
-      .catch(error => setErrors(error.inner));
+      .then((data): void => noop(data))
+      .catch((error: yup.ValidationError): void => {
+        setErrors(error.inner);
+      });
   }
 
-  function handleErrorMessage(error: any[], errorName: string): any {
-    return get(
-      find(error, item => {
-        return item.path === errorName;
-      }),
-      'message',
-    );
+  function handleErrorMessage(errors: yup.ValidationError[], errorName: string): string {
+    return get(find(errors, (item: yup.ValidationError): boolean => item.path === errorName), 'message', '');
   }
 
-  function handleChangeName(e: React.FormEvent<HTMLInputElement>): void {
+  function handleChangeName(e: ChangeEvent<HTMLInputElement>): void {
     setName(e.currentTarget.value);
   }
 
-  function handleChangeAge(e: React.FormEvent<HTMLInputElement>): void {
+  function handleChangeAge(e: ChangeEvent<HTMLInputElement>): void {
     setAge(e.currentTarget.value);
   }
 

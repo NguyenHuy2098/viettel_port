@@ -2,12 +2,12 @@ import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { map } from 'lodash';
+import { map, noop } from 'lodash';
+
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaDongTai: React.FC = (): JSX.Element => {
@@ -29,13 +29,13 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
 
   function printBangKe(bangKe: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
-      console.log('print', bangKe.TOR_ID);
+      noop('print', bangKe.TOR_ID);
     };
   }
 
   function editBangKe(bangKe: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
-      console.log('edit', bangKe.TOR_ID);
+      noop('edit', bangKe.TOR_ID);
     };
   }
 
@@ -58,9 +58,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       if (!window.confirm('Bạn có chắc chắn?')) return;
       dispatch(
         action_MIOA_ZTMI016(payload, {
-          onFailure: (error: HttpRequestErrorType): void => {
-            console.log(error);
-          },
           onSuccess: (): void => {
             const payload = {
               IV_TOR_ID: '',
@@ -68,13 +65,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
               IV_FR_LOC_ID: 'BDH',
               IV_CUST_STATUS: '101',
             };
-            dispatch(
-              action_MIOA_ZTMI047(payload, {
-                onFailure: (error: HttpRequestErrorType): void => {
-                  console.log(error.messages);
-                },
-              }),
-            );
+            dispatch(action_MIOA_ZTMI047(payload));
           },
         }),
       );

@@ -5,7 +5,7 @@ import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
 import produce from 'immer';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { get, filter, find, forEach, map, set, size } from 'lodash';
+import { get, filter, find, forEach, map, noop, set, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -311,7 +311,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         { GET: null },
         {
           onFailure: (error: HttpRequestErrorType): void => {
-            console.log(error);
+            noop(error);
           },
           onSuccess: (data: API.MTZTMI068Response): void => {
             setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
@@ -512,16 +512,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       LanguageDefaultId: null,
     };
     // if (!window.confirm('Bạn có chắc chắn?')) return;
-    dispatch(
-      action_MIOA_ZTMI012(payload, {
-        onFailure: (error: HttpRequestErrorType): void => {
-          console.log(error);
-        },
-        onSuccess: (): void => {
-          console.log('Api success!!!');
-        },
-      }),
-    );
+    dispatch(action_MIOA_ZTMI012(payload));
   }
 
   // eslint-disable-next-line max-lines-per-function

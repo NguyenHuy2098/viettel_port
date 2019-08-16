@@ -1,9 +1,10 @@
-import * as React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Button, Input, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { push } from 'connected-react-router';
 import { map } from 'lodash';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
@@ -69,12 +70,13 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   }
   const [codeChuyenThu, setCodeChuyenThu] = React.useState<string>('4800000278');
 
-  function handleChangeCodeChuyenThu(e: any) {
+  function handleChangeCodeChuyenThu(e: ChangeEvent<HTMLInputElement>): void {
     setCodeChuyenThu(e.target.value);
   }
 
   const [error, setError] = React.useState<string>('');
-  function handleSearchCodeChuyenThu() {
+
+  function handleSearchCodeChuyenThu(): void {
     const payload = {
       IV_ID: codeChuyenThu,
     };

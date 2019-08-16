@@ -1,4 +1,4 @@
-/* eslint-disable max-lines, @typescript-eslint/interface-name-prefix */
+/* eslint-disable max-lines, @typescript-eslint/interface-name-prefix, @typescript-eslint/no-explicit-any */
 declare namespace API {
   export interface Child {
     TOR_ID?: string;

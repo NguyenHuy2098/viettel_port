@@ -4,6 +4,7 @@ import { call, takeEvery } from 'redux-saga/effects';
 import { UnfoldSagaActionType } from 'redux-unfold-saga';
 
 function* takeError(action: UnfoldSagaActionType): SagaIterator {
+  // eslint-disable-next-line no-console
   yield call(console.log, `Failed at ${action.type} with ${action.payload}`);
 }
 

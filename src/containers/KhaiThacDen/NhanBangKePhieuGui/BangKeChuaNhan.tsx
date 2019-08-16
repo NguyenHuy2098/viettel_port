@@ -1,12 +1,13 @@
-import * as React from 'react';
+import React from 'react';
 import { Button, Row, Input, Pagination, PaginationItem, PaginationLink, Table, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { withRouter } from 'react-router-dom';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { get, map } from 'lodash';
 import moment from 'moment';
+
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorCountMT_ZTMI046, useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 
 interface Props {
@@ -21,7 +22,6 @@ const BangKeChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const idTaiKien = get(props, 'match.params.idTaiKien');
 
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
-  console.log(manifestForwardingOrderList);
   const countPhieuGui = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
 
   React.useEffect((): void => {

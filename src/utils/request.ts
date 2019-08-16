@@ -4,12 +4,7 @@ import store from 'redux/store';
 
 function request(options: AxiosRequestConfig): AxiosPromise {
   options.method = options.method || 'POST';
-  let accessToken = '';
-  try {
-    accessToken = get(store.getState(), 'auth.user.access_token');
-  } catch (error) {
-    console.log(error);
-  }
+  let accessToken = get(store.getState(), 'auth.user.access_token');
   if (accessToken) {
     options.headers = {
       Authorization: `Bearer ${accessToken}`,

@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { map } from 'lodash';
+import { map, noop } from 'lodash';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
@@ -29,7 +29,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
 
   function printBangKe(bangKe: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
-      console.log('print', bangKe.TOR_ID);
+      noop('print', bangKe.TOR_ID);
     };
   }
 

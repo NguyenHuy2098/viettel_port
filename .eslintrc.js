@@ -16,11 +16,15 @@ module.exports = {
   rules: {
     // Turning off these rules is just an unexpected action. This hurts so bad! :(
     '@typescript-eslint/camelcase': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'error',
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-unused-vars': 'error',
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     'import/imports-first': ['error', 'absolute-first'],
     'import/newline-after-import': 'error',
     'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
     'max-lines-per-function': ['error', { max: 50 }],
+    'no-console': 'error',
     'react/boolean-prop-naming': 'error',
     'react/jsx-max-depth': ['error', { max: 5 }],
     'react/jsx-no-bind': 'error',

@@ -23,7 +23,6 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
 
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
-  // console.log(manifestForwardingOrderList);
   const counttaikien = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
 
   React.useEffect((): void => {

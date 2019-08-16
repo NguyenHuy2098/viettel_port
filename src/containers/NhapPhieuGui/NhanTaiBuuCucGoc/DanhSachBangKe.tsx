@@ -7,7 +7,6 @@ import { map } from 'lodash';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 
@@ -27,14 +26,8 @@ function DanhSachBangKe(): JSX.Element {
       IV_CUST_STATUS: '101',
       IV_TO_LOC_ID: '',
     };
-    dispatch(
-      action_MIOA_ZTMI047(payload, {
-        onFailure: (error: HttpRequestErrorType): void => {
-          console.log(error.messages);
-        },
-      }),
-    );
-  }, [dispatch]);
+    dispatch(action_MIOA_ZTMI047(payload));
+  }, []);
 
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {

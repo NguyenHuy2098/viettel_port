@@ -2,13 +2,14 @@ import React, { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { map } from 'lodash';
+import { map, noop } from 'lodash';
 import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { push } from 'connected-react-router';
+
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
-import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
@@ -31,13 +32,13 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
 
   function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
-      console.log('print', tai.TOR_ID);
+      noop('print', tai.TOR_ID);
     };
   }
 
   function editTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
-      console.log('edit', tai.TOR_ID);
+      noop('edit', tai.TOR_ID);
     };
   }
 

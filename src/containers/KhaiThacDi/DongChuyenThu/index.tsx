@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import {
   Badge,
   Button,
@@ -17,13 +17,11 @@ import {
   NavLink,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import classNames from 'classnames';
 import { get } from 'lodash';
-import { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import { push } from 'connected-react-router';
+
 import {
   makeSelectorCountChuyenThuChuaHoanThanh,
   makeSelectorCountBangKeChuaDongTai,
@@ -55,10 +53,12 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   }
   const [textGhiChu, setTextGhiChu] = React.useState<string>('');
   const [valueBuuCuc, setValueBuuCuc] = React.useState<string>('1');
-  function handleChangeText(e: any) {
+
+  function handleChangeText(e: ChangeEvent<HTMLInputElement>): void {
     setTextGhiChu(e.target.value);
   }
-  function handleChangeBuuCuc(e: any) {
+
+  function handleChangeBuuCuc(e: ChangeEvent<HTMLInputElement>): void {
     setValueBuuCuc(e.target.value);
   }
   const handleAddChuyenThu = (): ((event: React.MouseEvent) => void) => {
@@ -145,18 +145,18 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
     getListChuyenThu();
   }, [getListChuyenThu]);
 
-  function handleSearchChuyenThu(e: any): void {
+  function handleSearchChuyenThu(e: KeyboardEvent<HTMLInputElement>): void {
     const payload = {
-      IV_TOR_ID: e.target.value,
+      IV_TOR_ID: e.currentTarget.value,
       IV_TOR_TYPE: 'ZC3',
       IV_FR_LOC_ID: 'BHD',
       IV_CUST_STATUS: '101',
     };
-    const torId = e.target.value;
+    const torId = e.currentTarget.value;
     if (e.key === 'Enter') {
       dispatch(
         action_MIOA_ZTMI047(payload, {
-          onSuccess: (data: any): void => {
+          onSuccess: (data: API.MIOAZTMI047Response): void => {
             const check = get(data, 'data.MT_ZTMI047_OUT.Row', null);
             if (check) {
               dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${torId}`));
@@ -165,7 +165,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               getListChuyenThu();
             }
           },
-          onFailure: (error: any): void => {
+          onFailure: (): void => {
             alert(t('Lỗi!'));
             getListChuyenThu();
           },

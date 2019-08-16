@@ -14,7 +14,6 @@ function* takeGet_MIOA_ZTMI012(action: UnfoldSagaActionType): Iterable<SagaItera
           url: apisMap.MIOA_ZTMI012,
           data: action.payload,
         });
-        console.log(results);
         if (results.data.Status) return results.data;
         throw new HttpRequestError(results.data.ErrorCode, results.data.Messages);
       },

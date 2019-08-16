@@ -19,13 +19,13 @@ import {
   NavLink,
 } from 'reactstrap';
 import classNames from 'classnames';
+
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import {
   makeSelectorCountTaiChuaHoanThanh,
   makeSelectorCountBangKeChuaDongTai,
   makeSelectorCountTaiDaDong,
 } from 'redux/MIOA_ZTMI047/selectors';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';
@@ -49,14 +49,8 @@ const DongTai: React.FC = (): JSX.Element => {
       IV_FR_LOC_ID: 'BDH',
       IV_CUST_STATUS: '101',
     };
-    dispatch(
-      action_MIOA_ZTMI047(payload, {
-        onFailure: (error: HttpRequestErrorType): void => {
-          console.log(error.messages);
-        },
-      }),
-    );
-  }, [dispatch]);
+    dispatch(action_MIOA_ZTMI047(payload));
+  }, []);
 
   useEffect((): void => {
     const payload = {
@@ -65,14 +59,8 @@ const DongTai: React.FC = (): JSX.Element => {
       IV_FR_LOC_ID: 'BDH',
       IV_CUST_STATUS: '101',
     };
-    dispatch(
-      action_MIOA_ZTMI047(payload, {
-        onFailure: (error: HttpRequestErrorType): void => {
-          console.log(error.messages);
-        },
-      }),
-    );
-  }, [dispatch]);
+    dispatch(action_MIOA_ZTMI047(payload));
+  }, []);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);

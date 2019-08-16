@@ -2,13 +2,14 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
-import { map } from 'lodash';
+import { push } from 'connected-react-router';
+import { map, noop } from 'lodash';
+
 import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
-import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
@@ -45,7 +46,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
   }
 
   function onPageChange(selectedItem: { selected: number }): void {
-    console.log(selectedItem);
+    noop(selectedItem);
   }
 
   const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {

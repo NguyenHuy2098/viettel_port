@@ -40,9 +40,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
 
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
-  // console.log(manifestForwardingOrderList)
   const getInfoTaiKien = get(manifestForwardingOrderList, 'Row[0]');
-  // console.log(getInfoTaiKien && getInfoTaiKien.TOR_ID);
   const countTaiKien = useSelector(makeSelectorCountMT_ZTMI046);
   const countKienChuaNhan = useSelector(makeSelectorCountKienChuaNhan);
   const countKienDaNhan = useSelector(makeSelectorCountKienDaNhan);

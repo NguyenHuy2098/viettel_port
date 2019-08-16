@@ -31,7 +31,6 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   }
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
   const getInfoBangKe = get(manifestForwardingOrderList, 'Row[0]');
-  // console.log(getInfoBangKe && getInfoBangKe.TOR_ID);
   const countBangKe = useSelector(makeSelectorCountMT_ZTMI046);
   const countBangKeChuaNhan = useSelector(makeSelectorCountBangKeChuaNhan);
   const countBangKeDaNhan = useSelector(makeSelectorCountBangKeDaNhan);
