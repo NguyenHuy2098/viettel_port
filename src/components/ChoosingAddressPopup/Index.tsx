@@ -63,7 +63,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
     return get(find(data, { I: id }), 'N', '');
   };
 
-  let addressData = {
+  const addressData = {
     province: '',
     district: '',
     ward: '',
@@ -83,21 +83,21 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
     onHide();
   };
 
-  let payloadProvince = {
+  const payloadProvince = {
     TypeLocation: 1,
     Id: '',
     ParentId: '',
     PageIndex: 0,
     PageSize: 200,
   };
-  let payloadDistrict = {
+  const payloadDistrict = {
     TypeLocation: 2,
     Id: '',
     ParentId: '',
     PageIndex: 0,
     PageSize: 1000,
   };
-  let payloadWard = {
+  const payloadWard = {
     TypeLocation: 3,
     Id: '',
     ParentId: district !== '0' ? district : '',

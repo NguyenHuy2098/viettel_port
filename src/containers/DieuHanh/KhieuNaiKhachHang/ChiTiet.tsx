@@ -48,7 +48,7 @@ const ComplainDetail: React.FC = (): JSX.Element => {
   function handleValidate(e: FormEvent): void {
     e.preventDefault();
     // check validate
-    let data = {
+    const data = {
       name,
       age,
     };

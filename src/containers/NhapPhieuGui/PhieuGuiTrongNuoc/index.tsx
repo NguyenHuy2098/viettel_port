@@ -76,7 +76,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       .typeError(t('Vui lòng nhập định dạng số')),
   });
 
-  let packageItemErrors: API.PackageItemErrors[] = [];
+  const packageItemErrors: API.PackageItemErrors[] = [];
   const packageTabSchema = yup.object().shape({
     Description: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
     GOODS_VALUE: yup

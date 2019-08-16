@@ -12,8 +12,8 @@ function ExportExcel(props) {
           // If IE, you must uses a different method.
           window.navigator.msSaveOrOpenBlob(blob, name);
         } else {
-          let url = window.URL.createObjectURL(blob);
-          let a = document.createElement('a');
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
           document.body.appendChild(a);
           a.href = url;
           a.download = name;

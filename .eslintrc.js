@@ -25,6 +25,7 @@ module.exports = {
     'max-lines': ['error', { max: 300, skipBlankLines: true, skipComments: true }],
     'max-lines-per-function': ['error', { max: 50 }],
     'no-console': 'error',
+    'prefer-const': 'error',
     'react/boolean-prop-naming': 'error',
     'react/jsx-max-depth': ['error', { max: 5 }],
     'react/jsx-no-bind': 'error',
