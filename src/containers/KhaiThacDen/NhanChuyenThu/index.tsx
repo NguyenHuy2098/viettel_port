@@ -1,14 +1,16 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { Button, Input, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { push } from 'connected-react-router';
-import { map } from 'lodash';
+import { push, replace, getSearch } from 'connected-react-router';
+import { get, isArray, isEmpty, isNil, map } from 'lodash';
+import queryString from 'query-string';
 
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { makeSelectorCountMT_ZTMI046 } from 'redux/MIOA_ZTMI046/selectors';
+import { AppStateType } from 'redux/store';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 
@@ -16,6 +18,11 @@ import routesMap from 'utils/routesMap';
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const search = useSelector<AppStateType, string>(getSearch);
+  const dataNhanChuyenThu = useSelector(makeSelectorNhanChuyenThu, shallowEqual);
+  const countChuyenThu = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
+  const [codeChuyenThu, setCodeChuyenThu] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   // useEffect((): void => {
   //   dispatch(
@@ -29,12 +36,42 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   //   );
   // }, [dispatch]);
 
+  useEffect((): void => {
+    const searchObject = queryString.parse(search);
+    let chuyenThu = get(searchObject, 'ZC3', codeChuyenThu);
+    if (!isEmpty(chuyenThu) && !isNil(chuyenThu)) {
+      if (isArray(chuyenThu)) {
+        setCodeChuyenThu(chuyenThu[0]);
+        chuyenThu = chuyenThu[0];
+      } else {
+        setCodeChuyenThu(chuyenThu);
+      }
+      dispatch(
+        action_MIOA_ZTMI046({
+          IV_TOR_ID: chuyenThu,
+        }),
+      );
+      dispatch(
+        action_MIOA_ZTMI023(
+          {
+            IV_ID: chuyenThu,
+          },
+          {
+            onFailure: (error: HttpRequestErrorType): void => {
+              setError(error.messages[0]);
+            },
+          },
+        ),
+      );
+    }
+  }, [search]);
+
   function renderPagination(): JSX.Element {
     return (
       <Pagination className="sipPagination">
         <PaginationItem className="sipPaginationPrev pull-left">
           <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
+            <i className="fa fa-arrow-left" />
           </PaginationLink>
         </PaginationItem>
         <PaginationItem active>
@@ -54,7 +91,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         </PaginationItem>
         <PaginationItem className="sipPaginationNext pull-right">
           <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
+            <i className="fa fa-arrow-right" />
           </PaginationLink>
         </PaginationItem>
       </Pagination>
@@ -68,35 +105,14 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       </Row>
     );
   }
-  const [codeChuyenThu, setCodeChuyenThu] = React.useState<string>('4800000278');
 
   function handleChangeCodeChuyenThu(e: ChangeEvent<HTMLInputElement>): void {
     setCodeChuyenThu(e.target.value);
   }
 
-  const [error, setError] = React.useState<string>('');
-
   function handleSearchCodeChuyenThu(): void {
-    const payload = {
-      IV_ID: codeChuyenThu,
-    };
-    const payload046 = {
-      IV_TOR_ID: codeChuyenThu,
-    };
-    dispatch(action_MIOA_ZTMI046(payload046));
-    dispatch(
-      action_MIOA_ZTMI023(payload, {
-        onFailure: (error: HttpRequestErrorType): void => {
-          setError(error.messages[0]);
-        },
-      }),
-    );
+    dispatch(replace({ search: queryString.stringify({ ZC3: codeChuyenThu }) }));
   }
-
-  const dataNhanChuyenThu = useSelector(makeSelectorNhanChuyenThu, shallowEqual);
-  const countChuyenThu = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
-
-  // console.log(count);
 
   function renderFindOrder(): JSX.Element {
     return (
@@ -114,7 +130,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         </div>
         <div className="sipTitleRightBlock sipTitleRightBlock2">
           {t('Tổng số')}
-          {t('HYPHEN', ':')} <strong>3</strong>
+          {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThu}</strong>
         </div>
       </Row>
     );
