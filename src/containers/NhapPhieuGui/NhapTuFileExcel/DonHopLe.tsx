@@ -77,7 +77,7 @@ const DonHopLe: React.FC = (): JSX.Element => {
             {t('Đã chọn')}: <span className="color-primary">02/03</span>
           </p>
         </Col>
-      </Row>e
+      </Row>
       <div className="mt-3" />
       <Row className="sipTableContainer">{renderTable()}</Row>
     </>

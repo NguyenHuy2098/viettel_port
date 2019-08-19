@@ -5,6 +5,14 @@ module.exports = {
     'prettier/@typescript-eslint', // Uses eslint-config-prettier to disable ESLint rules from @typescript-eslint/eslint-plugin that would conflict with prettier
     'plugin:prettier/recommended', // Enables eslint-plugin-prettier and displays prettier errors as ESLint errors. Make sure this is always the last configuration in the extends array.
   ],
+  overrides: [
+    {
+      files: ['**/*.js'],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': 'off',
+      },
+    },
+  ],
   parser: '@typescript-eslint/parser', // Specifies the ESLint parser
   parserOptions: {
     ecmaFeatures: {
@@ -15,10 +23,12 @@ module.exports = {
   },
   rules: {
     // Turning off these rules is just an unexpected action. This hurts so bad! :(
+    '@typescript-eslint/ban-ts-ignore': 'warn',
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/explicit-function-return-type': 'error',
     '@typescript-eslint/no-explicit-any': 'error',
     '@typescript-eslint/no-unused-vars': 'error',
+    '@typescript-eslint/no-angle-bracket-type-assertion': 'off',
     // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
     'import/imports-first': ['error', 'absolute-first'],
     'import/newline-after-import': 'error',

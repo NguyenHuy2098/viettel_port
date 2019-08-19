@@ -64,6 +64,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         ),
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   function renderPagination(): JSX.Element {
@@ -140,6 +141,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       dispatch(push(`${routesMap.NHAN_TAI_KIEN}/${item.TOR_ID}`));
     };
   };
+
   // eslint-disable-next-line max-lines-per-function
   function renderTable(): JSX.Element {
     return (
