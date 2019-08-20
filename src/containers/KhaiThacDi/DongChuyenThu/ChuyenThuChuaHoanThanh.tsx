@@ -134,7 +134,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
   }
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU}/${item.TOR_ID}`));
     };
   };
   function renderTable1(): JSX.Element {

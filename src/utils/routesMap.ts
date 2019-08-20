@@ -18,9 +18,14 @@ export const DONG_BANG_KE_NOI_TINH = `${KHAI_THAC_DI}/dong-bang-ke-noi-tinh`;
 export const THONG_TIN_BANG_KE = `${KHAI_THAC_DI}/thong-tin-bang-ke`;
 export const DANH_SACH_BANG_KE = `${KHAI_THAC_DI}/danh-sach-bang-ke`;
 export const DANH_SACH_PHIEU_GUI = `${KHAI_THAC_DI}/danh-sach-phieu-gui`;
-export const DANH_SACH_PHIEU_GUI_TRONG_BANG_KE = `${KHAI_THAC_DI}/danh-sach-phieu-gui-trong-bang-ke/:manifestId`;
 export const DONG_TAI = `${KHAI_THAC_DI}/dong-tai`;
+export const DANH_SACH_PHIEU_GUI_TRONG_TAI = `${KHAI_THAC_DI}/danh-sach-phieu-gui-trong-tai`;
+export const DANH_SACH_PHIEU_GUI_TRONG_TAI_DA_DONG = `${KHAI_THAC_DI}/danh-sach-phieu-gui-trong-tai-da-dong`;
+export const DANH_SACH_PHIEU_GUI_TRONG_BANG_KE = `${KHAI_THAC_DI}/danh-sach-phieu-gui-trong-bang-ke`;
+export const DANH_SACH_PHIEU_GUI_TRONG_BANG_KE_DA_DONG = `${KHAI_THAC_DI}/danh-sach-phieu-gui-trong-bang-ke-da-dong`;
 export const DONG_CHUYEN_THU = `${KHAI_THAC_DI}/dong-chuyen-thu`;
+export const DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU = `${KHAI_THAC_DI}/danh-sach-tai-kien-trong-chuyen-thu`;
+export const DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU_DA_DONG = `${KHAI_THAC_DI}/danh-sach-tai-kien-trong-chuyen-thu-da-dong`;
 export const DANH_SACH_TAI_KIEN = `${KHAI_THAC_DI}/danh-sach-tai-kien`;
 export const TACH_PHIEU_GUI = `${KHAI_THAC_DI}/tach-phieu-gui`;
 
@@ -81,9 +86,14 @@ export default {
   THONG_TIN_BANG_KE,
   DANH_SACH_BANG_KE,
   DANH_SACH_PHIEU_GUI,
-  DANH_SACH_PHIEU_GUI_TRONG_BANG_KE,
   DONG_TAI,
+  DANH_SACH_PHIEU_GUI_TRONG_TAI,
+  DANH_SACH_PHIEU_GUI_TRONG_TAI_DA_DONG,
+  DANH_SACH_PHIEU_GUI_TRONG_BANG_KE,
+  DANH_SACH_PHIEU_GUI_TRONG_BANG_KE_DA_DONG,
   DONG_CHUYEN_THU,
+  DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU,
+  DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU_DA_DONG,
   DANH_SACH_TAI_KIEN,
   TACH_PHIEU_GUI,
   /**

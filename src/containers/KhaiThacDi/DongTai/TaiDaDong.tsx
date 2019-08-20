@@ -76,7 +76,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
   }
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_BANG_KE}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI_DA_DONG}/${item.TOR_ID}`));
     };
   };
   function renderTable(): JSX.Element {

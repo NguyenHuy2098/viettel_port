@@ -85,7 +85,11 @@ const DanhSachBangKe = Loadable({
   loading: Loading,
 });
 const DanhSachPhieuGuiTrongBangKe = Loadable({
-  loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc/DanhSachPhieuGuiTrongBangKe'),
+  loader: (): any => import('containers/KhaiThacDi/DongBangKe/DanhSachPhieuGuiTrongBangKe'),
+  loading: Loading,
+});
+const DanhSachPhieuGuiTrongBangKeDaDong = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongBangKe/DanhSachPhieuGuiTrongBangKeDaDong'),
   loading: Loading,
 });
 const DanhSachPhieuGui = Loadable({
@@ -96,8 +100,24 @@ const DongTai = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongTai'),
   loading: Loading,
 });
+const DanhSachPhieuGuiTrongTai = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachPhieuGuiTrongTai'),
+  loading: Loading,
+});
+const DanhSachPhieuGuiTrongTaiDaDong = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachPhieuGuiTrongTaiDaDong'),
+  loading: Loading,
+});
 const DongChuyenThu = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongChuyenThu'),
+  loading: Loading,
+});
+const DanhSachTaiKienTrongChuyenThu = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongChuyenThu/DanhSachTaiKienTrongChuyenThu'),
+  loading: Loading,
+});
+const DanhSachTaiKienTrongChuyenThuDaDong = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongChuyenThu/DanhSachTaiKienTrongChuyenThuDaDong'),
   loading: Loading,
 });
 const DanhSachTaiKien = Loadable({
@@ -160,7 +180,7 @@ const RedirectToHome = Loadable({
 });
 
 /* eslint-enable @typescript-eslint/no-explicit-any */
-
+// eslint-disable-next-line max-lines-per-function
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
     { path: routesMap.ROOT, exact: true, name: t('Root'), component: RedirectToHome },
@@ -176,6 +196,16 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.NHAP_TU_FILE_EXCEL, name: t('Nhập từ file excel'), component: NhapTuFileExcel },
     { path: routesMap.THONG_TIN_BANG_KE, name: t('Thông tin bảng kê'), component: ThongTinBangKe },
     { path: routesMap.DONG_TAI, name: t('Đóng tải'), component: DongTai },
+    {
+      path: routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI,
+      name: t('Danh sách phiêu gửi trong tải'),
+      component: DanhSachPhieuGuiTrongTai,
+    },
+    {
+      path: routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI_DA_DONG,
+      name: t('Danh sách phiêu gửi trong tải đã đóng'),
+      component: DanhSachPhieuGuiTrongTaiDaDong,
+    },
     { path: routesMap.DANH_SACH_TAI_KIEN, name: t('Danh sách tải kiện'), component: DanhSachTaiKien },
     { path: routesMap.DONG_CHUYEN_THU, name: t('Đóng chuyến thư'), component: DongChuyenThu },
     { path: routesMap.THONG_TIN_CHUYEN_THU, name: t('Thông tin chuyến thư'), component: ThongTinChuyenThu },
@@ -188,6 +218,21 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
       path: routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE,
       name: t('Danh sách phiếu gửi trong bảng kê'),
       component: DanhSachPhieuGuiTrongBangKe,
+    },
+    {
+      path: routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE_DA_DONG,
+      name: t('Danh sách phiếu gửi trong bảng kê đã đóng'),
+      component: DanhSachPhieuGuiTrongBangKeDaDong,
+    },
+    {
+      path: routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU,
+      name: t('Danh sách tải kiện trong chuyến thư'),
+      component: DanhSachTaiKienTrongChuyenThu,
+    },
+    {
+      path: routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU_DA_DONG,
+      name: t('Danh sách tải kiện trong chuyến thư đã đóng'),
+      component: DanhSachTaiKienTrongChuyenThuDaDong,
     },
     { path: routesMap.DANH_SACH_BANG_KE, name: t('Danh sách bảng kê'), component: DanhSachBangKe },
     { path: routesMap.KHAI_THAC_TAI, name: t('Khai thác tải'), component: KhaiThacTai },

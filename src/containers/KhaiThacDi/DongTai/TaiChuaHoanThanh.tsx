@@ -122,7 +122,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   }
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI}/${item.TOR_ID}`));
     };
   };
   function renderTable(): JSX.Element {
