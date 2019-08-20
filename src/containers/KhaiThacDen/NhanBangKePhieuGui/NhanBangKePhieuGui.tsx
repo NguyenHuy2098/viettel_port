@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Button, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';

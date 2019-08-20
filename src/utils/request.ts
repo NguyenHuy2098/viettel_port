@@ -2,7 +2,7 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { get, merge } from 'lodash';
 import store from 'redux/store';
 import { REACT_APP_API_ENDPOINT } from './env';
-import { throwErrorIfEmpty } from './errorHelpers';
+import { throwErrorIfMalformed } from './errorHelpers';
 
 /**
  * Configure default request config
@@ -47,7 +47,7 @@ sapApi.interceptors.request.use(
 
 sapApi.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => {
-    throwErrorIfEmpty(response);
+    throwErrorIfMalformed(response);
     return response;
   },
   (error): Promise<Error> => {

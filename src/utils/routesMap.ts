@@ -41,8 +41,8 @@ export const TRA_CUU_BIEN_BAN = `${DIEU_HANH}/tra-cuu-bien-ban`;
 
 export const KHAI_THAC_DEN = '/khai-thac-den';
 export const NHAN_CHUYEN_THU = `${KHAI_THAC_DEN}/nhan-chuyen-thu`;
+export const THONG_TIN_CHUYEN_THU = `${KHAI_THAC_DEN}/nhan-chuyen-thu/:idChuyenThu`;
 export const KHAI_THAC_CHUYEN_THU_DEN = `${KHAI_THAC_DEN}/khai-thac-chuyen-thu-den`;
-export const NHAN_TAI_KIEN = `${KHAI_THAC_DEN}/nhan-tai-kien/:idChuyenThu`;
 export const KHAI_THAC_TAI = `${KHAI_THAC_DEN}/khai-thac-tai`;
 export const NHAN_BANG_KE_PHIEU_GUI = `${KHAI_THAC_DEN}/nhan-bang-ke-phieu-gui/:idTaiKien`;
 
@@ -111,7 +111,7 @@ export default {
   KHAI_THAC_DEN,
   NHAN_CHUYEN_THU,
   KHAI_THAC_CHUYEN_THU_DEN,
-  NHAN_TAI_KIEN,
+  THONG_TIN_CHUYEN_THU,
   KHAI_THAC_TAI,
   NHAN_BANG_KE_PHIEU_GUI,
   /**

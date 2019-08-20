@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 

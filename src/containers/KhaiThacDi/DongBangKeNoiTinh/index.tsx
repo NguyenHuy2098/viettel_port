@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';

@@ -1,16 +1,15 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useState } from 'react';
 import { Button, Input, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { push, replace, getSearch } from 'connected-react-router';
-import { get, isArray, isEmpty, isNil, map } from 'lodash';
-import queryString from 'query-string';
+import { generatePath } from 'react-router-dom';
+import { push } from 'connected-react-router';
+import { map } from 'lodash';
 
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { makeSelectorCountMT_ZTMI046 } from 'redux/MIOA_ZTMI046/selectors';
-import { AppStateType } from 'redux/store';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 
@@ -18,10 +17,9 @@ import routesMap from 'utils/routesMap';
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const search = useSelector<AppStateType, string>(getSearch);
   const dataNhanChuyenThu = useSelector(makeSelectorNhanChuyenThu, shallowEqual);
   const countChuyenThu = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
-  const [codeChuyenThu, setCodeChuyenThu] = useState<string>('');
+  const [codeChuyenThu, setCodeChuyenThu] = useState<string>('4800000278');
   const [error, setError] = useState<string>('');
 
   // useEffect((): void => {
@@ -35,37 +33,6 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   //     }),
   //   );
   // }, [dispatch]);
-
-  useEffect((): void => {
-    const searchObject = queryString.parse(search);
-    let chuyenThu = get(searchObject, 'ZC3', codeChuyenThu);
-    if (!isEmpty(chuyenThu) && !isNil(chuyenThu)) {
-      if (isArray(chuyenThu)) {
-        setCodeChuyenThu(chuyenThu[0]);
-        chuyenThu = chuyenThu[0];
-      } else {
-        setCodeChuyenThu(chuyenThu);
-      }
-      dispatch(
-        action_MIOA_ZTMI046({
-          IV_TOR_ID: chuyenThu,
-        }),
-      );
-      dispatch(
-        action_MIOA_ZTMI023(
-          {
-            IV_ID: chuyenThu,
-          },
-          {
-            onFailure: (error: HttpRequestErrorType): void => {
-              setError(error.messages[0]);
-            },
-          },
-        ),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search]);
 
   function renderPagination(): JSX.Element {
     return (
@@ -102,7 +69,8 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   function renderOrderInformationTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thông tin chuyến thư')}</h1>
+        <h1 className="sipTitle">{t('Nhận chuyến thư')}</h1>
+        <Input className="w-25" type="search" placeholder={t('Quét mã tải kiện')} />
       </Row>
     );
   }
@@ -112,7 +80,23 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   }
 
   function handleSearchCodeChuyenThu(): void {
-    dispatch(replace({ search: queryString.stringify({ ZC3: codeChuyenThu }) }));
+    dispatch(
+      action_MIOA_ZTMI046({
+        IV_TOR_ID: codeChuyenThu,
+      }),
+    );
+    dispatch(
+      action_MIOA_ZTMI023(
+        {
+          IV_ID: codeChuyenThu,
+        },
+        {
+          onFailure: (error: HttpRequestErrorType): void => {
+            setError(error.messages[0]);
+          },
+        },
+      ),
+    );
   }
 
   function renderFindOrder(): JSX.Element {
@@ -136,11 +120,14 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       </Row>
     );
   }
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      dispatch(push(`${routesMap.NHAN_TAI_KIEN}/${item.TOR_ID}`));
-    };
-  };
+
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => (): void => {
+      dispatch(push(generatePath(routesMap.THONG_TIN_CHUYEN_THU, { idChuyenThu: item.TOR_ID })));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   // eslint-disable-next-line max-lines-per-function
   function renderTable(): JSX.Element {

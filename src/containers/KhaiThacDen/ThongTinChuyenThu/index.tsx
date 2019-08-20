@@ -1,14 +1,14 @@
-import * as React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import { match } from 'react-router-dom';
-import { get } from 'lodash';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import classNames from 'classnames';
 import { push } from 'connected-react-router';
+import { get } from 'lodash';
 import moment from 'moment';
+
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelectorCountMT_ZTMI046,
   useGet_MT_ZTMI046_OUT,
@@ -22,35 +22,31 @@ import TaiKienChuaNhan from './TaiKienChuaNhan';
 interface Props {
   match: match;
 }
+
 // eslint-disable-next-line max-lines-per-function
-const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
-  const [modalCreateNew, setmodalCreateNew] = React.useState<boolean>(false);
-  const { t } = useTranslation();
-  function toggle(): void {
-    setmodalCreateNew(!modalCreateNew);
-  }
-
-  const [tab, setTab] = useState<number>(1);
-
-  function handleChangeTab(tab: number): void {
-    setTab(tab);
-  }
+const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
-
+  const { t } = useTranslation();
+  const [tab, setTab] = useState<number>(1);
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
-
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
   const getInfoTaiKien = get(manifestForwardingOrderList, 'Row[0]');
   const countTaiKien = useSelector(makeSelectorCountMT_ZTMI046);
   const countKienChuaNhan = useSelector(makeSelectorCountKienChuaNhan);
   const countKienDaNhan = useSelector(makeSelectorCountKienDaNhan);
 
-  React.useEffect((): void => {
-    const payload = {
-      IV_TOR_ID: idChuyenThu,
-    };
-    dispatch(action_MIOA_ZTMI046(payload));
-  }, [dispatch, idChuyenThu]);
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
+  }
+
+  useEffect((): void => {
+    dispatch(
+      action_MIOA_ZTMI046({
+        IV_TOR_ID: idChuyenThu,
+      }),
+    );
+    // eslint-disable-next-line
+  }, [idChuyenThu]);
 
   const handleBackChuyenThu = (): void => {
     dispatch(push(routesMap.NHAN_CHUYEN_THU));
@@ -90,7 +86,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
             <Col xs="7">{getInfoTaiKien && getInfoTaiKien.LOG_LOCID_SRC}</Col>
           </Row>
           <Row>
-            <Col xs="5">{t('Ngày gửi')}: </Col>
+            <Col xs="5">{t('Ngày gửi')}:&nbsp;</Col>
             <Col xs="7">24/04/2019</Col>
           </Row>
         </Col>
@@ -101,12 +97,6 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
       <div className="row mt-3" />
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thông tin tải kiện')}</h1>
-        <div className="sipTitleRightBlock sipTitleRightBlock2">
-          <Button onClick={toggle}>
-            <i className="fa fa-gift fa-lg"></i>
-            {t('Nhận tải kiện')}
-          </Button>
-        </div>
       </Row>
       <div className="row mt-3" />
 
@@ -115,7 +105,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 1 })}
-              onClick={React.useCallback((): void => handleChangeTab(1), [])}
+              onClick={useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Tải kiện chưa nhận')}
               <Badge color="primary">{countKienChuaNhan}</Badge>
@@ -124,7 +114,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 2 })}
-              onClick={React.useCallback((): void => handleChangeTab(2), [])}
+              onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Tải kiện đã nhận')}
               <Badge color="primary">{countKienDaNhan}</Badge>
@@ -144,4 +134,4 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   );
 };
 
-export default ThongTinTai;
+export default ThongTinChuyenThu;

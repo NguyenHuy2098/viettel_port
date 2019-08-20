@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Row, Col } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function

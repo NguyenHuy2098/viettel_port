@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import * as React from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { FormEvent, useState } from 'react';
 import * as yup from 'yup';

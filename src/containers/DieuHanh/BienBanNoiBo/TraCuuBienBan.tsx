@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Row, Table, Col, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
