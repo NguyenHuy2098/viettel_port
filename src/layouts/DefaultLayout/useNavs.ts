@@ -122,6 +122,10 @@ const nav = (t: i18next.TFunction): any => {
             url: routesMap.NHAN_CHUYEN_THU,
           },
           {
+            name: t('Nhận tải kiện'),
+            url: routesMap.NHAN_TAI_KIEN,
+          },
+          {
             name: t('Khai thác chuyển thư đến'),
             url: routesMap.KHAI_THAC_CHUYEN_THU_DEN,
           },

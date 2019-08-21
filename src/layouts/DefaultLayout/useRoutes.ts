@@ -135,6 +135,10 @@ const NhanChuyenThu = Loadable({
   loader: (): any => import('containers/KhaiThacDen/NhanChuyenThu'),
   loading: Loading,
 });
+const NhanTaiKien = Loadable({
+  loader: (): any => import('containers/KhaiThacDen/NhanTaiKien'),
+  loading: Loading,
+});
 const KhaiThacChuyenThuDen = Loadable({
   loader: (): any => import('containers/KhaiThacDen/KhaiThacChuyenThuDen'),
   loading: Loading,
@@ -180,6 +184,7 @@ const RedirectToHome = Loadable({
 });
 
 /* eslint-enable @typescript-eslint/no-explicit-any */
+
 // eslint-disable-next-line max-lines-per-function
 const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
@@ -238,6 +243,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.KHAI_THAC_TAI, name: t('Khai thác tải'), component: KhaiThacTai },
     { path: routesMap.DANH_SACH_PHIEU_GUI, name: t('Danh sách phiếu gửi'), component: DanhSachPhieuGui },
     { path: routesMap.NHAN_CHUYEN_THU, name: t('Nhận chuyến thư'), component: NhanChuyenThu },
+    { path: routesMap.NHAN_TAI_KIEN, name: t('Nhận tải kiện'), component: NhanTaiKien },
     { path: routesMap.KHAI_THAC_CHUYEN_THU_DEN, name: t('Khai thác chuyển thư đến'), component: KhaiThacChuyenThuDen },
     { path: routesMap.ERROR_NO_DATA, name: t('Chưa có dữ liệu'), component: PageNoData },
     { path: routesMap.TIEP_XUC_KHACH_HANG, name: t('Tiếp xúc khách hàng'), component: TiepXucKhachHang },
