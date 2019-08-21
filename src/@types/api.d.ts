@@ -2475,6 +2475,79 @@ declare namespace API {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+  export interface TransportMethodItem {
+    SERVICE_TYPE: string;
+    SERVICE_TYPE_DES: string;
+    SERVICE_GROUP: string;
+    SERVICE_GROUP_DES: string;
+    TARGET_TIME?: any;
+  }
+
+  export interface MTZTMI068OUT {
+    EV_ERROR: number;
+    Row: TransportMethodItem[];
+  }
+
+  export interface MTZTMI068Response {
+    MT_ZTMI068_OUT: MTZTMI068OUT;
+    Status: boolean;
+    ErrorCode: number;
+    Messages: any[];
+    ObjectId?: any;
+    Version: number;
+  }
+  export interface VtpAddress {
+    I: string;
+    N: string;
+    P?: string;
+    type: number;
+  }
+  interface PackageItemErrors {
+    index: number;
+    errors: yup.ValidationError[];
+  }
+  export interface PackageItem {
+    Flag?: string;
+    PACKAGING_MATERIAL?: string;
+    Description?: string;
+    PACKAGE_TYPE?: string;
+    QUANTITY_OF_PACKAGE?: string | undefined;
+    QUANTITY_OF_UNIT?: string;
+    GROSS_WEIGHT?: string | undefined;
+    GROSS_WEIGHT_OF_UNIT?: string;
+    NET_WEIGHT?: string;
+    NET_WEIGHT_OF_UNIT?: string;
+    Length?: string | undefined;
+    Hight?: string | undefined;
+    Width?: string | undefined;
+    Note?: string;
+    GOODS_VALUE?: string | undefined;
+    Currency?: string;
+    COMODITY_CODE?: string;
+    COD?: string | undefined;
+    SERVICE_TYPE?: string;
+  }
+  export interface AddressPopupData {
+    province: string;
+    district: string;
+    ward: string;
+    detailAddress: string;
+    fullAddress: string;
+  }
+  export interface VtpAddressResponse {
+    LocationModels: VtpAddress[];
+    PageIndex: number;
+    PageSize: number;
+    TotalRow: number;
+    Status: boolean;
+    ErrorCode: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Messages: any[];
+    any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ObjectId?: any;
+    Version: number;
+  }
 }
 declare namespace Paths {
   namespace AddIndexLocation {

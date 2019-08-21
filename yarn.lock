@@ -12244,6 +12244,11 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
+react-table@^7.0.0-alpha.25:
+  version "7.0.0-alpha.25"
+  resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.0.0-alpha.25.tgz#2f501c2fc3aef28ceee7fa7ed67ee000c7a92993"
+  integrity sha512-C0c+ih/mRKvZNnWiFyUPfo+gPZFuB17l1/Rc7MmMxZCx6IK8b35uSxnnG6AnQCOzTWyNy9h1ht3ADP2BDLmCUQ==
+
 react-test-renderer@^16.0.0-0:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.8.6.tgz#188d8029b8c39c786f998aa3efd3ffe7642d5ba1"

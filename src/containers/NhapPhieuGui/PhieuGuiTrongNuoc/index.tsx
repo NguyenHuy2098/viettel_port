@@ -366,7 +366,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           const cuocChinhAmount = reduce(
             data,
             (total: number, item: API.ItemMTZTMI011OUT): number => {
-              return item.CHARGE_TYPE === phuongThucVanChuyen ? total + parseInt(item.AMOUNT_ITEM) : total;
+              return item.CHARGE_TYPE === phuongThucVanChuyen ? total + parseInt(item.AMOUNT_ITEM || '') : total;
             },
             0,
           );
@@ -377,7 +377,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               return findIndex(dichVuCongThem, (itemDichVuCongThem: string): boolean => {
                 return itemDichVuCongThem === item.CHARGE_TYPE;
               }) !== -1
-                ? total + parseInt(item.AMOUNT_ITEM)
+                ? total + parseInt(item.AMOUNT_ITEM || '')
                 : total;
             },
             0,

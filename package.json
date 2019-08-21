@@ -49,6 +49,7 @@
     "react-redux": "^7.1.0",
     "react-router-config": "^5.0.1",
     "react-router-dom": "^5.0.1",
+    "react-table": "^7.0.0-alpha.25",
     "react-test-renderer": "^16.9.0",
     "reactstrap": "^8.0.1",
     "redux": "^4.0.4",
