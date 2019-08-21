@@ -1,16 +1,13 @@
 import React, { useCallback, useState } from 'react';
 import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { match } from 'react-router-dom';
 import classNames from 'classnames';
 import TaiKienChuaNhan from './ChuyenThuChuaNhanTaiKien';
-
-interface Props {
-  match: match;
-}
+import TaiDaNhan from './TaiDaNhan';
+import NhanRiengTaiKien from './NhanRiengTaiKien';
 
 // eslint-disable-next-line max-lines-per-function
-const NhanTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
+const NhanTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
 
@@ -31,7 +28,7 @@ const NhanTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
       <div className="row mt-3" />
 
       <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs>
+        <Nav tabs className="shadow-sm">
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 1 })}
@@ -63,8 +60,12 @@ const NhanTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
           <TabPane tabId={1}>
             <TaiKienChuaNhan />
           </TabPane>
-          <TabPane tabId={2}>tab2</TabPane>
-          <TabPane tabId={3}>abc</TabPane>
+          <TabPane tabId={2}>
+            <TaiDaNhan />
+          </TabPane>
+          <TabPane tabId={3}>
+            <NhanRiengTaiKien />
+          </TabPane>
         </TabContent>
       </div>
     </>
