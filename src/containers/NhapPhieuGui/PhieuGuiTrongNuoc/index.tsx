@@ -403,8 +403,8 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         },
       ),
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     dispatchGetSummaryInformation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   // eslint-disable-next-line max-lines-per-function
