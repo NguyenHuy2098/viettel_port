@@ -79,7 +79,7 @@ declare namespace API {
     /**
      * Số tiền tương ứng với mã dịch vụ
      */
-    AMOUNT_ITEM?: string;
+    AMOUNT_ITEM: string;
     /**
      * Tiền tệ
      */

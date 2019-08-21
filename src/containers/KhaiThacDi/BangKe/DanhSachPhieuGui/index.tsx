@@ -47,7 +47,7 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
             <Col xs="7">BK_1209_BNH</Col>
           </Row>
           <Row>
-            <Col xs="5">{t('Trọng l')}: </Col>
+            <Col xs="5">{t('Trọng lượng')}: </Col>
             <Col xs="7">1400 g</Col>
           </Row>
         </Col>

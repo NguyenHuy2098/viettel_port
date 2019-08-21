@@ -1,16 +1,20 @@
 /* eslint-disable max-lines */
 import React from 'react';
+// import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
 import produce from 'immer';
+import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { get, filter, find, forEach, map, noop, set, size } from 'lodash';
+import { get, find, findIndex, forEach, map, noop, reduce, set, size, toString } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
+import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
 import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
+// import { makeSelectProfile } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
@@ -20,15 +24,12 @@ let dichVuCongThem: string[] = [];
 const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  // const dataSelectProfile = useSelector(makeSelectProfile, shallowEqual);
 
   const isVnPhoneMobile = /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
 
   const schema = yup.object().shape({
     maPhieuGui: yup.string().required(t('Vui lòng nhập mã phiếu gửi')),
-    phuPhi: yup
-      .number()
-      .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số')),
     maKhachHang: yup.string().required(t('Vui lòng nhập mã khách hàng')),
     dienThoaiSender: yup
       .string()
@@ -129,7 +130,6 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   }
   //__________________________________________________________
   const [maPhieuGui, setMaPhieuGui] = useState<string>('');
-  const [phuPhi, setPhuPhi] = useState<string>('0.00');
   const [maKhachHang, setMaKhachHang] = useState<string>('');
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
   const [hoTenSender, setHoTenSender] = useState<string>('');
@@ -177,6 +177,10 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   const [packageItemErrorsList, setPackageItemErrorsList] = useState<API.PackageItemErrors[]>([]);
   //________packageItem valid checking
   let tabValid = true;
+  //_______summary order amount
+  const [cuocChinh, setCuocChinh] = useState<string>('0 đ');
+  const [cuocCongThem, setCuocCongThem] = useState<string>('0 đ');
+  const [tongCuoc, setTongCuoc] = useState<string>('0 đ');
 
   //__________________ package item partial events
 
@@ -200,6 +204,26 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     COMODITY_CODE: 'V04',
     COD: '',
   };
+  const firstPackageItem = {
+    Flag: 'I',
+    PACKAGING_MATERIAL: '',
+    Description: tenHang,
+    PACKAGE_TYPE: '',
+    QUANTITY_OF_PACKAGE: soLuong,
+    QUANTITY_OF_UNIT: 'EA',
+    GROSS_WEIGHT: trongLuong,
+    GROSS_WEIGHT_OF_UNIT: 'g',
+    NET_WEIGHT: '100',
+    NET_WEIGHT_OF_UNIT: 'g',
+    Length: kichThuocDai,
+    Hight: kichThuocCao,
+    Width: kichThuocRong,
+    Note: ghiChu,
+    GOODS_VALUE: giaTri,
+    Currency: 'VND',
+    COMODITY_CODE: loaiHangHoa,
+    COD: tienThuHo,
+  };
   function addNewPackageItem(): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       draftState.push(newPackageItem);
@@ -211,12 +235,14 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       draftState.splice(index, 1);
     });
     setPackageItemArr(newArr);
+    dispatchGetSummaryInformation();
   }
   function adjustPackageItemValue(valueName: string, value: string | undefined, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], valueName, value);
     });
     setPackageItemArr(newArr);
+    dispatchGetSummaryInformation();
     // check validate
     if (isSubmit) {
       setCount(count + 1);
@@ -241,6 +267,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     setWardSender(data.ward);
     setDetailAddressSender(data.detailAddress);
     setDiaChiSender(data.fullAddress);
+    dispatchGetSummaryInformation();
     // check validate
     if (isSubmit) {
       setCount(count + 1);
@@ -252,6 +279,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     setWardReceiver(data.ward);
     setDetailAddressReceiver(data.detailAddress);
     setDiaChiReceiver(data.fullAddress);
+    dispatchGetSummaryInformation();
     // check validate
     if (isSubmit) {
       setCount(count + 1);
@@ -260,7 +288,6 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
 
   const validateData = {
     maPhieuGui,
-    phuPhi,
     maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
     dienThoaiSender,
     hoTenSender,
@@ -305,6 +332,63 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   //   COD: '',
   // };
 
+  // eslint-disable-next-line max-lines-per-function
+  function dispatchGetSummaryInformation(): void {
+    const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
+      draftState.unshift(firstPackageItem);
+    });
+    const servicePayload = find(
+      transportMethodArr,
+      (item: API.TransportMethodItem): boolean => item.SERVICE_GROUP === phuongThucVanChuyen,
+    );
+    const api011Payload = {
+      Movement_type: 'ZDD',
+      Ordering_party: 'TRUNGVT',
+      Sales_org: '',
+      Service_group: servicePayload ? servicePayload.SERVICE_TYPE : '',
+      Source_country: 'VN',
+      Source_city: provinceSender,
+      Source_district: districtSender,
+      Source_Ward: wardSender,
+      Destination_country: 'VN',
+      Destination_city: provinceReceiver,
+      Destination_district: districtReceiver,
+      Destination_Ward: wardReceiver,
+      FWO_type: 'V001',
+      Item: payloadPackageItemArr,
+    };
+    dispatch(
+      action_MIOA_ZTMI011(api011Payload, {
+        onFailure: (error: HttpRequestErrorType): void => {
+          // console.log(error);
+        },
+        onSuccess: (data: API.ItemMTZTMI011OUT[]): void => {
+          const cuocChinhAmount = reduce(
+            data,
+            (total: number, item: API.ItemMTZTMI011OUT): number => {
+              return item.CHARGE_TYPE === phuongThucVanChuyen ? total + parseInt(item.AMOUNT_ITEM) : total;
+            },
+            0,
+          );
+          setCuocChinh(toString(cuocChinhAmount) + ' đ');
+          const cuocCongThemAmount = reduce(
+            data,
+            (total: number, item: API.ItemMTZTMI011OUT): number => {
+              return findIndex(dichVuCongThem, (itemDichVuCongThem: string): boolean => {
+                return itemDichVuCongThem === item.CHARGE_TYPE;
+              }) !== -1
+                ? total + parseInt(item.AMOUNT_ITEM)
+                : total;
+            },
+            0,
+          );
+          setCuocCongThem(toString(cuocCongThemAmount) + ' đ');
+          setTongCuoc(cuocChinhAmount + cuocCongThemAmount + ' đ');
+        },
+      }),
+    );
+  }
+
   React.useEffect((): void => {
     dispatch(
       action_GET_TRANSPORT_METHOD(
@@ -319,6 +403,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         },
       ),
     );
+    dispatchGetSummaryInformation();
   }, [dispatch]);
 
   // eslint-disable-next-line max-lines-per-function
@@ -379,6 +464,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
+      dispatchGetSummaryInformation();
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -391,6 +477,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     forEach(dichVuCongThem, (item: string, index: number): void => {
       loaiHinhDichVu += '/' + item;
     });
+    dispatchGetSummaryInformation();
   }
 
   function handleChangeTransportMethod(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
@@ -425,26 +512,6 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
-    const firstPackageItem = {
-      Flag: 'I',
-      PACKAGING_MATERIAL: '',
-      Description: tenHang,
-      PACKAGE_TYPE: '',
-      QUANTITY_OF_PACKAGE: soLuong,
-      QUANTITY_OF_UNIT: 'EA',
-      GROSS_WEIGHT: trongLuong,
-      GROSS_WEIGHT_OF_UNIT: 'g',
-      NET_WEIGHT: '100',
-      NET_WEIGHT_OF_UNIT: 'g',
-      Length: kichThuocDai,
-      Hight: kichThuocCao,
-      Width: kichThuocRong,
-      Note: ghiChu,
-      GOODS_VALUE: giaTri,
-      Currency: 'VND',
-      COMODITY_CODE: loaiHangHoa,
-      COD: tienThuHo,
-    };
     const paramsPackageItem = {
       SERVICE_TYPE: loaiHinhDichVu,
       QUANTITY_OF_PACKAGE: '1',
@@ -606,7 +673,6 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     setIsSubmit(false);
     setErrors([]);
     setMaPhieuGui('');
-    setPhuPhi('');
     setMaKhachHang('');
     setDienThoaiSender('');
     setHoTenSender('');
@@ -656,7 +722,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               {t('HYPHEN', ':')}
             </Col>
             <Col xs="7" className="text-semibold">
-              12.000 đ
+              <NumberFormat value={cuocChinh} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
@@ -665,17 +731,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               {t('HYPHEN', ':')}
             </Col>
             <Col xs="7" className="text-semibold">
-              2.000 đ
-            </Col>
-          </Row>
-          <Row className="sipSendingCouponItem">
-            <Col xs="5">
-              {t('Phụ phí khác')}
-              {t('HYPHEN', ':')}
-            </Col>
-            <Col xs="7">
-              <Input type="text" value={phuPhi} onChange={handleChangeTextboxValue(setPhuPhi)} />
-              <div className="sipInputItemError">{handleErrorMessage(errors, 'phuPhi')}</div>
+              <NumberFormat value={cuocCongThem} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
             </Col>
           </Row>
         </Row>
@@ -684,7 +740,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
           <Row className="sipSendingCouponItem mb-3">
             <Col xs="6">{t('Tổng cước')}</Col>
             <Col xs="6" className="color-orange text-semibold">
-              29.000 đ
+              <NumberFormat value={tongCuoc} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
             </Col>
           </Row>
         </Row>
@@ -863,11 +919,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
               onChange={handleChangeTransportMethod(setPhuongThucVanChuyen)}
             >
               {map(
-                filter(
-                  transportMethodArr,
-                  (item: API.TransportMethodItem): boolean =>
-                    item.SERVICE_GROUP === 'V01' || item.SERVICE_GROUP === 'V02',
-                ),
+                transportMethodArr,
                 (item: API.TransportMethodItem): JSX.Element => {
                   return (
                     <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
@@ -895,7 +947,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
         </h3>
         <Row className="sipInputItem">
           {map(
-            filter(transportMethodArr, (item: API.TransportMethodItem): boolean => item.SERVICE_GROUP === 'V04'),
+            transportMethodArr,
             (item: API.TransportMethodItem): JSX.Element => {
               return (
                 <Label key={item.SERVICE_TYPE} check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">

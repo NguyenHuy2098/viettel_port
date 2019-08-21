@@ -208,7 +208,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.KHIEU_NAI_KHACH_HANG, name: t('Khiếu nại khách hàng'), component: KhieuNaiKhachHang },
     { path: routesMap.CHI_TIET_KHIEU_NAI, name: t('Chi tiết khiếu nại'), component: ChiTietKhieuNai },
     { path: routesMap.BAO_CAO, name: t('Báo cáo'), component: BaoCao },
-    { path: routesMap.NHAN_TAI_BUU_CUC_GOC, name: t('Nhận tại bưu cục gốc'), component: NhanTaiBuuCucGoc },
+    { path: routesMap.NHAN_TAI_BUU_CUC_GOC, name: t('Quét mã phiếu gửi'), component: NhanTaiBuuCucGoc },
   ];
 };
 

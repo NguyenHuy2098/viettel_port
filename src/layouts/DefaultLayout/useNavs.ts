@@ -47,7 +47,7 @@ const nav = (t: i18next.TFunction): any => {
         ],
       },
       {
-        name: t('Nhập phiếu gửi'),
+        name: t('Nhận tại bưu cục gốc '),
         icon: 'icon-note',
         url: routesMap.NHAP_PHIEU_GUI,
         children: [
@@ -64,7 +64,7 @@ const nav = (t: i18next.TFunction): any => {
             url: routesMap.NHAP_TU_FILE_EXCEL,
           },
           {
-            name: t('Nhận tại bưu cục gốc'),
+            name: t('Quét mã phiếu gửi'),
             url: routesMap.NHAN_TAI_BUU_CUC_GOC,
           },
         ],
