@@ -1,1 +1,23 @@
-// Variable overrides
+// Custom.scss
+// Option A: Include all of Bootstrap
+
+//@import '~bootstrap/scss/bootstrap';
+
+$theme-colors: (
+  'primary': #299f9a,
+  'secondary': #fd8301,
+  'danger': #eb3c66,
+  'info': #3d88e1,
+);
+
+$colors: (
+  'blue': #3d88e1,
+  'bluegreen': #2db4a1,
+  'green': #2c9859,
+  'orange': #fd8301,
+  'red': #eb3c66,
+  'violet': #a775d5,
+  'black': #000000,
+  'white': #ffffff,
+  'gray': #a4aaae,
+);

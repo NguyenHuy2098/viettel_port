@@ -5,35 +5,12 @@
   }
 }
 
-$colors: map-merge(
-  $colors,
-  (
-    'blue': #3d88e1,
-    'bluegreen': #2db4a1,
-    'green': #2c9859,
-    'orange': #fd8301,
-    'red': #eb3c66,
-    'violet': #a775d5,
-    'black': #000000,
-    'white': #ffffff,
-    'gray': #a4aaae
-  )
-);
-
 // color-xxx
 @each $color, $value in $colors {
   .color-#{$color} {
     color: $value;
   }
 }
-
-$theme-colors: map-merge(
-  $theme-colors,
-  (
-    'primary': #2c9859,
-    'secondary': #fd8301,
-  )
-);
 
 // color-xxx
 @each $color, $value in $theme-colors {

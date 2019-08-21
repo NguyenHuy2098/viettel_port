@@ -79,7 +79,7 @@ declare namespace API {
     /**
      * Số tiền tương ứng với mã dịch vụ
      */
-    AMOUNT_ITEM: string;
+    AMOUNT_ITEM?: string;
     /**
      * Tiền tệ
      */
@@ -95,18 +95,18 @@ declare namespace API {
     CHARGE_TYPE?: string;
   }
   export interface ItemZTMI011 {
-    ITEM_CAT?: string;
-    GROSS_WEIGHT?: string;
-    NET_WEIGHT?: string;
+    item_cat?: string;
+    Gross_weight?: string;
+    Net_weight?: string;
     Height?: string;
     Length?: string;
     Width?: string;
     Currency?: string;
     COD?: string;
-    INSURANCE_VALUE?: string;
-    WEIGHT_UOM?: string;
-    DIMENSION_UOM?: string;
-    Quantity?: string;
+    Insurance_value?: string;
+    Weight_UoM?: string;
+    Dimension_UoM?: string;
+    quantity?: string;
     COMMODITY_TYPE?: string;
   }
   export interface ItemZTMI012 {
@@ -186,52 +186,52 @@ declare namespace API {
     /**
      * Mã loại đơn hàng: V001: Đơn hàng xã phường/xã của điểm nhận hàng
      */
-    FWO_TYPE?: string;
+    FWO_type?: string;
     /**
      * Mã tổ chức mua hàng: Tạm thời sử dụng mã 50000005 cho VTP, chờ chốt về cấu trúc tổ chức có thay đổi sẽ báo lại
      */
-    SALES_ORG?: string;
-    SERVICE_GROUP?: string;
+    Sales_org?: string;
+    Service_group?: string;
     /**
      * Mã khách hàng
      */
-    ORDERING_PARTY?: string;
+    Ordering_party?: string;
     /**
      * Loại giao nhận: ZDD: nhận trả tại nhà, ZPD – nhận bc trả tại nhà
      */
-    MOVEMENT_TYPE?: string;
+    Movement_type?: string;
     /**
      * Mã quốc gia của điểm nhận hàng
      */
-    SOURCE_COUNTRY?: string;
+    Source_country?: string;
     /**
      * Mã tỉnh/thành của điểm nhận hàng
      */
-    SOURCE_CITY?: string;
+    Source_city?: string;
     /**
      * Mã quận/huyện của điểm nhận hàng
      */
-    SOURCE_DISTRICT?: string;
+    Source_district?: string;
     /**
      * Mã phường/xã của điểm nhận hàng
      */
-    SOURCE_WARD?: string;
+    Source_Ward?: string;
     /**
      * Mã quốc gia của điểm giao hàng
      */
-    DESTINATION_COUNTRY?: string;
+    Destination_country?: string;
     /**
      * Mã tỉnh/thành của điểm giao hàng
      */
-    DESTINATION_CITY?: string;
+    Destination_city?: string;
     /**
      * Mã quận/huyện của điểm giao hàng
      */
-    DESTINATION_DISTRICT?: string;
+    Destination_district?: string;
     /**
      * Mã phường/xã của điểm giao hàng
      */
-    DESTINATION_WARD?: string;
+    Destination_Ward?: string;
     Item?: ItemZTMI011[];
     LanguageId?: string;
     LanguageDefaultId?: string;
@@ -1157,7 +1157,7 @@ declare namespace API {
     /**
      *
      */
-    Row?: RowMTZTMI011OUT;
+    Row?: RowMTZTMI011OUT[];
   }
   export interface MTZTMI012OUT {
     EV_ERROR?: string;
@@ -1177,7 +1177,7 @@ declare namespace API {
     /**
      *
      */
-    RETURN_MESSAGE?: RETURNMESSAGE;
+    RETURN_MESSAGE?: RETURNMESSAGE[];
   }
   export interface MTZTMI017OUT {
     /**
@@ -2474,79 +2474,6 @@ declare namespace API {
   export interface ZTMI063OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
-  }
-  export interface TransportMethodItem {
-    SERVICE_TYPE: string;
-    SERVICE_TYPE_DES: string;
-    SERVICE_GROUP: string;
-    SERVICE_GROUP_DES: string;
-    TARGET_TIME?: any;
-  }
-
-  export interface MTZTMI068OUT {
-    EV_ERROR: number;
-    Row: TransportMethodItem[];
-  }
-
-  export interface MTZTMI068Response {
-    MT_ZTMI068_OUT: MTZTMI068OUT;
-    Status: boolean;
-    ErrorCode: number;
-    Messages: any[];
-    ObjectId?: any;
-    Version: number;
-  }
-  export interface VtpAddress {
-    I: string;
-    N: string;
-    P?: string;
-    type: number;
-  }
-  interface PackageItemErrors {
-    index: number;
-    errors: yup.ValidationError[];
-  }
-  export interface PackageItem {
-    Flag?: string;
-    PACKAGING_MATERIAL?: string;
-    Description?: string;
-    PACKAGE_TYPE?: string;
-    QUANTITY_OF_PACKAGE?: string | undefined;
-    QUANTITY_OF_UNIT?: string;
-    GROSS_WEIGHT?: string | undefined;
-    GROSS_WEIGHT_OF_UNIT?: string;
-    NET_WEIGHT?: string;
-    NET_WEIGHT_OF_UNIT?: string;
-    Length?: string | undefined;
-    Hight?: string | undefined;
-    Width?: string | undefined;
-    Note?: string;
-    GOODS_VALUE?: string | undefined;
-    Currency?: string;
-    COMODITY_CODE?: string;
-    COD?: string | undefined;
-    SERVICE_TYPE?: string;
-  }
-  export interface AddressPopupData {
-    province: string;
-    district: string;
-    ward: string;
-    detailAddress: string;
-    fullAddress: string;
-  }
-  export interface VtpAddressResponse {
-    LocationModels: VtpAddress[];
-    PageIndex: number;
-    PageSize: number;
-    TotalRow: number;
-    Status: boolean;
-    ErrorCode: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Messages: any[];
-    any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ObjectId?: any;
-    Version: number;
   }
 }
 declare namespace Paths {
