@@ -1,7 +1,8 @@
-import React from 'react';
-import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from 'reactstrap';
+import React, { useMemo } from 'react';
+import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
+import { Cell } from 'react-table';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
@@ -38,54 +39,79 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
       </Modal>
     );
   }
+  const data = [
+    {
+      TOR_ID: 42365,
+      FR_LOG_ID: 'yut',
+      TO_LOG_ID: 'adff',
+      countChuyenThu: 12,
+      GRO_WEI_VAL: 2500,
+      CREATED_ON: '12/12/2019',
+      NOTE_OF: 'Kcg',
+    },
+    {
+      TOR_ID: 42365,
+      FR_LOG_ID: 'yut',
+      TO_LOG_ID: 'adff',
+      countChuyenThu: 12,
+      GRO_WEI_VAL: 2500,
+      CREATED_ON: '12/12/2019',
+      NOTE_OF: 'Kcg',
+    },
+  ];
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã bảng kê'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Bưu cục đi'),
+        accessor: 'FR_LOG_ID',
+      },
+      {
+        Header: t('Bưu cục đến'),
+        accessor: 'TO_LOG_ID',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Người nhập'),
+        accessor: 'PERSONAL_EN',
+      },
+      {
+        Header: t('Ngày nhập'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Ghi chú'),
+        accessor: 'NOTE_OF',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
-  function renderPagination(): JSX.Element {
-    return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-    );
-  }
-
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -107,33 +133,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
       </p>
       <Row className="mt-3" />
       <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>{t('Mã bảng kê')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-        {renderPagination()}
+        <DataTable columns={columns} data={data} />
       </Row>
     </>
   );

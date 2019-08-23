@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useState, useCallback } from 'react';
-import { Button, Col, Input, Nav, NavLink, NavItem, Row, Table, TabContent, TabPane } from 'reactstrap';
+import { Button, Col, Input, Nav, NavLink, NavItem, Row, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
+import { Cell } from 'react-table';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachPhieuGui: React.FC = (): JSX.Element => {
@@ -13,6 +15,10 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
   const handleBack = (): void => {
     dispatch(goBack());
   };
+  const [tab, setTab] = useState<number>(1);
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
+  }
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
@@ -67,7 +73,6 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
       </Row>
     );
   }
-
   function renderShippingInformationAndScanCode(): JSX.Element {
     return (
       <div className="sipContentContainer">
@@ -80,69 +85,56 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
       </div>
     );
   }
-
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
-
-  function renderTable(): JSX.Element {
-    return (
-      <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>Số vận đơn</th>
-              <th>Bưu cục đến</th>
-              <th>Số lượng</th>
-              <th>Trọng lượng</th>
-              <th>Ngày gửi</th>
-              <th>Quản trị</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>41100035876</td>
-              <td>BNE</td>
-              <td>2</td>
-              <td>250 g</td>
-              <td>19/6/2019</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-            <tr>
-              <td>41100035876</td>
-              <td>BNE</td>
-              <td>2</td>
-              <td>250 g</td>
-              <td>19/6/2019</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-            <tr>
-              <td>41100035876</td>
-              <td>BNE</td>
-              <td>2</td>
-              <td>250 g</td>
-              <td>19/6/2019</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Row>
-    );
-  }
-
-  const [tab, setTab] = useState<number>(1);
-  function handleChangeTab(tab: number): void {
-    setTab(tab);
-  }
+  const data = [
+    {
+      TOR_ID: 4545,
+      TO_LOG_ID: 'bcd',
+      countChuyenThu: 12,
+      GRO_WEI_VAL: 1200,
+      CREATED_ON: '12/12/2019',
+    },
+  ];
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Số vận đơn'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Bưu cục đến'),
+        accessor: 'TO_LOG_ID',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Trọng lượng'),
+        accessor: 'GRO_WEI_VAL',
+      },
+      {
+        Header: t('Ngày gửi'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <>
@@ -168,10 +160,15 @@ const DanhSachPhieuGui: React.FC = (): JSX.Element => {
           </NavItem>
         </Nav>
         <TabContent activeTab={tab}>
-          <TabPane tabId={1}>{renderTable()}</TabPane>
+          <TabPane tabId={1}>
+            <Row className="sipTableContainer">
+              <DataTable columns={columns} data={data} />
+            </Row>
+          </TabPane>
           <TabPane tabId={2}>
-            {renderTable()}
-            {renderTable()}
+            <Row className="sipTableContainer">
+              <DataTable columns={columns} data={data} />
+            </Row>
           </TabPane>
         </TabContent>
       </div>

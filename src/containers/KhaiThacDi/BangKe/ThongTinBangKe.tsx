@@ -1,59 +1,78 @@
-import React from 'react';
-import { Button, Input, Table, Row, Col, Label } from 'reactstrap';
+import React, { useMemo } from 'react';
+import { Button, Row, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { Cell } from 'react-table';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const ThongTinBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-      </>
-    );
-  }
-
-  function renderTable(): JSX.Element {
-    return (
-      <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th></th>
-              <th>{t('Số vận đơn')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
-              <th>{t('Trọng lượng')}</th>
-              <th>{t('Ngày tạo')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Row>
-    );
-  }
+  const data = [
+    {
+      TOR_ID: 42365,
+      FR_LOG_ID: 'yut',
+      TO_LOG_ID: 'adff',
+      countChuyenThu: 12,
+      GRO_WEI_VAL: 2500,
+      CREATED_ON: '12/12/2019',
+      NOTE_OF: 'Kcg',
+    },
+    {
+      TOR_ID: 42365,
+      FR_LOG_ID: 'yut',
+      TO_LOG_ID: 'adff',
+      countChuyenThu: 12,
+      GRO_WEI_VAL: 2500,
+      CREATED_ON: '12/12/2019',
+      NOTE_OF: 'Kcg',
+    },
+  ];
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Số vận đơn'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Bưu cục đi'),
+        accessor: 'FR_LOG_ID',
+      },
+      {
+        Header: t('Bưu cục đến'),
+        accessor: 'TO_LOG_ID',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Trọng lượng'),
+        accessor: 'GRO_WEI_VAL',
+      },
+      {
+        Header: t('Ngày tạo'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Ghi chú'),
+        accessor: 'NOTE_OF',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <>
@@ -102,7 +121,9 @@ const ThongTinBangKe: React.FC = (): JSX.Element => {
           {t('Tổng số')}: 5
         </Col>
       </Row>
-      {renderTable()}
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} />
+      </Row>
     </>
   );
 };

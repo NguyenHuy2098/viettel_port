@@ -1,8 +1,11 @@
 import * as React from 'react';
-import { Button, Col, Input, Row, Table, Label } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
+import { useMemo } from 'react';
+import { Cell } from 'react-table';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachPhieuGuiTrongBangKe: React.FC = (): JSX.Element => {
@@ -87,63 +90,79 @@ const DanhSachPhieuGuiTrongBangKe: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
+  const data = [
+    {
+      TOR_ID: 4545,
+      TO_LOG_ID: 'bcd',
+      countChuyenThu: 12,
+      WEIGHT: 1200,
+      CREATED_ON: '12/12/2019',
+      TYPE_OF: 'tải',
+    },
+    {
+      TOR_ID: 4545,
+      TO_LOG_ID: 'bcd',
+      countChuyenThu: 12,
+      WEIGHT: 1200,
+      CREATED_ON: '12/12/2019',
+      TYPE_OF: 'Note',
+    },
+  ];
 
-  function renderTable(): JSX.Element {
-    return (
-      <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Mã BK/ Phiếu gửi</th>
-              <th>Điểm đến</th>
-              <th>Số lượng</th>
-              <th>Trọng lượng</th>
-              <th>Ngày gửi</th>
-              <th>Loại</th>
-              <th>Quản trị</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td className="text-center">
-                <Label check>
-                  {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="checkbox" />
-                </Label>
-              </td>
-              <td>41100035876</td>
-              <td>BNE</td>
-              <td>2</td>
-              <td>250 g</td>
-              <td>19/6/2019</td>
-              <td>Bảng kê</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Row>
-    );
-  }
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã BK/PG'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Điểm đến'),
+        accessor: 'TO_LOG_ID',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Trọng lượng'),
+        accessor: 'WEIGHT',
+      },
+      {
+        Header: t('Ngày gửi'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Loại'),
+        accessor: 'TYPE_OF',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <>
       {renderTitle()}
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
-      <div className="sipTabContainer">{renderTable()}</div>
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} />
+      </Row>
     </>
   );
 };

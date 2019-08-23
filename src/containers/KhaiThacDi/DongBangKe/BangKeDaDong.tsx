@@ -1,16 +1,17 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Input, Label, Row, Table } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
-import { map, noop } from 'lodash';
-
-import Pagination from 'components/Pagination';
+import { map, get } from 'lodash';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import routesMap from 'utils/routesMap';
+import { Cell } from 'react-table';
+import moment from 'moment';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeDaDong: React.FC = (): JSX.Element => {
@@ -45,10 +46,6 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
     getListBangKe(payload);
   }
 
-  function onPageChange(selectedItem: { selected: number }): void {
-    noop(selectedItem);
-  }
-
   const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       const payload = {
@@ -73,70 +70,68 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
     };
   };
 
-  function renderAction(item: API.RowMTZTMI047OUT): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <ModalPopupConfirm handleDoSomething={handleDeleteManifest(item)} />
-      </>
-    );
-  }
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE_DA_DONG}/${item.TOR_ID}`));
     };
   };
-  function renderTable(): JSX.Element {
-    return (
-      <>
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th />
-              <th>{t('Mã bảng kê')}</th>
-              <th>{t('Điểm đến')}</th>
-              <th>{t('SL')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {map(
-              listBangKeChuaDongTai,
-              (item: API.RowMTZTMI047OUT, index): JSX.Element => {
-                return (
-                  <tr key={index} onClick={handleRedirectDetail(item)}>
-                    <td className="text-center">
-                      <Label check>
-                        {/* eslint-disable-next-line react/jsx-max-depth */}
-                        <Input type="checkbox" />
-                      </Label>
-                    </td>
-                    <td>{item.TOR_ID}</td>
-                    <td></td>
-                    <td>{item.ITEM_NO}</td>
-                    <td></td>
-                    <td>{item.DATETIME_CHLC}</td>
-                    <td>{item.EXEC_CONT}</td>
-                    <td className="SipTableFunctionIcon">{renderAction(item)}</td>
-                  </tr>
-                );
-              },
-            )}
-          </tbody>
-        </Table>
-        <Pagination pageRangeDisplayed={5} marginPagesDisplayed={2} pageCount={100} onPageChange={onPageChange} />
-      </>
-    );
-  }
 
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã bảng kê'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Điểm đến'),
+        accessor: 'LOG_LOCID_TO',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Người nhập'),
+        accessor: 'PERSONAL',
+      },
+      {
+        Header: t('Ngày nhập'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Ghi chú'),
+        accessor: 'NOTE_OF',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <ModalPopupConfirm handleDoSomething={handleDeleteManifest} />
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const data = map(get(listBangKeChuaDongTai, 'Row[0].CHILDS'), (item: API.RowMTZTMI047OUT) => {
+    return {
+      TOR_ID: item.TOR_ID,
+      LOG_LOCID_TO: item.LOG_LOCID_TO,
+      PERSONAL: item.ITEM_NO,
+      countChuyenThu: 222,
+      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
+      NOTE_OF: item.EXEC_CONT,
+    };
+  });
   return (
     <>
       <Row className="sipContentContainer">
@@ -161,7 +156,9 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
         </Col>
       </Row>
       <div className="mt-3" />
-      <Row className="sipTableContainer">{renderTable()}</Row>
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+      </Row>
     </>
   );
 };
