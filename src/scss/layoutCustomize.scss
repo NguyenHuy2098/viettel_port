@@ -398,6 +398,14 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
         font-size: 12px;
       }
     }
+    .SipTableFunctionIcon{
+      padding: 0;
+      background: none;
+      border: none;
+      box-shadow: none;
+      margin: 0 10px;
+      font-size: 12px;
+    }
   }
 }
 .sipTableRowClickable tr {

@@ -1,72 +1,60 @@
-import React from 'react';
-import { Button, Row, Input, Pagination, PaginationItem, PaginationLink, Table } from 'reactstrap';
+import React, { useMemo } from 'react';
+import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuChuaNhanTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã chuyến thư'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Bưu cục đi'),
+        accessor: 'FR_LOG_ID',
+      },
+      {
+        Header: t('Bưu cục đến'),
+        accessor: 'TO_LOG_ID',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Trọng lượng'),
+        accessor: 'GRO_WEI_VAL',
+      },
+      {
+        Header: t('Ngày tạo'),
+        accessor: 'CREATED_ON',
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
-  function renderPagination(): JSX.Element {
-    return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left" />
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right" />
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-    );
-  }
-
-  function renderTable(): JSX.Element {
-    return (
-      <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>{t('Mã chuyến thư')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('SL')}</th>
-              <th>{t('Trọng lượng')}</th>
-              <th>{t('Ngày tạo')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>ABCGJHJJJK</td>
-              <td>KDV</td>
-              <td>NT2</td>
-              <td>02</td>
-              <td>1000g</td>
-              <td>12/02/2019</td>
-            </tr>
-          </tbody>
-        </Table>
-        {renderPagination()}
-      </Row>
-    );
-  }
+  const data = [
+    {
+      TOR_ID: 1234,
+      FR_LOG_ID: 'abc',
+      TO_LOG_ID: 'bcd',
+      countChuyenThu: 12,
+      GRO_WEI_VAL: 1200,
+      CREATED_ON: '12/12/2019',
+    },
+    {
+      TOR_ID: 42365,
+      FR_LOG_ID: 'yut',
+      TO_LOG_ID: 'adff',
+      countChuyenThu: 12,
+      GRO_WEI_VAL: 2500,
+      CREATED_ON: '12/12/2019',
+    },
+  ];
 
   return (
     <>
@@ -83,7 +71,9 @@ const ChuyenThuChuaNhanTaiKien: React.FC = (): JSX.Element => {
           </div>
         </Row>
       </div>
-      {renderTable()}
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} />
+      </Row>
     </>
   );
 };
