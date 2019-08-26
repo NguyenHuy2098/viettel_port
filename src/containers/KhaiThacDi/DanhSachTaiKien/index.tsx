@@ -66,7 +66,7 @@ const DanhSachTaiKien: React.FC = (): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button>
+          <Button className="sipTitleBtnBack">
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           {t('Danh sách tải kiện trong chuyển thư')}

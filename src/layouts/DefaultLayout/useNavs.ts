@@ -162,14 +162,9 @@ const nav = (t: i18next.TFunction): any => {
         ],
       },
       {
-        name: t('Thông tin đơn hàng'),
+        name: t('Thông tin kiện hàng'),
         icon: 'icon-info',
-        url: routesMap.THONG_TIN_DON_HANG,
-      },
-      {
-        name: t('Thông tin đơn hàng 2'),
-        icon: 'icon-info',
-        url: routesMap.THONG_TIN_DON_HANG_2,
+        url: routesMap.THONG_TIN_KIEN_HANG,
       },
       {
         name: t('Thông tin đơn hàng new'),

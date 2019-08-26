@@ -14,6 +14,7 @@ const sapApis = [
   'SearchLocation',
   'SIOA_ZTMI068',
   'MIOA_ZTMI011',
+  'MIOA_ZTMI031',
 ];
 
 /**

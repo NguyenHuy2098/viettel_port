@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Badge,
-  Button,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  FormGroup,
-  Input,
-  Nav,
-  NavItem,
-  ButtonDropdown,
-} from 'reactstrap';
+import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, ButtonDropdown } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 // @ts-ignore
@@ -19,6 +8,7 @@ import logo from 'assets/img/logo.png';
 import { logout } from 'redux/auth/actions';
 import { makeSelectProfile } from 'redux/auth/selectors';
 import routesMap from 'utils/routesMap';
+import HeaderSearch from 'components/HeaderSearch/Index';
 
 // eslint-disable-next-line max-lines-per-function
 const DefaultHeader: React.FC = (): JSX.Element => {
@@ -160,12 +150,7 @@ const DefaultHeader: React.FC = (): JSX.Element => {
       />
       <AppSidebarToggler className="d-md-down-none" display="lg" />
 
-      <FormGroup className="sipHeaderSearch">
-        <Input type="text" placeholder="Tra cứu đơn hàng" />
-        <Button>
-          <i className="fa fa-search fa-lg" />
-        </Button>
-      </FormGroup>
+      <HeaderSearch />
       {renderNav()}
     </>
   );

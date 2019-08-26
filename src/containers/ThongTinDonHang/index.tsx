@@ -1,125 +1,138 @@
-import React from 'react';
-import { Button, Table, Row, Col } from 'reactstrap';
+import React, { ChangeEvent, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Cell } from 'react-table';
+import { match } from 'react-router-dom';
+import { map, get } from 'lodash';
+import DataTable from 'components/DataTable';
+import { Button, Row, Col } from 'reactstrap';
+import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
+import { useGet_MT_ZTMI031_OUT, useGet_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
+
+interface Props {
+  match: match;
+}
 
 // eslint-disable-next-line max-lines-per-function
-const OrderInformation: React.FC = (): JSX.Element => {
+const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const idDonHang = get(props, 'match.params.idDonHang');
+  const orderInformation = useSelector(useGet_MT_ZTMI031_OUT);
+  const orderInformationInstane = useSelector(useGet_MT_ZTMI031_INSTANE);
+  const orderInfoTableData = map(
+    orderInformation,
+    (item: API.RowMTZTMI031OUT, index: number): API.RowMTZTMI031OUT => {
+      return {
+        PACKAGE_ID: item.PACKAGE_ID,
+        ITEM_DESCRIPTION: item.ITEM_DESCRIPTION,
+        FWO: item.FWO,
+        GROSS_WEIGHT: item.GROSS_WEIGHT ? parseFloat(item.GROSS_WEIGHT).toFixed(2) : '',
+        Quantity: item.Quantity ? parseFloat(item.Quantity).toFixed(2) : '',
+        SERVICE_TYPE: item.SERVICE_TYPE,
+      };
+    },
+  );
+
+  const payloadFirstLoad = {
+    FWO_ID: idDonHang,
+    BUYER_REFERENCE_NUMBER: '',
+  };
+
+  React.useEffect((): void => {
+    dispatch(action_MIOA_ZTMI031(payloadFirstLoad));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
+
+  function handleRedirectDetail(e: ChangeEvent<HTMLInputElement>): void {
+    // console.log(e);
+  }
+
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã kiện hàng'),
+        accessor: 'PACKAGE_ID',
+      },
+      {
+        Header: t('Tên hàng'),
+        accessor: 'ITEM_DESCRIPTION',
+      },
+      {
+        Header: t('Giá trị'),
+        accessor: 'FWO',
+      },
+      {
+        Header: t('Trọng lượng'),
+        accessor: 'GROSS_WEIGHT',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'Quantity',
+      },
+      {
+        Header: t('Dịch vụ'),
+        accessor: 'SERVICE_TYPE',
+      },
+      {
+        Header: t('Quản trị'),
+        accessor: '',
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   function renderTable(): JSX.Element {
     return (
-      <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>{t('Mã bưu cục')}</th>
-              <th>{t('Thời gian')}</th>
-              <th>{t('Trạng thái')}</th>
-              <th>{t('Thông tin bảng kê')}</th>
-              <th>{t('Người tác động')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>LHA - Hà Nội</td>
-              <td>11:12 ∙ 19/05/2019</td>
-              <td>Giao cho bưu cục (103)</td>
-              <td>CT_335_DHNI TAT_194_DTHNI</td>
-              <td>NV: Huy PV ∙ 0988753468</td>
-            </tr>
-            <tr>
-              <td>LHA - Hà Nội</td>
-              <td>11:12 ∙ 19/05/2019</td>
-              <td>Giao cho bưu cục (103)</td>
-              <td>CT_335_DHNI TAT_194_DTHNI</td>
-              <td>NV: Huy PV ∙ 0988753468</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Row>
-    );
-  }
-
-  function renderOrderInformation(): JSX.Element {
-    return (
-      <Col xl="4" xs="12" className="mb-4">
-        <div className="sipContentContainer">
-          <div className="sipInputBlock">
-            <h3>Thông tin đơn hàng</h3>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5">
-                Trạng thái:
-              </Col>
-              <Col xs="12" sm="7">
-                Giao bưu tá phát
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5">
-                Trọng lượng:
-              </Col>
-              <Col xs="12" sm="7">
-                900 g
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5">
-                Tổng cước:
-              </Col>
-              <Col xs="12" sm="7">
-                15.000 đ
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5">
-                {t('Tiền thu hộ')}:
-              </Col>
-              <Col xs="12" sm="7">
-                0 đ
-              </Col>
-            </Row>
-          </div>
-        </div>
-      </Col>
+      <>
+        <DataTable columns={columns} data={orderInfoTableData} onRowClick={handleRedirectDetail} />
+      </>
     );
   }
 
   function renderSenderCustomer(): JSX.Element {
     return (
-      <Col xl="4" xs="12" className="mb-4">
+      <Col xl="6" xs="12" className="mb-4">
         <div className="sipContentContainer">
-          <div className="sipInputBlock">
+          <div className="sipInputBlock mb-0">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
-              <Col xs="12" sm="5">
+              <Col xs="12" sm="5" md={4} xl={3}>
                 {t('Họ & tên')}:
               </Col>
-              <Col xs="12" sm="7">
-                {t('Nguyễn Văn An')}
+              <Col xs="12" sm="7" md={8} xl={9}>
+                {orderInformationInstane && orderInformationInstane.CONSIGNEE_NAME}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" sm="5">
+              <Col xs="12" sm="5" md={4} xl={3}>
                 {t('Điện thoại')}:
               </Col>
-              <Col xs="12" sm="7">
-                {t('0987654314')}:
+              <Col xs="12" sm="7" md={8} xl={9}>
+                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_DES}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" sm="5">
-                {t('Email')}:
-              </Col>
-              <Col xs="12" sm="7">
-                {t('hiepsiden@gmail.com')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5">
+              <Col xs="12" sm="5" md={4} xl={3}>
                 {t('Địa chỉ')}:
               </Col>
-              <Col xs="12" sm="7">
-                {t('Số 10, ngõ 2 phố Quần Ngựa, Văn Cao, Ba Đình, Hà Nội')}
+              <Col xs="12" sm="7" md={8} xl={9}>
+                {orderInformationInstane &&
+                  `${orderInformationInstane.HOUSE_NO_DES}${' '}
+                  ${orderInformationInstane.STREET_ID_DES}${' '}
+                  ${orderInformationInstane.WARD_ID_DES}${' '}
+                  ${orderInformationInstane.DISTRICT_ID_DES}${' '}
+                  ${orderInformationInstane.COUNTRY_ID_DES}`}
               </Col>
             </Row>
           </div>
@@ -130,83 +143,37 @@ const OrderInformation: React.FC = (): JSX.Element => {
 
   function renderReceiveCustomer(): JSX.Element {
     return (
-      <Col xl="4" xs="12" className="mb-4">
+      <Col xl="6" xs="12" className="mb-4">
         <div className="sipContentContainer">
-          <div className="sipInputBlock">
+          <div className="sipInputBlock mb-0">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
-              <Col xs="12" sm="5">
+              <Col xs="12" sm="5" md={4} xl={3}>
                 {t('Họ & tên')}:
               </Col>
-              <Col xs="12" sm="7">
-                {t('Trần Văn Thao')}
+              <Col xs="12" sm="7" md={8} xl={9}>
+                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_SRT}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" sm="5">
+              <Col xs="12" sm="5" md={4} xl={3}>
                 {t('Điện thoại')}:
               </Col>
-              <Col xs="12" sm="7">
-                {t('0987654314')}:
+              <Col xs="12" sm="7" md={8} xl={9}>
+                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_SRT}
               </Col>
             </Row>
             <Row className="sipInputItem">
-              <Col xs="12" sm="5">
-                {t('Email')}:
-              </Col>
-              <Col xs="12" sm="7">
-                {t('hiepsimu@gmail.com')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5">
+              <Col xs="12" sm="5" md={4} xl={3}>
                 {t('Địa chỉ')}:
               </Col>
-              <Col xs="12" sm="7">
-                {t('Số 10, ngõ 2 phố Quần Ngựa, Văn Cao, Ba Đình, Hà Nội')}
-              </Col>
-            </Row>
-          </div>
-        </div>
-      </Col>
-    );
-  }
-
-  function renderInformationContact(): JSX.Element {
-    return (
-      <Col xs="12">
-        <div className="sipContentContainer">
-          <div className="sipInputBlock">
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5" xl={2}>
-                {t('Bưu cục phát')}:
-              </Col>
-              <Col xs="12" sm="7">
-                {t('TN2')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5" xl={2}>
-                {t('Bưu tá phát')}:
-              </Col>
-              <Col xs="12" sm="7">
-                {t('Huy NT・098843700')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5" xl={2}>
-                {t('Bưu cục gốc')}:
-              </Col>
-              <Col xs="12" sm="7">
-                {t('DTHNI')}
-              </Col>
-            </Row>
-            <Row className="sipInputItem">
-              <Col xs="12" sm="5" xl={2}>
-                {t('Giám đốc gốc')}:
-              </Col>
-              <Col xs="12" sm="7">
-                {t('Nga PT・098800982')}
+              <Col xs="12" sm="7" md={8} xl={9}>
+                {orderInformationInstane &&
+                  `${orderInformationInstane.HOUSE_NO_SOURCE}${' '}
+                  ${orderInformationInstane.STREET_ID_SOURCE}${' '}
+                  ${orderInformationInstane.WARD_ID_SOURCE}${' '}
+                  ${orderInformationInstane.DISTRICT_ID_SOURCE}${' '}
+                  ${orderInformationInstane.COUNTRY_ID_SOURCE}`}
               </Col>
             </Row>
           </div>
@@ -216,20 +183,10 @@ const OrderInformation: React.FC = (): JSX.Element => {
   }
 
   return (
-    <div>
-      <Row className="sipInputItem">
-        <Col xs="12" lg="8" className="color-bluegreen">
-          {t('Mã vận đơn')}: 157 194 840720
-        </Col>
-      </Row>
-      <div className="mt-3" />
+    <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
         <div className="sipTitleRightBlock">
-          <Button>
-            <i className="fa fa-eye" />
-            Xem phiếu gửi
-          </Button>
           <Button>
             <i className="fa fa-pencil" />
             Sửa phiếu gửi
@@ -245,16 +202,13 @@ const OrderInformation: React.FC = (): JSX.Element => {
         </div>
       </Row>
       <Row>
-        {renderOrderInformation()}
         {renderSenderCustomer()}
         {renderReceiveCustomer()}
       </Row>
-      <h1 className="sipTitle">{t('Thông tin liên hệ')}</h1>
-      <Row>{renderInformationContact()}</Row>
       <div className="row mt-3" />
-      <h1 className="sipTitle">{t('Hành trình')}</h1>
-      {renderTable()}
-    </div>
+      <h1 className="sipTitle">{t('Danh sách kiện hàng')}</h1>
+      <Row className="sipTableContainer">{renderTable()}</Row>
+    </>
   );
 };
 

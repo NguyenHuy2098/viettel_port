@@ -156,6 +156,7 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
     padding: 0;
     height: 27px;
     width: 27px;
+    border: none;
   }
 }
 .sipHeaderNoti {
@@ -270,6 +271,9 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
     margin-right: 8px;
     position: relative;
     top: -3px;
+    &.sipTitleBtnBack {
+      color: #000;
+    }
   }
 }
 .sipTitleRightBlock {
@@ -279,6 +283,7 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
     background: #2DB4A1 !important;
     font-weight: 600;
     margin-left: 15px;
+    border: none;
     i {
       margin-right: 5px;
     }

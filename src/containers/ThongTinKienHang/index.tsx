@@ -1,40 +1,77 @@
-import React, { useCallback } from 'react';
-import { useState } from 'react';
-import { Button, Row, Col, Nav, NavItem, NavLink } from 'reactstrap';
-import classnames from 'classnames';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { goBack } from 'connected-react-router';
+import { Button, Table, Row, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import HistoryImpactTable from '../../components/OrderInfomationTabType/HistoryImpactTable';
-import TripInfoTable from '../../components/OrderInfomationTabType/TripInfoTable';
 
 // eslint-disable-next-line max-lines-per-function
-const OrderInformationTabType: React.FC = (): JSX.Element => {
+const PackageInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const handleBackToOrderInformation = (): void => {
+    dispatch(goBack());
+  };
+
+  function renderTable(): JSX.Element {
+    return (
+      <Row className="sipTableContainer">
+        <Table striped hover>
+          <thead>
+            <tr>
+              <th>{t('Mã bưu cục')}</th>
+              <th>{t('Thời gian')}</th>
+              <th>{t('Trạng thái')}</th>
+              <th>{t('Thông tin bảng kê')}</th>
+              <th>{t('Người tác động')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LHA - Hà Nội</td>
+              <td>11:12 ∙ 19/05/2019</td>
+              <td>Giao cho bưu cục (103)</td>
+              <td>CT_335_DHNI TAT_194_DTHNI</td>
+              <td>NV: Huy PV ∙ 0988753468</td>
+            </tr>
+            <tr>
+              <td>LHA - Hà Nội</td>
+              <td>11:12 ∙ 19/05/2019</td>
+              <td>Giao cho bưu cục (103)</td>
+              <td>CT_335_DHNI TAT_194_DTHNI</td>
+              <td>NV: Huy PV ∙ 0988753468</td>
+            </tr>
+          </tbody>
+        </Table>
+      </Row>
+    );
+  }
 
   function renderOrderInformation(): JSX.Element {
     return (
-      <Col xl="4" xs="12">
-        <div className="sipInputContainer">
+      <Col xl="4" xs="12" className="mb-4">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>Thông tin đơn hàng</h3>
             <Row className="sipInputItem">
               <Col xs="12" sm="5">
-                {t('Trạng thái')}:
+                Trạng thái:
               </Col>
               <Col xs="12" sm="7">
-                {t('Giao bưu tá phát')}
+                Giao bưu tá phát
               </Col>
             </Row>
             <Row className="sipInputItem">
               <Col xs="12" sm="5">
-                {t('Trọng lượng')}:
+                Trọng lượng:
               </Col>
-              <Col xs="12" sm={7}>
+              <Col xs="12" sm="7">
                 900 g
               </Col>
             </Row>
             <Row className="sipInputItem">
               <Col xs="12" sm="5">
-                {t('Tổng cước')}:
+                Tổng cước:
               </Col>
               <Col xs="12" sm="7">
                 15.000 đ
@@ -56,8 +93,8 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
 
   function renderSenderCustomer(): JSX.Element {
     return (
-      <Col xl="4" xs="12">
-        <div className="sipInputContainer">
+      <Col xl="4" xs="12" className="mb-4">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
@@ -100,8 +137,8 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
 
   function renderReceiveCustomer(): JSX.Element {
     return (
-      <Col xl="4" xs="12">
-        <div className="sipInputContainer">
+      <Col xl="4" xs="12" className="mb-4">
+        <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3> {t('Người gửi')}</h3>
             <Row className="sipInputItem">
@@ -144,124 +181,87 @@ const OrderInformationTabType: React.FC = (): JSX.Element => {
 
   function renderInformationContact(): JSX.Element {
     return (
-      <div className="sipContentContainer">
-        <div className="sipInputBlock">
-          <Row className="sipInputItem">
-            <Col xs="12" sm="5" xl={2}>
-              {t('Bưu cục phát')}:
-            </Col>
-            <Col xs="12" sm="7">
-              {t('TN2')}
-            </Col>
-          </Row>
-          <Row className="sipInputItem">
-            <Col xs="12" sm="5" xl={2}>
-              {t('Bưu tá phát')}:
-            </Col>
-            <Col xs="12" sm="7">
-              {t('Huy NT・098843700')}
-            </Col>
-          </Row>
-          <Row className="sipInputItem">
-            <Col xs="12" sm="5" xl={2}>
-              {t('Bưu cục gốc')}:
-            </Col>
-            <Col xs="12" sm="7">
-              {t('DTHNI')}
-            </Col>
-          </Row>
-          <Row className="sipInputItem">
-            <Col xs="12" sm="5" xl={2}>
-              {t('Giám đốc gốc')}:
-            </Col>
-            <Col xs="12" sm="7">
-              {t('Nga PT・098800982')}
-            </Col>
-          </Row>
+      <Col xs="12">
+        <div className="sipContentContainer">
+          <div className="sipInputBlock">
+            <Row className="sipInputItem">
+              <Col xs="12" sm="5" xl={2}>
+                {t('Bưu cục phát')}:
+              </Col>
+              <Col xs="12" sm="7">
+                {t('TN2')}
+              </Col>
+            </Row>
+            <Row className="sipInputItem">
+              <Col xs="12" sm="5" xl={2}>
+                {t('Bưu tá phát')}:
+              </Col>
+              <Col xs="12" sm="7">
+                {t('Huy NT・098843700')}
+              </Col>
+            </Row>
+            <Row className="sipInputItem">
+              <Col xs="12" sm="5" xl={2}>
+                {t('Bưu cục gốc')}:
+              </Col>
+              <Col xs="12" sm="7">
+                {t('DTHNI')}
+              </Col>
+            </Row>
+            <Row className="sipInputItem">
+              <Col xs="12" sm="5" xl={2}>
+                {t('Giám đốc gốc')}:
+              </Col>
+              <Col xs="12" sm="7">
+                {t('Nga PT・098800982')}
+              </Col>
+            </Row>
+          </div>
         </div>
-      </div>
+      </Col>
     );
   }
 
-  const [tab, setTab] = useState<number>(1);
-  function handleChangeTab(tab: number): void {
-    setTab(tab);
-  }
-
   return (
-    <div>
-      <Row className="sipInputItem">
-        <Col xs="12" lg="8" className="color-bluegreen">
-          {t('Mã vận đơn')}: 157 194 840720
-        </Col>
-      </Row>
-      <div className="mt-3" />
+    <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
+        <h1 className="sipTitle">
+          <Button onClick={handleBackToOrderInformation} className="sipTitleBtnBack">
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Thông tin đơn hàng')}
+        </h1>
         <div className="sipTitleRightBlock">
           <Button>
             <i className="fa fa-eye" />
-            {t('Xem phiếu gửi')}
+            Xem phiếu gửi
           </Button>
           <Button>
             <i className="fa fa-pencil" />
-            {t('Sửa phiếu gửi')}
+            Sửa phiếu gửi
           </Button>
           <Button>
             <i className="fa fa-barcode" />
-            {t('In mã vạch')}
+            In mã vạch
           </Button>
           <Button>
             <i className="fa fa-print" />
-            {t('In mã phiếu')}
+            In mã phiếu
           </Button>
         </div>
       </Row>
-      <div className="sipTabContainer">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: tab === 1 })}
-              onClick={useCallback((): void => handleChangeTab(1), [])}
-            >
-              {t('Thông tin hành trình')}
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classnames({ active: tab === 2 })}
-              onClick={useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Lịch sử tác động')}
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <Row className="sipContentContainer no-padding">
-          {renderOrderInformation()}
-          {renderSenderCustomer()}
-          {renderReceiveCustomer()}
-        </Row>
-      </div>
+      <Row>
+        {renderOrderInformation()}
+        {renderSenderCustomer()}
+        {renderReceiveCustomer()}
+      </Row>
+      <h1 className="sipTitle">{t('Thông tin liên hệ')}</h1>
+      <Row>{renderInformationContact()}</Row>
       <div className="row mt-3" />
-      <div className="mt-3" />
-      {tab === 2 && (
-        <>
-          <h1 className="sipTitle">{t('Thông tin liên hệ')}</h1>
-          {renderInformationContact()}
-          <div className="row mt-3" />
-          <div className="mt-3" />
-          <h1 className="sipTitle">{t('Lịch sử tác động')}</h1>
-          <HistoryImpactTable />
-        </>
-      )}
-      {tab === 1 && (
-        <>
-          <h1 className="sipTitle">{t('Thông tin hành trình')}</h1>
-          <TripInfoTable />
-        </>
-      )}
-    </div>
+      <h1 className="sipTitle">{t('Hành trình')}</h1>
+      {renderTable()}
+    </>
   );
 };
 
-export default OrderInformationTabType;
+export default PackageInformation;

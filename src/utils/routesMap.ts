@@ -134,7 +134,7 @@ export default {
   /**
    * Thong tin don hang
    */
-  THONG_TIN_DON_HANG: '/thong-tin-don-hang',
-  THONG_TIN_DON_HANG_2: '/thong-tin-don-hang-2',
+  THONG_TIN_KIEN_HANG: '/thong-tin-kien-hang',
   THONG_TIN_DON_HANG_NEW: '/thong-tin-don-hang-new',
+  THONG_TIN_DON_HANG: '/thong-tin-don-hang/:idDonHang',
 };

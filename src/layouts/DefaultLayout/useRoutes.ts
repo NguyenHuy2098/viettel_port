@@ -158,12 +158,12 @@ const NhanBangKePhieuGui = Loadable({
 
 // =========== unsorted components ==========
 
-const ThongTinDonHang = Loadable({
-  loader: (): any => import('containers/ThongTinDonHang'),
+const ThongTinKienHang = Loadable({
+  loader: (): any => import('containers/ThongTinKienHang'),
   loading: Loading,
 });
-const ThongTinDonHang2 = Loadable({
-  loader: (): any => import('containers/ThongTinDonHang2'),
+const ThongTinDonHang = Loadable({
+  loader: (): any => import('containers/ThongTinDonHang'),
   loading: Loading,
 });
 const ThongTinDonHangNew = Loadable({
@@ -247,8 +247,8 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.KHAI_THAC_CHUYEN_THU_DEN, name: t('Khai thác chuyển thư đến'), component: KhaiThacChuyenThuDen },
     { path: routesMap.ERROR_NO_DATA, name: t('Chưa có dữ liệu'), component: PageNoData },
     { path: routesMap.TIEP_XUC_KHACH_HANG, name: t('Tiếp xúc khách hàng'), component: TiepXucKhachHang },
+    { path: routesMap.THONG_TIN_KIEN_HANG, name: t('Thông tin kiện hàng'), component: ThongTinKienHang },
     { path: routesMap.THONG_TIN_DON_HANG, name: t('Thông tin đơn hàng'), component: ThongTinDonHang },
-    { path: routesMap.THONG_TIN_DON_HANG_2, name: t('Thông tin đơn hàng 2'), component: ThongTinDonHang2 },
     { path: routesMap.THONG_TIN_DON_HANG_NEW, name: t('Thông tin đơn hàng new'), component: ThongTinDonHangNew },
     { path: routesMap.TACH_PHIEU_GUI, name: t('Tách phiếu gửi'), component: TachPhieuGui },
     { path: routesMap.BIEN_BAN_NOI_BO, name: t('Biên bản nội bộ'), component: BienBanNoiBo },

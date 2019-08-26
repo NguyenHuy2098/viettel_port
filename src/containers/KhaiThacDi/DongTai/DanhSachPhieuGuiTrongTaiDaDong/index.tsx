@@ -15,7 +15,7 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC = (): JSX.Element => {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack}>
+          <Button onClick={handleBack} className="sipTitleBtnBack">
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           Danh sách bảng kê/ phiếu gửi trong tải

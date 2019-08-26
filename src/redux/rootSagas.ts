@@ -11,6 +11,7 @@ import watch_MIOA_ZTMI012_SagaAsync from './MIOA_ZTMI012/sagas';
 import watch_apiGetAddress_SagaAsync from './SearchLocation/sagas';
 import watch_apiGetTransportMethod_SagaAsync from './SIOA_ZTMI068/sagas';
 import watch_MIOA_ZTMI011_SagaAsync from './MIOA_ZTMI011/sagas';
+import watch_MIOA_ZTMI031_SagaAsync from './MIOA_ZTMI031/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -25,5 +26,6 @@ export default function* rootSagas(): SagaIterator {
     call(watch_apiGetAddress_SagaAsync),
     call(watch_apiGetTransportMethod_SagaAsync),
     call(watch_MIOA_ZTMI011_SagaAsync),
+    call(watch_MIOA_ZTMI031_SagaAsync),
   ]);
 }

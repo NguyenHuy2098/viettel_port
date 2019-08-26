@@ -42,7 +42,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBackTaiKien}>
+          <Button onClick={handleBackTaiKien} className="sipTitleBtnBack">
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           {t('Thông tin tải')}
