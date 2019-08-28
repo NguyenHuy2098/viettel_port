@@ -1225,7 +1225,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
                 defaultChecked
                 onChange={handleChangeTextboxValue(setChoXemHang)}
               />{' '}
-              {t('Cho khách xem hàng')}
+              {t('Cho khách xem áchhàng')}
             </Label>
           </Col>
           <Col lg="6" xs="12">

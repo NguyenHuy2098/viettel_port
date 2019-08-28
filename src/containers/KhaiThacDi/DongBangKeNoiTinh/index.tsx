@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { Pagination, PaginationItem, PaginationLink } from 'reactstrap';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
@@ -36,38 +35,6 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
           </Button>
         </ModalFooter>
       </Modal>
-    );
-  }
-
-  function renderPagination(): JSX.Element {
-    return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left"></i>
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right"></i>
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
     );
   }
 
@@ -133,7 +100,6 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
             </tr>
           </tbody>
         </Table>
-        {renderPagination()}
       </Row>
     </>
   );
