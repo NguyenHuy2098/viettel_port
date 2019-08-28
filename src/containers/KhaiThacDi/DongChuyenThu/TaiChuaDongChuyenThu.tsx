@@ -1,15 +1,17 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { push } from 'connected-react-router';
-import { map } from 'lodash';
-import { Button, Col, Input, Label, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { map, get } from 'lodash';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import routesMap from 'utils/routesMap';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import moment from 'moment';
+import { Cell } from 'react-table';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
@@ -45,37 +47,6 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
     getListChuyenThu(payload);
   }
 
-  function renderPagination(): JSX.Element {
-    return (
-      <Pagination className="sipPagination">
-        <PaginationItem className="sipPaginationPrev pull-left">
-          <PaginationLink previous href="#">
-            <i className="fa fa-arrow-left" />
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem active>
-          <PaginationLink href="#">1</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">2</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">3</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">4</PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">5</PaginationLink>
-        </PaginationItem>
-        <PaginationItem className="sipPaginationNext pull-right">
-          <PaginationLink next href="#">
-            <i className="fa fa-arrow-right" />
-          </PaginationLink>
-        </PaginationItem>
-      </Pagination>
-    );
-  }
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU}/${item.TOR_ID}`));
@@ -114,65 +85,62 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
     };
   };
 
-  function renderManifestTableAction(item: API.RowMTZTMI047OUT): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button onClick={handleRedirectDetail(item)}>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <ModalPopupConfirm handleDoSomething={handleDeleteChuyenThu(item)} />
-      </>
-    );
-  }
-
-  function renderTable1(): JSX.Element {
-    return (
-      <>
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th />
-              <th>{t('Mã chuyến thư')}</th>
-              <th>{t('Điểm đến')}</th>
-              <th>{t('SL')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {map(
-              listChuyenThuChuaHoanThanh,
-              (item: API.RowMTZTMI047OUT, index): JSX.Element => {
-                return (
-                  <tr key={index}>
-                    <td className="text-center">
-                      <Label check>
-                        <Input type="checkbox" />
-                      </Label>
-                    </td>
-                    <td>{item.TOR_ID}</td>
-                    <td>{item.LOG_LOCID_TO}</td>
-                    <td>{item.ITEM_NO}</td>
-                    <td />
-                    <td>{moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</td>
-                    <td>{item.EXEC_CONT}</td>
-                    <td className="SipTableFunctionIcon">{renderManifestTableAction(item)}</td>
-                  </tr>
-                );
-              },
-            )}
-          </tbody>
-        </Table>
-        {renderPagination()}
-      </>
-    );
-  }
-
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã chuyễn th'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Điểm đến'),
+        accessor: 'LOG_LOCID_TO',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Người nhập'),
+        accessor: 'PERSONAL',
+      },
+      {
+        Header: t('Ngày nhập'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Ghi chú'),
+        accessor: 'NOTE_OF',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+              <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(row.original)}>
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <ModalPopupConfirm handleDoSomething={handleDeleteChuyenThu} />
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const data = map(get(listChuyenThuChuaHoanThanh, ''), (item: API.RowMTZTMI047OUT) => {
+    return {
+      TOR_ID: item.TOR_ID,
+      LOG_LOCID_TO: item.LOG_LOCID_TO,
+      countChuyenThu: countChuyenThuChuaHoanThanh,
+      PERSONAL: item.ITEM_NO,
+      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
+      NOTE_OF: item.EXEC_CONT,
+    };
+  });
   return (
     <>
       <Row className="sipContentContainer">
@@ -197,7 +165,9 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         </Col>
       </Row>
       <div className="mt-3" />
-      <Row className="sipTableContainer">{renderTable1()}</Row>
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} />
+      </Row>
     </>
   );
 };

@@ -1,6 +1,8 @@
-import React from 'react';
-import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row, Table } from 'reactstrap';
+import React, { useMemo } from 'react';
+import { Button, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { Cell } from 'react-table';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
@@ -38,21 +40,58 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã bảng kê'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Bưu cục đi'),
+        accessor: 'LOG_LOCID_TO',
+      },
+      {
+        Header: t('Bưu cục đến'),
+        accessor: 'DES_LOCID_TO',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Người nhập'),
+        accessor: 'PERSONAL',
+      },
+      {
+        Header: t('Ngày nhập'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Ghi chú'),
+        accessor: 'NOTE_OF',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <Button>
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -74,32 +113,7 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
       </p>
       <Row className="mt-3" />
       <Row className="sipTableContainer">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>{t('Mã bảng kê')}</th>
-              <th>{t('Bưu cục đi')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>BK-2683077-TTKT1</td>
-              <td>TTKT1</td>
-              <td>TTKT3</td>
-              <td>25</td>
-              <td>Nguyễn Văn An</td>
-              <td>19/6/2019</td>
-              <td>Hàng giá trị cao</td>
-              <td className="SipTableFunctionIcon">{renderAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
+        <DataTable columns={columns} data={[]} />
       </Row>
     </>
   );

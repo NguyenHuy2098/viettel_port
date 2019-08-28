@@ -1,14 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Button, Input, Row, Table } from 'reactstrap';
+import { Button, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
-import { map } from 'lodash';
+import { map, get } from 'lodash';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import routesMap from 'utils/routesMap';
+import { Cell } from 'react-table';
+import moment from 'moment';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 function DanhSachBangKe(): JSX.Element {
@@ -69,58 +72,6 @@ function DanhSachBangKe(): JSX.Element {
     };
   };
 
-  function renderManifestTableAction(item: API.RowMTZTMI047OUT): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-print fa-lg color-green" />
-        </Button>
-        <Button onClick={handleRedirectDetail(item)}>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <ModalPopupConfirm handleDoSomething={handleDeleteManifest(item)} />
-      </>
-    );
-  }
-
-  function renderManifestTable(): JSX.Element {
-    return (
-      <Row className="sipTableContainer sipBoxShadow">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>{t('Mã bảng kê')}</th>
-              <th>{t('Điểm đến')}</th>
-              <th>{t('Số lượng')}</th>
-              <th>{t('Người nhập')}</th>
-              <th>{t('Ngày nhập')}</th>
-              <th>{t('Ghi chú')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {map(
-              listBangKeChuaDongTai,
-              (item: API.RowMTZTMI047OUT, index): JSX.Element => {
-                return (
-                  <tr key={index}>
-                    <td>{item.TOR_ID}</td>
-                    <td>{item.LOG_LOCID_TO}</td>
-                    <td>{item.ITEM_NO}</td>
-                    <td></td>
-                    <td>{item.DATETIME_CHLC}</td>
-                    <td>{item.EXEC_CONT}</td>
-                    <td className="SipTableFunctionIcon">{renderManifestTableAction(item)}</td>
-                  </tr>
-                );
-              },
-            )}
-          </tbody>
-        </Table>
-      </Row>
-    );
-  }
-
   function renderManifestIdSearch(): JSX.Element {
     return (
       <div className="sipContentContainer">
@@ -132,11 +83,68 @@ function DanhSachBangKe(): JSX.Element {
       </div>
     );
   }
-
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã tải'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Điểm đến'),
+        accessor: 'LOG_LOCID_TO',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Người nhập'),
+        accessor: 'PERSONAL',
+      },
+      {
+        Header: t('Ngày nhập'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Ghi chú'),
+        accessor: 'NOTE_OF',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
+              <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(row.original)}>
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <ModalPopupConfirm handleDoSomething={handleDeleteManifest} />
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const data = map(get(listBangKeChuaDongTai, ''), (item: API.RowMTZTMI047OUT) => {
+    return {
+      TOR_ID: item.TOR_ID,
+      LOG_LOCID_TO: item.LOG_LOCID_TO,
+      countChuyenThu: 222,
+      PERSONAL: item.ITEM_NO,
+      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
+      NOTE_OF: item.EXEC_CONT,
+    };
+  });
   return (
     <>
       {renderManifestIdSearch()}
-      {renderManifestTable()}
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} />
+      </Row>
     </>
   );
 }

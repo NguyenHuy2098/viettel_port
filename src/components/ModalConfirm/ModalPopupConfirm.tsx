@@ -10,6 +10,7 @@ interface Props {
   cancelButton?: string;
   titleModal?: string;
   contentConfirm?: string;
+  classNameBtn?: string;
 }
 
 const ModalPopupConfirm: React.FC<Props> = (props: Props): JSX.Element => {
@@ -27,7 +28,7 @@ const ModalPopupConfirm: React.FC<Props> = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Button onClick={toggle}>
+      <Button className={props.classNameBtn ? props.classNameBtn : 'SipTableFunctionIcon'} onClick={toggle}>
         {props.buttonLabel ? props.buttonLabel : <i className="fa fa-trash-o fa-lg color-red" />}
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={props.className ? props.className : 'sipTitleModalCreateNew'}>

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Input, Row, Table } from 'reactstrap';
+import { Button, Input, Row } from 'reactstrap';
+import { Cell } from 'react-table';
+import DataTable from 'components/DataTable';
 
 // eslint-disable-next-line max-lines-per-function
 const QuetMa: React.FC = (): JSX.Element => {
@@ -18,52 +20,73 @@ const QuetMa: React.FC = (): JSX.Element => {
     );
   }
 
-  function renderForwardingOrderTableAction(): JSX.Element {
-    return (
-      <>
-        <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
-
-  function renderForwardingOrderTable(): JSX.Element {
-    return (
-      <Row className="sipTableContainer sipBoxShadow">
-        <Table striped hover>
-          <thead>
-            <tr>
-              <th>{t('Số vận đơn')}</th>
-              <th>{t('Bưu cục đến')}</th>
-              <th>{t('Số lượng')}</th>
-              <th>{t('Trọng lượng')}</th>
-              <th>{t('Ngày gửi')}</th>
-              <th>{t('Quản trị')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>00843186002</td>
-              <td>BNE</td>
-              <td>5</td>
-              <td>250g</td>
-              <td>19/6/2019</td>
-              <td className="SipTableFunctionIcon">{renderForwardingOrderTableAction()}</td>
-            </tr>
-          </tbody>
-        </Table>
-      </Row>
-    );
-  }
-
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Số vận đơn'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Bưu cục đến'),
+        accessor: 'LOG_LOCID_TO',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('Trọng lượng'),
+        accessor: 'PERSONAL',
+      },
+      {
+        Header: t('Ngày gửi'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+  const data = [
+    {
+      TOR_ID: 4545,
+      FR_LOG_ID: 'abc',
+      TO_LOG_ID: 'bcd',
+      countChuyenThu: 12,
+      PERSONAL: 'Nguyen Thu Thuy',
+      CREATED_ON: '12/12/2019',
+      NOTE_OF: 'Note',
+    },
+    {
+      TOR_ID: 4545,
+      FR_LOG_ID: 'abc',
+      TO_LOG_ID: 'bcd',
+      countChuyenThu: 12,
+      PERSONAL: 'Nguyen Thu Thuy',
+      CREATED_ON: '12/12/2019',
+      NOTE_OF: 'Note',
+    },
+  ];
   return (
     <>
       {renderForwardingOrderCodeScan()}
-      {renderForwardingOrderTable()}
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} />
+      </Row>
     </>
   );
 };

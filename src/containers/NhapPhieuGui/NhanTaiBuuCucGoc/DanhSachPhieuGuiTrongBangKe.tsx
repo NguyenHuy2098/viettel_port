@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { match } from 'react-router-dom';
-import { Button, Input, Label, Col, Row, Table } from 'reactstrap';
+import { Button, Input, Col, Row } from 'reactstrap';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { get, map, size } from 'lodash';
 import { useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
+import { Cell } from 'react-table';
+import moment from 'moment';
+import DataTable from 'components/DataTable';
 
 interface Props {
   match: match;
@@ -48,58 +51,57 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
       </>
     );
   }
-
-  function renderTableRowControllers(): JSX.Element {
-    return (
-      <>
-        <Button onClick={redirectToPreviousLocation}>
-          <i className="fa fa-pencil fa-lg color-blue" />
-        </Button>
-        <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
-        </Button>
-      </>
-    );
-  }
-
-  const renderDataTable = (): JSX.Element => (
-    <Table striped hover>
-      <thead>
-        <tr>
-          <th></th>
-          <th>{t('Mã phiếu gửi')}</th>
-          <th>{t('Điểm đến')}</th>
-          <th>{t('Số lượng')}</th>
-          <th>{t('Trọng lượng')}</th>
-          <th>{t('Ngày gửi')}</th>
-          <th>{t('Quản trị')}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {map(
-          get(manifestForwardingOrderList, 'Row[0].CHILDS'),
-          (item: API.Child, index): JSX.Element => {
-            return (
-              <tr key={index}>
-                <td>
-                  <Label check>
-                    <Input type="checkbox" />
-                  </Label>
-                </td>
-                <td>{item.TOR_ID}</td>
-                <td>BNE</td>
-                <td>2</td>
-                <td>250g</td>
-                <td>19/6/2019</td>
-                <td className="SipTableFunctionIcon">{renderTableRowControllers()}</td>
-              </tr>
-            );
-          },
-        )}
-      </tbody>
-    </Table>
+  const columns = useMemo(
+    () => [
+      {
+        Header: t('Mã phiếu gửi'),
+        accessor: 'TOR_ID',
+      },
+      {
+        Header: t('Điểm đến'),
+        accessor: 'LOG_LOCID_TO',
+      },
+      {
+        Header: t('Số lượng'),
+        accessor: 'countChuyenThu',
+      },
+      {
+        Header: t('TRỌNG LƯỢNG'),
+        accessor: 'PERSONAL',
+      },
+      {
+        Header: t('Ngày gửi'),
+        accessor: 'CREATED_ON',
+      },
+      {
+        Header: t('Quản trị'),
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Button className="SipTableFunctionIcon" onClick={redirectToPreviousLocation}>
+                <i className="fa fa-pencil fa-lg color-blue" />
+              </Button>
+              <Button className="SipTableFunctionIcon">
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
+            </>
+          );
+        },
+      },
+    ],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
-
+  const data = map(get(manifestForwardingOrderList, ''), (item: API.RowMTZTMI047OUT) => {
+    return {
+      TOR_ID: item.TOR_ID,
+      LOG_LOCID_TO: item.LOG_LOCID_TO,
+      countChuyenThu: 222,
+      PERSONAL: item.ITEM_NO,
+      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
+      NOTE_OF: item.EXEC_CONT,
+    };
+  });
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -149,7 +151,9 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
         </div>
       </Row>
 
-      <Row className="sipTableContainer">{renderDataTable()}</Row>
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={data} />
+      </Row>
     </>
   );
 }
