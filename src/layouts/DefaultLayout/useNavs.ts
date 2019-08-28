@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import routesMap from 'utils/routesMap';
+import { generatePath } from 'react-router';
 
 // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
 const nav = (t: i18next.TFunction): any => {
@@ -53,7 +54,7 @@ const nav = (t: i18next.TFunction): any => {
         children: [
           {
             name: t('Phiếu gửi trong nước'),
-            url: routesMap.NHAP_PHIEU_GUI_TRONG_NUOC,
+            url: generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC, { idDonHang: 'tao-don' }),
           },
           {
             name: 'Phiếu gửi quốc tế',

@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { drop, find, findIndex, get, slice } from 'lodash';
@@ -8,7 +8,8 @@ import DataTable from 'components/DataTable';
 import { Button, Row, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
-import { useGet_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
+import { select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
+import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 
@@ -28,11 +29,96 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const idDonHang = get(props, 'match.params.idDonHang');
   const idKienHang = get(props, 'match.params.idKienHang');
   const packageInformation: API.RowMTZTMI031OUT | undefined = find(
-    useSelector(useGet_MT_ZTMI031_OUT),
+    useSelector(select_MT_ZTMI031_OUT),
     (item: API.RowMTZTMI031OUT): boolean => {
       return item.PACKAGE_ID === idKienHang;
     },
   );
+  const [provinceSender, setProvinceSender] = useState<string>('');
+  const [districtSender, setDistrictSender] = useState<string>('');
+  const [wardSender, setWardSender] = useState<string>('');
+  const [provinceReceiver, setProvinceReceiver] = useState<string>('');
+  const [districtReceiver, setDistrictReceiver] = useState<string>('');
+  const [wardReceiver, setWardReceiver] = useState<string>('');
+
+  //eslint-disable-next-line max-lines-per-function
+  React.useEffect((): void => {
+    if (packageInformation) {
+      if (packageInformation.PROVINCE_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: packageInformation.PROVINCE_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setProvinceSender(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (packageInformation.DISTRICT_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: packageInformation.DISTRICT_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setDistrictSender(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (packageInformation.WARD_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: packageInformation.WARD_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setWardSender(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (packageInformation.PROVINCE_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: packageInformation.PROVINCE_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setProvinceReceiver(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (packageInformation.DISTRICT_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: packageInformation.DISTRICT_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setDistrictReceiver(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (packageInformation.WARD_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: packageInformation.WARD_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setWardReceiver(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [packageInformation]);
 
   const progressEffect: ProgressEffect[] = [
     {
@@ -152,7 +238,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const handleGotoEditForwardingOrder = (): void => {
-    dispatch(push(generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC_EDIT, { idDonHang })));
+    dispatch(push(generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC, { idDonHang })));
   };
 
   const columns = useMemo(
@@ -294,11 +380,11 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_SOURCE}${' '}
-                  ${packageInformation.STREET_ID_SOURCE}${' '}
-                  ${packageInformation.WARD_ID_SOURCE}${' '}
-                  ${packageInformation.DISTRICT_ID_SOURCE}${' '}
-                  ${packageInformation.COUNTRY_ID_SOURCE}`}
+                  `${packageInformation.HOUSE_NO_DES}${' '}
+                  ${packageInformation.STREET_ID_DES}${' '}
+                  ${wardSender}${' '}
+                  ${districtSender}${' '}
+                  ${provinceSender}`}
               </Col>
             </Row>
           </div>
@@ -335,11 +421,11 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_DES}${' '}
-                  ${packageInformation.STREET_ID_DES}${' '}
-                  ${packageInformation.WARD_ID_DES}${' '}
-                  ${packageInformation.DISTRICT_ID_DES}${' '}
-                  ${packageInformation.COUNTRY_ID_DES}`}
+                  `${packageInformation.HOUSE_NO_SOURCE}${' '}
+                  ${packageInformation.STREET_ID_SOURCE}${' '}
+                  ${wardReceiver}${' '}
+                  ${districtReceiver}${' '}
+                  ${provinceReceiver}`}
               </Col>
             </Row>
           </div>

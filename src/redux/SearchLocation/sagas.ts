@@ -4,7 +4,7 @@ import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
 import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
 import HttpRequestError from 'utils/HttpRequetsError';
-import { ACTION_GET_PROVINCE, ACTION_GET_DISTRICT, ACTION_GET_WARD } from './actions';
+import { ACTION_GET_ADDRESS, ACTION_GET_PROVINCE, ACTION_GET_DISTRICT, ACTION_GET_WARD } from './actions';
 
 function* takeGet_ADDRESS(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   yield unfoldSaga(
@@ -21,6 +21,7 @@ function* takeGet_ADDRESS(action: UnfoldSagaActionType): Iterable<SagaIterator> 
 }
 
 export default function*(): SagaIterator {
+  yield takeEvery(ACTION_GET_ADDRESS, takeGet_ADDRESS);
   yield takeEvery(ACTION_GET_PROVINCE, takeGet_ADDRESS);
   yield takeEvery(ACTION_GET_DISTRICT, takeGet_ADDRESS);
   yield takeEvery(ACTION_GET_WARD, takeGet_ADDRESS);

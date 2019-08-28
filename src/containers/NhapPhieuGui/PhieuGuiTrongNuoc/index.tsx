@@ -1,30 +1,138 @@
 /* eslint-disable max-lines */
 import React from 'react';
-// import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
 import produce from 'immer';
+import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { get, find, findIndex, forEach, map, noop, reduce, set, size, toString } from 'lodash';
+import { drop, get, find, findIndex, forEach, map, noop, reduce, set, size, toString } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
 import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
+import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
+import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
+import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 // import { makeSelectProfile } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
 
+interface Props {
+  match: match;
+}
+
 let dichVuCongThem: string[] = [];
 // eslint-disable-next-line max-lines-per-function
-const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
+const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   // const dataSelectProfile = useSelector(makeSelectProfile, shallowEqual);
+
+  const idDonHang = get(props, 'match.params.idDonHang');
+
+  const payloadOrderInfoFirstLoad = {
+    FWO_ID: idDonHang,
+    BUYER_REFERENCE_NUMBER: '',
+  };
+
+  const orderInformation = useSelector(select_MT_ZTMI031_OUT);
+  const orderInformationInstane = useSelector(select_MT_ZTMI031_INSTANE);
+
+  const [provinceSenderEdit, setProvinceSenderEdit] = useState<string>('');
+  const [districtSenderEdit, setDistrictSenderEdit] = useState<string>('');
+  const [wardSenderEdit, setWardSenderEdit] = useState<string>('');
+  const [provinceReceiverEdit, setProvinceReceiverEdit] = useState<string>('');
+  const [districtReceiverEdit, setDistrictReceiverEdit] = useState<string>('');
+  const [wardReceiverEdit, setWardReceiverEdit] = useState<string>('');
+
+  //eslint-disable-next-line max-lines-per-function
+  React.useEffect((): void => {
+    if (orderInformationInstane) {
+      if (orderInformationInstane.PROVINCE_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.PROVINCE_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setProvinceSenderEdit(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.DISTRICT_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.DISTRICT_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setDistrictSenderEdit(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.WARD_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.WARD_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setWardSenderEdit(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.PROVINCE_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.PROVINCE_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setProvinceReceiverEdit(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.DISTRICT_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.DISTRICT_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setDistrictReceiverEdit(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.WARD_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.WARD_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setWardReceiverEdit(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderInformationInstane]);
+
+  React.useEffect((): void => {
+    dispatch(action_MIOA_ZTMI031(payloadOrderInfoFirstLoad));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [idDonHang]);
 
   const isVnPhoneMobile = /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
 
@@ -201,7 +309,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     Note: '',
     GOODS_VALUE: '',
     Currency: 'VN',
-    COMODITY_CODE: 'V04',
+    COMODITY_CODE: 'V99',
     COD: '',
   };
   const firstPackageItem = {
@@ -311,26 +419,115 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
     choXemHang,
     diemGiaoNhan,
   };
-  // let packageItemValidate: API.PackageItem = {
-  //   Flag: 'I',
-  //   PACKAGING_MATERIAL: '',
-  //   Description: '',
-  //   PACKAGE_TYPE: '',
-  //   QUANTITY_OF_PACKAGE: '',
-  //   QUANTITY_OF_UNIT: '',
-  //   GROSS_WEIGHT: '',
-  //   GROSS_WEIGHT_OF_UNIT: 'g',
-  //   NET_WEIGHT: '100',
-  //   NET_WEIGHT_OF_UNIT: 'g',
-  //   Length: '',
-  //   Hight: '',
-  //   Width: '',
-  //   Note: '',
-  //   GOODS_VALUE: '',
-  //   Currency: 'VN',
-  //   COMODITY_CODE: 'V04',
-  //   COD: '',
-  // };
+
+  //______________check if Order Information exist
+  //eslint-disable-next-line max-lines-per-function
+  React.useEffect((): void => {
+    if (orderInformationInstane && orderInformation) {
+      setMaPhieuGui(orderInformationInstane.FWO ? orderInformationInstane.FWO : '');
+      setDienThoaiSender(orderInformationInstane.MOBILE_PHONE_SRT ? orderInformationInstane.MOBILE_PHONE_SRT : '');
+      setHoTenSender(orderInformationInstane.SHIPER_NAME ? orderInformationInstane.SHIPER_NAME : '');
+      setDiaChiSender(
+        `${orderInformationInstane.HOUSE_NO_DES}${' '}${
+          orderInformationInstane.STREET_ID_DES
+        }${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
+      );
+      setProvinceSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
+      setDistrictSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
+      setWardSender(toString(get(orderInformationInstane, 'WARD_ID_SOURCE', '')));
+      setDetailAddressSender(
+        get(orderInformationInstane, 'HOUSE_NO_SOURCE', '') +
+          ' ' +
+          get(orderInformationInstane, 'STREET_ID_SOURCE', ''),
+      );
+      setDienThoaiReceiver(get(orderInformationInstane, 'MOBILE_PHONE_DES', ''));
+      setHoTenReceiver(get(orderInformationInstane, 'CONSIGNEE_NAME', ''));
+      setDiaChiReceiver(
+        `${orderInformationInstane.HOUSE_NO_SOURCE}${' '}${
+          orderInformationInstane.STREET_ID_SOURCE
+        }${' '}${wardReceiverEdit}${' '}${districtReceiverEdit}${' '}${provinceReceiverEdit}`,
+      );
+      setProvinceReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
+      setDistrictReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
+      setWardReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
+      setDetailAddressReceiver(
+        get(orderInformationInstane, 'HOUSE_NO_DES', '') + ' ' + get(orderInformationInstane, 'STREET_ID_DES', ''),
+      );
+      setTenHang(get(orderInformationInstane, 'ITEM_DESCRIPTION', ''));
+      setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(2) : '');
+      setGiaTri('');
+      setTienThuHo(orderInformationInstane.COD ? toString(parseInt(orderInformationInstane.COD)) : '');
+      setTrongLuong(
+        orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(2) : '',
+      );
+      setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(2) : '');
+      setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(2) : '');
+      setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(2) : '');
+      // setThoiGianPhat(get(orderInformationInstane, 'TIME_DATE', ''));
+      // setPhuongThucVanChuyen(get(orderInformationInstane, 'SERVICE_TYPE', ''));
+      // loaiHinhDichVu = 'VCN';
+      // dichVuCongThem = [];
+      // setUncheckAllAdditionalCheckbox(false);
+      // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
+      let newPackageItemEdit: API.PackageItem = {
+        Flag: 'I',
+        PACKAGING_MATERIAL: '',
+        Description: '',
+        PACKAGE_TYPE: '',
+        QUANTITY_OF_PACKAGE: '',
+        QUANTITY_OF_UNIT: '',
+        GROSS_WEIGHT: '',
+        GROSS_WEIGHT_OF_UNIT: 'g',
+        NET_WEIGHT: '100',
+        NET_WEIGHT_OF_UNIT: 'g',
+        Length: '',
+        Hight: '',
+        Width: '',
+        Note: '',
+        GOODS_VALUE: '',
+        Currency: 'VN',
+        COMODITY_CODE: 'V99',
+        COD: '',
+      };
+      if (size(orderInformation) >= 2) {
+        const newArrEdit: API.RowMTZTMI031OUT[] = [];
+        forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
+          newPackageItemEdit = {
+            Flag: 'I',
+            PACKAGING_MATERIAL: '',
+            Description: '',
+            PACKAGE_TYPE: '',
+            QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
+            QUANTITY_OF_UNIT: '',
+            GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(2)) : '',
+            GROSS_WEIGHT_OF_UNIT: 'g',
+            NET_WEIGHT: '100',
+            NET_WEIGHT_OF_UNIT: 'g',
+            Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
+            Hight: item.Height ? toString(parseFloat(item.Height).toFixed(2)) : '',
+            Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
+            Note: '',
+            GOODS_VALUE: '',
+            Currency: 'VN',
+            COMODITY_CODE: 'V99',
+            COD: item.COD ? toString(parseInt(item.COD)) : '',
+          };
+          newArrEdit.push(newPackageItemEdit);
+        });
+        setPackageItemArr(newArrEdit);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    orderInformationInstane,
+    orderInformation,
+    provinceSenderEdit,
+    provinceReceiverEdit,
+    districtReceiverEdit,
+    districtSenderEdit,
+    wardReceiverEdit,
+    wardSenderEdit,
+  ]);
 
   // eslint-disable-next-line max-lines-per-function
   function dispatchGetSummaryInformation(): void {
@@ -534,7 +731,7 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       ADDRESS_OP: diaChiSender,
       PHONE_OP: dienThoaiSender,
       EMAIL_OP: null,
-      Shipper: '2', // Người gửi hàng- mã BP
+      Shipper: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
       NAME_SHIPPER: null,
       ADDRESS_SHIPPER: null,
       PHONE_SHIPPER: null,
@@ -580,7 +777,16 @@ const PhieuGuiTrongNuoc: React.FC = (): JSX.Element => {
       LanguageDefaultId: null,
     };
     // if (!window.confirm('Bạn có chắc chắn?')) return;
-    dispatch(action_MIOA_ZTMI012(payload));
+    dispatch(
+      action_MIOA_ZTMI012(payload, {
+        onSuccess: (): void => {
+          alert('Thành công!!!');
+        },
+        onFailure: (): void => {
+          alert('Có lỗi xảy ra.');
+        },
+      }),
+    );
   }
 
   // eslint-disable-next-line max-lines-per-function

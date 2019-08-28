@@ -1,4 +1,5 @@
-import React, { useMemo } from 'react';
+/* eslint-disable max-lines */
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
@@ -8,7 +9,8 @@ import { drop, findIndex, get, map, slice } from 'lodash';
 import DataTable from 'components/DataTable';
 import { Button, Row, Col } from 'reactstrap';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
-import { useGet_MT_ZTMI031_OUT, useGet_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
+import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
+import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -21,8 +23,8 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const idDonHang = get(props, 'match.params.idDonHang');
 
-  const orderInformation = useSelector(useGet_MT_ZTMI031_OUT);
-  const orderInformationInstane = useSelector(useGet_MT_ZTMI031_INSTANE);
+  const orderInformation = useSelector(select_MT_ZTMI031_OUT);
+  const orderInformationInstane = useSelector(select_MT_ZTMI031_INSTANE);
   const orderInfoTableData = map(
     orderInformation,
     (item: API.RowMTZTMI031OUT, index: number): API.RowMTZTMI031OUT => {
@@ -36,6 +38,91 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       };
     },
   );
+  const [provinceSender, setProvinceSender] = useState<string>('');
+  const [districtSender, setDistrictSender] = useState<string>('');
+  const [wardSender, setWardSender] = useState<string>('');
+  const [provinceReceiver, setProvinceReceiver] = useState<string>('');
+  const [districtReceiver, setDistrictReceiver] = useState<string>('');
+  const [wardReceiver, setWardReceiver] = useState<string>('');
+
+  //eslint-disable-next-line max-lines-per-function
+  React.useEffect((): void => {
+    if (orderInformationInstane) {
+      if (orderInformationInstane.PROVINCE_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.PROVINCE_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setProvinceSender(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.DISTRICT_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.DISTRICT_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setDistrictSender(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.WARD_ID_SOURCE) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.WARD_ID_SOURCE },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setWardSender(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.PROVINCE_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.PROVINCE_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setProvinceReceiver(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.DISTRICT_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.DISTRICT_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setDistrictReceiver(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+      if (orderInformationInstane.WARD_ID_DES) {
+        dispatch(
+          action_GET_ADDRESS(
+            { Id: orderInformationInstane.WARD_ID_DES },
+            {
+              onSuccess: (data: API.VtpAddressResponse): void => {
+                setWardReceiver(get(data, 'LocationModels[0].N'));
+              },
+            },
+          ),
+        );
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orderInformationInstane]);
 
   const payloadFirstLoad = {
     FWO_ID: idDonHang,
@@ -59,7 +146,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const handleGotoEditForwardingOrder = (): void => {
-    dispatch(push(generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC_EDIT, { idDonHang })));
+    dispatch(push(generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC, { idDonHang })));
   };
 
   const columns = useMemo(
@@ -163,9 +250,9 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {orderInformationInstane &&
                   `${orderInformationInstane.HOUSE_NO_DES}${' '}
                   ${orderInformationInstane.STREET_ID_DES}${' '}
-                  ${orderInformationInstane.WARD_ID_DES}${' '}
-                  ${orderInformationInstane.DISTRICT_ID_DES}${' '}
-                  ${orderInformationInstane.COUNTRY_ID_DES}`}
+                  ${wardSender}${' '}
+                  ${districtSender}${' '}
+                  ${provinceSender}`}
               </Col>
             </Row>
           </div>
@@ -204,9 +291,9 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {orderInformationInstane &&
                   `${orderInformationInstane.HOUSE_NO_SOURCE}${' '}
                   ${orderInformationInstane.STREET_ID_SOURCE}${' '}
-                  ${orderInformationInstane.WARD_ID_SOURCE}${' '}
-                  ${orderInformationInstane.DISTRICT_ID_SOURCE}${' '}
-                  ${orderInformationInstane.COUNTRY_ID_SOURCE}`}
+                  ${wardReceiver}${' '}
+                  ${districtReceiver}${' '}
+                  ${provinceReceiver}`}
               </Col>
             </Row>
           </div>

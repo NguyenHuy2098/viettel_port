@@ -1,13 +1,9 @@
-import { useSelector, shallowEqual } from 'react-redux';
 import { AppStateType } from 'redux/store';
 import { get } from 'lodash';
 
-export function useGet_MT_ZTMI031_OUT(): API.RowMTZTMI031OUT[] {
-  return useSelector((state: AppStateType): API.RowMTZTMI031OUT[] => {
-    return get(state, 'MIOA_ZTMI031', []);
-  }, shallowEqual);
-}
-const defaultInstane = {
+export const select_MT_ZTMI031_OUT = (state: AppStateType): API.RowMTZTMI031OUT[] => get(state, 'MIOA_ZTMI031', []);
+
+const defaultInstance = {
   FWO: '',
   ORDERING_PARTY: '9999999999',
   SHIPER_ID: '',
@@ -58,8 +54,6 @@ const defaultInstane = {
   Item: [],
 };
 
-export function useGet_MT_ZTMI031_INSTANE(): API.RowMTZTMI031OUT {
-  return useSelector((state: AppStateType): API.RowMTZTMI031OUT => {
-    return get(state, 'MIOA_ZTMI031[0]', defaultInstane);
-  }, shallowEqual);
+export function select_MT_ZTMI031_INSTANE(state: AppStateType): API.RowMTZTMI031OUT {
+  return get(select_MT_ZTMI031_OUT(state), '[0]', defaultInstance);
 }
