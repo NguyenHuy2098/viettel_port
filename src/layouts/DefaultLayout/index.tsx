@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container } from 'reactstrap';
+import { get } from 'lodash';
 import * as router from 'react-router-dom';
 import {
   AppHeader,
@@ -23,7 +24,7 @@ const DefaultLayout: React.FC = (props): JSX.Element => {
   return (
     <div className="app">
       <AppHeader fixed>
-        <DefaultHeader />
+        <DefaultHeader url={get(props, 'location.pathname', '')} />
       </AppHeader>
       <div className="app-body">
         <AppSidebar fixed display="lg">

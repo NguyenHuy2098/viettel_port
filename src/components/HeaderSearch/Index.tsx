@@ -1,13 +1,18 @@
 import React, { useState, FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { generatePath } from 'react-router-dom';
+import { includes, size } from 'lodash';
 import { Button, Input, FormGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { action_CHECK_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
-import { push } from 'connected-react-router';
+import { push, replace } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
-const HeaderSearch: React.FC = (): JSX.Element => {
+interface Props {
+  url: string;
+}
+
+const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -24,17 +29,14 @@ const HeaderSearch: React.FC = (): JSX.Element => {
   };
 
   const handleOrderSearch = (): void => {
-    dispatch(
-      action_CHECK_MIOA_ZTMI031(payloadOrder, {
-        onSuccess: (data: API.MIOAZTMI031Response): void => {
-          if (data) {
-            dispatch(push(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
-          } else {
-            alert('No data!');
-          }
-        },
-      }),
-    );
+    if (size(searchValue)) {
+      if (includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN)) {
+        dispatch(replace(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
+      } else {
+        dispatch(push(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
+      }
+      dispatch(action_CHECK_MIOA_ZTMI031(payloadOrder));
+    }
   };
 
   return (

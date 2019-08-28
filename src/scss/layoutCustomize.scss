@@ -272,7 +272,7 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
     position: relative;
     top: -3px;
     &.sipTitleBtnBack {
-      color: #000;
+      color: #000 !important;
     }
   }
 }
@@ -399,6 +399,9 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
       }
     }
   }
+}
+.sipTableRowClickable tr {
+  cursor: pointer;
 }
 .modal .sipTableContainer {
   box-shadow: none;

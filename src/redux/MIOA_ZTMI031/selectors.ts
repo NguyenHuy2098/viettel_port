@@ -7,7 +7,6 @@ export function useGet_MT_ZTMI031_OUT(): API.RowMTZTMI031OUT[] {
     return get(state, 'MIOA_ZTMI031', []);
   }, shallowEqual);
 }
-
 const defaultInstane = {
   FWO: '',
   ORDERING_PARTY: '9999999999',

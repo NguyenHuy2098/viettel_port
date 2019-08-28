@@ -1,13 +1,15 @@
-import React, { ChangeEvent, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
 import { Cell } from 'react-table';
-import { match } from 'react-router-dom';
-import { map, get } from 'lodash';
+import { generatePath, match } from 'react-router-dom';
+import { drop, findIndex, get, map, slice } from 'lodash';
 import DataTable from 'components/DataTable';
 import { Button, Row, Col } from 'reactstrap';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { useGet_MT_ZTMI031_OUT, useGet_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   match: match;
@@ -18,6 +20,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const idDonHang = get(props, 'match.params.idDonHang');
+
   const orderInformation = useSelector(useGet_MT_ZTMI031_OUT);
   const orderInformationInstane = useSelector(useGet_MT_ZTMI031_INSTANE);
   const orderInfoTableData = map(
@@ -42,13 +45,25 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   React.useEffect((): void => {
     dispatch(action_MIOA_ZTMI031(payloadFirstLoad));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [idDonHang]);
 
-  function handleRedirectDetail(e: ChangeEvent<HTMLInputElement>): void {
-    // console.log(e);
-  }
+  const handleRedirectDetail = (item: API.RowMTZTMI031OUT): void => {
+    dispatch(
+      push(
+        generatePath(routesMap.THONG_TIN_KIEN_HANG, {
+          idDonHang: idDonHang,
+          idKienHang: item.PACKAGE_ID,
+        }),
+      ),
+    );
+  };
+
+  const handleGotoEditForwardingOrder = (): void => {
+    dispatch(push(generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC_EDIT, { idDonHang })));
+  };
 
   const columns = useMemo(
+    // eslint-disable-next-line max-lines-per-function
     () => [
       {
         Header: t('Mã kiện hàng'),
@@ -60,7 +75,10 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Giá trị'),
-        accessor: 'FWO',
+        accessor: '',
+        Cell: ({ row }: Cell): JSX.Element => {
+          return <>Thiếu Api</>;
+        },
       },
       {
         Header: t('Trọng lượng'),
@@ -73,6 +91,21 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Dịch vụ'),
         accessor: 'SERVICE_TYPE',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Cell: ({ row }: any): JSX.Element => {
+          const serviceType: string[] = drop(get(row, 'values.SERVICE_TYPE', ''), 1);
+          return (
+            <>
+              {slice(
+                serviceType,
+                0,
+                findIndex(serviceType, (item: string): boolean => {
+                  return item === '/';
+                }),
+              )}
+            </>
+          );
+        },
       },
       {
         Header: t('Quản trị'),
@@ -94,9 +127,14 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   function renderTable(): JSX.Element {
     return (
-      <>
-        <DataTable columns={columns} data={orderInfoTableData} onRowClick={handleRedirectDetail} />
-      </>
+      <Row className="sipTableContainer sipTableRowClickable">
+        <DataTable
+          columns={columns}
+          data={orderInfoTableData}
+          onRowClick={handleRedirectDetail}
+          dependency={idDonHang}
+        />
+      </Row>
     );
   }
 
@@ -146,7 +184,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       <Col xl="6" xs="12" className="mb-4">
         <div className="sipContentContainer">
           <div className="sipInputBlock mb-0">
-            <h3> {t('Người gửi')}</h3>
+            <h3> {t('Người nhận')}</h3>
             <Row className="sipInputItem">
               <Col xs="12" sm="5" md={4} xl={3}>
                 {t('Họ & tên')}:
@@ -187,7 +225,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
         <div className="sipTitleRightBlock">
-          <Button>
+          <Button onClick={handleGotoEditForwardingOrder}>
             <i className="fa fa-pencil" />
             Sửa phiếu gửi
           </Button>
@@ -207,7 +245,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <div className="row mt-3" />
       <h1 className="sipTitle">{t('Danh sách kiện hàng')}</h1>
-      <Row className="sipTableContainer">{renderTable()}</Row>
+      {renderTable()}
     </>
   );
 };

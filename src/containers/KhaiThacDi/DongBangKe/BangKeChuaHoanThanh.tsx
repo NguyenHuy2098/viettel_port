@@ -140,7 +140,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   return (
     <>
       <Row className="sipContentContainer">
-        <Col lg={4} xs={12} className="p-0">
+        <Col xl={6} lg={8} xs={12} className="p-0">
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />

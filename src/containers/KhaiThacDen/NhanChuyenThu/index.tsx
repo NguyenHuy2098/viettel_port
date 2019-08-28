@@ -111,7 +111,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     <div>
       {renderOrderInformationTitle()}
       {renderFindOrder()}
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={dataNhanChuyenThu} onRowClick={handleRedirectDetail} />
       </Row>
     </div>

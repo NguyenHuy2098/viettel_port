@@ -10,8 +10,12 @@ import { makeSelectProfile } from 'redux/auth/selectors';
 import routesMap from 'utils/routesMap';
 import HeaderSearch from 'components/HeaderSearch/Index';
 
+interface Props {
+  url: string;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const DefaultHeader: React.FC = (): JSX.Element => {
+const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const profile = useSelector(makeSelectProfile);
   const [dropdownOpenMenu, setDropdownOpenMenu] = useState<boolean>(false);
@@ -150,7 +154,7 @@ const DefaultHeader: React.FC = (): JSX.Element => {
       />
       <AppSidebarToggler className="d-md-down-none" display="lg" />
 
-      <HeaderSearch />
+      <HeaderSearch url={props.url} />
       {renderNav()}
     </>
   );
