@@ -128,12 +128,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   function renderTable(): JSX.Element {
     return (
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable
-          columns={columns}
-          data={orderInfoTableData}
-          onRowClick={handleRedirectDetail}
-          dependency={idDonHang}
-        />
+        <DataTable columns={columns} data={orderInfoTableData} onRowClick={handleRedirectDetail} />
       </Row>
     );
   }

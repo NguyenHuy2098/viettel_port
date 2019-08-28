@@ -8,17 +8,10 @@ import Pagination from 'components/Pagination';
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: (item: any) => void;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  dependency?: any;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const DataTable: React.FC<Props & TableProps> = ({
-  columns,
-  data,
-  onRowClick,
-  dependency,
-}: Props & TableProps): JSX.Element => {
+const DataTable: React.FC<Props & TableProps> = ({ columns, data, onRowClick }: Props & TableProps): JSX.Element => {
   // Use the state and functions returned from useTable to build your UI
   const { getTableProps, headerGroups, rows, prepareRow } = useTable({
     columns,
@@ -31,7 +24,7 @@ const DataTable: React.FC<Props & TableProps> = ({
       onRowClick && onRowClick(item);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dependency && dependency],
+    [data],
   );
 
   // Render the UI for your table
