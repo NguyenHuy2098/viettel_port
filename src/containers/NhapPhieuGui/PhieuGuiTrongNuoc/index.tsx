@@ -245,6 +245,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [provinceSender, setProvinceSender] = useState<string>('');
   const [districtSender, setDistrictSender] = useState<string>('');
   const [wardSender, setWardSender] = useState<string>('');
+  const [provinceIdSender, setProvinceIdSender] = useState<string>('');
+  const [districtIdSender, setDistrictIdSender] = useState<string>('');
+  const [wardIdSender, setWardIdSender] = useState<string>('');
   const [detailAddressSender, setDetailAddressSender] = useState<string>('');
   const [dienThoaiReceiver, setDienThoaiReceiver] = useState<string>('');
   const [hoTenReceiver, setHoTenReceiver] = useState<string>('');
@@ -252,6 +255,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [provinceReceiver, setProvinceReceiver] = useState<string>('');
   const [districtReceiver, setDistrictReceiver] = useState<string>('');
   const [wardReceiver, setWardReceiver] = useState<string>('');
+  const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>('');
+  const [districtIdReceiver, setDistrictIdReceiver] = useState<string>('');
+  const [wardIdReceiver, setWardIdReceiver] = useState<string>('');
   const [detailAddressReceiver, setDetailAddressReceiver] = useState<string>('');
   const [tenHang, setTenHang] = useState<string>('');
   const [soLuong, setSoLuong] = useState<string>('');
@@ -373,6 +379,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setProvinceSender(data.province);
     setDistrictSender(data.district);
     setWardSender(data.ward);
+    setProvinceIdSender(data.provinceId);
+    setDistrictIdSender(data.districtId);
+    setWardIdSender(data.wardId);
     setDetailAddressSender(data.detailAddress);
     setDiaChiSender(data.fullAddress);
     dispatchGetSummaryInformation();
@@ -385,6 +394,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setProvinceReceiver(data.province);
     setDistrictReceiver(data.district);
     setWardReceiver(data.ward);
+    setProvinceIdReceiver(data.provinceId);
+    setDistrictIdReceiver(data.districtId);
+    setWardIdReceiver(data.wardId);
     setDetailAddressReceiver(data.detailAddress);
     setDiaChiReceiver(data.fullAddress);
     dispatchGetSummaryInformation();
@@ -423,7 +435,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //______________check if Order Information exist
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
-    if (orderInformationInstane && orderInformation) {
+    if (size(orderInformation)) {
       setMaPhieuGui(orderInformationInstane.FWO ? orderInformationInstane.FWO : '');
       setDienThoaiSender(orderInformationInstane.MOBILE_PHONE_SRT ? orderInformationInstane.MOBILE_PHONE_SRT : '');
       setHoTenSender(orderInformationInstane.SHIPER_NAME ? orderInformationInstane.SHIPER_NAME : '');
@@ -432,9 +444,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           orderInformationInstane.STREET_ID_DES
         }${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
       );
-      setProvinceSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
-      setDistrictSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
-      setWardSender(toString(get(orderInformationInstane, 'WARD_ID_SOURCE', '')));
+      setProvinceIdSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
+      setDistrictIdSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
+      setWardIdSender(toString(get(orderInformationInstane, 'WARD_ID_SOURCE', '')));
+      setProvinceSender(provinceSenderEdit);
+      setDistrictSender(districtSenderEdit);
+      setWardSender(wardSenderEdit);
       setDetailAddressSender(
         get(orderInformationInstane, 'HOUSE_NO_SOURCE', '') +
           ' ' +
@@ -447,9 +462,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           orderInformationInstane.STREET_ID_SOURCE
         }${' '}${wardReceiverEdit}${' '}${districtReceiverEdit}${' '}${provinceReceiverEdit}`,
       );
-      setProvinceReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
-      setDistrictReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
-      setWardReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
+      setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
+      setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
+      setWardIdReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
+      setProvinceReceiver(provinceReceiverEdit);
+      setDistrictReceiver(districtReceiverEdit);
+      setWardReceiver(wardReceiverEdit);
       setDetailAddressReceiver(
         get(orderInformationInstane, 'HOUSE_NO_DES', '') + ' ' + get(orderInformationInstane, 'STREET_ID_DES', ''),
       );
@@ -536,24 +554,90 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     });
     const servicePayload = find(
       transportMethodArr,
-      (item: API.TransportMethodItem): boolean => item.SERVICE_GROUP === phuongThucVanChuyen,
+      (item: API.TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
     );
+    let newPackageItem011 = {
+      COD: '',
+      Currency: 'VN',
+      Dimension_UoM: 'CM',
+      GROSS_WEIGHT: '',
+      Length: '',
+      Height: '',
+      Width: '',
+      Insurance_value: '4555',
+      item_cat: 'PKG',
+      NET_WEIGHT: '100',
+      quantity: '1',
+      Weight_UoM: 'G',
+    };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const newArr011: any = [];
+    if (size(payloadPackageItemArr) >= 1) {
+      forEach(payloadPackageItemArr, (item: API.PackageItem): void => {
+        newPackageItem011 = {
+          COD: item.COD ? toString(parseInt(item.COD)) : '',
+          Currency: '',
+          Dimension_UoM: 'CM',
+          GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
+          Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
+          Height: item.Hight ? toString(parseFloat(item.Hight).toFixed(2)) : '',
+          Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
+          Insurance_value: '4555',
+          item_cat: 'PKG',
+          NET_WEIGHT: '',
+          quantity: '1',
+          Weight_UoM: 'G',
+        };
+        newArr011.push(newPackageItem011);
+      });
+    }
     const api011Payload = {
       Movement_type: 'ZDD',
       Ordering_party: 'TRUNGVT',
       Sales_org: '',
-      Service_group: servicePayload ? servicePayload.SERVICE_TYPE : '',
+      Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
       Source_country: 'VN',
-      Source_city: provinceSender,
-      Source_district: districtSender,
-      Source_Ward: wardSender,
+      Source_city: provinceIdSender,
+      Source_district: districtIdSender,
+      Source_Ward: wardIdSender,
       Destination_country: 'VN',
-      Destination_city: provinceReceiver,
-      Destination_district: districtReceiver,
-      Destination_Ward: wardReceiver,
+      Destination_city: provinceIdReceiver,
+      Destination_district: districtIdReceiver,
+      Destination_Ward: wardIdReceiver,
       FWO_type: 'V001',
-      Item: payloadPackageItemArr,
+      Item: newArr011,
     };
+    // const api011PayloadFake = {
+    //   Movement_type: 'ZDD',
+    //   Ordering_party: 'TRUNGVT',
+    //   Sales_org: '',
+    //   Service_group: 'V02',
+    //   Source_country: 'VN',
+    //   Source_city: 'HNI',
+    //   Source_district: 'HNBD',
+    //   Source_Ward: '11106',
+    //   Destination_country: 'VN',
+    //   Destination_city: 'HCM',
+    //   Destination_district: 'HCQ1',
+    //   Destination_Ward: '71006',
+    //   FWO_type: 'V001',
+    //   Item: [
+    //     {
+    //       COD: '4555',
+    //       Currency: '',
+    //       Dimension_UoM: 'CM',
+    //       Gross_weight: '3000',
+    //       Height: '',
+    //       Insurance_value: '4555',
+    //       item_cat: 'PKG',
+    //       Length: '',
+    //       Net_weight: '',
+    //       quantity: '1',
+    //       Weight_UoM: 'G',
+    //       Width: '',
+    //     },
+    //   ],
+    // };
     dispatch(
       action_MIOA_ZTMI011(api011Payload, {
         onFailure: (error: HttpRequestErrorType): void => {
@@ -1431,7 +1515,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 defaultChecked
                 onChange={handleChangeTextboxValue(setChoXemHang)}
               />{' '}
-              {t('Cho khách xem áchhàng')}
+              {t('Cho khách xem hàng')}
             </Label>
           </Col>
           <Col lg="6" xs="12">

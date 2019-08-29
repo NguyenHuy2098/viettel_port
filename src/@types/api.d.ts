@@ -2531,6 +2531,9 @@ declare namespace API {
     province: string;
     district: string;
     ward: string;
+    provinceId: string;
+    districtId: string;
+    wardId: string;
     detailAddress: string;
     fullAddress: string;
   }

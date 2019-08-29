@@ -67,6 +67,9 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
     province: '',
     district: '',
     ward: '',
+    provinceId: '',
+    districtId: '',
+    wardId: '',
     detailAddress: '',
     fullAddress: '',
   };
@@ -197,6 +200,9 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
     addressData.province = provinceName;
     addressData.district = districtName;
     addressData.ward = wardName;
+    addressData.provinceId = province;
+    addressData.districtId = district;
+    addressData.wardId = ward;
     addressData.detailAddress = detailAddress;
     addressData.fullAddress = `${detailAddress} - ${wardName} - ${districtName} - ${provinceName}`;
   }
