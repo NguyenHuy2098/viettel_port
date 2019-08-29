@@ -225,6 +225,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   //________hook to trigger input focus validating
   const [count, setCount] = useState<number>(0);
+  //________hook to trigger get Summary Information
+  const [countGetSummaryInformation, setCountGetSummaryInformation] = useState<number>(0);
   //________Yup errors list after executing validating
   const [errors, setErrors] = useState<yup.ValidationError[]>([]);
   //________return corresponding error according to field name
@@ -349,14 +351,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       draftState.splice(index, 1);
     });
     setPackageItemArr(newArr);
-    dispatchGetSummaryInformation();
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
   }
   function adjustPackageItemValue(valueName: string, value: string | undefined, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], valueName, value);
     });
     setPackageItemArr(newArr);
-    dispatchGetSummaryInformation();
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
     if (isSubmit) {
       setCount(count + 1);
@@ -384,7 +388,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setWardIdSender(data.wardId);
     setDetailAddressSender(data.detailAddress);
     setDiaChiSender(data.fullAddress);
-    dispatchGetSummaryInformation();
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
     if (isSubmit) {
       setCount(count + 1);
@@ -399,7 +404,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setWardIdReceiver(data.wardId);
     setDetailAddressReceiver(data.detailAddress);
     setDiaChiReceiver(data.fullAddress);
-    dispatchGetSummaryInformation();
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
     if (isSubmit) {
       setCount(count + 1);
@@ -671,6 +677,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   React.useEffect((): void => {
+    dispatchGetSummaryInformation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countGetSummaryInformation]);
+
+  React.useEffect((): void => {
     dispatch(
       action_GET_TRANSPORT_METHOD(
         { GET: null },
@@ -684,7 +695,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         },
       ),
     );
-    dispatchGetSummaryInformation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
@@ -746,7 +756,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
-      dispatchGetSummaryInformation();
+      //trigger get Summary information dispatch
+      setCountGetSummaryInformation(countGetSummaryInformation + 1);
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -759,7 +770,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     forEach(dichVuCongThem, (item: string, index: number): void => {
       loaiHinhDichVu += '/' + item;
     });
-    dispatchGetSummaryInformation();
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
   }
 
   function handleChangeTransportMethod(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
@@ -786,6 +798,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function handleChangeDeliveryTime(date: Date): void {
     setThoiGianPhat(date);
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
     if (isSubmit) {
       setCount(count + 1);
