@@ -10,6 +10,7 @@ const sapApis = [
   'MIOA_ZTMI023',
   'MIOA_ZTMI046',
   'MIOA_ZTMI047',
+  'MIOA_ZTMI040',
   'MIOA_ZTMI012',
   'SearchLocation',
   'SIOA_ZTMI068',

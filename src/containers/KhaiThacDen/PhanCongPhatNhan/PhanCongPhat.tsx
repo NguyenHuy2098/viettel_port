@@ -1,9 +1,13 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Button, Row, Input, Label, Col } from 'reactstrap';
+import { get } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { match, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+// import moment from 'moment';
+import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
 import ModalThemPhieuGui from './ModalThemPhieuGui';
 import ModalChonNhanVien from './ModalChonNhanVien';
 
@@ -14,30 +18,31 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
-  const data = [
-    {
-      TOR_ID: 4545,
-      TO_LOCAL_ID: 'abc',
-      TO_LOG_ID: 'bcd',
-      countChuyenThu: 12,
-      MONEY: 1200,
-      CREATED_ON: '12/12/2019',
-      NOTE: 'Chả có gì',
-      TYPE_OF: 'Kiện',
-      STATUS: 'Chưa có',
-    },
-    {
-      TOR_ID: 42365,
-      TO_LOCAL_ID: 'yut',
-      TO_LOG_ID: 'adff',
-      countChuyenThu: 12,
-      MONEY: 2500,
-      CREATED_ON: '12/12/2019',
-      NOTE: 'Chả có gì',
-      TYPE_OF: 'Tải',
-      STATUS: 'Chưa có',
-    },
-  ];
+  const dispatch = useDispatch();
+  // const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
+
+  const [phanCongPhatList, setPhanCongPhatList] = useState<API.RowResponseZTMI040[]>([]);
+
+  useEffect((): void => {
+    dispatch(
+      action_MIOA_ZTMI040(
+        {
+          FU_STATUS: '604,806',
+          Delivery_postman: 'PM02',
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '50',
+          Vourcher: 'N',
+          Return: 'N',
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI040PayloadType): void => {
+            setPhanCongPhatList(get(data, 'data.MT_ZTMI040_OUT.row', []));
+          },
+        },
+      ),
+    );
+  }, []);
+
   const columns = useMemo(
     () => [
       {
@@ -54,7 +59,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Mã phiếu gửi'),
-        accessor: 'TOR_ID',
+        accessor: 'Package_ID',
       },
       {
         Header: t('Bưu cục đến'),
@@ -62,19 +67,19 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Địa chỉ phát'),
-        accessor: 'TO_LOCAL_ID',
+        accessor: 'Receiver_address',
       },
       {
         Header: t('Tiền phải thu'),
-        accessor: 'MONEY',
+        accessor: 'Freight_charge',
       },
       {
         Header: t('Ngày gửi bưu phẩm'),
-        accessor: 'CREATED_ON',
+        accessor: 'Created_on',
       },
       {
         Header: t('Trạng thái'),
-        accessor: 'STATUS',
+        accessor: 'Status',
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -118,7 +123,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
         </div>
       </Row>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={phanCongPhatList} />
       </Row>
     </>
   );
