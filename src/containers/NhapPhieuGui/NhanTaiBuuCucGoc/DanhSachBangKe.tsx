@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
-import { map, get } from 'lodash';
+import { map, toString, trim } from 'lodash';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
@@ -24,10 +24,14 @@ function DanhSachBangKe(): JSX.Element {
   useEffect((): void => {
     const payload = {
       IV_TOR_ID: '',
-      IV_TOR_TYPE: 'ZC1',
+      IV_TOR_TYPE: 'ZC3',
       IV_FR_LOC_ID: 'BDH',
-      IV_CUST_STATUS: '101',
+      IV_CUST_STATUS: '104',
       IV_TO_LOC_ID: '',
+      IV_FR_DATE: '20190101',
+      IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+      IV_PAGENO: '1',
+      IV_NO_PER_PAGE: '10',
     };
     dispatch(action_MIOA_ZTMI047(payload));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -129,7 +133,7 @@ function DanhSachBangKe(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const data = map(get(listBangKeChuaDongTai, ''), (item: API.RowMTZTMI047OUT) => {
+  const data = map(listBangKeChuaDongTai, (item: API.RowMTZTMI047OUT) => {
     return {
       TOR_ID: item.TOR_ID,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
