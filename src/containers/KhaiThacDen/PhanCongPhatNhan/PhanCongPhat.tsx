@@ -1,13 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Row, Input, Label, Col } from 'reactstrap';
-import { get } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { match, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import DataTable from 'components/DataTable';
 // import moment from 'moment';
+import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
+import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
 import ModalThemPhieuGui from './ModalThemPhieuGui';
 import ModalChonNhanVien from './ModalChonNhanVien';
 
@@ -19,27 +19,18 @@ interface Props {
 const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  // const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
-
-  const [phanCongPhatList, setPhanCongPhatList] = useState<API.RowResponseZTMI040[]>([]);
+  const listPhanCongPhat = useSelector(selectPhanCongPhat);
 
   useEffect((): void => {
     dispatch(
-      action_MIOA_ZTMI040(
-        {
-          FU_STATUS: '604,806',
-          Delivery_postman: 'PM02',
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '50',
-          Vourcher: 'N',
-          Return: 'N',
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI040PayloadType): void => {
-            setPhanCongPhatList(get(data, 'data.MT_ZTMI040_OUT.row', []));
-          },
-        },
-      ),
+      action_MIOA_ZTMI040({
+        FU_STATUS: '604,806',
+        Delivery_postman: 'PM02',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '50',
+        Vourcher: 'N',
+        Return: 'N',
+      }),
     );
   }, []);
 
@@ -123,7 +114,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
         </div>
       </Row>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={phanCongPhatList} />
+        <DataTable columns={columns} data={listPhanCongPhat} />
       </Row>
     </>
   );

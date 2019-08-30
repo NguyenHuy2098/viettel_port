@@ -19,7 +19,7 @@ export default function(
           draftState.response = payload.data;
           return draftState;
         default:
-          return defaultState;
+          return draftState;
       }
     },
   );
