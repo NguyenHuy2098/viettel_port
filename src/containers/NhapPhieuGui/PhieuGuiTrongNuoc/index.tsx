@@ -7,7 +7,7 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { drop, get, find, findIndex, forEach, map, noop, reduce, set, size, toString } from 'lodash';
+import { drop, get, find, findIndex, forEach, map, reduce, set, size, toString } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -21,6 +21,7 @@ import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTM
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
+import ModalAddNewSuccess from './ModalAddNewSuccess';
 
 interface Props {
   match: match;
@@ -34,11 +35,20 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   // const dataSelectProfile = useSelector(makeSelectProfile, shallowEqual);
 
   const idDonHang = get(props, 'match.params.idDonHang');
+  const isCreateNewForwardingOrder: boolean = idDonHang === 'tao-don';
 
   const payloadOrderInfoFirstLoad = {
     FWO_ID: idDonHang,
     BUYER_REFERENCE_NUMBER: '',
   };
+  //________________success popup enable
+  const [modalApiCreateSuccess, setModalApiCreateSuccess] = React.useState<boolean>(false);
+
+  function toggleModalApiCreateSuccess(): void {
+    setModalApiCreateSuccess(!modalApiCreateSuccess);
+  }
+
+  //_____________________________________________________________
 
   const orderInformation = useSelector(select_MT_ZTMI031_OUT);
   const orderInformationInstane = useSelector(select_MT_ZTMI031_INSTANE);
@@ -130,7 +140,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }, [orderInformationInstane]);
 
   React.useEffect((): void => {
-    dispatch(action_MIOA_ZTMI031(payloadOrderInfoFirstLoad));
+    if (!isCreateNewForwardingOrder) {
+      dispatch(action_MIOA_ZTMI031(payloadOrderInfoFirstLoad));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idDonHang]);
 
@@ -647,7 +659,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI011(api011Payload, {
         onFailure: (error: HttpRequestErrorType): void => {
-          // console.log(error);
+          alert(error.messages);
         },
         onSuccess: (data: API.ItemMTZTMI011OUT[]): void => {
           const cuocChinhAmount = reduce(
@@ -687,7 +699,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         { GET: null },
         {
           onFailure: (error: HttpRequestErrorType): void => {
-            noop(error);
+            alert(error.messages);
           },
           onSuccess: (data: API.MTZTMI068Response): void => {
             setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
@@ -877,11 +889,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // if (!window.confirm('Bạn có chắc chắn?')) return;
     dispatch(
       action_MIOA_ZTMI012(payload, {
-        onSuccess: (): void => {
-          alert('Thành công!!!');
+        onSuccess: (data: API.MIOAZTMI012Response): void => {
+          setMaPhieuGui(get(data, 'MT_ZTMI012_OUT.FWO_ID', ''));
+          toggleModalApiCreateSuccess();
         },
-        onFailure: (): void => {
-          alert('Có lỗi xảy ra.');
+        onFailure: (error: HttpRequestErrorType): void => {
+          alert(error.messages);
         },
       }),
     );
@@ -1655,6 +1668,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Ghi lại
         </Button>
       </div>
+      <ModalAddNewSuccess
+        modalApiCreateSuccess={modalApiCreateSuccess}
+        isCreateNewForwardingOrder={isCreateNewForwardingOrder}
+        toggle={toggleModalApiCreateSuccess}
+      />
     </>
   );
 };
