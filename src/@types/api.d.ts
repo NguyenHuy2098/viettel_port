@@ -1584,7 +1584,15 @@ declare namespace API {
     ZONLO?: string;
     CHILDS?: Child[];
   }
+  export interface RowMTZTMI047OUTChild {
+    TOR_ID: string;
+    TOR_TYPE: string;
+    PACKAGE_ID: string;
+    LIFECYCLE: string;
+    DESCRIPTION: string;
+  }
   export interface RowMTZTMI047OUT {
+    CREATED_BY?: string;
     TOR_ID?: string;
     LIFECYCLE?: number; // int32
     DATETIME_CHLC?: string;
@@ -1595,6 +1603,7 @@ declare namespace API {
     EXEC_CONT?: string;
     ITEM_NO?: string;
     ZONLO?: string;
+    Childs: RowMTZTMI047OUTChild[];
   }
   export interface RowMTZTMI048OUT {
     TOR_ID?: string;

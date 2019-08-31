@@ -19,7 +19,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorCountBangKeChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
@@ -77,7 +77,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
 
   const [tab, setTab] = useState<number>(1);
-  const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
+  const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
@@ -109,7 +109,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Bảng kê chưa hoàn thành')}
-              <Badge color="primary">{countBangKeChuaDongTai}</Badge>
+              <Badge color="primary">{countBangKeChuaHoanThanh}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>

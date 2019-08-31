@@ -1,13 +1,13 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { map, get } from 'lodash';
+import { map, get, size } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
-import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
+import { makeSelectorBangKeChuaHoanThanh, makeSelectorCountBangKeChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
+import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import moment from 'moment';
@@ -18,8 +18,30 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
-  const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
+  const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
+  const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaHoanThanh);
+
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+  const [deleteTorId, setDeleteTorId] = useState<string>('');
+  const [torIdSearch, setTorIdSearch] = useState<string>('');
+
+  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setValueFunction(event.currentTarget.value);
+    };
+  }
+
+  function toggleDeleteConfirmModal(): void {
+    setDeleteConfirmModal(!deleteConfirmModal);
+  }
+
+  function handleDeleteItem(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      event.stopPropagation();
+      setDeleteTorId(torId);
+      toggleDeleteConfirmModal();
+    };
+  }
 
   const getListBangKe = useCallback(
     function(payload = {}): void {
@@ -29,7 +51,10 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '101',
-          IV_TO_LOC_ID: '',
+          IV_FR_DATE: '20190828',
+          IV_TO_DATE: '20190828',
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
           ...payload,
         }),
       );
@@ -39,46 +64,48 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
 
   useEffect((): void => getListBangKe(), [getListBangKe]);
 
-  function handleSearchBangKe(e: React.ChangeEvent<HTMLInputElement>): void {
-    const payload = {
-      IV_TOR_ID: e.target.value,
-    };
-    getListBangKe(payload);
+  function handleSearchBangKe(): void {
+    if (size(torIdSearch)) {
+      const payload = {
+        IV_TOR_ID: torIdSearch,
+      };
+      getListBangKe(payload);
+    }
   }
 
   // function onPageChange(selectedItem: { selected: number }): void {
   //   noop(selectedItem);
   // }
 
-  const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      const payload = {
-        IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC1',
-        IV_TOR_ID_CU: item.TOR_ID,
-        IV_SLOCATION: '',
-        IV_DLOCATION: '',
-        IV_DESCRIPTION: '',
-        T_ITEM: [
-          {
-            ITEM_ID: '',
-            ITEM_TYPE: '',
-          },
-        ],
-      };
-      dispatch(
-        action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => getListBangKe(),
-        }),
-      );
+  const handleDeleteManifest = (torId: string): void => {
+    const payload = {
+      IV_FLAG: '3',
+      IV_TOR_TYPE: 'ZC1',
+      IV_TOR_ID_CU: torId,
+      IV_SLOCATION: '',
+      IV_DLOCATION: '',
+      IV_DESCRIPTION: '',
+      T_ITEM: [
+        {
+          ITEM_ID: '',
+          ITEM_TYPE: '',
+        },
+      ],
     };
+    dispatch(
+      action_MIOA_ZTMI016(payload, {
+        onFinish: (): void => getListBangKe(),
+      }),
+    );
   };
 
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): void => {
       dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
-    };
-  };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listBangKeChuaDongTai],
+  );
 
   const columns = useMemo(
     () => [
@@ -96,7 +123,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Người nhập'),
-        accessor: 'PERSONAL',
+        accessor: 'CREATED_BY',
       },
       {
         Header: t('Ngày nhập'),
@@ -117,7 +144,9 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
               <Button className="SipTableFunctionIcon">
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>
-              <ModalPopupConfirm handleDoSomething={handleDeleteManifest} />
+              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
             </>
           );
         },
@@ -126,14 +155,14 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const data = map(get(listBangKeChuaDongTai, 'Row[0].CHILDS'), (item: API.RowMTZTMI047OUT) => {
+  const data = map(listBangKeChuaDongTai, (item: API.RowMTZTMI047OUT) => {
     return {
       TOR_ID: item.TOR_ID,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
-      PERSONAL: item.ITEM_NO,
-      countChuyenThu: 222,
+      countChuyenThu: item.ITEM_NO,
+      CREATED_BY: item.CREATED_BY,
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      NOTE_OF: item.EXEC_CONT,
+      NOTE_OF: get(item, 'Childs[0].DESCRIPTION', ''),
     };
   });
 
@@ -144,9 +173,14 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm bảng kê')} onChange={handleSearchBangKe} />
+              <Input
+                value={torIdSearch}
+                type="text"
+                placeholder={t('Tìm kiếm bảng kê')}
+                onChange={handleChangeTextboxValue(setTorIdSearch)}
+              />
             </div>
-            <Button color="primary" className="ml-2">
+            <Button color="primary" className="ml-2" onClick={handleSearchBangKe}>
               {t('Tìm kiếm')}
             </Button>
             <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
@@ -156,14 +190,20 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countBangKeChuaDongTai}</span>
+            {t('Tổng số')}: <span>{countBangKeChuaHoanThanh}</span>
           </p>
         </Col>
       </Row>
       <div className="mt-3" />
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
       </Row>
+      <DeleteConfirmModal
+        visible={deleteConfirmModal}
+        onDelete={handleDeleteManifest}
+        onHide={toggleDeleteConfirmModal}
+        torId={deleteTorId}
+      />
     </>
   );
 };

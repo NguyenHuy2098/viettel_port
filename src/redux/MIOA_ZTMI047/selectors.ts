@@ -5,6 +5,12 @@ export function makeSelectorBangKeChuaDongTai(state: AppStateType): API.RowMTZTM
   return get(state, 'MIOA_ZTMI047.ZC3.104.MT_ZTMI047_OUT.Row', null);
 }
 
+//__________________________________________________
+export function makeSelectorBangKeChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
+  return get(state, 'MIOA_ZTMI047.ZC1.101.MT_ZTMI047_OUT.Row', null);
+}
+//__________________________________________________
+
 export function makeSelectorTaiChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
   return get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', null);
 }
@@ -22,6 +28,10 @@ export function makeSelectorTaiDaDong(state: AppStateType): API.RowMTZTMI047OUT[
 
 export function makeSelectorCountBangKeChuaDongTai(state: AppStateType): number {
   return size(makeSelectorBangKeChuaDongTai(state));
+}
+
+export function makeSelectorCountBangKeChuaHoanThanh(state: AppStateType): number {
+  return size(makeSelectorBangKeChuaHoanThanh(state));
 }
 
 export function makeSelectorCountTaiChuaHoanThanh(state: AppStateType): number {
