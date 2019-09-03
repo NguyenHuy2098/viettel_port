@@ -5,13 +5,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { Cell } from 'react-table';
 import { generatePath, match } from 'react-router-dom';
-import { drop, findIndex, get, map, slice } from 'lodash';
+import { drop, findIndex, get, map, size, slice } from 'lodash';
 import DataTable from 'components/DataTable';
-import { Button, Row, Col } from 'reactstrap';
+import { Button, Row, Col, Fade } from 'reactstrap';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
+import { goBack } from 'connected-react-router';
 
 interface Props {
   match: match;
@@ -22,6 +23,9 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const idDonHang = get(props, 'match.params.idDonHang');
+  const handleBack = (): void => {
+    dispatch(goBack());
+  };
 
   const orderInformation = useSelector(select_MT_ZTMI031_OUT);
   const orderInformationInstane = useSelector(select_MT_ZTMI031_INSTANE);
@@ -231,7 +235,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Họ & tên')}:
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
-                {orderInformationInstane && orderInformationInstane.CONSIGNEE_NAME}
+                {orderInformationInstane && orderInformationInstane.SHIPER_NAME}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -239,7 +243,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Điện thoại')}:
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
-                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_DES}
+                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_SRT}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -248,8 +252,8 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
                 {orderInformationInstane &&
-                  `${orderInformationInstane.HOUSE_NO_DES}${' '}
-                  ${orderInformationInstane.STREET_ID_DES}${' '}
+                  `${orderInformationInstane.HOUSE_NO_DES !== 0 ? orderInformationInstane.HOUSE_NO_DES : ''}${' '}
+                  ${orderInformationInstane.STREET_ID_DES !== null ? orderInformationInstane.STREET_ID_DES : ''}${' '}
                   ${wardSender}${' '}
                   ${districtSender}${' '}
                   ${provinceSender}`}
@@ -272,7 +276,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Họ & tên')}:
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
-                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_SRT}
+                {orderInformationInstane && orderInformationInstane.CONSIGNEE_NAME}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -280,7 +284,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Điện thoại')}:
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
-                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_SRT}
+                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_DES}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -289,8 +293,10 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
                 {orderInformationInstane &&
-                  `${orderInformationInstane.HOUSE_NO_SOURCE}${' '}
-                  ${orderInformationInstane.STREET_ID_SOURCE}${' '}
+                  `${orderInformationInstane.HOUSE_NO_SOURCE !== 0 ? orderInformationInstane.HOUSE_NO_SOURCE : ''}${' '}
+                  ${
+                    orderInformationInstane.STREET_ID_SOURCE !== null ? orderInformationInstane.STREET_ID_SOURCE : ''
+                  }${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}
@@ -302,7 +308,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  return (
+  return size(orderInformation) > 0 ? (
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
@@ -329,6 +335,19 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       <h1 className="sipTitle">{t('Danh sách kiện hàng')}</h1>
       {renderTable()}
     </>
+  ) : (
+    <Fade in={true} timeout={2000}>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button onClick={handleBack} className="sipTitleBtnBack">
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Quay lại')}
+        </h1>
+      </Row>
+      <div className="row mb-5" />
+      <h3 className="text-center">{t('Không tìm thấy thông tin phiếu gửi!')}</h3>
+    </Fade>
   );
 };
 

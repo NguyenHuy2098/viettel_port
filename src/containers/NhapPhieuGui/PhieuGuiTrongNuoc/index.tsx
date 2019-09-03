@@ -50,8 +50,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   //_____________________________________________________________
 
-  const orderInformation = useSelector(select_MT_ZTMI031_OUT);
-  const orderInformationInstane = useSelector(select_MT_ZTMI031_INSTANE);
+  const orderInformationSelector = useSelector(select_MT_ZTMI031_OUT);
+  const orderInformationInstaneSelector = useSelector(select_MT_ZTMI031_INSTANE);
+
+  const orderInformation = isCreateNewForwardingOrder ? [] : orderInformationSelector;
+  const orderInformationInstane = isCreateNewForwardingOrder ? {} : orderInformationInstaneSelector;
 
   const [provinceSenderEdit, setProvinceSenderEdit] = useState<string>('');
   const [districtSenderEdit, setDistrictSenderEdit] = useState<string>('');
@@ -62,79 +65,77 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
-    if (orderInformationInstane) {
-      if (orderInformationInstane.PROVINCE_ID_SOURCE) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: orderInformationInstane.PROVINCE_ID_SOURCE },
-            {
-              onSuccess: (data: API.VtpAddressResponse): void => {
-                setProvinceSenderEdit(get(data, 'LocationModels[0].N'));
-              },
+    if (orderInformationInstane.PROVINCE_ID_SOURCE) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: orderInformationInstane.PROVINCE_ID_SOURCE },
+          {
+            onSuccess: (data: API.VtpAddressResponse): void => {
+              setProvinceSenderEdit(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (orderInformationInstane.DISTRICT_ID_SOURCE) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: orderInformationInstane.DISTRICT_ID_SOURCE },
-            {
-              onSuccess: (data: API.VtpAddressResponse): void => {
-                setDistrictSenderEdit(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (orderInformationInstane.DISTRICT_ID_SOURCE) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: orderInformationInstane.DISTRICT_ID_SOURCE },
+          {
+            onSuccess: (data: API.VtpAddressResponse): void => {
+              setDistrictSenderEdit(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (orderInformationInstane.WARD_ID_SOURCE) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: orderInformationInstane.WARD_ID_SOURCE },
-            {
-              onSuccess: (data: API.VtpAddressResponse): void => {
-                setWardSenderEdit(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (orderInformationInstane.WARD_ID_SOURCE) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: orderInformationInstane.WARD_ID_SOURCE },
+          {
+            onSuccess: (data: API.VtpAddressResponse): void => {
+              setWardSenderEdit(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (orderInformationInstane.PROVINCE_ID_DES) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: orderInformationInstane.PROVINCE_ID_DES },
-            {
-              onSuccess: (data: API.VtpAddressResponse): void => {
-                setProvinceReceiverEdit(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (orderInformationInstane.PROVINCE_ID_DES) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: orderInformationInstane.PROVINCE_ID_DES },
+          {
+            onSuccess: (data: API.VtpAddressResponse): void => {
+              setProvinceReceiverEdit(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (orderInformationInstane.DISTRICT_ID_DES) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: orderInformationInstane.DISTRICT_ID_DES },
-            {
-              onSuccess: (data: API.VtpAddressResponse): void => {
-                setDistrictReceiverEdit(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (orderInformationInstane.DISTRICT_ID_DES) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: orderInformationInstane.DISTRICT_ID_DES },
+          {
+            onSuccess: (data: API.VtpAddressResponse): void => {
+              setDistrictReceiverEdit(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (orderInformationInstane.WARD_ID_DES) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: orderInformationInstane.WARD_ID_DES },
-            {
-              onSuccess: (data: API.VtpAddressResponse): void => {
-                setWardReceiverEdit(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (orderInformationInstane.WARD_ID_DES) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: orderInformationInstane.WARD_ID_DES },
+          {
+            onSuccess: (data: API.VtpAddressResponse): void => {
+              setWardReceiverEdit(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
+          },
+        ),
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderInformationInstane]);

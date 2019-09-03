@@ -459,10 +459,12 @@ html:not([dir="rtl"]) .sidebar {
         height: 36px;
         min-width: 36px;
         line-height: 34px;
+        cursor: pointer;
       }
-      &.active .page-link {
+      &.selected .page-link {
         background: none;
         border: 1px solid #94979B;
+        cursor: auto;
       }
     }
     .sipPaginationNext, .sipPaginationPrev {

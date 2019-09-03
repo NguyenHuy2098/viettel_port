@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { generatePath } from 'react-router-dom';
-import { includes, size } from 'lodash';
+import { includes, size, trim } from 'lodash';
 import { Button, Input, FormGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { action_CHECK_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
@@ -29,7 +29,7 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const handleOrderSearch = (): void => {
-    if (size(searchValue)) {
+    if (size(trim(searchValue))) {
       if (includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN)) {
         dispatch(replace(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
       } else {

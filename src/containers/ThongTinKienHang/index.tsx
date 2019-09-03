@@ -12,6 +12,7 @@ import { select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
 import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
+import moment from 'moment';
 
 interface Props {
   match: match;
@@ -170,7 +171,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
       description: t('Nhận hàng không thành công'),
     },
     {
-      id: 'ZPOSTMAN_DELIVERY',
+      id: 'ZPOSTMAN_DELIVER',
       description: t('Phân công giao hàng'),
     },
     {
@@ -301,6 +302,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   const serviceType: string[] = drop(get(packageInformation, 'SERVICE_TYPE', ''), 1);
 
+  //eslint-disable-next-line max-lines-per-function
   function renderOrderInformation(): JSX.Element {
     return (
       <Col xl="4" xs="12" className="mb-4">
@@ -320,7 +322,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Ngày tạo')}:
               </Col>
               <Col xs="12" sm="7">
-                10:46:07 - 23/5/2019 (Api trả thiếu)
+                {packageInformation && moment(packageInformation.CREATED_ON, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -328,13 +330,17 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Dịch vụ')}:
               </Col>
               <Col xs="12" sm="7">
-                {slice(
-                  serviceType,
-                  0,
-                  findIndex(serviceType, (item: string): boolean => {
-                    return item === '/';
-                  }),
-                )}
+                {findIndex(serviceType, (item: string): boolean => {
+                  return item === '/';
+                }) !== -1
+                  ? slice(
+                      serviceType,
+                      0,
+                      findIndex(serviceType, (item: string): boolean => {
+                        return item === '/';
+                      }),
+                    )
+                  : serviceType}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -342,8 +348,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Trạng thái')}:
               </Col>
               <Col xs="12" sm="7">
-                <span className="bg-success p-1 rounded">Đang giao</span>
-                (Api trả thiếu)
+                <span className="bg-success p-1 rounded">{packageInformation && packageInformation.FU_STATUS}</span>
               </Col>
             </Row>
           </div>
@@ -380,8 +385,8 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_DES}${' '}
-                  ${packageInformation.STREET_ID_DES}${' '}
+                  `${packageInformation.HOUSE_NO_DES !== 0 ? packageInformation.HOUSE_NO_DES : ''}${' '}
+                  ${packageInformation.STREET_ID_DES !== null ? packageInformation.STREET_ID_DES : ''}${' '}
                   ${wardSender}${' '}
                   ${districtSender}${' '}
                   ${provinceSender}`}
@@ -421,8 +426,8 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_SOURCE}${' '}
-                  ${packageInformation.STREET_ID_SOURCE}${' '}
+                  `${packageInformation.HOUSE_NO_SOURCE !== 0 ? packageInformation.HOUSE_NO_SOURCE : ''}${' '}
+                  ${packageInformation.STREET_ID_SOURCE !== null ? packageInformation.STREET_ID_SOURCE : ''}${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}
@@ -521,7 +526,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Bưu cục')}:
             </Col>
             <Col xs="12" sm="8">
-              BDH (Api trả thiếu)
+              {packageInformation && packageInformation.DES_PO_ID}
             </Col>
           </Row>
         </div>

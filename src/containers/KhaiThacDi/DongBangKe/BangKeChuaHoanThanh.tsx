@@ -12,6 +12,7 @@ import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import moment from 'moment';
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -100,6 +101,14 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [listBangKeChuaDongTai],
   );
+
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: torIdSearch,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListBangKe(payload);
+  };
 
   const columns = useMemo(
     () => [
@@ -191,6 +200,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
       <div className="mt-3" />
       <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <Pagination pageRangeDisplayed={2} marginPagesDisplayed={2} pageCount={100} onPageChange={onPaginationChange} />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}

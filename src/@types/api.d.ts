@@ -1456,6 +1456,7 @@ declare namespace API {
     ORDERING_PARTY?: string;
     SHIPER_ID?: string;
     SHIPER_NAME?: string;
+    CREATED_ON?: string;
     MOBILE_PHONE_SRT?: string;
     CONSIGNEE_ID?: string;
     CONSIGNEE_NAME?: string;
@@ -1498,6 +1499,8 @@ declare namespace API {
     DELIVERY_POSTMAN_ID?: string;
     DELIVERY_POSTMAN_NAME?: string;
     DELIVERY_POSTMAN_PHONE?: string;
+    FU_STATUS?: string;
+    DES_PO_ID?: string;
     Execution?: Execution[];
     Item?: ItemMTZTMI031OUT[];
   }

@@ -3,8 +3,6 @@ import { Table } from 'reactstrap';
 import { TableProps, useTable } from 'react-table';
 import { noop } from 'lodash';
 
-import Pagination from 'components/Pagination';
-
 interface Props {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: (item: any) => void;
@@ -57,7 +55,6 @@ const DataTable: React.FC<Props & TableProps> = ({ columns, data, onRowClick }: 
           )}
         </tbody>
       </Table>
-      <Pagination pageRangeDisplayed={5} marginPagesDisplayed={2} pageCount={100} />
     </>
   );
 };
