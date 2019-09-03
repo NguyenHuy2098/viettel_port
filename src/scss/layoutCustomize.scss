@@ -359,9 +359,9 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
         text-transform: uppercase;
         padding: 8px 20px;
         font-weight: 600;
+        color: #fff !important;
         &.btn-primary {
           background: linear-gradient(180deg, #18A796 0%, #47C4AE 100%);
-          color: #fff !important;
         }
       }
     }
