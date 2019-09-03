@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   Badge,
   Button,
@@ -20,7 +20,6 @@ import {
 } from 'reactstrap';
 import classNames from 'classnames';
 
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import {
   makeSelectorCountTaiChuaHoanThanh,
   makeSelectorCountBangKeChuaDongTai,
@@ -34,35 +33,12 @@ import TaiDaDong from './TaiDaDong';
 // eslint-disable-next-line max-lines-per-function
 const DongTai: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
 
   const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(1);
   const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
   const countBangKeBuuGuiChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
   const countTaiDaDong = useSelector(makeSelectorCountTaiDaDong);
-
-  useEffect((): void => {
-    const payload = {
-      IV_TOR_ID: '',
-      IV_TOR_TYPE: 'ZC2',
-      IV_FR_LOC_ID: 'BDH',
-      IV_CUST_STATUS: '101',
-    };
-    dispatch(action_MIOA_ZTMI047(payload));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect((): void => {
-    const payload = {
-      IV_TOR_ID: '',
-      IV_TOR_TYPE: 'ZC1',
-      IV_FR_LOC_ID: 'BDH',
-      IV_CUST_STATUS: '101',
-    };
-    dispatch(action_MIOA_ZTMI047(payload));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);

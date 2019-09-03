@@ -1,15 +1,15 @@
-import React, { ChangeEvent, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { map, noop, get } from 'lodash';
+import { map, get, noop, toString, trim } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
-import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
+import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
@@ -22,14 +22,55 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
   const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
 
-  function handleSearch(event: ChangeEvent<HTMLInputElement>): void {
-    const payload = {
-      IV_TOR_ID: event.target.value,
-      IV_TOR_TYPE: 'ZC2',
-      IV_FR_LOC_ID: 'BDH',
-      IV_CUST_STATUS: '101',
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+  const [deleteTorId, setDeleteTorId] = useState<string>('');
+  const [torIdSearch, setTorIdSearch] = useState<string>('');
+
+  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setValueFunction(event.currentTarget.value);
     };
-    dispatch(action_MIOA_ZTMI047(payload));
+  }
+
+  function toggleDeleteConfirmModal(): void {
+    setDeleteConfirmModal(!deleteConfirmModal);
+  }
+
+  function handleDeleteItem(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      event.stopPropagation();
+      setDeleteTorId(torId);
+      toggleDeleteConfirmModal();
+    };
+  }
+
+  const getListTai = useCallback(
+    function(payload = {}): void {
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_TOR_ID: '',
+          IV_TOR_TYPE: 'ZC2',
+          IV_FR_LOC_ID: 'BDH',
+          IV_CUST_STATUS: '101',
+          IV_FR_DATE: '20000101',
+          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
+          ...payload,
+        }),
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dispatch],
+  );
+
+  useEffect((): void => getListTai(), [getListTai]);
+
+  function handleSearchTai(): void {
+    const payload = {
+      IV_TOR_ID: torIdSearch,
+    };
+    getListTai(payload);
   }
 
   function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
@@ -44,44 +85,36 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   }
 
-  const handleDeleteTai = (tai: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      const payload = {
-        IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC2',
-        IV_TOR_ID_CU: tai.TOR_ID,
-        IV_SLOCATION: '',
-        IV_DLOCATION: '',
-        IV_DESCRIPTION: '',
-        T_ITEM: [
-          {
-            ITEM_ID: '',
-            ITEM_TYPE: '',
-          },
-        ],
-      };
-      dispatch(
-        action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => {
-            const payload = {
-              IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC3',
-              IV_FR_LOC_ID: 'BDH',
-              IV_CUST_STATUS: '101',
-              IV_TO_LOC_ID: '',
-            };
-            dispatch(action_MIOA_ZTMI047(payload));
-          },
-        }),
-      );
+  const handleDeleteTai = (torId: string): void => {
+    const payload = {
+      IV_FLAG: '3',
+      IV_TOR_TYPE: 'ZC2',
+      IV_TOR_ID_CU: torId,
+      IV_SLOCATION: '',
+      IV_DLOCATION: '',
+      IV_DESCRIPTION: '',
+      T_ITEM: [
+        {
+          ITEM_ID: '',
+          ITEM_TYPE: '',
+        },
+      ],
     };
+    dispatch(
+      action_MIOA_ZTMI016(payload, {
+        onFinish: (): void => getListTai(),
+      }),
+    );
   };
 
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): void => {
       dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI}/${item.TOR_ID}`));
-    };
-  };
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listTaiChuaHoanThanh],
+  );
+
   const columns = useMemo(
     () => [
       {
@@ -119,7 +152,9 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
               <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>
-              <ModalPopupConfirm handleDoSomething={handleDeleteTai} />
+              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
+                <i className="fa fa-trash-o fa-lg color-red" />
+              </Button>
             </>
           );
         },
@@ -128,26 +163,31 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const data = map(get(listTaiChuaHoanThanh, ''), (item: API.RowMTZTMI047OUT) => {
+  const data = map(listTaiChuaHoanThanh, (item: API.RowMTZTMI047OUT) => {
     return {
       TOR_ID: item.TOR_ID,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
-      countChuyenThu: 222,
-      PERSONAL: item.ITEM_NO,
+      countChuyenThu: item.ITEM_NO,
+      PERSONAL: item.CREATED_BY,
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      NOTE_OF: item.EXEC_CONT,
+      NOTE_OF: get(item, 'Childs[0].DESCRIPTION', ''),
     };
   });
   return (
     <>
       <Row className="sipContentContainer">
-        <Col lg={4} xs={12} className="p-0">
+        <Col xl={6} lg={9} xs={12} className="p-0">
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSearch} />
+              <Input
+                value={torIdSearch}
+                type="text"
+                placeholder={t('Tìm kiếm bảng kê')}
+                onChange={handleChangeTextboxValue(setTorIdSearch)}
+              />
             </div>
-            <Button color="primary" className="ml-2">
+            <Button color="primary" className="ml-2" onClick={handleSearchTai}>
               {t('Tìm kiếm')}
             </Button>
             <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
@@ -162,9 +202,15 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         </Col>
       </Row>
       <div className="mt-3" />
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
       </Row>
+      <DeleteConfirmModal
+        visible={deleteConfirmModal}
+        onDelete={handleDeleteTai}
+        onHide={toggleDeleteConfirmModal}
+        torId={deleteTorId}
+      />
     </>
   );
 };

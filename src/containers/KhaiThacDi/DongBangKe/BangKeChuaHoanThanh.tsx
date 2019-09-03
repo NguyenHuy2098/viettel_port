@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { map, get, size } from 'lodash';
+import { map, get, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -51,8 +51,8 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '101',
-          IV_FR_DATE: '20190828',
-          IV_TO_DATE: '20190828',
+          IV_FR_DATE: '20000101',
+          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
           ...payload,
@@ -65,17 +65,11 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   useEffect((): void => getListBangKe(), [getListBangKe]);
 
   function handleSearchBangKe(): void {
-    if (size(torIdSearch)) {
-      const payload = {
-        IV_TOR_ID: torIdSearch,
-      };
-      getListBangKe(payload);
-    }
+    const payload = {
+      IV_TOR_ID: torIdSearch,
+    };
+    getListBangKe(payload);
   }
-
-  // function onPageChange(selectedItem: { selected: number }): void {
-  //   noop(selectedItem);
-  // }
 
   const handleDeleteManifest = (torId: string): void => {
     const payload = {
