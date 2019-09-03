@@ -32,6 +32,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
         Return: 'N',
       }),
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = useMemo(
