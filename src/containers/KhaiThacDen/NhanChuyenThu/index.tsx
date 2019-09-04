@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Button, Input, Row } from 'reactstrap';
+import { Col, Button, Input, InputGroup, InputGroupAddon, Row, Form } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
@@ -23,8 +23,19 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   function renderOrderInformationTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Nhận chuyến thư')}</h1>
-        <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
+        <Col className="px-0" md={9}>
+          <h3>{t('Nhận chuyến thư')}</h3>
+        </Col>
+        <Col className="px-0" md={3}>
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <span className="input-group-text">
+                <i className="fa fa-search" />
+              </span>
+            </InputGroupAddon>
+            <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
+          </InputGroup>
+        </Col>
       </Row>
     );
   }
@@ -47,23 +58,34 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   }
 
   function renderFindOrder(): JSX.Element {
+    const renderForm = (): JSX.Element => (
+      <Form inline>
+        <InputGroup className="mr-3">
+          <InputGroupAddon addonType="prepend">
+            <span className="input-group-text">
+              <i className="fa fa-barcode" />
+            </span>
+          </InputGroupAddon>
+          <Input
+            onChange={handleChangeCodeChuyenThu}
+            placeholder="Quét mã chuyến thư"
+            type="text"
+            value={codeChuyenThu}
+          />
+        </InputGroup>
+        <Button onClick={handleSearchCodeChuyenThu} color="primary">
+          {t('Quét mã')}
+        </Button>
+      </Form>
+    );
+
     return (
       <Row className="sipBgWhiteContainer d-flex justify-content-between">
-        <div className="sipScanCodeContainer">
-          <Input
-            type="text"
-            placeholder="Quét mã chuyến thư"
-            value={codeChuyenThu}
-            onChange={handleChangeCodeChuyenThu}
-          />
-          <Button onClick={handleSearchCodeChuyenThu} color="primary">
-            {t('Quét mã')}
-          </Button>
-        </div>
-        <div className="sipTitleRightBlock sipTitleRightBlock2">
+        <Col md={10}>{renderForm()}</Col>
+        <Col className="d-flex justify-content-end align-items-center" md={2}>
           {t('Tổng số')}
           {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThu}</strong>
-        </div>
+        </Col>
       </Row>
     );
   }
