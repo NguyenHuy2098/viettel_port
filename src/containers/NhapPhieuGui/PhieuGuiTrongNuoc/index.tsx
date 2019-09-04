@@ -659,9 +659,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // };
     dispatch(
       action_MIOA_ZTMI011(api011Payload, {
-        onFailure: (error: HttpRequestErrorType): void => {
-          alert(error.messages);
-        },
         onSuccess: (data: API.ItemMTZTMI011OUT[]): void => {
           const cuocChinhAmount = reduce(
             data,

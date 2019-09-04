@@ -1507,6 +1507,7 @@ declare namespace API {
     DELIVERY_POSTMAN_NAME?: string;
     DELIVERY_POSTMAN_PHONE?: string;
     FU_STATUS?: string;
+    PHONE_OF_PICKUP_POSTMAN?: string;
     DES_PO_ID?: string;
     Execution?: Execution[];
     Item?: ItemMTZTMI031OUT[];

@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { noop } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { makeSelectorCountBangKeChuaHoanThanh, makeSelectorCountBangKeDaDong } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
@@ -12,11 +14,28 @@ import BangKeDaDong from './BangKeDaDong';
 // eslint-disable-next-line max-lines-per-function
 const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const [tab, setTab] = useState<number>(1);
   const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
   const countBangKeDaDong = useSelector(makeSelectorCountBangKeDaDong);
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
+
+  const payloadGetPostOfficeList = {
+    row: [
+      {
+        IV_LOCTYPE: 'V001',
+      },
+    ],
+    IV_BP: '',
+    IV_PAGENO: '1',
+    IV_NO_PER_PAGE: '5000',
+  };
+
+  useEffect((): void => {
+    dispatch(action_MIOA_ZTMI045(payloadGetPostOfficeList));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   function toggleCreateForwardingItemModal(): void {
     setCreateForwardingItemModal(!createForwardingItemModal);
@@ -34,7 +53,11 @@ const DongBangKe: React.FC = (): JSX.Element => {
           <i className="fa fa-plus" />
           {t('Tạo bảng kê')}
         </Button>
-        <CreateForwardingItemModal visible={createForwardingItemModal} onHide={toggleCreateForwardingItemModal} />
+        <CreateForwardingItemModal
+          onSuccessCreated={noop}
+          visible={createForwardingItemModal}
+          onHide={toggleCreateForwardingItemModal}
+        />
       </>
     );
   }

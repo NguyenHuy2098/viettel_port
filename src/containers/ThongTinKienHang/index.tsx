@@ -552,7 +552,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Số điện thoại')}:
             </Col>
             <Col xs="12" sm="8">
-              {packageInformation && packageInformation.PICKUP_POSTMAN_PHONE}
+              {packageInformation && packageInformation.PHONE_OF_PICKUP_POSTMAN}
             </Col>
           </Row>
           <Row className="sipInputItem">
