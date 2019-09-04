@@ -1,4 +1,4 @@
-import { get, size } from 'lodash';
+import { get, size, trim } from 'lodash';
 import { AppStateType } from 'redux/store';
 
 export function makeSelectorBangKeChuaDongTai(state: AppStateType): API.RowMTZTMI047OUT[] | null {
@@ -9,14 +9,23 @@ export function makeSelectorBangKeChuaDongTai(state: AppStateType): API.RowMTZTM
 export function makeSelectorBangKeChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
   return get(state, 'MIOA_ZTMI047.ZC1.101.MT_ZTMI047_OUT.Row', null);
 }
+export function getTotalPageBangKe(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC1.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
+}
 //__________________________________________________
 
 export function makeSelectorTaiChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
   return get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', null);
 }
+export function getTotalPageTai(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
+}
 
 export function makeSelectorChuyenThuChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
   return get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Row', null);
+}
+export function getTotalPageChuyenThu(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
 }
 
 export function makeSelectorChuyenThuDaDong(state: AppStateType): API.RowMTZTMI047OUT[] | null {

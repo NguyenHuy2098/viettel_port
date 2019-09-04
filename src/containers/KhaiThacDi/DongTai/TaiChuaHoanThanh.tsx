@@ -8,11 +8,16 @@ import { push } from 'connected-react-router';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorCountTaiChuaHoanThanh, makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
+import {
+  makeSelectorCountTaiChuaHoanThanh,
+  makeSelectorTaiChuaHoanThanh,
+  getTotalPageTai,
+} from 'redux/MIOA_ZTMI047/selectors';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -21,6 +26,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
 
   const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
   const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
+  const totalPage = useSelector(getTotalPageTai);
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -115,6 +121,14 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     [listTaiChuaHoanThanh],
   );
 
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: torIdSearch,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListTai(payload);
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -204,6 +218,12 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
       <div className="mt-3" />
       <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}

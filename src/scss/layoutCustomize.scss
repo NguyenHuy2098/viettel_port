@@ -477,6 +477,10 @@ html:not([dir="rtl"]) .sidebar {
         height: 32px;
         line-height: 30px;
       }
+      &.disabled .page-link {
+        background: #ccc;
+        box-shadow: none;
+      }
     }
   }
 }

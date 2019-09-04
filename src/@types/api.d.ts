@@ -1319,9 +1319,16 @@ declare namespace API {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI046OUT[];
   }
+  export interface Paging {
+    IV_PAGENO: string;
+    IV_NO_PER_PAGE: string;
+    EV_TOTAL_PAGE: string;
+    EV_TOTAL_ITEM: string;
+  }
   export interface MTZTMI047OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI047OUT[];
+    Paging: Paging;
   }
   export interface MTZTMI048OUT {
     EV_ERROR?: number; // int32

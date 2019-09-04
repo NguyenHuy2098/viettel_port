@@ -6,7 +6,11 @@ import { map, get, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorBangKeChuaHoanThanh, makeSelectorCountBangKeChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
+import {
+  makeSelectorBangKeChuaHoanThanh,
+  makeSelectorCountBangKeChuaHoanThanh,
+  getTotalPageBangKe,
+} from 'redux/MIOA_ZTMI047/selectors';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
@@ -21,6 +25,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
 
   const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
   const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaHoanThanh);
+  const totalPage = useSelector(getTotalPageBangKe);
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -200,7 +205,12 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
       <div className="mt-3" />
       <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
-        <Pagination pageRangeDisplayed={2} marginPagesDisplayed={2} pageCount={100} onPageChange={onPaginationChange} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}
