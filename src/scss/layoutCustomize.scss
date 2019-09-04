@@ -96,7 +96,8 @@ input.form-control:-moz-placeholder { /* Firefox 18- */
       position: relative;
       top: -2px;
       left: -2px;
-      height: 14px;
+      height: 15px;
+      width: 15px;
       display: inline-block;
     }
     &:checked {

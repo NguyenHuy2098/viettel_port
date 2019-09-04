@@ -336,7 +336,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {renderTable()}
     </>
   ) : (
-    <Fade in={true} timeout={2000}>
+    <Fade in={true} timeout={1000}>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">

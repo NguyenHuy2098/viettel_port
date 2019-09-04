@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { map, get, noop, toString, trim } from 'lodash';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
@@ -130,7 +130,20 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   };
 
   const columns = useMemo(
+    //eslint-disable-next-line max-lines-per-function
     () => [
+      {
+        id: 'select',
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Label check>
+                <Input type="checkbox" />
+              </Label>
+            </>
+          );
+        },
+      },
       {
         Header: t('Mã tải'),
         accessor: 'TOR_ID',

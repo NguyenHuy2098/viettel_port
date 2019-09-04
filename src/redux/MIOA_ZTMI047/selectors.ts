@@ -12,6 +12,20 @@ export function makeSelectorBangKeChuaHoanThanh(state: AppStateType): API.RowMTZ
 export function getTotalPageBangKe(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC1.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
 }
+export function makeSelectorCountBangKeChuaHoanThanh(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC1.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
+}
+
+//__________________________________________________
+export function makeSelectorBangKeDaDong(state: AppStateType): API.RowMTZTMI047OUT[] | null {
+  return get(state, 'MIOA_ZTMI047.ZC1.102.MT_ZTMI047_OUT.Row', null);
+}
+export function getTotalPageBangKeDaDong(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC1.102.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
+}
+export function makeSelectorCountBangKeDaDong(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC1.102.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
+}
 //__________________________________________________
 
 export function makeSelectorTaiChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
@@ -20,12 +34,18 @@ export function makeSelectorTaiChuaHoanThanh(state: AppStateType): API.RowMTZTMI
 export function getTotalPageTai(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
 }
+export function makeSelectorCountTaiChuaHoanThanh(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
+}
 
 export function makeSelectorChuyenThuChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
   return get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Row', null);
 }
 export function getTotalPageChuyenThu(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
+}
+export function makeSelectorCountChuyenThuChuaHoanThanh(state: AppStateType): number {
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
 }
 
 export function makeSelectorChuyenThuDaDong(state: AppStateType): API.RowMTZTMI047OUT[] | null {
@@ -42,17 +62,6 @@ export function makeSelectorCountBangKeChuaDongTai(state: AppStateType): number 
   return size(makeSelectorBangKeChuaDongTai(state));
 }
 
-export function makeSelectorCountBangKeChuaHoanThanh(state: AppStateType): number {
-  return size(makeSelectorBangKeChuaHoanThanh(state));
-}
-
-export function makeSelectorCountTaiChuaHoanThanh(state: AppStateType): number {
-  return size(makeSelectorTaiChuaHoanThanh(state));
-}
-
-export function makeSelectorCountChuyenThuChuaHoanThanh(state: AppStateType): number {
-  return size(makeSelectorChuyenThuChuaHoanThanh(state));
-}
 export function makeSelectorCountChuyenThuDaDong(state: AppStateType): number {
   return size(makeSelectorChuyenThuDaDong(state));
 }

@@ -1,25 +1,37 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { map, get, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
-import { map, get } from 'lodash';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
-import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
+import {
+  makeSelectorBangKeDaDong,
+  makeSelectorCountBangKeChuaHoanThanh,
+  getTotalPageBangKeDaDong,
+} from 'redux/MIOA_ZTMI047/selectors';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import moment from 'moment';
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
-  const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
+  const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
+  const listBangKeDaDong = useSelector(makeSelectorBangKeDaDong);
+  const totalPage = useSelector(getTotalPageBangKeDaDong);
+
+  const [torIdSearch, setTorIdSearch] = useState<string>('');
+
+  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setValueFunction(event.currentTarget.value);
+    };
+  }
 
   const getListBangKe = useCallback(
     function(payload = {}): void {
@@ -28,8 +40,11 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: 'BDH',
-          IV_CUST_STATUS: '101',
-          IV_TO_LOC_ID: '',
+          IV_CUST_STATUS: '102',
+          IV_FR_DATE: '20000101',
+          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
           ...payload,
         }),
       );
@@ -39,45 +54,44 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
 
   useEffect((): void => getListBangKe(), [getListBangKe]);
 
-  function handleSearchBangKe(e: React.ChangeEvent<HTMLInputElement>): void {
+  function handleSearchBangKe(): void {
     const payload = {
-      IV_TOR_ID: e.target.value,
+      IV_TOR_ID: torIdSearch,
     };
     getListBangKe(payload);
   }
 
-  const handleDeleteManifest = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      const payload = {
-        IV_FLAG: '3',
-        IV_TOR_TYPE: 'ZC1',
-        IV_TOR_ID_CU: item.TOR_ID,
-        IV_SLOCATION: '',
-        IV_DLOCATION: '',
-        IV_DESCRIPTION: '',
-        T_ITEM: [
-          {
-            ITEM_ID: '',
-            ITEM_TYPE: '',
-          },
-        ],
-      };
-      dispatch(
-        action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => getListBangKe(),
-        }),
-      );
-    };
-  };
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): void => {
+      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listBangKeDaDong],
+  );
 
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE_DA_DONG}/${item.TOR_ID}`));
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: torIdSearch,
+      IV_PAGENO: selectedItem.selected + 1,
     };
+    getListBangKe(payload);
   };
 
   const columns = useMemo(
+    //eslint-disable-next-line max-lines-per-function
     () => [
+      {
+        id: 'select',
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <>
+              <Label check>
+                <Input type="checkbox" />
+              </Label>
+            </>
+          );
+        },
+      },
       {
         Header: t('Mã bảng kê'),
         accessor: 'TOR_ID',
@@ -92,7 +106,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Người nhập'),
-        accessor: 'PERSONAL',
+        accessor: 'CREATED_BY',
       },
       {
         Header: t('Ngày nhập'),
@@ -110,10 +124,6 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
               <Button className="SipTableFunctionIcon">
                 <i className="fa fa-print fa-lg color-green" />
               </Button>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-pencil fa-lg color-blue" />
-              </Button>
-              <ModalPopupConfirm handleDoSomething={handleDeleteManifest} />
             </>
           );
         },
@@ -122,42 +132,54 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const data = map(get(listBangKeChuaDongTai, 'Row[0].CHILDS'), (item: API.RowMTZTMI047OUT) => {
+  const data = map(listBangKeDaDong, (item: API.RowMTZTMI047OUT) => {
     return {
       TOR_ID: item.TOR_ID,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
-      PERSONAL: item.ITEM_NO,
-      countChuyenThu: 222,
+      countChuyenThu: item.ITEM_NO,
+      CREATED_BY: item.CREATED_BY,
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      NOTE_OF: item.EXEC_CONT,
+      NOTE_OF: get(item, 'Childs[0].DESCRIPTION', ''),
     };
   });
+
   return (
     <>
       <Row className="sipContentContainer">
-        <Col lg={4} xs={12} className="p-0">
+        <Col xl={6} lg={8} xs={12} className="p-0">
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm bảng kê')} onChange={handleSearchBangKe} />
+              <Input
+                value={torIdSearch}
+                type="text"
+                placeholder={t('Tìm kiếm bảng kê')}
+                onChange={handleChangeTextboxValue(setTorIdSearch)}
+              />
             </div>
-            <Button color="primary" className="ml-2">
+            <Button color="primary" className="ml-2" onClick={handleSearchBangKe}>
               {t('Tìm kiếm')}
             </Button>
-            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
+            <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
               <i className="fa fa-trash-o" />
             </Button>
           </div>
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countBangKeChuaDongTai}</span>
+            {t('Tổng số')}: <span>{countBangKeChuaHoanThanh}</span>
           </p>
         </Col>
       </Row>
       <div className="mt-3" />
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
     </>
   );
