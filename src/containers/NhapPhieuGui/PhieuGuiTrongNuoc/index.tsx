@@ -455,9 +455,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
     if (size(orderInformation)) {
-      setMaPhieuGui(orderInformationInstane.FWO ? orderInformationInstane.FWO : '');
-      setDienThoaiSender(orderInformationInstane.MOBILE_PHONE_SRT ? orderInformationInstane.MOBILE_PHONE_SRT : '');
-      setHoTenSender(orderInformationInstane.SHIPER_NAME ? orderInformationInstane.SHIPER_NAME : '');
+      setMaPhieuGui(get(orderInformationInstane, 'FWO', ''));
+      setDienThoaiSender(get(orderInformationInstane, 'MOBILE_PHONE_SRT', ''));
+      setHoTenSender(get(orderInformationInstane, 'SHIPER_NAME', ''));
       setDiaChiSender(
         `${orderInformationInstane.HOUSE_NO_DES}${' '}${
           orderInformationInstane.STREET_ID_DES

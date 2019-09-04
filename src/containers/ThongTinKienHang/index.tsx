@@ -368,7 +368,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Họ & tên')}:
               </Col>
               <Col xs="12" sm="7">
-                {packageInformation && packageInformation.SHIPER_NAME}
+                {get(packageInformation, 'SHIPER_NAME')}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -376,7 +376,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Điện thoại')}:
               </Col>
               <Col xs="12" sm="7">
-                {packageInformation && packageInformation.MOBILE_PHONE_SRT}
+                {get(packageInformation, 'MOBILE_PHONE_SRT')}
               </Col>
             </Row>
             <Row className="sipInputItem">

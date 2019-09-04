@@ -1,24 +1,48 @@
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { Col, Button, Input, InputGroup, InputGroupAddon, Row, Form } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
+import { ceil, get } from 'lodash';
 
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountMT_ZTMI046 } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelectorChuyenThuDaQuetNhan } from 'redux/MIOA_ZTMI047/selectors';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const dataNhanChuyenThu = useSelector(makeSelectorNhanChuyenThu);
   const countChuyenThu = useSelector(makeSelectorCountMT_ZTMI046);
+  const chuyenThuDaQuetNhan = useSelector(makeSelectorChuyenThuDaQuetNhan);
   const [codeChuyenThu, setCodeChuyenThu] = useState<string>();
+
+  function dispatch_action_MIOA_ZTMI047(): void {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_TOR_TYPE: 'ZC3',
+        IV_FR_LOC_ID: '',
+        IV_TO_LOC_ID: 'HUB1',
+        IV_CUST_STATUS: '106',
+        IV_FR_DATE: '20190501',
+        IV_TO_DATE: '20190831',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '10',
+      }),
+    );
+  }
+
+  useEffect(() => {
+    dispatch_action_MIOA_ZTMI047();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function renderOrderInformationTitle(): JSX.Element {
     return (
@@ -106,23 +130,26 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Bưu cục đi'),
-        accessor: 'FR_LOG_ID',
+        accessor: 'LOG_LOCID_FR',
       },
       {
         Header: t('Bưu cục đến'),
-        accessor: 'TO_LOG_ID',
-      },
-      {
-        Header: t('Số lượng'),
-        accessor: 'countChuyenThu',
+        accessor: 'LOG_LOCID_TO',
       },
       {
         Header: t('Trọng lượng'),
-        accessor: 'GRO_WEI_VAL',
+        accessor: 'NET_WEI_VAL',
+        Cell: ({ row }: Cell): JSX.Element => {
+          return (
+            <span>
+              {ceil(get(row, 'original.NET_WEI_VAL'), 2)}&nbsp;{get(row, 'original.NET_WEI_UNI')}
+            </span>
+          );
+        },
       },
       {
         Header: t('Ngày tạo'),
-        accessor: 'CREATED_ON',
+        accessor: 'DATETIME_CHLC',
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,7 +161,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       {renderOrderInformationTitle()}
       {renderFindOrder()}
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={dataNhanChuyenThu} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={chuyenThuDaQuetNhan} onRowClick={handleRedirectDetail} />
       </Row>
     </div>
   );

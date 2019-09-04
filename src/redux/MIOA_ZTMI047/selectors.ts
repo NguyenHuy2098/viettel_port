@@ -28,8 +28,8 @@ export function makeSelectorCountBangKeDaDong(state: AppStateType): number {
 }
 //__________________________________________________
 
-export function makeSelectorTaiChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
-  return get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', null);
+export function makeSelectorTaiChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] {
+  return get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', []);
 }
 export function getTotalPageTai(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
@@ -37,9 +37,8 @@ export function getTotalPageTai(state: AppStateType): number {
 export function makeSelectorCountTaiChuaHoanThanh(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
 }
-
-export function makeSelectorChuyenThuChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] | null {
-  return get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Row', null);
+export function makeSelectorChuyenThuChuaHoanThanh(state: AppStateType): API.RowMTZTMI047OUT[] {
+  return get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Row', []);
 }
 export function getTotalPageChuyenThu(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
@@ -47,12 +46,14 @@ export function getTotalPageChuyenThu(state: AppStateType): number {
 export function makeSelectorCountChuyenThuChuaHoanThanh(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
 }
-
-export function makeSelectorChuyenThuDaDong(state: AppStateType): API.RowMTZTMI047OUT[] | null {
-  return get(state, 'MIOA_ZTMI047.ZC3.104.MT_ZTMI047_OUT.Row', null);
+export function makeSelectorChuyenThuDaDong(state: AppStateType): API.RowMTZTMI047OUT[] {
+  return get(state, 'MIOA_ZTMI047.ZC3.104.MT_ZTMI047_OUT.Row', []);
 }
-export function makeSelectorTaiDaDong(state: AppStateType): API.RowMTZTMI047OUT[] | null {
-  return get(state, 'MIOA_ZTMI047.ZC2.103.MT_ZTMI047_OUT.Row', null);
+export function makeSelectorChuyenThuDaQuetNhan(state: AppStateType): API.RowMTZTMI047OUT[] {
+  return get(state, 'MIOA_ZTMI047.ZC3.106.MT_ZTMI047_OUT.Row', []);
+}
+export function makeSelectorTaiDaDong(state: AppStateType): API.RowMTZTMI047OUT[] {
+  return get(state, 'MIOA_ZTMI047.ZC2.103.MT_ZTMI047_OUT.Row', []);
 }
 export function makeSelectorKienChuaDongChuyenThu(state: AppStateType): API.RowMTZTMI047OUT[] | [] {
   return get(state, 'MIOA_ZTMI047.ZBIG.BHD.101.MT_ZTMI047_OUT.Row', []);

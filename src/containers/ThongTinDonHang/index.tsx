@@ -243,7 +243,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Điện thoại')}:
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
-                {orderInformationInstane && orderInformationInstane.MOBILE_PHONE_SRT}
+                {get(orderInformationInstane, 'MOBILE_PHONE_SRT')}
               </Col>
             </Row>
             <Row className="sipInputItem">
