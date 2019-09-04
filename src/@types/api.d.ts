@@ -13,6 +13,13 @@ declare namespace API {
     DATETIME_CHLC?: string;
     ZONLO?: string;
   }
+  export interface Childs {
+    TOR_ID?: string;
+    TOR_TYPE?: string;
+    PACKAGE_ID?: string;
+    LIFECYCLE?: string;
+    DESCRIPTION?: string;
+  }
   export interface EVTRQIDERROR {
     TRQ_ID?: string;
   }
@@ -24,6 +31,9 @@ declare namespace API {
     EVENT_REASON?: string;
     Location?: string;
     LOCATION_DESCRIPTION?: string;
+    CHANGED_BY?: string;
+    NAME_CHANGED_BY?: string;
+    MOB_CHANGED_BY?: string;
   }
   export interface GenUserRequest {
     Number?: number; // int32
@@ -756,17 +766,6 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
-  interface MIOAZTMI040PayloadType {
-    data: API.MIOAZTMI040Response;
-    params: {
-      FU_STATUS: string;
-      Delivery_postman: string;
-    };
-  }
-
-  interface MIOAZTMI040StateType {
-    response?: API.MIOAZTMI040Response;
-  }
   export interface MIOAZTMI040Response {
     /**
      *
@@ -783,6 +782,9 @@ declare namespace API {
      *
      */
     row?: RowRequestZTMI045[];
+    IV_BP?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -854,6 +856,16 @@ declare namespace API {
      * Trạng thái tải/bảng kê/chuyến thư
      */
     IV_CUST_STATUS?: string;
+    /**
+     * Khung thời gian quét
+     */
+    IV_FR_DATE?: string;
+    /**
+     * Khung thời gian quét
+     */
+    IV_TO_DATE?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -1319,16 +1331,10 @@ declare namespace API {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI046OUT[];
   }
-  export interface Paging {
-    IV_PAGENO: string;
-    IV_NO_PER_PAGE: string;
-    EV_TOTAL_PAGE: string;
-    EV_TOTAL_ITEM: string;
-  }
   export interface MTZTMI047OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI047OUT[];
-    Paging: Paging;
+    Paging?: Paging;
   }
   export interface MTZTMI048OUT {
     EV_ERROR?: number; // int32
@@ -1463,8 +1469,7 @@ declare namespace API {
     ORDERING_PARTY?: string;
     SHIPER_ID?: string;
     SHIPER_NAME?: string;
-    CREATED_ON?: string;
-    MOBILE_PHONE_SRT?: string;
+    MOBILE_PHONE_SRC?: string;
     CONSIGNEE_ID?: string;
     CONSIGNEE_NAME?: string;
     MOBILE_PHONE_DES?: string;
@@ -1502,15 +1507,15 @@ declare namespace API {
     COD?: string;
     PICKUP_POSTMAN_ID?: string;
     PICKUP_POSTMAN_NAME?: string;
-    PICKUP_POSTMAN_PHONE?: string;
+    PHONE_OF_PICKUP_POSTMAN?: string;
     DELIVERY_POSTMAN_ID?: string;
     DELIVERY_POSTMAN_NAME?: string;
     DELIVERY_POSTMAN_PHONE?: string;
-    FU_STATUS?: string;
-    PHONE_OF_PICKUP_POSTMAN?: string;
-    DES_PO_ID?: string;
     Execution?: Execution[];
     Item?: ItemMTZTMI031OUT[];
+    CREATED_ON?: string;
+    FU_STATUS?: string;
+    DES_PO_ID?: string;
   }
   export interface RowMTZTMI045OUT {
     /**
@@ -1606,15 +1611,7 @@ declare namespace API {
     ZONLO?: string;
     CHILDS?: Child[];
   }
-  export interface RowMTZTMI047OUTChild {
-    TOR_ID: string;
-    TOR_TYPE: string;
-    PACKAGE_ID: string;
-    LIFECYCLE: string;
-    DESCRIPTION: string;
-  }
   export interface RowMTZTMI047OUT {
-    CREATED_BY?: string;
     TOR_ID?: string;
     LIFECYCLE?: number; // int32
     DATETIME_CHLC?: string;
@@ -1625,7 +1622,9 @@ declare namespace API {
     EXEC_CONT?: string;
     ITEM_NO?: string;
     ZONLO?: string;
-    Childs: RowMTZTMI047OUTChild[];
+    EXT_LOC_ID?: string;
+    CREATED_BY?: string;
+    Childs?: Childs[];
   }
   export interface RowMTZTMI048OUT {
     TOR_ID?: string;
@@ -2505,82 +2504,6 @@ declare namespace API {
   export interface ZTMI063OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
-  }
-  export interface TransportMethodItem {
-    SERVICE_TYPE: string;
-    SERVICE_TYPE_DES: string;
-    SERVICE_GROUP: string;
-    SERVICE_GROUP_DES: string;
-    TARGET_TIME?: any;
-  }
-
-  export interface MTZTMI068OUT {
-    EV_ERROR: number;
-    Row: TransportMethodItem[];
-  }
-
-  export interface MTZTMI068Response {
-    MT_ZTMI068_OUT: MTZTMI068OUT;
-    Status: boolean;
-    ErrorCode: number;
-    Messages: any[];
-    ObjectId?: any;
-    Version: number;
-  }
-  export interface VtpAddress {
-    I: string;
-    N: string;
-    P?: string;
-    type: number;
-  }
-  interface PackageItemErrors {
-    index: number;
-    errors: yup.ValidationError[];
-  }
-  export interface PackageItem {
-    Flag?: string;
-    PACKAGING_MATERIAL?: string;
-    Description?: string;
-    PACKAGE_TYPE?: string;
-    QUANTITY_OF_PACKAGE?: string | undefined;
-    QUANTITY_OF_UNIT?: string;
-    GROSS_WEIGHT?: string | undefined;
-    GROSS_WEIGHT_OF_UNIT?: string;
-    NET_WEIGHT?: string;
-    NET_WEIGHT_OF_UNIT?: string;
-    Length?: string | undefined;
-    Hight?: string | undefined;
-    Width?: string | undefined;
-    Note?: string;
-    GOODS_VALUE?: string | undefined;
-    Currency?: string;
-    COMODITY_CODE?: string;
-    COD?: string | undefined;
-    SERVICE_TYPE?: string;
-  }
-  export interface AddressPopupData {
-    province: string;
-    district: string;
-    ward: string;
-    provinceId: string;
-    districtId: string;
-    wardId: string;
-    detailAddress: string;
-    fullAddress: string;
-  }
-  export interface VtpAddressResponse {
-    LocationModels: VtpAddress[];
-    PageIndex: number;
-    PageSize: number;
-    TotalRow: number;
-    Status: boolean;
-    ErrorCode: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Messages: any[];
-    any;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ObjectId?: any;
-    Version: number;
   }
 }
 declare namespace Paths {

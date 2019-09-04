@@ -9,7 +9,7 @@ import { ACTION_GET_ADDRESS, ACTION_GET_PROVINCE, ACTION_GET_DISTRICT, ACTION_GE
 function* takeGet_ADDRESS(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   yield unfoldSaga(
     {
-      handler: async (): Promise<API.VtpAddressResponse> => {
+      handler: async (): Promise<VtpAddressResponse> => {
         const { data } = await sapApi.post(sapApiMap.SearchLocation, action.payload);
         if (data.Status) return data;
         throw new HttpRequestError(data.ErrorCode, data.Messages);

@@ -50,7 +50,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           action_GET_ADDRESS(
             { Id: packageInformation.PROVINCE_ID_SOURCE },
             {
-              onSuccess: (data: API.VtpAddressResponse): void => {
+              onSuccess: (data: VtpAddressResponse): void => {
                 setProvinceSender(get(data, 'LocationModels[0].N'));
               },
             },
@@ -62,7 +62,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           action_GET_ADDRESS(
             { Id: packageInformation.DISTRICT_ID_SOURCE },
             {
-              onSuccess: (data: API.VtpAddressResponse): void => {
+              onSuccess: (data: VtpAddressResponse): void => {
                 setDistrictSender(get(data, 'LocationModels[0].N'));
               },
             },
@@ -74,7 +74,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           action_GET_ADDRESS(
             { Id: packageInformation.WARD_ID_SOURCE },
             {
-              onSuccess: (data: API.VtpAddressResponse): void => {
+              onSuccess: (data: VtpAddressResponse): void => {
                 setWardSender(get(data, 'LocationModels[0].N'));
               },
             },
@@ -86,7 +86,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           action_GET_ADDRESS(
             { Id: packageInformation.PROVINCE_ID_DES },
             {
-              onSuccess: (data: API.VtpAddressResponse): void => {
+              onSuccess: (data: VtpAddressResponse): void => {
                 setProvinceReceiver(get(data, 'LocationModels[0].N'));
               },
             },
@@ -98,7 +98,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           action_GET_ADDRESS(
             { Id: packageInformation.DISTRICT_ID_DES },
             {
-              onSuccess: (data: API.VtpAddressResponse): void => {
+              onSuccess: (data: VtpAddressResponse): void => {
                 setDistrictReceiver(get(data, 'LocationModels[0].N'));
               },
             },
@@ -110,7 +110,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           action_GET_ADDRESS(
             { Id: packageInformation.WARD_ID_DES },
             {
-              onSuccess: (data: API.VtpAddressResponse): void => {
+              onSuccess: (data: VtpAddressResponse): void => {
                 setWardReceiver(get(data, 'LocationModels[0].N'));
               },
             },

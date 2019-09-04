@@ -21,7 +21,7 @@ import * as yup from 'yup';
 
 interface Props {
   onHide: () => void;
-  onChoose: (data: API.AddressPopupData) => void;
+  onChoose: (data: AddressPopupData) => void;
   visible: boolean;
   province?: string;
   district?: string;
@@ -50,16 +50,16 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  const [filteredProvince, setFilteredProvince] = useState<API.VtpAddress[]>([]);
-  const [fullDistrict, setFullDistrict] = useState<API.VtpAddress[]>([]);
-  const [filteredDistrict, setFilteredDistrict] = useState<API.VtpAddress[]>([]);
-  const [filteredWard, setFilteredWard] = useState<API.VtpAddress[]>([]);
+  const [filteredProvince, setFilteredProvince] = useState<VtpAddress[]>([]);
+  const [fullDistrict, setFullDistrict] = useState<VtpAddress[]>([]);
+  const [filteredDistrict, setFilteredDistrict] = useState<VtpAddress[]>([]);
+  const [filteredWard, setFilteredWard] = useState<VtpAddress[]>([]);
   const [province, setProvince] = useState<string>(props.province || '0');
   const [district, setDistrict] = useState<string>(props.district || '0');
   const [ward, setWard] = useState<string>(props.ward || '0');
   const [detailAddress, setDetailAddress] = useState<string>(props.detailAddress || '');
 
-  const getAddressNameById = (id: string, data: API.VtpAddress[]): string => {
+  const getAddressNameById = (id: string, data: VtpAddress[]): string => {
     return get(find(data, { I: id }), 'N', '');
   };
 
@@ -111,14 +111,14 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     dispatch(
       action_GET_PROVINCE(payloadProvince, {
-        onSuccess: (data: API.VtpAddressResponse): void => {
+        onSuccess: (data: VtpAddressResponse): void => {
           setFilteredProvince(get(data, 'LocationModels'));
         },
       }),
     );
     dispatch(
       action_GET_DISTRICT(payloadDistrict, {
-        onSuccess: (data: API.VtpAddressResponse): void => {
+        onSuccess: (data: VtpAddressResponse): void => {
           setFullDistrict(get(data, 'LocationModels'));
           if (province !== '0') {
             setFilteredDistrict(filter(get(data, 'LocationModels'), { P: province }));
@@ -129,7 +129,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
     if (district !== '0') {
       dispatch(
         action_GET_WARD(payloadWard, {
-          onSuccess: (data: API.VtpAddressResponse): void => {
+          onSuccess: (data: VtpAddressResponse): void => {
             setFilteredWard(get(data, 'LocationModels'));
           },
         }),
@@ -160,7 +160,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
       payloadWard.ParentId = event.currentTarget.value;
       dispatch(
         action_GET_WARD(payloadWard, {
-          onSuccess: (data: API.VtpAddressResponse): void => {
+          onSuccess: (data: VtpAddressResponse): void => {
             setFilteredWard(get(data, 'LocationModels'));
           },
         }),
@@ -254,7 +254,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
                 <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
                 {map(
                   filteredProvince,
-                  (item: API.VtpAddress, index: number): JSX.Element => {
+                  (item: VtpAddress, index: number): JSX.Element => {
                     return (
                       <option key={index} value={item.I || undefined}>
                         {item.N}
@@ -271,7 +271,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
                 <option value="0">{t('Quận / Huyện')}</option>
                 {map(
                   filteredDistrict,
-                  (item: API.VtpAddress, index: number): JSX.Element => {
+                  (item: VtpAddress, index: number): JSX.Element => {
                     return (
                       <option key={index} value={item.I || undefined}>
                         {item.N}
@@ -288,7 +288,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
                 <option value="0">{t('Chọn Phường/ Xã')}</option>
                 {map(
                   filteredWard,
-                  (item: API.VtpAddress, index: number): JSX.Element => {
+                  (item: VtpAddress, index: number): JSX.Element => {
                     return (
                       <option key={index} value={item.I || undefined}>
                         {item.N}

@@ -70,7 +70,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         action_GET_ADDRESS(
           { Id: orderInformationInstane.PROVINCE_ID_SOURCE },
           {
-            onSuccess: (data: API.VtpAddressResponse): void => {
+            onSuccess: (data: VtpAddressResponse): void => {
               setProvinceSenderEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -82,7 +82,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         action_GET_ADDRESS(
           { Id: orderInformationInstane.DISTRICT_ID_SOURCE },
           {
-            onSuccess: (data: API.VtpAddressResponse): void => {
+            onSuccess: (data: VtpAddressResponse): void => {
               setDistrictSenderEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -94,7 +94,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         action_GET_ADDRESS(
           { Id: orderInformationInstane.WARD_ID_SOURCE },
           {
-            onSuccess: (data: API.VtpAddressResponse): void => {
+            onSuccess: (data: VtpAddressResponse): void => {
               setWardSenderEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -106,7 +106,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         action_GET_ADDRESS(
           { Id: orderInformationInstane.PROVINCE_ID_DES },
           {
-            onSuccess: (data: API.VtpAddressResponse): void => {
+            onSuccess: (data: VtpAddressResponse): void => {
               setProvinceReceiverEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -118,7 +118,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         action_GET_ADDRESS(
           { Id: orderInformationInstane.DISTRICT_ID_DES },
           {
-            onSuccess: (data: API.VtpAddressResponse): void => {
+            onSuccess: (data: VtpAddressResponse): void => {
               setDistrictReceiverEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -130,7 +130,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         action_GET_ADDRESS(
           { Id: orderInformationInstane.WARD_ID_DES },
           {
-            onSuccess: (data: API.VtpAddressResponse): void => {
+            onSuccess: (data: VtpAddressResponse): void => {
               setWardReceiverEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -198,7 +198,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       .typeError(t('Vui lòng nhập định dạng số')),
   });
 
-  const packageItemErrors: API.PackageItemErrors[] = [];
+  const packageItemErrors: PackageItemErrors[] = [];
   const packageTabSchema = yup.object().shape({
     Description: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
     GOODS_VALUE: yup
@@ -294,7 +294,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
 
-  const [transportMethodArr, setTransportMethodArr] = useState<API.TransportMethodItem[]>([]);
+  const [transportMethodArr, setTransportMethodArr] = useState<TransportMethodItem[]>([]);
   const [uncheckAllAdditionalCheckbox, setUncheckAllAdditionalCheckbox] = useState<boolean | undefined>(undefined);
   //_______open Address modal
   const [modalSender, setModalSender] = useState<boolean>(false);
@@ -302,8 +302,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //______ Package item tab
 
   const [activeTab, setActiveTab] = useState<string>('1');
-  const [packageItemArr, setPackageItemArr] = useState<API.PackageItem[]>([]);
-  const [packageItemErrorsList, setPackageItemErrorsList] = useState<API.PackageItemErrors[]>([]);
+  const [packageItemArr, setPackageItemArr] = useState<PackageItemInputType[]>([]);
+  const [packageItemErrorsList, setPackageItemErrorsList] = useState<PackageItemErrors[]>([]);
   //________packageItem valid checking
   let tabValid = true;
   //_______summary order amount
@@ -313,7 +313,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   //__________________ package item partial events
 
-  const newPackageItem: API.PackageItem = {
+  const newPackageItem: PackageItemInputType = {
     Flag: 'I',
     PACKAGING_MATERIAL: '',
     Description: '',
@@ -392,7 +392,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setModalReceiver(!modalReceiver);
   }
 
-  function handleSenderAddressData(data: API.AddressPopupData): void {
+  function handleSenderAddressData(data: AddressPopupData): void {
     setProvinceSender(data.province);
     setDistrictSender(data.district);
     setWardSender(data.ward);
@@ -408,7 +408,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setCount(count + 1);
     }
   }
-  function handleReceiverAddressData(data: API.AddressPopupData): void {
+  function handleReceiverAddressData(data: AddressPopupData): void {
     setProvinceReceiver(data.province);
     setDistrictReceiver(data.district);
     setWardReceiver(data.ward);
@@ -506,7 +506,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       // dichVuCongThem = [];
       // setUncheckAllAdditionalCheckbox(false);
       // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
-      let newPackageItemEdit: API.PackageItem = {
+      let newPackageItemEdit: PackageItemInputType = {
         Flag: 'I',
         PACKAGING_MATERIAL: '',
         Description: '',
@@ -573,7 +573,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     });
     const servicePayload = find(
       transportMethodArr,
-      (item: API.TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
+      (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
     );
     let newPackageItem011 = {
       COD: '',
@@ -592,7 +592,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newArr011: any = [];
     if (size(payloadPackageItemArr) >= 1) {
-      forEach(payloadPackageItemArr, (item: API.PackageItem): void => {
+      forEach(payloadPackageItemArr, (item: PackageItemInputType): void => {
         newPackageItem011 = {
           COD: item.COD ? toString(parseInt(item.COD)) : '',
           Currency: '',
@@ -699,7 +699,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           onFailure: (error: HttpRequestErrorType): void => {
             alert(error.messages);
           },
-          onSuccess: (data: API.MTZTMI068Response): void => {
+          onSuccess: (data: API.SIOAZTMI068Response): void => {
             setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
           },
         },
@@ -717,7 +717,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         .catch((error: yup.ValidationError): void => {
           setErrors(error.inner);
         });
-      map(packageItemArr, (item: API.PackageItem, index: number): void => {
+      map(packageItemArr, (item: PackageItemInputType, index: number): void => {
         const packageItemValidate = {
           Flag: 'I',
           PACKAGING_MATERIAL: '',
@@ -905,7 +905,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     tabValid = true;
     if (packageItemArr.length) {
       // eslint-disable-next-line max-lines-per-function
-      map(packageItemArr, (item: API.PackageItem, index: number): void => {
+      map(packageItemArr, (item: PackageItemInputType, index: number): void => {
         const packageItemValidate = {
           Flag: 'I',
           PACKAGING_MATERIAL: '',
@@ -1236,7 +1236,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             >
               {map(
                 transportMethodArr,
-                (item: API.TransportMethodItem): JSX.Element => {
+                (item: TransportMethodItem): JSX.Element => {
                   return (
                     <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
                       {item.SERVICE_TYPE_DES}
@@ -1264,7 +1264,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <Row className="sipInputItem">
           {map(
             transportMethodArr,
-            (item: API.TransportMethodItem): JSX.Element => {
+            (item: TransportMethodItem): JSX.Element => {
               return (
                 <Label key={item.SERVICE_TYPE} check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
                   <Input

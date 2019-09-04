@@ -18,13 +18,13 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const dataNhanChuyenThu = useSelector(makeSelectorNhanChuyenThu);
   const countChuyenThu = useSelector(makeSelectorCountMT_ZTMI046);
-  const [codeChuyenThu, setCodeChuyenThu] = useState<string>('4800000278');
+  const [codeChuyenThu, setCodeChuyenThu] = useState<string>();
 
   function renderOrderInformationTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Nhận chuyến thư')}</h1>
-        <Input className="w-25" type="search" placeholder={t('Quét mã tải kiện')} />
+        <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
       </Row>
     );
   }
@@ -57,7 +57,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
             onChange={handleChangeCodeChuyenThu}
           />
           <Button onClick={handleSearchCodeChuyenThu} color="primary">
-            {t('Tìm kiếm')}
+            {t('Quét mã')}
           </Button>
         </div>
         <div className="sipTitleRightBlock sipTitleRightBlock2">

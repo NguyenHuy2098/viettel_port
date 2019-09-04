@@ -9,7 +9,7 @@ import { ACTION_GET_TRANSPORT_METHOD } from './actions';
 function* takeGet_TRANSPORT_METHOD(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   yield unfoldSaga(
     {
-      handler: async (): Promise<API.MTZTMI068Response> => {
+      handler: async (): Promise<API.SIOAZTMI068Response> => {
         const { data } = await sapApi.post(sapApiMap.SIOA_ZTMI068, action.payload);
         if (data.Status) return data;
         throw new HttpRequestError(data.ErrorCode, data.Messages);

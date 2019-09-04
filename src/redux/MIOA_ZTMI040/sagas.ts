@@ -9,7 +9,7 @@ import { ACTION_MIOA_ZTMI040 } from './actions';
 function* takeGet_MIOA_ZTMI040(action: UnfoldSagaActionType): Iterable<SagaIterator> {
   yield unfoldSaga(
     {
-      handler: async (): Promise<API.MIOAZTMI040PayloadType> => {
+      handler: async (): Promise<MIOAZTMI040PayloadType> => {
         const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI040, action.payload);
         if (data.Status)
           return {

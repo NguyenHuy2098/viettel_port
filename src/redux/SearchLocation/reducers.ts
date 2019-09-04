@@ -2,10 +2,10 @@ import { createActionTypeOnSuccess, UnfoldSagaActionType } from 'redux-unfold-sa
 import produce from 'immer';
 import { ACTION_GET_PROVINCE } from './actions';
 
-export default function(state = {}, action: UnfoldSagaActionType): API.VtpAddressResponse {
+export default function(state = {}, action: UnfoldSagaActionType): VtpAddressResponse {
   return produce(
     state,
-    (draftState: API.VtpAddressResponse): API.VtpAddressResponse => {
+    (draftState: VtpAddressResponse): VtpAddressResponse => {
       switch (action.type) {
         case createActionTypeOnSuccess(ACTION_GET_PROVINCE):
           draftState = action.payload;

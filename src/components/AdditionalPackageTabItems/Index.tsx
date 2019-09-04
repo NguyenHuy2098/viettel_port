@@ -8,11 +8,11 @@ import * as yup from 'yup';
 
 interface Props {
   removePackageItem: (index: number) => void;
-  data: API.PackageItem[];
+  data: PackageItemInputType[];
   onChangeValue: (valueName: string, value: string | undefined, index: number) => void;
   isSubmit: boolean;
   parentCount: number;
-  packageItemErrorsList: API.PackageItemErrors[];
+  packageItemErrorsList: PackageItemErrors[];
   activeTab: string;
   setActiveTab: (tab: string) => void;
 }
@@ -76,7 +76,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
     };
   }
 
-  function renderPackageSize(item: API.PackageItem, index: number): JSX.Element {
+  function renderPackageSize(item: PackageItemInputType, index: number): JSX.Element {
     return (
       <Row className="sipInputItemGroup">
         <Col xs="12" md="4" className="mb-2">
@@ -159,7 +159,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
   }
 
   // eslint-disable-next-line max-lines-per-function
-  function renderTabContent(index: number, item: API.PackageItem): JSX.Element {
+  function renderTabContent(index: number, item: PackageItemInputType): JSX.Element {
     return (
       <div className="sipInputBlock">
         {renderPackageType(index)}
@@ -256,7 +256,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
       <Nav tabs className="packageTabTitle">
         {map(
           data,
-          (item: API.PackageItem, index: number): JSX.Element => {
+          (item: PackageItemInputType, index: number): JSX.Element => {
             return (
               <NavLink
                 className={classnames({
@@ -278,7 +278,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
       <TabContent activeTab={activeTab} className="packageTabContent">
         {map(
           data,
-          (item: API.PackageItem, index: number): JSX.Element => {
+          (item: PackageItemInputType, index: number): JSX.Element => {
             return (
               <TabPane tabId={toString(index + 1)} key={index}>
                 {renderTabContent(index, item)}
