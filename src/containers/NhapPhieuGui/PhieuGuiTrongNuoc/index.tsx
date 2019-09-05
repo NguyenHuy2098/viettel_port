@@ -577,17 +577,17 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
     let newPackageItem011 = {
       COD: '',
-      Currency: 'VN',
-      Dimension_UoM: 'CM',
-      GROSS_WEIGHT: '',
+      Currency: '',
+      Dimension_UoM: '',
+      Goods_value: '',
+      Gross_weight: '200',
+      item_cat: 'PKG',
+      Service_type: '',
+      Weight_UoM: 'G',
       Length: '',
       Height: '',
       Width: '',
-      Insurance_value: '4555',
-      item_cat: 'PKG',
-      NET_WEIGHT: '100',
       quantity: '1',
-      Weight_UoM: 'G',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newArr011: any = [];
@@ -596,14 +596,14 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         newPackageItem011 = {
           COD: item.COD ? toString(parseInt(item.COD)) : '',
           Currency: '',
-          Dimension_UoM: 'CM',
-          GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
+          Dimension_UoM: '',
+          Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
+          Goods_value: '',
+          Service_type: '',
           Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
           Height: item.Hight ? toString(parseFloat(item.Hight).toFixed(2)) : '',
           Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
-          Insurance_value: '4555',
           item_cat: 'PKG',
-          NET_WEIGHT: '',
           quantity: '1',
           Weight_UoM: 'G',
         };
@@ -611,52 +611,22 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       });
     }
     const api011Payload = {
-      Movement_type: 'ZDD',
-      Ordering_party: 'TRUNGVT',
-      Sales_org: '',
-      Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
-      Source_country: 'VN',
-      Source_city: provinceIdSender,
-      Source_district: districtIdSender,
-      Source_Ward: wardIdSender,
-      Destination_country: 'VN',
+      Comodity_type: 'V3',
       Destination_city: provinceIdReceiver,
+      Destination_country: 'VN',
       Destination_district: districtIdReceiver,
       Destination_Ward: wardIdReceiver,
-      FWO_type: 'V001',
-      Item: newArr011,
+      loc_id: '',
+      Movement_type: 'ZDD',
+      Ordering_party: '9999999999',
+      item: newArr011,
+      Sales_org: '',
+      Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
+      Source_city: provinceIdSender,
+      Source_country: 'VN',
+      Source_district: districtIdSender,
+      Source_Ward: wardIdSender,
     };
-    // const api011PayloadFake = {
-    //   Movement_type: 'ZDD',
-    //   Ordering_party: 'TRUNGVT',
-    //   Sales_org: '',
-    //   Service_group: 'V02',
-    //   Source_country: 'VN',
-    //   Source_city: 'HNI',
-    //   Source_district: 'HNBD',
-    //   Source_Ward: '11106',
-    //   Destination_country: 'VN',
-    //   Destination_city: 'HCM',
-    //   Destination_district: 'HCQ1',
-    //   Destination_Ward: '71006',
-    //   FWO_type: 'V001',
-    //   Item: [
-    //     {
-    //       COD: '4555',
-    //       Currency: '',
-    //       Dimension_UoM: 'CM',
-    //       Gross_weight: '3000',
-    //       Height: '',
-    //       Insurance_value: '4555',
-    //       item_cat: 'PKG',
-    //       Length: '',
-    //       Net_weight: '',
-    //       quantity: '1',
-    //       Weight_UoM: 'G',
-    //       Width: '',
-    //     },
-    //   ],
-    // };
     dispatch(
       action_MIOA_ZTMI011(api011Payload, {
         onSuccess: (data: API.ItemMTZTMI011OUT[]): void => {
