@@ -8,10 +8,11 @@ import { push } from 'connected-react-router';
 import { get } from 'lodash';
 import moment from 'moment';
 
+import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { makeSelectorChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import {
   makeSelectorCountMT_ZTMI046,
-  useGet_MT_ZTMI046_OUT,
   makeSelectorCountKienChuaNhan,
   makeSelectorCountKienDaNhan,
 } from 'redux/MIOA_ZTMI046/selectors';
@@ -29,8 +30,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
-  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
-  const getInfoTaiKien = get(manifestForwardingOrderList, 'Row[0]');
+  const chuyenThu = useSelector(makeSelectorChuyenThu);
   const countTaiKien = useSelector(makeSelectorCountMT_ZTMI046);
   const countKienChuaNhan = useSelector(makeSelectorCountKienChuaNhan);
   const countKienDaNhan = useSelector(makeSelectorCountKienDaNhan);
@@ -40,6 +40,11 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   useEffect((): void => {
+    dispatch(
+      action_MIOA_ZTMI023({
+        IV_ID: idChuyenThu,
+      }),
+    );
     dispatch(
       action_MIOA_ZTMI046({
         IV_TOR_ID: idChuyenThu,
@@ -71,23 +76,21 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         <Col lg="5" xs="12">
           <Row>
             <Col xs="5">{t('Mã chuyến thư')}: </Col>
-            <Col xs="7">{getInfoTaiKien && getInfoTaiKien.TOR_ID}</Col>
+            <Col xs="7">{get(chuyenThu, 'TOR_ID')}</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">
-              {moment(getInfoTaiKien && getInfoTaiKien.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
-            </Col>
+            <Col xs="7">{moment(get(chuyenThu, 'CREATED_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</Col>
           </Row>
         </Col>
         <Col lg="5" xl={4} xs="12">
           <Row>
             <Col xs="5">{t('Bưu cục đi')}: </Col>
-            <Col xs="7">{getInfoTaiKien && getInfoTaiKien.LOG_LOCID_SRC}</Col>
+            <Col xs="7">{get(chuyenThu, 'FR_LOG_ID')}</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ngày gửi')}:&nbsp;</Col>
-            <Col xs="7">24/04/2019</Col>
+            <Col xs="7">-/-/-</Col>
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">

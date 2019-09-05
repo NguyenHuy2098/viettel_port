@@ -7,13 +7,13 @@ import { Cell } from 'react-table';
 import moment from 'moment';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
-import { makeSelectorNhanChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
+import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const QuetMa: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const dataNhanChuyenThu = useSelector(makeSelectorNhanChuyenThu);
+  const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
 
   const [codeChuyenThu, setCodeChuyenThu] = useState<string>('4800000278');
 

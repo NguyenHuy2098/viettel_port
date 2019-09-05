@@ -3,7 +3,7 @@ import produce from 'immer';
 import { ACTION_MIOA_ZTMI023 } from './actions';
 
 export const defaultState: MIOAZTMI023StateType = {
-  ZC3: {},
+  response: {},
 };
 
 export default function(
@@ -15,7 +15,7 @@ export default function(
     (draftState: MIOAZTMI023StateType): MIOAZTMI023StateType => {
       switch (type) {
         case createActionTypeOnSuccess(ACTION_MIOA_ZTMI023):
-          draftState.ZC3 = payload;
+          draftState.response = payload;
           return draftState;
         case createActionTypeOnFailure(ACTION_MIOA_ZTMI023):
           return defaultState;
