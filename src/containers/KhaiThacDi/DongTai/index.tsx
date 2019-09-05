@@ -24,6 +24,7 @@ import {
   makeSelectorCountTaiChuaHoanThanh,
   makeSelectorCountBangKeChuaDongTai,
   makeSelectorCountTaiDaDong,
+  makeSelectorCountTai_BangKeChuaDongTai,
 } from 'redux/MIOA_ZTMI047/selectors';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
@@ -39,6 +40,7 @@ const DongTai: React.FC = (): JSX.Element => {
   const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
   const countBangKeBuuGuiChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
   const countTaiDaDong = useSelector(makeSelectorCountTaiDaDong);
+  const countBangKeChuaDongTai = useSelector(makeSelectorCountTai_BangKeChuaDongTai);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
@@ -123,7 +125,7 @@ const DongTai: React.FC = (): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(3), [])}
             >
               {t('Bảng kê chưa đóng tải')}
-              <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
+              <Badge color="primary">{countBangKeChuaDongTai}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>

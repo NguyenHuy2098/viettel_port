@@ -210,7 +210,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
               <Input
                 value={torIdSearch}
                 type="text"
-                placeholder={t('Tìm kiếm bảng kê')}
+                placeholder={t('Tìm kiếm tải')}
                 onChange={handleChangeTextboxValue(setTorIdSearch)}
               />
             </div>
