@@ -11,6 +11,7 @@ import {
   makeSelectorCountBangKeChuaHoanThanh,
   getTotalPageBangKe,
 } from 'redux/MIOA_ZTMI047/selectors';
+import { generatePath } from 'react-router-dom';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
@@ -101,7 +102,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
+      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [listBangKeChuaDongTai],

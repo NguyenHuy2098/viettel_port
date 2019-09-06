@@ -20,19 +20,19 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
 
   const getListChuyenThu = useCallback(
     function(payload = {}): void {
-      dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZBIG',
-          IV_FR_LOC_ID: 'BHD',
-          IV_TO_LOC_ID: '',
-          IV_CUST_STATUS: '101',
-          IV_FR_DATE: '20190727',
-          IV_TO_DATE: '20190828',
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '20',
-        }),
-      );
+      // dispatch(
+      //   action_MIOA_ZTMI047({
+      //     IV_TOR_ID: '',
+      //     IV_TOR_TYPE: 'ZBIG',
+      //     IV_FR_LOC_ID: 'BHD',
+      //     IV_TO_LOC_ID: '',
+      //     IV_CUST_STATUS: '101',
+      //     IV_FR_DATE: '20190727',
+      //     IV_TO_DATE: '20190828',
+      //     IV_PAGENO: '1',
+      //     IV_NO_PER_PAGE: '20',
+      //   }),
+      // );
     },
     [dispatch],
   );

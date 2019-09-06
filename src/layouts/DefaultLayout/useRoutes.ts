@@ -80,20 +80,12 @@ const ThongTinBangKe = Loadable({
   loader: (): any => import('containers/KhaiThacDi/BangKe/ThongTinBangKe'),
   loading: Loading,
 });
-const DanhSachBangKe = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/DanhSachBangKe/DanhSachBangKe'),
-  loading: Loading,
-});
 const DanhSachPhieuGuiTrongBangKe = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongBangKe/DanhSachPhieuGuiTrongBangKe'),
   loading: Loading,
 });
 const DanhSachPhieuGuiTrongBangKeDaDong = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongBangKe/DanhSachPhieuGuiTrongBangKeDaDong'),
-  loading: Loading,
-});
-const DanhSachPhieuGui = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/BangKe/DanhSachPhieuGui'),
   loading: Loading,
 });
 const DongTai = Loadable({
@@ -118,10 +110,6 @@ const DanhSachTaiKienTrongChuyenThu = Loadable({
 });
 const DanhSachTaiKienTrongChuyenThuDaDong = Loadable({
   loader: (): any => import('containers/KhaiThacDi/DongChuyenThu/DanhSachTaiKienTrongChuyenThuDaDong'),
-  loading: Loading,
-});
-const DanhSachTaiKien = Loadable({
-  loader: (): any => import('containers/KhaiThacDi/DanhSachTaiKien'),
   loading: Loading,
 });
 const TachPhieuGui = Loadable({
@@ -215,7 +203,6 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
       name: t('Danh sách phiêu gửi trong tải đã đóng'),
       component: DanhSachPhieuGuiTrongTaiDaDong,
     },
-    { path: routesMap.DANH_SACH_TAI_KIEN, name: t('Danh sách tải kiện'), component: DanhSachTaiKien },
     { path: routesMap.DONG_CHUYEN_THU, name: t('Đóng chuyến thư'), component: DongChuyenThu },
     { path: routesMap.THONG_TIN_CHUYEN_THU, name: t('Thông tin chuyến thư'), component: ThongTinChuyenThu },
     {
@@ -243,9 +230,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
       name: t('Danh sách tải kiện trong chuyến thư đã đóng'),
       component: DanhSachTaiKienTrongChuyenThuDaDong,
     },
-    { path: routesMap.DANH_SACH_BANG_KE, name: t('Danh sách bảng kê'), component: DanhSachBangKe },
     { path: routesMap.KHAI_THAC_TAI, name: t('Khai thác tải'), component: KhaiThacTai },
-    { path: routesMap.DANH_SACH_PHIEU_GUI, name: t('Danh sách phiếu gửi'), component: DanhSachPhieuGui },
     { path: routesMap.NHAN_CHUYEN_THU, name: t('Nhận chuyến thư'), component: NhanChuyenThu },
     { path: routesMap.NHAN_TAI_KIEN, name: t('Nhận tải kiện'), component: NhanTaiKien },
     { path: routesMap.KHAI_THAC_CHUYEN_THU_DEN, name: t('Khai thác chuyển thư đến'), component: KhaiThacChuyenThuDen },

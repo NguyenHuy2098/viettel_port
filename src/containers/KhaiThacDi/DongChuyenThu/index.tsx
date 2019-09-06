@@ -56,7 +56,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
     const thisValue = e.currentTarget.value;
     if (size(trim(thisValue)) && e.keyCode === 13) {
-      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${thisValue}`));
+      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU}/${thisValue}`));
     }
   }
 

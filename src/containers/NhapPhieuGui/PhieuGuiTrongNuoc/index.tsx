@@ -553,6 +553,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         });
         setPackageItemArr(newArrEdit);
       }
+      //___________trigger call api for cost calculating
+      setCountGetSummaryInformation(countGetSummaryInformation + 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [

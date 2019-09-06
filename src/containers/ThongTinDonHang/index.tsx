@@ -2,8 +2,8 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { push } from 'connected-react-router';
 import { Cell } from 'react-table';
+import { push } from 'connected-react-router';
 import { generatePath, match } from 'react-router-dom';
 import { drop, findIndex, get, map, size, slice } from 'lodash';
 import DataTable from 'components/DataTable';

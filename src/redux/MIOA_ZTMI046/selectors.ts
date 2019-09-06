@@ -8,8 +8,16 @@ export function useGet_MT_ZTMI046_OUT(): API.MTZTMI046OUT | null {
   }, shallowEqual);
 }
 
-export function makeSelectorMT_ZTMI046(state: AppStateType): API.MTZTMI046OUT[] | null {
-  return get(state, 'response.MIOA_ZTMI046.MT_ZTMI046_OUT.Row[0].CHILDS', null);
+export function makeSelectorMT_ZTMI046(state: AppStateType): API.RowMTZTMI046OUT[] | null {
+  return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row', null);
+}
+
+export function makeSelectorMT_ZTMI046_Instane(state: AppStateType): API.RowMTZTMI046OUT | null {
+  return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0]', null);
+}
+
+export function makeSelectorMT_ZTMI046_Instane_Children(state: AppStateType): API.Child[] | null {
+  return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0].CHILDS', null);
 }
 
 export function makeSelectorCountMT_ZTMI046(state: AppStateType): number {
