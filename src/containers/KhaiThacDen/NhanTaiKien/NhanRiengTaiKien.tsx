@@ -44,7 +44,8 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
         ),
       );
     },
-    [dispatch],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   const dispatch_Action_MIOA_ZTMI023 = useCallback((): void => {
