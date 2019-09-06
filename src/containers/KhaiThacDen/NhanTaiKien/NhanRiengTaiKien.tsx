@@ -21,28 +21,31 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
   const [showTaiKienDaDuocNhanMessage, setShowTaiKienDaDuocNhanMessage] = useState<boolean>(false);
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
-  const dispatch_Action_MIOA_ZTMI022 = (torId: string, api023Row: API.RowResponseZTMI023OUT[] | null): void => {
-    dispatch(
-      action_MIOA_ZTMI022(
-        {
-          row: {
-            CU_NO: '',
-            FU_NO: torId,
-            STATUS_ID: '1',
-            USER_ID: 'KT1',
-            LOC_ID: 'HUB1',
+  const dispatch_Action_MIOA_ZTMI022 = useCallback(
+    (torId: string, api023Row: API.RowResponseZTMI023OUT[] | null): void => {
+      dispatch(
+        action_MIOA_ZTMI022(
+          {
+            row: {
+              CU_NO: '',
+              FU_NO: torId,
+              STATUS_ID: '1',
+              USER_ID: 'KT1',
+              LOC_ID: 'HUB1',
+            },
           },
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI022Response): void => {
-            if ((data.MT_ZTMI022_OUT, 'EV_ERROR')) {
-              setApi023Record(api023Row);
-            }
+          {
+            onSuccess: (data: API.MIOAZTMI022Response): void => {
+              if ((data.MT_ZTMI022_OUT, 'EV_ERROR')) {
+                setApi023Record(api023Row);
+              }
+            },
           },
-        },
-      ),
-    );
-  };
+        ),
+      );
+    },
+    [dispatch],
+  );
 
   const dispatch_Action_MIOA_ZTMI023 = useCallback((): void => {
     dispatch(
@@ -76,7 +79,7 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
         },
       ),
     );
-  }, [dispatch, torIdSearch, dispatch_Action_MIOA_ZTMI022]);
+  }, [dispatch, torIdSearch]);
 
   const handleControllerClick = useCallback(
     item => (): void => {
