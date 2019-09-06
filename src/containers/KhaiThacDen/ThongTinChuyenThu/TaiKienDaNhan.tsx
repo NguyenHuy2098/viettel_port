@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { Button, Row, Input, Label } from 'reactstrap';
+import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { generatePath, match, withRouter } from 'react-router-dom';
@@ -115,24 +115,35 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
+  function renderToolbar(): JSX.Element {
+    return (
+      <Row>
+        <div className="btn-toolbar col-10">
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <span className="input-group-text">
+                <i className="fa fa-search" />
+              </span>
+            </InputGroupAddon>
+            <Input className="w-25 mr-2" type="text" placeholder={t('Tìm kiếm tải/kiện')} />
+          </InputGroup>
+          <Button className="mr-2" color="primary">
+            {t('Tìm kiếm')}
+          </Button>
+          <button className="btn btn-outline-primary mr-2">
+            {t('Tải')}&nbsp;({'05'})
+          </button>
+          <button className="btn btn-outline-secondary">
+            {t('Kiện')}&nbsp;({'20'})
+          </button>
+        </div>
+      </Row>
+    );
+  }
+
   return (
     <>
-      <div className="shadow-sm p-3 mb-3 bg-white">
-        <Row>
-          <div className="btn-toolbar col-10">
-            <Input className="w-25 mr-2" type="text" placeholder={t('Tìm kiếm tải/kiện')} />
-            <Button className="mr-2" color="primary">
-              {t('Tìm kiếm')}
-            </Button>
-            <button className="btn btn-outline-primary mr-2">
-              {t('Tải')}&nbsp;({'05'})
-            </button>
-            <button className="btn btn-outline-secondary">
-              {t('Kiện')}&nbsp;({'20'})
-            </button>
-          </div>
-        </Row>
-      </div>
+      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
       </Row>

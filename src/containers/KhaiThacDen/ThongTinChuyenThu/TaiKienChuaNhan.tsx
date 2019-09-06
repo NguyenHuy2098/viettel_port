@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Row, Input, Label } from 'reactstrap';
+import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { generatePath, match, withRouter } from 'react-router-dom';
@@ -32,7 +32,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         IV_TOR_ID: idChuyenThu,
       }),
     );
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
 
   function handleScanTaiKien(): void {
@@ -110,6 +110,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
   const data = map(get(manifestForwardingOrderList, 'Row[0].CHILDS'), (item: API.Child) => {
     if (item.LIFECYCLE === 106) {
       return {
@@ -124,32 +125,43 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     }
   });
 
-  return (
-    <>
-      <div className="shadow-sm p-3 mb-3 bg-white">
-        <Row>
-          <div className="btn-toolbar col-10">
+  function renderToolbar(): JSX.Element {
+    return (
+      <Row>
+        <div className="btn-toolbar col-10">
+          <InputGroup>
+            <InputGroupAddon addonType="prepend">
+              <span className="input-group-text">
+                <i className="fa fa-barcode" />
+              </span>
+            </InputGroupAddon>
             <Input
               className="w-25 mr-2"
               onChange={handleChangeTaiKien}
               type="text"
               placeholder={t('Quét mã tải kiện')}
             />
-            <Button className="mr-2" color="primary" onClick={handleScanTaiKien}>
-              {t('Tìm kiếm')}
-            </Button>
-            <button className="btn btn-outline-primary mr-2">
-              {t('Tải')}&nbsp;({'05'})
-            </button>
-            <button className="btn btn-outline-primary">
-              {t('Kiện')}&nbsp;({'20'})
-            </button>
-          </div>
-          <div className="btn-toolbar col-2 align-items-end flex-column">
-            <Button color="primary">{t('Nhận tải kiện')}</Button>
-          </div>
-        </Row>
-      </div>
+          </InputGroup>
+          <Button className="mr-2" color="primary" onClick={handleScanTaiKien}>
+            {t('Quét mã')}
+          </Button>
+          <button className="btn btn-outline-primary mr-2">
+            {t('Tải')}&nbsp;({'05'})
+          </button>
+          <button className="btn btn-outline-primary">
+            {t('Kiện')}&nbsp;({'20'})
+          </button>
+        </div>
+        <div className="btn-toolbar col-2 align-items-end flex-column">
+          <Button color="primary">{t('Nhận tải kiện')}</Button>
+        </div>
+      </Row>
+    );
+  }
+
+  return (
+    <>
+      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
       </Row>
