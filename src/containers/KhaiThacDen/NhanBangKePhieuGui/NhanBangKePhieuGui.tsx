@@ -32,7 +32,6 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
 
   const taiChuaNhanBKPhieuGuiRawRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
   const bangKeChuaNhanPhieuGuiRawRecords = useSelector(makeSelectorBangKeChuaNhanPhieuGui);
-  console.log('bangKeChuaNhanPhieuGuiRawRecords', bangKeChuaNhanPhieuGuiRawRecords);
 
   const [taiChuaNhanBKPhieuGuiRecords, setTaiChuaNhanBKPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
   const [bangKeChuaNhanPhieuGuiRecords, setBangKeChuaNhanPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
@@ -87,9 +86,9 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     const tempArray: API.RowMTZTMI047OUT[] = [];
     forEach(bangKeChuaNhanPhieuGuiRawRecords, el => {
-      // if (checkIsNot604LifeCycle(el)) {
-      tempArray.push(el);
-      // }
+      if (checkIsNot604LifeCycle(el)) {
+        tempArray.push(el);
+      }
     });
     setBangKeChuaNhanPhieuGuiRecords(tempArray);
   }, [bangKeChuaNhanPhieuGuiRawRecords]);
