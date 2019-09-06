@@ -38,9 +38,10 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
       ),
     );
   };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect((): void => {
     dispatch_Action_MIOA_ZTMI047();
-  }, [dispatch]);
+  }, []);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
