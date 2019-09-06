@@ -3,10 +3,16 @@ import { Button, Input, Row, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+import { useDispatch } from 'react-redux';
+import { goBack } from 'connected-react-router';
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const handleBack = (): void => {
+    dispatch(goBack());
+  };
   const data = [
     {
       TOR_ID: 4545,
@@ -84,7 +90,7 @@ const DanhSachTaiKien: React.FC = (): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button className="sipTitleBtnBack">
+          <Button className="sipTitleBtnBack" onClick={handleBack}>
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           {t('Danh sách tải kiện trong chuyển thư')}

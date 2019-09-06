@@ -10,13 +10,15 @@ interface Props {
   onHide: () => void;
   onSuccessCreated: () => void;
   visible: boolean;
+  modalTitle: string;
+  IV_TOR_TYPE: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { onHide, onSuccessCreated, visible } = props;
+  const { onHide, onSuccessCreated, visible, modalTitle, IV_TOR_TYPE } = props;
 
   const postOfficeList = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
 
@@ -25,7 +27,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
 
   const payloadCreate = {
     IV_FLAG: '1',
-    IV_TOR_TYPE: 'ZC1',
+    IV_TOR_TYPE: IV_TOR_TYPE,
     IV_TOR_ID_CU: '',
     IV_SLOCATION: 'BHD',
     IV_DLOCATION: destination,
@@ -44,7 +46,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       action_MIOA_ZTMI016(payloadCreate, {
         onSuccess: (): void => {
           onSuccessCreated();
-          alert(t('Tạo bảng kê thành công!'));
+          alert(t('Tạo thành công!'));
         },
         onFinish: (): void => {
           onHide();
@@ -65,7 +67,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
 
   return (
     <Modal isOpen={visible} className="sipTitleModalCreateNew">
-      <ModalHeader toggle={onHide}>{t('Tạo bảng kê')}</ModalHeader>
+      <ModalHeader toggle={onHide}>{modalTitle}</ModalHeader>
       <ModalBody>
         <FormGroup>
           <Label>{t('Chọn điểm đến')}</Label>

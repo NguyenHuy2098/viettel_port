@@ -1,18 +1,37 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { map, get } from 'lodash';
+import { push } from 'connected-react-router';
+import { map, get, toString, trim } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorChuyenThuDaDong, makeSelectorCountChuyenThuDaDong } from 'redux/MIOA_ZTMI047/selectors';
+import {
+  makeSelectorChuyenThuDaDong,
+  makeSelectorCountChuyenThuDaDong,
+  getTotalPageChuyenThuDaDong,
+} from 'redux/MIOA_ZTMI047/selectors';
+import routesMap from 'utils/routesMap';
 import moment from 'moment';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const countChuyenThuDaDong = useSelector(makeSelectorCountChuyenThuDaDong);
+  const listChuyenThuDaDong = useSelector(makeSelectorChuyenThuDaDong);
+  const totalPage = useSelector(getTotalPageChuyenThuDaDong);
+
+  const [torIdSearch, setTorIdSearch] = useState<string>('');
+
+  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setValueFunction(event.currentTarget.value);
+    };
+  }
 
   const getListChuyenThu = useCallback(
     function(payload = {}): void {
@@ -20,9 +39,12 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC3',
-          IV_FR_LOC_ID: 'BHD',
+          IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '104',
-          IV_TO_LOC_ID: '',
+          IV_FR_DATE: '20000101',
+          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
           ...payload,
         }),
       );
@@ -30,22 +52,38 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
     [dispatch],
   );
 
-  useEffect((): void => getListChuyenThu(), [getListChuyenThu]);
+  useEffect((): void => {
+    getListChuyenThu();
+  }, [getListChuyenThu]);
 
-  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuDaDong);
-  // eslint-disable-next-line no-undef
-  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorChuyenThuDaDong);
-
-  function handleSearchChuyenThu(e: React.ChangeEvent<HTMLInputElement>): void {
+  function handleSearchChuyenThu(): void {
     const payload = {
-      IV_TOR_ID: e.target.value,
+      IV_TOR_ID: torIdSearch,
     };
     getListChuyenThu(payload);
   }
+
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): void => {
+      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU}/${item.TOR_ID}`));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listChuyenThuDaDong],
+  );
+
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: torIdSearch,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListChuyenThu(payload);
+  };
+
   const columns = useMemo(
+    //eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mã chuyễn thư'),
+        Header: t('Mã chuyến thư'),
         accessor: 'TOR_ID',
       },
       {
@@ -84,26 +122,31 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const data = map(get(listChuyenThuChuaHoanThanh, ''), (item: API.RowMTZTMI047OUT) => {
+  const data = map(listChuyenThuDaDong, (item: API.RowMTZTMI047OUT) => {
     return {
       TOR_ID: item.TOR_ID,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
-      countChuyenThu: 222,
-      PERSONAL: item.ITEM_NO,
+      countChuyenThu: item.ITEM_NO,
+      CREATED_BY: item.CREATED_BY,
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      NOTE_OF: item.EXEC_CONT,
+      NOTE_OF: get(item, 'Childs[0].DESCRIPTION', ''),
     };
   });
   return (
     <>
       <Row className="sipContentContainer">
-        <Col lg={4} xs={12} className="p-0">
+        <Col xl={6} lg={9} xs={12} className="p-0">
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} onChange={handleSearchChuyenThu} />
+              <Input
+                value={torIdSearch}
+                type="text"
+                placeholder={t('Tìm kiếm bảng kê')}
+                onChange={handleChangeTextboxValue(setTorIdSearch)}
+              />
             </div>
-            <Button color="primary" className="ml-2">
+            <Button color="primary" className="ml-2" onClick={handleSearchChuyenThu}>
               {t('Tìm kiếm')}
             </Button>
             <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
@@ -113,13 +156,19 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countChuyenThuChuaHoanThanh}</span>
+            {t('Tổng số')}: <span>{countChuyenThuDaDong}</span>
           </p>
         </Col>
       </Row>
       <div className="mt-3" />
-      <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} />
+      <Row className="sipTableContainer sipTableRowClickable">
+        <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
     </>
   );

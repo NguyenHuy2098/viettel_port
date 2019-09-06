@@ -1,34 +1,18 @@
-import React, { ChangeEvent, KeyboardEvent, useCallback, useEffect, useState } from 'react';
-import {
-  Badge,
-  Button,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Row,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-} from 'reactstrap';
+import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { noop, size, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { get } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 
 import {
   makeSelectorCountChuyenThuChuaHoanThanh,
-  makeSelectorCountBangKeChuaDongTai,
+  makeSelectorCountTaiChuaHoanThanh,
   makeSelectorCountChuyenThuDaDong,
 } from 'redux/MIOA_ZTMI047/selectors';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import routesMap from 'utils/routesMap';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
@@ -44,133 +28,35 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
     setTab(tab);
   }
 
-  const [modalCreateNew, setModalCreateNew] = React.useState<boolean>(false);
+  const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
   const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
-  const countTaiChuaDong = useSelector(makeSelectorCountBangKeChuaDongTai);
   const countChuyenThuDaDong = useSelector(makeSelectorCountChuyenThuDaDong);
-  function toggle(): void {
-    setModalCreateNew(!modalCreateNew);
-  }
-  const [textGhiChu, setTextGhiChu] = React.useState<string>('');
-  const [valueBuuCuc, setValueBuuCuc] = React.useState<string>('1');
+  const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
 
-  function handleChangeText(e: ChangeEvent<HTMLInputElement>): void {
-    setTextGhiChu(e.target.value);
-  }
-
-  function handleChangeBuuCuc(e: ChangeEvent<HTMLInputElement>): void {
-    setValueBuuCuc(e.target.value);
-  }
-  const handleAddChuyenThu = (): ((event: React.MouseEvent) => void) => {
-    return (): void => {
-      const payload = {
-        IV_FLAG: '1',
-        IV_TOR_TYPE: 'ZC3',
-        IV_TOR_ID_CU: '',
-        IV_SLOCATION: 'BHD',
-        IV_DLOCATION: valueBuuCuc,
-        IV_DESCRIPTION: '',
-        EXEC_CONT: textGhiChu,
-        T_ITEM: [
-          {
-            ITEM_ID: '',
-            ITEM_TYPE: '',
-          },
-        ],
-      };
-
-      dispatch(
-        action_MIOA_ZTMI016(payload, {
-          onFinish: (): void => {
-            const payload = {
-              IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZC3',
-              IV_FR_LOC_ID: 'BHD',
-              IV_CUST_STATUS: '101',
-              IV_TO_LOC_ID: '',
-            };
-            dispatch(action_MIOA_ZTMI047(payload));
-          },
-        }),
-      );
-      setModalCreateNew(!modalCreateNew);
-    };
+  const payloadGetPostOfficeList = {
+    row: [
+      {
+        IV_LOCTYPE: 'V001',
+      },
+    ],
+    IV_BP: '',
+    IV_PAGENO: '1',
+    IV_NO_PER_PAGE: '5000',
   };
 
-  function renderModal(): JSX.Element {
-    return (
-      <Modal isOpen={modalCreateNew} toggle={toggle} className="sipTitleModalCreateNew">
-        <ModalHeader toggle={toggle}>{t('Tạo chuyến thư')}</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <Label>{t('Bưu cục đến')}</Label>
-            <Input type="select" value={valueBuuCuc} onChange={handleChangeBuuCuc}>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label>{t('Ghi chú')}</Label>
-            <Input type="textarea" placeholder={t('Nhập ghi chú')} value={textGhiChu} onChange={handleChangeText} />
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={handleAddChuyenThu()}>
-            {t('Ghi lại')}
-          </Button>
-        </ModalFooter>
-      </Modal>
-    );
-  }
-  const getListChuyenThu = useCallback(
-    function(payload = {}): void {
-      dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC3',
-          IV_FR_LOC_ID: 'BHD',
-          IV_CUST_STATUS: '101',
-          IV_TO_LOC_ID: '',
-          LanguageId: '',
-          LanguageDefaultId: '',
-          ...payload,
-        }),
-      );
-    },
-    [dispatch],
-  );
-
   useEffect((): void => {
-    getListChuyenThu();
-  }, [getListChuyenThu]);
+    dispatch(action_MIOA_ZTMI045(payloadGetPostOfficeList));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
-  function handleSearchChuyenThu(e: KeyboardEvent<HTMLInputElement>): void {
-    const payload = {
-      IV_TOR_ID: e.currentTarget.value,
-      IV_TOR_TYPE: 'ZC3',
-      IV_FR_LOC_ID: 'BHD',
-      IV_CUST_STATUS: '101',
-    };
-    const torId = e.currentTarget.value;
-    if (e.key === 'Enter') {
-      dispatch(
-        action_MIOA_ZTMI047(payload, {
-          onSuccess: (data: API.MIOAZTMI047Response): void => {
-            const check = get(data, 'data.MT_ZTMI047_OUT.Row', null);
-            if (check) {
-              dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${torId}`));
-            } else {
-              alert(t('Không tìm thấy'));
-              getListChuyenThu();
-            }
-          },
-          onFailure: (): void => {
-            alert(t('Lỗi!'));
-            getListChuyenThu();
-          },
-        }),
-      );
+  function toggleCreateForwardingItemModal(): void {
+    setCreateForwardingItemModal(!createForwardingItemModal);
+  }
+
+  function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
+    const thisValue = e.currentTarget.value;
+    if (size(trim(thisValue)) && e.keyCode === 13) {
+      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN}/${thisValue}`));
     }
   }
 
@@ -181,13 +67,19 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
         <div className="sipTitleRightBlock">
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu chuyến thư')} onKeyDown={handleSearchChuyenThu} />
+            <Input type="text" placeholder={t('Tra cứu chuyến thư')} onKeyUp={handleForwardingSearch} />
           </div>
-          <Button onClick={toggle}>
+          <Button onClick={toggleCreateForwardingItemModal}>
             <i className="fa fa-plus" />
             {t('Tạo chuyến thư')}
           </Button>
-          {renderModal()}
+          <CreateForwardingItemModal
+            onSuccessCreated={noop}
+            visible={createForwardingItemModal}
+            onHide={toggleCreateForwardingItemModal}
+            modalTitle={t('Tạo chuyến thư')}
+            IV_TOR_TYPE="ZC3"
+          />
         </div>
       </Row>
     );
@@ -213,7 +105,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Tải chưa đóng chuyến thư')}
-              <Badge color="primary">{countTaiChuaDong}</Badge>
+              <Badge color="primary">{countTaiChuaHoanThanh}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -222,7 +114,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(3), [])}
             >
               {t('Kiện chưa đóng chuyến thư')}
-              <Badge color="primary">03</Badge>
+              <Badge color="primary">0</Badge>
             </NavLink>
           </NavItem>
           <NavItem>

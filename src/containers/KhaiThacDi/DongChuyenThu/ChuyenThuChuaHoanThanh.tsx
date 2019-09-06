@@ -133,7 +133,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
         },
       },
       {
-        Header: t('Mã chuyễn thư'),
+        Header: t('Mã chuyến thư'),
         accessor: 'TOR_ID',
       },
       {

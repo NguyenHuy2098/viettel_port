@@ -1,14 +1,14 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { noop, size, toString, trim } from 'lodash';
+import { noop, size, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { makeSelectorCountBangKeChuaHoanThanh, makeSelectorCountBangKeDaDong } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
-import moment from 'moment';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { push } from 'connected-react-router';
+import routesMap from 'utils/routesMap';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
@@ -47,30 +47,10 @@ const DongBangKe: React.FC = (): JSX.Element => {
     setTab(tab);
   }
 
-  function handleForwardingSearch(e: ChangeEvent<HTMLInputElement>): void {
+  function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
     const thisValue = e.currentTarget.value;
-    if (size(trim(thisValue))) {
-      const searchPayload = {
-        IV_TOR_ID: thisValue,
-        IV_TOR_TYPE: 'ZC1',
-        IV_FR_LOC_ID: 'BDH',
-        IV_CUST_STATUS: '101',
-
-        IV_FR_DATE: '20190828',
-        IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '10',
-      };
-      dispatch(
-        action_MIOA_ZTMI047(searchPayload, {
-          onSuccess: (data: MIOAZTMI047PayloadType): void => {
-            // console.log(data);
-          },
-          onFailure: (): void => {
-            // console.log('Loi!!!');
-          },
-        }),
-      );
+    if (size(trim(thisValue)) && e.keyCode === 13) {
+      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${thisValue}`));
     }
   }
 
@@ -86,6 +66,8 @@ const DongBangKe: React.FC = (): JSX.Element => {
           onSuccessCreated={noop}
           visible={createForwardingItemModal}
           onHide={toggleCreateForwardingItemModal}
+          modalTitle={t('Tạo bảng kê')}
+          IV_TOR_TYPE="ZC1"
         />
       </>
     );
@@ -98,7 +80,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
         <div className="sipTitleRightBlock">
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu bảng kê')} onChange={handleForwardingSearch} />
+            <Input type="text" placeholder={t('Tra cứu bảng kê')} onKeyUp={handleForwardingSearch} />
           </div>
           <TaoBangKe />
         </div>

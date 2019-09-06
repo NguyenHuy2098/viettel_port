@@ -1,23 +1,8 @@
-import React, { useState } from 'react';
+import React, { KeyboardEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import {
-  Badge,
-  Button,
-  FormGroup,
-  Input,
-  Label,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Row,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-} from 'reactstrap';
+import { useDispatch, useSelector } from 'react-redux';
+import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { noop, size, trim } from 'lodash';
 import classNames from 'classnames';
 
 import {
@@ -26,6 +11,10 @@ import {
   makeSelectorCountTaiDaDong,
   makeSelectorCountTai_BangKeChuaDongTai,
 } from 'redux/MIOA_ZTMI047/selectors';
+import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { push } from 'connected-react-router';
+import routesMap from 'utils/routesMap';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';
@@ -34,47 +23,44 @@ import TaiDaDong from './TaiDaDong';
 // eslint-disable-next-line max-lines-per-function
 const DongTai: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
-  const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
   const [tab, setTab] = useState<number>(1);
   const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
   const countBangKeBuuGuiChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
   const countTaiDaDong = useSelector(makeSelectorCountTaiDaDong);
   const countBangKeChuaDongTai = useSelector(makeSelectorCountTai_BangKeChuaDongTai);
+  const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
+
+  const payloadGetPostOfficeList = {
+    row: [
+      {
+        IV_LOCTYPE: 'V001',
+      },
+    ],
+    IV_BP: '',
+    IV_PAGENO: '1',
+    IV_NO_PER_PAGE: '5000',
+  };
+
+  useEffect((): void => {
+    dispatch(action_MIOA_ZTMI045(payloadGetPostOfficeList));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch]);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
 
-  function toggleModal(): void {
-    setModalCreateNew(!modalCreateNew);
+  function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
+    const thisValue = e.currentTarget.value;
+    if (size(trim(thisValue)) && e.keyCode === 13) {
+      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI}/${thisValue}`));
+    }
   }
 
-  function renderModal(): JSX.Element {
-    return (
-      <Modal isOpen={modalCreateNew} toggle={toggleModal} className="sipTitleModalCreateNew">
-        <ModalHeader toggle={toggleModal}>{t('Tạo tải')}</ModalHeader>
-        <ModalBody>
-          <FormGroup>
-            <Label>{t('Bưu cục đến')}</Label>
-            <Input type="select">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-            </Input>
-          </FormGroup>
-          <FormGroup>
-            <Label>{t('Ghi chú')}</Label>
-            <Input type="textarea" placeholder={t('Nhập ghi chú')} />
-          </FormGroup>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={toggleModal}>
-            {t('Ghi lại')}
-          </Button>
-        </ModalFooter>
-      </Modal>
-    );
+  function toggleCreateForwardingItemModal(): void {
+    setCreateForwardingItemModal(!createForwardingItemModal);
   }
 
   function renderTitle(): JSX.Element {
@@ -84,13 +70,19 @@ const DongTai: React.FC = (): JSX.Element => {
         <div className="sipTitleRightBlock">
           <div className="sipTitleRightBlockInput">
             <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu tải')} />
+            <Input type="text" placeholder={t('Tra cứu tải')} onKeyUp={handleForwardingSearch} />
           </div>
-          <Button onClick={toggleModal}>
+          <Button onClick={toggleCreateForwardingItemModal}>
             <i className="fa fa-plus" />
             {t('Tạo tải')}
           </Button>
-          {renderModal()}
+          <CreateForwardingItemModal
+            onSuccessCreated={noop}
+            visible={createForwardingItemModal}
+            onHide={toggleCreateForwardingItemModal}
+            modalTitle={t('Tạo tải')}
+            IV_TOR_TYPE="ZC2"
+          />
         </div>
       </Row>
     );
