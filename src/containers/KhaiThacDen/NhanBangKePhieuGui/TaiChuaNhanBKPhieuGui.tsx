@@ -1,14 +1,14 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { match } from 'react-router-dom';
-import { map, toNumber, trim, size } from 'lodash';
+import { filter, map, toNumber, trim, size, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import { push } from 'connected-react-router';
-import routesMap from '../../../utils/routesMap';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   match: match;
@@ -19,6 +19,12 @@ interface Props {
 const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [searchKey, setSearchKey] = useState<string>('');
+  const [filterTableRows, setFilterTableRow] = useState<API.RowMTZTMI047OUT[]>([]);
+
+  useEffect((): void => {
+    setFilterTableRow(tableRows);
+  }, [tableRows]);
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -52,7 +58,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
     [],
   );
 
-  const data = map(tableRows, item => {
+  const data = map(filterTableRows, item => {
     return {
       TOR_ID: item.TOR_ID,
       LOG_LOCID_FR: item.LOG_LOCID_FR,
@@ -67,6 +73,17 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
     dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI}/${item.TOR_ID}`));
   };
 
+  const handleSearch = (): void => {
+    const newTableRows = filter(tableRows, row => {
+      return includes(row.TOR_ID, searchKey);
+    });
+    setFilterTableRow(newTableRows);
+  };
+
+  const handleChangeInput = (event: React.FormEvent<HTMLInputElement>): void => {
+    setSearchKey(event.currentTarget.value);
+  };
+
   return (
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">
@@ -74,9 +91,9 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
           <div className="btn-toolbar col-10">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm tải')} />
+              <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleChangeInput} />
             </div>
-            <Button className="ml-2" color="primary">
+            <Button className="ml-2" color="primary" onClick={handleSearch}>
               {t('Tìm kiếm')}
             </Button>
           </div>

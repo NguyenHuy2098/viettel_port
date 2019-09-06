@@ -8,12 +8,12 @@ import { match } from 'react-router';
 import { forEach, size } from 'lodash';
 import moment from 'moment';
 
-import { checkChildsLifeCycle } from 'utils/helper';
+import { checkIsNot109LifeCycle, checkIsNot604LifeCycle } from 'utils/helper';
 import { makeSelectorCountBangKeDaNhan } from 'redux/MIOA_ZTMI046/selectors';
-import { makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorBangKeChuaNhanPhieuGui, makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import BangKeDaNhan from './BangKeDaNhan';
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
+import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
 
 interface Props {
   match: match;
@@ -30,11 +30,14 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   const countBangKeDaNhan = useSelector(makeSelectorCountBangKeDaNhan);
   const dispatch = useDispatch();
 
-  const taiChuaNhanBKPhieuGuiRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
+  const taiChuaNhanBKPhieuGuiRawRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
+  const bangKeChuaNhanPhieuGuiRawRecords = useSelector(makeSelectorBangKeChuaNhanPhieuGui);
+  console.log('bangKeChuaNhanPhieuGuiRawRecords', bangKeChuaNhanPhieuGuiRawRecords);
 
-  const [tableRows, setTableRows] = useState<API.RowMTZTMI047OUT[]>([]);
+  const [taiChuaNhanBKPhieuGuiRecords, setTaiChuaNhanBKPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
+  const [bangKeChuaNhanPhieuGuiRecords, setBangKeChuaNhanPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
 
-  const dispatch_Action_MIOA_ZTMI047 = (): void => {
+  const getTaiChuaNhanBKPhieuGuiRawRecords = (): void => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
@@ -49,20 +52,47 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
       }),
     );
   };
+
+  const getBangKeChuaNhanPgRawRecords = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_TOR_TYPE: 'ZC1',
+        IV_FR_LOC_ID: '',
+        IV_TO_LOC_ID: 'HUB1',
+        IV_CUST_STATUS: '109',
+        IV_FR_DATE: '20100828',
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '1000',
+      }),
+    );
+  };
   useEffect((): void => {
-    dispatch_Action_MIOA_ZTMI047();
+    getTaiChuaNhanBKPhieuGuiRawRecords();
+    getBangKeChuaNhanPgRawRecords();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect((): void => {
-    const tableRows: API.RowMTZTMI047OUT[] = [];
-    forEach(taiChuaNhanBKPhieuGuiRecords, el => {
-      if (checkChildsLifeCycle(el)) {
-        tableRows.push(el);
+    const tempArray: API.RowMTZTMI047OUT[] = [];
+    forEach(taiChuaNhanBKPhieuGuiRawRecords, el => {
+      if (checkIsNot109LifeCycle(el)) {
+        tempArray.push(el);
       }
     });
-    setTableRows(tableRows);
-  }, [taiChuaNhanBKPhieuGuiRecords]);
+    setTaiChuaNhanBKPhieuGuiRecords(tempArray);
+  }, [taiChuaNhanBKPhieuGuiRawRecords]);
+
+  useEffect((): void => {
+    const tempArray: API.RowMTZTMI047OUT[] = [];
+    forEach(bangKeChuaNhanPhieuGuiRawRecords, el => {
+      // if (checkIsNot604LifeCycle(el)) {
+      tempArray.push(el);
+      // }
+    });
+    setBangKeChuaNhanPhieuGuiRecords(tempArray);
+  }, [bangKeChuaNhanPhieuGuiRawRecords]);
 
   return (
     <>
@@ -80,7 +110,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Tải chưa nhận BK/phiếu gửi')}
-              <Badge color="primary">{size(tableRows)}</Badge>
+              <Badge color="primary">{size(taiChuaNhanBKPhieuGuiRecords)}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -89,7 +119,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Bảng kê chưa nhận PG')}
-              <Badge color="primary">{countBangKeDaNhan}</Badge>
+              <Badge color="primary">{size(bangKeChuaNhanPhieuGuiRecords)}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -104,10 +134,10 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <TaiChuaNhanBKPhieuGui tableRows={tableRows} match={props.match} />
+            <TaiChuaNhanBKPhieuGui tableRows={taiChuaNhanBKPhieuGuiRecords} match={props.match} />
           </TabPane>
           <TabPane tabId={2}>
-            <BangKeDaNhan />
+            <BangKeChuaNhanPhieuGui tableRows={bangKeChuaNhanPhieuGuiRecords} match={props.match} />
           </TabPane>
         </TabContent>
       </div>
