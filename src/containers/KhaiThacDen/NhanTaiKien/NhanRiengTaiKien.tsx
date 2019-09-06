@@ -80,7 +80,7 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
         },
       ),
     );
-  }, [dispatch, torIdSearch]);
+  }, [dispatch, torIdSearch, dispatch_Action_MIOA_ZTMI022]);
 
   const handleControllerClick = useCallback(
     item => (): void => {
