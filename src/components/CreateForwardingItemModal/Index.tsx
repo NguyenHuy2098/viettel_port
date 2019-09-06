@@ -48,6 +48,9 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
           onSuccessCreated();
           alert(t('Tạo thành công!'));
         },
+        onFailure: (): void => {
+          alert(t('Có lỗi xảy ra!'));
+        },
         onFinish: (): void => {
           onHide();
         },

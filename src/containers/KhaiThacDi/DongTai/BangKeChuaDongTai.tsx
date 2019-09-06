@@ -133,14 +133,14 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           return (
             <>
               <Label check>
-                <Input type="checkbox" />
+                <Input type="checkbox" value={get(row, 'values.TOR_ID', '')} />
               </Label>
             </>
           );
         },
       },
       {
-        Header: t('Mã tải'),
+        Header: t('Mã bảng kê'),
         accessor: 'TOR_ID',
       },
       {
