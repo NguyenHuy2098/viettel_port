@@ -93,6 +93,9 @@ export function makeSelectorKienChuaDongChuyenThu(state: AppStateType): API.RowM
 export function makeSelectorNhanRiengTaiKien(state: AppStateType): API.RowMTZTMI047OUT[] {
   return get(state, 'MIOA_ZTMI047.ZC2.106.MT_ZTMI047_OUT.Row', []);
 }
+export function makeSelectorTaiChuaNhanBKPhieuGui(state: AppStateType): API.RowMTZTMI047OUT[] {
+  return get(state, 'MIOA_ZTMI047.ZC2.108.MT_ZTMI047_OUT.Row', []);
+}
 
 export function makeSelectorCountBangKeChuaDongTai(state: AppStateType): number {
   return size(makeSelectorBangKeChuaDongTai(state));

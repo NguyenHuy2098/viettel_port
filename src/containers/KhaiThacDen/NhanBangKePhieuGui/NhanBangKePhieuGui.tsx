@@ -1,21 +1,19 @@
-import React from 'react';
-import { Button, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
+import React, { useEffect } from 'react';
+import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { match } from 'react-router';
-import { goBack } from 'connected-react-router';
-import { get } from 'lodash';
+import { forEach, size } from 'lodash';
 import moment from 'moment';
-import {
-  makeSelectorCountBangKeChuaNhan,
-  makeSelectorCountBangKeDaNhan,
-  makeSelectorCountMT_ZTMI046,
-  useGet_MT_ZTMI046_OUT,
-} from 'redux/MIOA_ZTMI046/selectors';
+
+import { checkChildsLifeCycle } from 'utils/helper';
+import { makeSelectorCountBangKeDaNhan } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import BangKeDaNhan from './BangKeDaNhan';
-import BangKeChuaNhan from './BangKeChuaNhan';
+import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 
 interface Props {
   match: match;
@@ -29,62 +27,48 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
-  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
-  const getInfoBangKe = get(manifestForwardingOrderList, 'Row[0]');
-  const countBangKe = useSelector(makeSelectorCountMT_ZTMI046);
-  const countBangKeChuaNhan = useSelector(makeSelectorCountBangKeChuaNhan);
   const countBangKeDaNhan = useSelector(makeSelectorCountBangKeDaNhan);
   const dispatch = useDispatch();
-  const handleBackTaiKien = (): void => {
-    dispatch(goBack());
+
+  const taiChuaNhanBKPhieuGuiRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
+
+  const [tableRows, setTableRows] = useState<API.RowMTZTMI047OUT[]>([]);
+
+  const dispatch_Action_MIOA_ZTMI047 = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_TOR_TYPE: 'ZC2',
+        IV_FR_LOC_ID: '',
+        IV_TO_LOC_ID: 'HUB1',
+        IV_CUST_STATUS: '108',
+        IV_FR_DATE: '20100828',
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
   };
+  useEffect((): void => {
+    dispatch_Action_MIOA_ZTMI047();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect((): void => {
+    const tableRows: API.RowMTZTMI047OUT[] = [];
+    forEach(taiChuaNhanBKPhieuGuiRecords, el => {
+      if (checkChildsLifeCycle(el)) {
+        tableRows.push(el);
+      }
+    });
+    setTableRows(tableRows);
+  }, [taiChuaNhanBKPhieuGuiRecords]);
+
   return (
     <>
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">
-          <Button onClick={handleBackTaiKien} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
-          </Button>
-          {t('Thông tin tải')}
-        </h1>
-        <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-print" />
-          </Button>
-        </div>
-      </Row>
-      <Row className="sipSummaryContent">
-        <Col lg="5" xs="12">
-          <Row>
-            <Col xs="5">{t('Mã tải')}: </Col>
-            <Col xs="7">{getInfoBangKe && getInfoBangKe.TOR_ID}</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">
-              {moment(getInfoBangKe && getInfoBangKe.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
-            </Col>
-          </Row>
-        </Col>
-        <Col lg="5" xl={4} xs="12">
-          <Row>
-            <Col xs="5">{t('Bưu cục đi')}: </Col>
-            <Col xs="7">{getInfoBangKe && getInfoBangKe.LOG_LOCID_SRC}</Col>
-          </Row>
-          <Row>
-            <Col xs="5">{t('Ngày gửi')}: </Col>
-            <Col xs="7">
-              {moment(getInfoBangKe && getInfoBangKe.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
-            </Col>
-          </Row>
-        </Col>
-        <Col lg="2" xl={3} xs="12" className="text-right">
-          {t('Tổng số')}: {countBangKe}
-        </Col>
-      </Row>
       <div className="row mt-3" />
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thông tin bảng kê / phiếu gửi')}</h1>
+        <h1 className="sipTitle">{t('Nhận bảng kê / phiếu gửi')}</h1>
       </Row>
       <div className="row mt-3" />
 
@@ -95,8 +79,8 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               className={classNames({ active: tab === 1 })}
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
-              {t('Bảng kê / Phiếu gửi chưa nhận')}
-              <Badge color="primary">{countBangKeChuaNhan}</Badge>
+              {t('Tải chưa nhận BK/phiếu gửi')}
+              <Badge color="primary">{size(tableRows)}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -104,14 +88,23 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               className={classNames({ active: tab === 2 })}
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
-              {t('Bảng kê / Phiếu gửi đã nhận')}
+              {t('Bảng kê chưa nhận PG')}
+              <Badge color="primary">{countBangKeDaNhan}</Badge>
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classNames({ active: tab === 3 })}
+              onClick={React.useCallback((): void => handleChangeTab(3), [])}
+            >
+              {t('Nhân riêng bảng kê/phiếu gửi')}
               <Badge color="primary">{countBangKeDaNhan}</Badge>
             </NavLink>
           </NavItem>
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <BangKeChuaNhan />
+            <TaiChuaNhanBKPhieuGui tableRows={tableRows} match={props.match} />
           </TabPane>
           <TabPane tabId={2}>
             <BangKeDaNhan />
