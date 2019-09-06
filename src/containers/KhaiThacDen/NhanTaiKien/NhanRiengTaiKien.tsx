@@ -26,13 +26,11 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
       dispatch(
         action_MIOA_ZTMI022(
           {
-            row: {
-              CU_NO: '',
-              FU_NO: torId,
-              STATUS_ID: '1',
-              USER_ID: 'KT1',
-              LOC_ID: 'HUB1',
-            },
+            // CU_NO: '',
+            // FU_NO: torId,
+            // STATUS_ID: '1',
+            // USER_ID: 'KT1',
+            // LOC_ID: 'HUB1',
           },
           {
             onSuccess: (data: API.MIOAZTMI022Response): void => {

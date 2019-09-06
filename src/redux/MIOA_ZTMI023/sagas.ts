@@ -1,6 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
 import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
+import { get, isArray, size } from 'lodash';
 
 import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
@@ -50,7 +51,11 @@ function* takeGet_MIOA_ZTMI023(action: UnfoldSagaActionType): Iterable<SagaItera
     {
       handler: async (): Promise<API.MIOAZTMI023Response> => {
         const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI023, action.payload);
-        return data;
+        const row = get(data, 'MT_ZTMI023_OUT.row');
+        if (isArray(row) && size(row) > 0) {
+          return data;
+        }
+        throw new Error('Không tìm thấy chuyến thư.');
       },
       key: action.type,
     },

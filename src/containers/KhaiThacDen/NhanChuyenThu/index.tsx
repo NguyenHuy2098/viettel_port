@@ -6,24 +6,24 @@ import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
+import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorCountMT_ZTMI046 } from 'redux/MIOA_ZTMI046/selectors';
-import { makeSelectorChuyenThuDaQuetNhan } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorChuyenThuDaQuetNhan, makeSelectorCountChuyenThuDaDong } from 'redux/MIOA_ZTMI047/selectors';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const countChuyenThu = useSelector(makeSelectorCountMT_ZTMI046);
+  const countChuyenThuDaQuetNhan = useSelector(makeSelectorCountChuyenThuDaDong);
   const chuyenThuDaQuetNhan = useSelector(makeSelectorChuyenThuDaQuetNhan);
-  const [codeChuyenThu, setCodeChuyenThu] = useState<string>();
+  const [idChuyenThu, setIdChuyenThu] = useState<string>();
 
-  function dispatch_action_MIOA_ZTMI047(): void {
+  function getListChuyenThuDaQuetNhan(): void {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
@@ -40,7 +40,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   }
 
   useEffect(() => {
-    dispatch_action_MIOA_ZTMI047();
+    getListChuyenThuDaQuetNhan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -64,20 +64,40 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     );
   }
 
-  function handleChangeCodeChuyenThu(e: ChangeEvent<HTMLInputElement>): void {
-    setCodeChuyenThu(e.target.value);
+  function handleChangeCodeChuyenThu(event: ChangeEvent<HTMLInputElement>): void {
+    setIdChuyenThu(event.target.value);
   }
 
-  function handleSearchCodeChuyenThu(): void {
+  function handleQuetNhanChuyenThu(): void {
     dispatch(
-      action_MIOA_ZTMI046({
-        IV_TOR_ID: codeChuyenThu,
-      }),
-    );
-    dispatch(
-      action_MIOA_ZTMI023({
-        IV_ID: codeChuyenThu,
-      }),
+      action_MIOA_ZTMI023(
+        {
+          IV_ID: idChuyenThu,
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI023Response) => {
+            const infoChuyenThu: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
+            dispatch(
+              action_MIOA_ZTMI022(
+                {
+                  row: {
+                    CU_NO: '',
+                    FU_NO: get(infoChuyenThu, 'TOR_ID'),
+                    LOC_ID: 'HUB1',
+                    STATUS_ID: '1',
+                    USER_ID: 'KT1',
+                  },
+                },
+                // {
+                //   onSuccess: (data: API.MIOAZTMI022Response) => {
+                //     console.log(data);
+                //   },
+                // },
+              ),
+            );
+          },
+        },
+      ),
     );
   }
 
@@ -94,10 +114,10 @@ const ShippingInformation: React.FC = (): JSX.Element => {
             onChange={handleChangeCodeChuyenThu}
             placeholder="Quét mã chuyến thư"
             type="text"
-            value={codeChuyenThu}
+            value={idChuyenThu}
           />
         </InputGroup>
-        <Button onClick={handleSearchCodeChuyenThu} color="primary">
+        <Button onClick={handleQuetNhanChuyenThu} color="primary">
           {t('Quét mã')}
         </Button>
       </Form>
@@ -108,7 +128,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         <Col md={10}>{renderForm()}</Col>
         <Col className="d-flex justify-content-end align-items-center" md={2}>
           {t('Tổng số')}
-          {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThu}</strong>
+          {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThuDaQuetNhan}</strong>
         </Col>
       </Row>
     );
@@ -138,18 +158,15 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Trọng lượng'),
-        accessor: 'NET_WEI_VAL',
-        Cell: ({ row }: Cell): JSX.Element => {
-          return (
-            <span>
-              {ceil(get(row, 'original.NET_WEI_VAL'), 2)}&nbsp;{get(row, 'original.NET_WEI_UNI')}
-            </span>
-          );
+        Cell: ({ row }: Cell): string => {
+          return `${ceil(get(row, 'original.NET_WEI_VAL'), 2)} ${get(row, 'original.NET_WEI_UNI')}`;
         },
       },
       {
         Header: t('Ngày tạo'),
-        accessor: 'DATETIME_CHLC',
+        Cell: ({ row }: Cell): string => {
+          return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
