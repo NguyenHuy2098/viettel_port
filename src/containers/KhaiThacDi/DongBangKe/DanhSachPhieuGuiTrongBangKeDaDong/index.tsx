@@ -52,6 +52,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
   useEffect((): void => {
     setDataTable(dataTableOrigin);
     setDataTableCount(size(dataTableOrigin));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataBangKeChild]);
 
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
