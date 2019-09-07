@@ -65,7 +65,7 @@ const BangKeChuaNhanPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Elem
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
