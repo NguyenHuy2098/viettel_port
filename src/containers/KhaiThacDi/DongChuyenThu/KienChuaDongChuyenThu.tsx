@@ -34,7 +34,8 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
       //   }),
       // );
     },
-    [dispatch],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
   );
 
   useEffect((): void => getListChuyenThu(), [getListChuyenThu]);
