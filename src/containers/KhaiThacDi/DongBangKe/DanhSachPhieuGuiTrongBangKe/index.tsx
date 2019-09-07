@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -9,11 +9,13 @@ import { useMemo } from 'react';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelectorMT_ZTMI046_Instane, makeSelectorMT_ZTMI046_Instane_Children } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
 import { push } from 'connected-react-router';
 import { generatePath } from 'react-router-dom';
 import routesMap from 'utils/routesMap';
+import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 
 interface Props {
   match: match;
@@ -27,6 +29,20 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelectorMT_ZTMI046_Instane);
   const dataBangKeChild = useSelector(makeSelectorMT_ZTMI046_Instane_Children);
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+  const [deleteTorId, setDeleteTorId] = useState<string>('');
+
+  function toggleDeleteConfirmModal(): void {
+    setDeleteConfirmModal(!deleteConfirmModal);
+  }
+
+  function handleDeleteItem(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      event.stopPropagation();
+      setDeleteTorId(torId);
+      toggleDeleteConfirmModal();
+    };
+  }
 
   const payload046 = {
     IV_TOR_ID: idBangKe,
@@ -34,8 +50,33 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     IV_NO_PER_PAGE: '10',
   };
 
-  React.useEffect((): void => {
+  const getListPhieuGui = (): void => {
     dispatch(action_MIOA_ZTMI046(payload046));
+  };
+
+  const handleDeleteForwardingOrder = (torId: string): void => {
+    const payload = {
+      IV_FLAG: '3',
+      IV_TOR_ID_CU: torId,
+      IV_SLOCATION: '',
+      IV_DLOCATION: '',
+      IV_DESCRIPTION: '',
+      T_ITEM: [
+        {
+          ITEM_ID: '',
+          ITEM_TYPE: '',
+        },
+      ],
+    };
+    dispatch(
+      action_MIOA_ZTMI016(payload, {
+        onFinish: (): void => getListPhieuGui(),
+      }),
+    );
+  };
+
+  React.useEffect((): void => {
+    getListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idBangKe]);
 
@@ -63,11 +104,15 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             <i className="fa fa-print" />
           </Button>
           <Button>
-            <i className="fa fa-exchange" />
-            {t('Chuyển tải')}
+            <i className="fa fa-download rotate-90" />
+            {t('Chuyển bảng kê')}
           </Button>
           <Button>
-            <i className="fa fa-shopping-bag" />
+            <i className="fa fa-building-o" />
+            {t('Đóng bảng kê')}
+          </Button>
+          <Button>
+            <i className="fa fa-cloud rotate-90" />
             {t('Đóng tải')}
           </Button>
         </div>
@@ -110,7 +155,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   function renderShippingInformationAndScanCode(): JSX.Element {
     return (
       <div className="sipContentContainer">
-        <Row className="sipLine mt-3 mb-3" />
         <div className="d-flex">
           <div className="sipTitleRightBlockInput m-0">
             <i className="fa fa-barcode" />
@@ -118,9 +162,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           </div>
           <Button color="primary" className="ml-2">
             {t('Quét mã')}
-          </Button>
-          <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-            <i className="fa fa-trash-o" />
           </Button>
         </div>
       </div>
@@ -175,7 +216,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
               >
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>
-              <Button className="SipTableFunctionIcon">
+              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
                 <i className="fa fa-trash-o fa-lg color-red" />
               </Button>
             </>
@@ -195,6 +236,12 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={dataTable} />
       </Row>
+      <DeleteConfirmModal
+        visible={deleteConfirmModal}
+        onDelete={handleDeleteForwardingOrder}
+        onHide={toggleDeleteConfirmModal}
+        torId={deleteTorId}
+      />
     </>
   );
 };

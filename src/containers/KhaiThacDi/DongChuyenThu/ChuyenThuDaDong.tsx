@@ -15,6 +15,7 @@ import moment from 'moment';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import { generatePath } from 'react-router-dom';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuDaDong: React.FC = (): JSX.Element => {
@@ -65,7 +66,7 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
-      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU}/${item.TOR_ID}`));
+      dispatch(push(generatePath(routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU_DA_DONG, { idChuyenThu: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [listChuyenThuDaDong],

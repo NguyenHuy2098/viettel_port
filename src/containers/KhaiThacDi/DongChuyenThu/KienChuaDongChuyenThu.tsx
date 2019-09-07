@@ -12,6 +12,7 @@ import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 // import moment from 'moment';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+import { generatePath } from 'react-router-dom';
 
 // eslint-disable-next-line max-lines-per-function
 const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
@@ -51,7 +52,7 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
 
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
-      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU}/${item.TOR_ID}`));
+      dispatch(push(generatePath(routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU, { idChuyenThu: item.TOR_ID })));
     };
   };
   const handleDeleteChuyenThu = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
