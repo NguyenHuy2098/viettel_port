@@ -74,6 +74,7 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
         }
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listChuyenThu]);
 
   const columns = useMemo(
