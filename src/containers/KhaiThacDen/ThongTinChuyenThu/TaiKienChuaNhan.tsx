@@ -1,24 +1,24 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { get, map, noop } from 'lodash';
+import { ceil, get, noop } from 'lodash';
 import moment from 'moment';
 
-import { makeSelectorCountMT_ZTMI046, useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
-import routesMap from 'utils/routesMap';
-import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+import { makeSelectorTaiKienByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
+import { SipDataState } from 'utils/enums';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idTaiKien, setIdTaiKien] = useState<string>('');
-  const countTaiKien = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
-  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
+  const listTaiKienChuaNhan = useSelector(makeSelectorTaiKienByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
   function handleScanTaiKien(): void {
     noop(idTaiKien);
@@ -69,15 +69,19 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Trọng lượng'),
-        accessor: 'GRO_WEI_VAL',
+        Cell: ({ row }: Cell): string => {
+          return `${ceil(get(row, 'original.GRO_WEI_VAL'), 2)} ${get(row, 'original.GRO_WEI_UNI')}`;
+        },
       },
       {
         Header: t('Ngày tạo'),
-        accessor: 'CREATED_ON',
+        Cell: ({ row }: Cell): string => {
+          return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+        },
       },
       {
         Header: t('Loại'),
-        accessor: 'TYPE_OF',
+        accessor: 'TOR_TYPE',
       },
       {
         Header: t('Quản trị'),
@@ -95,20 +99,6 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-
-  const data = map(get(manifestForwardingOrderList, 'Row[0].CHILDS'), (item: API.Child) => {
-    if (item.LIFECYCLE === 106) {
-      return {
-        TOR_ID: item.TOR_ID,
-        SRC_LOC_IDTRQ: item.SRC_LOC_IDTRQ,
-        DES_LOC_IDTRQ: item.DES_LOC_IDTRQ,
-        countPhieuGui: countTaiKien,
-        GRO_WEI_VAL: item.GRO_WEI_VAL,
-        CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-        TYPE_OF: item.TOR_TYPE === 'ZC2' ? 'Tải' : 'Kiện',
-      };
-    }
-  });
 
   function renderToolbar(): JSX.Element {
     return (
@@ -130,12 +120,12 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
           <Button className="mr-2" color="primary" onClick={handleScanTaiKien}>
             {t('Quét mã')}
           </Button>
-          <button className="btn btn-outline-primary mr-2">
-            {t('Tải')}&nbsp;({'05'})
-          </button>
-          <button className="btn btn-outline-primary">
-            {t('Kiện')}&nbsp;({'20'})
-          </button>
+          {/*<button className="btn btn-outline-primary mr-2">*/}
+          {/*  {t('Tải')}&nbsp;({'05'})*/}
+          {/*</button>*/}
+          {/*<button className="btn btn-outline-primary">*/}
+          {/*  {t('Kiện')}&nbsp;({'20'})*/}
+          {/*</button>*/}
         </div>
         <div className="btn-toolbar col-2 align-items-end flex-column">
           <Button color="primary">{t('Nhận tải kiện')}</Button>
@@ -148,7 +138,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listTaiKienChuaNhan} onRowClick={handleRedirectDetail} />
       </Row>
     </>
   );

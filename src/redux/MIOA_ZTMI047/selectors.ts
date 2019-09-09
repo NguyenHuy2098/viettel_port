@@ -120,7 +120,7 @@ export function makeSelectorCountKienChuaDongChuyenThu(state: AppStateType): num
  * @param IV_TOR_TYPE
  * @param IV_CUST_STATUS
  */
-export function makeSelectorPaging(IV_TOR_TYPE: string, IV_CUST_STATUS: string) {
+export function makeSelectorPaging(IV_TOR_TYPE: string, IV_CUST_STATUS: number) {
   return (state: AppStateType): API.Paging =>
     get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Paging`, {});
 }
@@ -129,7 +129,7 @@ export function makeSelectorPaging(IV_TOR_TYPE: string, IV_CUST_STATUS: string) 
  * @param IV_TOR_TYPE
  * @param IV_CUST_STATUS
  */
-export function makeSelectorRow(IV_TOR_TYPE: string, IV_CUST_STATUS: string) {
+export function makeSelectorRow(IV_TOR_TYPE: string, IV_CUST_STATUS: number) {
   return (state: AppStateType): API.RowMTZTMI047OUT[] =>
     get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Row`, []);
 }
@@ -138,7 +138,7 @@ export function makeSelectorRow(IV_TOR_TYPE: string, IV_CUST_STATUS: string) {
  * @param IV_TOR_TYPE
  * @param IV_CUST_STATUS
  */
-export function makeSelectorPagingCount(IV_TOR_TYPE: string, IV_CUST_STATUS: string) {
+export function makeSelectorPagingCount(IV_TOR_TYPE: string, IV_CUST_STATUS: number) {
   return (state: AppStateType): number =>
     toNumber(
       trim(get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM`, '0')),

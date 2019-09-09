@@ -14,15 +14,22 @@ import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorPaging, makeSelectorRow, makeSelectorPagingCount } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const pagingChuyenThuDaQuetNhan = useSelector(makeSelectorPaging('ZC3', '106'));
-  const listChuyenThuDaQuetNhan = useSelector(makeSelectorRow('ZC3', '106'));
-  const countChuyenThuDaQuetNhan = useSelector(makeSelectorPagingCount('ZC3', '106'));
+  const pagingChuyenThuDaQuetNhan = useSelector(
+    makeSelectorPaging(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
+  );
+  const listChuyenThuDaQuetNhan = useSelector(
+    makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
+  );
+  const countChuyenThuDaQuetNhan = useSelector(
+    makeSelectorPagingCount(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
+  );
   const [idChuyenThu, setIdChuyenThu] = useState<string>();
   const [page, setPage] = useState<number>(1);
 
@@ -30,10 +37,10 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
-        IV_TOR_TYPE: 'ZC3',
+        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
         IV_FR_LOC_ID: '',
         IV_TO_LOC_ID: 'HUB1',
-        IV_CUST_STATUS: '106',
+        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
         IV_FR_DATE: '20190501',
         IV_TO_DATE: '20190831',
         IV_PAGENO: page,
