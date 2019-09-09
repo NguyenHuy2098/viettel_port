@@ -5,23 +5,26 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get } from 'lodash';
+import { ceil, get, toNumber } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorChuyenThuDaQuetNhan, makeSelectorCountChuyenThuDaDong } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorPaging, makeSelectorRow, makeSelectorPagingCount } from 'redux/MIOA_ZTMI047/selectors';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const countChuyenThuDaQuetNhan = useSelector(makeSelectorCountChuyenThuDaDong);
-  const chuyenThuDaQuetNhan = useSelector(makeSelectorChuyenThuDaQuetNhan);
+  const pagingChuyenThuDaQuetNhan = useSelector(makeSelectorPaging('ZC3', '106'));
+  const listChuyenThuDaQuetNhan = useSelector(makeSelectorRow('ZC3', '106'));
+  const countChuyenThuDaQuetNhan = useSelector(makeSelectorPagingCount('ZC3', '106'));
   const [idChuyenThu, setIdChuyenThu] = useState<string>();
+  const [page, setPage] = useState<number>(1);
 
   function getListChuyenThuDaQuetNhan(): void {
     dispatch(
@@ -33,7 +36,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         IV_CUST_STATUS: '106',
         IV_FR_DATE: '20190501',
         IV_TO_DATE: '20190831',
-        IV_PAGENO: '1',
+        IV_PAGENO: page,
         IV_NO_PER_PAGE: '10',
       }),
     );
@@ -42,7 +45,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   useEffect(() => {
     getListChuyenThuDaQuetNhan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [page]);
 
   function renderOrderInformationTitle(): JSX.Element {
     return (
@@ -134,6 +137,10 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     );
   }
 
+  const handlePageChange = ({ selected }: { selected: number }): void => {
+    setPage(selected + 1);
+  };
+
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
       dispatch(push(generatePath(routesMap.THONG_TIN_CHUYEN_THU, { idChuyenThu: item.TOR_ID })));
@@ -178,7 +185,13 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       {renderOrderInformationTitle()}
       {renderFindOrder()}
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={chuyenThuDaQuetNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listChuyenThuDaQuetNhan} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={toNumber(get(pagingChuyenThuDaQuetNhan, 'EV_TOTAL_PAGE'))}
+          onPageChange={handlePageChange}
+        />
       </Row>
     </div>
   );

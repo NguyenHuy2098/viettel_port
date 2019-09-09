@@ -1,4 +1,4 @@
-import { get, size, trim } from 'lodash';
+import { get, size, toNumber, trim } from 'lodash';
 import { AppStateType } from 'redux/store';
 
 export function makeSelectorBangKeChuaDongTai(state: AppStateType): API.RowMTZTMI047OUT[] | null {
@@ -80,7 +80,7 @@ export function getTotalPageChuyenThuDaDong(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.104.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
 }
 export function makeSelectorCountChuyenThuDaDong(state: AppStateType): number {
-  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.104.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.106.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
 }
 
 //__________________________________________________
@@ -114,4 +114,33 @@ export function makeSelectorCountBangKeChuaDongTai(state: AppStateType): number 
 
 export function makeSelectorCountKienChuaDongChuyenThu(state: AppStateType): number {
   return size(makeSelectorTaiDaDong(state));
+}
+
+/**
+ * @param IV_TOR_TYPE
+ * @param IV_CUST_STATUS
+ */
+export function makeSelectorPaging(IV_TOR_TYPE: string, IV_CUST_STATUS: string) {
+  return (state: AppStateType): API.Paging =>
+    get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Paging`, {});
+}
+
+/**
+ * @param IV_TOR_TYPE
+ * @param IV_CUST_STATUS
+ */
+export function makeSelectorRow(IV_TOR_TYPE: string, IV_CUST_STATUS: string) {
+  return (state: AppStateType): API.RowMTZTMI047OUT[] =>
+    get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Row`, []);
+}
+
+/**
+ * @param IV_TOR_TYPE
+ * @param IV_CUST_STATUS
+ */
+export function makeSelectorPagingCount(IV_TOR_TYPE: string, IV_CUST_STATUS: string) {
+  return (state: AppStateType): number =>
+    toNumber(
+      trim(get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM`, '0')),
+    );
 }
