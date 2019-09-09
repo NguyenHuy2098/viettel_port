@@ -81,7 +81,8 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   }
 
   function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
-    return (): void => {
+    return (event: React.MouseEvent): void => {
+      event.stopPropagation();
       noop('print', tai.TOR_ID);
     };
   }

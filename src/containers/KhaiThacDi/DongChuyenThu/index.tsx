@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
-
+import { generatePath } from 'react-router';
 import {
   makeSelectorCountChuyenThuChuaHoanThanh,
   makeSelectorCountTaiChuaHoanThanh,
@@ -56,7 +56,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
     const thisValue = e.currentTarget.value;
     if (size(trim(thisValue)) && e.keyCode === 13) {
-      dispatch(push(`${routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU}/${thisValue}`));
+      dispatch(push(generatePath(routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU, { idBangKe: thisValue })));
     }
   }
 

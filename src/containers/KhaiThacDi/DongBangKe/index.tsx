@@ -9,6 +9,7 @@ import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Inde
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
+import { generatePath } from 'react-router';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
@@ -50,7 +51,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
   function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
     const thisValue = e.currentTarget.value;
     if (size(trim(thisValue)) && e.keyCode === 13) {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${thisValue}`));
+      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: thisValue })));
     }
   }
 

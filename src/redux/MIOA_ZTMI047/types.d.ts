@@ -13,3 +13,8 @@ interface MIOAZTMI047StateType {
     [IV_CUST_STATUS: string]: API.MIOAZTMI047Response;
   };
 }
+
+interface ForwardingItem {
+  ITEM_ID: string;
+  ITEM_TYPE: string;
+}

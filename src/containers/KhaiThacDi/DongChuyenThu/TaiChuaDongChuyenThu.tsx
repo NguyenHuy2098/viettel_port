@@ -1,12 +1,14 @@
+/* eslint-disable max-lines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { map, get, noop, toString, trim } from 'lodash';
+import { forEach, map, get, noop, toString, trim, size } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorTaiChuaHoanThanh, getTotalPageTai } from 'redux/MIOA_ZTMI047/selectors';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
@@ -15,11 +17,16 @@ import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+
+let forwardingItemList: ForwardingItem[] = [];
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+
+  forwardingItemList = [];
 
   const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
   const totalPage = useSelector(getTotalPageTai);
@@ -27,11 +34,28 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [torIdSearch, setTorIdSearch] = useState<string>('');
+  const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
+  const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
+  const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
+    undefined,
+  );
 
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
     };
+  }
+
+  function toggleSelectForwardingItemModal(): void {
+    setSelectForwardingItemModal(!selectForwardingItemModal);
+  }
+
+  function handleChuyenVaoChuyenThu(): void {
+    if (size(forwardingItemListState) > 0) {
+      toggleSelectForwardingItemModal();
+    } else {
+      alert(t('Vui lòng chọn tải!'));
+    }
   }
 
   function toggleDeleteConfirmModal(): void {
@@ -55,7 +79,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '101',
           IV_FR_DATE: '20000101',
-          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
           ...payload,
@@ -65,6 +89,12 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch],
   );
+
+  function onSuccessSelectedForwardingItem(): void {
+    getListTai();
+    setUncheckAllForwardingItemCheckbox(false);
+    setForwardingItemListState([]);
+  }
 
   useEffect((): void => getListTai(), [getListTai]);
 
@@ -76,7 +106,8 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
   }
 
   function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
-    return (): void => {
+    return (event: React.MouseEvent): void => {
+      event.stopPropagation();
       noop('print', tai.TOR_ID);
     };
   }
@@ -109,6 +140,98 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
     );
   };
 
+  //eslint-disable-next-line max-lines-per-function
+  const handleDongChuyenThu = (): void => {
+    if (size(forwardingItemListState) > 0) {
+      const payloadTaoTaiMoi = {
+        IV_FLAG: '1',
+        IV_TOR_TYPE: 'ZC3',
+        IV_TOR_ID_CU: '',
+        IV_SLOCATION: 'BHD',
+        IV_DLOCATION: 'HUB1',
+        IV_DESCRIPTION: '',
+        T_ITEM: [
+          {
+            ITEM_ID: '',
+            ITEM_TYPE: '',
+          },
+        ],
+      };
+      dispatch(
+        action_MIOA_ZTMI016(payloadTaoTaiMoi, {
+          //eslint-disable-next-line max-lines-per-function
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            if (data.Status) {
+              if (data.ErrorCode === 1) {
+                alert('Error at step 1');
+                alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+              } else {
+                const payloadGanBangKeVaoTai = {
+                  IV_FLAG: '2',
+                  IV_TOR_TYPE: 'ZC3',
+                  IV_TOR_ID_CU: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
+                  IV_SLOCATION: 'BHD',
+                  IV_DLOCATION: 'HUB1',
+                  IV_DESCRIPTION: '',
+                  T_ITEM: forwardingItemListState,
+                };
+                dispatch(
+                  action_MIOA_ZTMI016(payloadGanBangKeVaoTai, {
+                    //eslint-disable-next-line max-lines-per-function
+                    onSuccess: (data: API.MIOAZTMI016Response): void => {
+                      if (data.Status) {
+                        if (data.ErrorCode === 1) {
+                          alert('Error at step 2');
+                          alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+                        } else {
+                          const payloadDongChuyenThu = {
+                            row: {
+                              CU_NO: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
+                              FU_NO: '',
+                              STATUS_ID: '1',
+                              USER_ID: 'KT1',
+                              LOC_ID: 'HUB1',
+                            },
+                          };
+                          dispatch(
+                            action_MIOA_ZTMI022(payloadDongChuyenThu, {
+                              onSuccess: (data: API.MIOAZTMI022Response): void => {
+                                if (data.Status) {
+                                  if (data.ErrorCode === 1) {
+                                    alert('Error at step 3');
+                                    alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+                                  } else {
+                                    alert(t('Đóng chuyến thư thành công!'));
+                                    onSuccessSelectedForwardingItem();
+                                  }
+                                } else {
+                                  alert('Error at step 3');
+                                  alert(data.Messages);
+                                }
+                              },
+                            }),
+                          );
+                        }
+                      } else {
+                        alert('Error at step 2');
+                        alert(data.Messages);
+                      }
+                    },
+                  }),
+                );
+              }
+            } else {
+              alert('Error at step 1');
+              alert(data.Messages);
+            }
+          },
+        }),
+      );
+    } else {
+      alert(t('Vui lòng chọn chuyến thư!'));
+    }
+  };
+
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
       dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
@@ -125,6 +248,22 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
     getListTai(payload);
   };
 
+  function handleSelectTaiItem(event: React.FormEvent<HTMLInputElement>): void {
+    event.stopPropagation();
+    const value = event.currentTarget.value;
+    setUncheckAllForwardingItemCheckbox(undefined);
+    if (event.currentTarget.checked) {
+      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC2' });
+    } else {
+      forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
+        if (item.ITEM_ID === value) {
+          forwardingItemList.splice(index, 1);
+        }
+      });
+    }
+    setForwardingItemListState(forwardingItemList);
+  }
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -134,7 +273,12 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
           return (
             <>
               <Label check>
-                <Input type="checkbox" />
+                <Input
+                  checked={uncheckAllForwardingItemCheckbox}
+                  type="checkbox"
+                  value={get(row, 'values.TOR_ID', '')}
+                  onClick={handleSelectTaiItem}
+                />
               </Label>
             </>
           );
@@ -206,7 +350,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
               <Input
                 value={torIdSearch}
                 type="text"
-                placeholder={t('Tìm kiếm bảng kê')}
+                placeholder={t('Tìm kiếm tải')}
                 onChange={handleChangeTextboxValue(setTorIdSearch)}
               />
             </div>
@@ -219,13 +363,13 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
           </div>
         </Col>
         <Col xl={6} lg={4} xs={12} className="p-0 text-right">
-          <Button color="primary" className="ml-2">
-            <i className="fa fa-cloud-download mr-2 rotate-90"></i>
-            {t('Chuyển vào tải')}
+          <Button color="primary" className="ml-2" onClick={handleChuyenVaoChuyenThu}>
+            <i className="fa fa-download mr-2 rotate-90"></i>
+            {t('Chuyển vào chuyến thư')}
           </Button>
-          <Button color="primary" className="ml-2">
-            <i className="fa fa-cloud mr-2 rotate-90"></i>
-            {t('Đóng tải')}
+          <Button color="primary" className="ml-2" onClick={handleDongChuyenThu}>
+            <i className="fa fa-truck mr-2"></i>
+            {t('Đóng chuyến thư')}
           </Button>
         </Col>
       </Row>
@@ -244,6 +388,17 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         onDelete={handleDeleteTai}
         onHide={toggleDeleteConfirmModal}
         torId={deleteTorId}
+      />
+      <SelectForwardingItemModal
+        onSuccessSelected={onSuccessSelectedForwardingItem}
+        visible={selectForwardingItemModal}
+        onHide={toggleSelectForwardingItemModal}
+        modalTitle={t('Chọn chuyến thư')}
+        forwardingItemList={forwardingItemListState}
+        IV_TOR_TYPE="ZC3"
+        IV_FR_LOC_ID="HUB1"
+        IV_TO_LOC_ID=""
+        IV_CUST_STATUS="101"
       />
     </>
   );

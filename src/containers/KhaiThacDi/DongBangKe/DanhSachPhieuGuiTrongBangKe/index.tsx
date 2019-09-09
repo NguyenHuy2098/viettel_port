@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Button, Col, Fade, Input, Row } from 'reactstrap';
 import { get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
@@ -158,7 +158,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         <div className="d-flex">
           <div className="sipTitleRightBlockInput m-0">
             <i className="fa fa-barcode" />
-            <Input type="text" placeholder={t('Quét mã bảng kê phiếu gửi')} />
+            <Input type="text" placeholder={t('Quét mã phiếu gửi')} />
           </div>
           <Button color="primary" className="ml-2">
             {t('Quét mã')}
@@ -175,7 +175,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         DES_LOC_IDTRQ: item.DES_LOC_IDTRQ,
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
         GRO_WEI_UNI: item.GRO_WEI_UNI,
-        DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDHHhhmmss').format(' DD/MM/YYYY '),
+        DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
       };
     },
   );
@@ -228,7 +228,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     [],
   );
 
-  return (
+  return dataBangKe ? (
     <>
       {renderTitle()}
       {renderDescriptionServiceShipping()}
@@ -243,6 +243,19 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         torId={deleteTorId}
       />
     </>
+  ) : (
+    <Fade in={true} timeout={1000}>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button onClick={handleBack} className="sipTitleBtnBack">
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Quay lại')}
+        </h1>
+      </Row>
+      <div className="row mb-5" />
+      <h3 className="text-center">{t('Không tìm thấy dữ liệu!')}</h3>
+    </Fade>
   );
 };
 export default DanhSachPhieuGuiTrongBangKe;

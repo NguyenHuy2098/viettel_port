@@ -135,7 +135,8 @@ input.form-control:-moz-placeholder {
       position: relative;
       top: -2px;
       left: -2px;
-      height: 14px;
+      height: 15px;
+      width: 15px;
       display: inline-block;
     }
     &:checked {
@@ -571,6 +572,42 @@ html:not([dir='rtl']) .sidebar {
         margin: 0;
         box-shadow: none;
       }
+    }
+  }
+}
+
+.selectForwardingItem {
+  color: #4a4a4a !important;
+  font-weight: normal !important;
+  margin: 0 -15px 12px 0;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+  padding: 0 70px 10px 0;
+  cursor: pointer;
+  & > input {
+    margin-right: 15px !important;
+  }
+  & > p {
+    margin: 0;
+    width: calc(100% - 32px);
+    span {
+      display: block;
+      &:first-child {
+        color: #299f9a;
+        font-weight: 600;
+        font-size: 15px;
+        margin-bottom: 3px;
+      }
+    }
+  }
+  & > span {
+    position: absolute;
+    right: 10px;
+    top: 0;
+    text-align: right;
+    span {
+      display: block;
     }
   }
 }

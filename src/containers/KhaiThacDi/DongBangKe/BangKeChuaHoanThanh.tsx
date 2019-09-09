@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { map, get, toString, trim } from 'lodash';
+import { map, get, noop, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -116,6 +116,13 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     getListBangKe(payload);
   };
 
+  function printBangKe(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+    return (event: React.MouseEvent): void => {
+      event.stopPropagation();
+      noop('print', tai.TOR_ID);
+    };
+  }
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -160,7 +167,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon">
+              <Button className="SipTableFunctionIcon" onClick={printBangKe(row.original)}>
                 <i className="fa fa-print fa-lg color-green" />
               </Button>
               <Button className="SipTableFunctionIcon">

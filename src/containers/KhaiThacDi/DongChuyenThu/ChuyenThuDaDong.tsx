@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { push } from 'connected-react-router';
-import { map, get, toString, trim } from 'lodash';
+import { map, get, noop, toString, trim } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import {
@@ -80,6 +80,13 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
     getListChuyenThu(payload);
   };
 
+  function printChuyenThu(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+    return (event: React.MouseEvent): void => {
+      event.stopPropagation();
+      noop('print', tai.TOR_ID);
+    };
+  }
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -112,7 +119,7 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon">
+              <Button className="SipTableFunctionIcon" onClick={printChuyenThu(row.original)}>
                 <i className="fa fa-print fa-lg color-green" />
               </Button>
             </>
@@ -143,7 +150,7 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
               <Input
                 value={torIdSearch}
                 type="text"
-                placeholder={t('Tìm kiếm bảng kê')}
+                placeholder={t('Tìm kiếm chuyến thư')}
                 onChange={handleChangeTextboxValue(setTorIdSearch)}
               />
             </div>

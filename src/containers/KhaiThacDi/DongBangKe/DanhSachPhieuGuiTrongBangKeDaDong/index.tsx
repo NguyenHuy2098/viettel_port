@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Button, Col, Fade, Input, Row } from 'reactstrap';
 import { find, get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
@@ -254,7 +254,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     [],
   );
 
-  return (
+  return dataBangKe ? (
     <>
       {renderTitle()}
       {renderDescriptionServiceShipping()}
@@ -269,6 +269,19 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
         torId={deleteTorId}
       />
     </>
+  ) : (
+    <Fade in={true} timeout={1000}>
+      <Row className="mb-3 sipTitleContainer">
+        <h1 className="sipTitle">
+          <Button onClick={handleBack} className="sipTitleBtnBack">
+            <i className="fa fa-arrow-left backIcon" />
+          </Button>
+          {t('Quay lại')}
+        </h1>
+      </Row>
+      <div className="row mb-5" />
+      <h3 className="text-center">{t('Không tìm thấy dữ liệu!')}</h3>
+    </Fade>
   );
 };
 export default DanhSachPhieuGuiTrongBangKeDaDong;
