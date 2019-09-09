@@ -14,6 +14,7 @@ import { makeSelectorBangKeChuaNhanPhieuGui, makeSelectorTaiChuaNhanBKPhieuGui }
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
+import NhanRiengBangKePhieuGui from './NhanRiengBangKePhieuGui';
 
 interface Props {
   match: match;
@@ -137,6 +138,9 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
           </TabPane>
           <TabPane tabId={2}>
             <BangKeChuaNhanPhieuGui tableRows={bangKeChuaNhanPhieuGuiRecords} match={props.match} />
+          </TabPane>
+          <TabPane tabId={3}>
+            <NhanRiengBangKePhieuGui tableRows={bangKeChuaNhanPhieuGuiRecords} match={props.match} />
           </TabPane>
         </TabContent>
       </div>
