@@ -1,12 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { Button, Row, Input, Label, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 
+interface Props {
+  disabled: boolean;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const ModalThemPhieugui: React.FC = (): JSX.Element => {
+const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
 
@@ -75,7 +78,7 @@ const ModalThemPhieugui: React.FC = (): JSX.Element => {
   );
   return (
     <>
-      <Button onClick={toggle}>
+      <Button onClick={toggle} disabled={props.disabled}>
         <i className="fa fa-plus" />
         Thêm phiếu gửi
       </Button>
@@ -118,4 +121,4 @@ const ModalThemPhieugui: React.FC = (): JSX.Element => {
   );
 };
 
-export default withRouter(ModalThemPhieugui);
+export default ModalThemPhieugui;

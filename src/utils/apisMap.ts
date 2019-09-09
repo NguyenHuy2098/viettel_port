@@ -8,6 +8,7 @@ const sapApis = [
   'MIOA_ZTMI016',
   'MIOA_ZTMI022',
   'MIOA_ZTMI023',
+  'MIOA_ZTMI035',
   'MIOA_ZTMI046',
   'MIOA_ZTMI047',
   'MIOA_ZTMI040',
@@ -17,6 +18,8 @@ const sapApis = [
   'MIOA_ZTMI011',
   'MIOA_ZTMI031',
   'MIOA_ZTMI045',
+  'MIOA_ZTMI054',
+  'MIOA_ZTMI055',
 ];
 
 /**

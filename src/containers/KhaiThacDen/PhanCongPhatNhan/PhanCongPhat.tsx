@@ -1,15 +1,18 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Row, Input, Label, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { match, withRouter } from 'react-router-dom';
+import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { map, find, reject } from 'lodash';
 // import moment from 'moment';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
 import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
 import ModalThemPhieuGui from './ModalThemPhieuGui';
 import ModalChonNhanVien from './ModalChonNhanVien';
+import { makeSelectorGet_MT_ZTMI054_OUT } from '../../../redux/MIOA_ZTMI054/selectors';
+import { action_MIOA_ZTMI055 } from '../../../redux/MIOA_ZTMI055/actions';
 
 interface Props {
   match: match;
@@ -19,21 +22,33 @@ interface Props {
 const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const listPhanCongPhat = useSelector(selectPhanCongPhat);
 
-  useEffect((): void => {
-    dispatch(
-      action_MIOA_ZTMI040({
-        FU_STATUS: '604,806',
-        Delivery_postman: 'PM02',
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '50',
-        Vourcher: 'N',
-        Return: 'N',
-      }),
-    );
+  const getStatusDisplay = useCallback((statusCode: string) => {
+    // if (statusCode === '605') return 'Chờ phát';
+    // if (statusCode === '805') return 'Duyệt hoàn';
+    return statusCode;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const [dataSelected, setDataSelected] = useState<string[]>([]);
+  const [userIdSelected, setUserIdSelected] = useState<string | undefined>(undefined);
+  const listPhanCongPhat = useSelector(selectPhanCongPhat);
+  const convertData = map(listPhanCongPhat, item => {
+    return {
+      ...item,
+      Total_Charge: (parseFloat(item.COD || '0') + parseFloat(item.Freight_charge || '0')).toFixed(3),
+      statusDisplay: getStatusDisplay(item.Status || ''),
+    };
+  });
+
+  const listStaff = useSelector(makeSelectorGet_MT_ZTMI054_OUT);
+
+  const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value;
+    const insideArray = find(dataSelected, item => item === value);
+    if (!insideArray) setDataSelected([...dataSelected, value]);
+    else setDataSelected(reject(dataSelected, item => item === value));
+  };
 
   const columns = useMemo(
     () => [
@@ -43,7 +58,12 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
           return (
             <>
               <Label check>
-                <Input type="checkbox" />
+                <Input
+                  type="checkbox"
+                  value={row.original.FWO}
+                  checked={dataSelected.includes(row.original.FWO)}
+                  onChange={handleCheckBoxItemData}
+                />
               </Label>
             </>
           );
@@ -63,7 +83,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Tiền phải thu'),
-        accessor: 'Freight_charge',
+        accessor: 'Total_Charge',
       },
       {
         Header: t('Ngày gửi bưu phẩm'),
@@ -71,12 +91,71 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Trạng thái'),
-        accessor: 'Status',
+        accessor: 'statusDisplay',
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [dataSelected],
   );
+
+  const dispatchGetListPhieuGui = useCallback(() => {
+    dispatch(
+      action_MIOA_ZTMI040(
+        {
+          FU_STATUS: '604,806',
+          Delivery_postman: userIdSelected,
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '50',
+          Vourcher: 'N',
+          Return: 'N',
+        },
+        {
+          onFinish: () => {
+            setDataSelected([]);
+          },
+        },
+      ),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userIdSelected]);
+
+  useEffect(() => {
+    dispatchGetListPhieuGui();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userIdSelected]);
+
+  const handleSelectUserChange = useCallback(event => {
+    if (event.target.value === '') setUserIdSelected(undefined);
+    setUserIdSelected(event.target.value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSelectStaffChange = useCallback(
+    (IV_PARTY_ID: string): void => {
+      dispatch(
+        action_MIOA_ZTMI055(
+          {
+            IV_PARTY_RCO: 'ZTM002',
+            IV_TRQ_ID: map(dataSelected, item => {
+              return {
+                TRQ_ID: item,
+              };
+            }),
+            IV_PARTY_ID: IV_PARTY_ID,
+            IV_UNAME: userIdSelected,
+          },
+          {
+            onFinish: () => {
+              dispatchGetListPhieuGui();
+            },
+          },
+        ),
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [userIdSelected, dataSelected],
+  );
+  const disableButton = listPhanCongPhat.length === 0;
 
   return (
     <>
@@ -85,11 +164,18 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search mr-2" />
-              <Input type="select" className="pl-4">
+              <Input type="select" className="pl-4" onChange={handleSelectUserChange}>
                 {/* eslint-disable-next-line react/jsx-max-depth */}
-                <option value="ZDD">{t('Chọn nhân viên')}</option>
+                <option value="">{t('Chọn nhân viên')}</option>
+                {map(listStaff, item => (
+                  <option value={item.LOCNO} key={item.LOCNO}>
+                    {item.NAME_TEXT}
+                  </option>
+                ))}
                 {/* eslint-disable-next-line react/jsx-max-depth */}
-                <option value="ZPP">{t('Nguyễn Văn A')}</option>
+                {/*<option value={'PM02'} key={'PM02'}>*/}
+                {/*  User test (need remove)*/}
+                {/*</option>*/}
               </Input>
             </div>
             <Button color="primary" className="ml-2">
@@ -99,26 +185,30 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>01</span>
+            {t('Tổng số')}: <span>{listPhanCongPhat.length}</span>
           </p>
         </Col>
       </Row>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">Danh sách phân công</h1>
         <div className="sipTitleRightBlock">
-          <Button>
+          <Button disabled={disableButton}>
             <i className="fa fa-print" />
             In phiếu phân công
           </Button>
-          <ModalChonNhanVien />
-          <ModalThemPhieuGui />
+          <ModalChonNhanVien
+            onApplyChoosen={handleSelectStaffChange}
+            disabled={disableButton || dataSelected.length === 0}
+            currentUserId={userIdSelected}
+          />
+          <ModalThemPhieuGui disabled={disableButton} />
         </div>
       </Row>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listPhanCongPhat} />
+        <DataTable columns={columns} data={convertData} />
       </Row>
     </>
   );
 };
 
-export default withRouter(PhanCongPhat);
+export default withRouter<Props & RouteComponentProps, React.ComponentType<Props & RouteComponentProps>>(PhanCongPhat);

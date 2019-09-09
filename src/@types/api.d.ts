@@ -641,7 +641,7 @@ declare namespace API {
     /**
      *
      */
-    Row?: RowRequestZTMI035;
+    row?: RowRequestZTMI035[];
     IV_PAGENO?: string;
     IV_NO_PER_PAGE?: string;
     LanguageId?: string;
@@ -649,14 +649,7 @@ declare namespace API {
     readonly LanguageCurrentId?: string;
   }
   export interface MIOAZTMI035Response {
-    /**
-     *
-     */
-    EV_ERROR?: string;
-    /**
-     *
-     */
-    Row?: RowResponseZTMI035[];
+    MT_ZTMI035_OUT?: MTZTMI035OUT;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -966,7 +959,7 @@ declare namespace API {
     IV_NO_PER_PAGE?: string;
   }
   export interface MIOAZTMI054Response {
-    MT_ZTMI045_OUT?: MTZTMI054OUT;
+    MT_ZTMI054_OUT?: MTZTMI054OUT;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -1300,6 +1293,16 @@ declare namespace API {
     EV_ERROR?: string;
     Row?: RowMTZTMI031OUT[];
   }
+  export interface MTZTMI035OUT {
+    EV_ERROR?: string;
+    row?: RowResponseZTMI035[];
+    PAGING?: PagingZTMI054[];
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
   export interface MTZTMI036OUT {
     /**
      * 01 – Thành công, 00 – Lỗi
@@ -1374,6 +1377,7 @@ declare namespace API {
   export interface MTZTMI054OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI054OUT[];
+    PAGING?: PagingZTMI054[];
   }
   export interface MTZTMI055OUT {
     EV_ERROR?: number; // int32
@@ -1415,6 +1419,12 @@ declare namespace API {
     /**
      *
      */
+    EV_TOTAL_ITEM?: string;
+  }
+  export interface PagingZTMI054 {
+    IV_PAGE_NO?: string;
+    IV_NO_PER_PAGE?: string;
+    EV_TOTAL_PAGE?: string;
     EV_TOTAL_ITEM?: string;
   }
   export interface RETURNMESSAGE {
@@ -1961,82 +1971,28 @@ declare namespace API {
     MSG?: string;
   }
   export interface RowResponseZTMI035 {
-    /**
-     * Tên người gửi hàng
-     */
     SHIPPER_ID?: string;
-    /**
-     * Số điện thoại người gửi
-     */
     TEL_NUMBER_SRC?: string;
-    /**
-     * Địa chỉ ngưởi gửi
-     */
     ADD_SHIPPER?: string;
-    /**
-     * Tổng số bản ghi
-     */
-    Count?: string;
-    /**
-     * Số phiếu gửi
-     */
+    COUNT?: string;
     TRQ_ID?: string;
-    /**
-     * Ngày assigned
-     */
     PICK_UP_PM_ASSIGNED_ON?: string;
-    /**
-     * Ngày dự kiến pick hàng
-     */
     PIC_EAR_REQ?: string;
-    /**
-     * Số bưu gửi
-     */
     TOR_ID?: string;
-    /**
-     * Mã bưu gửi
-     */
     PACKET_ID?: string;
-    /**
-     * Mô tả
-     */
     ITEM_DESCR?: string;
-    /**
-     * Gross weigh
-     */
     GRO_WEI_VAL?: string;
-    /**
-     * Đơn vị
-     */
     GRO_WEI_UNI?: string;
-    /**
-     * Dài
-     */
     LENGTH?: string;
-    /**
-     * Rộng
-     */
     WIDTH?: string;
-    /**
-     * Cao
-     */
     HEIGHT?: string;
-    /**
-     * Đơn vị tính
-     */
     MEASUOM?: string;
-    /**
-     * Loại hàng hóa
-     */
     TYPE_OF_GOODS?: string;
-    /**
-     * Tiền cước
-     */
     TOTAL_AMOUNT?: string;
-    /**
-     * Tiền COD
-     */
     COD?: string;
+    STATUS?: string;
+    VOURCHER?: string;
+    TIMEZONE?: string;
   }
   export interface RowResponseZTMI038 {
     IT_FDELIVERY?: ITFDELIVERY[];

@@ -6,4 +6,4 @@ export const select_MIOA_ZTMI040 = (state: AppStateType): MIOAZTMI040StateType =
 };
 
 export const selectPhanCongPhat = (state: AppStateType): API.RowResponseZTMI040[] =>
-  get(select_MIOA_ZTMI040(state), 'response.MT_ZTMI040_OUT.row', []);
+  get(select_MIOA_ZTMI040(state), 'response.MT_ZTMI040_OUT.row', []) || [];

@@ -1,20 +1,42 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { map, filter } from 'lodash';
+import { makeSelectorGet_MT_ZTMI054_OUT } from '../../../redux/MIOA_ZTMI054/selectors';
+
+interface Props {
+  onApplyChoosen: (IV_PARTY_ID: string) => void;
+  disabled: boolean;
+  currentUserId: string | undefined;
+}
 
 // eslint-disable-next-line max-lines-per-function
-const ModalChonNhanVien: React.FC = (): JSX.Element => {
+const ModalChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
+  const [idUserSelected, setIdUserSelected] = useState<undefined | string>(undefined);
 
   function toggle(): void {
     setModalCreateNew(!modalCreateNew);
   }
+  const handleApplyClick = (): void => {
+    props.onApplyChoosen(idUserSelected || '');
+    setModalCreateNew(!modalCreateNew);
+  };
+  const listStaff = filter(useSelector(makeSelectorGet_MT_ZTMI054_OUT), item => item.LOCNO !== props.currentUserId);
+
+  const handleChangeSelectUser = useCallback(
+    (id: string | undefined) => (): void => {
+      setIdUserSelected(id);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
 
   return (
     <>
-      <Button onClick={toggle}>
+      <Button onClick={toggle} disabled={props.disabled}>
         <i className="fa fa-user-o" />
         Chuyển phân công
       </Button>
@@ -23,25 +45,24 @@ const ModalChonNhanVien: React.FC = (): JSX.Element => {
           {t('Chọn nhân viên')}
         </ModalHeader>
         <ModalBody>
-          <Label check xs="12" className="pl-0 pr-0 ipOptionNV">
-            <Input type="radio" name="deliveryRequirement" value="khongChoXem" /> {t('Nguyễn Văn An')}
-            <div className="pl-4">{t('Tuyến: Hoàng Hoa THám - Liễu Giai - Văn Cao - Ba Đình')}</div>
-          </Label>
-          <Label check xs="12" className="pl-0 pr-0 ipOptionNV">
-            <Input type="radio" name="deliveryRequirement" value="khongChoXem" /> {t('Nguyễn Văn An')}
-            <div className="pl-4">{t('Tuyến: Hoàng Hoa THám - Liễu Giai - Văn Cao - Ba Đình')}</div>
-          </Label>
-          <Label check xs="12" className="pl-0 pr-0 ipOptionNV">
-            <Input type="radio" name="deliveryRequirement" value="khongChoXem" /> {t('Nguyễn Văn An')}
-            <div className="pl-4">{t('Tuyến: Hoàng Hoa THám - Liễu Giai - Văn Cao - Ba Đình')}</div>
-          </Label>
-          <Label check xs="12" className="pl-0 pr-0 ipOptionNV">
-            <Input type="radio" name="deliveryRequirement" value="khongChoXem" /> {t('Nguyễn Văn An')}
-            <div className="pl-4">{t('Tuyến: Hoàng Hoa THám - Liễu Giai - Văn Cao - Ba Đình')}</div>
-          </Label>
+          {map(listStaff, item => (
+            <Label check xs="12" className="pl-0 pr-0 ipOptionNV" key={item.LOCNO}>
+              <Input
+                type="radio"
+                name="deliveryRequirement"
+                checked={item.LOCNO === idUserSelected}
+                value={item.LOCNO}
+                onChange={handleChangeSelectUser(item.LOCNO)}
+              />{' '}
+              {item.NAME_TEXT}
+              <div className="pl-4">
+                {t('Tuyến')}: {''}
+              </div>
+            </Label>
+          ))}
         </ModalBody>
         <ModalFooter className="no-border">
-          <Button color="primary" onClick={toggle}>
+          <Button color="primary" onClick={handleApplyClick} disabled={!idUserSelected}>
             {t('Hoàn thành')}
           </Button>
         </ModalFooter>
@@ -50,4 +71,4 @@ const ModalChonNhanVien: React.FC = (): JSX.Element => {
   );
 };
 
-export default withRouter(ModalChonNhanVien);
+export default ModalChonNhanVien;

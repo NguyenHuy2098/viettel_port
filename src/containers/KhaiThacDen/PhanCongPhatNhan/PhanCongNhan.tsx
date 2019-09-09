@@ -1,11 +1,18 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Row, Input, Label, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { match, withRouter } from 'react-router-dom';
+import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { map, find, reject } from 'lodash';
+
 import DataTable from 'components/DataTable';
 import ModalThemPhieuGui from './ModalThemPhieuGui';
 import ModalChonNhanVien from './ModalChonNhanVien';
+import { makeSelectorGet_MT_ZTMI054_OUT } from '../../../redux/MIOA_ZTMI054/selectors';
+import { action_MIOA_ZTMI035 } from '../../../redux/MIOA_ZTMI035/actions';
+import { selectPhanCongNhan } from '../../../redux/MIOA_ZTMI035/selectors';
+import { action_MIOA_ZTMI055 } from '../../../redux/MIOA_ZTMI055/actions';
 
 interface Props {
   match: match;
@@ -14,30 +21,64 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
-  const data = [
-    {
-      TOR_ID: 4545,
-      TO_LOCAL_ID: 'abc',
-      TO_LOG_ID: 'bcd',
-      countChuyenThu: 12,
-      MONEY: 1200,
-      CREATED_ON: '12/12/2019',
-      NOTE: 'Chả có gì',
-      TYPE_OF: 'Kiện',
-      STATUS: 'Chưa có',
-    },
-    {
-      TOR_ID: 42365,
-      TO_LOCAL_ID: 'yut',
-      TO_LOG_ID: 'adff',
-      countChuyenThu: 12,
-      MONEY: 2500,
-      CREATED_ON: '12/12/2019',
-      NOTE: 'Chả có gì',
-      TYPE_OF: 'Tải',
-      STATUS: 'Chưa có',
-    },
-  ];
+
+  const getStatusDisplay = useCallback((statusCode: string) => {
+    // if (statusCode === '301') return 'Chờ lấy hàng';
+    return statusCode;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const dispatch = useDispatch();
+  const [dataSelected, setDataSelected] = useState<string[]>([]);
+  const listPhanCongNhan = useSelector(selectPhanCongNhan);
+  const convertData = map(listPhanCongNhan, item => {
+    return {
+      ...item,
+      Total_Charge: (parseFloat(item.COD || '0') + parseFloat(item.TOTAL_AMOUNT || '0')).toFixed(3),
+      statusDisplay: getStatusDisplay(item.STATUS || ''),
+    };
+  });
+  const [userIdSelected, setUserIdSelected] = useState<string | undefined>(undefined);
+
+  const handleSelectUserChange = useCallback(event => {
+    if (event.target.value === '') setUserIdSelected(undefined);
+    setUserIdSelected(event.target.value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const dispatchAPI035 = useCallback(() => {
+    dispatch(
+      action_MIOA_ZTMI035(
+        {
+          row: [
+            {
+              USER_ID: userIdSelected,
+            },
+          ],
+          IV_PAGENO: '3',
+          IV_NO_PER_PAGE: '11',
+        },
+        {
+          onFinish: (): void => {
+            setDataSelected([]);
+          },
+        },
+      ),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userIdSelected]);
+
+  useEffect((): void => {
+    dispatchAPI035();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userIdSelected]);
+
+  const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const value = event.target.value;
+    const insideArray = find(dataSelected, item => item === value);
+    if (!insideArray) setDataSelected([...dataSelected, value]);
+    else setDataSelected(reject(dataSelected, item => item === value));
+  };
   const columns = useMemo(
     () => [
       {
@@ -46,7 +87,12 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           return (
             <>
               <Label check>
-                <Input type="checkbox" />
+                <Input
+                  type="checkbox"
+                  value={row.original.TOR_ID}
+                  checked={dataSelected.includes(row.original.TOR_ID)}
+                  onChange={handleCheckBoxItemData}
+                />
               </Label>
             </>
           );
@@ -54,7 +100,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Mã phiếu gửi'),
-        accessor: 'TOR_ID',
+        accessor: 'PACKET_ID',
       },
       {
         Header: t('Bưu cục đến'),
@@ -62,24 +108,53 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Địa chỉ phát'),
-        accessor: 'TO_LOCAL_ID',
+        accessor: 'ADD_SHIPPER',
       },
       {
         Header: t('Tiền phải thu'),
-        accessor: 'MONEY',
+        accessor: 'Total_Charge',
       },
       {
         Header: t('Ngày gửi bưu phẩm'),
-        accessor: 'CREATED_ON',
+        accessor: 'Created_on',
       },
       {
         Header: t('Trạng thái'),
-        accessor: 'STATUS',
+        accessor: 'statusDisplay',
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [dataSelected],
   );
+
+  const listStaff = useSelector(makeSelectorGet_MT_ZTMI054_OUT);
+  const handleSelectStaffChange = useCallback(
+    (IV_PARTY_ID: string): void => {
+      dispatch(
+        action_MIOA_ZTMI055(
+          {
+            IV_PARTY_RCO: 'ZTM001',
+            IV_TRQ_ID: map(dataSelected, item => {
+              return {
+                TRQ_ID: item,
+              };
+            }),
+            IV_PARTY_ID: IV_PARTY_ID,
+            IV_UNAME: userIdSelected,
+          },
+          {
+            onFinish: (): void => {
+              dispatchAPI035();
+            },
+          },
+        ),
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [userIdSelected, dataSelected],
+  );
+
+  const disableButton = listPhanCongNhan.length === 0;
 
   return (
     <>
@@ -88,11 +163,18 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search mr-2" />
-              <Input type="select" className="pl-4">
+              <Input type="select" className="pl-4" onChange={handleSelectUserChange}>
                 {/* eslint-disable-next-line react/jsx-max-depth */}
-                <option value="ZDD">{t('Chọn nhân viên')}</option>
+                <option value="">{t('Chọn nhân viên')}</option>
+                {map(listStaff, item => (
+                  <option value={item.LOCNO} key={item.LOCNO}>
+                    {item.NAME_TEXT}
+                  </option>
+                ))}
                 {/* eslint-disable-next-line react/jsx-max-depth */}
-                <option value="ZPP">{t('Nguyễn Văn A')}</option>
+                {/*<option value={'PM02'} key={'PM02'}>*/}
+                {/*  User test (need remove)*/}
+                {/*</option>*/}
               </Input>
             </div>
             <Button color="primary" className="ml-2">
@@ -102,26 +184,30 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>01</span>
+            {t('Tổng số')}: <span>{listPhanCongNhan.length}</span>
           </p>
         </Col>
       </Row>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">Danh sách phân công</h1>
         <div className="sipTitleRightBlock">
-          <Button>
+          <Button disabled={disableButton}>
             <i className="fa fa-print" />
             In phiếu phân công
           </Button>
-          <ModalChonNhanVien />
-          <ModalThemPhieuGui />
+          <ModalChonNhanVien
+            onApplyChoosen={handleSelectStaffChange}
+            disabled={disableButton || dataSelected.length === 0}
+            currentUserId={userIdSelected}
+          />
+          <ModalThemPhieuGui disabled={disableButton} />
         </div>
       </Row>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={convertData} />
       </Row>
     </>
   );
 };
 
-export default withRouter(PhanCongNhan);
+export default withRouter<Props & RouteComponentProps, React.ComponentType<Props & RouteComponentProps>>(PhanCongNhan);

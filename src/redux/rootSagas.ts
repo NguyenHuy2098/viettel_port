@@ -5,6 +5,7 @@ import watchErrorsSagaAsync from './errors/sagas';
 import watch_MIOA_ZTMI016_SagaAsync from './MIOA_ZTMI016/sagas';
 import watch_MIOA_ZTMI022_SagaAsync from './MIOA_ZTMI022/sagas';
 import watch_MIOA_ZTMI023_SagaAsync from './MIOA_ZTMI023/sagas';
+import watch_MIOA_ZTMI035_SagaAsync from './MIOA_ZTMI035/sagas';
 import watch_MIOA_ZTMI046_SagaAsync from './MIOA_ZTMI046/sagas';
 import watch_MIOA_ZTMI047_SagaAsync from './MIOA_ZTMI047/sagas';
 import watch_MIOA_ZTMI040_SagaAsync from './MIOA_ZTMI040/sagas';
@@ -14,6 +15,8 @@ import watch_apiGetTransportMethod_SagaAsync from './SIOA_ZTMI068/sagas';
 import watch_MIOA_ZTMI011_SagaAsync from './MIOA_ZTMI011/sagas';
 import watch_MIOA_ZTMI031_SagaAsync from './MIOA_ZTMI031/sagas';
 import watch_MIOA_ZTMI045_SagaAsync from './MIOA_ZTMI045/sagas';
+import watch_MIOA_ZTMI054_SagaAsync from './MIOA_ZTMI054/sagas';
+import watch_MIOA_ZTMI055_SagaAsync from './MIOA_ZTMI055/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -22,6 +25,7 @@ export default function* rootSagas(): SagaIterator {
     call(watch_MIOA_ZTMI016_SagaAsync),
     call(watch_MIOA_ZTMI022_SagaAsync),
     call(watch_MIOA_ZTMI023_SagaAsync),
+    call(watch_MIOA_ZTMI035_SagaAsync),
     call(watch_MIOA_ZTMI046_SagaAsync),
     call(watch_MIOA_ZTMI047_SagaAsync),
     call(watch_MIOA_ZTMI040_SagaAsync),
@@ -31,5 +35,7 @@ export default function* rootSagas(): SagaIterator {
     call(watch_MIOA_ZTMI011_SagaAsync),
     call(watch_MIOA_ZTMI031_SagaAsync),
     call(watch_MIOA_ZTMI045_SagaAsync),
+    call(watch_MIOA_ZTMI054_SagaAsync),
+    call(watch_MIOA_ZTMI055_SagaAsync),
   ]);
 }
