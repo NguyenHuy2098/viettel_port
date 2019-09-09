@@ -1,38 +1,23 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { generatePath, match, withRouter } from 'react-router-dom';
+import { generatePath, withRouter } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { get, map } from 'lodash';
 import moment from 'moment';
 
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorCountMT_ZTMI046, useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 
-interface Props {
-  match: match;
-}
-
 // eslint-disable-next-line max-lines-per-function
-const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
+const TaiKienDaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
   const counttaikien = useSelector(makeSelectorCountMT_ZTMI046, shallowEqual);
-
-  useEffect((): void => {
-    dispatch(
-      action_MIOA_ZTMI046({
-        IV_TOR_ID: idChuyenThu,
-      }),
-    );
-    // eslint-disable-next-line
-  }, [idChuyenThu]);
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function

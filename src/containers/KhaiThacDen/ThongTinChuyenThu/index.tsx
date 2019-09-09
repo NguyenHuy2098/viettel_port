@@ -5,10 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import classNames from 'classnames';
 import { push } from 'connected-react-router';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelectorChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import {
@@ -40,17 +39,15 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   useEffect((): void => {
-    dispatch(
-      action_MIOA_ZTMI023({
-        IV_ID: idChuyenThu,
-      }),
-    );
-    dispatch(
-      action_MIOA_ZTMI046({
-        IV_TOR_ID: idChuyenThu,
-      }),
-    );
-    // eslint-disable-next-line
+    !isEmpty(idChuyenThu) &&
+      dispatch(
+        action_MIOA_ZTMI046({
+          IV_TOR_ID: idChuyenThu,
+          IV_NO_PER_PAGE: '10',
+          IV_PAGENO: '1',
+        }),
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
 
   const handleBackChuyenThu = (): void => {

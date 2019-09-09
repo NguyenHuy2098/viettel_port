@@ -561,6 +561,8 @@ declare namespace API {
      * Ngày dự kiến bay đi
      */
     IV_DE_DATE?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -640,6 +642,8 @@ declare namespace API {
      *
      */
     Row?: RowRequestZTMI035;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -823,6 +827,8 @@ declare namespace API {
      * Mã tải/ tải gom/ bảng kê
      */
     IV_TOR_ID?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -903,6 +909,8 @@ declare namespace API {
      * Ngày kết thúc khởi hàng
      */
     IV_T_DEP?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -920,6 +928,8 @@ declare namespace API {
      * Nếu là null thi lấy hết, nếu <> null thi lấy theo tất cả các xe co location nhap vao
      */
     IV_LOCNO?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -952,6 +962,8 @@ declare namespace API {
      *
      */
     iv_position?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
   }
   export interface MIOAZTMI054Response {
     MT_ZTMI045_OUT?: MTZTMI054OUT;
@@ -1144,6 +1156,19 @@ declare namespace API {
   }
   export interface MIOAZTMI063Response {
     MT_ZTMI063_OUT?: ZTMI063OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface MIOAZTMI067Request {
+    row?: RowRequestZTMI067;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
+  }
+  export interface MIOAZTMI067Response {
+    MT_ZTMI067_OUT?: ZTMI067OUT;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -1673,6 +1698,13 @@ declare namespace API {
     UOM?: string;
     SENDER_ADDRESS?: string;
   }
+  export interface RowMTZTMI067OUT {
+    DEPART_DATE?: string;
+    SCH_TYPE?: string;
+    SCH_ID?: string;
+    DESCRIPTION?: string;
+    T_ITEM?: TITEMZTMI067OUT[];
+  }
   export interface RowMTZTMI068OUT {
     SERVICE_TYPE?: string;
     SERVICE_TYPE_DES?: string;
@@ -1769,6 +1801,11 @@ declare namespace API {
      *
      */
     TOR_ID?: string;
+  }
+  export interface RowRequestZTMI067 {
+    IV_DEPART_DATE?: string;
+    IV_SCH_TYPE?: string;
+    IV_LOCATION_ID?: string;
   }
   export interface RowResponseZTMI018OUT {
     /**
@@ -2421,6 +2458,16 @@ declare namespace API {
      */
     MEASUOM?: string;
   }
+  export interface TITEMZTMI067OUT {
+    LOC_SEQS?: string;
+    LOCATION_ID?: string;
+    LOCATION_ADDRESS?: string;
+    DEPARTURE_TIME?: string;
+    ARRIVAL_TIME?: string;
+    ZONLO?: string;
+    DISTANCE?: string;
+    DISTANCE_UOM?: string;
+  }
   export interface UserSapMappingGetRequest {
     UserName?: string;
     Email?: string;
@@ -2503,6 +2550,11 @@ declare namespace API {
   }
   export interface ZTMI063OUT {
     EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE;
+  }
+  export interface ZTMI067OUT {
+    EV_ERROR?: number; // int32
+    Row?: RowMTZTMI067OUT[];
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
 }
@@ -2879,6 +2931,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.MIOAZTMI063Response;
+    }
+  }
+  namespace MIOAZTMI067 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.MIOAZTMI067Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.MIOAZTMI067Response;
     }
   }
   namespace MIOAZTMI094 {
