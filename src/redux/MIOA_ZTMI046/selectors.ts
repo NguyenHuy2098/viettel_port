@@ -29,7 +29,9 @@ export function makeSelectorKienChuaNhan(state: AppStateType): API.Child[] {
 }
 
 export function makeSelectorKienDaNhan(state: AppStateType): API.Child[] {
-  return filter(makeSelectorMT_ZTMI046(state), { LIFECYCLE: 107 });
+  const allTaiKienDaNhan = get(makeSelectorMT_ZTMI046(state)[0], 'CHILDS');
+  const taiKienFiltered = filter(allTaiKienDaNhan, { LIFECYCLE: 108 });
+  return taiKienFiltered;
 }
 
 export function makeSelectorBangKeDaNhan(state: AppStateType): API.Child[] {
