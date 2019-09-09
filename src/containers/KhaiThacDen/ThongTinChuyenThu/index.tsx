@@ -9,11 +9,11 @@ import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelectorChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import {
   makeSelectorCountMT_ZTMI046,
   makeSelectorCountKienChuaNhan,
   makeSelectorCountKienDaNhan,
+  makeSelectorMT_ZTMI046_Instane,
 } from 'redux/MIOA_ZTMI046/selectors';
 import routesMap from 'utils/routesMap';
 import TaiKienDaNhan from './TaiKienDaNhan';
@@ -29,7 +29,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
-  const chuyenThu = useSelector(makeSelectorChuyenThu);
+  const chuyenThu = useSelector(makeSelectorMT_ZTMI046_Instane);
   const countTaiKien = useSelector(makeSelectorCountMT_ZTMI046);
   const countKienChuaNhan = useSelector(makeSelectorCountKienChuaNhan);
   const countKienDaNhan = useSelector(makeSelectorCountKienDaNhan);
@@ -77,13 +77,13 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           </Row>
           <Row>
             <Col xs="5">{t('Ngày tạo')}: </Col>
-            <Col xs="7">{moment(get(chuyenThu, 'CREATED_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</Col>
+            <Col xs="7">{moment(get(chuyenThu, 'DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</Col>
           </Row>
         </Col>
         <Col lg="5" xl={4} xs="12">
           <Row>
             <Col xs="5">{t('Bưu cục đi')}: </Col>
-            <Col xs="7">{get(chuyenThu, 'FR_LOG_ID')}</Col>
+            <Col xs="7">{get(chuyenThu, 'LOG_LOCID_SRC')}</Col>
           </Row>
           <Row>
             <Col xs="5">{t('Ngày gửi')}:&nbsp;</Col>
