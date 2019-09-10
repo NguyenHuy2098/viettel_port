@@ -6,14 +6,11 @@ import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { generatePath } from 'react-router';
-import {
-  makeSelectorCountChuyenThuChuaHoanThanh,
-  makeSelectorCountTaiChuaHoanThanh,
-  makeSelectorCountChuyenThuDaDong,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import routesMap from 'utils/routesMap';
+import { SipDataState, SipDataType } from 'utils/enums';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
 import KienChuaDongChuyenThu from './KienChuaDongChuyenThu';
@@ -29,9 +26,14 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   }
 
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
-  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
-  const countChuyenThuDaDong = useSelector(makeSelectorCountChuyenThuDaDong);
-  const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
+
+  const countChuyenThuChuaHoanThanh = useSelector(
+    makeSelectorTotalItem(SipDataType.CHUYEN_THU, SipDataState.CHUA_HOAN_THANH),
+  );
+  const countChuyenThuDaDong = useSelector(
+    makeSelectorTotalItem(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU),
+  );
+  const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
 
   const payloadGetPostOfficeList = {
     row: [

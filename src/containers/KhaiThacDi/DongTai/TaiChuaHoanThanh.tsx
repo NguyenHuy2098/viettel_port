@@ -8,26 +8,23 @@ import { push } from 'connected-react-router';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import {
-  makeSelectorCountTaiChuaHoanThanh,
-  makeSelectorTaiChuaHoanThanh,
-  getTotalPageTai,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
-  const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
-  const totalPage = useSelector(getTotalPageTai);
+  const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
+  const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');

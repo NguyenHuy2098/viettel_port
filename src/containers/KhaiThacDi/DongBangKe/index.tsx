@@ -4,12 +4,13 @@ import { noop, size, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { makeSelectorCountBangKeChuaHoanThanh, makeSelectorCountBangKeDaDong } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 import { generatePath } from 'react-router';
+import { SipDataState, SipDataType } from 'utils/enums';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
@@ -20,8 +21,10 @@ const DongBangKe: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const [tab, setTab] = useState<number>(1);
-  const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
-  const countBangKeDaDong = useSelector(makeSelectorCountBangKeDaDong);
+  const countBangKeChuaHoanThanh = useSelector(
+    makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH),
+  );
+  const countBangKeDaDong = useSelector(makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.DA_DONG));
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
 
   const payloadGetPostOfficeList = {

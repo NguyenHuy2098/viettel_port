@@ -5,26 +5,23 @@ import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { map, get, noop, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import {
-  makeSelectorBangKeDaDong,
-  makeSelectorCountBangKeChuaHoanThanh,
-  getTotalPageBangKeDaDong,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import moment from 'moment';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
-  const listBangKeDaDong = useSelector(makeSelectorBangKeDaDong);
-  const totalPage = useSelector(getTotalPageBangKeDaDong);
+  const listBangKeDaDong = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.DA_DONG));
+  const countBangKeDaDong = useSelector(makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.DA_DONG));
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.DA_DONG));
 
   const [torIdSearch, setTorIdSearch] = useState<string>('');
 
@@ -175,7 +172,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countBangKeChuaHoanThanh}</span>
+            {t('Tổng số')}: <span>{countBangKeDaDong}</span>
           </p>
         </Col>
       </Row>

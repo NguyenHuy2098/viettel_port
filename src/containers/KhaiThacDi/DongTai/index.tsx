@@ -5,17 +5,13 @@ import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink }
 import { noop, size, trim } from 'lodash';
 import classNames from 'classnames';
 
-import {
-  makeSelectorCountTaiChuaHoanThanh,
-  makeSelectorCountBangKeChuaDongTai,
-  makeSelectorCountTaiDaDong,
-  makeSelectorCountTai_BangKeChuaDongTai,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { push } from 'connected-react-router';
 import { generatePath } from 'react-router';
 import routesMap from 'utils/routesMap';
+import { SipDataState, SipDataType } from 'utils/enums';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';
@@ -27,10 +23,13 @@ const DongTai: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const [tab, setTab] = useState<number>(1);
-  const countTaiChuaHoanThanh = useSelector(makeSelectorCountTaiChuaHoanThanh);
-  const countBangKeBuuGuiChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
-  const countTaiDaDong = useSelector(makeSelectorCountTaiDaDong);
-  const countBangKeChuaDongTai = useSelector(makeSelectorCountTai_BangKeChuaDongTai);
+  const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
+  const countBangKeBuuGuiChuaDongTai = useSelector(
+    makeSelectorTotalItem(SipDataType.BUU_GUI_CON, SipDataState.CHUA_HOAN_THANH),
+  );
+  const countTaiDaDong = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
+  const countBangKeChuaDongTai = useSelector(makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
+
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
 
   const payloadGetPostOfficeList = {

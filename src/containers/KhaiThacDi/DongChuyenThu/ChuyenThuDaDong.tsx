@@ -5,11 +5,8 @@ import { push } from 'connected-react-router';
 import { map, get, noop, toString, trim } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import {
-  makeSelectorChuyenThuDaDong,
-  makeSelectorCountChuyenThuDaDong,
-  getTotalPageChuyenThuDaDong,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import moment from 'moment';
 import { Cell } from 'react-table';
@@ -22,9 +19,11 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const countChuyenThuDaDong = useSelector(makeSelectorCountChuyenThuDaDong);
-  const listChuyenThuDaDong = useSelector(makeSelectorChuyenThuDaDong);
-  const totalPage = useSelector(getTotalPageChuyenThuDaDong);
+  const listChuyenThuDaDong = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU));
+  const countChuyenThuDaDong = useSelector(
+    makeSelectorTotalItem(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU),
+  );
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU));
 
   const [torIdSearch, setTorIdSearch] = useState<string>('');
 

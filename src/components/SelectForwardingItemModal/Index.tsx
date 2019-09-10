@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorTaiChuaHoanThanh } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import moment from 'moment';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 interface Props {
   onHide: () => void;
@@ -36,7 +37,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     IV_CUST_STATUS,
   } = props;
 
-  const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
+  const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
 
   const [radioTorId, setRadioTorId] = useState<string>('');
 

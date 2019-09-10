@@ -7,21 +7,22 @@ import { Button, Col, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorCountTaiDaDong, makeSelectorTaiDaDong, getTotalPageTaiDaDong } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const listTaiDaDong = useSelector(makeSelectorTaiDaDong);
-  const countTaiDaDong = useSelector(makeSelectorCountTaiDaDong);
-  const totalPage = useSelector(getTotalPageTaiDaDong);
+  const listTaiDaDong = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
+  const countTaiDaDong = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
 
   const [torIdSearch, setTorIdSearch] = useState<string>('');
 

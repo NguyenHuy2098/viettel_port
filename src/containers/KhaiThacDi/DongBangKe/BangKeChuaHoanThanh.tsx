@@ -6,11 +6,8 @@ import { map, get, noop, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import {
-  makeSelectorBangKeChuaHoanThanh,
-  makeSelectorCountBangKeChuaHoanThanh,
-  getTotalPageBangKe,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import { generatePath } from 'react-router-dom';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
@@ -24,9 +21,11 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const countBangKeChuaHoanThanh = useSelector(makeSelectorCountBangKeChuaHoanThanh);
-  const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaHoanThanh);
-  const totalPage = useSelector(getTotalPageBangKe);
+  const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
+  const countBangKeChuaHoanThanh = useSelector(
+    makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH),
+  );
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');

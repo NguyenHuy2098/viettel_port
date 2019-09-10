@@ -9,7 +9,8 @@ import { push } from 'connected-react-router';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorTai_BangKeChuaDongTai, getTotalPageTai_BangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
@@ -27,8 +28,8 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
 
   forwardingItemList = [];
 
-  const listBangKeChuaDongTai = useSelector(makeSelectorTai_BangKeChuaDongTai);
-  const totalPage = useSelector(getTotalPageTai_BangKeChuaDongTai);
+  const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');

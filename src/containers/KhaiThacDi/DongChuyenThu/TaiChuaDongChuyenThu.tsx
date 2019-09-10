@@ -10,7 +10,7 @@ import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorTaiChuaHoanThanh, getTotalPageTai } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
@@ -18,6 +18,7 @@ import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -28,8 +29,8 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
 
   forwardingItemList = [];
 
-  const listTaiChuaHoanThanh = useSelector(makeSelectorTaiChuaHoanThanh);
-  const totalPage = useSelector(getTotalPageTai);
+  const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');

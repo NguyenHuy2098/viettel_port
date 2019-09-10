@@ -33,12 +33,12 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     orderInformation,
     (item: API.RowMTZTMI031OUT, index: number): API.RowMTZTMI031OUT => {
       return {
-        PACKAGE_ID: item.PACKAGE_ID,
-        ITEM_DESCRIPTION: item.ITEM_DESCRIPTION,
-        FWO: item.FWO,
+        PACKAGE_ID: get(item, 'PACKAGE_ID', ''),
+        ITEM_DESCRIPTION: get(item, 'ITEM_DESCRIPTION', ''),
+        FWO: get(item, 'FWO', ''),
         GROSS_WEIGHT: item.GROSS_WEIGHT ? parseFloat(item.GROSS_WEIGHT).toFixed(2) : '',
         Quantity: item.Quantity ? parseFloat(item.Quantity).toFixed(2) : '',
-        SERVICE_TYPE: item.SERVICE_TYPE,
+        SERVICE_TYPE: get(item, 'SERVICE_TYPE', ''),
       };
     },
   );
@@ -243,7 +243,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Điện thoại')}:
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
-                {get(orderInformationInstane, 'MOBILE_PHONE_SRT')}
+                {get(orderInformationInstane, 'MOBILE_PHONE_SRC')}
               </Col>
             </Row>
             <Row className="sipInputItem">

@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, KeyboardEvent } from 'react';
 import { useDispatch } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { includes, size, trim } from 'lodash';
@@ -39,6 +39,10 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
     }
   };
 
+  function handleEnterSearch(e: KeyboardEvent<HTMLInputElement>): void {
+    if (e.keyCode === 13) handleOrderSearch();
+  }
+
   return (
     <>
       <FormGroup className="sipHeaderSearch">
@@ -47,6 +51,7 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
           placeholder={t('Tra cứu đơn hàng')}
           value={searchValue}
           onChange={handleChangeTextboxValue}
+          onKeyUp={handleEnterSearch}
         />
         <Button onClick={handleOrderSearch}>
           <i className="fa fa-search fa-lg" />

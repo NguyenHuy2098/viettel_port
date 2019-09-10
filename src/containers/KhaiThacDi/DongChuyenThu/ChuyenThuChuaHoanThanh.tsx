@@ -5,11 +5,8 @@ import { push } from 'connected-react-router';
 import { map, get, toString, trim, noop } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import {
-  makeSelectorChuyenThuChuaHoanThanh,
-  makeSelectorCountChuyenThuChuaHoanThanh,
-  getTotalPageChuyenThu,
-} from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import routesMap from 'utils/routesMap';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
@@ -24,9 +21,11 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const countChuyenThuChuaHoanThanh = useSelector(makeSelectorCountChuyenThuChuaHoanThanh);
-  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorChuyenThuChuaHoanThanh);
-  const totalPage = useSelector(getTotalPageChuyenThu);
+  const listChuyenThuChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.CHUA_HOAN_THANH));
+  const countChuyenThuChuaHoanThanh = useSelector(
+    makeSelectorTotalItem(SipDataType.CHUYEN_THU, SipDataState.CHUA_HOAN_THANH),
+  );
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.CHUYEN_THU, SipDataState.CHUA_HOAN_THANH));
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');

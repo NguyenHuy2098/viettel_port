@@ -8,7 +8,9 @@ export enum SipDataType {
 
 export enum SipDataState {
   TAO_MOi = 101,
+  CHUA_HOAN_THANH = 101,
   GAN_BANG_KE_VAO_TAI = 102,
+  DA_DONG = 102,
   GAN_TAI_KIEN_VAO_CHUYEN_THU = 103,
   HOAN_THANH_CHUYEN_THU = 104,
   CHUYEN_THU_XUAT_PHAT = 105,
