@@ -24,10 +24,6 @@ export function makeSelectorCountMT_ZTMI046(state: AppStateType): number {
   return size(makeSelectorMT_ZTMI046(state));
 }
 
-export function makeSelectorKienChuaNhan(state: AppStateType): API.Child[] {
-  return filter(makeSelectorMT_ZTMI046(state), { LIFECYCLE: 107 });
-}
-
 export function makeSelectorKienDaNhan(state: AppStateType): API.Child[] {
   const allTaiKienDaNhan = get(makeSelectorMT_ZTMI046(state)[0], 'CHILDS');
   const taiKienFiltered = filter(allTaiKienDaNhan, { LIFECYCLE: 108 });
@@ -38,27 +34,22 @@ export function makeSelectorBangKeDaNhan(state: AppStateType): API.Child[] {
   return filter(makeSelectorMT_ZTMI046(state), { LIFECYCLE: 107 });
 }
 
-export function makeSelectorBangKeChuaNhan(state: AppStateType): API.Child[] {
-  return filter(makeSelectorMT_ZTMI046(state), { LIFECYCLE: 107 });
-}
-
-export function makeSelectorCountKienChuaNhan(state: AppStateType): number {
-  return size(makeSelectorKienChuaNhan(state));
-}
-export function makeSelectorCountKienDaNhan(state: AppStateType): number {
-  return size(makeSelectorKienDaNhan(state));
-}
 export function makeSelectorCountBangKeDaNhan(state: AppStateType): number {
   return size(makeSelectorBangKeDaNhan(state));
 }
 
-export function makeSelectorCountBangKeChuaNhan(state: AppStateType): number {
-  return size(makeSelectorBangKeChuaNhan(state));
-}
-
 /**
+ * List: tải kiện trong chuyến thư theo trạng thái
  * @param LIFECYCLE
  */
 export function makeSelectorTaiKienByLifecycle(LIFECYCLE: number) {
   return (state: AppStateType): API.Child[] => filter(makeSelectorListTaiKien(state), { LIFECYCLE });
+}
+
+/**
+ * Count: tải kiện trong chuyến thư theo trạng thái
+ * @param LIFECYCLE
+ */
+export function makeSelectorCountTaiKienByLifecycle(LIFECYCLE: number) {
+  return (state: AppStateType): number => size(makeSelectorTaiKienByLifecycle(LIFECYCLE)(state));
 }

@@ -14,6 +14,7 @@ import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelectorTaiKienByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import Pagination from '../../../components/Pagination';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiKienChuaNhan: React.FC = (): JSX.Element => {
@@ -170,6 +171,12 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={listTaiKienChuaNhan} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={1}
+          // onPageChange={handlePageChange}
+        />
       </Row>
     </>
   );

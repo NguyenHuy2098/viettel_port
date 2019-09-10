@@ -11,10 +11,10 @@ import moment from 'moment';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelectorCountMT_ZTMI046,
-  makeSelectorCountKienChuaNhan,
-  makeSelectorCountKienDaNhan,
   makeSelectorMT_ZTMI046_Instane,
+  makeSelectorCountTaiKienByLifecycle,
 } from 'redux/MIOA_ZTMI046/selectors';
+import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import TaiKienDaNhan from './TaiKienDaNhan';
 import TaiKienChuaNhan from './TaiKienChuaNhan';
@@ -31,8 +31,8 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const chuyenThu = useSelector(makeSelectorMT_ZTMI046_Instane);
   const countTaiKien = useSelector(makeSelectorCountMT_ZTMI046);
-  const countKienChuaNhan = useSelector(makeSelectorCountKienChuaNhan);
-  const countKienDaNhan = useSelector(makeSelectorCountKienDaNhan);
+  const countKienChuaNhan = useSelector(makeSelectorCountTaiKienByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const countKienDaNhan = useSelector(makeSelectorCountTaiKienByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
 
   function handleChangeTab(tab: number): void {
     setTab(tab);

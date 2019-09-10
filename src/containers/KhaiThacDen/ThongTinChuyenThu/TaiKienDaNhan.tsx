@@ -11,6 +11,7 @@ import { makeSelectorCountMT_ZTMI046, makeSelectorKienDaNhan } from 'redux/MIOA_
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+import Pagination from '../../../components/Pagination';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiKienDaNhan: React.FC = (): JSX.Element => {
@@ -151,6 +152,12 @@ const TaiKienDaNhan: React.FC = (): JSX.Element => {
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={1}
+          // onPageChange={handlePageChange}
+        />
       </Row>
     </>
   );
