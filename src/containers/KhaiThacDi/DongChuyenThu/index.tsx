@@ -40,6 +40,9 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
       {
         IV_LOCTYPE: 'V001',
       },
+      {
+        IV_LOCTYPE: 'V004',
+      },
     ],
     IV_BP: '',
     IV_PAGENO: '1',

@@ -7,7 +7,9 @@ import { Cell } from 'react-table';
 import moment from 'moment';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
 import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const QuetMa: React.FC = (): JSX.Element => {
@@ -21,11 +23,54 @@ const QuetMa: React.FC = (): JSX.Element => {
     setCodeChuyenThu(e.target.value);
   }
 
+  // eslint-disable-next-line max-lines-per-function
   function handleSearchCodeChuyenThu(): void {
     dispatch(
-      action_MIOA_ZTMI023({
-        IV_ID: codeChuyenThu,
-      }),
+      action_MIOA_ZTMI023(
+        {
+          IV_ID: codeChuyenThu,
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI023Response): void => {
+            if (data.Status) {
+              if (data.ErrorCode === 1) {
+                alert('Error at step 1');
+                alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+              } else {
+                const thisTorId = get(data, 'MT_ZTMI023_OUT.row[0].TOR_ID', '');
+                dispatch(
+                  action_MIOA_ZTMI063(
+                    {
+                      row: {
+                        TOR_ID: thisTorId,
+                      },
+                      IV_LOC_ID: 'BDH',
+                      IV_USER: 'HUONGTT147',
+                    },
+                    {
+                      onSuccess: (data: API.MIOAZTMI063Response): void => {
+                        if (data.Status) {
+                          alert(get(data, 'MT_ZTMI063_OUT.RETURN_MESSAGE[0].MESSAGE', ''));
+                        } else {
+                          alert(data.Messages);
+                        }
+                      },
+                      onFailure: (error: HttpRequestErrorType): void => {
+                        alert(error.messages);
+                      },
+                    },
+                  ),
+                );
+              }
+            } else {
+              alert(data.Messages);
+            }
+          },
+          onFailure: (error: HttpRequestErrorType): void => {
+            alert(error.messages);
+          },
+        },
+      ),
     );
   }
 

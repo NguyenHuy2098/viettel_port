@@ -12,7 +12,7 @@ function NhanTaiBuuCucGoc(): JSX.Element {
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">Quét mã phiếu gửi</h1>
+        <h1 className="sipTitle">{t('Quét mã phiếu gửi')}</h1>
       </Row>
     );
   }
