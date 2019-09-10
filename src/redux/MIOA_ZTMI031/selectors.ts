@@ -57,3 +57,6 @@ const defaultInstance = {
 export function select_MT_ZTMI031_INSTANE(state: AppStateType): API.RowMTZTMI031OUT {
   return get(select_MT_ZTMI031_OUT(state), '[0]', defaultInstance);
 }
+export function makeSelectThongTinPhieuGui(state: AppStateType): API.RowMTZTMI031OUT {
+  return state.MIOA_ZTMI031[0];
+}
