@@ -5,10 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get, noop } from 'lodash';
+import { ceil, get } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
+import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelectorTaiKienByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -21,7 +23,36 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const listTaiKienChuaNhan = useSelector(makeSelectorTaiKienByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
   function handleScanTaiKien(): void {
-    noop(idTaiKien);
+    dispatch(
+      action_MIOA_ZTMI023(
+        {
+          IV_ID: idTaiKien,
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI023Response) => {
+            const infoTaiKien: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
+            dispatch(
+              action_MIOA_ZTMI022(
+                {
+                  row: {
+                    CU_NO: '',
+                    FU_NO: get(infoTaiKien, 'TOR_ID'),
+                    LOC_ID: 'HUB1',
+                    STATUS_ID: '1',
+                    USER_ID: 'KT1',
+                  },
+                },
+                // {
+                //   onSuccess: (data: API.MIOAZTMI022Response) => {
+                //     console.log(data);
+                //   },
+                // },
+              ),
+            );
+          },
+        },
+      ),
+    );
   }
 
   function handleChangeTaiKien(event: React.ChangeEvent<HTMLInputElement>): void {
