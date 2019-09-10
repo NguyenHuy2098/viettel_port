@@ -8,7 +8,7 @@ import { match } from 'react-router';
 import { forEach, size } from 'lodash';
 import moment from 'moment';
 
-import { makeSelectorCountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046CountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { makeSelectorBangKeChuaNhanPhieuGui, makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { SipDataState } from 'utils/enums';
@@ -25,7 +25,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
-  const countBangKeDaNhan = useSelector(makeSelectorCountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
+  const countBangKeDaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
   const taiChuaNhanBKPhieuGuiRawRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
   const bangKeChuaNhanPhieuGuiRawRecords = useSelector(makeSelectorBangKeChuaNhanPhieuGui);
   const [taiChuaNhanBKPhieuGuiRecords, setTaiChuaNhanBKPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);

@@ -11,7 +11,7 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import { makeSelectorChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
@@ -22,7 +22,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
-  const listTaiKienDaNhan = useSelector(makeSelectorChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
+  const listTaiKienDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function

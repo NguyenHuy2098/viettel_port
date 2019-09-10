@@ -5,7 +5,7 @@ import { match } from 'react-router-dom';
 import { Button, Input, Col, Row } from 'reactstrap';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { get, map, size } from 'lodash';
-import { makeSelectorOUT } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046OUT } from 'redux/MIOA_ZTMI046/selectors';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
@@ -21,7 +21,7 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const manifestId = get(props, 'match.params.manifestId', '');
-  const manifestForwardingOrderList = useSelector(makeSelectorOUT);
+  const manifestForwardingOrderList = useSelector(makeSelector046OUT);
 
   useEffect((): void => {
     dispatch(

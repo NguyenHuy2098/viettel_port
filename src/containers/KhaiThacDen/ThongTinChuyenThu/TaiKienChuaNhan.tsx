@@ -11,7 +11,7 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
-import { makeSelectorChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import Pagination from '../../../components/Pagination';
@@ -21,7 +21,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idTaiKien, setIdTaiKien] = useState<string>('');
-  const listTaiKienChuaNhan = useSelector(makeSelectorChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
   function handleScanTaiKien(): void {
     dispatch(

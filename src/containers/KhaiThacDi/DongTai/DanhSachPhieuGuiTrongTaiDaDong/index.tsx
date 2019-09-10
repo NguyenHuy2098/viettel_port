@@ -9,7 +9,7 @@ import { useMemo } from 'react';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelectorRowFirstChild, makeSelectorListChildren } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
 
 interface Props {
@@ -22,8 +22,8 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
   const dispatch = useDispatch();
 
   const idTai = get(props, 'match.params.idTai', '');
-  const dataTai = useSelector(makeSelectorRowFirstChild);
-  const dataTaiChild = useSelector(makeSelectorListChildren);
+  const dataTai = useSelector(makeSelector046RowFirstChild);
+  const dataTaiChild = useSelector(makeSelector046ListChildren);
 
   const dataTableOrigin = map(
     dataTaiChild,

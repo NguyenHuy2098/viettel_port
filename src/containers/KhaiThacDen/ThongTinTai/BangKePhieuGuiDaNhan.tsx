@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import { makeSelectorChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
@@ -18,7 +18,7 @@ import routesMap from 'utils/routesMap';
 const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const taiKienDaNhan = useSelector(makeSelectorChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
+  const taiKienDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function

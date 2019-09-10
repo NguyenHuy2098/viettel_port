@@ -5,7 +5,7 @@ import { filter, get, size } from 'lodash';
  * Info
  * @param state
  */
-export function makeSelectorOUT(state: AppStateType): API.MTZTMI046OUT | null {
+export function makeSelector046OUT(state: AppStateType): API.MTZTMI046OUT | null {
   return get(state, 'response.MIOA_ZTMI046.MT_ZTMI046_OUT', null);
 }
 
@@ -13,7 +13,7 @@ export function makeSelectorOUT(state: AppStateType): API.MTZTMI046OUT | null {
  * Info
  * @param state
  */
-export function makeSelectorRowFirstChild(state: AppStateType): API.RowMTZTMI046OUT | null {
+export function makeSelector046RowFirstChild(state: AppStateType): API.RowMTZTMI046OUT | null {
   return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0]', null);
 }
 
@@ -21,7 +21,7 @@ export function makeSelectorRowFirstChild(state: AppStateType): API.RowMTZTMI046
  * List Child
  * @param state
  */
-export function makeSelectorListChildren(state: AppStateType): API.Child[] {
+export function makeSelector046ListChildren(state: AppStateType): API.Child[] {
   return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0].CHILDS', []);
 }
 
@@ -29,22 +29,22 @@ export function makeSelectorListChildren(state: AppStateType): API.Child[] {
  * Count list Child
  * @param state
  */
-export function makeSelectorCountChildren(state: AppStateType): number {
-  return size(makeSelectorListChildren(state));
+export function makeSelector046CountChildren(state: AppStateType): number {
+  return size(makeSelector046ListChildren(state));
 }
 
 /**
  * List Child theo trạng thái
  * @param LIFECYCLE
  */
-export function makeSelectorChildrenByLifecycle(LIFECYCLE: number) {
-  return (state: AppStateType): API.Child[] => filter(makeSelectorListChildren(state), { LIFECYCLE });
+export function makeSelector046ChildrenByLifecycle(LIFECYCLE: number) {
+  return (state: AppStateType): API.Child[] => filter(makeSelector046ListChildren(state), { LIFECYCLE });
 }
 
 /**
  * Count list Child theo trạng thái
  * @param LIFECYCLE
  */
-export function makeSelectorCountChildrenByLifecycle(LIFECYCLE: number) {
-  return (state: AppStateType): number => size(makeSelectorChildrenByLifecycle(LIFECYCLE)(state));
+export function makeSelector046CountChildrenByLifecycle(LIFECYCLE: number) {
+  return (state: AppStateType): number => size(makeSelector046ChildrenByLifecycle(LIFECYCLE)(state));
 }

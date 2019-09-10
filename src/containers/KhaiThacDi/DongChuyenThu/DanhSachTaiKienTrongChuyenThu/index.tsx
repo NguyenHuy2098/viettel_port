@@ -10,7 +10,7 @@ import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { makeSelectorRowFirstChild, makeSelectorListChildren } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 
@@ -24,8 +24,8 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const dispatch = useDispatch();
 
   const idChuyenThu = get(props, 'match.params.idChuyenThu', '');
-  const dataChuyenThu = useSelector(makeSelectorRowFirstChild);
-  const dataChuyenThuChild = useSelector(makeSelectorListChildren);
+  const dataChuyenThu = useSelector(makeSelector046RowFirstChild);
+  const dataChuyenThuChild = useSelector(makeSelector046ListChildren);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 

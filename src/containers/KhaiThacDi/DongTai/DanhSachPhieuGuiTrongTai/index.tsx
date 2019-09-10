@@ -10,7 +10,7 @@ import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { makeSelectorRowFirstChild, makeSelectorListChildren } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
 import { push } from 'connected-react-router';
 import { generatePath } from 'react-router-dom';
@@ -27,8 +27,8 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const dispatch = useDispatch();
 
   const idTai = get(props, 'match.params.idTai', '');
-  const dataTai = useSelector(makeSelectorRowFirstChild);
-  const dataTaiChild = useSelector(makeSelectorListChildren);
+  const dataTai = useSelector(makeSelector046RowFirstChild);
+  const dataTaiChild = useSelector(makeSelector046ListChildren);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 

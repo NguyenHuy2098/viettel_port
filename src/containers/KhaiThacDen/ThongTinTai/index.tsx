@@ -10,9 +10,9 @@ import moment from 'moment';
 
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
-  makeSelectorRowFirstChild,
-  makeSelectorCountChildrenByLifecycle,
-  makeSelectorCountChildren,
+  makeSelector046RowFirstChild,
+  makeSelector046CountChildrenByLifecycle,
+  makeSelector046CountChildren,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -28,13 +28,13 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   const [tab, setTab] = useState<number>(1);
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const idTaiKien = get(props, 'match.params.idTaiKien');
-  const taiKien = useSelector(makeSelectorRowFirstChild);
-  const countBangKePhieuGui = useSelector(makeSelectorCountChildren);
+  const taiKien = useSelector(makeSelector046RowFirstChild);
+  const countBangKePhieuGui = useSelector(makeSelector046CountChildren);
   const countBangKePhieuGuiChuaNhan = useSelector(
-    makeSelectorCountChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN),
+    makeSelector046CountChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN),
   );
   const countBangKePhieuGuiDaNhan = useSelector(
-    makeSelectorCountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN),
+    makeSelector046CountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN),
   );
 
   function handleChangeTab(tab: number): void {
