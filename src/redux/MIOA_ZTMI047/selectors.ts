@@ -80,7 +80,7 @@ export function getTotalPageChuyenThuDaDong(state: AppStateType): number {
   return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.104.MT_ZTMI047_OUT.Paging.EV_TOTAL_PAGE', '0')));
 }
 export function makeSelectorCountChuyenThuDaDong(state: AppStateType): number {
-  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.106.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
+  return parseInt(trim(get(state, 'MIOA_ZTMI047.ZC3.104.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM', '0')));
 }
 
 //__________________________________________________

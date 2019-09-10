@@ -187,8 +187,14 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
         accessor: 'GRO_WEI_VAL',
       },
       {
-        Header: t('Ngày gửi'),
+        Header: t('Ngày tạo'),
         accessor: 'DATETIME_CHLC',
+      },
+      {
+        Header: t('Loại'),
+        Cell: (): JSX.Element => {
+          return <>Thiếu API</>;
+        },
       },
       {
         Header: t('Quản trị'),

@@ -218,6 +218,12 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         accessor: 'DATETIME_CHLC',
       },
       {
+        Header: t('Loại'),
+        Cell: (): JSX.Element => {
+          return <>Thiếu API</>;
+        },
+      },
+      {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell): JSX.Element => {
           return (

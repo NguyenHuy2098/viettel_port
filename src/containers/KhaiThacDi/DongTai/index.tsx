@@ -56,7 +56,7 @@ const DongTai: React.FC = (): JSX.Element => {
   function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
     const thisValue = e.currentTarget.value;
     if (size(trim(thisValue)) && e.keyCode === 13) {
-      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idBangKe: thisValue })));
+      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: thisValue })));
     }
   }
 
