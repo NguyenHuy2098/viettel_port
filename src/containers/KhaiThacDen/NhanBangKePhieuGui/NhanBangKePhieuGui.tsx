@@ -8,10 +8,11 @@ import { match } from 'react-router';
 import { forEach, size } from 'lodash';
 import moment from 'moment';
 
-import { checkIsNot109LifeCycle, checkIsNot604LifeCycle } from 'utils/helper';
-import { makeSelectorCountBangKeDaNhan } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelectorCountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { makeSelectorBangKeChuaNhanPhieuGui, makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { SipDataState } from 'utils/enums';
+import { checkIsNot109LifeCycle, checkIsNot604LifeCycle } from 'utils/helper';
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
 import NhanRiengBangKePhieuGui from './NhanRiengBangKePhieuGui';
@@ -21,21 +22,18 @@ interface Props {
 }
 // eslint-disable-next-line max-lines-per-function
 const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
+  const dispatch = useDispatch();
   const { t } = useTranslation();
-
   const [tab, setTab] = useState<number>(1);
+  const countBangKeDaNhan = useSelector(makeSelectorCountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
+  const taiChuaNhanBKPhieuGuiRawRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
+  const bangKeChuaNhanPhieuGuiRawRecords = useSelector(makeSelectorBangKeChuaNhanPhieuGui);
+  const [taiChuaNhanBKPhieuGuiRecords, setTaiChuaNhanBKPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
+  const [bangKeChuaNhanPhieuGuiRecords, setBangKeChuaNhanPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
-  const countBangKeDaNhan = useSelector(makeSelectorCountBangKeDaNhan);
-  const dispatch = useDispatch();
-
-  const taiChuaNhanBKPhieuGuiRawRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
-  const bangKeChuaNhanPhieuGuiRawRecords = useSelector(makeSelectorBangKeChuaNhanPhieuGui);
-
-  const [taiChuaNhanBKPhieuGuiRecords, setTaiChuaNhanBKPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
-  const [bangKeChuaNhanPhieuGuiRecords, setBangKeChuaNhanPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
 
   const getTaiChuaNhanBKPhieuGuiRawRecords = (): void => {
     dispatch(

@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { RouteComponentProps } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
@@ -15,14 +14,11 @@ import { makeSelectorChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
-type Props = RouteComponentProps;
-
 // eslint-disable-next-line max-lines-per-function
-const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
+const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const idChuyenThu = get(props, 'match.params.idChuyenThu');
-  const listTaiKienDaNhan = useSelector(makeSelectorChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
+  const taiKienDaNhan = useSelector(makeSelectorChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -66,6 +62,10 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
+        Header: t('Loại'),
+        accessor: 'TOR_TYPE',
+      },
+      {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell): JSX.Element => {
           return (
@@ -81,15 +81,8 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
 
   const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI047OUT) => {
-      dispatch(
-        push(
-          generatePath(routesMap.THONG_TIN_TAI, {
-            idChuyenThu,
-            idTaiKien: item.TOR_ID,
-          }),
-        ),
-      );
+    (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => (): void => {
+      dispatch(push(generatePath(routesMap.NHAN_BANG_KE_PHIEU_GUI, { idTaiKien: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -125,7 +118,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listTaiKienDaNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={taiKienDaNhan} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
@@ -137,4 +130,4 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
 };
 
-export default withRouter(TaiKienDaNhan);
+export default withRouter(BangKePhieuGuiDaNhan);

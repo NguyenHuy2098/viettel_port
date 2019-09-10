@@ -11,7 +11,7 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
-import { makeSelectorTaiKienByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelectorChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import Pagination from '../../../components/Pagination';
@@ -21,7 +21,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idTaiKien, setIdTaiKien] = useState<string>('');
-  const listTaiKienChuaNhan = useSelector(makeSelectorTaiKienByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const listTaiKienChuaNhan = useSelector(makeSelectorChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
   function handleScanTaiKien(): void {
     dispatch(
@@ -75,11 +75,9 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
         id: 'select',
         Cell: ({ row }: Cell): JSX.Element => {
           return (
-            <>
-              <Label check>
-                <Input type="checkbox" />
-              </Label>
-            </>
+            <Label check>
+              <Input type="checkbox" />
+            </Label>
           );
         },
       },
@@ -97,7 +95,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Số lượng'),
-        accessor: 'countPhieuGui',
+        accessor: 'count',
       },
       {
         Header: t('Trọng lượng'),
@@ -119,11 +117,9 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell): JSX.Element => {
           return (
-            <>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
-            </>
+            <Button className="SipTableFunctionIcon">
+              <i className="fa fa-print fa-lg color-green" />
+            </Button>
           );
         },
       },

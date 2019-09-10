@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { match } from 'react-router-dom';
 import { Button, Input, Col, Row } from 'reactstrap';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { get, map, size } from 'lodash';
-import { useGet_MT_ZTMI046_OUT } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelectorOUT } from 'redux/MIOA_ZTMI046/selectors';
 import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
@@ -21,14 +21,14 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const manifestId = get(props, 'match.params.manifestId', '');
+  const manifestForwardingOrderList = useSelector(makeSelectorOUT);
 
-  const manifestForwardingOrderList = useGet_MT_ZTMI046_OUT();
-
-  React.useEffect((): void => {
-    const payload = {
-      IV_TOR_ID: manifestId,
-    };
-    dispatch(action_MIOA_ZTMI046(payload));
+  useEffect((): void => {
+    dispatch(
+      action_MIOA_ZTMI046({
+        IV_TOR_ID: manifestId,
+      }),
+    );
   }, [dispatch, manifestId]);
 
   function redirectToPreviousLocation(): void {
