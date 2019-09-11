@@ -24,12 +24,14 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
   const dispatch = useDispatch();
   const listChuyenThu = useSelector(makeSelectorListChuyenThu);
 
+  const [keySearch, setKeySearch] = useState<string>('');
+
   const [tableRecords, setTableRecords] = useState<API.RowResponseZTMI023OUT[]>([]);
   const [showReceivedMessage, setShowReceivedMessage] = useState<boolean>(false);
   const [showErrormessage, setShowErrorMessage] = useState<boolean>(false);
 
   const dispatchActionAPI_ZTMI023 = (): void => {
-    dispatch(action_MIOA_ZTMI023({ IV_ID: '4800000037' }, {}));
+    dispatch(action_MIOA_ZTMI023({ IV_ID: keySearch }, {}));
   };
 
   const dispatchactionApi_ZTMI022 = (torID: string, el: API.RowResponseZTMI023OUT): void => {
@@ -165,6 +167,10 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
   );
+
+  const handleSetKeySearch = (event: React.FormEvent<HTMLInputElement>): void => {
+    setKeySearch(event.currentTarget.value);
+  };
   return (
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">
@@ -172,7 +178,7 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
           <div className="btn-toolbar col-10">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm tải')} />
+              <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSetKeySearch} />
             </div>
             <Button className="ml-2" color="primary" onClick={dispatchActionAPI_ZTMI023}>
               {t('Tìm kiếm')}
