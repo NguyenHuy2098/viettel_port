@@ -2,11 +2,12 @@ import React, { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Row } from 'reactstrap';
-import { get } from 'lodash';
+import { findIndex, get, slice, join, size } from 'lodash';
 import { Cell } from 'react-table';
 import moment from 'moment';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
 import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
@@ -25,45 +26,74 @@ const QuetMa: React.FC = (): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleSearchCodeChuyenThu(): void {
+    const checkIfDashExist = findIndex(codeChuyenThu, (item: string): boolean => {
+      return item === '_';
+    });
+    const thisCodeChuyenThu =
+      checkIfDashExist === -1 ? codeChuyenThu : join(slice(codeChuyenThu, 0, checkIfDashExist), '');
     dispatch(
-      action_MIOA_ZTMI023(
+      action_MIOA_ZTMI031(
         {
-          IV_ID: codeChuyenThu,
+          FWO_ID: thisCodeChuyenThu,
+          Buyer_reference_Number: '',
         },
         {
-          onSuccess: (data: API.MIOAZTMI023Response): void => {
-            if (data.Status) {
-              if (data.ErrorCode === 1) {
-                alert('Error at step 1');
-                alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
-              } else {
-                const thisTorId = get(data, 'MT_ZTMI023_OUT.row[0].TOR_ID', '');
-                dispatch(
-                  action_MIOA_ZTMI063(
-                    {
-                      row: {
-                        TOR_ID: thisTorId,
-                      },
-                      IV_LOC_ID: 'BDH',
-                      IV_USER: 'HUONGTT147',
-                    },
-                    {
-                      onSuccess: (data: API.MIOAZTMI063Response): void => {
-                        if (data.Status) {
-                          alert(get(data, 'MT_ZTMI063_OUT.RETURN_MESSAGE[0].MESSAGE', ''));
+          // eslint-disable-next-line max-lines-per-function
+          onSuccess: (data: API.RowMTZTMI031OUT[]): void => {
+            if (size(data)) {
+              dispatch(
+                action_MIOA_ZTMI023(
+                  {
+                    IV_ID: get(data, '[0].FREIGHT_UNIT', ''),
+                  },
+                  {
+                    onSuccess: (data: API.MIOAZTMI023Response): void => {
+                      if (data.Status) {
+                        if (data.ErrorCode === 1) {
+                          alert('Error at step 1');
+                          alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
                         } else {
-                          alert(data.Messages);
+                          if (get(data, 'MT_ZTMI023_OUT.row[0].EXT_LOG_ID', '') === 'BDH') {
+                            const thisTorId = get(data, 'MT_ZTMI023_OUT.row[0].TOR_ID', '');
+                            dispatch(
+                              action_MIOA_ZTMI063(
+                                {
+                                  row: {
+                                    TOR_ID: thisTorId,
+                                  },
+                                  IV_LOC_ID: 'BDH',
+                                  IV_USER: '',
+                                },
+                                {
+                                  onSuccess: (data: API.MIOAZTMI063Response): void => {
+                                    if (data.Status) {
+                                      alert(get(data, 'MT_ZTMI063_OUT.RETURN_MESSAGE[0].MESSAGE', ''));
+                                    } else {
+                                      alert(data.Messages);
+                                    }
+                                  },
+                                  onFailure: (error: HttpRequestErrorType): void => {
+                                    alert(error.messages);
+                                  },
+                                },
+                              ),
+                            );
+                          } else {
+                            alert("EXT_LOG_ID không khớp với bưu cục hiện tại (đang fake là 'BDH')");
+                          }
                         }
-                      },
-                      onFailure: (error: HttpRequestErrorType): void => {
-                        alert(error.messages);
-                      },
+                      } else {
+                        alert(data.Messages);
+                      }
                     },
-                  ),
-                );
-              }
+                    onFailure: (error: HttpRequestErrorType): void => {
+                      alert(error.messages);
+                    },
+                  },
+                ),
+              );
             } else {
-              alert(data.Messages);
+              alert(t('Không tìm thấy kết quả!'));
             }
           },
           onFailure: (error: HttpRequestErrorType): void => {
