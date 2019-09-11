@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { map, get, noop, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
@@ -125,18 +125,6 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
-          return (
-            <>
-              <Label check>
-                <Input type="checkbox" />
-              </Label>
-            </>
-          );
-        },
-      },
       {
         Header: t('Mã bảng kê'),
         accessor: 'TOR_ID',

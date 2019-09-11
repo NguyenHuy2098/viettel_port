@@ -12,9 +12,6 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
-import { push } from 'connected-react-router';
-import { generatePath } from 'react-router-dom';
-import routesMap from 'utils/routesMap';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 
 interface Props {
@@ -129,12 +126,6 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     dispatch(goBack());
   };
 
-  function handleGotoEditForwardingOrder(idDonHang: string): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      dispatch(push(generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC, { idDonHang })));
-    };
-  }
-
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
@@ -236,12 +227,6 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
         Cell: ({ row }: Cell): JSX.Element => {
           return (
             <>
-              <Button
-                className="SipTableFunctionIcon"
-                onClick={handleGotoEditForwardingOrder(get(row, 'values.TOR_ID'))}
-              >
-                <i className="fa fa-pencil fa-lg color-blue" />
-              </Button>
               <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
                 <i className="fa fa-trash-o fa-lg color-red" />
               </Button>

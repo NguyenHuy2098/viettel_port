@@ -6,6 +6,7 @@ interface Props {
   modalApiCreateSuccess: boolean;
   isCreateNewForwardingOrder: boolean;
   toggle: () => void;
+  idPhieuGuiSuccess: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -26,6 +27,8 @@ const ModalAddNew: React.FC<Props> = (props): JSX.Element => {
       <ModalBody>
         <h5 className="mb-4">
           {props.isCreateNewForwardingOrder ? t('Tạo đơn mới thành công!') : t('Cập nhật thành công!')}
+          <br />
+          {`Mã: ${props.idPhieuGuiSuccess}`}
         </h5>
       </ModalBody>
       <ModalFooter>

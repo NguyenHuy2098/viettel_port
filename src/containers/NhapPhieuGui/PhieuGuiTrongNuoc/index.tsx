@@ -860,7 +860,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI012(payload, {
         onSuccess: (data: API.MIOAZTMI012Response): void => {
-          setMaPhieuGui(get(data, 'MT_ZTMI012_OUT.FWO_ID', ''));
+          const idPhieuGuiSuccess = get(data, 'MT_ZTMI012_OUT.FWO_ID', '');
+          setMaPhieuGui(idPhieuGuiSuccess);
           toggleModalApiCreateSuccess();
         },
         onFailure: (error: HttpRequestErrorType): void => {
@@ -1642,6 +1643,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         modalApiCreateSuccess={modalApiCreateSuccess}
         isCreateNewForwardingOrder={isCreateNewForwardingOrder}
         toggle={toggleModalApiCreateSuccess}
+        idPhieuGuiSuccess={maPhieuGui}
       />
     </>
   );

@@ -44,9 +44,10 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     e.preventDefault();
     dispatch(
       action_MIOA_ZTMI016(payloadCreate, {
-        onSuccess: (): void => {
+        onSuccess: (data: API.MIOAZTMI016Response): void => {
           onSuccessCreated();
-          alert(t('Tạo thành công!'));
+          const thisId = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+          alert(`Tạo thành công! Mã: ${thisId}`);
         },
         onFailure: (): void => {
           alert(t('Có lỗi xảy ra!'));
