@@ -33,8 +33,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   // const dataSelectProfile = useSelector(makeSelectProfile, shallowEqual);
 
-  const idDonHang = get(props, 'match.params.idDonHang');
-  const isCreateNewForwardingOrder: boolean = idDonHang === 'tao-don';
+  const idDonHang = get(props, 'match.params.idDonHang', '');
+  const isCreateNewForwardingOrder: boolean = idDonHang === '';
 
   const payloadOrderInfoFirstLoad = {
     FWO_ID: idDonHang,
@@ -299,42 +299,46 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   //__________________ package item partial events
 
   const newPackageItem: PackageItemInputType = {
-    Flag: 'I',
-    PACKAGING_MATERIAL: '',
-    Description: '',
-    PACKAGE_TYPE: '',
-    QUANTITY_OF_PACKAGE: '',
-    QUANTITY_OF_UNIT: '',
+    Width: '',
+    commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+    PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
+    QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
+    GOODS_VALUE: '',
     GROSS_WEIGHT: '',
-    GROSS_WEIGHT_OF_UNIT: 'g',
-    NET_WEIGHT: '100',
-    NET_WEIGHT_OF_UNIT: 'g',
     Length: '',
     Hight: '',
-    Width: '',
-    Note: '',
-    GOODS_VALUE: '',
-    Currency: 'VN',
-    COMODITY_CODE: 'V99',
+    PACKAGING_MATERIAL: '',
+    Service_type: '',
+    QUANTITY_OF_PACKAGE: '',
+    Description: '',
+    NET_WEIGHT_OF_UNIT: '',
+    Currency: '',
+    GROSS_WEIGHT_OF_UNIT: 'KG',
+    Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
+    COD: '',
+    NET_WEIGHT: '100',
   };
   const firstPackageItem = {
-    Flag: 'I',
-    PACKAGING_MATERIAL: '',
-    Description: tenHang,
-    PACKAGE_TYPE: '',
-    QUANTITY_OF_PACKAGE: soLuong,
-    QUANTITY_OF_UNIT: 'EA',
+    Width: kichThuocRong,
+    commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+    PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
+    QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
+    GOODS_VALUE: giaTri,
     GROSS_WEIGHT: trongLuong,
-    GROSS_WEIGHT_OF_UNIT: 'g',
-    NET_WEIGHT: '100',
-    NET_WEIGHT_OF_UNIT: 'g',
     Length: kichThuocDai,
     Hight: kichThuocCao,
-    Width: kichThuocRong,
-    Note: ghiChu,
-    GOODS_VALUE: giaTri,
-    Currency: 'VND',
-    COMODITY_CODE: loaiHangHoa,
+    PACKAGING_MATERIAL: '',
+    Service_type: phuongThucVanChuyen,
+    QUANTITY_OF_PACKAGE: soLuong,
+    Description: tenHang,
+    NET_WEIGHT_OF_UNIT: '',
+    Currency: '',
+    GROSS_WEIGHT_OF_UNIT: 'KG',
+    Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
+    COD: '',
+    NET_WEIGHT: '100',
   };
   function addNewPackageItem(): void {
     const newArr = produce(packageItemArr, (draftState): void => {
@@ -482,45 +486,49 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       // dichVuCongThem = [];
       // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
       let newPackageItemEdit: PackageItemInputType = {
-        Flag: 'I',
-        PACKAGING_MATERIAL: '',
-        Description: '',
-        PACKAGE_TYPE: '',
-        QUANTITY_OF_PACKAGE: '',
-        QUANTITY_OF_UNIT: '',
+        Width: '',
+        commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+        commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+        PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
+        QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
+        GOODS_VALUE: '',
         GROSS_WEIGHT: '',
-        GROSS_WEIGHT_OF_UNIT: 'g',
-        NET_WEIGHT: '100',
-        NET_WEIGHT_OF_UNIT: 'g',
         Length: '',
         Hight: '',
-        Width: '',
-        Note: '',
-        GOODS_VALUE: '',
-        Currency: 'VN',
-        COMODITY_CODE: 'V99',
+        PACKAGING_MATERIAL: '',
+        Service_type: '',
+        QUANTITY_OF_PACKAGE: '',
+        Description: '',
+        NET_WEIGHT_OF_UNIT: '',
+        Currency: '',
+        GROSS_WEIGHT_OF_UNIT: 'KG',
+        Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
+        COD: '',
+        NET_WEIGHT: '100',
       };
       if (size(orderInformation) >= 2) {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
-            Flag: 'I',
+            commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+            commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+            PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
+            QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
+            GOODS_VALUE: '',
             PACKAGING_MATERIAL: '',
+            Service_type: loaiHinhDichVu,
             Description: '',
-            PACKAGE_TYPE: '',
-            QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
-            QUANTITY_OF_UNIT: '',
-            GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(2)) : '',
-            GROSS_WEIGHT_OF_UNIT: 'g',
+            NET_WEIGHT_OF_UNIT: '',
+            Currency: '',
+            GROSS_WEIGHT_OF_UNIT: 'KG',
+            Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
             NET_WEIGHT: '100',
-            NET_WEIGHT_OF_UNIT: 'g',
+            QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
+            GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(2)) : '',
             Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
             Hight: item.Height ? toString(parseFloat(item.Height).toFixed(2)) : '',
             Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
-            Note: '',
-            GOODS_VALUE: '',
-            Currency: 'VN',
-            COMODITY_CODE: 'V99',
+            COD: '',
           };
           newArrEdit.push(newPackageItemEdit);
         });
@@ -551,6 +559,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
     );
     let newPackageItem011 = {
+      COD: '',
       Currency: '',
       Dimension_UoM: '',
       Goods_value: '',
@@ -568,11 +577,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     if (size(payloadPackageItemArr) >= 1) {
       forEach(payloadPackageItemArr, (item: PackageItemInputType): void => {
         newPackageItem011 = {
+          COD: '',
           Currency: '',
           Dimension_UoM: '',
           Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
           Goods_value: '',
-          Service_type: '',
+          Service_type: loaiHinhDichVu,
           Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
           Height: item.Hight ? toString(parseFloat(item.Hight).toFixed(2)) : '',
           Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
@@ -735,71 +745,58 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
-    const paramsPackageItem = {
-      SERVICE_TYPE: loaiHinhDichVu,
-      QUANTITY_OF_PACKAGE: '1',
-      QUANTITY_OF_UNIT: 'ST',
-    };
     const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
-      draftState.push(paramsPackageItem);
     });
     const payload = {
-      ORDER_TYPE: 'V001',
-      BUYERS_REFERENCE_NUMBER: maPhieuGui,
-      SALE_ORG: null,
-      SALE_OFFICE: null,
-      SOURCE_TYPE: '50000119', // nguồn tạo từ APP/Web hoặc từ ecommerce
-      FWO_NO: null,
-      ORDERING_PARTY: '306', // Mã đối tác sử dụng dịch vụ
-      NAME_OP: hoTenSender,
-      ADDRESS_OP: diaChiSender,
-      PHONE_OP: dienThoaiSender,
-      EMAIL_OP: null,
-      Shipper: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
-      NAME_SHIPPER: null,
-      ADDRESS_SHIPPER: null,
-      PHONE_SHIPPER: null,
-      EMAIL_SHIPPER: null,
-      Consignee: '306', // Người nhận hàng
-      NAME_CONSIG: hoTenReceiver,
-      ADDRESS_CONSIG: diaChiReceiver,
-      PHONE_CONSIG: dienThoaiReceiver,
-      EMAIL_CONSIG: null,
-      VAT_NO_PAYER: null, // Mã số thuế đối tác sử dụng
-      MOVEMENT_TYPE: 'ZDD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
-      POSTAL_CODE_SRC: null, // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
       TEL_SRC: dienThoaiSender,
-      COUNTRY_SRC: null, // Mã đất nước gửi trong trường hợp khách hàng vãng lai
-      CITY_SRC: provinceSender, // trong trường hợp khách hàng vãng lai
-      DISTRICT_SRC: districtSender, // trong trường hợp khách hàng vãng lai
-      WARD_SRC: wardSender, // trong trường hợp khách hàng vãng lai
-      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
-      HOUSE_ID_SRC: null, // trong trường hợp khách hàng vãng lai
-      POSTAL_CODE_DES: null, // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
-      TEL_DES: dienThoaiReceiver,
-      COUNTRY_DES: null, // nhận trong trường hợp khách hàng vãng lai
-      CITY_DES: provinceReceiver, // nhận trong trường hợp khách hàng vãng lai
-      DISTRICT_DES: districtReceiver, // nhận trong trường hợp khách hàng vãng lai
-      WARD_DES: wardReceiver, // Mã xã phường nhận trong trường hợp vãng lai
-      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
-      FLAG_HEADER: '',
+      LOCATION_ID_SRC: '',
+      CUS_ID: '', // Mã user trên hệ thống APP/Web
+      Consignee: '9999999999', // Người nhận hàng
+      FWO_NO: '', // bắt buộc với sửa/xóa
+      LOCATION_ID_DES: '',
+      VAT_NO_PAYER: '', // Mã số thuế đối tác sử dụng
+      PHONE_OP: '',
+      MOVEMENT_TYPE: 'ZDD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
+      DISTRICT_DES: districtIdReceiver, // nhận trong trường hợp khách hàng vãng lai
+      SALE_ORG: '',
+      EMAIL_OP: '',
+      CITY_DES: provinceIdReceiver, // nhận trong trường hợp khách hàng vãng lai
       PromoCode: '',
-      VOUCHER_ID: null,
-      Campaign: null,
-      Disctype: null,
-      Description: null,
-      LOCATION_ID_SRC: null,
-      LOCATION_ID_DES: null,
-      REQUEST_PICK_DATE: null,
-      CONFIRM_PICK_DATE: null,
-      REQUEST_DELIV_DATE: null,
-      CONFIRM_DELIV_DATE: null,
-      FREIGH_TERM: null,
-      CUS_ID: null, // Mã user trên hệ thống APP/Web
+      POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
+      WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
+      FLAG_HEADER: '', // Cờ phân biệt trường hợp hủy đơn hàng để khác null là block
+      BUYERS_REFERENCE_NUMBER: maPhieuGui,
+      Note: '', // Ghi chú cho bưu gửi
+      EMAIL_CONSIG: '',
+      CITY_SRC: provinceIdSender, // trong trường hợp khách hàng vãng lai
+      ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
+      REQUEST_PICK_DATE: '',
+      NAME_CONSIG: hoTenReceiver,
+      Shipper: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
+      ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
+      REQUEST_DELIV_DATE: '', // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
+      DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
+      PHONE_CONSIG: dienThoaiReceiver,
+      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
+      WARD_SRC: wardIdSender, // trong trường hợp khách hàng vãng lai
+      Campaign: '', // Mã chương trình khuyển mại
+      Disctype: '', // Loại khuyến mại
+      Description: '', // Mô tả chương trình khuyến mại
+      VOUCHER_ID: '',
+      FREIGH_TERM: 'PP', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
+      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
+      COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
+      NAME_OP: hoTenSender, // Tên của đối tượng sử dụng dịch vụ
+      EMAIL_SHIPPER: '',
+      POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
+      SOURCE_TYPE: '', // nguồn tạo từ APP/Web hoặc từ ecommerce
+      SALE_OFFICE: 'BDH', // mã bưu cục, đang fake tạm là BDH
+      des_name: '', // Địa chỉ nhận trong trường hợp vãng lai
+      Transportation_mode: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
+      house_id_des: '12', // Số nhà nhận trong trường hợp vãng lai
+      TEL_DES: dienThoaiReceiver,
       Item: payloadPackageItemArr,
-      LanguageId: null,
-      LanguageDefaultId: null,
     };
     // if (!window.confirm('Bạn có chắc chắn?')) return;
     dispatch(

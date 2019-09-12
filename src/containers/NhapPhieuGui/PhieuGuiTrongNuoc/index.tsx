@@ -34,8 +34,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   // const dataSelectProfile = useSelector(makeSelectProfile, shallowEqual);
 
-  const idDonHang = get(props, 'match.params.idDonHang');
-  const isCreateNewForwardingOrder: boolean = idDonHang === 'tao-don';
+  const idDonHang = get(props, 'match.params.idDonHang', '');
+  const isCreateNewForwardingOrder: boolean = idDonHang === '';
 
   const payloadOrderInfoFirstLoad = {
     FWO_ID: idDonHang,
@@ -143,6 +143,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   React.useEffect((): void => {
     if (!isCreateNewForwardingOrder) {
       dispatch(action_MIOA_ZTMI031(payloadOrderInfoFirstLoad));
+    } else {
+      handleClearData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idDonHang]);
@@ -673,7 +675,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         { GET: null },
         {
           onFailure: (error: HttpRequestErrorType): void => {
-            alert(error.messages);
+            alert(error.message);
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
             setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
@@ -856,7 +858,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           toggleModalApiCreateSuccess();
         },
         onFailure: (error: HttpRequestErrorType): void => {
-          alert(error.messages);
+          alert(error.message);
         },
       }),
     );
@@ -1623,11 +1625,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       <div className="display-block sipTitleRightBlock text-right">
         <Button onClick={handleClearData}>
           <i className="fa fa-refresh" />
-          Làm mới
+          {t('Làm mới')}
         </Button>
         <Button onClick={handleValidate}>
           <i className="fa fa-download" />
-          Ghi lại
+          {t('Ghi lại')}
         </Button>
       </div>
       <ModalAddNewSuccess

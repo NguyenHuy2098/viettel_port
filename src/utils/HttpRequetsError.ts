@@ -14,6 +14,7 @@ class HttpRequestError extends BaseError {
 export interface HttpRequestErrorType {
   status: string;
   messages: string[];
+  message?: string[];
 }
 
 export default HttpRequestError;
