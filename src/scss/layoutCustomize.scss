@@ -196,7 +196,6 @@ input.form-control:-moz-placeholder {
 }
 .sipHeaderUser {
   & > .nav-link {
-    font-size: 16px;
     i {
       margin-left: 8px;
     }
@@ -205,50 +204,52 @@ input.form-control:-moz-placeholder {
 .app-body {
   .sidebar {
     background: #fff;
-    .nav-dropdown-items {
-      background: #f9f9f9 !important;
-    }
-    .nav-link {
-      color: #4a4a4a !important;
-      border-left: 4px solid transparent !important;
-      background: #f9f9f9 !important;
-      padding: 12px 8px 12px 38px;
-      position: relative;
-      i {
-        color: #299f9a !important;
-        font-size: 18px;
-        position: absolute;
-        top: 12px;
-        left: 10px;
+    .nav {
+      .nav-dropdown-items {
+        background: #f9f9f9 !important;
       }
-      &:hover {
-        border-color: #299f9a !important;
-        background: #fff !important;
-        color: #299f9a !important;
-      }
-      &.active {
-        color: #fd8301 !important;
-      }
-    }
-    .nav-dropdown {
-      .nav-dropdown-toggle {
-        background: #fff !important;
-        &:before {
-          font: normal normal normal 14px/1 FontAwesome;
-          background: none;
-          content: '\F054';
-          width: auto;
-          height: auto;
-          font-size: 10px;
+      .nav-link {
+        color: #4a4a4a !important;
+        border-left: 4px solid transparent !important;
+        background: #f9f9f9 !important;
+        padding: 12px 8px 12px 38px;
+        position: relative;
+        i {
+          color: #299f9a !important;
+          font-size: 18px;
+          position: absolute;
+          top: 12px;
+          left: 10px;
+        }
+        &.active {
+          color: #fd8301 !important;
+        }
+        &:hover {
+          border-color: #299f9a !important;
+          background: #fff !important;
+          color: #299f9a !important;
         }
       }
-      &.open .nav-dropdown-toggle {
-        border-color: #299f9a !important;
-        background: #fff !important;
-        color: #299f9a !important;
-        &:before {
-          -webkit-transform: rotate(90deg);
-          transform: rotate(90deg);
+      .nav-dropdown {
+        .nav-dropdown-toggle {
+          background: #fff !important;
+          &:before {
+            font: normal normal normal 14px/1 FontAwesome;
+            background: none;
+            content: '\F054';
+            width: auto;
+            height: auto;
+            font-size: 10px;
+          }
+        }
+        &.open .nav-dropdown-toggle {
+          border-color: #299f9a !important;
+          background: #fff !important;
+          color: #299f9a !important;
+          &:before {
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+          }
         }
       }
     }

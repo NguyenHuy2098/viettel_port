@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 // @ts-ignore
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
+import { get } from 'lodash';
 import logo from 'assets/img/logo.png';
-import { logout } from 'redux/auth/actions';
-import { makeSelectProfile } from 'redux/auth/selectors';
-import routesMap from 'utils/routesMap';
 import HeaderSearch from 'components/HeaderSearch/Index';
+import { logout } from 'redux/auth/actions';
+import { makeSelectorProfile } from 'redux/auth/selectors';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   url: string;
@@ -17,7 +18,7 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
-  const profile = useSelector(makeSelectProfile);
+  const profile = useSelector(makeSelectorProfile);
   const [dropdownOpenMenu, setDropdownOpenMenu] = useState<boolean>(false);
   const [dropdownOpenNotifications, setDropdownOpenNotifications] = useState<boolean>(false);
 
@@ -81,7 +82,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const renderHeaderUser = (): JSX.Element => (
     <ButtonDropdown isOpen={dropdownOpenMenu} toggle={toggleDropdownOpenMenu} className="sipHeaderUser">
       <DropdownToggle nav>
-        <span className="hide-xs">{profile && profile.name}</span>
+        <span className="hide-xs">{get(profile, 'preferred_username') || get(profile, 'email')}</span>
         <i className="fa fa-caret-down fa-lg hide-xs" />
         <i className="fa fa-user-o fa-lg show-xs" />
       </DropdownToggle>
