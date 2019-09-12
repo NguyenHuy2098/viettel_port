@@ -4,11 +4,11 @@ import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'r
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import moment from 'moment';
-import { size } from 'lodash';
+import { forEach, size } from 'lodash';
 
-import { makeSelectorNhanRiengTaiKien } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorNhanRiengTaiKien, makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import TaiKienChuaNhan from './ChuyenThuChuaNhanTaiKien';
+import ChuyenThuChuaNhanTaiKien from './ChuyenThuChuaNhanTaiKien';
 import TaiDaNhan from './TaiDaNhan';
 import NhanRiengTaiKien from './NhanRiengTaiKien';
 
@@ -19,30 +19,69 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const nhanRiengTaiKien = useSelector(makeSelectorNhanRiengTaiKien);
+  const chuyenThuChuaNhanTaiKien = useSelector(makeSelectorRow('ZC3', 106));
 
-  const dispatch_Action_MIOA_ZTMI047 = (): void => {
+  const [chuyenThuChuaNhanTaiKienFiltered, setChuyenThuChuaNhanTaiKienFiltered] = useState<API.RowMTZTMI047OUT[]>([]);
+
+  const getNhanRiengTaiKienData = (): void => {
     dispatch(
-      action_MIOA_ZTMI047(
-        {
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: '',
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_TOR_TYPE: 'ZC2',
+        IV_FR_LOC_ID: '',
 
-          IV_TO_LOC_ID: 'HUB1',
-          IV_CUST_STATUS: '106',
-          IV_FR_DATE: '20000101',
-          IV_TO_DATE: moment().format('YYYYMMDD'),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-        },
-        {},
-      ),
+        IV_TO_LOC_ID: 'HUB1',
+        IV_CUST_STATUS: '106',
+        IV_FR_DATE: '20000101',
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '10',
+      }),
+    );
+  };
+
+  const getChuyenThuChuaNhanTaiKien = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_TOR_TYPE: 'ZC3',
+        IV_FR_LOC_ID: '',
+
+        IV_TO_LOC_ID: 'HUB1',
+        IV_CUST_STATUS: '106',
+        IV_FR_DATE: '20000101',
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '10',
+      }),
     );
   };
   useEffect((): void => {
-    dispatch_Action_MIOA_ZTMI047();
+    getNhanRiengTaiKienData();
+    getChuyenThuChuaNhanTaiKien();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const childLifeCycleIsNot107 = (el: API.RowMTZTMI047OUT): boolean => {
+    let isNot107 = true;
+    forEach(el.Childs, child => {
+      if (child.LIFECYCLE === '107') {
+        isNot107 = false;
+      }
+    });
+
+    return isNot107;
+  };
+
+  useEffect((): void => {
+    const newChuyenThuChuaNhanTaiKienFiltered: API.RowMTZTMI047OUT[] = [];
+    forEach(chuyenThuChuaNhanTaiKien, el => {
+      if (childLifeCycleIsNot107(el)) {
+        newChuyenThuChuaNhanTaiKienFiltered.push(el);
+      }
+    });
+    setChuyenThuChuaNhanTaiKienFiltered(newChuyenThuChuaNhanTaiKienFiltered);
+  }, [chuyenThuChuaNhanTaiKien]);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
@@ -72,7 +111,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Chuyến thư chưa nhận tải/kiện')}
-              <Badge color="primary">01</Badge>
+              <Badge color="primary">{size(chuyenThuChuaNhanTaiKienFiltered)}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -96,7 +135,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <TaiKienChuaNhan />
+            <ChuyenThuChuaNhanTaiKien data={chuyenThuChuaNhanTaiKienFiltered} />
           </TabPane>
           <TabPane tabId={2}>
             <TaiDaNhan />

@@ -1,11 +1,37 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import DataTable from 'components/DataTable';
+import { filter, map, includes } from 'lodash';
+import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+import routesMap from 'utils/routesMap';
+import { generatePath } from 'react-router-dom';
+
+interface Props {
+  data: API.RowMTZTMI047OUT[];
+}
 
 // eslint-disable-next-line max-lines-per-function
-const ChuyenThuChuaNhanTaiKien: React.FC = (): JSX.Element => {
+const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data }: Props): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  const [chuyenThuChuaNhanTaiKien, setChuyenThuChuaNhanTaiKien] = useState<API.RowMTZTMI047OUT[]>([]);
+  const [keySearch, setKeySearch] = useState<string>('');
+
+  useEffect((): void => {
+    setChuyenThuChuaNhanTaiKien(data);
+  }, [data]);
+
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): void => {
+      dispatch(push(generatePath(routesMap.THONG_TIN_CHUYEN_THU, { idChuyenThu: item.TOR_ID })));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data],
+  );
   const columns = useMemo(
     () => [
       {
@@ -21,7 +47,7 @@ const ChuyenThuChuaNhanTaiKien: React.FC = (): JSX.Element => {
         accessor: 'TO_LOG_ID',
       },
       {
-        Header: t('Số lượng'),
+        Header: t('SL'),
         accessor: 'countChuyenThu',
       },
       {
@@ -36,25 +62,24 @@ const ChuyenThuChuaNhanTaiKien: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+  const rows = map(chuyenThuChuaNhanTaiKien, (item: API.RowMTZTMI047OUT) => {
+    return {
+      TOR_ID: item.TOR_ID,
+      FR_LOG_ID: item.LOG_LOCID_FR,
+      TO_LOG_ID: item.LOG_LOCID_TO,
+      countChuyenThu: '',
+      GRO_WEI_VAL: item.NET_WEI_VAL,
+      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
+    };
+  });
 
-  const data = [
-    {
-      TOR_ID: 1234,
-      FR_LOG_ID: 'abc',
-      TO_LOG_ID: 'bcd',
-      countChuyenThu: 12,
-      GRO_WEI_VAL: 1200,
-      CREATED_ON: '12/12/2019',
-    },
-    {
-      TOR_ID: 42365,
-      FR_LOG_ID: 'yut',
-      TO_LOG_ID: 'adff',
-      countChuyenThu: 12,
-      GRO_WEI_VAL: 2500,
-      CREATED_ON: '12/12/2019',
-    },
-  ];
+  const changeKeySearch = (event: React.FormEvent<HTMLInputElement>): void => {
+    setKeySearch(event.currentTarget.value);
+  };
+  const handleSearch = (): void => {
+    const tempArray: API.RowMTZTMI047OUT[] = filter(data, item => includes(item.TOR_ID, keySearch));
+    setChuyenThuChuaNhanTaiKien(tempArray);
+  };
 
   return (
     <>
@@ -63,16 +88,16 @@ const ChuyenThuChuaNhanTaiKien: React.FC = (): JSX.Element => {
           <div className="btn-toolbar col-10">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} />
+              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} onChange={changeKeySearch} />
             </div>
-            <Button className="ml-2" color="primary">
+            <Button className="ml-2" color="primary" onClick={handleSearch}>
               {t('Tìm kiếm')}
             </Button>
           </div>
         </Row>
       </div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={rows} onRowClick={handleRedirectDetail} />
       </Row>
     </>
   );
