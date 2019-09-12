@@ -40,7 +40,7 @@ function NhanTaiBuuCucGoc(): JSX.Element {
               className={classNames({ active: tab === 2 })}
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
-              {t('Danh sách bảng kê')}
+              {t('Phiếu gửi chưa đóng bảng kê')}
             </NavLink>
           </NavItem>
         </Nav>

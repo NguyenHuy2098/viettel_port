@@ -18,3 +18,27 @@ interface ForwardingItem {
   ITEM_ID: string;
   ITEM_TYPE: string;
 }
+
+interface PackageItemInputType {
+  Flag?: string;
+  PACKAGING_MATERIAL?: string;
+  Description?: string;
+  PACKAGE_TYPE?: string;
+  QUANTITY_OF_PACKAGE?: string | undefined;
+  QUANTITY_OF_UNIT?: string;
+  GROSS_WEIGHT?: string | undefined;
+  GROSS_WEIGHT_OF_UNIT?: string;
+  NET_WEIGHT?: string;
+  NET_WEIGHT_OF_UNIT?: string;
+  Length?: string | undefined;
+  Hight?: string | undefined;
+  Width?: string | undefined;
+  Note?: string;
+  GOODS_VALUE?: string | undefined;
+  Currency?: string;
+  COMODITY_CODE?: string;
+  COD?: string | undefined;
+  Service_type?: string;
+  commodity_type?: string;
+  commodity_code?: string;
+}

@@ -53,7 +53,7 @@ const PhieuGuiTrongNuoc = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/PhieuGuiTrongNuoc'),
   loading: Loading,
 });
-const InternationalForwardingOrder = Loadable({
+const PhieuGuiQuocTe = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/PhieuGuiQuocTe'),
   loading: Loading,
 });
@@ -199,7 +199,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     {
       path: routesMap.NHAP_PHIEU_GUI_QUOC_TE,
       name: t('Phiếu gửi quốc tế'),
-      component: InternationalForwardingOrder,
+      component: PhieuGuiQuocTe,
     },
     { path: routesMap.DONG_BANG_KE_NOI_TINH, name: t('Đóng bảng kê nội tỉnh'), component: DongBangKeNoiTinh },
     { path: routesMap.DONG_BANG_KE, name: t('Đóng bảng kê'), component: DongBangKe },
