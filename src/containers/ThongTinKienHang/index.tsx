@@ -239,7 +239,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const handleGotoEditForwardingOrder = (): void => {
-    dispatch(push(generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC, { idDonHang })));
+    dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
   };
 
   const columns = useMemo(

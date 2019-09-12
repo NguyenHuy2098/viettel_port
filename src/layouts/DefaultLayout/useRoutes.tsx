@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
 import Loadable from 'react-loadable';
 import i18next from 'i18next';
+
 import Loading from 'components/Loading';
 import routesMap from 'utils/routesMap';
-
 import { SIPRoutePropsType } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -178,7 +178,6 @@ const RedirectToHome = Loadable({
   loader: (): any => import('./RedirectToHome'),
   loading: Loading,
 });
-
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function
@@ -186,7 +185,17 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
     { path: routesMap.ROOT, exact: true, name: t('Root'), component: RedirectToHome },
     { path: routesMap.HOME, exact: true, name: t('Home'), component: Home },
-    { path: routesMap.NHAP_PHIEU_GUI_TRONG_NUOC, name: t('Phiếu gửi trong nước'), component: PhieuGuiTrongNuoc },
+    {
+      path: routesMap.NHAP_PHIEU_GUI_TRONG_NUOC,
+      exact: true,
+      name: t('Phiếu gửi trong nước'),
+      component: PhieuGuiTrongNuoc,
+    },
+    {
+      path: routesMap.PHIEU_GUI_TRONG_NUOC,
+      name: t('Phiếu gửi trong nước'),
+      component: PhieuGuiTrongNuoc,
+    },
     {
       path: routesMap.NHAP_PHIEU_GUI_QUOC_TE,
       name: t('Phiếu gửi quốc tế'),

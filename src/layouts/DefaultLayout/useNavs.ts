@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
 import routesMap from 'utils/routesMap';
-import { generatePath } from 'react-router';
 
 // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
 const nav = (t: i18next.TFunction): any => {
@@ -12,41 +11,41 @@ const nav = (t: i18next.TFunction): any => {
         icon: 'fa fa-home',
         url: routesMap.HOME,
       },
-      // {
-      //   name: t('Điều hành'),
-      //   icon: 'fa fa-user-circle-o',
-      //   url: routesMap.DIEU_HANH,
-      //   children: [
-      //     {
-      //       name: t('Biên bản nội bộ'),
-      //       url: routesMap.BIEN_BAN_NOI_BO,
-      //     },
-      //     {
-      //       name: t('Sửa biên bản'),
-      //       url: routesMap.SUA_BIEN_BAN,
-      //     },
-      //     {
-      //       name: t('Xác minh biên bản'),
-      //       url: routesMap.XAC_MINH_BIEN_BAN,
-      //     },
-      //     {
-      //       name: t('Khiếu nại khách hàng'),
-      //       url: routesMap.KHIEU_NAI_KHACH_HANG,
-      //     },
-      //     {
-      //       name: t('Chi tiết khiếu nại'),
-      //       url: routesMap.CHI_TIET_KHIEU_NAI,
-      //     },
-      //     {
-      //       name: t('Lập biên bản'),
-      //       url: routesMap.LAP_BIEN_BAN,
-      //     },
-      //     {
-      //       name: t('Tra cứu biên bản'),
-      //       url: routesMap.TRA_CUU_BIEN_BAN,
-      //     },
-      //   ],
-      // },
+      {
+        name: t('Điều hành'),
+        icon: 'fa fa-user-circle-o',
+        url: routesMap.DIEU_HANH,
+        children: [
+          {
+            name: t('Biên bản nội bộ'),
+            url: routesMap.BIEN_BAN_NOI_BO,
+          },
+          {
+            name: t('Sửa biên bản'),
+            url: routesMap.SUA_BIEN_BAN,
+          },
+          {
+            name: t('Xác minh biên bản'),
+            url: routesMap.XAC_MINH_BIEN_BAN,
+          },
+          {
+            name: t('Khiếu nại khách hàng'),
+            url: routesMap.KHIEU_NAI_KHACH_HANG,
+          },
+          {
+            name: t('Chi tiết khiếu nại'),
+            url: routesMap.CHI_TIET_KHIEU_NAI,
+          },
+          {
+            name: t('Lập biên bản'),
+            url: routesMap.LAP_BIEN_BAN,
+          },
+          {
+            name: t('Tra cứu biên bản'),
+            url: routesMap.TRA_CUU_BIEN_BAN,
+          },
+        ],
+      },
       {
         name: t('Nhận tại bưu cục gốc'),
         icon: 'fa fa-pencil-square-o',
@@ -54,7 +53,7 @@ const nav = (t: i18next.TFunction): any => {
         children: [
           {
             name: t('Phiếu gửi trong nước'),
-            url: generatePath(routesMap.NHAP_PHIEU_GUI_TRONG_NUOC, { idDonHang: 'tao-don' }),
+            url: routesMap.NHAP_PHIEU_GUI_TRONG_NUOC,
           },
           {
             name: 'Phiếu gửi quốc tế',
