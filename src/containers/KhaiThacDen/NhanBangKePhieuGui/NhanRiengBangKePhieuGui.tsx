@@ -175,13 +175,13 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">
         <Row>
-          <div className="btn-toolbar col-10">
-            <div className="sipTitleRightBlockInput m-0">
-              <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleSetKeySearch} />
+          <div className="btn-toolbar col-12">
+            <div className="sipTitleRightBlockInput m-0 col-4 p-0">
+              <i className="fa fa-barcode" />
+              <Input type="text" placeholder={t('Quét mã bảng kê/phiếu gửi')} onChange={handleSetKeySearch} />
             </div>
-            <Button className="ml-2" color="primary" onClick={dispatchActionAPI_ZTMI023}>
-              {t('Tìm kiếm')}
+            <Button color="primary" className="ml-2" onClick={dispatchActionAPI_ZTMI023}>
+              {t('Quét mã')}
             </Button>
           </div>
         </Row>
