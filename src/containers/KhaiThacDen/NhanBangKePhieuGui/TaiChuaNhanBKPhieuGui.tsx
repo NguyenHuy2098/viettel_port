@@ -65,7 +65,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
       LOG_LOCID_TO: item.LOG_LOCID_TO,
       countChilds: size(item.Childs),
       NET_WEI_VAL: toNumber(item.NET_WEI_VAL).toPrecision(2),
-      CREATED_ON: moment(trim(item.DATETIME_CHLC), 'YYYYMMDDhhmmss').format('DD/MM/YYYY'),
+      CREATED_ON: moment(trim(item.DATETIME_CHLC), 'YYYYMMDDhhmmss').format('hh:mm DD/MM/YYYY'),
     };
   });
 
