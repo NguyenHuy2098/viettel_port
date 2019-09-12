@@ -1,22 +1,28 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import DataTable from 'components/DataTable';
-import { filter, map, includes } from 'lodash';
-import moment from 'moment';
-import { useDispatch } from 'react-redux';
-import { push } from 'connected-react-router';
-import routesMap from 'utils/routesMap';
 import { generatePath } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import { filter, map, includes, toLower } from 'lodash';
+import moment from 'moment';
+
+import DataTable from 'components/DataTable';
+import routesMap from 'utils/routesMap';
+import Pagination from 'components/Pagination';
+import { makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 
 interface Props {
   data: API.RowMTZTMI047OUT[];
+  getChuyenThuChuaNhanTaiKien: (IV_PAGENO: number) => void;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data }: Props): JSX.Element => {
+const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data, getChuyenThuChuaNhanTaiKien }: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const totalPage = useSelector(makeSelectorTotalPage('ZC3', 106));
 
   const [chuyenThuChuaNhanTaiKien, setChuyenThuChuaNhanTaiKien] = useState<API.RowMTZTMI047OUT[]>([]);
   const [keySearch, setKeySearch] = useState<string>('');
@@ -32,6 +38,9 @@ const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data }: Props): JSX.Element
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
   );
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    getChuyenThuChuaNhanTaiKien(selectedItem.selected + 1);
+  };
   const columns = useMemo(
     () => [
       {
@@ -68,7 +77,7 @@ const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data }: Props): JSX.Element
       FR_LOG_ID: item.LOG_LOCID_FR,
       TO_LOG_ID: item.LOG_LOCID_TO,
       countChuyenThu: '',
-      GRO_WEI_VAL: item.NET_WEI_VAL,
+      GRO_WEI_VAL: parseFloat(item.NET_WEI_VAL || '0').toPrecision(3) + ' ' + toLower(item.NET_WEI_UNI),
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
     };
   });
@@ -98,6 +107,12 @@ const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data }: Props): JSX.Element
       </div>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={rows} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
     </>
   );

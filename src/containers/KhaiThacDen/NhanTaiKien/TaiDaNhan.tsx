@@ -2,32 +2,23 @@ import React, { useCallback, useMemo } from 'react';
 import { Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Cell } from 'react-table';
+import { map, toLower } from 'lodash';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
+import { makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+
+interface Props {
+  data: API.RowMTZTMI047OUT[];
+  getTaiDaNhan: (IV_PAGENO: number) => void;
+}
 
 // eslint-disable-next-line max-lines-per-function
-const TaiDaNhan: React.FC = (): JSX.Element => {
+const TaiDaNhan: React.FC<Props> = ({ data, getTaiDaNhan }: Props): JSX.Element => {
   const { t } = useTranslation();
-  const data = [
-    {
-      TOR_ID: 4545,
-      FR_LOG_ID: 'abc',
-      TO_LOG_ID: 'bcd',
-      countChuyenThu: 12,
-      GRO_WEI_VAL: 1200,
-      CREATED_ON: '12/12/2019',
-      TYPE_OF: 'Kiện',
-    },
-    {
-      TOR_ID: 42365,
-      FR_LOG_ID: 'yut',
-      TO_LOG_ID: 'adff',
-      countChuyenThu: 12,
-      GRO_WEI_VAL: 2500,
-      CREATED_ON: '12/12/2019',
-      TYPE_OF: 'Tải',
-    },
-  ];
+  const totalPage = useSelector(makeSelectorTotalPage('ZC2', 107));
 
   const handleControllerClick = useCallback(
     item => (): void => {
@@ -36,6 +27,9 @@ const TaiDaNhan: React.FC = (): JSX.Element => {
     },
     [],
   );
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    getTaiDaNhan(selectedItem.selected + 1);
+  };
 
   const columns = useMemo(
     () => [
@@ -84,11 +78,28 @@ const TaiDaNhan: React.FC = (): JSX.Element => {
     [],
   );
 
+  const rows = map(data, (item: API.RowMTZTMI047OUT) => {
+    return {
+      TOR_ID: item.TOR_ID,
+      FR_LOG_ID: item.LOG_LOCID_FR,
+      TO_LOG_ID: item.LOG_LOCID_TO,
+      countChuyenThu: '',
+      GRO_WEI_VAL: parseFloat(item.NET_WEI_VAL || '0').toPrecision(3) + ' ' + toLower(item.NET_WEI_UNI),
+      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
+    };
+  });
+
   return (
     <>
       <div className="mb-3"></div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={rows} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
     </>
   );

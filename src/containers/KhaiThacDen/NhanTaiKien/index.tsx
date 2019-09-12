@@ -20,6 +20,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
 
   const nhanRiengTaiKien = useSelector(makeSelectorNhanRiengTaiKien);
   const chuyenThuChuaNhanTaiKien = useSelector(makeSelectorRow('ZC3', 106));
+  const taiDaNhan = useSelector(makeSelectorRow('ZC2', 107));
 
   const [chuyenThuChuaNhanTaiKienFiltered, setChuyenThuChuaNhanTaiKienFiltered] = useState<API.RowMTZTMI047OUT[]>([]);
 
@@ -40,7 +41,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     );
   };
 
-  const getChuyenThuChuaNhanTaiKien = (): void => {
+  const getChuyenThuChuaNhanTaiKien = (IV_PAGENO: number): void => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
@@ -51,14 +52,32 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
         IV_CUST_STATUS: '106',
         IV_FR_DATE: '20000101',
         IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO: '1',
+        IV_PAGENO: IV_PAGENO,
+        IV_NO_PER_PAGE: '10',
+      }),
+    );
+  };
+
+  const getTaiDaNhan = (IV_PAGENO: number): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_TOR_TYPE: 'ZC2',
+        IV_FR_LOC_ID: '',
+
+        IV_TO_LOC_ID: 'HUB1',
+        IV_CUST_STATUS: '107',
+        IV_FR_DATE: '20000101',
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_PAGENO: IV_PAGENO,
         IV_NO_PER_PAGE: '10',
       }),
     );
   };
   useEffect((): void => {
     getNhanRiengTaiKienData();
-    getChuyenThuChuaNhanTaiKien();
+    getChuyenThuChuaNhanTaiKien(1);
+    getTaiDaNhan(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -72,7 +91,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
 
     return isNot107;
   };
-
+  // filtering chuyenThuChuaNhanTaiKien
   useEffect((): void => {
     const newChuyenThuChuaNhanTaiKienFiltered: API.RowMTZTMI047OUT[] = [];
     forEach(chuyenThuChuaNhanTaiKien, el => {
@@ -120,7 +139,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Tải đã nhận')}
-              <Badge color="primary">05</Badge>
+              <Badge color="primary">{size(taiDaNhan)}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -135,10 +154,13 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <ChuyenThuChuaNhanTaiKien data={chuyenThuChuaNhanTaiKienFiltered} />
+            <ChuyenThuChuaNhanTaiKien
+              data={chuyenThuChuaNhanTaiKienFiltered}
+              getChuyenThuChuaNhanTaiKien={getChuyenThuChuaNhanTaiKien}
+            />
           </TabPane>
           <TabPane tabId={2}>
-            <TaiDaNhan />
+            <TaiDaNhan data={taiDaNhan} getTaiDaNhan={getTaiDaNhan} />
           </TabPane>
           <TabPane tabId={3}>
             <NhanRiengTaiKien />

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { match } from 'react-router-dom';
+import { generatePath, match } from 'react-router-dom';
 import { filter, map, toNumber, trim, size, includes } from 'lodash';
 import moment from 'moment';
 
@@ -70,7 +70,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
   });
 
   const handleRedirectDetail = (item: API.RowResponseZTMI023OUT): void => {
-    dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI}/${item.TOR_ID}`));
+    dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
   };
 
   const handleSearch = (): void => {
