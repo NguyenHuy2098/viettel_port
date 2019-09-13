@@ -25,7 +25,6 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
-  const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const idTaiKien = get(props, 'match.params.idTaiKien');
   const taiKien = useSelector(makeSelector046RowFirstChild);
   const countBangKePhieuGui = useSelector(makeSelector046CountChildren);
@@ -51,9 +50,9 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idChuyenThu, idTaiKien]);
+  }, [idTaiKien]);
 
-  const handleBackChuyenThu = (): void => {
+  const handleBack = (): void => {
     dispatch(goBack());
   };
 
@@ -61,7 +60,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBackChuyenThu} className="sipTitleBtnBack">
+          <Button onClick={handleBack} className="sipTitleBtnBack">
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           {t('Thông tin tải')}

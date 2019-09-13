@@ -224,7 +224,6 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     },
     { path: routesMap.DONG_CHUYEN_THU, name: t('Đóng chuyến thư'), component: DongChuyenThu },
     { path: routesMap.THONG_TIN_TAI, name: t('Thông tin tải'), component: ThongTinTai },
-    { path: routesMap.NHAN_BANG_KE_PHIEU_GUI_DETAIL, name: t('Thông tin tải'), component: ThongTinTai },
     { path: routesMap.THONG_TIN_CHUYEN_THU, name: t('Thông tin chuyến thư'), component: ThongTinChuyenThu },
     {
       path: routesMap.NHAN_BANG_KE_PHIEU_GUI,

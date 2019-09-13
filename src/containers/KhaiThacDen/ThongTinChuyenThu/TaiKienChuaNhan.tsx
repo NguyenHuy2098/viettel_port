@@ -62,7 +62,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => (): void => {
-      dispatch(push(generatePath(routesMap.NHAN_BANG_KE_PHIEU_GUI_DETAIL, { idTaiKien: item.TOR_ID })));
+      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],

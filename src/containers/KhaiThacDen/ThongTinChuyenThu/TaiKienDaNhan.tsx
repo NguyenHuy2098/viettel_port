@@ -21,7 +21,6 @@ type Props = RouteComponentProps;
 const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const listTaiKienDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
 
   const columns = useMemo(
@@ -82,14 +81,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT) => {
-      dispatch(
-        push(
-          generatePath(routesMap.THONG_TIN_TAI, {
-            idChuyenThu,
-            idTaiKien: item.TOR_ID,
-          }),
-        ),
-      );
+      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],

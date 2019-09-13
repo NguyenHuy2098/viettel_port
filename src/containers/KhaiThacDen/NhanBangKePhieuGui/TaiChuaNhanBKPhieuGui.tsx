@@ -70,7 +70,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
   });
 
   const handleRedirectDetail = (item: API.RowResponseZTMI023OUT): void => {
-    dispatch(push(generatePath(routesMap.NHAN_BANG_KE_PHIEU_GUI_DETAIL, { idTaiKien: item.TOR_ID })));
+    dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
   };
 
   const handleSearch = (): void => {
