@@ -818,7 +818,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
       FLAG_HEADER: '', // Cờ phân biệt trường hợp hủy đơn hàng để khác null là block
       BUYERS_REFERENCE_NUMBER: maPhieuGui,
-      Note: '', // Ghi chú cho bưu gửi
+      Note: ghiChu, // Ghi chú cho bưu gửi
       EMAIL_CONSIG: '',
       CITY_SRC: provinceIdSender, // trong trường hợp khách hàng vãng lai
       ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ

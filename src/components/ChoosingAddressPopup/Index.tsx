@@ -246,9 +246,9 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
               <Label for="provinceSelect">{t('Thành phố/ Tỉnh')}</Label>
               <Input
                 type="select"
-                name="select"
                 id="provinceSelect"
                 defaultValue={province}
+                value={province}
                 onChange={handleChangeProvince}
               >
                 <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
@@ -267,7 +267,13 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
             <Col xs="12 mb-3">
               <Label for="districtSelect">{t('Chọn Quận / Huyện')}</Label>
-              <Input type="select" name="select" id="districtSelect" value={district} onChange={handleChangeDistrict}>
+              <Input
+                type="select"
+                id="districtSelect"
+                value={district}
+                defaultValue={district}
+                onChange={handleChangeDistrict}
+              >
                 <option value="0">{t('Quận / Huyện')}</option>
                 {map(
                   filteredDistrict,
@@ -284,7 +290,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
             <Col xs="12 mb-3">
               <Label for="wardSelect">{t('Phường/ Xã')}</Label>
-              <Input type="select" name="select" id="wardSelect" value={ward} onChange={handleChangeWard}>
+              <Input type="select" id="wardSelect" value={ward} defaultValue={ward} onChange={handleChangeWard}>
                 <option value="0">{t('Chọn Phường/ Xã')}</option>
                 {map(
                   filteredWard,
@@ -308,6 +314,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
                 type="text"
                 placeholder={t('Nhập địa chỉ(tên đường, ngõ hẻm, số nhà)')}
                 value={detailAddress}
+                defaultValue={detailAddress}
                 onChange={handleChangeTextboxValue(setDetailAddress)}
               />
               <div className="sipInputItemError">{handleErrorMessage(errors, 'detailAddress')}</div>

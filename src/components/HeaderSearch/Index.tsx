@@ -1,4 +1,4 @@
-import React, { useState, FormEvent, KeyboardEvent } from 'react';
+import React, { useState, FormEvent, KeyboardEvent, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { includes, size, trim } from 'lodash';
@@ -12,12 +12,23 @@ interface Props {
   url: string;
 }
 
+// eslint-disable-next-line max-lines-per-function
 const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
   //________hook to trigger input focus validating
   const [searchValue, setSearchValue] = useState<string>('');
+
+  useEffect((): void => {
+    if (
+      !includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN) &&
+      !includes(props.url, routesMap.THONG_TIN_KIEN_HANG_ORIGIN)
+    ) {
+      setSearchValue('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.url]);
 
   const handleChangeTextboxValue = (event: React.FormEvent<HTMLInputElement>): void => {
     setSearchValue(event.currentTarget.value);
@@ -50,6 +61,7 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
           type="text"
           placeholder={t('Tra cứu đơn hàng')}
           value={searchValue}
+          defaultValue={searchValue}
           onChange={handleChangeTextboxValue}
           onKeyUp={handleEnterSearch}
         />

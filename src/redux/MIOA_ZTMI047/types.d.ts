@@ -42,3 +42,9 @@ interface PackageItemInputType {
   commodity_type?: string;
   commodity_code?: string;
 }
+
+interface NationType {
+  NATIONAL_ID: number;
+  NATIONAL_CODE: string;
+  NATIONAL_NAME: string;
+}

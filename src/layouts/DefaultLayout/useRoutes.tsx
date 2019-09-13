@@ -198,7 +198,13 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     },
     {
       path: routesMap.NHAP_PHIEU_GUI_QUOC_TE,
+      exact: true,
       name: t('Phiếu gửi quốc tế'),
+      component: PhieuGuiQuocTe,
+    },
+    {
+      path: routesMap.PHIEU_GUI_QUOC_TE,
+      name: t('Phiếu gửi trong nước'),
       component: PhieuGuiQuocTe,
     },
     { path: routesMap.DONG_BANG_KE_NOI_TINH, name: t('Đóng bảng kê nội tỉnh'), component: DongBangKeNoiTinh },

@@ -29,7 +29,8 @@ export const TACH_PHIEU_GUI = `${KHAI_THAC_DI}/tach-phieu-gui`;
 export const NHAP_PHIEU_GUI = '/nhap-phieu-gui';
 export const NHAP_PHIEU_GUI_TRONG_NUOC = `${NHAP_PHIEU_GUI}/phieu-gui-trong-nuoc/tao-don`;
 export const PHIEU_GUI_TRONG_NUOC = `${NHAP_PHIEU_GUI}/phieu-gui-trong-nuoc/:idDonHang`;
-export const NHAP_PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te`;
+export const NHAP_PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te/tao-don`;
+export const PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te/:idDonHang`;
 export const NHAP_TU_FILE_EXCEL = `${NHAP_PHIEU_GUI}/nhap-tu-file-excel`;
 export const NHAN_TAI_BUU_CUC_GOC = `${NHAP_PHIEU_GUI}/nhan-tai-buu-cuc-goc`;
 
@@ -102,6 +103,7 @@ export default {
   PHIEU_GUI_TRONG_NUOC,
   NHAP_PHIEU_GUI_TRONG_NUOC,
   NHAP_PHIEU_GUI_QUOC_TE,
+  PHIEU_GUI_QUOC_TE,
   NHAP_TU_FILE_EXCEL,
   NHAN_TAI_BUU_CUC_GOC,
   /**
@@ -140,4 +142,5 @@ export default {
   THONG_TIN_DON_HANG_NEW: '/thong-tin-don-hang-new',
   THONG_TIN_DON_HANG: '/thong-tin-don-hang/:idDonHang',
   THONG_TIN_DON_HANG_ORIGIN: '/thong-tin-don-hang',
+  THONG_TIN_KIEN_HANG_ORIGIN: '/thong-tin-kien-hang',
 };

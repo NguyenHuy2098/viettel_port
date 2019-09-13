@@ -7,7 +7,7 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { drop, get, find, findIndex, forEach, map, reduce, set, size, toString } from 'lodash';
+import { drop, get, find, findIndex, forEach, join, map, reduce, set, size, slice, sortBy, toString } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
@@ -21,17 +21,16 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
+import { countryList } from './countryList';
 
 interface Props {
   match: match;
 }
 
-let dichVuCongThem: string[] = [];
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  // const dataSelectProfile = useSelector(makeSelectProfile, shallowEqual);
 
   const idDonHang = get(props, 'match.params.idDonHang', '');
   const isCreateNewForwardingOrder: boolean = idDonHang === '';
@@ -157,9 +156,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     hoTenSender: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiSender: yup.string().required(t('Vui lòng nhập địa chỉ')),
     dienThoaiReceiver: yup
-      .string()
+      .number()
       .required(t('Vui lòng nhập số điện thoại'))
-      .matches(isVnPhoneMobile, t('Vui lòng nhập đúng định dạng số điện thoại')),
+      .typeError(t('Vui lòng nhập đúng định dạng số điện thoại')),
     hoTenReceiver: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiReceiver: yup.string().required(t('Vui lòng nhập địa chỉ')),
     tenHang: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
@@ -257,9 +256,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [dienThoaiReceiver, setDienThoaiReceiver] = useState<string>('');
   const [hoTenReceiver, setHoTenReceiver] = useState<string>('');
   const [diaChiReceiver, setDiaChiReceiver] = useState<string>('');
-  const [provinceReceiver, setProvinceReceiver] = useState<string>('');
-  const [districtReceiver, setDistrictReceiver] = useState<string>('');
-  const [wardReceiver, setWardReceiver] = useState<string>('');
   const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>('');
   const [districtIdReceiver, setDistrictIdReceiver] = useState<string>('');
   const [wardIdReceiver, setWardIdReceiver] = useState<string>('');
@@ -273,6 +269,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [kichThuocCao, setKichThuocCao] = useState<string>('');
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
+  const [quocGia, setQuocGia] = useState<string>('VN');
   let loaiHinhDichVu = 'VCN';
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V99');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
@@ -282,7 +279,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [transportMethodArr, setTransportMethodArr] = useState<TransportMethodItem[]>([]);
   //_______open Address modal
   const [modalSender, setModalSender] = useState<boolean>(false);
-  const [modalReceiver, setModalReceiver] = useState<boolean>(false);
   //______ Package item tab
 
   const [activeTab, setActiveTab] = useState<string>('1');
@@ -375,9 +371,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   function toggleSenderAddress(): void {
     setModalSender(!modalSender);
   }
-  function toggleReceiverAddress(): void {
-    setModalReceiver(!modalReceiver);
-  }
 
   function handleSenderAddressData(data: AddressPopupData): void {
     setProvinceSender(data.province);
@@ -388,22 +381,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setWardIdSender(data.wardId);
     setDetailAddressSender(data.detailAddress);
     setDiaChiSender(data.fullAddress);
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
-  }
-  function handleReceiverAddressData(data: AddressPopupData): void {
-    setProvinceReceiver(data.province);
-    setDistrictReceiver(data.district);
-    setWardReceiver(data.ward);
-    setProvinceIdReceiver(data.provinceId);
-    setDistrictIdReceiver(data.districtId);
-    setWardIdReceiver(data.wardId);
-    setDetailAddressReceiver(data.detailAddress);
-    setDiaChiReceiver(data.fullAddress);
     //trigger get Summary information dispatch
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
@@ -466,9 +443,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
-      setProvinceReceiver(provinceReceiverEdit);
-      setDistrictReceiver(districtReceiverEdit);
-      setWardReceiver(wardReceiverEdit);
       setDetailAddressReceiver(
         get(orderInformationInstane, 'HOUSE_NO_DES', '') + ' ' + get(orderInformationInstane, 'STREET_ID_DES', ''),
       );
@@ -481,10 +455,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(2) : '');
       setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(2) : '');
       setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(2) : '');
-      // setPhuongThucVanChuyen(get(orderInformationInstane, 'SERVICE_TYPE', ''));
-      // loaiHinhDichVu = 'VCN';
-      // dichVuCongThem = [];
-      // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
         commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
@@ -621,10 +591,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             0,
           );
           setCuocChinh(toString(cuocChinhAmount) + ' đ');
+          //______________temporary no additional amount
           const cuocCongThemAmount = reduce(
             data,
             (total: number, item: API.ItemMTZTMI011OUT): number => {
-              return findIndex(dichVuCongThem, (itemDichVuCongThem: string): boolean => {
+              return findIndex([], (itemDichVuCongThem: string): boolean => {
                 return itemDichVuCongThem === item.CHARGE_TYPE;
               }) !== -1
                 ? total + parseInt(item.AMOUNT_ITEM || '')
@@ -727,20 +698,13 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
-  function handleGenerateServiceType(transportMethod: string): void {
-    loaiHinhDichVu = transportMethod;
-    forEach(dichVuCongThem, (item: string, index: number): void => {
-      loaiHinhDichVu += '/' + item;
-    });
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-  }
-
-  function handleChangeTransportMethod(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(event.currentTarget.value);
-      handleGenerateServiceType(event.currentTarget.value);
-    };
+  function handleChangeReceiverAddress(event: React.FormEvent<HTMLInputElement>): void {
+    const thisValue = event.currentTarget.value;
+    setDiaChiReceiver(thisValue);
+    setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
+    setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
+    setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
+    setProvinceIdReceiver(join(slice(thisValue, 110, 190), ''));
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -767,14 +731,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
       FLAG_HEADER: '', // Cờ phân biệt trường hợp hủy đơn hàng để khác null là block
       BUYERS_REFERENCE_NUMBER: maPhieuGui,
-      Note: '', // Ghi chú cho bưu gửi
+      Note: ghiChu, // Ghi chú cho bưu gửi
       EMAIL_CONSIG: '',
       CITY_SRC: provinceIdSender, // trong trường hợp khách hàng vãng lai
       ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
       REQUEST_PICK_DATE: '',
       NAME_CONSIG: hoTenReceiver,
       Shipper: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
-      ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
+      ORDER_TYPE: 'V004', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
       REQUEST_DELIV_DATE: '', // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
       DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
       PHONE_CONSIG: dienThoaiReceiver,
@@ -914,9 +878,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setDienThoaiReceiver('');
     setHoTenReceiver('');
     setDiaChiReceiver('');
-    setProvinceReceiver('');
-    setDistrictReceiver('');
-    setWardReceiver('');
     setDetailAddressReceiver('');
     setTenHang('');
     setSoLuong('');
@@ -927,7 +888,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setKichThuocCao('');
     setPhuongThucVanChuyen('VCN');
     loaiHinhDichVu = 'VCN';
-    dichVuCongThem = [];
     // setLoaiHangHoa('V99');
     // setNguoiThanhToan('PP');
     setChoXemHang('');
@@ -1107,13 +1067,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="select">
-              <option key={1} value={1}>
-                Lào
-              </option>
-              <option key={2} value={2}>
-                Tàu
-              </option>
+            <Input type="select" value={quocGia} onChange={handleChangeTextboxValue(setQuocGia)}>
+              {map(sortBy(countryList, ['NATIONAL_NAME']), (item: NationType, index: number) => {
+                return (
+                  <option key={index} value={item.NATIONAL_CODE}>
+                    {item.NATIONAL_NAME}
+                  </option>
+                );
+              })}
             </Input>
             <div className="sipInputItemError">{handleErrorMessage(errors, 'hoTenSender')}</div>
           </Col>
@@ -1126,27 +1087,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <Input
               type="text"
-              placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
+              placeholder={t('Nhập địa chỉ')}
               value={diaChiReceiver}
-              onChange={handleChangeTextboxValue(setDiaChiReceiver)}
+              defaultValue={`${detailAddressReceiver} - ${wardIdReceiver} - ${districtIdReceiver} - ${provinceIdReceiver}`}
+              onChange={handleChangeReceiverAddress}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiReceiver')}</div>
-            <p className="sipInputItemDescription">
-              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
-              <Button onClick={toggleReceiverAddress} className="sipFlatBtn">
-                {t('nhấn vào đây')}
-              </Button>{' '}
-              {t('để tự nhập')})
-            </p>
-            <ChoosingAddressPopup
-              visible={modalReceiver}
-              onChoose={handleReceiverAddressData}
-              onHide={toggleReceiverAddress}
-              province={provinceReceiver}
-              district={districtReceiver}
-              ward={wardReceiver}
-              detailAddress={detailAddressReceiver}
-            />
           </Col>
         </Row>
       </div>
@@ -1166,7 +1112,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="select"
               value={phuongThucVanChuyen}
-              onChange={handleChangeTransportMethod(setPhuongThucVanChuyen)}
+              onChange={handleChangeTextboxValue(setPhuongThucVanChuyen)}
             >
               {map(
                 transportMethodArr,
@@ -1427,7 +1373,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Phiếu gửi trong nước')}</h1>
+        <h1 className="sipTitle">{t('Phiếu gửi quốc tế')}</h1>
       </Row>
       {renderSendingCoupon()}
       <Row className="mb-3">
