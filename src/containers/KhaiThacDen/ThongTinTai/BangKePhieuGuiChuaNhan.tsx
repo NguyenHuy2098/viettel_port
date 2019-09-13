@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Button, Row, Input, InputGroupAddon, InputGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -74,19 +74,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
-          return (
-            <>
-              <Label check>
-                <Input type="checkbox" />
-              </Label>
-            </>
-          );
-        },
-      },
-      {
-        Header: t('Mã tải kiện'),
+        Header: t('Mã bảng kê/phiếu gửi'),
         accessor: 'TOR_ID',
       },
       {
