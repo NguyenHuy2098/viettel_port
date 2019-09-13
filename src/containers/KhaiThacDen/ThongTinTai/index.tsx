@@ -66,7 +66,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
         }),
       );
     }
-  }, [isFromTaiChuaNhanBkPhieuGui, idTaiKien]);
+  }, [isFromTaiChuaNhanBkPhieuGui, idTaiKien, dispatch]);
 
   const handleBackChuyenThu = (): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_CHUYEN_THU, { idChuyenThu })));
