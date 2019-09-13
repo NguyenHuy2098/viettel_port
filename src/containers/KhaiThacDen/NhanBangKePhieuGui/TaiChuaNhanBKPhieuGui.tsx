@@ -71,6 +71,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
 
   const handleRedirectDetail = useCallback((item: API.RowResponseZTMI023OUT): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSearch = (): void => {

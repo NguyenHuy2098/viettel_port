@@ -64,6 +64,8 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
 
   const handleRedirectDetail = useCallback((item: API.RowMTZTMI047OUT): void => {
     dispatch(push(`${routesMap.THONG_TIN_BANG_KE}`));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = useMemo(
