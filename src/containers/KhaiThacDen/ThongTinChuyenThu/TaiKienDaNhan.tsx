@@ -65,6 +65,10 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
+        Header: t('Loại'),
+        accessor: 'TOR_TYPE',
+      },
+      {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell): JSX.Element => {
           return (
