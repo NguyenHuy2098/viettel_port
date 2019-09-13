@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row, Input, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
@@ -62,13 +62,9 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     setIdBangKePhieuGui(event.target.value);
   }
 
-  const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => (): void => {
-      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const handleRedirectDetail = useCallback((item: API.RowMTZTMI047OUT): void => {
+    dispatch(push(`${routesMap.THONG_TIN_BANG_KE}`));
+  }, []);
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -125,32 +121,20 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   function renderToolbar(): JSX.Element {
     return (
       <Row>
-        <div className="btn-toolbar col-10">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <span className="input-group-text">
-                <i className="fa fa-barcode" />
-              </span>
-            </InputGroupAddon>
-            <Input
-              className="w-25 mr-2"
-              onChange={handleChangeTaiKien}
-              type="text"
-              placeholder={t('Quét mã tải kiện')}
-            />
-          </InputGroup>
-          <Button className="mr-2" color="primary" onClick={handleScanTaiKien}>
+        <div className="btn-toolbar col-8">
+          <div className="sipTitleRightBlockInput m-0 col-6 p-0">
+            <i className="fa fa-barcode" />
+            <Input type="text" placeholder={t('Quét mã bảng kê/phiếu gửi')} onChange={handleChangeTaiKien} />
+          </div>
+          <Button color="primary" className="ml-2" onClick={handleScanTaiKien}>
             {t('Quét mã')}
           </Button>
-          {/*<button className="btn btn-outline-primary mr-2">*/}
-          {/*  {t('Tải')}&nbsp;({'05'})*/}
-          {/*</button>*/}
-          {/*<button className="btn btn-outline-primary">*/}
-          {/*  {t('Kiện')}&nbsp;({'20'})*/}
-          {/*</button>*/}
         </div>
-        <div className="btn-toolbar col-2 align-items-end flex-column">
-          <Button color="primary">{t('Nhận bảng kê/phiếu gửi')}</Button>
+        <div className="btn-toolbar col-4 align-items-end flex-column">
+          <Button color="primary">
+            <i className="fa fa-cube" />
+            {t('Nhận')}
+          </Button>
         </div>
       </Row>
     );

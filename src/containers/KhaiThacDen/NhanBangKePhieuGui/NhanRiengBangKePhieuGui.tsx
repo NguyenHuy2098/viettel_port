@@ -174,7 +174,7 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
+      dispatch(push(`${routesMap.THONG_TIN_BANG_KE}`));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
@@ -186,17 +186,15 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
   return (
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">
-        <Row>
-          <div className="btn-toolbar col-12">
-            <div className="sipTitleRightBlockInput m-0 col-4 p-0">
-              <i className="fa fa-barcode" />
-              <Input type="text" placeholder={t('Quét mã bảng kê/phiếu gửi')} onChange={handleSetKeySearch} />
-            </div>
-            <Button color="primary" className="ml-2" onClick={dispatchActionAPI_ZTMI023}>
-              {t('Quét mã')}
-            </Button>
+        <div className="btn-toolbar col-12">
+          <div className="sipTitleRightBlockInput m-0 col-4 p-0">
+            <i className="fa fa-barcode" />
+            <Input type="text" placeholder={t('Quét mã bảng kê/phiếu gửi')} onChange={handleSetKeySearch} />
           </div>
-        </Row>
+          <Button color="primary" className="ml-2" onClick={dispatchActionAPI_ZTMI023}>
+            {t('Quét mã')}
+          </Button>
+        </div>
       </div>
       <div className="row mt-3" />
       <Row className="sipTableContainer">{showMainContent()}</Row>

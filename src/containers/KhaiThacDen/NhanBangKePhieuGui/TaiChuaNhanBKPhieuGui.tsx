@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -69,9 +69,9 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
     };
   });
 
-  const handleRedirectDetail = (item: API.RowResponseZTMI023OUT): void => {
+  const handleRedirectDetail = useCallback((item: API.RowResponseZTMI023OUT): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
-  };
+  }, []);
 
   const handleSearch = (): void => {
     const newTableRows = filter(tableRows, row => {
