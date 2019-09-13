@@ -47,10 +47,10 @@ export const NHAN_CHUYEN_THU = `${KHAI_THAC_DEN}/nhan-chuyen-thu`;
 export const NHAN_TAI_KIEN = `${KHAI_THAC_DEN}/nhan-tai-kien`;
 export const THONG_TIN_CHUYEN_THU = `${KHAI_THAC_DEN}/nhan-chuyen-thu/:idChuyenThu`;
 export const THONG_TIN_TAI = `${KHAI_THAC_DEN}/nhan-chuyen-thu/:idChuyenThu/:idTaiKien`;
-export const THONG_TIN_TAI_NBKPG = `${KHAI_THAC_DEN}/thong-tin-tai-tcnbkpg/:idTaiKien/:fromTCNBKPG`;
 export const KHAI_THAC_CHUYEN_THU_DEN = `${KHAI_THAC_DEN}/khai-thac-chuyen-thu-den`;
 export const KHAI_THAC_TAI = `${KHAI_THAC_DEN}/khai-thac-tai`;
-export const NHAN_BANG_KE_PHIEU_GUI = `${KHAI_THAC_DEN}/nhan-bang-ke-phieu-gui/:idTaiKien`;
+export const NHAN_BANG_KE_PHIEU_GUI = `${KHAI_THAC_DEN}/nhan-bang-ke-phieu-gui`;
+export const NHAN_BANG_KE_PHIEU_GUI_DETAIL = `${KHAI_THAC_DEN}/thong-tin-tai/:idTaiKien`;
 export const PHAN_CONG_PHAT_NHAN = `${KHAI_THAC_DEN}/phan-cong-phat-nhan`;
 
 export const KHACH_HANG = '/khach-hang';
@@ -124,9 +124,9 @@ export default {
   KHAI_THAC_CHUYEN_THU_DEN,
   THONG_TIN_CHUYEN_THU,
   THONG_TIN_TAI,
-  THONG_TIN_TAI_NBKPG,
   KHAI_THAC_TAI,
   NHAN_BANG_KE_PHIEU_GUI,
+  NHAN_BANG_KE_PHIEU_GUI_DETAIL,
   PHAN_CONG_PHAT_NHAN,
   /**
    * Khách hàng

@@ -173,9 +173,9 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
                   </option>
                 ))}
                 {/* eslint-disable-next-line react/jsx-max-depth */}
-                {/*<option value={'PM02'} key={'PM02'}>*/}
-                {/*  User test (need remove)*/}
-                {/*</option>*/}
+                <option value={'PM02'} key={'PM02'}>
+                  User test (need remove)
+                </option>
               </Input>
             </div>
             <Button color="primary" className="ml-2">

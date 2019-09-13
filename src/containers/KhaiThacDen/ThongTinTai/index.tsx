@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import classNames from 'classnames';
-import { push } from 'connected-react-router';
+import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
@@ -15,7 +15,6 @@ import {
   makeSelector046CountChildren,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 import BangKePhieuGuiDaNhan from './BangKePhieuGuiDaNhan';
 import BangKePhieuGuiChuaNhan from './BangKePhieuGuiChuaNhan';
 
@@ -28,7 +27,6 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   const [tab, setTab] = useState<number>(1);
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const idTaiKien = get(props, 'match.params.idTaiKien');
-  const isFromTaiChuaNhanBkPhieuGui = get(props, 'match.params.fromTCNBKPG');
   const taiKien = useSelector(makeSelector046RowFirstChild);
   const countBangKePhieuGui = useSelector(makeSelector046CountChildren);
   const countBangKePhieuGuiChuaNhan = useSelector(
@@ -43,7 +41,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   useEffect((): void => {
-    if (!isEmpty(idChuyenThu) && !isEmpty(idTaiKien)) {
+    if (!isEmpty(idTaiKien)) {
       dispatch(
         action_MIOA_ZTMI046({
           IV_TOR_ID: idTaiKien,
@@ -55,21 +53,8 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu, idTaiKien]);
 
-  //just for case from TaiChuaNhanBKPhieuGui Screen
-  useEffect((): void => {
-    if (isFromTaiChuaNhanBkPhieuGui && isFromTaiChuaNhanBkPhieuGui === 'true') {
-      dispatch(
-        action_MIOA_ZTMI046({
-          IV_TOR_ID: idTaiKien,
-          IV_NO_PER_PAGE: '10',
-          IV_PAGENO: '1',
-        }),
-      );
-    }
-  }, [isFromTaiChuaNhanBkPhieuGui, idTaiKien, dispatch]);
-
   const handleBackChuyenThu = (): void => {
-    dispatch(push(generatePath(routesMap.THONG_TIN_CHUYEN_THU, { idChuyenThu })));
+    dispatch(goBack());
   };
 
   return (

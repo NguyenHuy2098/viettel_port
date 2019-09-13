@@ -3,7 +3,7 @@ import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match } from 'react-router-dom';
 
-import { map, trim, toNumber, size } from 'lodash';
+import { map, trim, toNumber, toLower, size } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -58,8 +58,8 @@ const BangKeChuaNhanPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Elem
       LOG_LOCID_FR: item.LOG_LOCID_FR,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
       countChilds: size(item.Childs),
-      NET_WEI_VAL: toNumber(item.NET_WEI_VAL).toPrecision(2) + item.NET_WEI_UNI,
-      CREATED_ON: moment(trim(item.DATETIME_CHLC), 'YYYYMMDDhhmmss').format('DD/MM/YYYY'),
+      NET_WEI_VAL: toNumber(item.NET_WEI_VAL).toPrecision(2) + ' ' + toLower(item.NET_WEI_UNI),
+      CREATED_ON: moment(trim(item.DATETIME_CHLC), 'YYYYMMDDhhmmss').format('hh:mm DD/MM/YYYY'),
     };
   });
 

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { generatePath, match } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { filter, map, toNumber, trim, size, includes } from 'lodash';
+import { filter, map, toNumber, trim, size, includes, toLower } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -64,13 +64,13 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
       LOG_LOCID_FR: item.LOG_LOCID_FR,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
       countChilds: size(item.Childs),
-      NET_WEI_VAL: toNumber(item.NET_WEI_VAL).toPrecision(2),
+      NET_WEI_VAL: toNumber(item.NET_WEI_VAL).toPrecision(2) + ' ' + toLower(item.NET_WEI_UNI),
       CREATED_ON: moment(trim(item.DATETIME_CHLC), 'YYYYMMDDhhmmss').format('hh:mm DD/MM/YYYY'),
     };
   });
 
   const handleRedirectDetail = (item: API.RowResponseZTMI023OUT): void => {
-    dispatch(push(generatePath(routesMap.THONG_TIN_TAI_NBKPG, { idTaiKien: item.TOR_ID, fromTCNBKPG: true })));
+    dispatch(push(generatePath(routesMap.NHAN_BANG_KE_PHIEU_GUI_DETAIL, { idTaiKien: item.TOR_ID })));
   };
 
   const handleSearch = (): void => {

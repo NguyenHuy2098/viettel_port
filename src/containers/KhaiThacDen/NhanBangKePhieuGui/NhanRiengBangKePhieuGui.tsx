@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
-import { forEach, get, map, trim, toNumber } from 'lodash';
+import { forEach, get, map, trim, toNumber, toLower } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -161,9 +161,9 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
       FR_LOG_ID: item.FR_LOG_ID,
       TO_LOG_ID: item.TO_LOG_ID,
       countChilds: 0,
-      GRO_WEI_VAL: toNumber(item.GRO_WEI_VAL).toPrecision(2) + item.GRO_WEI_UNI,
+      GRO_WEI_VAL: toNumber(item.GRO_WEI_VAL).toPrecision(2) + ' ' + toLower(item.GRO_WEI_UNI),
       TYPE: getTorTypeDisplayName(item.TOR_TYPE || ''),
-      CREATED_ON: moment(trim(item.CREATED_ON), 'YYYYMMDDhhmmss').format('DD/MM/YYYY'),
+      CREATED_ON: moment(trim(item.CREATED_ON), 'YYYYMMDDhhmmss').format('hh:mm DD/MM/YYYY'),
     };
   });
   const showMainContent = (): JSX.Element => {
