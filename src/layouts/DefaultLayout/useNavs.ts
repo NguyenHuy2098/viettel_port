@@ -125,10 +125,10 @@ const nav = (t: i18next.TFunction): any => {
           //   name: t('Khai thác tải'),
           //   url: routesMap.KHAI_THAC_TAI,
           // },
-          {
-            name: t('Phân công phát/nhận'),
-            url: routesMap.PHAN_CONG_PHAT_NHAN,
-          },
+          // {
+          //   name: t('Phân công phát/nhận'),
+          //   url: routesMap.PHAN_CONG_PHAT_NHAN,
+          // },
         ],
       },
       // {
