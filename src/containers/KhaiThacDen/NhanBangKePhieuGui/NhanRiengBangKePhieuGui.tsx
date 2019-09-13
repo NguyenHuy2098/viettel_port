@@ -34,6 +34,16 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
     dispatch(action_MIOA_ZTMI023({ IV_ID: keySearch }, {}));
   };
 
+  const existInTableRecord = (el: API.RowResponseZTMI023OUT): boolean => {
+    let exist = false;
+    forEach(tableRecords, record => {
+      if (record.TOR_ID === el.TOR_ID) {
+        exist = true;
+      }
+    });
+    return exist;
+  };
+
   const dispatchactionApi_ZTMI022 = (torID: string, el: API.RowResponseZTMI023OUT): void => {
     dispatch(
       action_MIOA_ZTMI022(
@@ -51,7 +61,9 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
             if (data.MT_ZTMI022_OUT && get(data.MT_ZTMI022_OUT, 'EV_ERROR')) {
               setShowReceivedMessage(false);
               setShowErrorMessage(false);
-              setTableRecords([...tableRecords, el]);
+              if (!existInTableRecord(el)) {
+                setTableRecords([...tableRecords, el]);
+              }
             }
           },
         },

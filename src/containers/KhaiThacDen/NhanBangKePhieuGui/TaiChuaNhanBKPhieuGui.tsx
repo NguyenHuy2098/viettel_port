@@ -3,11 +3,11 @@ import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { generatePath, match } from 'react-router-dom';
+import { push } from 'connected-react-router';
 import { filter, map, toNumber, trim, size, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import { push } from 'connected-react-router';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -70,7 +70,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
   });
 
   const handleRedirectDetail = (item: API.RowResponseZTMI023OUT): void => {
-    dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
+    dispatch(push(generatePath(routesMap.THONG_TIN_TAI_NBKPG, { idTaiKien: item.TOR_ID, fromTCNBKPG: true })));
   };
 
   const handleSearch = (): void => {

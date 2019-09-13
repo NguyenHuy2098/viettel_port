@@ -28,6 +28,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
   const [tab, setTab] = useState<number>(1);
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const idTaiKien = get(props, 'match.params.idTaiKien');
+  const isFromTaiChuaNhanBkPhieuGui = get(props, 'match.params.fromTCNBKPG');
   const taiKien = useSelector(makeSelector046RowFirstChild);
   const countBangKePhieuGui = useSelector(makeSelector046CountChildren);
   const countBangKePhieuGuiChuaNhan = useSelector(
@@ -53,6 +54,19 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu, idTaiKien]);
+
+  //just for case from TaiChuaNhanBKPhieuGui Screen
+  useEffect((): void => {
+    if (isFromTaiChuaNhanBkPhieuGui && isFromTaiChuaNhanBkPhieuGui === 'true') {
+      dispatch(
+        action_MIOA_ZTMI046({
+          IV_TOR_ID: idTaiKien,
+          IV_NO_PER_PAGE: '10',
+          IV_PAGENO: '1',
+        }),
+      );
+    }
+  }, [isFromTaiChuaNhanBkPhieuGui, idTaiKien]);
 
   const handleBackChuyenThu = (): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_CHUYEN_THU, { idChuyenThu })));
