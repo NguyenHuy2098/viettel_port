@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
 import classNames from 'classnames';
-import { push } from 'connected-react-router';
+import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
@@ -15,7 +15,6 @@ import {
   makeSelector046CountChildren,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 import TaiKienDaNhan from './TaiKienDaNhan';
 import TaiKienChuaNhan from './TaiKienChuaNhan';
 
@@ -50,7 +49,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   }, [idChuyenThu]);
 
   const handleBackChuyenThu = (): void => {
-    dispatch(push(routesMap.NHAN_CHUYEN_THU));
+    dispatch(goBack());
   };
 
   return (
