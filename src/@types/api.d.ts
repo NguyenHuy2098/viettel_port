@@ -12,6 +12,7 @@ declare namespace API {
     ITEM_TEXT?: string;
     DATETIME_CHLC?: string;
     ZONLO?: string;
+    DESCRIPTION?: string;
   }
   export interface Childs {
     TOR_ID?: string;
@@ -121,24 +122,26 @@ declare namespace API {
   }
   export interface ItemZTMI012 {
     Flag?: string;
-    PACKAGING_MATERIAL?: string;
+    Packaging_material?: string;
     Description?: string;
-    PACKAGE_TYPE?: string;
-    QUANTITY_OF_PACKAGE?: string;
-    QUANTITY_OF_UNIT?: string;
-    GROSS_WEIGHT?: string;
-    GROSS_WEIGHT_OF_UNIT?: string;
-    NET_WEIGHT?: string;
-    NET_WEIGHT_OF_UNIT?: string;
+    Package_type?: string;
+    Quantity_of_package?: string;
+    Quantity_of_unit?: string;
+    Gross_weight?: string;
+    Gross_weight_of_unit?: string;
+    Net_weight?: string;
+    Net_weight_of_unit?: string;
     Length?: string;
     Hight?: string;
     Width?: string;
     Note?: string;
-    GOODS_VALUE?: string;
+    Goods_value?: string;
     Currency?: string;
     COMODITY_CODE?: string;
     COD?: string;
-    SERVICE_TYPE?: string;
+    Service_type?: string;
+    commodity_type?: string;
+    commodity_code?: string;
   }
   export interface ItemZTMI094 {
     /**
@@ -259,59 +262,62 @@ declare namespace API {
     Version?: number; // int32
   }
   export interface MIOAZTMI012Request {
-    ORDER_TYPE?: string;
-    BUYERS_REFERENCE_NUMBER?: string;
-    SALE_ORG?: string;
-    SALE_OFFICE?: string;
-    SOURCE_TYPE?: string;
-    FWO_NO?: string;
-    ORDERING_PARTY?: string;
-    NAME_OP?: string;
-    ADDRESS_OP?: string;
-    PHONE_OP?: string;
-    EMAIL_OP?: string;
+    Order_Type?: string;
+    Buyers_Reference_Number?: string;
+    Sale_org?: string;
+    Sale_office?: string;
+    Source_type?: string;
+    FWO_no?: string;
+    Ordering_party?: string;
+    Name_OP?: string;
+    Phone_OP?: string;
+    Email_OP?: string;
     Shipper?: string;
-    NAME_SHIPPER?: string;
-    ADDRESS_SHIPPER?: string;
-    PHONE_SHIPPER?: string;
-    EMAIL_SHIPPER?: string;
+    Name_shipper?: string;
+    Address_shipper?: string;
+    Phone_shipper?: string;
+    Email_shipper?: string;
     Consignee?: string;
-    NAME_CONSIG?: string;
+    Name_consig?: string;
     ADDRESS_CONSIG?: string;
-    PHONE_CONSIG?: string;
-    EMAIL_CONSIG?: string;
-    VAT_NO_PAYER?: string;
-    MOVEMENT_TYPE?: string;
-    POSTAL_CODE_SRC?: string;
-    TEL_SRC?: string;
-    COUNTRY_SRC?: string;
-    CITY_SRC?: string;
-    DISTRICT_SRC?: string;
-    WARD_SRC?: string;
-    STREET_NAME_SRC?: string;
+    Phone_consig?: string;
+    Email_consig?: string;
+    VAT_No_payer?: string;
+    Movement_type?: string;
+    postal_code_src?: string;
+    tel_src?: string;
+    country_src?: string;
+    city_src?: string;
+    district_src?: string;
+    ward_src?: string;
+    street_name_src?: string;
     HOUSE_ID_SRC?: string;
-    POSTAL_CODE_DES?: string;
-    TEL_DES?: string;
-    COUNTRY_DES?: string;
-    CITY_DES?: string;
-    DISTRICT_DES?: string;
-    FLAG_HEADER?: string;
-    PromoCode?: string;
+    postal_code_des?: string;
+    tel_des?: string;
+    country_des?: string;
+    city_des?: string;
+    district_des?: string;
+    flag_header?: string;
+    Promocode?: string;
     VOUCHER_ID?: string;
     Campaign?: string;
     Disctype?: string;
     Description?: string;
-    WARD_DES?: string;
-    STREET_NAME_DES?: string;
-    LOCATION_ID_SRC?: string;
-    LOCATION_ID_DES?: string;
-    REQUEST_PICK_DATE?: string;
+    ward_des?: string;
+    street_name_des?: string;
+    location_ID_src?: string;
+    location_ID_des?: string;
+    request_pick_date?: string;
     CONFIRM_PICK_DATE?: string;
-    REQUEST_DELIV_DATE?: string;
+    request_deliv_date?: string;
     CONFIRM_DELIV_DATE?: string;
-    FREIGH_TERM?: string;
-    CUS_ID?: string;
-    Item?: ItemZTMI012[];
+    Freigh_term?: string;
+    Cus_id?: string;
+    item?: ItemZTMI012[];
+    Note?: string;
+    des_name?: string;
+    Transportation_mode?: string;
+    house_id_des?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -759,6 +765,14 @@ declare namespace API {
      *
      */
     IV_NO_PER_PAGE?: string;
+    /**
+     * Số trang
+     */
+    POSITION?: string;
+    /**
+     * Số kiện/trang
+     */
+    SIZE?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -1121,6 +1135,7 @@ declare namespace API {
      * Email để liên hệ với kho (option)
      */
     IV_EMAIL?: string;
+    IV_DEL_FLAG?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -1189,6 +1204,7 @@ declare namespace API {
   }
   export interface MTZFII016OUT {
     Row?: RowMTZFII016OUT;
+    PAGING?: PagingZTMI054;
   }
   export interface MTZTMI011OUT {
     /**
@@ -1358,6 +1374,7 @@ declare namespace API {
   export interface MTZTMI046OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI046OUT[];
+    PAGING?: PagingZTMI054;
   }
   export interface MTZTMI047OUT {
     EV_ERROR?: number; // int32
@@ -1373,6 +1390,7 @@ declare namespace API {
   }
   export interface MTZTMI051OUT {
     EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE[];
   }
   export interface MTZTMI054OUT {
     EV_ERROR?: string;
@@ -1387,7 +1405,7 @@ declare namespace API {
   export interface MTZTMI058OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI058OUT[];
-    Paging?: PAGING;
+    Paging?: PAGING[];
   }
   export interface MTZTMI062OUT {
     EV_ERROR?: number; // int32
@@ -1469,6 +1487,7 @@ declare namespace API {
     COD_Amount?: string;
     Total_Amount?: string;
     USERID?: string;
+    LOCID?: string;
   }
   export interface RowMTZFII016OUT {
     KUNNR?: string;
@@ -1633,6 +1652,10 @@ declare namespace API {
     PARTNER?: string;
     TEL_NUMBER?: string;
     CONTACT_PERSON?: string;
+    TEL_NUMBER2?: string;
+    FAX_NUMBER?: string;
+    SMTP_ADDR?: string;
+    NAME?: string;
   }
   export interface RowMTZTMI046OUT {
     TOR_ID?: string;
@@ -1645,6 +1668,7 @@ declare namespace API {
     EXEC_CONT?: string;
     ZONLO?: string;
     CHILDS?: Child[];
+    TOR_TYPE?: string;
   }
   export interface RowMTZTMI047OUT {
     TOR_ID?: string;
@@ -1660,6 +1684,7 @@ declare namespace API {
     EXT_LOC_ID?: string;
     CREATED_BY?: string;
     Childs?: Childs[];
+    TOR_TYPE?: string;
   }
   export interface RowMTZTMI048OUT {
     TOR_ID?: string;
@@ -1684,6 +1709,8 @@ declare namespace API {
     VALID_TO?: string;
     OrgCentre?: number; // int32
     COUNTRY_VEHIC_ID?: string;
+    OWNER?: string;
+    LEASE_CONTRACT_REF?: string;
   }
   export interface RowMTZTMI054OUT {
     LOCNO?: string;
@@ -2123,12 +2150,18 @@ declare namespace API {
      * Tổng số trang
      */
     Total_page?: string;
+    CREATE_ON?: string;
+    SHIPPER_NAME?: string;
+    SERVICE_TYPE?: string;
+    SERVICE_TYPE_NAME?: string;
   }
   export interface RowZFII016 {
     KUNNR?: string;
     FROM_DATE?: string;
     TO_DATE?: string;
     ASSIGNMENT?: string;
+    IV_PAGE_NO?: string;
+    IV_NO_PER_PAGE?: string;
   }
   export interface RowZTMI030 {
     CUSID?: string;
@@ -2506,7 +2539,7 @@ declare namespace API {
   }
   export interface ZTMI063OUT {
     EV_ERROR?: number; // int32
-    RETURN_MESSAGE?: RETURNMESSAGE;
+    RETURN_MESSAGE?: RETURNMESSAGE[];
   }
   export interface ZTMI067OUT {
     EV_ERROR?: number; // int32
