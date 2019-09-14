@@ -17,7 +17,7 @@ interface Props {
 }
 
 // eslint-disable-next-line max-lines-per-function
-function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
+function ThongTinBangKe(props: Props): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const manifestId = get(props, 'match.params.manifestId', '');
@@ -158,4 +158,4 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
   );
 }
 
-export default DanhSachPhieuGuiTrongBangKe;
+export default ThongTinBangKe;

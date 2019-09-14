@@ -70,13 +70,9 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
     [],
   );
 
-  const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => (): void => {
-      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const handleRedirectDetail = useCallback((item: API.RowMTZTMI047OUT): void => {
+    dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
+  }, []);
 
   function renderToolbar(): JSX.Element {
     return (

@@ -139,6 +139,10 @@ const ThongTinTai = Loadable({
   loader: (): any => import('containers/KhaiThacDen/ThongTinTai'),
   loading: Loading,
 });
+const ThongTinBangKePhieuGui = Loadable({
+  loader: (): any => import('containers/KhaiThacDen/ThongTinBangKe'),
+  loading: Loading,
+});
 const KhaiThacTai = Loadable({
   loader: (): any => import('containers/KhaiThacDen/KhaiThacDen'),
   loading: Loading,
@@ -224,6 +228,11 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     },
     { path: routesMap.DONG_CHUYEN_THU, name: t('Đóng chuyến thư'), component: DongChuyenThu },
     { path: routesMap.THONG_TIN_TAI, name: t('Thông tin tải'), component: ThongTinTai },
+    {
+      path: routesMap.THONG_TIN_BANG_KE_PHIEU_GUI,
+      name: t('Thông tin bảng kê/phiếu gửi'),
+      component: ThongTinBangKePhieuGui,
+    },
     { path: routesMap.THONG_TIN_CHUYEN_THU, name: t('Thông tin chuyến thư'), component: ThongTinChuyenThu },
     {
       path: routesMap.NHAN_BANG_KE_PHIEU_GUI,

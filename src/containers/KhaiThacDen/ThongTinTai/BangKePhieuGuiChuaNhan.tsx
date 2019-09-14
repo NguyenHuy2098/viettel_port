@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { generatePath, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
@@ -63,9 +63,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   }
 
   const handleRedirectDetail = useCallback((item: API.RowMTZTMI047OUT): void => {
-    dispatch(push(`${routesMap.THONG_TIN_BANG_KE}`));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
   }, []);
 
   const columns = useMemo(
