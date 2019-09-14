@@ -95,19 +95,19 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mã tải'),
+        Header: t('Mã BK/PG'),
         accessor: 'TOR_ID',
       },
       {
-        Header: t('Bưu cục đi'),
+        Header: t('Điểm đi'),
         accessor: 'FR_LOG_ID',
       },
       {
-        Header: t('Bưu cục đến'),
+        Header: t('Điểm đến'),
         accessor: 'TO_LOG_ID',
       },
       {
-        Header: t('SL'),
+        Header: t('Số lượng'),
         accessor: 'countChilds',
       },
       {
