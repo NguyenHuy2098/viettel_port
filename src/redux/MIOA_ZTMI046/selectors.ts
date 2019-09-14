@@ -1,5 +1,5 @@
 import { AppStateType } from 'redux/store';
-import { filter, get, size } from 'lodash';
+import { filter, get, includes, isArray, isNumber, size } from 'lodash';
 
 /**
  * Info
@@ -37,14 +37,21 @@ export function makeSelector046CountChildren(state: AppStateType): number {
  * List Child theo trạng thái
  * @param LIFECYCLE
  */
-export function makeSelector046ChildrenByLifecycle(LIFECYCLE: number) {
-  return (state: AppStateType): API.Child[] => filter(makeSelector046ListChildren(state), { LIFECYCLE });
+export function makeSelector046ChildrenByLifecycle(LIFECYCLE: number | number[]): (state: AppStateType) => API.Child[] {
+  if (isNumber(LIFECYCLE)) {
+    return (state: AppStateType): API.Child[] => filter(makeSelector046ListChildren(state), { LIFECYCLE });
+  } else if (isArray(LIFECYCLE)) {
+    return (state: AppStateType): API.Child[] =>
+      filter(makeSelector046ListChildren(state), child => includes(LIFECYCLE, get(child, 'LIFECYCLE')));
+  } else {
+    return (state: AppStateType): [] => [];
+  }
 }
 
 /**
  * Count list Child theo trạng thái
  * @param LIFECYCLE
  */
-export function makeSelector046CountChildrenByLifecycle(LIFECYCLE: number) {
+export function makeSelector046CountChildrenByLifecycle(LIFECYCLE: number | number[]) {
   return (state: AppStateType): number => size(makeSelector046ChildrenByLifecycle(LIFECYCLE)(state));
 }

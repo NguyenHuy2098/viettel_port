@@ -29,9 +29,17 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const bangKe = useSelector(makeSelector046RowFirstChild);
   const countPhieuGui = useSelector(makeSelector046CountChildren);
   const countPhieuGuiChuaNhan = useSelector(
-    makeSelector046CountChildrenByLifecycle(SipDataState.PHIEU_GUI_CHUA_QUET_NHAN),
+    makeSelector046CountChildrenByLifecycle([
+      SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT,
+      SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC,
+    ]),
   );
-  const countPhieuGuiDaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.PHIEU_GUI_DA_QUET_NHAN));
+  const countPhieuGuiDaNhan = useSelector(
+    makeSelector046CountChildrenByLifecycle([
+      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_TTKT,
+      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
+    ]),
+  );
 
   function handleChangeTab(tab: number): void {
     setTab(tab);

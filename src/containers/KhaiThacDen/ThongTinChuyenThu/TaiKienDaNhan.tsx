@@ -83,8 +83,8 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
-  const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI047OUT) => {
+  const redirectToThongTinTai = useCallback(
+    (item: API.Child) => {
       dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -121,7 +121,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listTaiKienDaNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listTaiKienDaNhan} onRowClick={redirectToThongTinTai} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

@@ -1,10 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
 
@@ -14,14 +13,18 @@ import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idPhieuGui, setIdPhieuGui] = useState<string>('');
-  const listPhieuGuiChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.PHIEU_GUI_CHUA_QUET_NHAN));
+  const listPhieuGuiChuaNhan = useSelector(
+    makeSelector046ChildrenByLifecycle([
+      SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT,
+      SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC,
+    ]),
+  );
 
   function handleQuetPhieuGui(): void {
     dispatch(
@@ -60,14 +63,6 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     setIdPhieuGui(event.target.value);
   }
 
-  const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => (): void => {
-      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
@@ -82,7 +77,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         },
       },
       {
-        Header: t('Mã tải kiện'),
+        Header: t('Mã phiếu gửi'),
         accessor: 'TOR_ID',
       },
       {
@@ -142,7 +137,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
               className="w-25 mr-2"
               onChange={handleChangeTaiKien}
               type="text"
-              placeholder={t('Quét mã tải kiện')}
+              placeholder={t('Quét mã phiếu gửi')}
             />
           </InputGroup>
           <Button className="mr-2" color="primary" onClick={handleQuetPhieuGui}>
@@ -156,7 +151,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
           {/*</button>*/}
         </div>
         <div className="btn-toolbar col-2 align-items-end flex-column">
-          <Button color="primary">{t('Nhận tải kiện')}</Button>
+          <Button color="primary">{t('Nhận phiếu gửi')}</Button>
         </div>
       </Row>
     );
@@ -166,7 +161,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listPhieuGuiChuaNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listPhieuGuiChuaNhan} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

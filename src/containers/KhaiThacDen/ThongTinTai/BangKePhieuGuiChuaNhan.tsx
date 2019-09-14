@@ -62,8 +62,9 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     setIdBangKePhieuGui(event.target.value);
   }
 
-  const handleRedirectDetail = useCallback((item: API.RowMTZTMI047OUT): void => {
+  const redirectToThongTinBangKe = useCallback((item: API.Child): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = useMemo(
@@ -144,7 +145,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listBangKePhieuGuiChuaNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listBangKePhieuGuiChuaNhan} onRowClick={redirectToThongTinBangKe} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

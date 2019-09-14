@@ -1,11 +1,10 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { RouteComponentProps } from 'react-router-dom';
-import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
 
@@ -13,15 +12,18 @@ import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 
 type Props = RouteComponentProps;
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
-  const dispatch = useDispatch();
   const { t } = useTranslation();
-  const listPhieuGuiDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.PHIEU_GUI_DA_QUET_NHAN));
+  const listPhieuGuiDaNhan = useSelector(
+    makeSelector046ChildrenByLifecycle([
+      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_TTKT,
+      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
+    ]),
+  );
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -37,7 +39,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Mã tải kiện'),
+        Header: t('Mã phiếu gửi'),
         accessor: 'TOR_ID',
       },
       {
@@ -83,14 +85,6 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
-  const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI047OUT) => {
-      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
-
   function renderToolbar(): JSX.Element {
     return (
       <Row>
@@ -101,17 +95,11 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
                 <i className="fa fa-search" />
               </span>
             </InputGroupAddon>
-            <Input className="w-25 mr-2" type="text" placeholder={t('Tìm kiếm tải/kiện')} />
+            <Input className="w-25 mr-2" type="text" placeholder={t('Tìm kiếm phiếu gửi')} />
           </InputGroup>
           <Button className="mr-2" color="primary">
             {t('Tìm kiếm')}
           </Button>
-          {/*<button className="btn btn-outline-primary mr-2">*/}
-          {/*  {t('Tải')}&nbsp;({'05'})*/}
-          {/*</button>*/}
-          {/*<button className="btn btn-outline-secondary">*/}
-          {/*  {t('Kiện')}&nbsp;({'20'})*/}
-          {/*</button>*/}
         </div>
       </Row>
     );
@@ -121,7 +109,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listPhieuGuiDaNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listPhieuGuiDaNhan} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

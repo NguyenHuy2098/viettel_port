@@ -60,8 +60,8 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     setIdTaiKien(event.target.value);
   }
 
-  const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => (): void => {
+  const redirectToThongTinTai = useCallback(
+    (item: API.Child) => {
       dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,7 +166,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listTaiKienChuaNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listTaiKienChuaNhan} onRowClick={redirectToThongTinTai} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

@@ -18,12 +18,12 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [torIdSearch, setTorIdSearch] = useState<string>('');
-  const [api023Record, setApi023Record] = useState<API.RowResponseZTMI023OUT[] | null>(null);
+  const [api023Record, setApi023Record] = useState<API.RowResponseZTMI023OUT[]>([]);
   const [showTaiKienDaDuocNhanMessage, setShowTaiKienDaDuocNhanMessage] = useState<boolean>(false);
   const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
 
   const dispatch_Action_MIOA_ZTMI022 = useCallback(
-    (torId: string, api023Row: API.RowResponseZTMI023OUT[] | null): void => {
+    (torId: string, api023Row: API.RowResponseZTMI023OUT[]): void => {
       dispatch(
         action_MIOA_ZTMI022(
           {
@@ -37,7 +37,7 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
           },
           {
             onSuccess: (data: API.MIOAZTMI022Response): void => {
-              if ((data.MT_ZTMI022_OUT, 'EV_ERROR')) {
+              if (get(data.MT_ZTMI022_OUT, 'EV_ERROR')) {
                 setApi023Record(api023Row);
               }
             },
