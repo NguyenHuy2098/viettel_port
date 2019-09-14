@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
-import { Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { match } from 'react-router';
-import { forEach } from 'lodash';
+import { forEach, size } from 'lodash';
 import moment from 'moment';
 
-// import { makeSelector046CountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046CountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { makeSelectorBangKeChuaNhanPhieuGui, makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-// import { SipDataState } from 'utils/enums';
+import { SipDataState } from 'utils/enums';
 import { checkIsNot109LifeCycle, checkIsNot604LifeCycle } from 'utils/helper';
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
@@ -25,7 +25,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
-  // const countBangKeDaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
+  const countBangKeDaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
   const taiChuaNhanBKPhieuGuiRawRecords = useSelector(makeSelectorTaiChuaNhanBKPhieuGui);
   const bangKeChuaNhanPhieuGuiRawRecords = useSelector(makeSelectorBangKeChuaNhanPhieuGui);
   const [taiChuaNhanBKPhieuGuiRecords, setTaiChuaNhanBKPhieuGuiRecords] = useState<API.RowMTZTMI047OUT[]>([]);
@@ -108,7 +108,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Tải chưa nhận BK/phiếu gửi')}
-              {/*<Badge color="primary">{size(taiChuaNhanBKPhieuGuiRecords)}</Badge>*/}
+              <Badge color="primary">{size(taiChuaNhanBKPhieuGuiRecords)}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -117,7 +117,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Bảng kê chưa nhận PG')}
-              {/*<Badge color="primary">{size(bangKeChuaNhanPhieuGuiRecords)}</Badge>*/}
+              <Badge color="primary">{size(bangKeChuaNhanPhieuGuiRecords)}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -126,7 +126,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               onClick={React.useCallback((): void => handleChangeTab(3), [])}
             >
               {t('Nhân riêng bảng kê/phiếu gửi')}
-              {/*<Badge color="primary">{countBangKeDaNhan}</Badge>*/}
+              <Badge color="primary">{countBangKeDaNhan}</Badge>
             </NavLink>
           </NavItem>
         </Nav>

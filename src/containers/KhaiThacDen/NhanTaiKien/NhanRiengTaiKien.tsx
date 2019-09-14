@@ -11,6 +11,7 @@ import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import routesMap from 'utils/routesMap';
+import { generatePath } from 'react-router';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanRiengTaiKien: React.FC = (): JSX.Element => {
@@ -155,7 +156,7 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
 
   const handleRedirectDetail = useCallback(
     (item: API.RowResponseZTMI023OUT): void => {
-      dispatch(push(`${routesMap.THONG_TIN_CHUYEN_THU}/${item.TOR_ID}`));
+      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [api023Record],

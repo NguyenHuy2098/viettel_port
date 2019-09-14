@@ -3,12 +3,15 @@ import { Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Cell } from 'react-table';
 import { map, toLower } from 'lodash';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { push } from 'connected-react-router';
+import { generatePath } from 'react-router';
+import routesMap from '../../../utils/routesMap';
 
 interface Props {
   data: API.RowMTZTMI047OUT[];
@@ -18,6 +21,7 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const TaiDaNhan: React.FC<Props> = ({ data, getTaiDaNhan }: Props): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const totalPage = useSelector(makeSelectorTotalPage('ZC2', 107));
 
   const handleControllerClick = useCallback(
@@ -89,11 +93,19 @@ const TaiDaNhan: React.FC<Props> = ({ data, getTaiDaNhan }: Props): JSX.Element 
     };
   });
 
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): void => {
+      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data],
+  );
+
   return (
     <>
       <div className="mb-3"></div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={rows} />
+        <DataTable columns={columns} data={rows} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
