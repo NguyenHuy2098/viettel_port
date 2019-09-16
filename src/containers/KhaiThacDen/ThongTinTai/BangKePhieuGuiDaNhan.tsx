@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button, Row, Input, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Button, Row, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -75,35 +75,27 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function renderToolbar(): JSX.Element {
-    return (
-      <Row>
-        <div className="btn-toolbar col-10">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <span className="input-group-text">
-                <i className="fa fa-search" />
-              </span>
-            </InputGroupAddon>
-            <Input className="w-25 mr-2" type="text" placeholder={t('Tìm kiếm tải/kiện')} />
-          </InputGroup>
-          <Button className="mr-2" color="primary">
-            {t('Tìm kiếm')}
-          </Button>
-          {/*<button className="btn btn-outline-primary mr-2">*/}
-          {/*  {t('Tải')}&nbsp;({'05'})*/}
-          {/*</button>*/}
-          {/*<button className="btn btn-outline-secondary">*/}
-          {/*  {t('Kiện')}&nbsp;({'20'})*/}
-          {/*</button>*/}
-        </div>
-      </Row>
-    );
-  }
-
   return (
     <>
-      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
+      <div className="shadow-sm p-3 mb-3 bg-white">
+        <Row>
+          <div className="btn-toolbar col-10">
+            <div className="sipTitleRightBlockInput m-0 col-5 p-0">
+              <i className="fa fa-search" />
+              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} className="backgroundColorNeural6" />
+            </div>
+            <Button className="ml-2" color="primary">
+              {t('Tìm kiếm')}
+            </Button>
+            {/*<button className="btn btn-outline-primary mr-2">*/}
+            {/*  {t('Tải')}&nbsp;({'05'})*/}
+            {/*</button>*/}
+            {/*<button className="btn btn-outline-secondary">*/}
+            {/*  {t('Kiện')}&nbsp;({'20'})*/}
+            {/*</button>*/}
+          </div>
+        </Row>
+      </div>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={taiKienDaNhan} onRowClick={redirectToThongTinBangKe} />
         <Pagination

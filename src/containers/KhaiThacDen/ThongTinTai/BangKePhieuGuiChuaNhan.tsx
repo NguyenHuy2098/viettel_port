@@ -71,7 +71,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mã bảng kê/phiếu gửi'),
+        Header: t('Mã BK/PG'),
         accessor: 'TOR_ID',
       },
       {
@@ -125,7 +125,12 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         <div className="btn-toolbar col-8">
           <div className="sipTitleRightBlockInput m-0 col-6 p-0">
             <i className="fa fa-barcode" />
-            <Input type="text" placeholder={t('Quét mã bảng kê/phiếu gửi')} onChange={handleChangeTaiKien} />
+            <Input
+              type="text"
+              placeholder={t('Quét mã bảng kê/phiếu gửi')}
+              onChange={handleChangeTaiKien}
+              className="backgroundColorNeural6"
+            />
           </div>
           <Button color="primary" className="ml-2" onClick={handleScanTaiKien}>
             {t('Quét mã')}

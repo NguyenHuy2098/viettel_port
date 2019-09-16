@@ -189,7 +189,12 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
         <div className="btn-toolbar col-12">
           <div className="sipTitleRightBlockInput m-0 col-4 p-0">
             <i className="fa fa-barcode" />
-            <Input type="text" placeholder={t('Quét mã bảng kê/phiếu gửi')} onChange={handleSetKeySearch} />
+            <Input
+              type="text"
+              placeholder={t('Quét mã bảng kê/phiếu gửi')}
+              onChange={handleSetKeySearch}
+              className="backgroundColorNeural6"
+            />
           </div>
           <Button color="primary" className="ml-2" onClick={dispatchActionAPI_ZTMI023}>
             {t('Quét mã')}

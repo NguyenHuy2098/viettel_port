@@ -557,6 +557,7 @@ html:not([dir='rtl']) .sidebar {
         &.active {
           border-bottom-color: #fd8301;
           color: #4a4a4a;
+          font-weight: bold;
           .badge {
             background-color: #299f9a;
           }
@@ -576,6 +577,9 @@ html:not([dir='rtl']) .sidebar {
       }
     }
   }
+}
+.backgroundColorNeural6 {
+  background: #f6f6f6 !important;
 }
 
 .selectForwardingItem {

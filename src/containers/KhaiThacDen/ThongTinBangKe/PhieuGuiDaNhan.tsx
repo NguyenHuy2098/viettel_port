@@ -24,7 +24,6 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
     ]),
   );
-
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
