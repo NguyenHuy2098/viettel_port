@@ -132,24 +132,25 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleSelectStaffChange = useCallback(
     (IV_PARTY_ID: string): void => {
+      const a = {
+        IV_PARTY_RCO: 'ZTM002',
+        IV_TRQ_ID: map(dataSelected, item => {
+          return {
+            TRQ_ID: item,
+          };
+        }),
+        // IV_PARTY_ID: IV_PARTY_ID,
+        IV_PARTY_ID: '3006',
+        // IV_UNAME: userIdSelected,
+        // ma nhan vien lay tu sso token
+        IV_UNAME: 'YenPh',
+      };
       dispatch(
-        action_MIOA_ZTMI055(
-          {
-            IV_PARTY_RCO: 'ZTM002',
-            IV_TRQ_ID: map(dataSelected, item => {
-              return {
-                TRQ_ID: item,
-              };
-            }),
-            IV_PARTY_ID: IV_PARTY_ID,
-            IV_UNAME: userIdSelected,
+        action_MIOA_ZTMI055(a, {
+          onFinish: () => {
+            dispatchGetListPhieuGui();
           },
-          {
-            onFinish: () => {
-              dispatchGetListPhieuGui();
-            },
-          },
-        ),
+        }),
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -168,11 +169,11 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
                 {/* eslint-disable-next-line react/jsx-max-depth */}
                 <option value="">{t('Chọn nhân viên')}</option>
                 {map(listStaff, item => (
-                  <option value={item.LOCNO} key={item.LOCNO}>
+                  <option value={item.UNAME} key={item.UNAME}>
                     {item.NAME_TEXT}
                   </option>
                 ))}
-                {/* eslint-disable-next-line react/jsx-max-depth */}
+                {/*eslint-disable-next-line react/jsx-max-depth*/}
                 {/*<option value={'PM02'} key={'PM02'}>*/}
                 {/*  User test (need remove)*/}
                 {/*</option>*/}

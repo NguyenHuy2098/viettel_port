@@ -24,7 +24,7 @@ const ModalChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
     props.onApplyChoosen(idUserSelected || '');
     setModalCreateNew(!modalCreateNew);
   };
-  const listStaff = filter(useSelector(makeSelectorGet_MT_ZTMI054_OUT), item => item.LOCNO !== props.currentUserId);
+  const listStaff = filter(useSelector(makeSelectorGet_MT_ZTMI054_OUT), item => item.UNAME !== props.currentUserId);
 
   const handleChangeSelectUser = useCallback(
     (id: string | undefined) => (): void => {
@@ -45,21 +45,23 @@ const ModalChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
           {t('Chọn nhân viên')}
         </ModalHeader>
         <ModalBody>
-          {map(listStaff, item => (
-            <Label check xs="12" className="pl-0 pr-0 ipOptionNV" key={item.LOCNO}>
-              <Input
-                type="radio"
-                name="deliveryRequirement"
-                checked={item.LOCNO === idUserSelected}
-                value={item.LOCNO}
-                onChange={handleChangeSelectUser(item.LOCNO)}
-              />{' '}
-              {item.NAME_TEXT}
-              <div className="pl-4">
-                {t('Tuyến')}: {''}
-              </div>
-            </Label>
-          ))}
+          {map(listStaff, item => {
+            return (
+              <Label check xs="12" className="pl-0 pr-0 ipOptionNV" key={item.UNAME}>
+                <Input
+                  type="radio"
+                  name="deliveryRequirement"
+                  checked={item.UNAME === idUserSelected}
+                  value={item.UNAME}
+                  onChange={handleChangeSelectUser(item.UNAME)}
+                />{' '}
+                {item.NAME_TEXT}
+                <div className="pl-4">
+                  {t('Tuyến')}: {''}
+                </div>
+              </Label>
+            );
+          })}
         </ModalBody>
         <ModalFooter className="no-border">
           <Button color="primary" onClick={handleApplyClick} disabled={!idUserSelected}>

@@ -30,8 +30,8 @@ const PhanCongPhatNhan: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     dispatch(
       action_MIOA_ZTMI054({
-        iv_post: 'HUB3',
-        iv_position: 'BHD',
+        iv_post: 'BDH',
+        iv_position: 'NVLX',
         IV_PAGENO: '1',
         IV_NO_PER_PAGE: '10',
       }),

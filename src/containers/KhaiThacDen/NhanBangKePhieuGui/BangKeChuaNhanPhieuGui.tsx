@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { match } from 'react-router-dom';
+import { generatePath, match } from 'react-router-dom';
 
 import { map, trim, toNumber, toLower, size } from 'lodash';
 import moment from 'moment';
@@ -65,7 +65,7 @@ const BangKeChuaNhanPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Elem
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
-      dispatch(push(`${routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE}/${item.TOR_ID}`));
+      dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],

@@ -89,7 +89,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
               <Label check>
                 <Input
                   type="checkbox"
-                  value={row.original.TOR_ID}
+                  value={row.original.TOR_ID || ''}
                   checked={dataSelected.includes(row.original.TOR_ID)}
                   onChange={handleCheckBoxItemData}
                 />
@@ -167,7 +167,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
                 {/* eslint-disable-next-line react/jsx-max-depth */}
                 <option value="">{t('Chọn nhân viên')}</option>
                 {map(listStaff, item => (
-                  <option value={item.LOCNO} key={item.LOCNO}>
+                  <option value={item.UNAME} key={item.UNAME}>
                     {item.NAME_TEXT}
                   </option>
                 ))}

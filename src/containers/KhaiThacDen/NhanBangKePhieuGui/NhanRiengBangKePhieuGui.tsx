@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Input, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { match } from 'react-router-dom';
+import { generatePath, match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
 import { forEach, get, map, trim, toNumber, toLower } from 'lodash';
@@ -174,7 +174,7 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
-      dispatch(push(`${routesMap.THONG_TIN_BANG_KE}`));
+      dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
