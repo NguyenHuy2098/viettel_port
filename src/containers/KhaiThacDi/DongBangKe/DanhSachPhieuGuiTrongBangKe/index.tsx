@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Fade, Input, Row } from 'reactstrap';
-import { get, map, size } from 'lodash';
+import { get, map, noop, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -178,6 +178,13 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     },
   );
 
+  function printTable(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
+    return (event: React.MouseEvent): void => {
+      event.stopPropagation();
+      noop('print', tai.TOR_ID);
+    };
+  }
+
   const columns = useMemo(
     () => [
       {
@@ -208,6 +215,9 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         Cell: ({ row }: Cell): JSX.Element => {
           return (
             <>
+              <Button className="SipTableFunctionIcon" onClick={printTable(row.original)}>
+                <i className="fa fa-print fa-lg color-green" />
+              </Button>
               <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
                 <i className="fa fa-trash-o fa-lg color-red" />
               </Button>

@@ -47,27 +47,29 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
   }, [listTaiChuaHoanThanh]);
 
   useEffect((): void => {
-    dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_FR_DATE: trim(
-          toString(
-            moment(new Date())
-              .subtract(7, 'days')
-              .format(' YYYYMMDD'),
+    if (visible) {
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_TOR_ID: '',
+          IV_FR_DATE: trim(
+            toString(
+              moment(new Date())
+                .subtract(7, 'days')
+                .format(' YYYYMMDD'),
+            ),
           ),
-        ),
-        IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
-        IV_TOR_TYPE: IV_TOR_TYPE,
-        IV_FR_LOC_ID: IV_FR_LOC_ID,
-        IV_TO_LOC_ID: IV_TO_LOC_ID,
-        IV_CUST_STATUS: IV_CUST_STATUS,
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '100',
-      }),
-    );
+          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_TOR_TYPE: IV_TOR_TYPE,
+          IV_FR_LOC_ID: IV_FR_LOC_ID,
+          IV_TO_LOC_ID: IV_TO_LOC_ID,
+          IV_CUST_STATUS: IV_CUST_STATUS,
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '100',
+        }),
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [visible]);
 
   function handleChuyenVaoTai(e: FormEvent): void {
     const payload = {

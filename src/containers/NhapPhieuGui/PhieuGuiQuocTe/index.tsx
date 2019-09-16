@@ -22,6 +22,7 @@ import {
   slice,
   sortBy,
   toString,
+  trim,
 } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -171,9 +172,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     hoTenSender: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiSender: yup.string().required(t('Vui lòng nhập địa chỉ')),
     dienThoaiReceiver: yup
-      .number()
+      .string()
       .required(t('Vui lòng nhập số điện thoại'))
-      .typeError(t('Vui lòng nhập đúng định dạng số điện thoại')),
+      .matches(isVnPhoneMobile, t('Vui lòng nhập đúng định dạng số điện thoại')),
     hoTenReceiver: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiReceiver: yup.string().required(t('Vui lòng nhập địa chỉ')),
     tenHang: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
@@ -403,11 +404,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const validateData = {
     maPhieuGui,
     maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
-    dienThoaiSender,
-    hoTenSender,
+    dienThoaiSender: trim(dienThoaiSender),
+    hoTenSender: trim(hoTenSender),
     diaChiSender,
-    dienThoaiReceiver,
-    hoTenReceiver,
+    dienThoaiReceiver: trim(dienThoaiReceiver),
+    hoTenReceiver: trim(hoTenReceiver),
     diaChiReceiver,
     tenHang,
     soLuong: soLuong === '' ? undefined : soLuong,
@@ -447,9 +448,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setDienThoaiReceiver(get(orderInformationInstane, 'MOBILE_PHONE_DES', ''));
       setHoTenReceiver(get(orderInformationInstane, 'CONSIGNEE_NAME', ''));
       setDiaChiReceiver(
-        `${orderInformationInstane.HOUSE_NO_SOURCE}${' '}${
-          orderInformationInstane.STREET_ID_SOURCE
-        }${' '}${wardReceiverEdit}${' '}${districtReceiverEdit}${' '}${provinceReceiverEdit}`,
+        `${orderInformationInstane.HOUSE_NO_SOURCE}${orderInformationInstane.STREET_ID_SOURCE}${wardReceiverEdit}${districtReceiverEdit}${provinceReceiverEdit}`,
       );
       setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
@@ -729,7 +728,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       draftState.push(paramsPackageItem);
     });
     const payload = {
-      TEL_SRC: dienThoaiSender,
+      TEL_SRC: trim(dienThoaiSender),
       LOCATION_ID_SRC: '',
       CUS_ID: '', // Mã user trên hệ thống APP/Web
       Consignee: '9999999999', // Người nhận hàng
@@ -752,12 +751,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       CITY_SRC: provinceIdSender, // trong trường hợp khách hàng vãng lai
       ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
       REQUEST_PICK_DATE: '',
-      NAME_CONSIG: hoTenReceiver,
+      NAME_CONSIG: trim(hoTenReceiver),
       Shipper: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
       ORDER_TYPE: 'V004', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
       REQUEST_DELIV_DATE: '', // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
       DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
-      PHONE_CONSIG: dienThoaiReceiver,
+      PHONE_CONSIG: trim(dienThoaiReceiver),
       STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
       WARD_SRC: wardIdSender, // trong trường hợp khách hàng vãng lai
       Campaign: '', // Mã chương trình khuyển mại
@@ -768,7 +767,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
       COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
       COUNTRY_DES: quocGia,
-      NAME_OP: hoTenSender, // Tên của đối tượng sử dụng dịch vụ
+      NAME_OP: trim(hoTenSender), // Tên của đối tượng sử dụng dịch vụ
       EMAIL_SHIPPER: '',
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       SOURCE_TYPE: '', // nguồn tạo từ APP/Web hoặc từ ecommerce
@@ -776,7 +775,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       des_name: '', // Địa chỉ nhận trong trường hợp vãng lai
       Transportation_mode: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
       house_id_des: '12', // Số nhà nhận trong trường hợp vãng lai
-      TEL_DES: dienThoaiReceiver,
+      TEL_DES: trim(dienThoaiReceiver),
       Item: payloadPackageItemArr,
     };
     // if (!window.confirm('Bạn có chắc chắn?')) return;
@@ -1098,7 +1097,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               type="text"
               placeholder={t('Nhập địa chỉ')}
               value={diaChiReceiver}
-              defaultValue={`${detailAddressReceiver} - ${wardIdReceiver} - ${districtIdReceiver} - ${provinceIdReceiver}`}
+              defaultValue={`${detailAddressReceiver}${wardIdReceiver}${districtIdReceiver}${provinceIdReceiver}`}
               onChange={handleChangeReceiverAddress}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiReceiver')}</div>

@@ -33,9 +33,11 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     (item: API.Child): API.Child => {
       return {
         TOR_ID: item.TOR_ID,
+        SRC_LOC_IDTRQ: item.SRC_LOC_IDTRQ,
         DES_LOC_IDTRQ: item.DES_LOC_IDTRQ,
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
         GRO_WEI_UNI: item.GRO_WEI_UNI,
+        TOR_TYPE: item.TOR_TYPE,
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
       };
     },
@@ -211,6 +213,10 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
         accessor: 'TOR_ID',
       },
       {
+        Header: t('Điểm đi'),
+        accessor: 'SRC_LOC_IDTRQ',
+      },
+      {
         Header: t('Điểm đến'),
         accessor: 'DES_LOC_IDTRQ',
       },
@@ -226,8 +232,12 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
         accessor: 'GRO_WEI_VAL',
       },
       {
-        Header: t('Ngày gửi'),
+        Header: t('Ngày tạo'),
         accessor: 'DATETIME_CHLC',
+      },
+      {
+        Header: t('Loại'),
+        accessor: 'TOR_TYPE',
       },
       {
         Header: t('Quản trị'),
