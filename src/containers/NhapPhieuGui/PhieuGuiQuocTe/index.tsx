@@ -7,7 +7,22 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { drop, get, find, findIndex, forEach, join, map, reduce, set, size, slice, sortBy, toString } from 'lodash';
+import {
+  drop,
+  get,
+  filter,
+  find,
+  findIndex,
+  forEach,
+  join,
+  map,
+  reduce,
+  set,
+  size,
+  slice,
+  sortBy,
+  toString,
+} from 'lodash';
 import { useTranslation } from 'react-i18next';
 import 'react-datepicker/dist/react-datepicker.css';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
@@ -270,7 +285,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
   const [quocGia, setQuocGia] = useState<string>('VN');
-  let loaiHinhDichVu = 'VCN';
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V99');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
   const [ghiChu, setGhiChu] = useState<string>('');
@@ -297,7 +311,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const newPackageItem: PackageItemInputType = {
     Width: '',
     commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+    comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: '',
@@ -305,7 +319,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     Length: '',
     Hight: '',
     PACKAGING_MATERIAL: '',
-    Service_type: '',
     QUANTITY_OF_PACKAGE: '',
     Description: '',
     NET_WEIGHT_OF_UNIT: '',
@@ -313,12 +326,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     GROSS_WEIGHT_OF_UNIT: 'KG',
     Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
     COD: '',
-    NET_WEIGHT: '100',
+    NET_WEIGHT: '',
   };
   const firstPackageItem = {
     Width: kichThuocRong,
     commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+    comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: giaTri,
@@ -326,7 +339,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     Length: kichThuocDai,
     Hight: kichThuocCao,
     PACKAGING_MATERIAL: '',
-    Service_type: phuongThucVanChuyen,
     QUANTITY_OF_PACKAGE: soLuong,
     Description: tenHang,
     NET_WEIGHT_OF_UNIT: '',
@@ -334,7 +346,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     GROSS_WEIGHT_OF_UNIT: 'KG',
     Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
     COD: '',
-    NET_WEIGHT: '100',
+    NET_WEIGHT: '',
   };
   function addNewPackageItem(): void {
     const newArr = produce(packageItemArr, (draftState): void => {
@@ -458,7 +470,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
         commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-        commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+        comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
         GOODS_VALUE: '',
@@ -466,7 +478,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         Length: '',
         Hight: '',
         PACKAGING_MATERIAL: '',
-        Service_type: '',
         QUANTITY_OF_PACKAGE: '',
         Description: '',
         NET_WEIGHT_OF_UNIT: '',
@@ -474,25 +485,24 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         GROSS_WEIGHT_OF_UNIT: 'KG',
         Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
         COD: '',
-        NET_WEIGHT: '100',
+        NET_WEIGHT: '',
       };
       if (size(orderInformation) >= 2) {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
             commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-            commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+            comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
             GOODS_VALUE: '',
             PACKAGING_MATERIAL: '',
-            Service_type: loaiHinhDichVu,
             Description: '',
             NET_WEIGHT_OF_UNIT: '',
             Currency: '',
             GROSS_WEIGHT_OF_UNIT: 'KG',
             Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
-            NET_WEIGHT: '100',
+            NET_WEIGHT: '',
             QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
             GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(2)) : '',
             Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
@@ -552,7 +562,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Dimension_UoM: '',
           Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
           Goods_value: '',
-          Service_type: loaiHinhDichVu,
+          Service_type: phuongThucVanChuyen,
           Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
           Height: item.Hight ? toString(parseFloat(item.Hight).toFixed(2)) : '',
           Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
@@ -651,7 +661,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           QUANTITY_OF_UNIT: '',
           GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
           GROSS_WEIGHT_OF_UNIT: 'g',
-          NET_WEIGHT: '100',
+          NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: 'g',
           Length: item.Length === '' ? undefined : item.Length,
           Hight: item.Hight === '' ? undefined : item.Hight,
@@ -709,8 +719,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
+    const paramsPackageItem = {
+      SERVICE_TYPE: phuongThucVanChuyen,
+      QUANTITY_OF_PACKAGE: '1',
+      QUANTITY_OF_UNIT: 'ST',
+    };
     const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
+      draftState.push(paramsPackageItem);
     });
     const payload = {
       TEL_SRC: dienThoaiSender,
@@ -751,6 +767,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       FREIGH_TERM: 'PP', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
       STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
       COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
+      COUNTRY_DES: quocGia,
       NAME_OP: hoTenSender, // Tên của đối tượng sử dụng dịch vụ
       EMAIL_SHIPPER: '',
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
@@ -794,7 +811,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           QUANTITY_OF_UNIT: '',
           GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
           GROSS_WEIGHT_OF_UNIT: 'g',
-          NET_WEIGHT: '100',
+          NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: 'g',
           Length: item.Length === '' ? undefined : item.Length,
           Hight: item.Hight === '' ? undefined : item.Hight,
@@ -887,7 +904,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setKichThuocRong('');
     setKichThuocCao('');
     setPhuongThucVanChuyen('VCN');
-    loaiHinhDichVu = 'VCN';
     // setLoaiHangHoa('V99');
     // setNguoiThanhToan('PP');
     setChoXemHang('');
@@ -1115,7 +1131,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeTextboxValue(setPhuongThucVanChuyen)}
             >
               {map(
-                transportMethodArr,
+                filter(
+                  transportMethodArr,
+                  (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V01' || item.SERVICE_GROUP === 'V02',
+                ),
                 (item: TransportMethodItem): JSX.Element => {
                   return (
                     <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>

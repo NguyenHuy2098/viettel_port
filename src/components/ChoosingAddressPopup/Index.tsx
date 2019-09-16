@@ -109,6 +109,22 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   useEffect((): void => {
+    if (!props.province) {
+      setProvince('0');
+    }
+    if (!props.district) {
+      setDistrict('0');
+    }
+    if (!props.ward) {
+      setWard('0');
+    }
+    if (!props.detailAddress) {
+      setDetailAddress('');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visible]);
+
+  useEffect((): void => {
     dispatch(
       action_GET_PROVINCE(payloadProvince, {
         onSuccess: (data: VtpAddressResponse): void => {
@@ -135,7 +151,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
         }),
       );
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   const handleChangeProvince = (event: React.FormEvent<HTMLInputElement>): void => {

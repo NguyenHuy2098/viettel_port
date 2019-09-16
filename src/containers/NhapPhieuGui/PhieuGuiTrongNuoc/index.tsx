@@ -7,7 +7,7 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { drop, get, find, findIndex, forEach, map, reduce, set, size, toString } from 'lodash';
+import { drop, get, filter, find, findIndex, forEach, map, reduce, set, size, toString } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -152,7 +152,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const isVnPhoneMobile = /^(0|\+84)(\s|\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\d)(\s|\.)?(\d{3})(\s|\.)?(\d{3})$/;
 
   const schema = yup.object().shape({
-    maPhieuGui: yup.string().required(t('Vui lòng nhập mã phiếu gửi')),
     maKhachHang: yup.string().required(t('Vui lòng nhập mã khách hàng')),
     dienThoaiSender: yup
       .string()
@@ -318,7 +317,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const newPackageItem: PackageItemInputType = {
     Width: '',
     commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+    comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: '',
@@ -326,20 +325,19 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     Length: '',
     Hight: '',
     PACKAGING_MATERIAL: '',
-    Service_type: '',
     QUANTITY_OF_PACKAGE: '',
     Description: '',
     NET_WEIGHT_OF_UNIT: '',
     Currency: '',
-    GROSS_WEIGHT_OF_UNIT: 'KG',
+    GROSS_WEIGHT_OF_UNIT: 'G',
     Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
     COD: '',
-    NET_WEIGHT: '100',
+    NET_WEIGHT: '',
   };
   const firstPackageItem = {
     Width: kichThuocRong,
     commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+    comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: giaTri,
@@ -347,15 +345,14 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     Length: kichThuocDai,
     Hight: kichThuocCao,
     PACKAGING_MATERIAL: '',
-    Service_type: phuongThucVanChuyen,
     QUANTITY_OF_PACKAGE: soLuong,
     Description: tenHang,
     NET_WEIGHT_OF_UNIT: '',
     Currency: '',
-    GROSS_WEIGHT_OF_UNIT: 'KG',
+    GROSS_WEIGHT_OF_UNIT: 'G',
     Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
     COD: tienThuHo,
-    NET_WEIGHT: '100',
+    NET_WEIGHT: '',
   };
   function addNewPackageItem(): void {
     const newArr = produce(packageItemArr, (draftState): void => {
@@ -430,7 +427,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   const validateData = {
-    maPhieuGui,
     maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
     dienThoaiSender,
     hoTenSender,
@@ -513,7 +509,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
         commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-        commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+        comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
         GOODS_VALUE: '',
@@ -521,33 +517,31 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         Length: '',
         Hight: '',
         PACKAGING_MATERIAL: '',
-        Service_type: '',
         QUANTITY_OF_PACKAGE: '',
         Description: '',
         NET_WEIGHT_OF_UNIT: '',
         Currency: '',
-        GROSS_WEIGHT_OF_UNIT: 'KG',
+        GROSS_WEIGHT_OF_UNIT: 'G',
         Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
         COD: '',
-        NET_WEIGHT: '100',
+        NET_WEIGHT: '',
       };
       if (size(orderInformation) >= 2) {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
             commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-            commodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+            comodity_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
             GOODS_VALUE: '',
             PACKAGING_MATERIAL: '',
-            Service_type: loaiHinhDichVu,
             Description: '',
             NET_WEIGHT_OF_UNIT: '',
             Currency: '',
-            GROSS_WEIGHT_OF_UNIT: 'KG',
+            GROSS_WEIGHT_OF_UNIT: 'G',
             Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
-            NET_WEIGHT: '100',
+            NET_WEIGHT: '',
             QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
             GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(2)) : '',
             Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
@@ -704,8 +698,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
           GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
-          GROSS_WEIGHT_OF_UNIT: 'g',
-          NET_WEIGHT: '100',
+          GROSS_WEIGHT_OF_UNIT: 'G',
+          NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: 'g',
           Length: item.Length === '' ? undefined : item.Length,
           Hight: item.Hight === '' ? undefined : item.Hight,
@@ -796,8 +790,14 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
+    const paramsPackageItem = {
+      SERVICE_TYPE: loaiHinhDichVu,
+      QUANTITY_OF_PACKAGE: '1',
+      QUANTITY_OF_UNIT: 'ST',
+    };
     const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
+      draftState.push(paramsPackageItem);
     });
     const payload = {
       TEL_SRC: dienThoaiSender,
@@ -843,11 +843,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       SOURCE_TYPE: '', // nguồn tạo từ APP/Web hoặc từ ecommerce
       SALE_OFFICE: 'BDH', // mã bưu cục, đang fake tạm là BDH
-      des_name: '', // Địa chỉ nhận trong trường hợp vãng lai
       Transportation_mode: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
       house_id_des: '12', // Số nhà nhận trong trường hợp vãng lai
       TEL_DES: dienThoaiReceiver,
       Item: payloadPackageItemArr,
+      CONTRACT_DISCOUNT_AMOUNT: 0,
+      CONTRACT_DISCOUNT_TYPE: '0',
     };
     // if (!window.confirm('Bạn có chắc chắn?')) return;
     dispatch(
@@ -880,8 +881,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
           GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
-          GROSS_WEIGHT_OF_UNIT: 'g',
-          NET_WEIGHT: '100',
+          GROSS_WEIGHT_OF_UNIT: 'G',
+          NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: 'g',
           Length: item.Length === '' ? undefined : item.Length,
           Hight: item.Hight === '' ? undefined : item.Hight,
@@ -1201,7 +1202,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeTransportMethod(setPhuongThucVanChuyen)}
             >
               {map(
-                transportMethodArr,
+                filter(
+                  transportMethodArr,
+                  (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V01' || item.SERVICE_GROUP === 'V02',
+                ),
                 (item: TransportMethodItem): JSX.Element => {
                   return (
                     <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
@@ -1229,7 +1233,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         </h3>
         <Row className="sipInputItem">
           {map(
-            transportMethodArr,
+            filter(transportMethodArr, (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V04'),
             (item: TransportMethodItem): JSX.Element => {
               return (
                 <Label key={item.SERVICE_TYPE} check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
@@ -1258,11 +1262,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Row className="sipInputItem">
               <Label xs="12" lg="4">
                 {t('Mã phiếu gửi')}
-                <span className="color-red"> *</span>
               </Label>
               <Col lg="8">
                 <Input type="text" value={maPhieuGui} onChange={handleChangeTextboxValue(setMaPhieuGui)} />
-                <div className="sipInputItemError">{handleErrorMessage(errors, 'maPhieuGui')}</div>
               </Col>
             </Row>
           </div>

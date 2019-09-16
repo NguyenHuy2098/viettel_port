@@ -40,7 +40,7 @@ interface PackageItemInputType {
   COD?: string | undefined;
   Service_type?: string;
   commodity_type?: string;
-  commodity_code?: string;
+  comodity_code?: string;
 }
 
 interface NationType {
