@@ -1,13 +1,15 @@
-import React, { KeyboardEvent, useEffect, useState } from 'react';
+import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { noop, size, trim } from 'lodash';
+import { size, toString, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { push } from 'connected-react-router';
+import moment from 'moment';
 import routesMap from 'utils/routesMap';
 import { generatePath } from 'react-router';
 import { SipDataState, SipDataType } from 'utils/enums';
@@ -19,6 +21,24 @@ import BangKeDaDong from './BangKeDaDong';
 const DongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const getListBangKe = useCallback(
+    function(): void {
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_TOR_ID: '',
+          IV_TOR_TYPE: 'ZC1',
+          IV_FR_LOC_ID: 'BDH',
+          IV_CUST_STATUS: '101',
+          IV_FR_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
+        }),
+      );
+    },
+    [dispatch],
+  );
 
   const [tab, setTab] = useState<number>(1);
   const countBangKeChuaHoanThanh = useSelector(
@@ -70,7 +90,7 @@ const DongBangKe: React.FC = (): JSX.Element => {
           {t('Tạo bảng kê')}
         </Button>
         <CreateForwardingItemModal
-          onSuccessCreated={noop}
+          onSuccessCreated={getListBangKe}
           visible={createForwardingItemModal}
           onHide={toggleCreateForwardingItemModal}
           modalTitle={t('Tạo bảng kê')}

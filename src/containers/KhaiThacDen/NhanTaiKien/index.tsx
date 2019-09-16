@@ -33,7 +33,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
 
         IV_TO_LOC_ID: 'HUB1',
         IV_CUST_STATUS: '106',
-        IV_FR_DATE: '20000101',
+        IV_FR_DATE: moment().format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: '1',
         IV_NO_PER_PAGE: '10',
@@ -50,7 +50,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
 
         IV_TO_LOC_ID: 'HUB1',
         IV_CUST_STATUS: '106',
-        IV_FR_DATE: '20000101',
+        IV_FR_DATE: moment().format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: IV_PAGENO,
         IV_NO_PER_PAGE: '10',
@@ -67,7 +67,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
 
         IV_TO_LOC_ID: 'HUB1',
         IV_CUST_STATUS: '107',
-        IV_FR_DATE: '20000101',
+        IV_FR_DATE: moment().format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: IV_PAGENO,
         IV_NO_PER_PAGE: '10',

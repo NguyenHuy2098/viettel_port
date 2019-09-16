@@ -62,7 +62,7 @@ export function makeSelectorTotalPage(IV_TOR_TYPE: string, IV_CUST_STATUS: numbe
  */
 export function makeSelectorTotalItem(IV_TOR_TYPE: string, IV_CUST_STATUS: number) {
   return (state: AppStateType): string =>
-    get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM`, '');
+    get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Paging.EV_TOTAL_ITEM`, '0');
 }
 
 /**

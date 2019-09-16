@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { map, get, noop, toString, trim } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -39,7 +39,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '102',
-          IV_FR_DATE: '20000101',
+          IV_FR_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
@@ -85,18 +85,6 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
-          return (
-            <>
-              <Label check>
-                <Input type="checkbox" />
-              </Label>
-            </>
-          );
-        },
-      },
       {
         Header: t('Mã bảng kê'),
         accessor: 'TOR_ID',

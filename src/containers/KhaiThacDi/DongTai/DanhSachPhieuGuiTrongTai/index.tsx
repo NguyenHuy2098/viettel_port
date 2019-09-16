@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -16,6 +16,7 @@ import { push } from 'connected-react-router';
 import { generatePath } from 'react-router-dom';
 import routesMap from 'utils/routesMap';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 interface Props {
   match: match;
@@ -70,6 +71,12 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     };
     dispatch(
       action_MIOA_ZTMI016(payload, {
+        onSuccess: (): void => {
+          alert(t('Xóa thành công!'));
+        },
+        onFailure: (error: HttpRequestErrorType): void => {
+          alert(error.messages);
+        },
         onFinish: (): void => getListPhieuGui(),
       }),
     );
@@ -89,6 +96,14 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
     };
   }
+
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI047OUT): void => {
+      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: item.TOR_ID })));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dataTaiChild],
+  );
 
   function renderTitle(): JSX.Element {
     return (
@@ -195,7 +210,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         },
       },
       {
-        Header: t('Mã phiếu gửi'),
+        Header: t('Mã bảng kê/phiếu gửi'),
         accessor: 'TOR_ID',
       },
       {
@@ -251,8 +266,8 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       {renderTitle()}
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
-      <Row className="sipTableContainer">
-        <DataTable columns={columns} data={dataTable} />
+      <Row className="sipTableContainer sipTableRowClickable">
+        <DataTable columns={columns} data={dataTable} onRowClick={handleRedirectDetail} />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}

@@ -13,6 +13,7 @@ import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 interface Props {
   match: match;
@@ -112,6 +113,12 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     };
     dispatch(
       action_MIOA_ZTMI016(payload, {
+        onSuccess: (): void => {
+          alert(t('Xóa thành công!'));
+        },
+        onFailure: (error: HttpRequestErrorType): void => {
+          alert(error.messages);
+        },
         onFinish: (): void => getListPhieuGui(),
       }),
     );

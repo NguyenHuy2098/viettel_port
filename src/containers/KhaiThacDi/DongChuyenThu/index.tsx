@@ -1,15 +1,17 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { noop, size, trim } from 'lodash';
+import { size, toString, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { push } from 'connected-react-router';
 import { generatePath } from 'react-router';
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import routesMap from 'utils/routesMap';
+import { push } from 'connected-react-router';
+import moment from 'moment';
 import { SipDataState, SipDataType } from 'utils/enums';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
@@ -20,6 +22,25 @@ import ChuyenThuDaDong from './ChuyenThuDaDong';
 const DongChuyenThu: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  const getListChuyenThu = useCallback(
+    function(): void {
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_TOR_ID: '',
+          IV_TOR_TYPE: 'ZC3',
+          IV_FR_LOC_ID: 'BDH',
+          IV_CUST_STATUS: '101',
+          IV_FR_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
+        }),
+      );
+    },
+    [dispatch],
+  );
+
   const [tab, setTab] = useState<number>(1);
   function handleChangeTab(tab: number): void {
     setTab(tab);
@@ -79,7 +100,7 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
             {t('Tạo chuyến thư')}
           </Button>
           <CreateForwardingItemModal
-            onSuccessCreated={noop}
+            onSuccessCreated={getListChuyenThu}
             visible={createForwardingItemModal}
             onHide={toggleCreateForwardingItemModal}
             modalTitle={t('Tạo chuyến thư')}

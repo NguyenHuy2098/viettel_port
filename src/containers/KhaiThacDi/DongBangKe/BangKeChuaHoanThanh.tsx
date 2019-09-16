@@ -15,6 +15,7 @@ import { Cell } from 'react-table';
 import moment from 'moment';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -57,7 +58,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '101',
-          IV_FR_DATE: '20000101',
+          IV_FR_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
@@ -94,6 +95,12 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     };
     dispatch(
       action_MIOA_ZTMI016(payload, {
+        onSuccess: (): void => {
+          alert(t('Xóa thành công!'));
+        },
+        onFailure: (error: HttpRequestErrorType): void => {
+          alert(error.messages);
+        },
         onFinish: (): void => getListBangKe(),
       }),
     );

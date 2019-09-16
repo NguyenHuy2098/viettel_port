@@ -286,7 +286,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   // const [maKhuyenMai, setMaKhuyenMai] = useState<string>('');
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
   //_____non-validated items
-  const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
+  const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   let loaiHinhDichVu = 'VCN';
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V99');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
@@ -672,7 +672,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             alert(error.message);
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
-            setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
+            setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row', []));
+            setPhuongThucVanChuyen(get(data, 'MT_ZTMI068_OUT.Row[0].SERVICE_TYPE', ''));
           },
         },
       ),

@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, FormGroup, Label, Input } from 'reactstrap';
 import { get, map } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -23,13 +23,18 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
   const postOfficeList = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
 
   const [note, setNote] = useState<string>('');
-  const [destination, setDestination] = useState<string>(get(postOfficeList, '[0].LOCNO', ''));
+  const [destination, setDestination] = useState<string>('');
+
+  useEffect((): void => {
+    setDestination(get(postOfficeList, '[0].LOCNO', ''));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [postOfficeList]);
 
   const payloadCreate = {
     IV_FLAG: '1',
     IV_TOR_TYPE: IV_TOR_TYPE,
     IV_TOR_ID_CU: '',
-    IV_SLOCATION: 'BHD',
+    IV_SLOCATION: 'BDH',
     IV_DLOCATION: destination,
     IV_DESCRIPTION: note,
     T_ITEM: [
@@ -42,6 +47,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
 
   function handleCreate(e: FormEvent): void {
     e.preventDefault();
+    debugger;
     dispatch(
       action_MIOA_ZTMI016(payloadCreate, {
         onSuccess: (data: API.MIOAZTMI016Response): void => {

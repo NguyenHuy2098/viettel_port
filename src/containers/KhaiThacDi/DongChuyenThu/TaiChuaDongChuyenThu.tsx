@@ -19,6 +19,7 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { SipDataState, SipDataType } from 'utils/enums';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -79,7 +80,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC2',
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '101',
-          IV_FR_DATE: '20000101',
+          IV_FR_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
@@ -136,6 +137,12 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
     };
     dispatch(
       action_MIOA_ZTMI016(payload, {
+        onSuccess: (): void => {
+          alert(t('Xóa thành công!'));
+        },
+        onFailure: (error: HttpRequestErrorType): void => {
+          alert(error.messages);
+        },
         onFinish: (): void => getListTai(),
       }),
     );
@@ -336,7 +343,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
       TOR_ID: item.TOR_ID,
       LOG_LOCID_TO: item.LOG_LOCID_TO,
       countChuyenThu: item.ITEM_NO,
-      PERSONAL: item.CREATED_BY,
+      CREATED_BY: item.CREATED_BY,
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
       NOTE_OF: get(item, 'Childs[0].DESCRIPTION', ''),
     };

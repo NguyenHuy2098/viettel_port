@@ -302,7 +302,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   let tabValid = true;
   //_______summary order amount
   const [cuocChinh, setCuocChinh] = useState<string>('0 đ');
-  // const [phuPhi, setPhuPhi] = useState<string>('0 đ');
   const [cuocCongThem, setCuocCongThem] = useState<string>('0 đ');
   const [tongCuoc, setTongCuoc] = useState<string>('0 đ');
 
@@ -635,6 +634,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
             setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
+            setPhuongThucVanChuyen(get(data, 'MT_ZTMI068_OUT.Row[0].SERVICE_TYPE', ''));
           },
         },
       ),
@@ -934,13 +934,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
             <Col xs="7" className="text-semibold">
               <NumberFormat value={cuocCongThem} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
-            </Col>
-          </Row>
-          <Row className="sipSendingCouponItem">
-            <Col xs="5">{t('Phụ phí')}:</Col>
-            <Col xs="7">
-              <Input type="text" defaultValue="0.00 đ" disabled />
-              {/*<div className="sipInputItemError">{handleErrorMessage(errors, 'phuPhi')}</div>*/}
             </Col>
           </Row>
         </Row>

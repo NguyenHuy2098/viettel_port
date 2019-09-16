@@ -13,6 +13,7 @@ import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import { generatePath } from 'react-router-dom';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 // eslint-disable-next-line max-lines-per-function
 const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
@@ -70,6 +71,12 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
       };
       dispatch(
         action_MIOA_ZTMI016(payload, {
+          onSuccess: (): void => {
+            alert(t('Xóa thành công!'));
+          },
+          onFailure: (error: HttpRequestErrorType): void => {
+            alert(error.messages);
+          },
           onFinish: (): void => {
             const payload = {
               IV_TOR_ID: '',
