@@ -172,13 +172,13 @@ const ShippingInformation: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Trọng lượng'),
-        Cell: ({ row }: Cell): string => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
           return `${ceil(get(row, 'original.NET_WEI_VAL'), 2)} ${get(row, 'original.NET_WEI_UNI')}`;
         },
       },
       {
         Header: t('Ngày tạo'),
-        Cell: ({ row }: Cell): string => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
           return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
         },
       },

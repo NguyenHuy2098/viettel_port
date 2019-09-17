@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { forEach, noop, map, get, toNumber, trim, toLower, round, size } from 'lodash';
 import moment from 'moment';
 
+import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
+import { select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
 import { testData } from './helper';
-import { action_MIOA_ZTMI031 } from '../../../redux/MIOA_ZTMI031/actions';
-import { select_MT_ZTMI031_OUT } from '../../../redux/MIOA_ZTMI031/selectors';
 
 let tempDivideQuantity = 0;
 

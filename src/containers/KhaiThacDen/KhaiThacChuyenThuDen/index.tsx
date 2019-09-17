@@ -43,13 +43,11 @@ const FreightOrderReceive: React.FC = (): JSX.Element => {
     () => [
       {
         id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <>
-              <Label check>
-                <Input type="checkbox" />
-              </Label>
-            </>
+            <Label check>
+              <Input type="checkbox" />
+            </Label>
           );
         },
       },
@@ -75,13 +73,11 @@ const FreightOrderReceive: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <>
-              <Button className="SipTableFunctionIcon" onClick={handleControllerClick(row.original)}>
-                <i className="fa fa-pencil fa-lg color-blue" />
-              </Button>
-            </>
+            <Button className="SipTableFunctionIcon" onClick={handleControllerClick(row.original)}>
+              <i className="fa fa-pencil fa-lg color-blue" />
+            </Button>
           );
         },
       },

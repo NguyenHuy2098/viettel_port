@@ -198,7 +198,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       {
         Header: t('Số lượng'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return <>Chưa có API</>;
         },
       },
@@ -212,7 +212,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon" onClick={printTable(row.original)}>

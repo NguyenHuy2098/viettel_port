@@ -5,11 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import classNames from 'classnames';
 
+import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
+import { selectPhanCongNhan } from 'redux/MIOA_ZTMI035/selectors';
+import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
 import PhanCongNhan from './PhanCongNhan';
 import PhanCongPhat from './PhanCongPhat';
-import { action_MIOA_ZTMI054 } from '../../../redux/MIOA_ZTMI054/actions';
-import { selectPhanCongNhan } from '../../../redux/MIOA_ZTMI035/selectors';
-import { selectPhanCongPhat } from '../../../redux/MIOA_ZTMI040/selectors';
 
 interface Props {
   match: match;

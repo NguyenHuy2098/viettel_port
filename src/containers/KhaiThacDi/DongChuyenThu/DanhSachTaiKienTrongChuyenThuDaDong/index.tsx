@@ -178,7 +178,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       {
         Header: t('Số lượng'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return <>Chưa có API</>;
         },
       },
@@ -198,13 +198,11 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
-            </>
+            <Button className="SipTableFunctionIcon">
+              <i className="fa fa-print fa-lg color-green" />
+            </Button>
           );
         },
       },

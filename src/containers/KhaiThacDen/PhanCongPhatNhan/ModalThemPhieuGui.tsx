@@ -34,7 +34,7 @@ const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
     () => [
       {
         id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               <Label check>
@@ -62,7 +62,7 @@ const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">

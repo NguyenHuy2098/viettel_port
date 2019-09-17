@@ -9,10 +9,10 @@ import { map, find, reject } from 'lodash';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
 import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
+import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
+import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import ModalThemPhieuGui from './ModalThemPhieuGui';
 import ModalChonNhanVien from './ModalChonNhanVien';
-import { makeSelectorGet_MT_ZTMI054_OUT } from '../../../redux/MIOA_ZTMI054/selectors';
-import { action_MIOA_ZTMI055 } from '../../../redux/MIOA_ZTMI055/actions';
 
 interface Props {
   match: match;
@@ -54,7 +54,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
     () => [
       {
         id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               <Label check>

@@ -124,13 +124,11 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
-            </>
+            <Button className="SipTableFunctionIcon">
+              <i className="fa fa-print fa-lg color-green" />
+            </Button>
           );
         },
       },

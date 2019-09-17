@@ -113,11 +113,9 @@ const ComplainCustomer: React.FC = (): JSX.Element => {
 
   function renderAction(): JSX.Element {
     return (
-      <>
-        <Button>
-          <i className="fa fa-check-square fa-lg color-green" />
-        </Button>
-      </>
+      <Button>
+        <i className="fa fa-check-square fa-lg color-green" />
+      </Button>
     );
   }
 

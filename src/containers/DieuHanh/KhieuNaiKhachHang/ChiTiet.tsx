@@ -19,12 +19,10 @@ const ComplainDetail: React.FC = (): JSX.Element => {
   });
 
   const renderTopController = (): React.ReactElement => (
-    <>
-      <Button type="submit">
-        <i className="fa fa-download" />
-        {t('Ghi lại')}
-      </Button>
-    </>
+    <Button type="submit">
+      <i className="fa fa-download" />
+      {t('Ghi lại')}
+    </Button>
   );
 
   function renderInternalRecordTitle(): JSX.Element {

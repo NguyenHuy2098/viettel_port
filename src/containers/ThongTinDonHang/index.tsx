@@ -167,7 +167,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Giá trị'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return <>Thiếu Api</>;
         },
       },
@@ -205,7 +205,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">

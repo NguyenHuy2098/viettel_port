@@ -3,7 +3,8 @@ import { Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { map, filter } from 'lodash';
-import { makeSelectorGet_MT_ZTMI054_OUT } from '../../../redux/MIOA_ZTMI054/selectors';
+
+import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 
 interface Props {
   onApplyChoosen: (IV_PARTY_ID: string) => void;

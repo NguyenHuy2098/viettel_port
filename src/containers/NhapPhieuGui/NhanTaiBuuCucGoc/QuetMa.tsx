@@ -114,21 +114,21 @@ const QuetMa: React.FC = (): JSX.Element => {
       {
         Header: t('Bưu cục đến'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return <>Thiếu Api</>;
         },
       },
       {
         Header: t('Số lượng'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return <>Thiếu Api</>;
         },
       },
       {
         Header: t('Trọng lượng'),
         accessor: 'GRO_WEI_VAL',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           const weight = parseFloat(get(row, 'values.GRO_WEI_VAL', '')).toFixed(2);
           return <>{weight}</>;
         },
@@ -136,14 +136,14 @@ const QuetMa: React.FC = (): JSX.Element => {
       {
         Header: t('Ngày gửi'),
         accessor: 'CREATED_ON',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           const date = get(row, 'values.CREATED_ON', '');
           return <>{moment(date, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</>;
         },
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">

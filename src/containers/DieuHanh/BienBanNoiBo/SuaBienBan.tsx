@@ -7,12 +7,10 @@ const EditRecord: React.FC = (): React.ReactElement => {
   const { t } = useTranslation();
 
   const renderTopController = (): React.ReactElement => (
-    <>
-      <Button>
-        <i className="fa fa-refresh" />
-        {t('Cập nhật')}
-      </Button>
-    </>
+    <Button>
+      <i className="fa fa-refresh" />
+      {t('Cập nhật')}
+    </Button>
   );
 
   const renderReportSolution = (): React.ReactElement => (

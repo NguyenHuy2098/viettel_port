@@ -314,18 +314,16 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     () => [
       {
         id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <>
-              <Label check>
-                <Input
-                  checked={uncheckAllForwardingItemCheckbox}
-                  type="checkbox"
-                  value={get(row, 'values.TOR_ID', '')}
-                  onClick={handleSelectBangKeItem}
-                />
-              </Label>
-            </>
+            <Label check>
+              <Input
+                checked={uncheckAllForwardingItemCheckbox}
+                type="checkbox"
+                value={get(row, 'values.TOR_ID', '')}
+                onClick={handleSelectBangKeItem}
+              />
+            </Label>
           );
         },
       },
@@ -355,7 +353,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon" onClick={printTai(row.original)}>

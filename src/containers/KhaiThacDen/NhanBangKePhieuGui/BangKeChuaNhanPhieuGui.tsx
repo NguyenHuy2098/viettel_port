@@ -70,13 +70,11 @@ const BangKeChuaNhanPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Elem
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
   );
+
   return (
-    <>
-      <div className="row mt-3" />
-      <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
-      </Row>
-    </>
+    <Row className="sipTableContainer">
+      <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+    </Row>
   );
 };
 

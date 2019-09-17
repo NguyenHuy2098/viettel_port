@@ -1,15 +1,18 @@
 import React, { useCallback } from 'react';
 import { Table } from 'reactstrap';
-import { TableProps, useTable } from 'react-table';
+import { TableOptions, useTable } from 'react-table';
 import { noop } from 'lodash';
 
-interface Props {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+interface Props extends TableOptions<any> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: (item: any) => void;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const DataTable: React.FC<Props & TableProps> = ({ columns, data, onRowClick }: Props & TableProps): JSX.Element => {
+const DataTable: React.FC<Props> = ({ columns, data, onRowClick }: Props): JSX.Element => {
   // Use the state and functions returned from useTable to build your UI
   const { getTableProps, headerGroups, rows, prepareRow } = useTable({
     columns,
@@ -27,35 +30,33 @@ const DataTable: React.FC<Props & TableProps> = ({ columns, data, onRowClick }: 
 
   // Render the UI for your table
   return (
-    <>
-      <Table striped hover {...getTableProps()}>
-        <thead>
-          {headerGroups.map(headerGroup => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {rows.map(
-            row =>
-              prepareRow(row) || (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map(cell => {
-                    return (
-                      <td onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
-                        {cell.render('Cell')}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ),
-          )}
-        </tbody>
-      </Table>
-    </>
+    <Table striped hover {...getTableProps()}>
+      <thead>
+        {headerGroups.map(headerGroup => (
+          <tr>
+            {headerGroup.headers.map(column => (
+              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody>
+        {rows.map(
+          row =>
+            prepareRow(row) || (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
+                      {cell.render('Cell')}
+                    </td>
+                  );
+                })}
+              </tr>
+            ),
+        )}
+      </tbody>
+    </Table>
   );
 };
 

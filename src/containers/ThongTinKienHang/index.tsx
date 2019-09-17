@@ -273,14 +273,14 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Thông tin bảng kê'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return <>Thiếu api</>;
         },
       },
       {
         Header: t('Người tác động'),
         accessor: '',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return <>Thiếu api</>;
         },
       },

@@ -32,14 +32,12 @@ const InternalRecord: React.FC = (): JSX.Element => {
 
   function renderFindRecordButton(): JSX.Element {
     return (
-      <>
-        <div className="findRecordButton">
-          <Button>{t('Nghiêm trọng')}</Button>
-          <Button className="active">{t('Kết luận sai')}</Button>
-          <Button>{t('Đã hoàn thành')}</Button>
-          <Button>{t('Mới lập')}</Button>
-        </div>
-      </>
+      <div className="findRecordButton">
+        <Button>{t('Nghiêm trọng')}</Button>
+        <Button className="active">{t('Kết luận sai')}</Button>
+        <Button>{t('Đã hoàn thành')}</Button>
+        <Button>{t('Mới lập')}</Button>
+      </div>
     );
   }
 

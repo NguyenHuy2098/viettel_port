@@ -28,7 +28,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     () => [
       {
         id: 'select',
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <Label check>
               <Input type="checkbox" />
@@ -54,13 +54,13 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Trọng lượng'),
-        Cell: ({ row }: Cell): string => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
           return `${ceil(get(row, 'original.GRO_WEI_VAL'), 2)} ${get(row, 'original.GRO_WEI_UNI')}`;
         },
       },
       {
         Header: t('Ngày tạo'),
-        Cell: ({ row }: Cell): string => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
           return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
         },
       },
@@ -70,7 +70,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell): JSX.Element => {
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <Button className="SipTableFunctionIcon">
               <i className="fa fa-print fa-lg color-green" />
