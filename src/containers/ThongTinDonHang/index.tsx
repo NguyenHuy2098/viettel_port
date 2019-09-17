@@ -187,13 +187,17 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
           const serviceType: string[] = drop(get(row, 'values.SERVICE_TYPE', ''), 1);
           return (
             <>
-              {slice(
-                serviceType,
-                0,
-                findIndex(serviceType, (item: string): boolean => {
-                  return item === '/';
-                }),
-              )}
+              {findIndex(serviceType, (item: string): boolean => {
+                return item === '/';
+              }) !== -1
+                ? slice(
+                    serviceType,
+                    0,
+                    findIndex(serviceType, (item: string): boolean => {
+                      return item === '/';
+                    }),
+                  )
+                : serviceType}
             </>
           );
         },
@@ -252,8 +256,10 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
                 {orderInformationInstane &&
-                  `${orderInformationInstane.HOUSE_NO_DES !== 0 ? orderInformationInstane.HOUSE_NO_DES : ''}${' '}
-                  ${orderInformationInstane.STREET_ID_DES !== null ? orderInformationInstane.STREET_ID_DES : ''}${' '}
+                  `${orderInformationInstane.HOUSE_NO_SOURCE !== 0 ? orderInformationInstane.HOUSE_NO_SOURCE : ''}${' '}
+                  ${
+                    orderInformationInstane.STREET_ID_SOURCE !== null ? orderInformationInstane.STREET_ID_SOURCE : ''
+                  }${' '}
                   ${wardSender}${' '}
                   ${districtSender}${' '}
                   ${provinceSender}`}
@@ -293,10 +299,8 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
                 {orderInformationInstane &&
-                  `${orderInformationInstane.HOUSE_NO_SOURCE !== 0 ? orderInformationInstane.HOUSE_NO_SOURCE : ''}${' '}
-                  ${
-                    orderInformationInstane.STREET_ID_SOURCE !== null ? orderInformationInstane.STREET_ID_SOURCE : ''
-                  }${' '}
+                  `${orderInformationInstane.HOUSE_NO_DES !== 0 ? orderInformationInstane.HOUSE_NO_DES : ''}${' '}
+                  ${orderInformationInstane.STREET_ID_DES !== null ? orderInformationInstane.STREET_ID_DES : ''}${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}

@@ -385,8 +385,8 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_DES !== 0 ? packageInformation.HOUSE_NO_DES : ''}${' '}
-                  ${packageInformation.STREET_ID_DES !== null ? packageInformation.STREET_ID_DES : ''}${' '}
+                  `${packageInformation.HOUSE_NO_SOURCE !== 0 ? packageInformation.HOUSE_NO_SOURCE : ''}${' '}
+                  ${packageInformation.STREET_ID_SOURCE !== null ? packageInformation.STREET_ID_SOURCE : ''}${' '}
                   ${wardSender}${' '}
                   ${districtSender}${' '}
                   ${provinceSender}`}
@@ -426,8 +426,8 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_SOURCE !== 0 ? packageInformation.HOUSE_NO_SOURCE : ''}${' '}
-                  ${packageInformation.STREET_ID_SOURCE !== null ? packageInformation.STREET_ID_SOURCE : ''}${' '}
+                  `${packageInformation.HOUSE_NO_DES !== 0 ? packageInformation.HOUSE_NO_DES : ''}${' '}
+                  ${packageInformation.STREET_ID_DES !== null ? packageInformation.STREET_ID_DES : ''}${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}

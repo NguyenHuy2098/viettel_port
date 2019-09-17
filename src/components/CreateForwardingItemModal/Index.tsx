@@ -47,7 +47,6 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
 
   function handleCreate(e: FormEvent): void {
     e.preventDefault();
-    debugger;
     dispatch(
       action_MIOA_ZTMI016(payloadCreate, {
         onSuccess: (data: API.MIOAZTMI016Response): void => {

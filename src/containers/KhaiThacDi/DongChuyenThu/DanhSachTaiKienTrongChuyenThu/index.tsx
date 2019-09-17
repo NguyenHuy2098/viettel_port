@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
-import { match } from 'react-router-dom';
+import { generatePath, match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { Cell } from 'react-table';
@@ -12,8 +12,10 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
+import { push } from 'connected-react-router';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   match: match;
@@ -177,6 +179,14 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     },
   );
 
+  const handleRedirectDetail = useCallback(
+    (item: API.RowMTZTMI046OUT): void => {
+      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dataChuyenThuChild],
+  );
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -246,8 +256,8 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       {renderTitle()}
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
-      <Row className="sipTableContainer">
-        <DataTable columns={columns} data={dataTable} />
+      <Row className="sipTableContainer sipTableRowClickable">
+        <DataTable columns={columns} data={dataTable} onRowClick={handleRedirectDetail} />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}

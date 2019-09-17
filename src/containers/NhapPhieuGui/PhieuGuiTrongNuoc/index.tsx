@@ -7,7 +7,7 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { drop, get, filter, find, findIndex, forEach, map, reduce, set, size, toString } from 'lodash';
+import { drop, get, filter, find, findIndex, forEach, map, reduce, set, size, toString, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -801,55 +801,64 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       draftState.push(paramsPackageItem);
     });
     const payload = {
-      TEL_SRC: dienThoaiSender,
-      LOCATION_ID_SRC: '',
-      CUS_ID: '', // Mã user trên hệ thống APP/Web
-      Consignee: '9999999999', // Người nhận hàng
-      FWO_NO: '', // bắt buộc với sửa/xóa
-      LOCATION_ID_DES: '',
-      VAT_NO_PAYER: '', // Mã số thuế đối tác sử dụng
-      PHONE_OP: '',
-      MOVEMENT_TYPE: 'ZDD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
-      DISTRICT_DES: districtIdReceiver, // nhận trong trường hợp khách hàng vãng lai
-      SALE_ORG: '',
-      EMAIL_OP: '',
-      CITY_DES: provinceIdReceiver, // nhận trong trường hợp khách hàng vãng lai
-      PromoCode: '',
-      POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
-      WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
-      FLAG_HEADER: '', // Cờ phân biệt trường hợp hủy đơn hàng để khác null là block
+      ADDRESS_CONSIG: '',
+      ADDRESS_SHIPPER: '',
       BUYERS_REFERENCE_NUMBER: maPhieuGui,
-      Note: ghiChu, // Ghi chú cho bưu gửi
-      EMAIL_CONSIG: '',
+      CAMPAIGN: '',
+      CITY_DES: provinceIdReceiver, // nhận trong trường hợp khách hàng vãng lai
       CITY_SRC: provinceIdSender, // trong trường hợp khách hàng vãng lai
-      ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
-      REQUEST_PICK_DATE: '',
-      NAME_CONSIG: hoTenReceiver,
-      Shipper: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
-      ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
-      REQUEST_DELIV_DATE: thoiGianPhat ? '' : null, // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
-      DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
-      PHONE_CONSIG: dienThoaiReceiver,
-      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
-      WARD_SRC: wardIdSender, // trong trường hợp khách hàng vãng lai
-      Campaign: '', // Mã chương trình khuyển mại
-      Disctype: '', // Loại khuyến mại
-      Description: '', // Mô tả chương trình khuyến mại
-      VOUCHER_ID: '',
-      FREIGH_TERM: nguoiThanhToan, // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
-      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
-      COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
-      NAME_OP: hoTenSender, // Tên của đối tượng sử dụng dịch vụ
-      EMAIL_SHIPPER: '',
-      POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
-      SOURCE_TYPE: '', // nguồn tạo từ APP/Web hoặc từ ecommerce
-      SALE_OFFICE: 'BDH', // mã bưu cục, đang fake tạm là BDH
-      Transportation_mode: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
-      house_id_des: '12', // Số nhà nhận trong trường hợp vãng lai
-      TEL_DES: dienThoaiReceiver,
-      Item: payloadPackageItemArr,
+      CONSIGNEE: 'TRUNGVT',
       CONTRACT_DISCOUNT_AMOUNT: 0,
       CONTRACT_DISCOUNT_TYPE: '0',
+      COUNTRY_DES: 'VN',
+      COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
+      CUS_ID: '', // Mã user trên hệ thống APP/Web
+      DISTRICT_DES: districtIdReceiver, // nhận trong trường hợp khách hàng vãng lai
+      DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
+      EMAIL_CONSIG: '',
+      FREIGH_TERM: nguoiThanhToan, // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
+      HOUSE_ID_SRC: '',
+      HOUSE_ID_DES: '',
+      ITEM: payloadPackageItemArr,
+      LOCATION_ID_SRC: '',
+      MOVEMENT_TYPE: 'ZDD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
+      NAME_CONSIG: trim(hoTenReceiver),
+      NAME_SHIPPER: hoTenSender,
+      NOTE: ghiChu, // Ghi chú cho bưu gửi
+      OLD_CAMPAIGN_ID: 0,
+      ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
+      ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
+      PHONE_CONSIG: dienThoaiReceiver,
+      PHONE_SHIPPER: '0395316598',
+      POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
+      POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
+      REQUEST_PICK_DATE: '',
+      REQUEST_DELIV_DATE: thoiGianPhat ? '' : null, // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
+      SHIPPER: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
+      SOURCE_TYPE: '', // nguồn tạo từ APP/Web hoặc từ ecommerce
+      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
+      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
+      TEL_DES: dienThoaiReceiver,
+      TEL_SRC: dienThoaiSender,
+      TRANSPORTATION_MODE: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
+      WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
+      WARD_SRC: wardIdSender, // trong trường hợp khách hàng vãng lai
+      //_______________________________________
+      // FWO_NO: '', // bắt buộc với sửa/xóa
+      // LOCATION_ID_DES: '',
+      // VAT_NO_PAYER: '', // Mã số thuế đối tác sử dụng
+      // PHONE_OP: '',
+      // SALE_ORG: '',
+      // EMAIL_OP: '',
+      // PromoCode: '',
+      // FLAG_HEADER: '', // Cờ phân biệt trường hợp hủy đơn hàng để khác null là block
+      // Disctype: '', // Loại khuyến mại
+      // Description: '', // Mô tả chương trình khuyến mại
+      // VOUCHER_ID: '',
+      // EMAIL_SHIPPER: '',
+      // POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
+      // SALE_OFFICE: 'BDH', // mã bưu cục, đang fake tạm là BDH
+      // house_id_des: '12', // Số nhà nhận trong trường hợp vãng lai
     };
     // if (!window.confirm('Bạn có chắc chắn?')) return;
     dispatch(
@@ -981,7 +990,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setKichThuocRong('');
     setKichThuocCao('');
     setThoiGianPhat(new Date());
-    setPhuongThucVanChuyen('VCN');
+    setPhuongThucVanChuyen(get(transportMethodArr, '[0].SERVICE_TYPE', 'VCN'));
     loaiHinhDichVu = 'VCN';
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
@@ -994,6 +1003,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPackageItemArr([]);
     setPackageItemErrorsList([]);
     tabValid = true;
+    setCuocChinh('0 đ');
+    setCuocCongThem('0 đ');
+    setTongCuoc('0 đ');
   }
 
   function renderSendingCoupon(): JSX.Element {

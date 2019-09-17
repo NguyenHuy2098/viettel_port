@@ -48,6 +48,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const sortedCountryList = sortBy(countryList, ['NATIONAL_NAME']);
+
   const idDonHang = get(props, 'match.params.idDonHang', '');
   const isCreateNewForwardingOrder: boolean = idDonHang === '';
 
@@ -285,7 +287,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [kichThuocCao, setKichThuocCao] = useState<string>('');
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
-  const [quocGia, setQuocGia] = useState<string>('VN');
+  const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V99');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
   const [ghiChu, setGhiChu] = useState<string>('');
@@ -714,6 +716,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
     setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
     setProvinceIdReceiver(join(slice(thisValue, 110, 190), ''));
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -728,57 +734,51 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       draftState.push(paramsPackageItem);
     });
     const payload = {
-      TEL_SRC: trim(dienThoaiSender),
-      LOCATION_ID_SRC: '',
-      CUS_ID: '', // Mã user trên hệ thống APP/Web
-      Consignee: '9999999999', // Người nhận hàng
-      FWO_NO: '', // bắt buộc với sửa/xóa
-      LOCATION_ID_DES: '',
-      VAT_NO_PAYER: '', // Mã số thuế đối tác sử dụng
-      PHONE_OP: '',
-      MOVEMENT_TYPE: 'ZDD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
-      DISTRICT_DES: districtIdReceiver, // nhận trong trường hợp khách hàng vãng lai
-      SALE_ORG: '',
-      EMAIL_OP: '',
-      CITY_DES: provinceIdReceiver, // nhận trong trường hợp khách hàng vãng lai
-      PromoCode: '',
-      POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
-      WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
-      FLAG_HEADER: '', // Cờ phân biệt trường hợp hủy đơn hàng để khác null là block
+      ADDRESS_CONSIG: '',
+      ADDRESS_SHIPPER: '',
       BUYERS_REFERENCE_NUMBER: maPhieuGui,
-      Note: ghiChu, // Ghi chú cho bưu gửi
-      EMAIL_CONSIG: '',
+      CAMPAIGN: '',
+      CITY_DES: provinceIdReceiver, // nhận trong trường hợp khách hàng vãng lai
       CITY_SRC: provinceIdSender, // trong trường hợp khách hàng vãng lai
-      ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
-      REQUEST_PICK_DATE: '',
-      NAME_CONSIG: trim(hoTenReceiver),
-      Shipper: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
-      ORDER_TYPE: 'V004', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
-      REQUEST_DELIV_DATE: '', // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
-      DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
-      PHONE_CONSIG: trim(dienThoaiReceiver),
-      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
-      WARD_SRC: wardIdSender, // trong trường hợp khách hàng vãng lai
-      Campaign: '', // Mã chương trình khuyển mại
-      Disctype: '', // Loại khuyến mại
-      Description: '', // Mô tả chương trình khuyến mại
-      VOUCHER_ID: '',
-      FREIGH_TERM: 'PP', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
-      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
-      COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
+      CONSIGNEE: 'TRUNGVT',
+      CONTRACT_DISCOUNT_AMOUNT: 0,
+      CONTRACT_DISCOUNT_TYPE: '0',
       COUNTRY_DES: quocGia,
-      NAME_OP: trim(hoTenSender), // Tên của đối tượng sử dụng dịch vụ
-      EMAIL_SHIPPER: '',
+      COUNTRY_SRC: 'VN',
+      CUS_ID: '', // Mã user trên hệ thống APP/Web
+      DISTRICT_DES: districtIdReceiver, // nhận trong trường hợp khách hàng vãng lai
+      DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
+      DESCRIPTION: '', // Mô tả chương trình khuyến mại
+      DISCTYPE: '', // Loại khuyến mại
+      EMAIL_CONSIG: '',
+      FREIGH_TERM: 'PP', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
+      HOUSE_ID_SRC: '',
+      HOUSE_ID_DES: '',
+      ITEM: payloadPackageItemArr,
+      LOCATION_ID_SRC: '',
+      LOCATION_ID_DES: '',
+      MOVEMENT_TYPE: 'ZDD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
+      NAME_CONSIG: trim(hoTenReceiver),
+      NAME_SHIPPER: hoTenSender,
+      NOTE: ghiChu, // Ghi chú cho bưu gửi
+      OLD_CAMPAIGN_ID: 0,
+      ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
+      ORDER_TYPE: 'V004', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
+      PHONE_CONSIG: trim(dienThoaiReceiver),
+      PHONE_SHIPPER: '0395316598',
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
+      POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
+      REQUEST_PICK_DATE: '',
+      SHIPPER: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
       SOURCE_TYPE: '', // nguồn tạo từ APP/Web hoặc từ ecommerce
-      SALE_OFFICE: 'BDH', // mã bưu cục, đang fake tạm là BDH
-      des_name: '', // Địa chỉ nhận trong trường hợp vãng lai
-      Transportation_mode: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
-      house_id_des: '12', // Số nhà nhận trong trường hợp vãng lai
+      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
+      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
       TEL_DES: trim(dienThoaiReceiver),
-      Item: payloadPackageItemArr,
+      TEL_SRC: trim(dienThoaiSender),
+      TRANSPORTATION_MODE: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
+      WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
+      WARD_SRC: wardIdSender, // trong trường hợp khách hàng vãng lai
     };
-    // if (!window.confirm('Bạn có chắc chắn?')) return;
     dispatch(
       action_MIOA_ZTMI012(payload, {
         onSuccess: (data: API.MIOAZTMI012Response): void => {
@@ -911,6 +911,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setPackageItemArr([]);
     setPackageItemErrorsList([]);
     tabValid = true;
+    setCuocChinh('0 đ');
+    setCuocCongThem('0 đ');
+    setTongCuoc('0 đ');
   }
 
   function renderSendingCoupon(): JSX.Element {
@@ -1076,7 +1079,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           </Label>
           <Col lg="8">
             <Input type="select" value={quocGia} onChange={handleChangeTextboxValue(setQuocGia)}>
-              {map(sortBy(countryList, ['NATIONAL_NAME']), (item: NationType, index: number) => {
+              {map(sortedCountryList, (item: NationType, index: number) => {
                 return (
                   <option key={index} value={item.NATIONAL_CODE}>
                     {item.NATIONAL_NAME}

@@ -26,7 +26,6 @@ const DongTai: React.FC = (): JSX.Element => {
 
   const getListTai = useCallback(
     function(): void {
-      debugger;
       dispatch(
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
