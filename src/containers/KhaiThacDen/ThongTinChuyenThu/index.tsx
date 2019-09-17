@@ -7,6 +7,7 @@ import classNames from 'classnames';
 import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
+import printJS from 'print-js';
 
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
@@ -48,26 +49,33 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
 
-  const handleBackChuyenThu = (): void => {
+  const handleGoBack = (): void => {
     dispatch(goBack());
+  };
+
+  const handlePrint = (): void => {
+    printJS({
+      printable: 'samplePrint',
+      type: 'html',
+    });
   };
 
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBackChuyenThu} className="sipTitleBtnBack">
+          <Button onClick={handleGoBack} className="sipTitleBtnBack">
             <i className="fa fa-arrow-left backIcon" />
           </Button>
           {t('Thông tin chuyến thư')}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
+          <Button className="sipTitleRightBlockBtnIcon" onClick={handlePrint}>
             <i className="fa fa-print" />
           </Button>
         </div>
       </Row>
-      <Row className="sipSummaryContent">
+      <Row id="samplePrint" className="sipSummaryContent">
         <Col lg="5" xs="12">
           <Row>
             <Col xs="5">{t('Mã chuyến thư')}: </Col>

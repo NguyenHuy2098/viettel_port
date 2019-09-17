@@ -11710,6 +11710,11 @@ pretty-format@^24.9.0:
     ansi-styles "^3.2.0"
     react-is "^16.8.4"
 
+print-js@^1.0.61:
+  version "1.0.61"
+  resolved "https://registry.yarnpkg.com/print-js/-/print-js-1.0.61.tgz#6e6079f636c04fc34f23fa561f0b8fced32e36d3"
+  integrity sha512-H/GhVZMroI7qqXH+6LrtFacLOcapRIUrcJD4F4BONZFTk6VtmGC2dqQydzW4RYJpfsCxNUg2Tyi7A46zKC3wmQ==
+
 printj@~1.1.0, printj@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/printj/-/printj-1.1.2.tgz#d90deb2975a8b9f600fb3a1c94e3f4c53c78a222"
@@ -12268,7 +12273,7 @@ react-side-effect@^1.1.0:
   dependencies:
     shallowequal "^1.0.1"
 
-react-table@^7.0.0-alpha.35:
+react-table@^7.0.0-beta.0:
   version "7.0.0-beta.0"
   resolved "https://registry.yarnpkg.com/react-table/-/react-table-7.0.0-beta.0.tgz#2ba60ce9faa8286c2c8ebe668efdd14308129ccf"
   integrity sha512-ddPDtsGMAq1m4Mh/pIn1uUaGAUikS52YMAfOhduKQkz+3UuQVqcUU44C6e8/9S7GZrMB+Vp1MwqmHJwR5ciW/g==
