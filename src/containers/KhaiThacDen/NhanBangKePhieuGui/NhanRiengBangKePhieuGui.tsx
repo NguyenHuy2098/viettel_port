@@ -199,6 +199,7 @@ const NhanRiengBangKePhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Ele
           </Button>
         </div>
       </div>
+
       <div className="row mt-3" />
       <Row className="sipTableContainer">{showMainContent()}</Row>
     </>

@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Button, Row, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -8,6 +8,8 @@ import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
 
+// import blackBag from 'assets/img/blackBag.png';
+// import deliveryBox from 'assets/img/box.png';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
@@ -132,31 +134,33 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <span className="input-group-text">
-                <i className="fa fa-barcode" />
-              </span>
-            </InputGroupAddon>
+          <div className="sipTitleRightBlockInput m-0 col-4 p-0 pr-2">
+            <i className="fa fa-barcode" />
             <Input
-              className="w-25 mr-2"
-              onChange={handleChangeTaiKien}
               type="text"
-              placeholder={t('Quét mã tải kiện')}
+              placeholder={t('Quét mã bảng kê/phiếu gửi')}
+              onChange={handleChangeTaiKien}
+              className="backgroundColorNeural6"
             />
-          </InputGroup>
+          </div>
           <Button className="mr-2" color="primary" onClick={handleScanTaiKien}>
             {t('Quét mã')}
           </Button>
-          {/*<button className="btn btn-outline-primary mr-2">*/}
+
+          {/*<Button className="sipButtonTypeC mr-2">*/}
+          {/*  <img src={blackBag} alt="black-bag" className="mr-2" />*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
-          {/*</button>*/}
-          {/*<button className="btn btn-outline-primary">*/}
+          {/*</Button>*/}
+          {/*<Button className="sipButtonTypeC">*/}
+          {/*  <img src={deliveryBox} alt="delivery-box" className="mr-2" />*/}
           {/*  {t('Kiện')}&nbsp;({'20'})*/}
-          {/*</button>*/}
+          {/*</Button>*/}
         </div>
         <div className="btn-toolbar col-2 align-items-end flex-column">
-          <Button color="primary">{t('Nhận tải kiện')}</Button>
+          <Button color="primary">
+            <i className="fa fa-cube" />
+            {t('Nhận')}
+          </Button>
         </div>
       </Row>
     );

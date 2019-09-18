@@ -125,7 +125,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
               className={classNames({ active: tab === 3 })}
               onClick={React.useCallback((): void => handleChangeTab(3), [])}
             >
-              {t('Nhân riêng bảng kê/phiếu gửi')}
+              {t('Nhận riêng bảng kê/phiếu gửi')}
               <Badge color="primary">{countBangKeDaNhan}</Badge>
             </NavLink>
           </NavItem>
