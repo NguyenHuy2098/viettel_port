@@ -60,11 +60,8 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         className: 'sipTitleRightBlockBtnIcon',
         children: <i className="fa fa-print" />,
       }}
-      modalProps={{
-        size: 'lg',
-      }}
       modalBodyProps={{
-        children: <PrintablePhieuGiaoNhanChuyenThu />,
+        children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={idChuyenThu} />,
       }}
       modalHeaderProps={{
         children: t('In thông tin chuyến thư'),

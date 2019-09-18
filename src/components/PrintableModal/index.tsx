@@ -44,6 +44,7 @@ const PrintableModal = (props: Props): JSX.Element => {
     printJS({
       css: ['https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'],
       printable: defaultPrintableId,
+      scanStyles: false,
       type: 'html',
     });
   };
@@ -55,7 +56,7 @@ const PrintableModal = (props: Props): JSX.Element => {
   return (
     <>
       <Button color="primary" onClick={handleToggleVisible} {...btnProps} />
-      <Modal isOpen={visible} size="lg" toggle={handleToggleVisible} {...modalProps}>
+      <Modal isOpen={visible} size="xl" toggle={handleToggleVisible} {...modalProps}>
         <ModalHeader toggle={handleToggleVisible} {...modalHeaderProps}>
           {get(modalHeaderProps, 'children', 'Title')}
         </ModalHeader>
