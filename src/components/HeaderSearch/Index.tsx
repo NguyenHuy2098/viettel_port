@@ -61,7 +61,6 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
           type="text"
           placeholder={t('Tra cứu đơn hàng')}
           value={searchValue}
-          defaultValue={searchValue}
           onChange={handleChangeTextboxValue}
           onKeyUp={handleEnterSearch}
         />

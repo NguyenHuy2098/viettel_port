@@ -185,10 +185,10 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     dataTaiChild,
     (item: API.Child): API.Child => {
       return {
-        TOR_ID: item.TOR_ID,
-        DES_LOC_IDTRQ: item.DES_LOC_IDTRQ,
+        TOR_ID: item.TOR_ID ? item.TOR_ID : '',
+        DES_LOC_IDTRQ: item.DES_LOC_IDTRQ ? item.DES_LOC_IDTRQ : '',
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
-        GRO_WEI_UNI: item.GRO_WEI_UNI,
+        GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
       };
     },

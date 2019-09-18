@@ -17,7 +17,7 @@ interface Props {
 }
 
 // eslint-disable-next-line max-lines-per-function
-const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element => {
+const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const { activeTab, setActiveTab, data, isSubmit, onChangeValue, packageItemErrorsList } = props;
 
@@ -50,6 +50,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
       }
     };
   }
+
   //______________________tab events
 
   function toggleTab(tab: string): (event: React.FormEvent<HTMLInputElement>) => void {
@@ -114,7 +115,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
               <Label check xs="12" className="pl-0 pr-0">
                 <Input
                   type="radio"
-                  value="V03"
+                  value="V99"
                   name={`packageType_${index}`}
                   defaultChecked
                   onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
@@ -126,22 +127,11 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
               <Label check xs="12" className="pl-0 pr-0">
                 <Input
                   type="radio"
-                  value="V02"
+                  value="V04"
                   name={`packageType_${index}`}
                   onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
                 />{' '}
                 {t('Thư')}
-              </Label>
-            </Col>
-            <Col lg="4" xs="12" className="pr-0">
-              <Label check xs="12" className="pl-0 pr-0">
-                <Input
-                  type="radio"
-                  value="V01"
-                  name={`packageType_${index}`}
-                  onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
-                />{' '}
-                {t('Kiện')}
               </Label>
             </Col>
           </Row>
@@ -190,26 +180,13 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
             {t('Giá trị & thu hộ')}
           </Label>
           <Col lg="8">
-            <Row className="sipInputItemGroup">
-              <Col xs="12" md="6" className="mb-2">
-                <Input
-                  type="text"
-                  placeholder={t('Nhập giá trị (đ)')}
-                  value={item.GOODS_VALUE}
-                  onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
-                />
-                <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
-              </Col>
-              <Col xs="12" md="6" className="mb-2">
-                <Input
-                  type="text"
-                  placeholder={t('Nhập tiền thu hộ (đ)')}
-                  value={item.COD}
-                  onChange={handleChangeTextboxValue('COD', index)}
-                />
-                <div className="sipInputItemError">{handleErrorMessage(index, 'COD')}</div>
-              </Col>
-            </Row>
+            <Input
+              type="text"
+              placeholder={t('Nhập giá trị (đ)')}
+              value={item.GOODS_VALUE}
+              onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -282,4 +259,4 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
     </>
   );
 };
-export default AdditionalPackageTabItems;
+export default AdditionalPackageTabItemsInternational;

@@ -32,22 +32,24 @@ const DataTable: React.FC<Props> = ({ columns, data, onRowClick }: Props): JSX.E
   return (
     <Table striped hover {...getTableProps()}>
       <thead>
-        {headerGroups.map(headerGroup => (
-          <tr>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+        {headerGroups.map((headerGroup, index) => (
+          <tr key={index}>
+            {headerGroup.headers.map((column, index) => (
+              <th key={index} {...column.getHeaderProps()}>
+                {column.render('Header')}
+              </th>
             ))}
           </tr>
         ))}
       </thead>
       <tbody>
         {rows.map(
-          row =>
+          (row, index) =>
             prepareRow(row) || (
-              <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
+              <tr key={index} {...row.getRowProps()}>
+                {row.cells.map((cell, index) => {
                   return (
-                    <td onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
+                    <td key={index} onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
                       {cell.render('Cell')}
                     </td>
                   );

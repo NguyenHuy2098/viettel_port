@@ -1570,6 +1570,8 @@ declare namespace API {
     CREATED_ON?: string;
     FU_STATUS?: string;
     DES_PO_ID?: string;
+    COMMODITY_CODE?: string;
+    COMMODITY_TYPE?: string;
   }
   export interface RowMTZTMI045OUT {
     /**

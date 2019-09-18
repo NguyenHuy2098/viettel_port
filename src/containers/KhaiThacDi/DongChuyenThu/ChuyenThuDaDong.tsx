@@ -128,13 +128,14 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
     [],
   );
   const data = map(listChuyenThuDaDong, (item: API.RowMTZTMI047OUT) => {
+    const thisDescription = get(item, 'Childs[0].DESCRIPTION', '');
     return {
-      TOR_ID: item.TOR_ID,
-      LOG_LOCID_TO: item.LOG_LOCID_TO,
-      countChuyenThu: item.ITEM_NO,
-      CREATED_BY: item.CREATED_BY,
+      TOR_ID: item.TOR_ID ? item.TOR_ID : '',
+      LOG_LOCID_TO: item.LOG_LOCID_TO ? item.LOG_LOCID_TO : '',
+      countChuyenThu: item.ITEM_NO ? item.ITEM_NO : '',
+      CREATED_BY: item.CREATED_BY ? item.CREATED_BY : '',
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      NOTE_OF: get(item, 'Childs[0].DESCRIPTION', ''),
+      NOTE_OF: thisDescription ? thisDescription : '',
     };
   });
   return (

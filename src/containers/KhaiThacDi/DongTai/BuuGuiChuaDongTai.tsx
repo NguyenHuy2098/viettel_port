@@ -122,13 +122,14 @@ const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
     [],
   );
   const data = map(get(listBangKeChuaDongTai, ''), (item: API.RowMTZTMI047OUT) => {
+    const thisDescription = get(item, 'Childs[0].DESCRIPTION', '');
     return {
-      TOR_ID: item.TOR_ID,
-      LOG_LOCID_TO: item.LOG_LOCID_TO,
-      countChuyenThu: 222,
-      PERSONAL: item.ITEM_NO,
+      TOR_ID: item.TOR_ID ? item.TOR_ID : '',
+      LOG_LOCID_TO: item.LOG_LOCID_TO ? item.LOG_LOCID_TO : '',
+      countChuyenThu: item.ITEM_NO ? item.ITEM_NO : '',
+      PERSONAL: item.CREATED_BY ? item.CREATED_BY : '',
       CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      NOTE_OF: item.EXEC_CONT,
+      NOTE_OF: thisDescription ? thisDescription : '',
     };
   });
   return (

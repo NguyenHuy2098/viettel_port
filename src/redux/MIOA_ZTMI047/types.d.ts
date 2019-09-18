@@ -39,8 +39,9 @@ interface PackageItemInputType {
   COMODITY_CODE?: string;
   COD?: string | undefined;
   Service_type?: string;
-  commodity_type?: string;
-  comodity_code?: string;
+  COMMODITY_CODE?: string;
+  COMODITY_CODE?: string;
+  COMMODITY_TYPE?: string;
 }
 
 interface NationType {
