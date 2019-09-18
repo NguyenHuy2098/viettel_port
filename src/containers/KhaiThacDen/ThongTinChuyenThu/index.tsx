@@ -7,8 +7,8 @@ import classNames from 'classnames';
 import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
-import printJS from 'print-js';
 
+import PrintableModal from 'components/PrintableModal';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelector046RowFirstChild,
@@ -16,6 +16,7 @@ import {
   makeSelector046CountChildren,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
+import PrintablePhieuGiaoNhanChuyenThu from './PrintablePhieuGiaoNhanChuyenThu';
 import TaiKienDaNhan from './TaiKienDaNhan';
 import TaiKienChuaNhan from './TaiKienChuaNhan';
 
@@ -53,12 +54,23 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(goBack());
   };
 
-  const handlePrint = (): void => {
-    printJS({
-      printable: 'samplePrint',
-      type: 'html',
-    });
-  };
+  const renderPrintButton = (): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'sipTitleRightBlockBtnIcon',
+        children: <i className="fa fa-print" />,
+      }}
+      modalProps={{
+        size: 'lg',
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoNhanChuyenThu />,
+      }}
+      modalHeaderProps={{
+        children: t('In thông tin chuyến thư'),
+      }}
+    />
+  );
 
   return (
     <>
@@ -69,11 +81,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           </Button>
           {t('Thông tin chuyến thư')}
         </h1>
-        <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon" onClick={handlePrint}>
-            <i className="fa fa-print" />
-          </Button>
-        </div>
+        <div className="sipTitleRightBlock">{renderPrintButton()}</div>
       </Row>
       <Row id="samplePrint" className="sipSummaryContent">
         <Col lg="5" xs="12">

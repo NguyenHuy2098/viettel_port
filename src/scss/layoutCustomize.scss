@@ -11,10 +11,10 @@ body {
 .app-header.navbar {
   padding-right: 15px;
 }
-.btn-primary {
-  background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
-  border-color: #299f9a;
-}
+//.btn-primary {
+//  background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
+//  border-color: #299f9a;
+//}
 .no-margin {
   margin: 0 !important;
 }
@@ -367,15 +367,15 @@ input.form-control:-moz-placeholder {
       border-top: none;
       padding: 0 20px 20px;
       justify-content: center;
-      .btn {
-        text-transform: uppercase;
-        padding: 8px 20px;
-        font-weight: 600;
-        color: #fff !important;
-        &.btn-primary {
-          background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
-        }
-      }
+      //.btn {
+      //  text-transform: uppercase;
+      //  padding: 8px 20px;
+      //  font-weight: 600;
+      //  color: #fff !important;
+      //  &.btn-primary {
+      //    background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
+      //  }
+      //}
     }
   }
 }
