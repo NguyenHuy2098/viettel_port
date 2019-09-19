@@ -318,7 +318,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           return (
             <Label check>
               <Input
-                checked={uncheckAllForwardingItemCheckbox}
+                defaultChecked={uncheckAllForwardingItemCheckbox}
                 type="checkbox"
                 value={get(row, 'values.TOR_ID', '')}
                 onClick={handleSelectBangKeItem}
@@ -371,7 +371,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [uncheckAllForwardingItemCheckbox],
   );
   const data = map(listBangKeChuaDongTai, (item: API.RowMTZTMI047OUT) => {
     const thisDescription = get(item, 'Childs[0].DESCRIPTION', '');
@@ -442,7 +442,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         IV_TOR_TYPE="ZC2"
         IV_FR_LOC_ID="BDH"
         IV_TO_LOC_ID=""
-        IV_CUST_STATUS="101"
+        IV_CUST_STATUS={101}
       />
     </>
   );

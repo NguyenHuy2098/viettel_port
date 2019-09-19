@@ -1,6 +1,6 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { size, toString, trim } from 'lodash';
+import { get, size, toString, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
@@ -13,14 +13,21 @@ import moment from 'moment';
 import routesMap from 'utils/routesMap';
 import { generatePath } from 'react-router';
 import { SipDataState, SipDataType } from 'utils/enums';
+import queryString from 'query-string';
+import { History } from 'history';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
 
+interface Props {
+  history: History;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const DongBangKe: React.FC = (): JSX.Element => {
+const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const tabParams = queryString.parse(get(props, 'history.location.search', {}));
 
   const getListBangKe = useCallback(
     function(): void {
@@ -70,8 +77,21 @@ const DongBangKe: React.FC = (): JSX.Element => {
     setCreateForwardingItemModal(!createForwardingItemModal);
   }
 
+  useEffect((): void => {
+    if (tabParams.tab) {
+      setTab(parseInt(toString(tabParams.tab)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabParams]);
+
   function handleChangeTab(tab: number): void {
     setTab(tab);
+    props.history.push({
+      pathname: props.history.location.pathname,
+      search: queryString.stringify({
+        tab,
+      }),
+    });
   }
 
   function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {

@@ -1,6 +1,6 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { size, toString, trim } from 'lodash';
+import { get, size, toString, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,15 +13,22 @@ import routesMap from 'utils/routesMap';
 import { push } from 'connected-react-router';
 import moment from 'moment';
 import { SipDataState, SipDataType } from 'utils/enums';
+import queryString from 'query-string';
+import { History } from 'history';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
 import KienChuaDongChuyenThu from './KienChuaDongChuyenThu';
 import ChuyenThuDaDong from './ChuyenThuDaDong';
 
+interface Props {
+  history: History;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const DongChuyenThu: React.FC = (): JSX.Element => {
+const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const tabParams = queryString.parse(get(props, 'history.location.search', {}));
 
   const getListChuyenThu = useCallback(
     function(): void {
@@ -44,7 +51,20 @@ const DongChuyenThu: React.FC = (): JSX.Element => {
   const [tab, setTab] = useState<number>(1);
   function handleChangeTab(tab: number): void {
     setTab(tab);
+    props.history.push({
+      pathname: props.history.location.pathname,
+      search: queryString.stringify({
+        tab,
+      }),
+    });
   }
+
+  useEffect((): void => {
+    if (tabParams.tab) {
+      setTab(parseInt(toString(tabParams.tab)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabParams]);
 
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
 

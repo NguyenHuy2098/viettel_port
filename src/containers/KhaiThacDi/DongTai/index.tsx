@@ -2,7 +2,7 @@ import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { size, toString, trim } from 'lodash';
+import { get, size, toString, trim } from 'lodash';
 import classNames from 'classnames';
 
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
@@ -14,15 +14,22 @@ import moment from 'moment';
 import { generatePath } from 'react-router';
 import routesMap from 'utils/routesMap';
 import { SipDataState, SipDataType } from 'utils/enums';
+import queryString from 'query-string';
+import { History } from 'history';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';
 import TaiDaDong from './TaiDaDong';
 
+interface Props {
+  history: History;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const DongTai: React.FC = (): JSX.Element => {
+const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const tabParams = queryString.parse(get(props, 'history.location.search', {}));
 
   const getListTai = useCallback(
     function(): void {
@@ -68,12 +75,25 @@ const DongTai: React.FC = (): JSX.Element => {
   };
 
   useEffect((): void => {
+    if (tabParams.tab) {
+      setTab(parseInt(toString(tabParams.tab)));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tabParams]);
+
+  useEffect((): void => {
     dispatch(action_MIOA_ZTMI045(payloadGetPostOfficeList));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
+    props.history.push({
+      pathname: props.history.location.pathname,
+      search: queryString.stringify({
+        tab,
+      }),
+    });
   }
 
   function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {

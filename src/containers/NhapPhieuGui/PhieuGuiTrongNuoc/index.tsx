@@ -586,10 +586,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       item_cat: 'PKG',
       Service_type: '',
       Weight_UoM: 'G',
-      Length: '',
-      Height: '',
-      Width: '',
-      quantity: '1',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newArr011: any = [];
@@ -602,11 +598,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
           Goods_value: '',
           Service_type: loaiHinhDichVu,
-          Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
-          Height: item.Hight ? toString(parseFloat(item.Hight).toFixed(2)) : '',
-          Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
           item_cat: 'PKG',
-          quantity: '1',
           Weight_UoM: 'G',
         };
         newArr011.push(newPackageItem011);

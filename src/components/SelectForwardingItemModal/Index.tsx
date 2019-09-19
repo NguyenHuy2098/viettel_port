@@ -7,7 +7,6 @@ import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import moment from 'moment';
-import { SipDataState, SipDataType } from 'utils/enums';
 
 interface Props {
   onHide: () => void;
@@ -16,9 +15,10 @@ interface Props {
   modalTitle: string;
   forwardingItemList: ForwardingItem[];
   IV_TOR_TYPE: string;
+  TorTypeChuyenVao?: string;
   IV_FR_LOC_ID: string;
   IV_TO_LOC_ID: string;
-  IV_CUST_STATUS: string;
+  IV_CUST_STATUS: number;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -35,9 +35,10 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     IV_FR_LOC_ID,
     IV_TO_LOC_ID,
     IV_CUST_STATUS,
+    TorTypeChuyenVao,
   } = props;
 
-  const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
+  const listTaiChuaHoanThanh = useSelector(makeSelectorRow(IV_TOR_TYPE, IV_CUST_STATUS));
 
   const [radioTorId, setRadioTorId] = useState<string>('');
 
@@ -74,7 +75,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
   function handleChuyenVaoTai(e: FormEvent): void {
     const payload = {
       IV_FLAG: '2',
-      IV_TOR_TYPE: IV_TOR_TYPE,
+      IV_TOR_TYPE: TorTypeChuyenVao ? TorTypeChuyenVao : IV_TOR_TYPE,
       IV_TOR_ID_CU: radioTorId,
       IV_SLOCATION: 'BDH',
       IV_DLOCATION: 'HUB1',

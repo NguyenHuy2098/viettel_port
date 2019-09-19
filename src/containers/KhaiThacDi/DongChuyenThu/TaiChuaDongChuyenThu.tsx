@@ -281,7 +281,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
           return (
             <Label check>
               <Input
-                checked={uncheckAllForwardingItemCheckbox}
+                defaultChecked={uncheckAllForwardingItemCheckbox}
                 type="checkbox"
                 value={get(row, 'values.TOR_ID', '')}
                 onClick={handleSelectTaiItem}
@@ -334,7 +334,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [uncheckAllForwardingItemCheckbox],
   );
   const data = map(listTaiChuaHoanThanh, (item: API.RowMTZTMI047OUT) => {
     const thisDescription = get(item, 'Childs[0].DESCRIPTION', '');
@@ -405,7 +405,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         IV_TOR_TYPE="ZC3"
         IV_FR_LOC_ID="HUB1"
         IV_TO_LOC_ID=""
-        IV_CUST_STATUS="101"
+        IV_CUST_STATUS={101}
       />
     </>
   );

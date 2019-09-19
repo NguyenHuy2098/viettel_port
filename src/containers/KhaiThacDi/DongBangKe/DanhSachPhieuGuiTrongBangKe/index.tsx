@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Col, Fade, Input, Row } from 'reactstrap';
-import { get, map, noop, size } from 'lodash';
+/* eslint-disable max-lines */
+import React, { ChangeEvent, useState } from 'react';
+import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
+import { findIndex, forEach, get, map, noop, slice, join, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -9,11 +10,15 @@ import { useMemo } from 'react';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+
+let forwardingItemList: ForwardingItem[] = [];
 
 interface Props {
   match: match;
@@ -30,6 +35,63 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 
+  const [codePhieuGui, setCodePhieuGui] = useState<string>('');
+
+  const payload046 = {
+    IV_TOR_ID: idBangKe,
+    IV_PAGENO: '1',
+    IV_NO_PER_PAGE: '10',
+  };
+
+  const getListPhieuGui = (): void => {
+    dispatch(action_MIOA_ZTMI046(payload046));
+  };
+
+  //_______________________SelectForwardingItemModal
+
+  forwardingItemList = [];
+  const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
+  const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
+  const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
+    undefined,
+  );
+
+  function toggleSelectForwardingItemModal(): void {
+    setSelectForwardingItemModal(!selectForwardingItemModal);
+  }
+
+  function handleChuyenVaoBangKe(): void {
+    if (size(forwardingItemListState) > 0) {
+      toggleSelectForwardingItemModal();
+    } else {
+      alert(t('Vui lòng chọn phiếu gửi!'));
+    }
+  }
+
+  function onSuccessSelectedForwardingItem(): void {
+    dispatch(action_MIOA_ZTMI046(payload046));
+    setUncheckAllForwardingItemCheckbox(false);
+    setForwardingItemListState([]);
+  }
+
+  function handleSelectBangKeItem(event: React.FormEvent<HTMLInputElement>): void {
+    event.stopPropagation();
+    const value = event.currentTarget.value;
+    setUncheckAllForwardingItemCheckbox(undefined);
+    if (event.currentTarget.checked) {
+      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC1' });
+    } else {
+      forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
+        if (item.ITEM_ID === value) {
+          forwardingItemList.splice(index, 1);
+        }
+      });
+    }
+    setForwardingItemListState(forwardingItemList);
+  }
+
+  //_____________________________________________________________________
+
   function toggleDeleteConfirmModal(): void {
     setDeleteConfirmModal(!deleteConfirmModal);
   }
@@ -41,16 +103,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       toggleDeleteConfirmModal();
     };
   }
-
-  const payload046 = {
-    IV_TOR_ID: idBangKe,
-    IV_PAGENO: '1',
-    IV_NO_PER_PAGE: '10',
-  };
-
-  const getListPhieuGui = (): void => {
-    dispatch(action_MIOA_ZTMI046(payload046));
-  };
 
   const handleDeleteForwardingOrder = (torId: string): void => {
     const payload = {
@@ -101,7 +153,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          <Button>
+          <Button onClick={handleChuyenVaoBangKe}>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển bảng kê')}
           </Button>
@@ -150,15 +202,77 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     );
   }
 
+  function handleChangeCodePhieuGui(e: ChangeEvent<HTMLInputElement>): void {
+    setCodePhieuGui(e.target.value);
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  function handleScanCodePhieuGui(): void {
+    const checkIfDashExist = findIndex(codePhieuGui, (item: string): boolean => {
+      return item === '_';
+    });
+    const payload031 = {
+      FWO_ID: checkIfDashExist === -1 ? codePhieuGui : join(slice(codePhieuGui, 0, checkIfDashExist), ''),
+      BUYER_REFERENCE_NUMBER: '',
+    };
+    dispatch(
+      action_MIOA_ZTMI031(payload031, {
+        // eslint-disable-next-line max-lines-per-function
+        onSuccess: (data: API.MIOAZTMI031Response[]): void => {
+          if (size(data) > 0) {
+            const payload016 = {
+              IV_FLAG: '2',
+              IV_TOR_TYPE: 'ZC1',
+              IV_TOR_ID_CU: idBangKe, //(mã bảng kê đang hiển thị)
+              IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
+              IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
+              IV_DESCRIPTION: '',
+              T_ITEM: [
+                {
+                  ITEM_ID: get(data, '[0].FREIGHT_UNIT', ''), //(mã Freight_unit lấy được từ API ZTMI031)
+                  ITEM_TYPE: '',
+                },
+              ],
+            };
+            dispatch(
+              action_MIOA_ZTMI016(payload016, {
+                onSuccess: (data: API.MIOAZTMI016Response): void => {
+                  if (data.Status) {
+                    alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', ''));
+                  } else {
+                    alert(data.Messages);
+                  }
+                },
+                onFailure: (error: HttpRequestErrorType): void => {
+                  alert(error.messages);
+                },
+              }),
+            );
+          } else {
+            alert(t('Không tìm thấy kết quả!'));
+          }
+        },
+        onFailure: (error: HttpRequestErrorType): void => {
+          alert(error.messages);
+        },
+      }),
+    );
+  }
+
   function renderShippingInformationAndScanCode(): JSX.Element {
     return (
       <div className="sipContentContainer">
         <div className="d-flex">
           <div className="sipTitleRightBlockInput m-0">
             <i className="fa fa-barcode" />
-            <Input type="text" placeholder={t('Quét mã phiếu gửi')} />
+            <Input
+              type="text"
+              placeholder={t('Quét mã phiếu gửi')}
+              onChange={handleChangeCodePhieuGui}
+              value={codePhieuGui}
+            />
           </div>
-          <Button color="primary" className="ml-2">
+          <Button color="primary" className="ml-2" onClick={handleScanCodePhieuGui}>
             {t('Quét mã')}
           </Button>
         </div>
@@ -186,7 +300,23 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   }
 
   const columns = useMemo(
+    //eslint-disable-next-line max-lines-per-function
     () => [
+      {
+        id: 'select',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return (
+            <Label check>
+              <Input
+                defaultChecked={uncheckAllForwardingItemCheckbox}
+                type="checkbox"
+                value={get(row, 'values.TOR_ID', '')}
+                onClick={handleSelectBangKeItem}
+              />
+            </Label>
+          );
+        },
+      },
       {
         Header: t('Mã phiếu gửi'),
         accessor: 'TOR_ID',
@@ -227,7 +357,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [uncheckAllForwardingItemCheckbox],
   );
 
   return dataBangKe ? (
@@ -243,6 +373,18 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         onDelete={handleDeleteForwardingOrder}
         onHide={toggleDeleteConfirmModal}
         torId={deleteTorId}
+      />
+      <SelectForwardingItemModal
+        onSuccessSelected={onSuccessSelectedForwardingItem}
+        visible={selectForwardingItemModal}
+        onHide={toggleSelectForwardingItemModal}
+        modalTitle={t('Chọn tải')}
+        forwardingItemList={forwardingItemListState}
+        IV_TOR_TYPE="ZC1"
+        TorTypeChuyenVao="ZC2"
+        IV_FR_LOC_ID={get(dataBangKe, 'LOG_LOCID_DES', '')}
+        IV_TO_LOC_ID=""
+        IV_CUST_STATUS={101}
       />
     </>
   ) : (
