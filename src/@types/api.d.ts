@@ -839,6 +839,7 @@ declare namespace API {
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
+    readonly LanguageCurrentId?: string;
   }
   export interface MIOAZTMI046Response {
     MT_ZTMI046_OUT?: MTZTMI046OUT;

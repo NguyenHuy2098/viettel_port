@@ -1,12 +1,11 @@
 /* eslint-disable max-lines */
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { findIndex, forEach, get, map, noop, slice, join, size } from 'lodash';
+import { findIndex, find, forEach, get, map, noop, slice, join, size, includes, isNil, toString } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMemo } from 'react';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
@@ -17,8 +16,13 @@ import moment from 'moment';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 
-let forwardingItemList: ForwardingItem[] = [];
+const forwardingItemList: ForwardingItem[] = [];
 
 interface Props {
   match: match;
@@ -32,8 +36,12 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
+  const listDichVu = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
+  const listTai = useSelector(makeSelectorRow('ZC2', 101));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+  const [disableButtonDongBangKe, setDisableButtonDongBangKe] = useState<boolean>(true);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
+  const [showDongBangKeVaoTaiPopup, setShowDongBangKeVaoTaiPopup] = useState<boolean>(false);
 
   const [codePhieuGui, setCodePhieuGui] = useState<string>('');
 
@@ -49,12 +57,40 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   //_______________________SelectForwardingItemModal
 
-  forwardingItemList = [];
   const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
+  const [listUncheckForwardingItem, setListUncheckForwardingItem] = useState<ForwardingItem[]>([]);
   const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
+  const [newTaiId, setnewTaiId] = useState<string>('');
+
+  const getListDichVu = (): void => {
+    dispatch(
+      action_MIOA_ZTMI045({
+        row: [
+          {
+            IV_LOCTYPE: 'V001, V004',
+          },
+        ],
+        IV_BP: '',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '10',
+      }),
+    );
+  };
+
+  useEffect((): void => {
+    getListDichVu();
+  }, []);
+
+  useEffect((): void => {
+    if (forwardingItemListState.length > 0) {
+      setDisableButtonDongBangKe(false);
+    } else {
+      setDisableButtonDongBangKe(true);
+    }
+  }, [forwardingItemListState]);
 
   function toggleSelectForwardingItemModal(): void {
     setSelectForwardingItemModal(!selectForwardingItemModal);
@@ -82,14 +118,38 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC1' });
     } else {
       forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
-        if (item.ITEM_ID === value) {
+        if (get(item, 'ITEM_ID') === value) {
           forwardingItemList.splice(index, 1);
         }
       });
     }
-    setForwardingItemListState(forwardingItemList);
+    setForwardingItemListState([...forwardingItemList]);
   }
 
+  function isForwardingItemSelected(item: API.Child, listForwardingItemId: string[]): boolean {
+    return includes(listForwardingItemId, item.TOR_ID);
+  }
+
+  useEffect((): void => {
+    const listForwardingItemId = map(forwardingItemListState, item => item.ITEM_ID);
+    const unSelectListForwardingItem: API.Child[] = [];
+    forEach(dataBangKeChild, item => {
+      if (!isForwardingItemSelected(item, listForwardingItemId)) {
+        unSelectListForwardingItem.push(item);
+      }
+    });
+
+    // listUncheckForwardingItem
+    const tempListUncheckForwardingItem: ForwardingItem[] = map(
+      unSelectListForwardingItem,
+      (item: API.Child): ForwardingItem => ({
+        ITEM_ID: item.TOR_ID || '',
+        ITEM_TYPE: '',
+      }),
+    );
+
+    setListUncheckForwardingItem(tempListUncheckForwardingItem);
+  }, [forwardingItemListState, dataBangKeChild]);
   //_____________________________________________________________________
 
   function toggleDeleteConfirmModal(): void {
@@ -103,6 +163,66 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       toggleDeleteConfirmModal();
     };
   }
+
+  const getListTai = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_FR_DATE: moment()
+          .subtract(7, 'day')
+          .format('YYYYMMDD'),
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_TOR_TYPE: 'ZC2',
+        IV_FR_LOC_ID: 'BDH',
+        IV_TO_LOC_ID: '',
+        IV_CUST_STATUS: '101',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
+  };
+
+  useEffect((): void => {
+    getListTai();
+  }, []);
+
+  const taoTaiMoi = (placeName: string, ghiChu: string): void => {
+    const place = find(listDichVu, ['DESCR40', placeName]);
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '1',
+          IV_TOR_TYPE: 'ZC2',
+          IV_TOR_ID_CU: '',
+          IV_SLOCATION: 'BHD',
+          IV_DLOCATION: get(place, 'LOCNO') || '',
+          IV_DESCRIPTION: ghiChu,
+          T_ITEM: [
+            {
+              ITEM_ID: '',
+              ITEM_TYPE: '',
+            },
+          ],
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            if (data && data.MT_ZTMI016_OUT) {
+              setnewTaiId(get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU'));
+            }
+          },
+
+          onFailure: (error: Error): void => {
+            alert(error.message);
+          },
+        },
+      ),
+    );
+  };
+  useEffect((): void => {
+    if (toString(newTaiId).length > 0) {
+      handleActionDongBangKe(newTaiId);
+    }
+  }, [newTaiId]);
 
   const handleDeleteForwardingOrder = (torId: string): void => {
     const payload = {
@@ -131,13 +251,113 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     );
   };
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     getListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idBangKe]);
 
   const handleBack = (): void => {
     dispatch(goBack());
+  };
+
+  const openPopUpDongBangKeVaoTai = useCallback((): void => {
+    setShowDongBangKeVaoTaiPopup(true);
+  }, []);
+
+  const closePopUpDongBangKeVaoTai = useCallback((): void => {
+    setShowDongBangKeVaoTaiPopup(false);
+  }, []);
+
+  const handleActionDongBangKeWithoutRemovePhieuGui = (taiID: string): void => {
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '2',
+          IV_TOR_TYPE: 'ZC2',
+          IV_TOR_ID_CU: taiID,
+          IV_SLOCATION: 'BDH',
+          IV_DLOCATION: 'HUB1',
+          IV_DESCRIPTION: '',
+          T_ITEM: [
+            {
+              ITEM_ID: idBangKe,
+              ITEM_TYPE: 'ZC1',
+            },
+          ],
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE'));
+          },
+          onFailure: (error: Error): void => {
+            alert(t('Đã có lỗi xảy ra'));
+          },
+        },
+      ),
+    );
+  };
+
+  // eslint-disable-next-line max-lines-per-function
+  const handleActionDongBangKeAfterRemovePhieuGui = (taiID: string): void => {
+    const a = {
+      IV_FLAG: '4',
+      IV_TOR_TYPE: 'ZC1',
+      IV_TOR_ID_CU: idBangKe,
+      IV_SLOCATION: 'BDH',
+      IV_DLOCATION: 'HUB1',
+      IV_DESCRIPTION: '',
+      T_ITEM: listUncheckForwardingItem,
+    };
+    dispatch(
+      action_MIOA_ZTMI016(a, {
+        onSuccess: (): void => {
+          dispatch(
+            action_MIOA_ZTMI016(
+              {
+                IV_FLAG: '2',
+                IV_TOR_TYPE: 'ZC2',
+                IV_TOR_ID_CU: toString(taiID),
+                IV_SLOCATION: 'BDH',
+                IV_DLOCATION: 'HUB1',
+                IV_DESCRIPTION: '',
+                T_ITEM: [
+                  {
+                    ITEM_ID: idBangKe,
+                    ITEM_TYPE: 'ZC1',
+                  },
+                ],
+              },
+              {
+                onSuccess: (data: API.MIOAZTMI016Response): void => {
+                  getListPhieuGui();
+                  if (size(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE')) > 0) {
+                    alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE'));
+                  }
+                },
+                onFailure: (error: Error): void => {
+                  alert(error.message);
+                },
+              },
+            ),
+          );
+        },
+        onFailure: (error: Error): void => {
+          if (isNil(get(error, 'messages[0]'))) {
+            alert(get(error, 'messages[0]'));
+          }
+        },
+      }),
+    );
+
+    setShowDongBangKeVaoTaiPopup(false);
+  };
+  const handleActionDongBangKe = (taiID: string): void => {
+    if (size(listUncheckForwardingItem) > 0) {
+      handleActionDongBangKeAfterRemovePhieuGui(taiID);
+    } else {
+      handleActionDongBangKeWithoutRemovePhieuGui(taiID);
+    }
+    setShowDongBangKeVaoTaiPopup(false);
   };
 
   function renderTitle(): JSX.Element {
@@ -157,7 +377,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             <i className="fa fa-download rotate-90" />
             {t('Chuyển bảng kê')}
           </Button>
-          <Button>
+          <Button onClick={openPopUpDongBangKeVaoTai} disabled={disableButtonDongBangKe}>
             <i className="fa fa-building-o" />
             {t('Đóng bảng kê')}
           </Button>
@@ -304,7 +524,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     () => [
       {
         id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <Label check>
               <Input
@@ -385,6 +605,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         IV_FR_LOC_ID={get(dataBangKe, 'LOG_LOCID_DES', '')}
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
+      />
+      <ModalTwoTab
+        onHide={closePopUpDongBangKeVaoTai}
+        visible={showDongBangKeVaoTaiPopup}
+        modalTitle="Gán bảng kê vào tải"
+        firstTabTitle={'Chọn tải'}
+        secondTabTitle={'Tạo tải mới'}
+        tab1Contents={listTai}
+        onSubmitButton1={handleActionDongBangKe}
+        onSubmitButton2={taoTaiMoi}
       />
     </>
   ) : (

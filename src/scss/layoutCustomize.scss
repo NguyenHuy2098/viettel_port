@@ -588,6 +588,12 @@ html:not([dir='rtl']) .sidebar {
   align-items: center;
 }
 
+.ganBangKeVaoTaiPopUp {
+  .nav-tabs .nav-item{
+    width: 50%;
+  }
+}
+
 .selectForwardingItem {
   color: #4a4a4a !important;
   font-weight: normal !important;
