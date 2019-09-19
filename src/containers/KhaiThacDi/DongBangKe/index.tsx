@@ -143,6 +143,7 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 1 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Bảng kê chưa hoàn thành')}
@@ -152,6 +153,7 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 2 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Bưu gửi chưa đóng BK')}
@@ -161,6 +163,7 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 3 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={React.useCallback((): void => handleChangeTab(3), [])}
             >
               {t('Bảng Kê đã đóng')}

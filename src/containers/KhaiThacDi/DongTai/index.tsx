@@ -140,6 +140,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 1 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={React.useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Tải chưa hoàn thành')}
@@ -149,6 +150,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 2 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={React.useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Bưu gửi chưa đóng tải')}
@@ -158,6 +160,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 3 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={React.useCallback((): void => handleChangeTab(3), [])}
             >
               {t('Bảng kê chưa đóng tải')}
@@ -167,6 +170,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 4 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={React.useCallback((): void => handleChangeTab(4), [])}
             >
               {t('Tải đã đóng')}

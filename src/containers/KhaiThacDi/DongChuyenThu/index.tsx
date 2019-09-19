@@ -139,6 +139,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 1 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
               {t('CT chưa hoàn thành')}
@@ -148,6 +149,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 2 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Tải chưa đóng chuyến thư')}
@@ -157,6 +159,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 3 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={useCallback((): void => handleChangeTab(3), [])}
             >
               {t('Kiện chưa đóng chuyến thư')}
@@ -166,6 +169,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 4 })}
+              // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={useCallback((): void => handleChangeTab(4), [])}
             >
               {t('Chuyến Thư đã đóng')}
