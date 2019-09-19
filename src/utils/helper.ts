@@ -1,21 +1,21 @@
 import { forEach } from 'lodash';
 
-export const checkIsNot109LifeCycle = (row: API.RowMTZTMI047OUT): boolean => {
-  let isNot109LifeCycle = false;
-  forEach(row.Childs, child => {
-    if (child.LIFECYCLE !== '109') {
-      isNot109LifeCycle = true;
+export const recordHasAtLeastOneChildHaveLifeCycle108 = (el: API.RowMTZTMI047OUT): boolean => {
+  let haveLifeCycle108 = false;
+  forEach(el.Childs, child => {
+    if (child.LIFECYCLE === '108') {
+      haveLifeCycle108 = true;
     }
   });
-  return isNot109LifeCycle;
+  return haveLifeCycle108;
 };
 
-export const checkIsNot604LifeCycle = (row: API.RowMTZTMI047OUT): boolean => {
-  let isNot604LifeCycle = false;
-  forEach(row.Childs, child => {
-    if (child.LIFECYCLE !== '604') {
-      isNot604LifeCycle = true;
+export const recordHaveAtLeastOneChildHaveLifeCycle603Or403 = (el: API.RowMTZTMI047OUT): boolean => {
+  let haveLifeCycle603Or403 = false;
+  forEach(el.Childs, child => {
+    if (child.LIFECYCLE === '603' || child.LIFECYCLE === '403') {
+      haveLifeCycle603Or403 = true;
     }
   });
-  return isNot604LifeCycle;
+  return haveLifeCycle603Or403;
 };

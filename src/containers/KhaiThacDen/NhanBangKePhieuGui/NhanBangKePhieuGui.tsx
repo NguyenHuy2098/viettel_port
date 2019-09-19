@@ -12,7 +12,7 @@ import { makeSelector046CountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/sele
 import { makeSelectorBangKeChuaNhanPhieuGui, makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { SipDataState } from 'utils/enums';
-import { checkIsNot109LifeCycle, checkIsNot604LifeCycle } from 'utils/helper';
+import { recordHasAtLeastOneChildHaveLifeCycle108, recordHaveAtLeastOneChildHaveLifeCycle603Or403 } from 'utils/helper';
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
 import NhanRiengBangKePhieuGui from './NhanRiengBangKePhieuGui';
@@ -41,12 +41,12 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
         IV_TOR_ID: '',
         IV_TOR_TYPE: 'ZC2',
         IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: 'HUB1',
+        IV_TO_LOC_ID: 'BDH',
         IV_CUST_STATUS: '108',
-        IV_FR_DATE: '20100828',
+        IV_FR_DATE: '20190701',
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
+        IV_NO_PER_PAGE: '100',
       }),
     );
   };
@@ -57,12 +57,12 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
         IV_TOR_ID: '',
         IV_TOR_TYPE: 'ZC1',
         IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: 'HUB1',
+        IV_TO_LOC_ID: 'BDH',
         IV_CUST_STATUS: '109',
-        IV_FR_DATE: '20100828',
+        IV_FR_DATE: '20190701',
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '1000',
+        IV_NO_PER_PAGE: '100',
       }),
     );
   };
@@ -75,7 +75,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     const tempArray: API.RowMTZTMI047OUT[] = [];
     forEach(taiChuaNhanBKPhieuGuiRawRecords, el => {
-      if (checkIsNot109LifeCycle(el)) {
+      if (recordHasAtLeastOneChildHaveLifeCycle108(el)) {
         tempArray.push(el);
       }
     });
@@ -85,7 +85,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     const tempArray: API.RowMTZTMI047OUT[] = [];
     forEach(bangKeChuaNhanPhieuGuiRawRecords, el => {
-      if (checkIsNot604LifeCycle(el)) {
+      if (recordHaveAtLeastOneChildHaveLifeCycle603Or403(el)) {
         tempArray.push(el);
       }
     });
