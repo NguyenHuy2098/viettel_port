@@ -40,8 +40,8 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
         IV_TOR_TYPE: 'ZC2',
-        IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: 'BDH',
+        IV_FR_LOC_ID: 'BDH',
+        IV_TO_LOC_ID: '',
         IV_CUST_STATUS: '108',
         IV_FR_DATE: '20190701',
         IV_TO_DATE: moment().format('YYYYMMDD'),
