@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
-import { Button, Row, Input } from 'reactstrap';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get } from 'lodash';
+import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -18,7 +18,8 @@ import routesMap from 'utils/routesMap';
 const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const taiKienDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
+  const listPhieuGuiDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN));
+  const [searchText, setSearchText] = useState<string>('');
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -70,34 +71,49 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
     [],
   );
 
+  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(event.target.value);
+  };
+
   const redirectToThongTinBangKe = useCallback((item: API.Child): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const filteredListPhieuGuiDaNhan = useMemo(
+    () => filter(listPhieuGuiDaNhan, (child: API.Child) => includes(JSON.stringify(child), searchText)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listPhieuGuiDaNhan],
+  );
+
+  const renderToolbar = (): JSX.Element => (
+    <Row>
+      <Col className="btn-toolbar col-8">
+        <div className="sipTitleRightBlockInput w-50 mr-2">
+          <i className="fa fa-search" />
+          <Input
+            className="backgroundColorNeural6"
+            onChange={handleChangeSearchText}
+            placeholder={t('Tìm kiếm bảng kê/phiếu gửi')}
+            type="text"
+          />
+        </div>
+        <Button color="primary">{t('Tìm kiếm')}</Button>
+        {/*<button className="btn btn-outline-primary mr-2">*/}
+        {/*  {t('Tải')}&nbsp;({'05'})*/}
+        {/*</button>*/}
+        {/*<button className="btn btn-outline-secondary">*/}
+        {/*  {t('Kiện')}&nbsp;({'20'})*/}
+        {/*</button>*/}
+      </Col>
+    </Row>
+  );
+
   return (
     <>
-      <div className="shadow-sm p-3 mb-3 bg-white">
-        <Row>
-          <div className="btn-toolbar col-10">
-            <div className="sipTitleRightBlockInput m-0 col-5 p-0">
-              <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} className="backgroundColorNeural6" />
-            </div>
-            <Button className="ml-2" color="primary">
-              {t('Tìm kiếm')}
-            </Button>
-            {/*<button className="btn btn-outline-primary mr-2">*/}
-            {/*  {t('Tải')}&nbsp;({'05'})*/}
-            {/*</button>*/}
-            {/*<button className="btn btn-outline-secondary">*/}
-            {/*  {t('Kiện')}&nbsp;({'20'})*/}
-            {/*</button>*/}
-          </div>
-        </Row>
-      </div>
+      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={taiKienDaNhan} onRowClick={redirectToThongTinBangKe} />
+        <DataTable columns={columns} data={filteredListPhieuGuiDaNhan} onRowClick={redirectToThongTinBangKe} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

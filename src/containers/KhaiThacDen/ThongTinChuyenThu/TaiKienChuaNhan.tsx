@@ -25,7 +25,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const [idTaiKien, setIdTaiKien] = useState<string>('');
   const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
-  function handleScanTaiKien(): void {
+  function handleQuetBangKePhieuGuiId(): void {
     dispatch(
       action_MIOA_ZTMI023(
         {
@@ -58,7 +58,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     );
   }
 
-  function handleChangeTaiKien(event: React.ChangeEvent<HTMLInputElement>): void {
+  function handleChangeBangKePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
     setIdTaiKien(event.target.value);
   }
 
@@ -84,7 +84,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
         },
       },
       {
-        Header: t('Mã tải kiện'),
+        Header: t('Mã tải/kiện'),
         accessor: 'TOR_ID',
       },
       {
@@ -134,16 +134,16 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <div className="sipTitleRightBlockInput m-0 col-4 p-0 pr-2">
+          <div className="sipTitleRightBlockInput w-50 mr-2">
             <i className="fa fa-barcode" />
             <Input
               type="text"
-              placeholder={t('Quét mã bảng kê/phiếu gửi')}
-              onChange={handleChangeTaiKien}
+              placeholder={t('Quét mã tải/kiện')}
+              onChange={handleChangeBangKePhieuGuiId}
               className="backgroundColorNeural6"
             />
           </div>
-          <Button className="mr-2" color="primary" onClick={handleScanTaiKien}>
+          <Button color="primary" onClick={handleQuetBangKePhieuGuiId}>
             {t('Quét mã')}
           </Button>
 
@@ -158,7 +158,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
         </div>
         <div className="btn-toolbar col-2 align-items-end flex-column">
           <Button color="primary">
-            <i className="fa fa-cube" />
+            <i className="fa fa-cube mr-1" />
             {t('Nhận')}
           </Button>
         </div>

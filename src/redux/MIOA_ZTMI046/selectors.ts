@@ -55,3 +55,19 @@ export function makeSelector046ChildrenByLifecycle(LIFECYCLE: number | number[])
 export function makeSelector046CountChildrenByLifecycle(LIFECYCLE: number | number[]) {
   return (state: AppStateType): number => size(makeSelector046ChildrenByLifecycle(LIFECYCLE)(state));
 }
+
+/**
+ * List Child theo filter
+ * @param criteria
+ */
+export function makeSelector046ChildrenByFilter(criteria: API.Child) {
+  return (state: AppStateType): API.Child[] => filter(makeSelector046ListChildren(state), criteria);
+}
+
+/**
+ * List Child theo filter
+ * @param criteria
+ */
+export function makeSelector046CountChildrenByFilter(criteria: API.Child) {
+  return (state: AppStateType): number => size(makeSelector046ChildrenByFilter(criteria)(state));
+}

@@ -1,12 +1,12 @@
-import React, { useCallback, useMemo } from 'react';
-import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { Button, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { RouteComponentProps } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { ceil, get } from 'lodash';
+import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -22,6 +22,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const listTaiKienDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
+  const [searchText, setSearchText] = useState<string>('');
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -37,7 +38,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Mã tải kiện'),
+        Header: t('Mã tải/kiện'),
         accessor: 'TOR_ID',
       },
       {
@@ -83,6 +84,10 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
+  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(event.target.value);
+  };
+
   const redirectToThongTinTai = useCallback(
     (item: API.Child) => {
       dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
@@ -91,21 +96,26 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
+  const filteredListTaiKienDaNhan = useMemo(
+    () => filter(listTaiKienDaNhan, (child: API.Child) => includes(JSON.stringify(child), searchText)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listTaiKienDaNhan],
+  );
+
   function renderToolbar(): JSX.Element {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <span className="input-group-text">
-                <i className="fa fa-search" />
-              </span>
-            </InputGroupAddon>
-            <Input className="w-25 mr-2" type="text" placeholder={t('Tìm kiếm tải/kiện')} />
-          </InputGroup>
-          <Button className="mr-2" color="primary">
-            {t('Tìm kiếm')}
-          </Button>
+          <div className="sipTitleRightBlockInput w-50 mr-2">
+            <i className="fa fa-search" />
+            <Input
+              className="backgroundColorNeural6"
+              onChange={handleChangeSearchText}
+              placeholder={t('Tìm kiếm tải/kiện')}
+              type="text"
+            />
+          </div>
+          <Button color="primary">{t('Tìm kiếm')}</Button>
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
           {/*</button>*/}
@@ -121,7 +131,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listTaiKienDaNhan} onRowClick={redirectToThongTinTai} />
+        <DataTable columns={columns} data={filteredListTaiKienDaNhan} onRowClick={redirectToThongTinTai} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

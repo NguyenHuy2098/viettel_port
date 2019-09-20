@@ -1,11 +1,11 @@
-import React, { useMemo } from 'react';
-import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
+import React, { ChangeEvent, useMemo, useState } from 'react';
+import { Button, Row, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { RouteComponentProps } from 'react-router-dom';
-import { ceil, get } from 'lodash';
+import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -24,6 +24,8 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
     ]),
   );
+  const [searchText, setSearchText] = useState<string>('');
+
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
@@ -84,21 +86,30 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
+  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(event.target.value);
+  };
+
+  const filteredListPhieuGuiDaNhan = useMemo(
+    () => filter(listPhieuGuiDaNhan, (child: API.Child) => includes(JSON.stringify(child), searchText)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listPhieuGuiDaNhan],
+  );
+
   function renderToolbar(): JSX.Element {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <span className="input-group-text">
-                <i className="fa fa-search" />
-              </span>
-            </InputGroupAddon>
-            <Input className="w-25 mr-2" type="text" placeholder={t('Tìm kiếm phiếu gửi')} />
-          </InputGroup>
-          <Button className="mr-2" color="primary">
-            {t('Tìm kiếm')}
-          </Button>
+          <div className="sipTitleRightBlockInput w-50 mr-2">
+            <i className="fa fa-search" />
+            <Input
+              className="backgroundColorNeural6"
+              onChange={handleChangeSearchText}
+              placeholder={t('Tìm kiếm phiếu gửi')}
+              type="text"
+            />
+          </div>
+          <Button color="primary">{t('Tìm kiếm')}</Button>
         </div>
       </Row>
     );
@@ -108,7 +119,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listPhieuGuiDaNhan} />
+        <DataTable columns={columns} data={filteredListPhieuGuiDaNhan} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Row, Input, Label, InputGroupAddon, InputGroup } from 'reactstrap';
+import { Button, Row, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -26,7 +26,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     ]),
   );
 
-  function handleQuetPhieuGui(): void {
+  function handleQuetPhieuGuiId(): void {
     dispatch(
       action_MIOA_ZTMI023(
         {
@@ -59,7 +59,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     );
   }
 
-  function handleChangeTaiKien(event: React.ChangeEvent<HTMLInputElement>): void {
+  function handleChangePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
     setIdPhieuGui(event.target.value);
   }
 
@@ -127,20 +127,16 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <span className="input-group-text">
-                <i className="fa fa-barcode" />
-              </span>
-            </InputGroupAddon>
+          <div className="sipTitleRightBlockInput w-50 mr-2">
+            <i className="fa fa-barcode" />
             <Input
-              className="w-25 mr-2"
-              onChange={handleChangeTaiKien}
               type="text"
               placeholder={t('Quét mã phiếu gửi')}
+              onChange={handleChangePhieuGuiId}
+              className="backgroundColorNeural6"
             />
-          </InputGroup>
-          <Button className="mr-2" color="primary" onClick={handleQuetPhieuGui}>
+          </div>
+          <Button className="mr-2" color="primary" onClick={handleQuetPhieuGuiId}>
             {t('Quét mã')}
           </Button>
           {/*<button className="btn btn-outline-primary mr-2">*/}
@@ -151,7 +147,10 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
           {/*</button>*/}
         </div>
         <div className="btn-toolbar col-2 align-items-end flex-column">
-          <Button color="primary">{t('Nhận phiếu gửi')}</Button>
+          <Button color="primary">
+            <i className="fa fa-cube mr-1" />
+            {t('Nhận phiếu gửi')}
+          </Button>
         </div>
       </Row>
     );

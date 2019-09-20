@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row, Input } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -120,8 +120,8 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   function renderToolbar(): JSX.Element {
     return (
       <Row>
-        <div className="btn-toolbar col-8">
-          <div className="sipTitleRightBlockInput m-0 col-6 p-0">
+        <Col className="btn-toolbar col-10">
+          <div className="sipTitleRightBlockInput w-50 mr-2">
             <i className="fa fa-barcode" />
             <Input
               type="text"
@@ -130,16 +130,16 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
               className="backgroundColorNeural6"
             />
           </div>
-          <Button color="primary" className="ml-2" onClick={handleScanTaiKien}>
+          <Button color="primary" onClick={handleScanTaiKien}>
             {t('Quét mã')}
           </Button>
-        </div>
-        <div className="btn-toolbar col-4 align-items-end flex-column">
+        </Col>
+        <Col className="btn-toolbar col-2 align-items-end flex-column">
           <Button color="primary">
-            <i className="fa fa-cube" />
+            <i className="fa fa-cube mr-1" />
             {t('Nhận')}
           </Button>
-        </div>
+        </Col>
       </Row>
     );
   }
