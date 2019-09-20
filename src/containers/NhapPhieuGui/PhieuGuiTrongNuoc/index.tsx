@@ -17,7 +17,7 @@ import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
 import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
-// import { makeSelectProfile } from 'redux/auth/selectors';
+// import { makeSelectorProfile, makeSelectorUser, selectAuth } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
@@ -32,7 +32,12 @@ let dichVuCongThem: string[] = [];
 const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  // const dataSelectProfile = useSelector(makeSelectProfile, shallowEqual);
+  // const dataSelectProfile = useSelector(makeSelectorProfile);
+  // const dataSelectUser = useSelector(makeSelectorUser);
+  // const dataSelectAuth = useSelector(selectAuth);
+  // console.log(dataSelectProfile);
+  // console.log(dataSelectUser);
+  // console.log(dataSelectAuth);
 
   const idDonHang = get(props, 'match.params.idDonHang', '');
   const isCreateNewForwardingOrder: boolean = idDonHang === '';
@@ -316,7 +321,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   const newPackageItem: PackageItemInputType = {
     Width: '',
-    COMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     COMMODITY_TYPE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -336,7 +341,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   };
   const firstPackageItem = {
     Width: kichThuocRong,
-    COMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     COMMODITY_TYPE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -427,28 +432,28 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   const validateData = {
-    maKhachHang: maKhachHang === '' ? '9999999999' : maKhachHang,
-    dienThoaiSender,
-    hoTenSender,
-    diaChiSender,
-    dienThoaiReceiver,
-    hoTenReceiver,
-    diaChiReceiver,
-    tenHang,
-    soLuong: soLuong === '' ? undefined : soLuong,
-    giaTri: giaTri === '' ? undefined : giaTri,
-    tienThuHo: tienThuHo === '' ? undefined : tienThuHo,
-    trongLuong: trongLuong === '' ? undefined : trongLuong,
-    kichThuocDai: kichThuocDai === '' ? undefined : kichThuocDai,
-    kichThuocRong: kichThuocRong === '' ? undefined : kichThuocRong,
-    kichThuocCao: kichThuocCao === '' ? undefined : kichThuocCao,
+    maKhachHang: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang),
+    dienThoaiSender: trim(dienThoaiSender),
+    hoTenSender: trim(hoTenSender),
+    diaChiSender: trim(diaChiSender),
+    dienThoaiReceiver: trim(dienThoaiReceiver),
+    hoTenReceiver: trim(hoTenReceiver),
+    diaChiReceiver: trim(diaChiReceiver),
+    tenHang: trim(tenHang),
+    soLuong: trim(soLuong) === '' ? undefined : trim(soLuong),
+    giaTri: trim(giaTri) === '' ? undefined : trim(giaTri),
+    tienThuHo: trim(tienThuHo) === '' ? undefined : trim(tienThuHo),
+    trongLuong: trim(trongLuong) === '' ? undefined : trim(trongLuong),
+    kichThuocDai: trim(kichThuocDai) === '' ? undefined : trim(kichThuocDai),
+    kichThuocRong: trim(kichThuocRong) === '' ? undefined : trim(kichThuocRong),
+    kichThuocCao: trim(kichThuocCao) === '' ? undefined : trim(kichThuocCao),
     // maKhuyenMai,
     thoiGianPhat,
     //_____non-validated items
-    loaiHangHoa,
-    nguoiThanhToan,
-    choXemHang,
-    diemGiaoNhan,
+    loaiHangHoa: trim(loaiHangHoa),
+    nguoiThanhToan: trim(nguoiThanhToan),
+    choXemHang: trim(choXemHang),
+    diemGiaoNhan: trim(diemGiaoNhan),
   };
 
   //______________check if Order Information exist
@@ -508,7 +513,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
-        COMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         COMMODITY_TYPE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -530,7 +535,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
-            COMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_CODE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
             COMMODITY_TYPE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -606,7 +611,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     }
 
     const api011Payload = {
-      Comodity_type: 'V3',
+      COMMODITY_type: 'V3',
       Destination_city: provinceIdReceiver,
       Destination_country: 'VN',
       Destination_district: districtIdReceiver,
@@ -702,7 +707,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMODITY_CODE: '', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_CODE: '', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COD: item.COD === '' ? undefined : item.COD,
         };
@@ -733,7 +738,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(trim(event.currentTarget.value));
+      setValueFunction(event.currentTarget.value);
       //trigger get Summary information dispatch
       setCountGetSummaryInformation(countGetSummaryInformation + 1);
       // check validate
@@ -754,7 +759,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function handleChangeTransportMethod(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(trim(event.currentTarget.value));
+      setValueFunction(event.currentTarget.value);
       handleGenerateServiceType(event.currentTarget.value);
     };
   }
@@ -797,53 +802,52 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     });
     const payload = {
       ADDRESS_CONSIG: '',
-      ADDRESS_OP: diaChiSender,
-      ADDRESS_SHIPPER: diaChiSender,
-      BUYERS_REFERENCE_NUMBER: maPhieuGui,
+      ADDRESS_OP: trim(diaChiSender),
+      ADDRESS_SHIPPER: trim(diaChiSender),
+      BUYERS_REFERENCE_NUMBER: trim(maPhieuGui),
       CAMPAIGN: '',
-      CITY_DES: provinceIdReceiver, // nhận trong trường hợp khách hàng vãng lai
-      CITY_SRC: provinceIdSender, // trong trường hợp khách hàng vãng lai
-      CONSIGNEE: 'TRUNGVT',
+      CITY_DES: trim(provinceIdReceiver), // nhận trong trường hợp khách hàng vãng lai
+      CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
+      CONSIGNEE: '9999999999',
       CONTRACT_DISCOUNT_AMOUNT: 0,
       CONTRACT_DISCOUNT_TYPE: '0',
       COUNTRY_DES: 'VN',
       COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
       CUS_ID: '', // Mã user trên hệ thống APP/Web
-      DISTRICT_DES: districtIdReceiver, // nhận trong trường hợp khách hàng vãng lai
-      DISTRICT_SRC: districtIdSender, // trong trường hợp khách hàng vãng lai
+      DISTRICT_DES: trim(districtIdReceiver), // nhận trong trường hợp khách hàng vãng lai
+      DISTRICT_SRC: trim(districtIdSender), // trong trường hợp khách hàng vãng lai
       EMAIL_CONSIG: '',
       EMAIL_OP: '',
       EMAIL_SHIPPER: '',
-      FREIGH_TERM: nguoiThanhToan, // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
+      FREIGH_TERM: trim(nguoiThanhToan), // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
       HOUSE_ID_SRC: '',
       HOUSE_ID_DES: '',
       ITEM: payloadPackageItemArr,
       LOCATION_ID_SRC: '',
-      MOVEMENT_TYPE: diemGiaoNhan, // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
+      MOVEMENT_TYPE: trim(diemGiaoNhan), // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
       NAME_CONSIG: trim(hoTenReceiver),
-      NAME_OP: hoTenSender,
-      NAME_SHIPPER: hoTenSender,
-      NOTE: ghiChu, // Ghi chú cho bưu gửi
+      NAME_OP: trim(hoTenSender),
+      NAME_SHIPPER: trim(hoTenSender),
+      NOTE: trim(ghiChu), // Ghi chú cho bưu gửi
       OLD_CAMPAIGN_ID: 0,
       ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
       ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
-      PHONE_CONSIG: dienThoaiReceiver,
-      PHONE_OP: dienThoaiSender,
-      PHONE_SHIPPER: dienThoaiSender,
+      PHONE_CONSIG: trim(dienThoaiReceiver),
+      PHONE_OP: trim(dienThoaiSender),
+      PHONE_SHIPPER: trim(dienThoaiSender),
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
       REQUEST_PICK_DATE: '',
       REQUEST_DELIV_DATE: thoiGianPhat ? '' : null, // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
-      SHIPPER: maKhachHang === '' ? '9999999999' : maKhachHang, // Người gửi hàng- mã BP
-      SOURCE_TYPE: '', //hiện tại để 03 đang bị lỗi api nên tạm để 01, đợi Hùng fix api
-      // SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
-      STREET_NAME_DES: detailAddressReceiver, // Địa chỉ nhận trong trường hợp vãng lai
-      STREET_NAME_SRC: detailAddressSender, // trong trường hợp khách hàng vãng lai
-      TEL_DES: dienThoaiReceiver,
-      TEL_SRC: dienThoaiSender,
+      SHIPPER: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Người gửi hàng- mã BP
+      SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
+      STREET_NAME_DES: trim(detailAddressReceiver), // Địa chỉ nhận trong trường hợp vãng lai
+      STREET_NAME_SRC: trim(detailAddressSender), // trong trường hợp khách hàng vãng lai
+      TEL_DES: trim(dienThoaiReceiver),
+      TEL_SRC: trim(dienThoaiSender),
       TRANSPORTATION_MODE: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
-      WARD_DES: wardIdReceiver, // Mã xã phường nhận trong trường hợp vãng lai
-      WARD_SRC: wardIdSender, // trong trường hợp khách hàng vãng lai
+      WARD_DES: trim(wardIdReceiver), // Mã xã phường nhận trong trường hợp vãng lai
+      WARD_SRC: trim(wardIdSender), // trong trường hợp khách hàng vãng lai
       //_______________________________________
       // SALE_ORG: '',
       // FWO_NO: '', // bắt buộc với sửa/xóa
@@ -898,7 +902,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMODITY_CODE: '',
+          COMMODITY_CODE: '',
           COMMODITY_TYPE: 'V99',
           COD: item.COD === '' ? undefined : item.COD,
         };

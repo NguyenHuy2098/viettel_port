@@ -133,7 +133,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       </ModalBody>
       <ModalFooter className="justify-content-end">
         <Button color="primary" onClick={handleChuyenVaoTai}>
-          {t('Hoàn thành')}
+          {t('Hoàn tất')}
         </Button>
       </ModalFooter>
     </Modal>

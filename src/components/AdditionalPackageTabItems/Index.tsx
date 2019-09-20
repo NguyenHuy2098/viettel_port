@@ -117,7 +117,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
                   value="V03"
                   name={`packageType_${index}`}
                   defaultChecked
-                  onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
+                  onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
                 />{' '}
                 {t('Hàng hóa')}
               </Label>
@@ -128,7 +128,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
                   type="radio"
                   value="V02"
                   name={`packageType_${index}`}
-                  onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
+                  onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
                 />{' '}
                 {t('Thư')}
               </Label>
@@ -139,7 +139,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
                   type="radio"
                   value="V01"
                   name={`packageType_${index}`}
-                  onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
+                  onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
                 />{' '}
                 {t('Kiện')}
               </Label>

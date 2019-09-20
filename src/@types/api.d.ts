@@ -137,7 +137,7 @@ declare namespace API {
     Note?: string;
     Goods_value?: string;
     Currency?: string;
-    COMODITY_CODE?: string;
+    COMMODITY_CODE?: string;
     COD?: string;
     Service_type?: string;
     commodity_type?: string;

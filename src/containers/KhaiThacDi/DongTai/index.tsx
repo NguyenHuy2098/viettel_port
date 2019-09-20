@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
 import { get, size, toString, trim } from 'lodash';
 import classNames from 'classnames';
+import queryString from 'query-string';
+import { History } from 'history';
 
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
@@ -14,8 +16,6 @@ import moment from 'moment';
 import { generatePath } from 'react-router';
 import routesMap from 'utils/routesMap';
 import { SipDataState, SipDataType } from 'utils/enums';
-import queryString from 'query-string';
-import { History } from 'history';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';

@@ -36,11 +36,9 @@ interface PackageItemInputType {
   Note?: string;
   GOODS_VALUE?: string | undefined;
   Currency?: string;
-  COMODITY_CODE?: string;
   COD?: string | undefined;
   Service_type?: string;
   COMMODITY_CODE?: string;
-  COMODITY_CODE?: string;
   COMMODITY_TYPE?: string;
 }
 

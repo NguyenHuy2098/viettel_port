@@ -118,7 +118,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
                   value="V99"
                   name={`packageType_${index}`}
                   defaultChecked
-                  onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
+                  onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
                 />{' '}
                 {t('Hàng hóa')}
               </Label>
@@ -129,7 +129,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
                   type="radio"
                   value="V04"
                   name={`packageType_${index}`}
-                  onChange={handleChangeTextboxValue('COMODITY_CODE', index)}
+                  onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
                 />{' '}
                 {t('Thư')}
               </Label>
@@ -162,6 +162,20 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
+            {t('Giá trị')}
+          </Label>
+          <Col lg="8">
+            <Input
+              type="text"
+              placeholder={t('Nhập giá trị (đ)')}
+              value={item.GOODS_VALUE}
+              onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
             {t('Số lượng')}
             <span className="color-red"> *</span>
           </Label>
@@ -177,20 +191,6 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Giá trị & thu hộ')}
-          </Label>
-          <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Nhập giá trị (đ)')}
-              value={item.GOODS_VALUE}
-              onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
-            />
-            <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
-          </Col>
-        </Row>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
             {t('Trọng lượng')}
             <span className="color-red"> *</span>
           </Label>
@@ -202,10 +202,6 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
               onChange={handleChangeTextboxValue('GROSS_WEIGHT', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GROSS_WEIGHT')}</div>
-            <p className="sipInputItemDescription text-right">
-              Trọng lượng quy đổi: &nbsp;
-              <span className="text-semibold color-bluegreen font-italic">500g</span>
-            </p>
           </Col>
         </Row>
         <Row className="sipInputItem mb-0">
