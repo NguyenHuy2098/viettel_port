@@ -68,10 +68,6 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Loại'),
-        accessor: 'TOR_TYPE',
-      },
-      {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (

@@ -105,10 +105,6 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         },
       },
       {
-        Header: t('Loại'),
-        accessor: 'TOR_TYPE',
-      },
-      {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
@@ -146,12 +142,12 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
           {/*  {t('Kiện')}&nbsp;({'20'})*/}
           {/*</button>*/}
         </div>
-        <div className="btn-toolbar col-2 align-items-end flex-column">
-          <Button color="primary">
-            <i className="fa fa-cube mr-1" />
-            {t('Nhận phiếu gửi')}
-          </Button>
-        </div>
+        {/*<div className="btn-toolbar col-2 align-items-end flex-column">*/}
+        {/*  <Button color="primary">*/}
+        {/*    <i className="fa fa-cube mr-1" />*/}
+        {/*    {t('Nhận phiếu gửi')}*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
       </Row>
     );
   }

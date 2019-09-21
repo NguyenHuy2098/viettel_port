@@ -95,7 +95,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           </Row>
           <Row>
             <Col xs="5">{t('Ngày gửi')}:&nbsp;</Col>
-            <Col xs="7">-/-/-</Col>
+            <Col xs="7">{moment(get(bangKe, 'DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</Col>
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
