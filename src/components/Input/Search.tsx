@@ -26,6 +26,7 @@ const Search = (props: Props): JSX.Element => {
           {t('Không tìm thấy dữ liệu!')}
         </>,
         {
+          containerId: 'Search',
           type: 'info',
         },
       );
@@ -50,7 +51,7 @@ const Search = (props: Props): JSX.Element => {
         <Button color="primary" {...buttonProps} onClick={handleClickButton}>
           {get(buttonProps, 'children') || t('Tìm kiếm')}
         </Button>
-        <ToastContainer />
+        <ToastContainer containerId={'Search'} />
       </Col>
     </Row>
   );

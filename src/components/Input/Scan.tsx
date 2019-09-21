@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, ButtonProps, Col, Input, InputProps, Row, RowProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { ToastContainer } from 'react-toastify';
 import classNames from 'classnames';
 import { get } from 'lodash';
 import './styles.scss';
@@ -28,7 +27,6 @@ const Scan = (props: Props): JSX.Element => {
         <Button color="primary" {...buttonProps}>
           {get(buttonProps, 'children') || t('Quét mã')}
         </Button>
-        <ToastContainer />
       </Col>
     </Row>
   );
