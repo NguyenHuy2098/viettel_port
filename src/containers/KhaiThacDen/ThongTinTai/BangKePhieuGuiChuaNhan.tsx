@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { ceil, get } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
@@ -25,7 +26,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN),
   );
 
-  function handleScanTaiKien(): void {
+  function handleScanPhieuGuiId(): void {
     dispatch(
       action_MIOA_ZTMI023(
         {
@@ -58,7 +59,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     );
   }
 
-  function handleChangeTaiKien(event: React.ChangeEvent<HTMLInputElement>): void {
+  function handleChangePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
     setIdBangKePhieuGui(event.target.value);
   }
 
@@ -121,18 +122,11 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <Col className="btn-toolbar col-10">
-          <div className="sipTitleRightBlockInput w-50 mr-2">
-            <i className="fa fa-barcode" />
-            <Input
-              type="text"
-              placeholder={t('Quét mã bảng kê/phiếu gửi')}
-              onChange={handleChangeTaiKien}
-              className="backgroundColorNeural6"
-            />
-          </div>
-          <Button color="primary" onClick={handleScanTaiKien}>
-            {t('Quét mã')}
-          </Button>
+          <Scan
+            onChange={handleChangePhieuGuiId}
+            onClick={handleScanPhieuGuiId}
+            placeholder={t('Quét mã bảng kê/phiếu gửi')}
+          />
         </Col>
         {/*<Col className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}

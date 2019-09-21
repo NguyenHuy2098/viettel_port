@@ -13,6 +13,7 @@ import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
+import Scan from '../../../components/Input/Scan';
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
@@ -123,18 +124,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <div className="sipTitleRightBlockInput w-50 mr-2">
-            <i className="fa fa-barcode" />
-            <Input
-              type="text"
-              placeholder={t('Quét mã phiếu gửi')}
-              onChange={handleChangePhieuGuiId}
-              className="backgroundColorNeural6"
-            />
-          </div>
-          <Button className="mr-2" color="primary" onClick={handleQuetPhieuGuiId}>
-            {t('Quét mã')}
-          </Button>
+          <Scan onChange={handleChangePhieuGuiId} onClick={handleQuetPhieuGuiId} placeholder={t('Quét mã phiếu gửi')} />
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
           {/*</button>*/}

@@ -140,7 +140,6 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
             onClick={handleQuetBangKePhieuGuiId}
             placeholder={t('Quét mã tải/kiện')}
           />
-
           {/*<Button className="sipButtonTypeC mr-2">*/}
           {/*  <img src={blackBag} alt="black-bag" className="mr-2" />*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}

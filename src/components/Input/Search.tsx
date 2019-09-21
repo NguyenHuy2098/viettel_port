@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { ToastContainer, toast } from 'react-toastify';
 import classNames from 'classnames';
 import { get, isArray, isEmpty } from 'lodash';
-import './styles.scss';
 
 interface Props extends InputProps {
   buttonProps?: ButtonProps;
@@ -31,6 +30,7 @@ const Search = (props: Props): JSX.Element => {
         },
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchResult]);
 
   const handleInputKeyPress = (event: KeyboardEvent<HTMLInputElement>): void => {

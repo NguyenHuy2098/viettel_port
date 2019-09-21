@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import Search from 'components/Input/Search';
 import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
@@ -88,17 +89,12 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
 
   const renderToolbar = (): JSX.Element => (
     <Row>
-      <Col className="btn-toolbar col-8">
-        <div className="sipTitleRightBlockInput w-50 mr-2">
-          <i className="fa fa-search" />
-          <Input
-            className="backgroundColorNeural6"
-            onChange={handleChangeSearchText}
-            placeholder={t('Tìm kiếm bảng kê/phiếu gửi')}
-            type="text"
-          />
-        </div>
-        <Button color="primary">{t('Tìm kiếm')}</Button>
+      <Col className="btn-toolbar col-10">
+        <Search
+          onChange={handleChangeSearchText}
+          placeholder={t('Tìm kiếm bảng kê/phiếu gửi')}
+          searchResult={filteredListPhieuGuiDaNhan}
+        />
         {/*<button className="btn btn-outline-primary mr-2">*/}
         {/*  {t('Tải')}&nbsp;({'05'})*/}
         {/*</button>*/}

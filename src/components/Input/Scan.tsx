@@ -3,7 +3,6 @@ import { Button, ButtonProps, Col, Input, InputProps, Row, RowProps } from 'reac
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { get } from 'lodash';
-import './styles.scss';
 
 interface Props extends InputProps {
   buttonProps?: ButtonProps;

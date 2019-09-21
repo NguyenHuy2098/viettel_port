@@ -112,6 +112,19 @@
   margin: 5px 0;
 }
 
+.sipTitleRightBlockInput {
+  position: relative;
+  i {
+    color: #9b9b9b;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+  input.form-control {
+    padding: 0 10px 0 30px;
+  }
+}
+
 .sipShippingInformationTitle {
   margin-right: 0px;
   background-color: #fff;
@@ -364,13 +377,13 @@
 .sipTableModal .table {
   min-width: 100%;
 }
-.no-border{
-  border: none!important;
+.no-border {
+  border: none !important;
 }
 .ipOptionNV {
-  border-bottom: 1px solid #D6D6D6;
+  border-bottom: 1px solid #d6d6d6;
   input {
-    top: 15px!important;
+    top: 15px !important;
   }
 }
 @media screen and (max-width: 575px) {
