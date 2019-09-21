@@ -3,14 +3,15 @@ import { Button, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
-import { Cell } from 'react-table';
 import { RouteComponentProps } from 'react-router-dom';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import Search from 'components/Input/Search';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -106,16 +107,11 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <div className="sipTitleRightBlockInput w-50 mr-2">
-            <i className="fa fa-search" />
-            <Input
-              className="backgroundColorNeural6"
-              onChange={handleChangeSearchText}
-              placeholder={t('Tìm kiếm tải/kiện')}
-              type="text"
-            />
-          </div>
-          <Button color="primary">{t('Tìm kiếm')}</Button>
+          <Search
+            onChange={handleChangeSearchText}
+            placeholder={t('Tìm kiếm tải/kiện')}
+            searchResult={filteredListTaiKienDaNhan}
+          />
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
           {/*</button>*/}

@@ -313,21 +313,6 @@ input.form-control:-moz-placeholder {
     }
   }
 }
-.sipTitleRightBlockInput {
-  width: 280px;
-  position: relative;
-  display: inline-block;
-  max-width: calc(100% - 15px);
-  i {
-    color: #9b9b9b;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
-  input.form-control {
-    padding: 0 10px 0 30px;
-  }
-}
 .sipTitleModalCreateNew {
   width: 568px;
   margin: 100px auto;
@@ -576,9 +561,6 @@ html:not([dir='rtl']) .sidebar {
       }
     }
   }
-}
-.backgroundColorNeural6 {
-  background: #f6f6f6 !important;
 }
 .sipButtonTypeC {
   background-color: white;

@@ -9,8 +9,7 @@
 @font-face {
   font-family: 'Core Sans GS';
   font-display: auto;
-  src: local('Core Sans GS'), url('./assets/fonts/CoreSansGS/S-Core_-_CoreSansGS45Regular1.ttf')
-  format('truetype');
+  src: local('Core Sans GS'), url('./assets/fonts/CoreSansGS/S-Core_-_CoreSansGS45Regular1.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
@@ -100,3 +99,5 @@
 @import '~simple-line-icons/css/simple-line-icons.css';
 // Import Main styles for this application
 @import './scss/style.scss';
+// Import React-Toastify
+@import '~react-toastify/dist/ReactToastify.css';

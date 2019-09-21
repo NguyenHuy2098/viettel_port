@@ -11,6 +11,7 @@ import moment from 'moment';
 // import blackBag from 'assets/img/blackBag.png';
 // import deliveryBox from 'assets/img/box.png';
 import DataTable from 'components/DataTable';
+import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
@@ -134,18 +135,11 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <div className="sipTitleRightBlockInput w-50 mr-2">
-            <i className="fa fa-barcode" />
-            <Input
-              type="text"
-              placeholder={t('Quét mã tải/kiện')}
-              onChange={handleChangeBangKePhieuGuiId}
-              className="backgroundColorNeural6"
-            />
-          </div>
-          <Button color="primary" onClick={handleQuetBangKePhieuGuiId}>
-            {t('Quét mã')}
-          </Button>
+          <Scan
+            onChange={handleChangeBangKePhieuGuiId}
+            onClick={handleQuetBangKePhieuGuiId}
+            placeholder={t('Quét mã tải/kiện')}
+          />
 
           {/*<Button className="sipButtonTypeC mr-2">*/}
           {/*  <img src={blackBag} alt="black-bag" className="mr-2" />*/}
