@@ -5,19 +5,19 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { generatePath, match } from 'react-router';
-import { forEach, size,trim } from 'lodash';
+import { forEach, size, trim } from 'lodash';
+import { push } from 'connected-react-router';
 import moment from 'moment';
 
 import { makeSelector046CountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { makeSelectorBangKeChuaNhanPhieuGui, makeSelectorTaiChuaNhanBKPhieuGui } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import routesMap from 'utils/routesMap';
 import { SipDataState } from 'utils/enums';
 import { recordHasAtLeastOneChildHaveLifeCycle108, recordHaveAtLeastOneChildHaveLifeCycle603Or403 } from 'utils/helper';
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
 import NhanRiengBangKePhieuGui from './NhanRiengBangKePhieuGui';
-import { push } from "connected-react-router";
-import routesMap from '../../../utils/routesMap';
 
 interface Props {
   match: match;
@@ -108,7 +108,7 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
         <h1 className="sipTitle">{t('Nhận bảng kê / phiếu gửi')}</h1>
         <div className="sipTitleRightBlockInput m-0">
           <i className="fa fa-search" />
-          <Input type="text" placeholder={t('Tra cứu bảng kê/phiếu gửi ')} />
+          <Input type="text" placeholder={t('Tra cứu bảng kê/phiếu gửi ')} onKeyUp={handleForwardingSearch} />
         </div>
       </Row>
       <div className="row mt-3" />
