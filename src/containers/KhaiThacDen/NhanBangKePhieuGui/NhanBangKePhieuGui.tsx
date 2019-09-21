@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
-import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
+import React, { KeyboardEvent, useEffect } from 'react';
+import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { match } from 'react-router';
-import { forEach, size } from 'lodash';
+import { generatePath, match } from 'react-router';
+import { forEach, size,trim } from 'lodash';
 import moment from 'moment';
 
 import { makeSelector046CountChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
@@ -16,6 +16,8 @@ import { recordHasAtLeastOneChildHaveLifeCycle108, recordHaveAtLeastOneChildHave
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
 import NhanRiengBangKePhieuGui from './NhanRiengBangKePhieuGui';
+import { push } from "connected-react-router";
+import routesMap from '../../../utils/routesMap';
 
 interface Props {
   match: match;
@@ -92,11 +94,22 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
     setBangKeChuaNhanPhieuGuiRecords(tempArray);
   }, [bangKeChuaNhanPhieuGuiRawRecords]);
 
+  function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
+    const thisValue = e.currentTarget.value;
+    if (size(trim(thisValue)) && e.keyCode === 13) {
+      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: thisValue })));
+    }
+  }
+
   return (
     <>
       <div className="row mt-3" />
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Nhận bảng kê / phiếu gửi')}</h1>
+        <div className="sipTitleRightBlockInput m-0">
+          <i className="fa fa-search" />
+          <Input type="text" placeholder={t('Tra cứu bảng kê/phiếu gửi ')} />
+        </div>
       </Row>
       <div className="row mt-3" />
 
