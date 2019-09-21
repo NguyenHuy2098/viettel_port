@@ -1,6 +1,7 @@
+/* eslint-disable max-lines */
 import React, { useCallback, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { get, map, size } from 'lodash';
+import { forEach, get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { generatePath, match } from 'react-router-dom';
@@ -16,6 +17,9 @@ import { push } from 'connected-react-router';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+
+let forwardingItemList: ForwardingItem[] = [];
 
 interface Props {
   match: match;
@@ -31,6 +35,47 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const dataChuyenThuChild = useSelector(makeSelector046ListChildren);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
+
+  const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
+  const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
+  const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
+    undefined,
+  );
+
+  function toggleSelectForwardingItemModal(): void {
+    setSelectForwardingItemModal(!selectForwardingItemModal);
+  }
+
+  function handleChuyenVaoChuyenThu(): void {
+    if (size(forwardingItemListState) > 0) {
+      toggleSelectForwardingItemModal();
+    } else {
+      alert(t('Vui lòng chọn tải!'));
+    }
+  }
+
+  function onSuccessSelectedForwardingItem(): void {
+    getListPhieuGui();
+    setUncheckAllForwardingItemCheckbox(false);
+    setForwardingItemListState([]);
+    forwardingItemList = [];
+  }
+
+  function handleSelectTaiItem(event: React.FormEvent<HTMLInputElement>): void {
+    event.stopPropagation();
+    const value = event.currentTarget.value;
+    setUncheckAllForwardingItemCheckbox(undefined);
+    if (event.currentTarget.checked) {
+      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC2' });
+    } else {
+      forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
+        if (item.ITEM_ID === value) {
+          forwardingItemList.splice(index, 1);
+        }
+      });
+    }
+    setForwardingItemListState(forwardingItemList);
+  }
 
   function toggleDeleteConfirmModal(): void {
     setDeleteConfirmModal(!deleteConfirmModal);
@@ -103,7 +148,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          <Button>
+          <Button onClick={handleChuyenVaoChuyenThu}>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển vào CT')}
           </Button>
@@ -180,7 +225,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   );
 
   const handleRedirectDetail = useCallback(
-    (item: API.RowMTZTMI046OUT): void => {
+    (item: API.Child): void => {
       dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,10 +237,15 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     () => [
       {
         id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <Label check>
-              <Input type="checkbox" />
+              <Input
+                defaultChecked={uncheckAllForwardingItemCheckbox}
+                type="checkbox"
+                value={get(row, 'values.TOR_ID', '')}
+                onClick={handleSelectTaiItem}
+              />
             </Label>
           );
         },
@@ -211,7 +261,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       {
         Header: t('Số lượng'),
         accessor: '',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return <>Thiếu API</>;
         },
       },
@@ -231,7 +281,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">
@@ -246,7 +296,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [uncheckAllForwardingItemCheckbox],
   );
 
   return dataChuyenThu ? (
@@ -262,6 +312,17 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
         onDelete={handleDeleteForwardingOrder}
         onHide={toggleDeleteConfirmModal}
         torId={deleteTorId}
+      />
+      <SelectForwardingItemModal
+        onSuccessSelected={onSuccessSelectedForwardingItem}
+        visible={selectForwardingItemModal}
+        onHide={toggleSelectForwardingItemModal}
+        modalTitle={t('Chọn chuyến thư')}
+        forwardingItemList={forwardingItemListState}
+        IV_TOR_TYPE="ZC3"
+        IV_FR_LOC_ID="HUB1"
+        IV_TO_LOC_ID=""
+        IV_CUST_STATUS={101}
       />
     </>
   ) : (

@@ -38,41 +38,40 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     TorTypeChuyenVao,
   } = props;
 
-  const listTaiChuaHoanThanh = useSelector(makeSelectorRow(IV_TOR_TYPE, IV_CUST_STATUS));
+  const listForwardingItemChuaHoanThanh = useSelector(makeSelectorRow(IV_TOR_TYPE, IV_CUST_STATUS));
 
   const [radioTorId, setRadioTorId] = useState<string>('');
 
   useEffect((): void => {
-    setRadioTorId(get(listTaiChuaHoanThanh, '[0].TOR_ID'));
+    setRadioTorId(get(listForwardingItemChuaHoanThanh, '[0].TOR_ID'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listTaiChuaHoanThanh]);
+  }, [listForwardingItemChuaHoanThanh]);
 
   useEffect((): void => {
     if (visible) {
-      dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_FR_DATE: trim(
-            toString(
-              moment(new Date())
-                .subtract(7, 'days')
-                .format(' YYYYMMDD'),
-            ),
+      const payload047 = {
+        IV_TOR_ID: '',
+        IV_FR_DATE: trim(
+          toString(
+            moment(new Date())
+              .subtract(7, 'days')
+              .format(' YYYYMMDD'),
           ),
-          IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
-          IV_TOR_TYPE: IV_TOR_TYPE,
-          IV_FR_LOC_ID: IV_FR_LOC_ID,
-          IV_TO_LOC_ID: IV_TO_LOC_ID,
-          IV_CUST_STATUS: IV_CUST_STATUS,
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '100',
-        }),
-      );
+        ),
+        IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+        IV_TOR_TYPE: IV_TOR_TYPE,
+        IV_FR_LOC_ID: IV_FR_LOC_ID,
+        IV_TO_LOC_ID: IV_TO_LOC_ID,
+        IV_CUST_STATUS: IV_CUST_STATUS,
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '100',
+      };
+      dispatch(action_MIOA_ZTMI047(payload047));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
-  function handleChuyenVaoTai(e: FormEvent): void {
+  function handleChuyenVaoForwardingItem(e: FormEvent): void {
     const payload = {
       IV_FLAG: '2',
       IV_TOR_TYPE: TorTypeChuyenVao ? TorTypeChuyenVao : IV_TOR_TYPE,
@@ -106,7 +105,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       <ModalBody>
         <FormGroup>
           {map(
-            listTaiChuaHoanThanh,
+            listForwardingItemChuaHoanThanh,
             (item: API.RowMTZTMI047OUT): JSX.Element => {
               return (
                 <Label key={item.TOR_ID} check className="selectForwardingItem row">
@@ -132,7 +131,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
         </FormGroup>
       </ModalBody>
       <ModalFooter className="justify-content-end">
-        <Button color="primary" onClick={handleChuyenVaoTai}>
+        <Button color="primary" onClick={handleChuyenVaoForwardingItem}>
           {t('Hoàn tất')}
         </Button>
       </ModalFooter>

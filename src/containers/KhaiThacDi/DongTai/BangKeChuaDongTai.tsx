@@ -27,8 +27,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  forwardingItemList = [];
-
   const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
 
@@ -41,12 +39,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     undefined,
   );
 
-  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(event.currentTarget.value);
-    };
-  }
-
   function toggleSelectForwardingItemModal(): void {
     setSelectForwardingItemModal(!selectForwardingItemModal);
   }
@@ -57,6 +49,12 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     } else {
       alert(t('Vui lòng chọn bảng kê!'));
     }
+  }
+
+  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setValueFunction(event.currentTarget.value);
+    };
   }
 
   function toggleDeleteConfirmModal(): void {
@@ -79,7 +77,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: 'BDH',
           IV_CUST_STATUS: '101',
-          IV_FR_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+          IV_FR_DATE: '20100101',
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
@@ -95,6 +93,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     getListTai();
     setUncheckAllForwardingItemCheckbox(false);
     setForwardingItemListState([]);
+    forwardingItemList = [];
   }
 
   useEffect((): void => getListTai(), [getListTai]);
