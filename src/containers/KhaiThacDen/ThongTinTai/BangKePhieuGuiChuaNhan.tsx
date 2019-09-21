@@ -134,12 +134,12 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
             {t('Quét mã')}
           </Button>
         </Col>
-        <Col className="btn-toolbar col-2 align-items-end flex-column">
-          <Button color="primary">
-            <i className="fa fa-cube mr-1" />
-            {t('Nhận')}
-          </Button>
-        </Col>
+        {/*<Col className="btn-toolbar col-2 align-items-end flex-column">*/}
+        {/*  <Button color="primary">*/}
+        {/*    <i className="fa fa-cube mr-1" />*/}
+        {/*    {t('Nhận')}*/}
+        {/*  </Button>*/}
+        {/*</Col>*/}
       </Row>
     );
   }
