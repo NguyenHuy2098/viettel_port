@@ -1,12 +1,15 @@
 export enum SipDataType {
   BANG_KE = 'ZC1',
-  BUU_GUI_CON = 'ZSML',
+  TAI = 'ZC2',
   CHUYEN_THU = 'ZC3',
   KIEN = 'ZBIG',
-  TAI = 'ZC2',
+  BUU_GUI_CON = 'ZSML',
 }
 
 export enum SipDataState {
+  /**
+   * Tai/Bang ke/Chuyen thu - 1xx
+   */
   TAO_MOi = 101,
   CHUA_HOAN_THANH = 101,
   GAN_BANG_KE_VAO_TAI = 102,
@@ -18,8 +21,13 @@ export enum SipDataState {
   CHUYEN_THU_DA_QUET_NHAN = 107,
   TAI_KIEN_DA_QUET_NHAN = 108,
   BANG_KE_DA_QUET_NHAN = 109,
+  /**
+   * Kien/Phieu gui/Buu gui - 3xx~8xx
+   */
+  KIEN_CHUA_QUET_NHAN_THUOC_CHUYEN_THU_DA_NHAN_TAI_TTKT = 401,
   PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT = 403,
   PHIEU_GUI_DA_QUET_NHAN_TAI_TTKT = 404,
+  KIEN_CHUA_QUET_NHAN_THUOC_CHUYEN_THU_DA_NHAN_TAI_BUU_CUC = 601,
   PHIEU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC = 603,
   PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC = 604,
 }

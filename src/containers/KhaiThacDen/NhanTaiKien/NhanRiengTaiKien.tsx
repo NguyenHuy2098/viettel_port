@@ -1,17 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row, Input } from 'reactstrap';
+import { Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import DataTable from 'components/DataTable';
-import { Cell } from 'react-table';
 import { useDispatch } from 'react-redux';
+import { generatePath } from 'react-router';
+import { Cell } from 'react-table';
 import moment from 'moment';
 import { forEach, map, get, isNil } from 'lodash';
 import { push } from 'connected-react-router';
 
+import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import routesMap from 'utils/routesMap';
-import { generatePath } from 'react-router';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanRiengTaiKien: React.FC = (): JSX.Element => {
@@ -137,11 +138,9 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <>
-              <Button className="SipTableFunctionIcon" onClick={handleControllerClick(row.original)}>
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
-            </>
+            <Button className="SipTableFunctionIcon" onClick={handleControllerClick(row.original)}>
+              <i className="fa fa-print fa-lg color-green" />
+            </Button>
           );
         },
       },
@@ -173,18 +172,11 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
       <div className="shadow-sm p-3 mb-3 bg-white">
         <Row>
           <div className="btn-toolbar col-10">
-            <div className="sipTitleRightBlockInput m-0">
-              <i className="fa fa-barcode" />
-              <Input
-                type="text"
-                placeholder={t('Quét mã tải kiện')}
-                onChange={handleOnChangeScanTorId}
-                value={torIdSearch}
-              />
-            </div>
-            <Button className="ml-2" color="primary" onClick={dispatch_Action_MIOA_ZTMI023}>
-              {t('Quét mã')}
-            </Button>
+            <Scan
+              onChange={handleOnChangeScanTorId}
+              onClick={dispatch_Action_MIOA_ZTMI023}
+              placeholder={t('Quét mã tải/kiện')}
+            />
           </div>
         </Row>
       </div>

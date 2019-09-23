@@ -1,13 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import moment from 'moment';
-import { forEach, size } from 'lodash';
 
-import { makeSelectorNhanRiengTaiKien, makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorCountChuyenThuChuaNhanTaiKien, makeSelectorRowSize } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import ChuyenThuChuaNhanTaiKien from './ChuyenThuChuaNhanTaiKien';
 import TaiDaNhan from './TaiDaNhan';
 import NhanRiengTaiKien from './NhanRiengTaiKien';
@@ -17,39 +18,35 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
   const dispatch = useDispatch();
+  const maBP = useSelector(makeSelectorMaBP);
+  const countChuyenThuChuaNhanTaiKien = useSelector(makeSelectorCountChuyenThuChuaNhanTaiKien);
+  const countTaiDaNhan = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
+  const countNhanRiengTaiKien = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
-  const nhanRiengTaiKien = useSelector(makeSelectorNhanRiengTaiKien);
-  const chuyenThuChuaNhanTaiKien = useSelector(makeSelectorRow('ZC3', 106));
-  const taiDaNhan = useSelector(makeSelectorRow('ZC2', 107));
-
-  const [chuyenThuChuaNhanTaiKienFiltered, setChuyenThuChuaNhanTaiKienFiltered] = useState<API.RowMTZTMI047OUT[]>([]);
-
-  const getNhanRiengTaiKienData = (): void => {
+  const getChuyenThuChuaNhanTaiKien = (IV_PAGENO = 1): void => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
-        IV_TOR_TYPE: 'ZC2',
+        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
         IV_FR_LOC_ID: '',
-
-        IV_TO_LOC_ID: 'HUB1',
-        IV_CUST_STATUS: '106',
+        IV_TO_LOC_ID: maBP,
+        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
         IV_FR_DATE: '20100917',
         IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '10',
+        IV_PAGENO: IV_PAGENO,
+        IV_NO_PER_PAGE: '5000',
       }),
     );
   };
 
-  const getChuyenThuChuaNhanTaiKien = (IV_PAGENO: number): void => {
+  const getTaiDaNhan = (IV_PAGENO = 1): void => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
-        IV_TOR_TYPE: 'ZC3',
+        IV_TOR_TYPE: SipDataType.TAI,
         IV_FR_LOC_ID: '',
-
-        IV_TO_LOC_ID: 'HUB1',
-        IV_CUST_STATUS: '106',
+        IV_TO_LOC_ID: maBP,
+        IV_CUST_STATUS: SipDataState.TAI_KIEN_DA_QUET_NHAN,
         IV_FR_DATE: '20100917',
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: IV_PAGENO,
@@ -58,15 +55,14 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     );
   };
 
-  const getTaiDaNhan = (IV_PAGENO: number): void => {
+  const getNhanRiengTaiKienData = (IV_PAGENO = 1): void => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
-        IV_TOR_TYPE: 'ZC2',
+        IV_TOR_TYPE: SipDataType.TAI,
         IV_FR_LOC_ID: '',
-
-        IV_TO_LOC_ID: 'HUB1',
-        IV_CUST_STATUS: '107',
+        IV_TO_LOC_ID: maBP,
+        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DEN,
         IV_FR_DATE: '20100917',
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: IV_PAGENO,
@@ -74,41 +70,17 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
       }),
     );
   };
+
   useEffect((): void => {
-    getNhanRiengTaiKienData();
     getChuyenThuChuaNhanTaiKien(1);
     getTaiDaNhan(1);
+    getNhanRiengTaiKienData(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const childLifeCycleIsNot107 = (el: API.RowMTZTMI047OUT): boolean => {
-    let isNot107 = true;
-    forEach(el.Childs, child => {
-      if (child.LIFECYCLE === '107') {
-        isNot107 = false;
-      }
-    });
-
-    return isNot107;
-  };
-  // filtering chuyenThuChuaNhanTaiKien
-  useEffect((): void => {
-    const newChuyenThuChuaNhanTaiKienFiltered: API.RowMTZTMI047OUT[] = [];
-    forEach(chuyenThuChuaNhanTaiKien, el => {
-      if (childLifeCycleIsNot107(el)) {
-        newChuyenThuChuaNhanTaiKienFiltered.push(el);
-      }
-    });
-    setChuyenThuChuaNhanTaiKienFiltered(newChuyenThuChuaNhanTaiKienFiltered);
-  }, [chuyenThuChuaNhanTaiKien]);
 
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
-
-  const getNumberOfNhanRiengTaiKien = useMemo((): number => {
-    return size(nhanRiengTaiKien);
-  }, [nhanRiengTaiKien]);
 
   return (
     <>
@@ -130,7 +102,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
               {t('Chuyến thư chưa nhận tải/kiện')}
-              <Badge color="primary">{size(chuyenThuChuaNhanTaiKienFiltered)}</Badge>
+              <Badge color="primary">{countChuyenThuChuaNhanTaiKien}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -139,7 +111,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Tải đã nhận')}
-              <Badge color="primary">{size(taiDaNhan)}</Badge>
+              <Badge color="primary">{countTaiDaNhan}</Badge>
             </NavLink>
           </NavItem>
           <NavItem>
@@ -148,19 +120,16 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(3), [])}
             >
               {t('Nhận riêng tải/kiện')}
-              <Badge color="primary">{getNumberOfNhanRiengTaiKien}</Badge>
+              <Badge color="primary">{countNhanRiengTaiKien}</Badge>
             </NavLink>
           </NavItem>
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <ChuyenThuChuaNhanTaiKien
-              data={chuyenThuChuaNhanTaiKienFiltered}
-              getChuyenThuChuaNhanTaiKien={getChuyenThuChuaNhanTaiKien}
-            />
+            <ChuyenThuChuaNhanTaiKien getChuyenThuChuaNhanTaiKien={getChuyenThuChuaNhanTaiKien} />
           </TabPane>
           <TabPane tabId={2}>
-            <TaiDaNhan data={taiDaNhan} getTaiDaNhan={getTaiDaNhan} />
+            <TaiDaNhan getTaiDaNhan={getTaiDaNhan} />
           </TabPane>
           <TabPane tabId={3}>
             <NhanRiengTaiKien />

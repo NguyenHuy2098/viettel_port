@@ -1,46 +1,45 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Row, Input } from 'reactstrap';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { generatePath } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { filter, map, includes, toLower } from 'lodash';
+import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import routesMap from 'utils/routesMap';
 import Pagination from 'components/Pagination';
-import { makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import Search from 'components/Input/Search';
+import { makeSelectorChuyenThuChuaNhanTaiKien, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
+import routesMap from 'utils/routesMap';
 
 interface Props {
-  data: API.RowMTZTMI047OUT[];
   getChuyenThuChuaNhanTaiKien: (IV_PAGENO: number) => void;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data, getChuyenThuChuaNhanTaiKien }: Props): JSX.Element => {
+const ChuyenThuChuaNhanTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getChuyenThuChuaNhanTaiKien } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  const totalPage = useSelector(makeSelectorTotalPage('ZC3', 106));
-
-  const [chuyenThuChuaNhanTaiKien, setChuyenThuChuaNhanTaiKien] = useState<API.RowMTZTMI047OUT[]>([]);
-  const [keySearch, setKeySearch] = useState<string>('');
-
-  useEffect((): void => {
-    setChuyenThuChuaNhanTaiKien(data);
-  }, [data]);
+  const chuyenThuChuaNhanTaiKien = useSelector(makeSelectorChuyenThuChuaNhanTaiKien);
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const [searchText, setSearchText] = useState<string>('');
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
       dispatch(push(generatePath(routesMap.THONG_TIN_CHUYEN_THU, { idChuyenThu: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data],
+    [],
   );
+
   const onPaginationChange = (selectedItem: { selected: number }): void => {
     getChuyenThuChuaNhanTaiKien(selectedItem.selected + 1);
   };
+
   const columns = useMemo(
     () => [
       {
@@ -49,64 +48,60 @@ const ChuyenThuChuaNhanTaiKien: React.FC<Props> = ({ data, getChuyenThuChuaNhanT
       },
       {
         Header: t('Bưu cục đi'),
-        accessor: 'FR_LOG_ID',
+        accessor: 'LOG_LOCID_FR',
       },
       {
         Header: t('Bưu cục đến'),
-        accessor: 'TO_LOG_ID',
+        accessor: 'LOG_LOCID_TO',
       },
       {
-        Header: t('SL'),
-        accessor: 'countChuyenThu',
+        Header: t('Số lượng'),
+        accessor: 'ITEM_NO',
       },
       {
         Header: t('Trọng lượng'),
-        accessor: 'GRO_WEI_VAL',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return `${ceil(get(row, 'original.NET_WEI_VAL'), 2)} ${get(row, 'original.NET_WEI_UNI')}`;
+        },
       },
       {
         Header: t('Ngày tạo'),
-        accessor: 'CREATED_ON',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const rows = map(chuyenThuChuaNhanTaiKien, (item: API.RowMTZTMI047OUT) => {
-    return {
-      TOR_ID: item.TOR_ID,
-      FR_LOG_ID: item.LOG_LOCID_FR,
-      TO_LOG_ID: item.LOG_LOCID_TO,
-      countChuyenThu: '',
-      GRO_WEI_VAL: parseFloat(item.NET_WEI_VAL || '0').toPrecision(3) + ' ' + toLower(item.NET_WEI_UNI),
-      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-    };
-  });
 
-  const changeKeySearch = (event: React.FormEvent<HTMLInputElement>): void => {
-    setKeySearch(event.currentTarget.value);
+  const filteredListChuyenThuChuaNhanTaiKien = useMemo(
+    () => filter(chuyenThuChuaNhanTaiKien, (child: API.Child) => includes(JSON.stringify(child), searchText)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [chuyenThuChuaNhanTaiKien, searchText],
+  );
+
+  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(event.target.value);
   };
-  const handleSearch = (): void => {
-    const tempArray: API.RowMTZTMI047OUT[] = filter(data, item => includes(item.TOR_ID, keySearch));
-    setChuyenThuChuaNhanTaiKien(tempArray);
-  };
+
+  const renderToolbar = (): JSX.Element => (
+    <Row>
+      <div className="btn-toolbar col-10">
+        <Search
+          onChange={handleChangeSearchText}
+          placeholder={t('Tìm kiếm chuyến thư')}
+          searchResult={filteredListChuyenThuChuaNhanTaiKien}
+        />
+      </div>
+    </Row>
+  );
 
   return (
     <>
-      <div className="shadow-sm p-3 mb-3 bg-white">
-        <Row>
-          <div className="btn-toolbar col-10">
-            <div className="sipTitleRightBlockInput m-0">
-              <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} onChange={changeKeySearch} />
-            </div>
-            <Button className="ml-2" color="primary" onClick={handleSearch}>
-              {t('Tìm kiếm')}
-            </Button>
-          </div>
-        </Row>
-      </div>
+      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={rows} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={filteredListChuyenThuChuaNhanTaiKien} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

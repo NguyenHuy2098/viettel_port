@@ -149,6 +149,20 @@
   }
 }
 
+.sipTitleRightBlockInput {
+  position: relative;
+  i {
+    color: #9b9b9b;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+  }
+  input.form-control {
+    padding: 0 10px 0 30px;
+  }
+}
+
+
 .findRecordButton {
   margin-bottom: 8px;
 
