@@ -1,18 +1,34 @@
 /* eslint-disable max-lines */
 import React, { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { findIndex, find, forEach, get, map, noop, slice, join, size, includes, isNil, toString } from 'lodash';
+import {
+  findIndex,
+  find,
+  forEach,
+  get,
+  map,
+  noop,
+  slice,
+  join,
+  size,
+  includes,
+  toString,
+  trim,
+  toNumber,
+} from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
+import { ToastContainer, toast } from 'react-toastify';
+import moment from 'moment';
+
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
-import moment from 'moment';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
@@ -38,10 +54,14 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
   const listDichVu = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const listTai = useSelector(makeSelectorRow('ZC2', 101));
+  const listChuyenThu = useSelector(makeSelectorRow('ZC3', 101));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [disableButtonDongBangKe, setDisableButtonDongBangKe] = useState<boolean>(true);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [showDongBangKeVaoTaiPopup, setShowDongBangKeVaoTaiPopup] = useState<boolean>(false);
+  const [showPopUpGanTaiVaoChuyenThu, setShowPopUpGanTaiVaoChuyenThu] = useState<boolean>(false);
+  const [selectedChuyenThu, setSelectedChuyenthu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
+  const [selectedTai, setSelectedTai] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
   const [codePhieuGui, setCodePhieuGui] = useState<string>('');
 
@@ -80,8 +100,27 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     );
   };
 
+  const getListChuyenThu = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_FR_DATE: moment()
+          .subtract(7, 'day')
+          .format('YYYYMMDD'),
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_TOR_TYPE: 'ZC3',
+        IV_FR_LOC_ID: 'BDH',
+        IV_TO_LOC_ID: '',
+        IV_CUST_STATUS: '101',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
+  };
+
   useEffect((): void => {
     getListDichVu();
+    getListChuyenThu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -271,6 +310,13 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     setShowDongBangKeVaoTaiPopup(false);
   }, []);
 
+  const openPopUpDongTai = useCallback((): void => {
+    setShowPopUpGanTaiVaoChuyenThu(true);
+  }, []);
+  const closePopUpDongTai = useCallback((): void => {
+    setShowPopUpGanTaiVaoChuyenThu(false);
+  }, []);
+
   const handleActionDongBangKeWithoutRemovePhieuGui = (taiID: string): void => {
     dispatch(
       action_MIOA_ZTMI016(
@@ -345,15 +391,14 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           );
         },
         onFailure: (error: Error): void => {
-          if (isNil(get(error, 'messages[0]'))) {
-            alert(get(error, 'messages[0]'));
-          }
+          alert(error.message);
         },
       }),
     );
 
     setShowDongBangKeVaoTaiPopup(false);
   };
+
   const handleActionDongBangKe = (taiID: string): void => {
     if (size(listUncheckForwardingItem) > 0) {
       handleActionDongBangKeAfterRemovePhieuGui(taiID);
@@ -361,6 +406,204 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       handleActionDongBangKeWithoutRemovePhieuGui(taiID);
     }
     setShowDongBangKeVaoTaiPopup(false);
+  };
+
+  const handleActionDongBangKeVaoTaiCoSan = (): void => {
+    handleActionDongBangKe(get(selectedTai, 'TOR_ID', ''));
+  };
+
+  // eslint-disable-next-line max-lines-per-function
+  const handleDongTaiSauKhiChonChuyenThu = (): void => {
+    const maChuyenThu = get(selectedChuyenThu, 'TOR_ID', '');
+    if (size(trim(maChuyenThu)) > 0) {
+      //tao tai moi
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: '1',
+            IV_TOR_TYPE: 'ZC2',
+            IV_TOR_ID_CU: '',
+            IV_SLOCATION: 'BDH',
+            IV_DLOCATION: 'HUB1',
+            IV_DESCRIPTION: '',
+            T_ITEM: [
+              {
+                ITEM_ID: '',
+                ITEM_TYPE: '',
+              },
+            ],
+          },
+          {
+            // eslint-disable-next-line max-lines-per-function
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              if (get(data, 'MT_ZTMI016_OUT.ev_error') === 1) {
+                const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
+                if (size(listUncheckForwardingItem) > 0) {
+                  // Remove phieu gui khong duoc tic ngoai man hin danh sach phieu gui trong bang ke
+                  dispatch(
+                    action_MIOA_ZTMI016(
+                      {
+                        IV_FLAG: '4',
+                        IV_TOR_TYPE: 'ZC1',
+                        IV_TOR_ID_CU: idBangKe,
+                        IV_SLOCATION: 'BDH',
+                        IV_DLOCATION: 'HUB1',
+                        IV_DESCRIPTION: '',
+                        T_ITEM: listUncheckForwardingItem,
+                      },
+                      {
+                        // eslint-disable-next-line max-lines-per-function
+                        onSuccess: (): void => {
+                          // add bang ke hien tai vao tai moi tao
+                          dispatch(
+                            action_MIOA_ZTMI016(
+                              {
+                                IV_FLAG: '2',
+                                IV_TOR_TYPE: 'ZC2',
+                                IV_TOR_ID_CU: maTaiVuaTao || '',
+                                IV_SLOCATION: 'BDH',
+                                IV_DLOCATION: 'HUB1',
+                                IV_DESCRIPTION: '',
+                                T_ITEM: [
+                                  {
+                                    ITEM_ID: idBangKe || '',
+                                    ITEM_TYPE: 'ZC1',
+                                  },
+                                ],
+                              },
+                              {
+                                // add tai vao chuyen thu vua chon
+                                onSuccess: (): void => {
+                                  dispatch(
+                                    action_MIOA_ZTMI016(
+                                      {
+                                        IV_FLAG: '2',
+                                        IV_TOR_TYPE: 'ZC3',
+                                        IV_TOR_ID_CU: maChuyenThu || '',
+                                        IV_SLOCATION: 'BDH',
+                                        IV_DLOCATION: 'HUB1',
+                                        IV_DESCRIPTION: '',
+                                        T_ITEM: [
+                                          {
+                                            ITEM_ID: maTaiVuaTao,
+                                            ITEM_TYPE: 'ZC2',
+                                          },
+                                        ],
+                                      },
+                                      {
+                                        onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                          if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+                                            toast(
+                                              <>
+                                                <i className="fa check mr-2" />
+                                                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                              </>,
+                                              {
+                                                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                                type: 'success',
+                                              },
+                                            );
+                                          } else {
+                                            toast(
+                                              <>
+                                                <i className="fa fa-window-close-o mr-2" />
+                                                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                              </>,
+                                              {
+                                                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                                type: 'error',
+                                              },
+                                            );
+                                          }
+                                        },
+                                      },
+                                    ),
+                                  );
+                                },
+                              },
+                            ),
+                          );
+                        },
+                      },
+                    ),
+                  );
+                } else {
+                  dispatch(
+                    action_MIOA_ZTMI016(
+                      {
+                        IV_FLAG: '2',
+                        IV_TOR_TYPE: 'ZC2',
+                        IV_TOR_ID_CU: maTaiVuaTao || '',
+                        IV_SLOCATION: 'BDH',
+                        IV_DLOCATION: 'HUB1',
+                        IV_DESCRIPTION: '',
+                        T_ITEM: [
+                          {
+                            ITEM_ID: idBangKe || '',
+                            ITEM_TYPE: 'ZC1',
+                          },
+                        ],
+                      },
+                      {
+                        // add tai vao chuyen thu vua chon
+                        onSuccess: (): void => {
+                          dispatch(
+                            action_MIOA_ZTMI016(
+                              {
+                                IV_FLAG: '2',
+                                IV_TOR_TYPE: 'ZC3',
+                                IV_TOR_ID_CU: maChuyenThu || '',
+                                IV_SLOCATION: 'BDH',
+                                IV_DLOCATION: 'HUB1',
+                                IV_DESCRIPTION: '',
+                                T_ITEM: [
+                                  {
+                                    ITEM_ID: maTaiVuaTao,
+                                    ITEM_TYPE: 'ZC2',
+                                  },
+                                ],
+                              },
+                              {
+                                onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                  if (get(data, 'MT_ZTMI016_OUT.ev_error') === 1) {
+                                    toast(
+                                      <>
+                                        <i className="fa fa-check-circle mr-2" />
+                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                      </>,
+                                      {
+                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                        type: 'info',
+                                      },
+                                    );
+                                  } else {
+                                    toast(
+                                      <>
+                                        <i className="fa fa-window-close-o mr-2" />
+                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                      </>,
+                                      {
+                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                        type: 'info',
+                                      },
+                                    );
+                                  }
+                                },
+                              },
+                            ),
+                          );
+                        },
+                      },
+                    ),
+                  );
+                }
+              }
+            },
+          },
+        ),
+      );
+    }
+    closePopUpDongTai();
   };
 
   function renderTitle(): JSX.Element {
@@ -384,7 +627,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             <i className="fa fa-building-o" />
             {t('Đóng bảng kê')}
           </Button>
-          <Button>
+          <Button disabled={disableButtonDongBangKe} onClick={openPopUpDongTai}>
             <i className="fa fa-cloud rotate-90" />
             {t('Đóng tải')}
           </Button>
@@ -583,6 +826,231 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     [uncheckAllForwardingItemCheckbox],
   );
 
+  const handleChonChuyenThu = (chuyenThu: API.RowMTZTMI047OUT | undefined): void => {
+    setSelectedChuyenthu(chuyenThu);
+  };
+
+  const hancleChonTai = (tai: API.RowMTZTMI047OUT | undefined): void => {
+    setSelectedTai(tai);
+  };
+
+  // eslint-disable-next-line max-lines-per-function
+  const taoChuyenThuMoi = (placeName: string, ghiChu: string): void => {
+    const place = find(listDichVu, ['DESCR40', placeName]);
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '1',
+          IV_TOR_TYPE: 'ZC2',
+          IV_TOR_ID_CU: '',
+          IV_SLOCATION: 'BDH',
+          IV_DLOCATION: 'HUB1',
+          IV_DESCRIPTION: '',
+          T_ITEM: [
+            {
+              ITEM_ID: '',
+              ITEM_TYPE: '',
+            },
+          ],
+        },
+        {
+          // eslint-disable-next-line max-lines-per-function
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+              const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+              if (size(listUncheckForwardingItem) > 0) {
+                // Remove cac phieu gui khong duoc tich o ben ngoi man hinh
+                dispatch(
+                  action_MIOA_ZTMI016(
+                    {
+                      IV_FLAG: '4',
+                      IV_TOR_TYPE: 'ZC1',
+                      IV_TOR_ID_CU: idBangKe,
+                      IV_SLOCATION: 'BDH',
+                      IV_DLOCATION: 'HUB1',
+                      IV_DESCRIPTION: '',
+                      T_ITEM: listUncheckForwardingItem,
+                    },
+                    {
+                      // eslint-disable-next-line max-lines-per-function
+                      onSuccess: (): void => {
+                        // Add bang ke hien tai vao tai moi tao
+                        dispatch(
+                          action_MIOA_ZTMI016(
+                            {
+                              IV_FLAG: '2',
+                              IV_TOR_TYPE: 'ZC2',
+                              IV_TOR_ID_CU: maTaiVuaTao,
+                              IV_SLOCATION: 'BDH',
+                              IV_DLOCATION: 'HUB1',
+                              IV_DESCRIPTION: '',
+                              T_ITEM: [
+                                {
+                                  ITEM_ID: idBangKe,
+                                  ITEM_TYPE: 'ZC1',
+                                },
+                              ],
+                            },
+                            {
+                              // eslint-disable-next-line max-lines-per-function
+                              onSuccess: (): void => {
+                                // Tao chuyen thu theo thong tin vua duoc chon tu popup
+                                dispatch(
+                                  action_MIOA_ZTMI016(
+                                    {
+                                      IV_FLAG: '1',
+                                      IV_TOR_TYPE: 'ZC3',
+                                      IV_TOR_ID_CU: '',
+                                      IV_SLOCATION: 'BHD',
+                                      IV_DLOCATION: get(place, 'LOCNO', ''),
+                                      IV_DESCRIPTION: ghiChu,
+                                      T_ITEM: [
+                                        {
+                                          ITEM_ID: '',
+                                          ITEM_TYPE: '',
+                                        },
+                                      ],
+                                    },
+                                    {
+                                      onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                        if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+                                          const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
+                                          dispatch(
+                                            action_MIOA_ZTMI016(
+                                              {
+                                                IV_FLAG: '2',
+                                                IV_TOR_TYPE: 'ZC3',
+                                                IV_TOR_ID_CU: maChuyenThuMoiTao,
+                                                IV_SLOCATION: 'BDH',
+                                                IV_DLOCATION: 'HUB1',
+                                                IV_DESCRIPTION: '',
+                                                T_ITEM: [
+                                                  {
+                                                    ITEM_ID: maTaiVuaTao,
+                                                    ITEM_TYPE: 'ZC2',
+                                                  },
+                                                ],
+                                              },
+                                              {
+                                                onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                                  toast(
+                                                    <>
+                                                      <i className="fa check mr-2" />
+                                                      {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                                    </>,
+                                                    {
+                                                      containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                                      type: 'success',
+                                                    },
+                                                  );
+                                                },
+                                              },
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    },
+                                  ),
+                                );
+                              },
+                            },
+                          ),
+                        );
+                      },
+                    },
+                  ),
+                );
+              } else {
+                dispatch(
+                  action_MIOA_ZTMI016(
+                    {
+                      IV_FLAG: '2',
+                      IV_TOR_TYPE: 'ZC2',
+                      IV_TOR_ID_CU: maTaiVuaTao,
+                      IV_SLOCATION: 'BDH',
+                      IV_DLOCATION: 'HUB1',
+                      IV_DESCRIPTION: '',
+                      T_ITEM: [
+                        {
+                          ITEM_ID: idBangKe,
+                          ITEM_TYPE: 'ZC1',
+                        },
+                      ],
+                    },
+                    {
+                      // eslint-disable-next-line max-lines-per-function
+                      onSuccess: (): void => {
+                        // Tao chuyen thu theo thong tin vua duoc chon tu popup
+                        dispatch(
+                          action_MIOA_ZTMI016(
+                            {
+                              IV_FLAG: '1',
+                              IV_TOR_TYPE: 'ZC3',
+                              IV_TOR_ID_CU: '',
+                              IV_SLOCATION: 'BHD',
+                              IV_DLOCATION: get(place, 'LOCNO', ''),
+                              IV_DESCRIPTION: ghiChu,
+                              T_ITEM: [
+                                {
+                                  ITEM_ID: '',
+                                  ITEM_TYPE: '',
+                                },
+                              ],
+                            },
+                            {
+                              onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+                                  const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
+                                  dispatch(
+                                    action_MIOA_ZTMI016(
+                                      {
+                                        IV_FLAG: '2',
+                                        IV_TOR_TYPE: 'ZC3',
+                                        IV_TOR_ID_CU: maChuyenThuMoiTao,
+                                        IV_SLOCATION: 'BDH',
+                                        IV_DLOCATION: 'HUB1',
+                                        IV_DESCRIPTION: '',
+                                        T_ITEM: [
+                                          {
+                                            ITEM_ID: maTaiVuaTao,
+                                            ITEM_TYPE: 'ZC2',
+                                          },
+                                        ],
+                                      },
+                                      {
+                                        onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                          toast(
+                                            <>
+                                              <i className="fa check mr-2" />
+                                              {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                            </>,
+                                            {
+                                              containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                              type: 'success',
+                                            },
+                                          );
+                                        },
+                                      },
+                                    ),
+                                  );
+                                }
+                              },
+                            },
+                          ),
+                        );
+                      },
+                    },
+                  ),
+                );
+              }
+            }
+          },
+        },
+      ),
+    );
+    closePopUpDongTai();
+  };
+
   return dataBangKe ? (
     <>
       {renderTitle()}
@@ -616,9 +1084,24 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         firstTabTitle={'Chọn tải'}
         secondTabTitle={'Tạo tải mới'}
         tab1Contents={listTai}
-        onSubmitButton1={handleActionDongBangKe}
+        onSubmitButton1={handleActionDongBangKeVaoTaiCoSan}
         onSubmitButton2={taoTaiMoi}
+        onChooseItemInFirstTab={hancleChonTai}
+        selectedChildInTab1={selectedTai}
       />
+      <ModalTwoTab
+        onHide={closePopUpDongTai}
+        visible={showPopUpGanTaiVaoChuyenThu}
+        modalTitle="Gán tải vào chuyến thư"
+        firstTabTitle={'Chọn chuyến thư'}
+        secondTabTitle={'Tạo chuyến thư mới'}
+        tab1Contents={listChuyenThu}
+        onSubmitButton1={handleDongTaiSauKhiChonChuyenThu}
+        onSubmitButton2={taoChuyenThuMoi}
+        onChooseItemInFirstTab={handleChonChuyenThu}
+        selectedChildInTab1={selectedChuyenThu}
+      />
+      <ToastContainer containerId={'DanhSachPhieuGuiTrongBangKe'} />
     </>
   ) : (
     <Fade in={true} timeout={1000}>

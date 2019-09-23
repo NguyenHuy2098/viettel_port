@@ -21,6 +21,7 @@ import { useSelector } from 'react-redux';
 import { map, get } from 'lodash';
 
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
+import { toast } from 'react-toastify';
 
 interface Props {
   onHide: () => void;
@@ -28,9 +29,11 @@ interface Props {
   modalTitle: string;
   firstTabTitle: string;
   secondTabTitle: string;
-  onSubmitButton1: (taiId: string) => void;
+  onSubmitButton1: () => void;
   onSubmitButton2: (dichvu: string, ghiChu: string) => void;
   tab1Contents: API.RowMTZTMI047OUT[];
+  onChooseItemInFirstTab: (tai: API.RowMTZTMI047OUT) => void;
+  selectedChildInTab1: API.RowMTZTMI047OUT | undefined;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -39,7 +42,6 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
   const { onHide, visible } = props;
 
   const [tab, setTab] = useState<number>(1);
-  const [selectedTai, setSelectedTai] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
   const listDichVu = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const [ghiChu, setGhiChu] = useState<string>('');
   const [selectedPlace, setSelselectedPlace] = useState<string>('');
@@ -50,16 +52,28 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleChooseTai = useCallback(
     (tai: API.RowMTZTMI047OUT) => (): void => {
-      setSelectedTai(tai);
+      props.onChooseItemInFirstTab(tai);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
   const handleOnSubmitButton1 = useCallback((): void => {
-    props.onSubmitButton1(get(selectedTai, 'TOR_ID', ''));
-  }, [selectedTai, props]);
+    props.onSubmitButton1();
+  }, [props]);
 
   const handleOnSubmitButton2 = (): void => {
+    if (ghiChu.length > 40) {
+      toast(
+        <>
+          <i className="fa check mr-2" />
+          {t('Ghi chú không được vượt quá 40 ký tự')}
+        </>,
+        {
+          containerId: 'DanhSachPhieuGuiTrongBangKe',
+          type: 'success',
+        },
+      );
+    }
     props.onSubmitButton2(selectedPlace, ghiChu);
   };
 
@@ -69,7 +83,12 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
         {map(props.tab1Contents, item => {
           return (
             <Label key={item.TOR_ID} check className="selectForwardingItem row">
-              <Input type="radio" name="selectForwardingItem" value="klajsdlk" onChange={handleChooseTai(item)} />
+              <Input
+                type="radio"
+                name="selectForwardingItem"
+                onChange={handleChooseTai(item)}
+                checked={get(props, 'selectedChildInTab1.TOR_ID') === item.TOR_ID}
+              />
               <p>
                 <span>{item.TOR_ID}</span>
                 <span>{item.CREATED_BY}</span>
