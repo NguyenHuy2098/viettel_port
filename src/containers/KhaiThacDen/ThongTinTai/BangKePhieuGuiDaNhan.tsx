@@ -39,7 +39,7 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Số lượng'),
-        accessor: 'count',
+        accessor: 'ITEM_NO',
       },
       {
         Header: t('Trọng lượng'),

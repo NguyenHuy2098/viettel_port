@@ -155,6 +155,10 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         accessor: 'LOG_LOCID_TO',
       },
       {
+        Header: t('Số lượng'),
+        accessor: 'ITEM_NO',
+      },
+      {
         Header: t('Trọng lượng'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
           return `${ceil(get(row, 'original.NET_WEI_VAL'), 2)} ${get(row, 'original.NET_WEI_UNI')}`;

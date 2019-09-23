@@ -54,7 +54,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Số lượng'),
-        accessor: 'count',
+        accessor: 'ITEM_NO',
       },
       {
         Header: t('Trọng lượng'),
