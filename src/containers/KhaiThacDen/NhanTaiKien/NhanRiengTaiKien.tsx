@@ -11,6 +11,7 @@ import { push } from 'connected-react-router';
 
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
@@ -26,6 +27,8 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
   const { getTaiKienChuaNhan } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const maBP = useSelector(makeSelectorMaBP);
+  const userId = useSelector(makeSelectorPreferredUsername);
   const listTaiKienChuaNhan = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const [idTaiKien, setIdTaiKien] = useState<string>('');
@@ -49,9 +52,9 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
                   row: {
                     CU_NO: '',
                     FU_NO: get(infoTaiKien, 'TOR_ID'),
-                    LOC_ID: 'HUB1',
+                    LOC_ID: maBP,
                     STATUS_ID: '1',
-                    USER_ID: 'KT1',
+                    USER_ID: userId,
                   },
                 },
                 // {
@@ -67,7 +70,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
     );
   };
 
-  const handleControllerClick = useCallback(
+  const handlePrintRowItem = useCallback(
     item => (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       event.stopPropagation();
     },
@@ -112,7 +115,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <Button className="SipTableFunctionIcon" onClick={handleControllerClick(row.original)}>
+            <Button className="SipTableFunctionIcon" onClick={handlePrintRowItem(row.original)}>
               <i className="fa fa-print fa-lg color-green" />
             </Button>
           );

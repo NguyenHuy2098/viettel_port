@@ -25,7 +25,7 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
   const listTaiDaNhan = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
 
-  const handleControllerClick = useCallback(
+  const handlePrintRowItem = useCallback(
     item => (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
       event.stopPropagation();
     },
@@ -74,7 +74,7 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <Button className="SipTableFunctionIcon" onClick={handleControllerClick(row.original)}>
+            <Button className="SipTableFunctionIcon" onClick={handlePrintRowItem(row.original)}>
               <i className="fa fa-print fa-lg color-green" />
             </Button>
           );
