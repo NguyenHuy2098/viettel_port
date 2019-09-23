@@ -2,137 +2,111 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import DataTable from 'components/DataTable';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
 import { Cell } from 'react-table';
 import moment from 'moment';
-import { forEach, map, get, isNil } from 'lodash';
+import { ceil, get } from 'lodash';
 import { push } from 'connected-react-router';
 
+import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
+import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
+interface Props {
+  getTaiKienChuaNhan: (IV_PAGENO: number) => void;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const NhanRiengTaiKien: React.FC = (): JSX.Element => {
+const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getTaiKienChuaNhan } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [torIdSearch, setTorIdSearch] = useState<string>('');
-  const [api023Record, setApi023Record] = useState<API.RowResponseZTMI023OUT[]>([]);
-  const [showTaiKienDaDuocNhanMessage, setShowTaiKienDaDuocNhanMessage] = useState<boolean>(false);
-  const [showErrorMessage, setShowErrorMessage] = useState<boolean>(false);
+  const listTaiKienChuaNhan = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const [idTaiKien, setIdTaiKien] = useState<string>('');
 
-  const dispatch_Action_MIOA_ZTMI022 = useCallback(
-    (torId: string, api023Row: API.RowResponseZTMI023OUT[]): void => {
-      dispatch(
-        action_MIOA_ZTMI022(
-          {
-            row: {
-              CU_NO: '',
-              FU_NO: torId,
-              STATUS_ID: '1',
-              USER_ID: 'KT1',
-              LOC_ID: 'HUB1',
-            },
-          },
-          {
-            onSuccess: (data: API.MIOAZTMI022Response): void => {
-              if (get(data.MT_ZTMI022_OUT, 'EV_ERROR')) {
-                setApi023Record(api023Row);
-              }
-            },
-          },
-        ),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    getTaiKienChuaNhan(selectedItem.selected + 1);
+  };
 
-  const dispatch_Action_MIOA_ZTMI023 = useCallback((): void => {
+  const handleQuetTaiKienId = (): void => {
     dispatch(
       action_MIOA_ZTMI023(
         {
-          IV_ID: torIdSearch,
+          IV_ID: idTaiKien,
         },
         {
-          onSuccess: (data: API.MIOAZTMI023Response): void => {
-            if (!isNil(data.MT_ZTMI023_OUT)) {
-              forEach(get(data, 'MT_ZTMI023_OUT.row'), (row: API.RowResponseZTMI023OUT) => {
-                if (
-                  (row.TOR_TYPE === 'ZC2' || row.TOR_TYPE === 'ZBIG') &&
-                  row.ZVTP_CUST_STATUS === 106 &&
-                  row.TO_LOG_ID === 'HUB1'
-                ) {
-                  dispatch_Action_MIOA_ZTMI022(row.TOR_ID || '', get(data, 'MT_ZTMI023_OUT.row', null));
-                } else {
-                  if (row.ZVTP_CUST_STATUS === 107) {
-                    setShowTaiKienDaDuocNhanMessage(true);
-                  } else {
-                    setShowErrorMessage(true);
-                  }
-                }
-              });
-            }
-          },
-          onFailure: (): void => {
-            setShowErrorMessage(true);
+          onSuccess: (data: API.MIOAZTMI023Response) => {
+            const infoTaiKien: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
+            dispatch(
+              action_MIOA_ZTMI022(
+                {
+                  row: {
+                    CU_NO: '',
+                    FU_NO: get(infoTaiKien, 'TOR_ID'),
+                    LOC_ID: 'HUB1',
+                    STATUS_ID: '1',
+                    USER_ID: 'KT1',
+                  },
+                },
+                // {
+                //   onSuccess: (data: API.MIOAZTMI022Response) => {
+                //     console.log(data);
+                //   },
+                // },
+              ),
+            );
           },
         },
       ),
     );
-  }, [dispatch, torIdSearch, dispatch_Action_MIOA_ZTMI022]);
+  };
 
   const handleControllerClick = useCallback(
-    item => (): void => {
-      // eslint-disable-next-line no-console
-      console.log('clicked', item);
+    item => (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
+      event.stopPropagation();
     },
     [],
   );
 
-  const data = map(api023Record, (item: API.RowResponseZTMI023OUT) => {
-    return {
-      TOR_ID: item.TOR_ID,
-      FR_LOG_ID: item.FR_LOG_ID,
-      TO_LOG_ID: item.TO_LOG_ID,
-      countChuyenThu: '',
-      GRO_WEI_VAL: item.GRO_WEI_VAL,
-      CREATED_ON: moment(item.CREATED_ON, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      TYPE_OF: item.TOR_TYPE,
-    };
-  });
-
   const columns = useMemo(
     () => [
       {
-        Header: t('Mã tải'),
+        Header: t('Mã tải/kiện'),
         accessor: 'TOR_ID',
       },
       {
         Header: t('Điểm đi'),
-        accessor: 'FR_LOG_ID',
+        accessor: 'LOG_LOCID_FR',
       },
       {
         Header: t('Điểm đến'),
-        accessor: 'TO_LOG_ID',
+        accessor: 'LOG_LOCID_TO',
       },
       {
         Header: t('Số lượng'),
-        accessor: 'countChuyenThu',
+        accessor: 'ITEM_NO',
       },
       {
         Header: t('Trọng lượng'),
-        accessor: 'GRO_WEI_VAL',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return `${ceil(get(row, 'original.NET_WEI_VAL'), 2)} ${get(row, 'original.NET_WEI_UNI')}`;
+        },
       },
       {
         Header: t('Ngày tạo'),
-        accessor: 'CREATED_ON',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+        },
       },
       {
         Header: t('Loại'),
-        accessor: 'TYPE_OF',
+        accessor: 'TOR_TYPE',
       },
       {
         Header: t('Quản trị'),
@@ -146,11 +120,11 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, api023Record],
+    [],
   );
 
   const handleOnChangeScanTorId = (event: React.FormEvent<HTMLInputElement>): void => {
-    setTorIdSearch(event.currentTarget.value);
+    setIdTaiKien(event.currentTarget.value);
   };
 
   const handleRedirectDetail = useCallback(
@@ -158,14 +132,8 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
       dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [api023Record],
+    [listTaiKienChuaNhan],
   );
-
-  const sipTableContent = (): JSX.Element => {
-    if (showTaiKienDaDuocNhanMessage) return <div>{t('Tải kiện đã được nhận')}</div>;
-    if (showErrorMessage) return <div>{t('Có lỗi xảy ra')}</div>;
-    return <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />;
-  };
 
   return (
     <>
@@ -174,13 +142,21 @@ const NhanRiengTaiKien: React.FC = (): JSX.Element => {
           <div className="btn-toolbar col-10">
             <Scan
               onChange={handleOnChangeScanTorId}
-              onClick={dispatch_Action_MIOA_ZTMI023}
+              onClick={handleQuetTaiKienId}
               placeholder={t('Quét mã tải/kiện')}
             />
           </div>
         </Row>
       </div>
-      <Row className="sipTableContainer">{sipTableContent()}</Row>
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={listTaiKienChuaNhan} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
+      </Row>
     </>
   );
 };

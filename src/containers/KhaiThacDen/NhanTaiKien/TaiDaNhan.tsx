@@ -31,6 +31,7 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
     },
     [],
   );
+
   const onPaginationChange = (selectedItem: { selected: number }): void => {
     getTaiDaNhan(selectedItem.selected + 1);
   };

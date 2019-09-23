@@ -55,14 +55,14 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     );
   };
 
-  const getNhanRiengTaiKienData = (IV_PAGENO = 1): void => {
+  const getTaiKienChuaNhan = (IV_PAGENO = 1): void => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
         IV_TOR_TYPE: SipDataType.TAI,
         IV_FR_LOC_ID: '',
         IV_TO_LOC_ID: maBP,
-        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DEN,
+        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
         IV_FR_DATE: '20100917',
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: IV_PAGENO,
@@ -74,7 +74,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
   useEffect((): void => {
     getChuyenThuChuaNhanTaiKien(1);
     getTaiDaNhan(1);
-    getNhanRiengTaiKienData(1);
+    getTaiKienChuaNhan(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -132,7 +132,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
             <TaiDaNhan getTaiDaNhan={getTaiDaNhan} />
           </TabPane>
           <TabPane tabId={3}>
-            <NhanRiengTaiKien />
+            <NhanRiengTaiKien getTaiKienChuaNhan={getTaiKienChuaNhan} />
           </TabPane>
         </TabContent>
       </div>

@@ -26,7 +26,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const [idTaiKien, setIdTaiKien] = useState<string>('');
   const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
-  function handleQuetBangKePhieuGuiId(): void {
+  function handleQuetTaiKienId(): void {
     dispatch(
       action_MIOA_ZTMI023(
         {
@@ -59,7 +59,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     );
   }
 
-  function handleChangeBangKePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
+  function handleChangeTaiKienId(event: React.ChangeEvent<HTMLInputElement>): void {
     setIdTaiKien(event.target.value);
   }
 
@@ -135,11 +135,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <Scan
-            onChange={handleChangeBangKePhieuGuiId}
-            onClick={handleQuetBangKePhieuGuiId}
-            placeholder={t('Quét mã tải/kiện')}
-          />
+          <Scan onChange={handleChangeTaiKienId} onClick={handleQuetTaiKienId} placeholder={t('Quét mã tải/kiện')} />
           {/*<Button className="sipButtonTypeC mr-2">*/}
           {/*  <img src={blackBag} alt="black-bag" className="mr-2" />*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
