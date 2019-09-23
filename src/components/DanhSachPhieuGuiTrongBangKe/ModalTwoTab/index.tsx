@@ -55,10 +55,9 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-
   const handleOnSubmitButton1 = useCallback((): void => {
     props.onSubmitButton1(get(selectedTai, 'TOR_ID', ''));
-  }, [selectedTai, props.onSubmitButton1]);
+  }, [selectedTai]);
 
   const handleOnSubmitButton2 = (): void => {
     props.onSubmitButton2(selectedPlace, ghiChu);
