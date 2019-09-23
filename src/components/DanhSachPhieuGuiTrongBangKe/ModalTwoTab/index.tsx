@@ -57,7 +57,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
   );
   const handleOnSubmitButton1 = useCallback((): void => {
     props.onSubmitButton1(get(selectedTai, 'TOR_ID', ''));
-  }, [selectedTai]);
+  }, [selectedTai, props]);
 
   const handleOnSubmitButton2 = (): void => {
     props.onSubmitButton2(selectedPlace, ghiChu);
