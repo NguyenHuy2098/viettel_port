@@ -82,6 +82,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   useEffect((): void => {
     getListDichVu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect((): void => {
@@ -184,6 +185,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   useEffect((): void => {
     getListTai();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const taoTaiMoi = (placeName: string, ghiChu: string): void => {
@@ -222,6 +224,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     if (toString(newTaiId).length > 0) {
       handleActionDongBangKe(newTaiId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newTaiId]);
 
   const handleDeleteForwardingOrder = (torId: string): void => {

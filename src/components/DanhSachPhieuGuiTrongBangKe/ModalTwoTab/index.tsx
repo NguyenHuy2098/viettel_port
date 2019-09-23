@@ -52,6 +52,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
     (tai: API.RowMTZTMI047OUT) => (): void => {
       setSelectedTai(tai);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
