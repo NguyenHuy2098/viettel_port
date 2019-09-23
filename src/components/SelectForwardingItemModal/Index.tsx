@@ -53,12 +53,12 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
         IV_TOR_ID: '',
         IV_FR_DATE: trim(
           toString(
-            moment(new Date())
+            moment()
               .subtract(7, 'days')
               .format(' YYYYMMDD'),
           ),
         ),
-        IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+        IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
         IV_TOR_TYPE: IV_TOR_TYPE,
         IV_FR_LOC_ID: IV_FR_LOC_ID,
         IV_TO_LOC_ID: IV_TO_LOC_ID,

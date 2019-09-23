@@ -29,8 +29,8 @@ function DanhSachBangKe(): JSX.Element {
       IV_FR_LOC_ID: 'BDH',
       IV_CUST_STATUS: '104',
       IV_TO_LOC_ID: '',
-      IV_FR_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
-      IV_TO_DATE: trim(toString(moment(new Date()).format(' YYYYMMDD'))),
+      IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
+      IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
       IV_PAGENO: '1',
       IV_NO_PER_PAGE: '10',
     };

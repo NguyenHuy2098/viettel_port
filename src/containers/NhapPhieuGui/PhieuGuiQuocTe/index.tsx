@@ -288,7 +288,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
   const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
-  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V99');
+  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
@@ -332,8 +332,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   };
   const firstPackageItem = {
     Width: kichThuocRong,
-    commodity_type: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    COMMODITY_code: loaiHangHoa, // Loại hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: giaTri,
@@ -429,7 +429,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   React.useEffect((): void => {
     if (size(orderInformation)) {
       setMaPhieuGui(get(orderInformationInstane, 'FWO', ''));
-      setDienThoaiSender(get(orderInformationInstane, 'MOBILE_PHONE_SRT', ''));
+      setDienThoaiSender(get(orderInformationInstane, 'MOBILE_PHONE_SRC', ''));
       setHoTenSender(get(orderInformationInstane, 'SHIPER_NAME', ''));
       setDiaChiSender(
         `${orderInformationInstane.HOUSE_NO_DES}${' '}${
@@ -574,7 +574,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       });
     }
     const api011Payload = {
-      COMMODITY_type: 'V3',
+      COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+      COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
       Destination_city: provinceIdReceiver,
       Destination_country: 'VN',
       Destination_district: districtIdReceiver,
@@ -670,7 +671,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMMODITY_CODE: '',
+          COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
           .validate(packageItemValidate, { abortEarly: false })
@@ -754,7 +756,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       EMAIL_CONSIG: '',
       EMAIL_OP: '',
       EMAIL_SHIPPER: '',
-      FREIGH_TERM: 'PP', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
+      FREIGH_TERM: '', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận, Vinh bảo tạm thời để trống
       HOUSE_ID_SRC: '',
       HOUSE_ID_DES: '',
       ITEM: payloadPackageItemArr,
@@ -823,7 +825,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMMODITY_CODE: '',
+          COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
           .validate(packageItemValidate, { abortEarly: false })
@@ -908,7 +911,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setKichThuocRong('');
     setKichThuocCao('');
     setPhuongThucVanChuyen('VCN');
-    // setLoaiHangHoa('V99');
+    // setLoaiHangHoa('V3');
     // setNguoiThanhToan('PP');
     setChoXemHang('');
     setGhiChu('');
@@ -1211,7 +1214,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           <Label check xs="12" className="pl-0 pr-0">
             <Input
               type="radio"
-              value="V03"
+              value="V3"
               name="packageType"
               defaultChecked
               onChange={handleChangeTextboxValue(setLoaiHangHoa)}
@@ -1221,7 +1224,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         </Col>
         <Col lg="3" xs="12" className="pr-0">
           <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V02" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
+            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
             {t('Thư')}
           </Label>
         </Col>
