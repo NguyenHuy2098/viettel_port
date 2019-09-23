@@ -9,17 +9,20 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import Scan from 'components/Input/Scan';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import Scan from '../../../components/Input/Scan';
 
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idPhieuGui, setIdPhieuGui] = useState<string>('');
+  const maBP = useSelector(makeSelectorMaBP);
+  const userId = useSelector(makeSelectorPreferredUsername);
   const listPhieuGuiChuaNhan = useSelector(
     makeSelector046ChildrenByLifecycle([
       SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT,
@@ -35,16 +38,16 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         },
         {
           onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoTaiKien: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
+            const infoPhieuGui: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
             dispatch(
               action_MIOA_ZTMI022(
                 {
                   row: {
                     CU_NO: '',
-                    FU_NO: get(infoTaiKien, 'TOR_ID'),
-                    LOC_ID: 'HUB1',
+                    FU_NO: get(infoPhieuGui, 'TOR_ID'),
+                    LOC_ID: maBP,
                     STATUS_ID: '1',
-                    USER_ID: 'KT1',
+                    USER_ID: userId,
                   },
                 },
                 // {
@@ -124,7 +127,13 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <Scan onChange={handleChangePhieuGuiId} onClick={handleQuetPhieuGuiId} placeholder={t('Quét mã phiếu gửi')} />
+          <Scan
+            buttonProps={{
+              onClick: handleQuetPhieuGuiId,
+            }}
+            onChange={handleChangePhieuGuiId}
+            placeholder={t('Quét mã phiếu gửi')}
+          />
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
           {/*</button>*/}

@@ -1,19 +1,21 @@
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import { Col, Button, Input, InputGroup, InputGroupAddon, Row, Form } from 'reactstrap';
+import { Col, Input, InputGroup, InputGroupAddon, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get, toNumber } from 'lodash';
+import { ceil, get } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import Scan from 'components/Input/Scan';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorPaging, makeSelectorRow, makeSelectorPagingCount } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorPagingCount, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
@@ -21,9 +23,9 @@ import routesMap from 'utils/routesMap';
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const pagingChuyenThuDaQuetNhan = useSelector(
-    makeSelectorPaging(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
-  );
+  const maBP = useSelector(makeSelectorMaBP);
+  const userId = useSelector(makeSelectorPreferredUsername);
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const listChuyenThuDaQuetNhan = useSelector(
     makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
   );
@@ -31,54 +33,33 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     makeSelectorPagingCount(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
   );
   const [idChuyenThu, setIdChuyenThu] = useState<string>();
-  const [page, setPage] = useState<number>(1);
 
-  function getListChuyenThuDaQuetNhan(): void {
+  const getListChuyenThuDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
         IV_TOR_TYPE: SipDataType.CHUYEN_THU,
         IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: 'HUB1',
+        IV_TO_LOC_ID: maBP,
         IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
         IV_FR_DATE: '20190501',
-        IV_TO_DATE: '20190831',
-        IV_PAGENO: page,
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_PAGENO: IV_PAGENO,
         IV_NO_PER_PAGE: '10',
       }),
     );
-  }
+  };
 
   useEffect(() => {
     getListChuyenThuDaQuetNhan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, []);
 
-  function renderOrderInformationTitle(): JSX.Element {
-    return (
-      <Row className="mb-3 sipTitleContainer">
-        <Col className="px-0" md={9}>
-          <h3>{t('Nhận chuyến thư')}</h3>
-        </Col>
-        <Col className="px-0" md={3}>
-          <InputGroup>
-            <InputGroupAddon addonType="prepend">
-              <span className="input-group-text">
-                <i className="fa fa-search" />
-              </span>
-            </InputGroupAddon>
-            <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
-          </InputGroup>
-        </Col>
-      </Row>
-    );
-  }
-
-  function handleChangeCodeChuyenThu(event: ChangeEvent<HTMLInputElement>): void {
+  const handleChangeCodeChuyenThu = (event: ChangeEvent<HTMLInputElement>): void => {
     setIdChuyenThu(event.target.value);
-  }
+  };
 
-  function handleQuetNhanChuyenThu(): void {
+  const handleQuetNhanChuyenThu = (): void => {
     dispatch(
       action_MIOA_ZTMI023(
         {
@@ -93,9 +74,9 @@ const ShippingInformation: React.FC = (): JSX.Element => {
                   row: {
                     CU_NO: '',
                     FU_NO: get(infoChuyenThu, 'TOR_ID'),
-                    LOC_ID: 'HUB1',
+                    LOC_ID: maBP,
                     STATUS_ID: '1',
-                    USER_ID: 'KT1',
+                    USER_ID: userId,
                   },
                 },
                 // {
@@ -109,43 +90,46 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         },
       ),
     );
-  }
+  };
 
-  function renderFindOrder(): JSX.Element {
-    const renderForm = (): JSX.Element => (
-      <Form inline>
-        <InputGroup className="mr-3">
+  const renderOrderInformationTitle = (): JSX.Element => (
+    <Row className="mb-3 sipTitleContainer">
+      <Col className="px-0" md={9}>
+        <h3>{t('Nhận chuyến thư')}</h3>
+      </Col>
+      <Col className="px-0" md={3}>
+        <InputGroup>
           <InputGroupAddon addonType="prepend">
             <span className="input-group-text">
-              <i className="fa fa-barcode" />
+              <i className="fa fa-search" />
             </span>
           </InputGroupAddon>
-          <Input
-            onChange={handleChangeCodeChuyenThu}
-            placeholder="Quét mã chuyến thư"
-            type="text"
-            value={idChuyenThu}
-          />
+          <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
         </InputGroup>
-        <Button onClick={handleQuetNhanChuyenThu} color="primary">
-          {t('Quét mã')}
-        </Button>
-      </Form>
-    );
+      </Col>
+    </Row>
+  );
 
-    return (
-      <Row className="sipBgWhiteContainer d-flex justify-content-between">
-        <Col md={10}>{renderForm()}</Col>
-        <Col className="d-flex justify-content-end align-items-center" md={2}>
-          {t('Tổng số')}
-          {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThuDaQuetNhan}</strong>
-        </Col>
-      </Row>
-    );
-  }
+  const renderFindOrder = (): JSX.Element => (
+    <Row className="sipBgWhiteContainer d-flex justify-content-between">
+      <Col md={10}>
+        <Scan
+          buttonProps={{
+            onClick: handleQuetNhanChuyenThu,
+          }}
+          onChange={handleChangeCodeChuyenThu}
+          placeholder={t('Quét mã chuyến thư')}
+        />
+      </Col>
+      <Col className="d-flex justify-content-end align-items-center" md={2}>
+        {t('Tổng số')}
+        {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThuDaQuetNhan}</strong>
+      </Col>
+    </Row>
+  );
 
   const handlePageChange = ({ selected }: { selected: number }): void => {
-    setPage(selected + 1);
+    getListChuyenThuDaQuetNhan(selected + 1);
   };
 
   const handleRedirectDetail = useCallback(
@@ -196,7 +180,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
-          pageCount={toNumber(get(pagingChuyenThuDaQuetNhan, 'EV_TOTAL_PAGE')) || 1}
+          pageCount={totalPage}
           onPageChange={handlePageChange}
         />
       </Row>

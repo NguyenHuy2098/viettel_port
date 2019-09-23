@@ -11,19 +11,22 @@ import moment from 'moment';
 // import blackBag from 'assets/img/blackBag.png';
 // import deliveryBox from 'assets/img/box.png';
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import Pagination from '../../../components/Pagination';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idTaiKien, setIdTaiKien] = useState<string>('');
+  const maBP = useSelector(makeSelectorMaBP);
+  const userId = useSelector(makeSelectorPreferredUsername);
   const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
   function handleQuetTaiKienId(): void {
@@ -41,9 +44,9 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
                   row: {
                     CU_NO: '',
                     FU_NO: get(infoTaiKien, 'TOR_ID'),
-                    LOC_ID: 'HUB1',
+                    LOC_ID: maBP,
                     STATUS_ID: '1',
-                    USER_ID: 'KT1',
+                    USER_ID: userId,
                   },
                 },
                 // {
@@ -135,7 +138,13 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <Scan onChange={handleChangeTaiKienId} onClick={handleQuetTaiKienId} placeholder={t('Quét mã tải/kiện')} />
+          <Scan
+            buttonProps={{
+              onClick: handleQuetTaiKienId,
+            }}
+            onChange={handleChangeTaiKienId}
+            placeholder={t('Quét mã tải/kiện')}
+          />
           {/*<Button className="sipButtonTypeC mr-2">*/}
           {/*  <img src={blackBag} alt="black-bag" className="mr-2" />*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}

@@ -11,3 +11,6 @@ export const makeSelectorUser = (state: AppStateType): User | undefined => get(s
 export const makeSelectorProfile = (state: AppStateType): any => get(makeSelectorUser(state), 'profile');
 
 export const makeSelectorMaBP = (state: AppStateType): string => get(makeSelectorProfile(state), 'bp_org_unit');
+
+export const makeSelectorPreferredUsername = (state: AppStateType): string =>
+  get(makeSelectorProfile(state), 'preferred_username');

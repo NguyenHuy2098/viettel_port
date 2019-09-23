@@ -11,6 +11,7 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
@@ -22,6 +23,8 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idBangKePhieuGui, setIdBangKePhieuGui] = useState<string>('');
+  const maBP = useSelector(makeSelectorMaBP);
+  const userId = useSelector(makeSelectorPreferredUsername);
   const listBangKePhieuGuiChuaNhan = useSelector(
     makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN),
   );
@@ -34,16 +37,16 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         },
         {
           onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoTaiKien: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
+            const infoBangKePhieuGui: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
             dispatch(
               action_MIOA_ZTMI022(
                 {
                   row: {
                     CU_NO: '',
-                    FU_NO: get(infoTaiKien, 'TOR_ID'),
-                    LOC_ID: 'HUB1',
+                    FU_NO: get(infoBangKePhieuGui, 'TOR_ID'),
+                    LOC_ID: maBP,
                     STATUS_ID: '1',
-                    USER_ID: 'KT1',
+                    USER_ID: userId,
                   },
                 },
                 // {
@@ -123,8 +126,10 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
       <Row>
         <Col className="btn-toolbar col-10">
           <Scan
+            buttonProps={{
+              onClick: handleScanPhieuGuiId,
+            }}
             onChange={handleChangePhieuGuiId}
-            onClick={handleScanPhieuGuiId}
             placeholder={t('Quét mã bảng kê/phiếu gửi')}
           />
         </Col>

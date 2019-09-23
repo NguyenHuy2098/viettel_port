@@ -137,7 +137,6 @@ declare namespace API {
     Note?: string;
     Goods_value?: string;
     Currency?: string;
-    COMMODITY_CODE?: string;
     COD?: string;
     Service_type?: string;
     commodity_type?: string;
@@ -839,7 +838,6 @@ declare namespace API {
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
-    readonly LanguageCurrentId?: string;
   }
   export interface MIOAZTMI046Response {
     MT_ZTMI046_OUT?: MTZTMI046OUT;
@@ -1375,7 +1373,7 @@ declare namespace API {
   export interface MTZTMI046OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI046OUT[];
-    PAGING?: PagingZTMI054;
+    Paging?: PagingZTMI054;
   }
   export interface MTZTMI047OUT {
     EV_ERROR?: number; // int32
@@ -1571,8 +1569,12 @@ declare namespace API {
     CREATED_ON?: string;
     FU_STATUS?: string;
     DES_PO_ID?: string;
-    COMMODITY_CODE?: string;
-    COMMODITY_TYPE?: string;
+    SOURCE_PO_ID?: string;
+    SOURCE_PO_DES?: string;
+    DES_PO_DES?: string;
+    MOVEMENT_TYPE?: string;
+    PUB_FEE?: string;
+    IMPORT_TAX?: string;
   }
   export interface RowMTZTMI045OUT {
     /**
