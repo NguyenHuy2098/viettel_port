@@ -30,9 +30,9 @@ interface Props {
   firstTabTitle: string;
   secondTabTitle: string;
   onSubmitButton1: () => void;
-  onSubmitButton2: (dichvu: string, ghiChu: string) => void;
+  onSubmitButton2: (placeName: string, ghiChu: string) => void;
   tab1Contents: API.RowMTZTMI047OUT[];
-  onChooseItemInFirstTab: (tai: API.RowMTZTMI047OUT) => void;
+  onChooseItemInFirstTab: (item: API.RowMTZTMI047OUT) => void;
   selectedChildInTab1: API.RowMTZTMI047OUT | undefined;
 }
 
@@ -42,7 +42,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
   const { onHide, visible } = props;
 
   const [tab, setTab] = useState<number>(1);
-  const listDichVu = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
+  const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const [ghiChu, setGhiChu] = useState<string>('');
   const [selectedPlace, setSelselectedPlace] = useState<string>('');
 
@@ -50,9 +50,9 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
     setTab(tab);
   }
 
-  const handleChooseTai = useCallback(
-    (tai: API.RowMTZTMI047OUT) => (): void => {
-      props.onChooseItemInFirstTab(tai);
+  const handleChooseItem = useCallback(
+    (item: API.RowMTZTMI047OUT) => (): void => {
+      props.onChooseItemInFirstTab(item);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
@@ -86,7 +86,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
               <Input
                 type="radio"
                 name="selectForwardingItem"
-                onChange={handleChooseTai(item)}
+                onChange={handleChooseItem(item)}
                 checked={get(props, 'selectedChildInTab1.TOR_ID') === item.TOR_ID}
               />
               <p>
@@ -129,8 +129,8 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
               className="col-8"
               onChange={handleChangeOption}
             >
-              {map(listDichVu, dv => {
-                return <option key={dv.LOCNO}>{dv.DESCR40}</option>;
+              {map(listDiemDen, dd => {
+                return <option key={dd.LOCNO}>{dd.DESCR40}</option>;
               })}
             </Input>
           </FormGroup>

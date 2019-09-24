@@ -3,9 +3,10 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { forEach, map, get, noop, size, toString, trim } from 'lodash';
+import { find, forEach, map, get, noop, size, toString, trim } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
+import { toast, ToastContainer } from 'react-toastify';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -19,6 +20,9 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import { action_MIOA_ZTMI045 } from '../../../redux/MIOA_ZTMI045/actions';
+import { makeSelectorGet_MT_ZTMI045_OUT } from '../../../redux/MIOA_ZTMI045/selectors';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -29,8 +33,12 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
 
   const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
+  const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOi));
+  const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
+  const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+  const [showPopupDongTai, setShowPopupDongTai] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [torIdSearch, setTorIdSearch] = useState<string>('');
   const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
@@ -38,6 +46,25 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
+
+  const getListDiemDen = (): void => {
+    dispatch(
+      action_MIOA_ZTMI045({
+        row: [
+          {
+            IV_LOCTYPE: 'V001, V004',
+          },
+        ],
+        IV_BP: '',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
+  };
+  useEffect((): void => {
+    getListChuyenThu();
+    getListDiemDen();
+  }, []);
 
   function toggleSelectForwardingItemModal(): void {
     setSelectForwardingItemModal(!selectForwardingItemModal);
@@ -68,6 +95,24 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       toggleDeleteConfirmModal();
     };
   }
+
+  const getListChuyenThu = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_FR_DATE: moment()
+          .subtract(7, 'day')
+          .format(' YYYYMMDD'),
+        IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
+        IV_TOR_TYPE: 'ZC3',
+        IV_FR_LOC_ID: 'BDH',
+        IV_TO_LOC_ID: '',
+        IV_CUST_STATUS: '101',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
+  };
 
   const getListTai = useCallback(
     function(payload = {}): void {
@@ -118,6 +163,14 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     };
   }
 
+  const handleShowPopupDongTai = (): void => {
+    setShowPopupDongTai(true);
+  };
+
+  const handleClosePopupDongtai = (): void => {
+    setShowPopupDongTai(false);
+  };
+
   const handleDeleteTai = (torId: string): void => {
     const payload = {
       IV_FLAG: '3',
@@ -147,133 +200,200 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   };
 
   //eslint-disable-next-line max-lines-per-function
-  const handleDongTai = (): void => {
+  const handleDongTaiVaoChuyenThuCoSan = (): void => {
     if (size(forwardingItemListState) > 0) {
-      const payloadTaoTaiMoi = {
-        IV_FLAG: '1',
-        IV_TOR_TYPE: 'ZC2',
-        IV_TOR_ID_CU: '',
-        IV_SLOCATION: 'BHD',
-        IV_DLOCATION: 'HUB1',
-        IV_DESCRIPTION: '',
-        T_ITEM: [
-          {
-            ITEM_ID: '',
-            ITEM_TYPE: '',
-          },
-        ],
-      };
       dispatch(
-        action_MIOA_ZTMI016(payloadTaoTaiMoi, {
-          //eslint-disable-next-line max-lines-per-function
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            if (data.Status) {
-              if (data.ErrorCode === 1) {
-                alert('Error at step 1');
-                alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
-              } else {
-                const payloadGanBangKeVaoTai = {
-                  IV_FLAG: '2',
-                  IV_TOR_TYPE: 'ZC2',
-                  IV_TOR_ID_CU: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
-                  IV_SLOCATION: 'BHD',
-                  IV_DLOCATION: 'HUB1',
-                  IV_DESCRIPTION: '',
-                  T_ITEM: forwardingItemListState,
-                };
-                dispatch(
-                  action_MIOA_ZTMI016(payloadGanBangKeVaoTai, {
-                    //eslint-disable-next-line max-lines-per-function
-                    onSuccess: (data: API.MIOAZTMI016Response): void => {
-                      if (data.Status) {
-                        if (data.ErrorCode === 1) {
-                          alert('Error at step 2');
-                          alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
-                        } else {
-                          const idTaoChuyenThu = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-                          const payloadTaoChuyenThu = {
-                            IV_FLAG: '1',
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: '1',
+            IV_TOR_TYPE: 'ZC2',
+            IV_TOR_ID_CU: '',
+            IV_SLOCATION: 'BDH',
+            IV_DLOCATION: 'HUB1',
+            IV_DESCRIPTION: '',
+            T_ITEM: [
+              {
+                ITEM_ID: '',
+                ITEM_TYPE: '',
+              },
+            ],
+          },
+          {
+            // eslint-disable-next-line max-lines-per-function
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              const taiMoiTaoId = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+              dispatch(
+                action_MIOA_ZTMI016(
+                  {
+                    IV_FLAG: '2',
+                    IV_TOR_TYPE: 'ZC2',
+                    IV_TOR_ID_CU: taiMoiTaoId,
+                    IV_SLOCATION: 'BDH',
+                    IV_DLOCATION: 'HUB1',
+                    IV_DESCRIPTION: '',
+                    T_ITEM: [
+                      {
+                        ITEM_ID: forwardingItemListState[0].ITEM_ID,
+                        ITEM_TYPE: 'ZC1',
+                      },
+                    ],
+                  },
+                  {
+                    onSuccess: (): void => {
+                      dispatch(
+                        action_MIOA_ZTMI016(
+                          {
+                            IV_FLAG: '2',
                             IV_TOR_TYPE: 'ZC3',
-                            IV_TOR_ID_CU: '',
-                            IV_SLOCATION: 'BHD',
+                            IV_TOR_ID_CU: get(selectedChuyenThu, ' TOR_ID', ''),
+                            IV_SLOCATION: 'BDH',
                             IV_DLOCATION: 'HUB1',
                             IV_DESCRIPTION: '',
                             T_ITEM: [
                               {
-                                ITEM_ID: '',
-                                ITEM_TYPE: '',
+                                ITEM_ID: taiMoiTaoId,
+                                ITEM_TYPE: 'ZC2',
                               },
                             ],
-                          };
-                          dispatch(
-                            action_MIOA_ZTMI016(payloadTaoChuyenThu, {
-                              onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                if (data.Status) {
-                                  if (data.ErrorCode === 1) {
-                                    alert('Error at step 3');
-                                    alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
-                                  } else {
-                                    const payloadGanTaiVaoChuyenThu = {
-                                      IV_FLAG: '2',
-                                      IV_TOR_TYPE: 'ZC3',
-                                      IV_TOR_ID_CU: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
-                                      IV_SLOCATION: 'BHD',
-                                      IV_DLOCATION: 'HUB1',
-                                      IV_DESCRIPTION: '',
-                                      T_ITEM: [
-                                        {
-                                          ITEM_ID: idTaoChuyenThu,
-                                          ITEM_TYPE: 'ZC2',
-                                        },
-                                      ],
-                                    };
-                                    dispatch(
-                                      action_MIOA_ZTMI016(payloadGanTaiVaoChuyenThu, {
-                                        onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                          if (data.Status) {
-                                            if (data.ErrorCode === 1) {
-                                              alert('Error at step 4');
-                                              alert(
-                                                get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'),
-                                              );
-                                            } else {
-                                              alert(t('Đóng tải thành công!'));
-                                              onSuccessSelectedForwardingItem();
-                                            }
-                                          } else {
-                                            alert('Error at step 4');
-                                            alert(data.Messages);
-                                          }
-                                        },
-                                      }),
-                                    );
-                                  }
-                                } else {
-                                  alert('Error at step 3');
-                                  alert(data.Messages);
-                                }
-                              },
-                            }),
-                          );
-                        }
-                      } else {
-                        alert('Error at step 2');
-                        alert(data.Messages);
-                      }
+                          },
+                          {
+                            onSuccess: (data: API.MIOAZTMI016Response): void => {
+                              toast(
+                                <>
+                                  <i className="fa check mr-2" />
+                                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                </>,
+                                {
+                                  containerId: 'BangKeChuaDongTai',
+                                  type: 'success',
+                                },
+                              );
+                            },
+                          },
+                        ),
+                      );
                     },
-                  }),
-                );
-              }
-            } else {
-              alert('Error at step 1');
-              alert(data.Messages);
-            }
+                  },
+                ),
+              );
+            },
           },
-        }),
+        ),
       );
     } else {
       alert(t('Vui lòng chọn bảng kê!'));
     }
+    handleClosePopupDongtai();
+  };
+
+  // eslint-disable-next-line max-lines-per-function
+  const dongTaiVaoChuyenThuMoiTao = (placeName: string, ghiChu: string): void => {
+    const place = find(listDiemDen, ['DESCR40', placeName]);
+    // tao ngam 1 tai voi diem den duoc chon
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '1',
+          IV_TOR_TYPE: 'ZC2',
+          IV_TOR_ID_CU: '',
+          IV_SLOCATION: 'BDH',
+          IV_DLOCATION: 'HUB1',
+          IV_DESCRIPTION: '',
+          T_ITEM: [
+            {
+              ITEM_ID: '',
+              ITEM_TYPE: '',
+            },
+          ],
+        },
+        {
+          // eslint-disable-next-line max-lines-per-function
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+            dispatch(
+              action_MIOA_ZTMI016(
+                {
+                  IV_FLAG: '2',
+                  IV_TOR_TYPE: 'ZC2',
+                  IV_TOR_ID_CU: maTaiVuaTao,
+                  IV_SLOCATION: 'BDH',
+                  IV_DLOCATION: 'HUB1',
+                  IV_DESCRIPTION: '',
+                  T_ITEM: [
+                    {
+                      ITEM_ID: forwardingItemListState[0].ITEM_ID,
+                      ITEM_TYPE: 'ZC1',
+                    },
+                  ],
+                },
+                {
+                  // eslint-disable-next-line max-lines-per-function
+                  onSuccess: (): void => {
+                    //tao chuyen thu
+                    dispatch(
+                      action_MIOA_ZTMI016(
+                        {
+                          IV_FLAG: '1',
+                          IV_TOR_TYPE: 'ZC3',
+                          IV_TOR_ID_CU: '',
+                          IV_SLOCATION: 'BHD',
+                          IV_DLOCATION: get(place, 'LOCNO', ''),
+                          IV_DESCRIPTION: ghiChu,
+                          T_ITEM: [
+                            {
+                              ITEM_ID: '',
+                              ITEM_TYPE: '',
+                            },
+                          ],
+                        },
+                        {
+                          onSuccess: (data: API.MIOAZTMI016Response): void => {
+                            const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+                            dispatch(
+                              action_MIOA_ZTMI016(
+                                {
+                                  IV_FLAG: '2',
+                                  IV_TOR_TYPE: 'ZC3',
+                                  IV_TOR_ID_CU: maChuyenThuMoiTao,
+                                  IV_SLOCATION: 'BDH',
+                                  IV_DLOCATION: get(place, 'LOCNO', ''),
+                                  IV_DESCRIPTION: '',
+                                  T_ITEM: [
+                                    {
+                                      ITEM_ID: maTaiVuaTao,
+                                      ITEM_TYPE: 'ZC2',
+                                    },
+                                  ],
+                                },
+                                {
+                                  onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                    toast(
+                                      <>
+                                        <i className="fa check mr-2" />
+                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                      </>,
+                                      {
+                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                        type: 'success',
+                                      },
+                                    );
+                                  },
+                                },
+                              ),
+                            );
+                          },
+                        },
+                      ),
+                    );
+                  },
+                },
+              ),
+            );
+          },
+        },
+      ),
+    );
+    handleClosePopupDongtai();
   };
 
   const handleRedirectDetail = useCallback(
@@ -372,6 +492,10 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [uncheckAllForwardingItemCheckbox],
   );
+
+  const saveSelectedChuyenThu = (chuyenThu: API.RowMTZTMI047OUT): void => {
+    setSelectedChuyenThu(chuyenThu);
+  };
   const data = map(listBangKeChuaDongTai, (item: API.RowMTZTMI047OUT) => {
     const thisDescription = get(item, 'Childs[0].DESCRIPTION', '');
     return {
@@ -410,7 +534,12 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
             <i className="fa fa-cloud-download mr-2 rotate-90"></i>
             {t('Chuyển vào tải')}
           </Button>
-          <Button color="primary" className="ml-2" onClick={handleDongTai}>
+          <Button
+            color="primary"
+            className="ml-2"
+            onClick={handleShowPopupDongTai}
+            disabled={size(forwardingItemListState) <= 0}
+          >
             <i className="fa fa-cloud mr-2 rotate-90"></i>
             {t('Đóng tải')}
           </Button>
@@ -443,6 +572,19 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
       />
+      <ModalTwoTab
+        onHide={handleClosePopupDongtai}
+        visible={showPopupDongTai}
+        modalTitle={t('Gán tải vào chuyến thư')}
+        firstTabTitle={t('CHỌN CHUYẾN THƯ')}
+        secondTabTitle={t('TẠO CHUYẾN THƯ MỚI')}
+        onSubmitButton1={handleDongTaiVaoChuyenThuCoSan}
+        onSubmitButton2={dongTaiVaoChuyenThuMoiTao}
+        tab1Contents={listChuyenThu}
+        selectedChildInTab1={selectedChuyenThu}
+        onChooseItemInFirstTab={saveSelectedChuyenThu}
+      />
+      <ToastContainer containerId={'BangKeChuaDongTai'} />
     </>
   );
 };

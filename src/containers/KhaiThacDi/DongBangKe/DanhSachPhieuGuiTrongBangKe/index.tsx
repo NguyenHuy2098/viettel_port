@@ -52,7 +52,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
-  const listDichVu = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
+  const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const listTai = useSelector(makeSelectorRow('ZC2', 101));
   const listChuyenThu = useSelector(makeSelectorRow('ZC3', 101));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
@@ -85,7 +85,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   );
   const [newTaiId, setnewTaiId] = useState<string>('');
 
-  const getListDichVu = (): void => {
+  const getListDiemDen = (): void => {
     dispatch(
       action_MIOA_ZTMI045({
         row: [
@@ -119,7 +119,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   };
 
   useEffect((): void => {
-    getListDichVu();
+    getListDiemDen();
     getListChuyenThu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -228,7 +228,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   }, []);
 
   const taoTaiMoi = (placeName: string, ghiChu: string): void => {
-    const place = find(listDichVu, ['DESCR40', placeName]);
+    const place = find(listDiemDen, ['DESCR40', placeName]);
     dispatch(
       action_MIOA_ZTMI016(
         {
@@ -236,7 +236,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           IV_TOR_TYPE: 'ZC2',
           IV_TOR_ID_CU: '',
           IV_SLOCATION: 'BHD',
-          IV_DLOCATION: get(place, 'LOCNO') || '',
+          IV_DLOCATION: get(place, 'LOCNO', ''),
           IV_DESCRIPTION: ghiChu,
           T_ITEM: [
             {
@@ -836,7 +836,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   // eslint-disable-next-line max-lines-per-function
   const taoChuyenThuMoi = (placeName: string, ghiChu: string): void => {
-    const place = find(listDichVu, ['DESCR40', placeName]);
+    const place = find(listDiemDen, ['DESCR40', placeName]);
     dispatch(
       action_MIOA_ZTMI016(
         {
