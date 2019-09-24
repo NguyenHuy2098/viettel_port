@@ -84,7 +84,6 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
 
   return (
     <>
-      <div className="row mt-3" />
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Nhận bảng kê / phiếu gửi')}</h1>
         <div className="sipTitleRightBlockInput m-0">
@@ -92,8 +91,6 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
           <Input type="text" placeholder={t('Tra cứu bảng kê/phiếu gửi ')} onKeyUp={handleForwardingSearch} />
         </div>
       </Row>
-      <div className="row mt-3" />
-
       <div className="sipTabContainer sipFlatContainer">
         <Nav tabs>
           <NavItem>

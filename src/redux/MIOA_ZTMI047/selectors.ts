@@ -1,4 +1,4 @@
-import { filter, get, isEmpty, size, toNumber, trim } from 'lodash';
+import { filter, get, isArray, isEmpty, size, toNumber, trim } from 'lodash';
 import { AppStateType } from 'redux/store';
 import { SipDataState, SipDataType } from 'utils/enums';
 
@@ -48,8 +48,15 @@ export function makeSelectorTotalItem(IV_TOR_TYPE: string, IV_CUST_STATUS: numbe
  * @param IV_CUST_STATUS
  */
 export function makeSelectorRow(IV_TOR_TYPE: string, IV_CUST_STATUS: number) {
-  return (state: AppStateType): API.RowMTZTMI047OUT[] =>
-    get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Row`, []);
+  return (state: AppStateType): API.RowMTZTMI047OUT[] => {
+    const result = get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Row`, []);
+
+    if (isArray(result)) {
+      return result;
+    }
+
+    return [];
+  };
 }
 
 /**
