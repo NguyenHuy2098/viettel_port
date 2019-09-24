@@ -1,30 +1,36 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Row, Input } from 'reactstrap';
+import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
+import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { generatePath, match } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { generatePath } from 'react-router-dom';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { filter, map, toNumber, trim, size, includes, toLower } from 'lodash';
+import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import Search from 'components/Input/Search';
+import Pagination from 'components/Pagination';
+import { makeSelectorTaiChuaNhanBangKePhieuGui, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 interface Props {
-  match: match;
-  tableRows: API.RowMTZTMI047OUT[];
+  getTaiKienDaQuetNhan: (IV_PAGENO: number) => void;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Element => {
+const TaiChuaNhanBKPhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getTaiKienDaQuetNhan } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [searchKey, setSearchKey] = useState<string>('');
-  const [filterTableRows, setFilterTableRow] = useState<API.RowMTZTMI047OUT[]>([]);
+  const [searchText, setSearchText] = useState<string>('');
+  const listTaiChuaNhanBangKePhieuGui = useSelector(makeSelectorTaiChuaNhanBangKePhieuGui);
+  const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
 
-  useEffect((): void => {
-    setFilterTableRow(tableRows);
-  }, [tableRows]);
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    getTaiKienDaQuetNhan(selectedItem.selected + 1);
+  };
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -34,75 +40,72 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = ({ tableRows }: Props): JSX.Eleme
         accessor: 'TOR_ID',
       },
       {
-        Header: t('Bưu cục đi'),
+        Header: t('Điểm đi'),
         accessor: 'LOG_LOCID_FR',
       },
       {
-        Header: t('Bưu cục đến'),
+        Header: t('Điểm đến'),
         accessor: 'LOG_LOCID_TO',
       },
       {
-        Header: t('SL'),
-        accessor: 'countChilds',
+        Header: t('Số lượng'),
+        accessor: 'ITEM_NO',
       },
       {
         Header: t('Trọng lượng'),
-        accessor: 'NET_WEI_VAL',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return `${ceil(get(row, 'original.NET_WEI_VAL'), 2)} ${get(row, 'original.NET_WEI_UNI')}`;
+        },
       },
       {
         Header: t('Ngày tạo'),
-        accessor: 'CREATED_ON',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
-  const data = map(filterTableRows, item => {
-    return {
-      TOR_ID: item.TOR_ID,
-      LOG_LOCID_FR: item.LOG_LOCID_FR,
-      LOG_LOCID_TO: item.LOG_LOCID_TO,
-      countChilds: size(item.Childs),
-      NET_WEI_VAL: toNumber(item.NET_WEI_VAL).toPrecision(2) + ' ' + toLower(item.NET_WEI_UNI),
-      CREATED_ON: moment(trim(item.DATETIME_CHLC), 'YYYYMMDDhhmmss').format('hh:mm DD/MM/YYYY'),
-    };
-  });
-
   const handleRedirectDetail = useCallback((item: API.RowResponseZTMI023OUT): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSearch = (): void => {
-    const newTableRows = filter(tableRows, row => {
-      return includes(row.TOR_ID, searchKey);
-    });
-    setFilterTableRow(newTableRows);
+  const filteredListTaiChuaNhanBangKePhieuGui = useMemo(
+    () => filter(listTaiChuaNhanBangKePhieuGui, (child: API.Child) => includes(JSON.stringify(child), searchText)),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listTaiChuaNhanBangKePhieuGui, searchText],
+  );
+
+  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(event.target.value);
   };
 
-  const handleChangeInput = (event: React.FormEvent<HTMLInputElement>): void => {
-    setSearchKey(event.currentTarget.value);
-  };
+  const renderToolbar = (): JSX.Element => (
+    <Row>
+      <div className="btn-toolbar col-10">
+        <Search
+          onChange={handleChangeSearchText}
+          placeholder={t('Tìm kiếm tải')}
+          searchResult={filteredListTaiChuaNhanBangKePhieuGui}
+        />
+      </div>
+    </Row>
+  );
 
   return (
     <>
-      <div className="shadow-sm p-3 mb-3 bg-white">
-        <Row>
-          <div className="btn-toolbar col-10">
-            <div className="sipTitleRightBlockInput m-0">
-              <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm tải')} onChange={handleChangeInput} />
-            </div>
-            <Button className="ml-2" color="primary" onClick={handleSearch}>
-              {t('Tìm kiếm')}
-            </Button>
-          </div>
-        </Row>
-      </div>
-      <div className="row mt-3" />
+      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={filteredListTaiChuaNhanBangKePhieuGui} onRowClick={handleRedirectDetail} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
     </>
   );

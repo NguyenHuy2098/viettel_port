@@ -148,7 +148,7 @@ const KhaiThacTai = Loadable({
   loading: Loading,
 });
 const NhanBangKePhieuGui = Loadable({
-  loader: (): any => import('containers/KhaiThacDen/NhanBangKePhieuGui/NhanBangKePhieuGui'),
+  loader: (): any => import('containers/KhaiThacDen/NhanBangKePhieuGui'),
   loading: Loading,
 });
 const PhanCongPhatNhan = Loadable({

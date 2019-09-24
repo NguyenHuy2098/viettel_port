@@ -15,12 +15,6 @@ export function makeSelectorCountBangKeChuaDongTai(state: AppStateType): number 
 export function makeSelectorKienChuaDongChuyenThu(state: AppStateType): API.RowMTZTMI047OUT[] | [] {
   return get(state, 'MIOA_ZTMI047.ZBIG.BHD.101.MT_ZTMI047_OUT.Row', []);
 }
-export function makeSelectorTaiChuaNhanBKPhieuGui(state: AppStateType): API.RowMTZTMI047OUT[] {
-  return get(state, 'MIOA_ZTMI047.ZC2.108.MT_ZTMI047_OUT.Row', []);
-}
-export function makeSelectorBangKeChuaNhanPhieuGui(state: AppStateType): API.RowMTZTMI047OUT[] {
-  return get(state, 'MIOA_ZTMI047.ZC1.109.MT_ZTMI047_OUT.Row', []);
-}
 
 /**
  * @param IV_TOR_TYPE
@@ -79,9 +73,10 @@ export function makeSelectorPagingCount(IV_TOR_TYPE: string, IV_CUST_STATUS: num
 
 /**
  * Select chuyến thư chưa nhận tải/kiện
+ * @param state
  */
-export const makeSelectorChuyenThuChuaNhanTaiKien = (state: AppStateType): API.RowMTZTMI047OUT[] =>
-  filter(
+export const makeSelectorChuyenThuChuaNhanTaiKien = (state: AppStateType): API.RowMTZTMI047OUT[] => {
+  return filter(
     makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN)(state),
     (chuyenThu: API.RowMTZTMI047OUT): boolean => {
       return !isEmpty(
@@ -107,9 +102,59 @@ export const makeSelectorChuyenThuChuaNhanTaiKien = (state: AppStateType): API.R
       );
     },
   );
+};
 
 /**
  * Count chuyến thư chưa nhận tải/kiện
  */
 export const makeSelectorCountChuyenThuChuaNhanTaiKien = (state: AppStateType): number =>
   size(makeSelectorChuyenThuChuaNhanTaiKien(state));
+
+/**
+ * Select tải chưa nhận bảng kê phiếu gửi
+ * @param state
+ */
+export const makeSelectorTaiChuaNhanBangKePhieuGui = (state: AppStateType): API.RowMTZTMI047OUT[] => {
+  return filter(
+    makeSelectorRow(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN)(state),
+    (tai: API.RowMTZTMI047OUT): boolean => {
+      return !isEmpty(
+        filter(get(tai, 'Childs'), (child: API.Child) => {
+          return toNumber(get(child, 'LIFECYCLE')) === SipDataState.TAI_KIEN_DA_QUET_NHAN;
+        }),
+      );
+    },
+  );
+};
+
+/**
+ * Count tải chưa nhận bảng kê phiếu gửi
+ */
+export const makeSelectorCountTaiChuaNhanBangKePhieuGui = (state: AppStateType): number =>
+  size(makeSelectorTaiChuaNhanBangKePhieuGui(state));
+
+/**
+ * Select bảng kê chưa nhận phiếu gửi
+ * @param state
+ */
+export const makeSelectorBangKeChuaNhanPhieuGui = (state: AppStateType): API.RowMTZTMI047OUT[] => {
+  return filter(
+    makeSelectorRow(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN)(state),
+    (tai: API.RowMTZTMI047OUT): boolean => {
+      return !isEmpty(
+        filter(get(tai, 'Childs'), (child: API.Child) => {
+          return (
+            toNumber(get(child, 'LIFECYCLE')) === SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT ||
+            toNumber(get(child, 'LIFECYCLE')) === SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC
+          );
+        }),
+      );
+    },
+  );
+};
+
+/**
+ * Count tải chưa nhận bảng kê phiếu gửi
+ */
+export const makeSelectorCountBangKeChuaNhanPhieuGui = (state: AppStateType): number =>
+  size(makeSelectorBangKeChuaNhanPhieuGui(state));

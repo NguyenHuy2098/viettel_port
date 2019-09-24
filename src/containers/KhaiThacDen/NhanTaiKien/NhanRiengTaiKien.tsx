@@ -126,8 +126,8 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
-  const handleOnChangeScanTorId = (event: React.FormEvent<HTMLInputElement>): void => {
-    setIdTaiKien(event.currentTarget.value);
+  const handleOnChangeTaiKienId = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setIdTaiKien(event.target.value);
   };
 
   const handleRedirectDetail = useCallback(
@@ -144,8 +144,10 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
         <Row>
           <div className="btn-toolbar col-10">
             <Scan
-              onChange={handleOnChangeScanTorId}
-              onClick={handleQuetTaiKienId}
+              buttonProps={{
+                onClick: handleQuetTaiKienId,
+              }}
+              onChange={handleOnChangeTaiKienId}
               placeholder={t('Quét mã tải/kiện')}
             />
           </div>

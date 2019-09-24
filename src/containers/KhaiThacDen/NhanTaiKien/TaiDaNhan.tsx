@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
 import { Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
 import { Cell } from 'react-table';
-import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
