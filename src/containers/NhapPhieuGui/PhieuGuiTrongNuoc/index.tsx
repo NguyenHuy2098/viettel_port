@@ -7,7 +7,22 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { drop, get, filter, find, findIndex, forEach, map, reduce, set, size, toString, trim } from 'lodash';
+import {
+  drop,
+  get,
+  filter,
+  find,
+  findIndex,
+  forEach,
+  join,
+  map,
+  reduce,
+  set,
+  size,
+  slice,
+  toString,
+  trim,
+} from 'lodash';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -27,6 +42,7 @@ interface Props {
   match: match;
 }
 
+let loaiHinhDichVu = '';
 let dichVuCongThem: string[] = [];
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
@@ -292,7 +308,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
-  let loaiHinhDichVu = 'VCN';
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
@@ -300,7 +315,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
 
-  const [transportMethodArr, setTransportMethodArr] = useState<TransportMethodItem[]>([]);
+  const [loaiHinhDichVuList, setLoaiHinhDichVuList] = useState<TransportMethodItem[]>([]);
+  const [dichVuCongThemList, setDichVuCongThemList] = useState<TransportMethodItem[]>([]);
   const [uncheckAllAdditionalCheckbox, setUncheckAllAdditionalCheckbox] = useState<boolean | undefined>(undefined);
   //_______open Address modal
   const [modalSender, setModalSender] = useState<boolean>(false);
@@ -463,10 +479,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setMaPhieuGui(get(orderInformationInstane, 'FWO', ''));
       setDienThoaiSender(get(orderInformationInstane, 'MOBILE_PHONE_SRC', ''));
       setHoTenSender(get(orderInformationInstane, 'SHIPER_NAME', ''));
+      const thisDetailAddressSender =
+        (orderInformationInstane.HOUSE_NO_SOURCE ? toString(orderInformationInstane.HOUSE_NO_SOURCE) + ' ' : '') +
+        (orderInformationInstane.STREET_ID_SOURCE ? toString(orderInformationInstane.STREET_ID_SOURCE) : '');
+      setDetailAddressSender(thisDetailAddressSender);
       setDiaChiSender(
-        `${orderInformationInstane.HOUSE_NO_DES}${' '}${
-          orderInformationInstane.STREET_ID_DES
-        }${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
+        `${thisDetailAddressSender}${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
       );
       setProvinceIdSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
       setDistrictIdSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
@@ -474,17 +492,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceSender(provinceSenderEdit);
       setDistrictSender(districtSenderEdit);
       setWardSender(wardSenderEdit);
-      setDetailAddressSender(
-        get(orderInformationInstane, 'HOUSE_NO_SOURCE', '') +
-          ' ' +
-          get(orderInformationInstane, 'STREET_ID_SOURCE', ''),
-      );
+      //__________________________________________________________
+
       setDienThoaiReceiver(get(orderInformationInstane, 'MOBILE_PHONE_DES', ''));
       setHoTenReceiver(get(orderInformationInstane, 'CONSIGNEE_NAME', ''));
+      const thisDetailAddressReceiver =
+        (orderInformationInstane.HOUSE_NO_DES ? toString(orderInformationInstane.HOUSE_NO_DES) + ' ' : '') +
+        (orderInformationInstane.STREET_ID_DES ? toString(orderInformationInstane.STREET_ID_DES) : '');
+      setDetailAddressReceiver(thisDetailAddressReceiver);
       setDiaChiReceiver(
-        `${orderInformationInstane.HOUSE_NO_SOURCE}${' '}${
-          orderInformationInstane.STREET_ID_SOURCE
-        }${' '}${wardReceiverEdit}${' '}${districtReceiverEdit}${' '}${provinceReceiverEdit}`,
+        `${thisDetailAddressReceiver}${' '}${wardReceiverEdit}${' '}${districtReceiverEdit}${' '}${provinceReceiverEdit}`,
       );
       setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
@@ -492,9 +509,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceReceiver(provinceReceiverEdit);
       setDistrictReceiver(districtReceiverEdit);
       setWardReceiver(wardReceiverEdit);
-      setDetailAddressReceiver(
-        get(orderInformationInstane, 'HOUSE_NO_DES', '') + ' ' + get(orderInformationInstane, 'STREET_ID_DES', ''),
-      );
       setTenHang(get(orderInformationInstane, 'ITEM_DESCRIPTION', ''));
       setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(2) : '');
       setGiaTri('');
@@ -505,10 +519,23 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(2) : '');
       setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(2) : '');
       setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(2) : '');
-      // setThoiGianPhat(get(orderInformationInstane, 'TIME_DATE', ''));
-      // setPhuongThucVanChuyen(get(orderInformationInstane, 'SERVICE_TYPE', ''));
-      // loaiHinhDichVu = 'VCN';
+      const thisServiceType: string[] = drop(get(orderInformationInstane, 'SERVICE_TYPE', ''), 1);
+      const thisTransportServiceType =
+        findIndex(thisServiceType, (item: string): boolean => {
+          return item === '/';
+        }) !== -1
+          ? slice(
+              thisServiceType,
+              0,
+              findIndex(thisServiceType, (item: string): boolean => {
+                return item === '/';
+              }),
+            )
+          : thisServiceType;
+      loaiHinhDichVu = join(thisTransportServiceType, '');
+      setPhuongThucVanChuyen(loaiHinhDichVu);
       // dichVuCongThem = [];
+      // setThoiGianPhat(get(orderInformationInstane, 'TIME_DATE', ''));
       // setUncheckAllAdditionalCheckbox(false);
       // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
       let newPackageItemEdit: PackageItemInputType = {
@@ -579,7 +606,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       draftState.unshift(firstPackageItem);
     });
     const servicePayload = find(
-      transportMethodArr,
+      loaiHinhDichVuList,
       (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
     );
     let newPackageItem011 = {
@@ -671,8 +698,19 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             alert(error.message);
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
-            setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row', []));
-            setPhuongThucVanChuyen(get(data, 'MT_ZTMI068_OUT.Row[0].SERVICE_TYPE', ''));
+            const thisData = get(data, 'MT_ZTMI068_OUT.Row', []);
+            const thisLoaiHinhDichVuList = filter(
+              thisData,
+              (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V01' || item.SERVICE_GROUP === 'V02',
+            );
+            setLoaiHinhDichVuList(thisLoaiHinhDichVuList);
+            const thisDichVuCongThemList = filter(
+              thisData,
+              (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V04',
+            );
+            setDichVuCongThemList(thisDichVuCongThemList);
+            loaiHinhDichVu = get(thisLoaiHinhDichVuList, '[0]', '');
+            setPhuongThucVanChuyen(loaiHinhDichVu);
           },
         },
       ),
@@ -994,8 +1032,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setKichThuocRong('');
     setKichThuocCao('');
     setThoiGianPhat(new Date());
-    setPhuongThucVanChuyen(get(transportMethodArr, '[0].SERVICE_TYPE', 'VCN'));
-    loaiHinhDichVu = 'VCN';
+    setPhuongThucVanChuyen(get(loaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
+    loaiHinhDichVu = get(loaiHinhDichVuList, '[0].SERVICE_TYPE', '');
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
     // setLoaiHangHoa('V3');
@@ -1219,10 +1257,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeTransportMethod(setPhuongThucVanChuyen)}
             >
               {map(
-                filter(
-                  transportMethodArr,
-                  (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V01' || item.SERVICE_GROUP === 'V02',
-                ),
+                loaiHinhDichVuList,
                 (item: TransportMethodItem): JSX.Element => {
                   return (
                     <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
@@ -1250,7 +1285,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         </h3>
         <Row className="sipInputItem">
           {map(
-            filter(transportMethodArr, (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V04'),
+            dichVuCongThemList,
             (item: TransportMethodItem): JSX.Element => {
               return (
                 <Label key={item.SERVICE_TYPE} check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">

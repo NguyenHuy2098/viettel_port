@@ -303,7 +303,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Người nhập'),
-        accessor: 'PERSONAL',
+        accessor: 'CREATED_BY',
       },
       {
         Header: t('Ngày nhập'),

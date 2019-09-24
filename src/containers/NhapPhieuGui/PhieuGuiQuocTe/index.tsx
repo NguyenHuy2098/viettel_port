@@ -286,7 +286,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [kichThuocRong, setKichThuocRong] = useState<string>('');
   const [kichThuocCao, setKichThuocCao] = useState<string>('');
   //_____non-validated items
-  const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
+  const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
@@ -431,10 +431,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setMaPhieuGui(get(orderInformationInstane, 'FWO', ''));
       setDienThoaiSender(get(orderInformationInstane, 'MOBILE_PHONE_SRC', ''));
       setHoTenSender(get(orderInformationInstane, 'SHIPER_NAME', ''));
+      const thisDetailAddressSender =
+        (orderInformationInstane.HOUSE_NO_SOURCE ? toString(orderInformationInstane.HOUSE_NO_SOURCE) + ' ' : '') +
+        (orderInformationInstane.STREET_ID_SOURCE ? toString(orderInformationInstane.STREET_ID_SOURCE) : '');
+      setDetailAddressSender(thisDetailAddressSender);
       setDiaChiSender(
-        `${orderInformationInstane.HOUSE_NO_DES}${' '}${
-          orderInformationInstane.STREET_ID_DES
-        }${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
+        `${thisDetailAddressSender}${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
       );
       setProvinceIdSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
       setDistrictIdSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
@@ -442,11 +444,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceSender(provinceSenderEdit);
       setDistrictSender(districtSenderEdit);
       setWardSender(wardSenderEdit);
-      setDetailAddressSender(
-        get(orderInformationInstane, 'HOUSE_NO_SOURCE', '') +
-          ' ' +
-          get(orderInformationInstane, 'STREET_ID_SOURCE', ''),
-      );
       setDienThoaiReceiver(get(orderInformationInstane, 'MOBILE_PHONE_DES', ''));
       setHoTenReceiver(get(orderInformationInstane, 'CONSIGNEE_NAME', ''));
       setDiaChiReceiver(
@@ -467,6 +464,20 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(2) : '');
       setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(2) : '');
       setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(2) : '');
+      const thisServiceType: string[] = drop(get(orderInformationInstane, 'SERVICE_TYPE', ''), 1);
+      const thisTransportServiceType =
+        findIndex(thisServiceType, (item: string): boolean => {
+          return item === '/';
+        }) !== -1
+          ? slice(
+              thisServiceType,
+              0,
+              findIndex(thisServiceType, (item: string): boolean => {
+                return item === '/';
+              }),
+            )
+          : thisServiceType;
+      setPhuongThucVanChuyen(join(thisTransportServiceType, ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
         COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
@@ -635,8 +646,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             alert(error.messages);
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
-            setTransportMethodArr(get(data, 'MT_ZTMI068_OUT.Row'));
-            setPhuongThucVanChuyen(get(data, 'MT_ZTMI068_OUT.Row[0].SERVICE_TYPE', ''));
+            const thisTransportMethodArr = filter(
+              get(data, 'MT_ZTMI068_OUT.Row', []),
+              (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V05',
+            );
+            setTransportMethodArr(thisTransportMethodArr);
+            setPhuongThucVanChuyen(get(thisTransportMethodArr, '[0]', ''));
           },
         },
       ),
@@ -1133,7 +1148,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeTextboxValue(setPhuongThucVanChuyen)}
             >
               {map(
-                filter(transportMethodArr, (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V05'),
+                transportMethodArr,
                 (item: TransportMethodItem): JSX.Element => {
                   return (
                     <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
