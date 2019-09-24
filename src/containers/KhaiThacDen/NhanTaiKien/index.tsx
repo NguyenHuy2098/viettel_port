@@ -31,7 +31,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
         IV_FR_LOC_ID: '',
         IV_TO_LOC_ID: maBP,
         IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
-        IV_FR_DATE: '20100917',
+        IV_FR_DATE: moment().subtract(7),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: IV_PAGENO,
         IV_NO_PER_PAGE: '5000',

@@ -97,7 +97,7 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
     <>
       <div className="shadow-sm mb-3 bg-white" />
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listTaiDaNhan} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listTaiDaNhan || []} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

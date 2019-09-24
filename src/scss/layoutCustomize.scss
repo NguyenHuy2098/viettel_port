@@ -570,8 +570,27 @@ html:not([dir='rtl']) .sidebar {
   align-items: center;
 }
 
+.custom-background-white {
+  background: #ffffff !important;
+  display: flex;
+  .modal-title {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    p {
+      color: #191919;
+      fontweight: 300;
+    }
+    i {
+      color: #e1e1e1;
+      cursor: pointer;
+    }
+  }
+}
+
 .ganBangKeVaoTaiPopUp {
-  .nav-tabs .nav-item{
+  .nav-tabs .nav-item {
     width: 50%;
   }
 }

@@ -163,8 +163,9 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
 
   return (
     <Modal isOpen={visible} className="sipTitleModalCreateNew" toggle={onHide}>
-      <ModalHeader style={{ background: 'white' }}>
-        <p style={{ color: 'black', fontWeight: 300 }}>{props.modalTitle}</p>
+      <ModalHeader className="custom-background-white">
+        <p className="mb-0">{props.modalTitle}</p>
+        <i className="fa fa-close fa-lg" onClick={onHide} />
       </ModalHeader>
       <ModalBody>
         <div className="sipTabContainer sipFlatContainer ganBangKeVaoTaiPopUp">
