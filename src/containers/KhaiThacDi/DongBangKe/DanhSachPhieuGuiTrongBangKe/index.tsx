@@ -830,7 +830,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     setSelectedChuyenthu(chuyenThu);
   };
 
-  const hancleChonTai = (tai: API.RowMTZTMI047OUT | undefined): void => {
+  const handleChonTai = (tai: API.RowMTZTMI047OUT | undefined): void => {
     setSelectedTai(tai);
   };
 
@@ -1081,20 +1081,20 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         onHide={closePopUpDongBangKeVaoTai}
         visible={showDongBangKeVaoTaiPopup}
         modalTitle="Gán bảng kê vào tải"
-        firstTabTitle={'Chọn tải'}
-        secondTabTitle={'Tạo tải mới'}
+        firstTabTitle={'CHỌN TẢI'}
+        secondTabTitle={'TẠO TẢI MỚI'}
         tab1Contents={listTai}
         onSubmitButton1={handleActionDongBangKeVaoTaiCoSan}
         onSubmitButton2={taoTaiMoi}
-        onChooseItemInFirstTab={hancleChonTai}
+        onChooseItemInFirstTab={handleChonTai}
         selectedChildInTab1={selectedTai}
       />
       <ModalTwoTab
         onHide={closePopUpDongTai}
         visible={showPopUpGanTaiVaoChuyenThu}
         modalTitle="Gán tải vào chuyến thư"
-        firstTabTitle={'Chọn chuyến thư'}
-        secondTabTitle={'Tạo chuyến thư mới'}
+        firstTabTitle={'CHỌN CHUYẾN THƯ'}
+        secondTabTitle={'TẠO CHUYẾN THƯ MỚI'}
         tab1Contents={listChuyenThu}
         onSubmitButton1={handleDongTaiSauKhiChonChuyenThu}
         onSubmitButton2={taoChuyenThuMoi}

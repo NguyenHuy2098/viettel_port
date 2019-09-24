@@ -573,11 +573,10 @@ html:not([dir='rtl']) .sidebar {
 .custom-background-white {
   background: #ffffff !important;
   display: flex;
+  border-bottom: none;
+
   .modal-title {
     width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     p {
       color: #191919;
       fontweight: 300;
@@ -586,10 +585,22 @@ html:not([dir='rtl']) .sidebar {
       color: #e1e1e1;
       cursor: pointer;
     }
+    .custom-header {
+      display: flex;
+      justify-content: space-between;
+    }
   }
+}
+.heighFourHundredPx {
+  height: 400px;
+}
+
+.float-right {
+  float: right;
 }
 
 .ganBangKeVaoTaiPopUp {
+  font-size: 14px;
   .nav-tabs .nav-item {
     width: 50%;
   }

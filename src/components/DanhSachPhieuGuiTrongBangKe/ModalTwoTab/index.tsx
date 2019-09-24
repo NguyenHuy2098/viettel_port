@@ -102,9 +102,6 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
             </Label>
           );
         })}
-        <Button color="primary" onClick={handleOnSubmitButton1} style={{ float: 'right' }}>
-          {t('Hoàn tất')}
-        </Button>
       </>
     );
   };
@@ -120,7 +117,8 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
           <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
             <Label for="exampleSelect" className="col-4">
               <p>
-                Chọn điểm đến<span className="color-red pl-2">*</span>
+                {t('Chọn điểm đến')}
+                <span className="color-red pl-2">*</span>
               </p>
             </Label>
             <Input
@@ -138,7 +136,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
           </FormGroup>
           <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
             <Label for="exampleText" className="col-4">
-              Ghi chú
+              {t('Ghi chú')}
             </Label>
             <Input
               type="textarea"
@@ -149,9 +147,6 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeGhiChu}
             />
           </FormGroup>
-          <Button color="primary" onClick={handleOnSubmitButton2} style={{ float: 'right' }}>
-            {t('Hoàn tất')}
-          </Button>
         </Form>
       </div>
     );
@@ -164,10 +159,10 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <Modal isOpen={visible} className="sipTitleModalCreateNew" toggle={onHide}>
       <ModalHeader className="custom-background-white">
-        <p className="mb-0">{props.modalTitle}</p>
-        <i className="fa fa-close fa-lg" onClick={onHide} />
-      </ModalHeader>
-      <ModalBody>
+        <div className="custom-header">
+          <p className="mb-0">{props.modalTitle}</p>
+          <i className="fa fa-close fa-lg" onClick={onHide} />
+        </div>
         <div className="sipTabContainer sipFlatContainer ganBangKeVaoTaiPopUp">
           <Nav tabs>
             <NavItem>
@@ -188,12 +183,22 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
             </NavItem>
           </Nav>
         </div>
+      </ModalHeader>
+      <ModalBody className="overflow-auto pt-0 heighFourHundredPx ">
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>{renderTab1()}</TabPane>
           <TabPane tabId={2}>{renderTab2()}</TabPane>
         </TabContent>
       </ModalBody>
-      <ModalFooter className="justify-content-end"></ModalFooter>
+      <ModalFooter className="justify-content-end pt-4">
+        <Button
+          color="primary"
+          onClick={tab === 1 ? handleOnSubmitButton1 : handleOnSubmitButton2}
+          className="float-right"
+        >
+          {t('Hoàn tất')}
+        </Button>
+      </ModalFooter>
     </Modal>
   );
 };
