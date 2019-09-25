@@ -6,7 +6,7 @@ import { generatePath, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, filter, get, includes } from 'lodash';
+import { ceil, filter, get, includes, map, size, toString } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -52,7 +52,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Số lượng'),
-        accessor: 'ITEM_NO',
+        accessor: 'ITEM_TEXT',
       },
       {
         Header: t('Trọng lượng'),
@@ -103,6 +103,21 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [listTaiKienDaNhan],
   );
 
+  const filteredListTaiKienDaNhanCopy = map(
+    filteredListTaiKienDaNhan,
+    (item: API.Child): API.Child => {
+      return {
+        TOR_ID: item.TOR_ID ? item.TOR_ID : '',
+        SRC_LOC_IDTRQ: item.SRC_LOC_IDTRQ ? item.SRC_LOC_IDTRQ : '',
+        ITEM_TEXT: toString(size(listTaiKienDaNhan)),
+        DES_LOC_IDTRQ: item.DES_LOC_IDTRQ ? item.DES_LOC_IDTRQ : '',
+        GRO_WEI_VAL: item.GRO_WEI_VAL ? item.GRO_WEI_VAL : '',
+        DATETIME_CHLC: item.DATETIME_CHLC ? item.DATETIME_CHLC : '',
+        TOR_TYPE: item.TOR_TYPE ? item.TOR_TYPE : '',
+      };
+    },
+  );
+
   function renderToolbar(): JSX.Element {
     return (
       <Row>
@@ -127,7 +142,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={filteredListTaiKienDaNhan} onRowClick={redirectToThongTinTai} />
+        <DataTable columns={columns} data={filteredListTaiKienDaNhanCopy} onRowClick={redirectToThongTinTai} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
