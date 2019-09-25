@@ -202,6 +202,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   //eslint-disable-next-line max-lines-per-function
   const handleDongTaiVaoChuyenThuCoSan = (): void => {
     if (size(forwardingItemListState) > 0) {
+      // Tạo ngầm 1 tải với điểm đến là điểm đến của bảng kê hiện tại
       dispatch(
         action_MIOA_ZTMI016(
           {
@@ -222,6 +223,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
             // eslint-disable-next-line max-lines-per-function
             onSuccess: (data: API.MIOAZTMI016Response): void => {
               const taiMoiTaoId = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+              // add bảng kê được chọn vào tải mới tạo
               dispatch(
                 action_MIOA_ZTMI016(
                   {
@@ -231,15 +233,11 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                     IV_SLOCATION: 'BDH',
                     IV_DLOCATION: 'HUB1',
                     IV_DESCRIPTION: '',
-                    T_ITEM: [
-                      {
-                        ITEM_ID: forwardingItemListState[0].ITEM_ID,
-                        ITEM_TYPE: 'ZC1',
-                      },
-                    ],
+                    T_ITEM: forwardingItemListState,
                   },
                   {
                     onSuccess: (): void => {
+                      // add tải vừa tạo vào chuyến thư được chọn
                       dispatch(
                         action_MIOA_ZTMI016(
                           {
@@ -310,6 +308,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           // eslint-disable-next-line max-lines-per-function
           onSuccess: (data: API.MIOAZTMI016Response): void => {
             const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+            // add bang ke duoc chon vao tai moi tao
             dispatch(
               action_MIOA_ZTMI016(
                 {
@@ -319,12 +318,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   IV_SLOCATION: 'BDH',
                   IV_DLOCATION: 'HUB1',
                   IV_DESCRIPTION: '',
-                  T_ITEM: [
-                    {
-                      ITEM_ID: forwardingItemListState[0].ITEM_ID,
-                      ITEM_TYPE: 'ZC1',
-                    },
-                  ],
+                  T_ITEM: forwardingItemListState,
                 },
                 {
                   // eslint-disable-next-line max-lines-per-function
@@ -349,6 +343,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                         {
                           onSuccess: (data: API.MIOAZTMI016Response): void => {
                             const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+                            // add tải vừa tạo vào chuyến thư vừa tạo
                             dispatch(
                               action_MIOA_ZTMI016(
                                 {

@@ -83,7 +83,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
-  const [newTaiId, setnewTaiId] = useState<string>('');
 
   const getListDiemDen = (): void => {
     dispatch(
@@ -248,7 +247,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
             if (data && data.MT_ZTMI016_OUT) {
-              setnewTaiId(get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU'));
+              const newTaiId = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+              handleActionDongBangKe(newTaiId);
             }
           },
 
@@ -259,12 +259,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       ),
     );
   };
-  useEffect((): void => {
-    if (toString(newTaiId).length > 0) {
-      handleActionDongBangKe(newTaiId);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newTaiId]);
 
   const handleDeleteForwardingOrder = (torId: string): void => {
     const payload = {
@@ -323,7 +317,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         {
           IV_FLAG: '2',
           IV_TOR_TYPE: 'ZC2',
-          IV_TOR_ID_CU: taiID,
+          IV_TOR_ID_CU: toString(taiID),
           IV_SLOCATION: 'BDH',
           IV_DLOCATION: 'HUB1',
           IV_DESCRIPTION: '',
@@ -336,10 +330,28 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         },
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
-            alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE'));
+            toast(
+              <>
+                <i className="fa check mr-2" />
+                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'success',
+              },
+            );
           },
           onFailure: (error: Error): void => {
-            alert(t('Đã có lỗi xảy ra'));
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'error',
+              },
+            );
           },
         },
       ),
@@ -357,6 +369,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       IV_DESCRIPTION: '',
       T_ITEM: listUncheckForwardingItem,
     };
+    // remove các phiếu gửi không được tích
     dispatch(
       action_MIOA_ZTMI016(a, {
         onSuccess: (): void => {
@@ -380,7 +393,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 onSuccess: (data: API.MIOAZTMI016Response): void => {
                   getListPhieuGui();
                   if (size(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE')) > 0) {
-                    alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE'));
+                    toast(
+                      <>
+                        <i className="fa check mr-2" />
+                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                      </>,
+                      {
+                        containerId: 'DanhSachPhieuGuiTrongBangKe',
+                        type: 'success',
+                      },
+                    );
                   }
                 },
                 onFailure: (error: Error): void => {
