@@ -41,13 +41,13 @@ const Search = (props: Props): JSX.Element => {
 
   return (
     <Row className={classNames('flex-fill', get(containerProps, 'className'))}>
-      <Col xs={6}>
+      <Col lg={9}>
         <div className="sipTitleRightBlockInput">
           {leftIcon || <i className="fa fa-search" />}
           <Input className="bg-gray-100" onKeyPress={handleInputKeyPress} type="search" {...rest} />
         </div>
       </Col>
-      <Col className="px-0">
+      <Col className="px-0" lg={3}>
         <Button color="primary" {...buttonProps} onClick={handleClickButton}>
           {get(buttonProps, 'children') || t('Tìm kiếm')}
         </Button>

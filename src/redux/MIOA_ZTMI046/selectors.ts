@@ -1,5 +1,5 @@
-import { AppStateType } from 'redux/store';
 import { filter, get, includes, isArray, isNumber, size } from 'lodash';
+import { AppStateType } from 'redux/store';
 
 /**
  * Info

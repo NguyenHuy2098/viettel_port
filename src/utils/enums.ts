@@ -10,7 +10,7 @@ export enum SipDataState {
   /**
    * Tai/Bang ke/Chuyen thu - 1xx
    */
-  TAO_MOi = 101,
+  TAO_MOI = 101,
   CHUA_HOAN_THANH = 101,
   GAN_BANG_KE_VAO_TAI = 102,
   DA_DONG = 102,

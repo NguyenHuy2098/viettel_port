@@ -1,54 +1,44 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useMemo } from 'react';
+import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { push } from 'connected-react-router';
-// import { map, get } from 'lodash';
-import { Button, Col, Input, Row } from 'reactstrap';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorKienChuaDongChuyenThu } from 'redux/MIOA_ZTMI047/selectors';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import routesMap from 'utils/routesMap';
-import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
-// import moment from 'moment';
-import { Cell } from 'react-table';
-import DataTable from 'components/DataTable';
+import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
+import { Cell } from 'react-table';
+import { push } from 'connected-react-router';
+import { get } from 'lodash';
+import moment from 'moment';
+
+import DataTable from 'components/DataTable';
+import Search from 'components/Input/Search';
+import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
+import Pagination from 'components/Pagination';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorZTMI236OUTPagingTotalPage, makeSelectorZTMI236OUTRow } from 'redux/ZTMI236/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import routesMap from 'utils/routesMap';
+
+interface Props {
+  getListKienChuaDongChuyenThu: (IV_PAGENO: number) => void;
+}
 
 // eslint-disable-next-line max-lines-per-function
-const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
+const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getListKienChuaDongChuyenThu } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const maBP = useSelector(makeSelectorMaBP);
+  const totalPage = useSelector(makeSelectorZTMI236OUTPagingTotalPage);
+  const listKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRow);
 
-  const getListChuyenThu = useCallback(
-    function(payload = {}): void {
-      // dispatch(
-      //   action_MIOA_ZTMI047({
-      //     IV_TOR_ID: '',
-      //     IV_TOR_TYPE: 'ZBIG',
-      //     IV_FR_LOC_ID: 'BHD',
-      //     IV_TO_LOC_ID: '',
-      //     IV_CUST_STATUS: '101',
-      //     IV_FR_DATE: '20190727',
-      //     IV_TO_DATE: '20190828',
-      //     IV_PAGENO: '1',
-      //     IV_NO_PER_PAGE: '20',
-      //   }),
-      // );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  const onPaginationChange = ({ selected }: { selected: number }): void => {
+    getListKienChuaDongChuyenThu(selected + 1);
+  };
 
-  useEffect((): void => getListChuyenThu(), [getListChuyenThu]);
-  // eslint-disable-next-line no-undef
-  const listKienChuaDongChuyenThu = useSelector(makeSelectorKienChuaDongChuyenThu);
-
-  function handleSearchChuyenThu(e: React.ChangeEvent<HTMLInputElement>): void {
-    const payload = {
-      IV_TOR_ID: e.target.value,
-    };
-    getListChuyenThu(payload);
+  function handleTimKiemKien(event: React.ChangeEvent<HTMLInputElement>): void {
+    // tim kiem kien
   }
 
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
@@ -56,16 +46,17 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
       dispatch(push(generatePath(routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU, { idChuyenThu: item.TOR_ID })));
     };
   };
-  const handleDeleteChuyenThu = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+
+  const handleDeleteKien = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
     return (): void => {
       const payload = {
         IV_TOR_ID: '',
-        IV_TOR_TYPE: 'ZBIG',
-        IV_FR_LOC_ID: 'BHD',
+        IV_TOR_TYPE: SipDataType.KIEN,
+        IV_FR_LOC_ID: maBP,
         IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: '101',
-        IV_FR_DATE: '20190727',
-        IV_TO_DATE: '20190828',
+        IV_CUST_STATUS: SipDataState.TAO_MOI,
+        IV_FR_DATE: moment().format(' YYYYMMDD'),
+        IV_TO_DATE: moment().format(' YYYYMMDD'),
         IV_PAGENO: '1',
         IV_NO_PER_PAGE: '20',
       };
@@ -78,17 +69,6 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
             alert(error.messages);
           },
           onFinish: (): void => {
-            const payload = {
-              IV_TOR_ID: '',
-              IV_TOR_TYPE: 'ZBIG',
-              IV_FR_LOC_ID: 'BHD',
-              IV_TO_LOC_ID: '',
-              IV_CUST_STATUS: '101',
-              IV_FR_DATE: '20190727',
-              IV_TO_DATE: '20190828',
-              IV_PAGENO: '1',
-              IV_NO_PER_PAGE: '20',
-            };
             dispatch(action_MIOA_ZTMI047(payload));
           },
         }),
@@ -99,24 +79,26 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
   const columns = useMemo(
     () => [
       {
-        Header: t('Mã phiếu gửi'),
-        accessor: 'TOR_ID',
+        Header: t('Mã kiện'),
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Bưu cục đến'),
-        accessor: 'LOG_LOCID_TO',
+        accessor: 'NEXT_LOC',
       },
       {
         Header: t('Số lượng'),
-        accessor: 'chua có',
+        accessor: 'QUANTITY',
       },
       {
         Header: t('Trọng lượng'),
-        accessor: 'ITEM_NO',
+        accessor: 'GROSS_WEIGHT',
       },
       {
         Header: t('Ngày gửi'),
-        accessor: 'DATETIME_CHLC',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return moment(get(row, 'original.CREADTED_ON'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+        },
       },
       {
         Header: t('Quản trị'),
@@ -126,7 +108,7 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
               <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(row.original)}>
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>
-              <ModalPopupConfirm handleDoSomething={handleDeleteChuyenThu} />
+              <ModalPopupConfirm handleDoSomething={handleDeleteKien} />
             </>
           );
         },
@@ -135,32 +117,41 @@ const KienChuaDongChuyenThu: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
+  const renderToolbar = (): JSX.Element => (
+    <Row>
+      <Col lg={4} xs={12}>
+        <Search onChange={handleTimKiemKien} placeholder={t('Tìm kiếm kiện')} searchResult={[]} />
+      </Col>
+      <Col lg={1}>
+        <Button color="white" className="sipTitleRightBlockBtnIcon sipBoxShadow">
+          <i className="fa fa-trash-o" />
+        </Button>
+      </Col>
+      <Col className="d-flex justify-content-end">
+        <Button className="mr-3" color="primary">
+          <i className="fa fa-folder mr-1" />
+          {t('Chuyển vào CT')}
+        </Button>
+        <Button color="primary">
+          <i className="fa fa-truck mr-1" />
+          {t('Đóng CT')}
+        </Button>
+      </Col>
+    </Row>
+  );
+
   return (
     <>
-      <Row className="sipContentContainer">
-        <Col lg={4} xs={12} className="p-0">
-          <div className="d-flex">
-            <div className="sipTitleRightBlockInput m-0">
-              <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm chuyến thư')} onChange={handleSearchChuyenThu} />
-            </div>
-            <Button color="primary" className="ml-2">
-              {t('Tìm kiếm')}
-            </Button>
-            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-              <i className="fa fa-trash-o" />
-            </Button>
-          </div>
-        </Col>
-        <Col>
-          <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>01</span>
-          </p>
-        </Col>
-      </Row>
-      <div className="mt-3" />
+      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={listKienChuaDongChuyenThu} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage}
+          onPageChange={onPaginationChange}
+        />
       </Row>
     </>
   );
