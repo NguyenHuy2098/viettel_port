@@ -11,7 +11,7 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import Search from 'components/Input/Search';
+import Filter from 'components/Input/Filter';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -107,7 +107,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <Search
+          <Filter
             onChange={handleChangeSearchText}
             placeholder={t('Tìm kiếm tải/kiện')}
             searchResult={filteredListTaiKienDaNhan}

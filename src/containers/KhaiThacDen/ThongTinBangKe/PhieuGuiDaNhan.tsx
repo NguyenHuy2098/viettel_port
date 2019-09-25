@@ -12,7 +12,7 @@ import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import Search from '../../../components/Input/Search';
+import Filter from 'components/Input/Filter';
 
 type Props = RouteComponentProps;
 
@@ -97,7 +97,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <div className="btn-toolbar col-10">
-          <Search
+          <Filter
             onChange={handleChangeSearchText}
             placeholder={t('Tìm kiếm phiếu gửi')}
             searchResult={filteredListPhieuGuiDaNhan}

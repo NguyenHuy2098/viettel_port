@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import Search from 'components/Input/Search';
+import Filter from 'components/Input/Filter';
 import { makeSelectorChuyenThuChuaNhanTaiKien, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -88,7 +88,7 @@ const ChuyenThuChuaNhanTaiKien: React.FC<Props> = (props: Props): JSX.Element =>
   const renderToolbar = (): JSX.Element => (
     <Row>
       <div className="btn-toolbar col-10">
-        <Search
+        <Filter
           onChange={handleChangeSearchText}
           placeholder={t('Tìm kiếm chuyến thư')}
           searchResult={filteredListChuyenThuChuaNhanTaiKien}

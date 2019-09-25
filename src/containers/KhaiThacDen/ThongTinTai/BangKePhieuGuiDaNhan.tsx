@@ -9,7 +9,7 @@ import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import Search from 'components/Input/Search';
+import Filter from 'components/Input/Filter';
 import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
@@ -90,7 +90,7 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
   const renderToolbar = (): JSX.Element => (
     <Row>
       <Col className="btn-toolbar col-10">
-        <Search
+        <Filter
           onChange={handleChangeSearchText}
           placeholder={t('Tìm kiếm bảng kê/phiếu gửi')}
           searchResult={filteredListPhieuGuiDaNhan}

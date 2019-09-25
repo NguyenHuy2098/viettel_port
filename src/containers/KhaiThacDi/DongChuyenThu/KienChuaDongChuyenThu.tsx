@@ -21,7 +21,7 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 
 interface Props {
-  getListKienChuaDongChuyenThu: (IV_PAGENO: number) => void;
+  getListKienChuaDongChuyenThu: (IV_PAGENO?: number, IV_PACKAGE_ID?: string) => void;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -37,8 +37,8 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     getListKienChuaDongChuyenThu(selected + 1);
   };
 
-  function handleTimKiemKien(event: React.ChangeEvent<HTMLInputElement>): void {
-    // tim kiem kien
+  function handleTimKiemKien(searchText: string): void {
+    getListKienChuaDongChuyenThu(1, searchText);
   }
 
   const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
@@ -121,7 +121,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const renderToolbar = (): JSX.Element => (
     <Row>
       <Col lg={4} xs={12}>
-        <Search onChange={handleTimKiemKien} placeholder={t('Tìm kiếm kiện')} searchResult={[]} />
+        <Search onSubmitSearch={handleTimKiemKien} placeholder={t('Tìm kiếm kiện')} />
       </Col>
       <Col lg={1}>
         <Button color="white" className="sipTitleRightBlockBtnIcon sipBoxShadow">

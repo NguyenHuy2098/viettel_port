@@ -1,42 +1,39 @@
-import React, { KeyboardEvent, useCallback } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { Button, ButtonProps, Col, Input, InputProps, Row, RowProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { ToastContainer, toast } from 'react-toastify';
 import classNames from 'classnames';
-import { get, isArray, isEmpty } from 'lodash';
+import { get } from 'lodash';
 
 interface Props extends InputProps {
   buttonProps?: ButtonProps;
   containerProps?: RowProps;
   leftIcon?: React.ReactNode;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  searchResult?: any[];
+  onSubmitSearch?: (searchText: string) => void;
 }
 
-const Search = (props: Props): JSX.Element => {
-  const { buttonProps, containerProps, leftIcon, searchResult, ...rest } = props;
+const Filter = (props: Props): JSX.Element => {
+  const { buttonProps, containerProps, leftIcon, onSubmitSearch, ...rest } = props;
   const { t } = useTranslation();
+  const [searchText, setSearchText] = useState<string>('');
 
-  const handleClickButton = useCallback(() => {
-    if (isArray(searchResult) && isEmpty(searchResult)) {
-      toast(
-        <>
-          <i className="fa fa-info-circle mr-2" />
-          {t('Không tìm thấy dữ liệu!')}
-        </>,
-        {
-          containerId: 'Search',
-          type: 'info',
-        },
-      );
+  const submitSearch = (text = ''): void => {
+    if (onSubmitSearch) {
+      onSubmitSearch(text);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchResult]);
+  };
 
-  const handleInputKeyPress = (event: KeyboardEvent<HTMLInputElement>): void => {
+  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchText(event.currentTarget.value);
+  };
+
+  const handleSubmitSearch = (event: KeyboardEvent<HTMLInputElement>): void => {
     if (event.charCode === 13) {
-      handleClickButton();
+      submitSearch(event.currentTarget.value);
     }
+  };
+
+  const handleClickSearch = (): void => {
+    submitSearch(searchText);
   };
 
   return (
@@ -44,17 +41,22 @@ const Search = (props: Props): JSX.Element => {
       <Col lg={9}>
         <div className="sipTitleRightBlockInput">
           {leftIcon || <i className="fa fa-search" />}
-          <Input className="bg-gray-100" onKeyPress={handleInputKeyPress} type="search" {...rest} />
+          <Input
+            className="bg-gray-100"
+            onChange={handleChangeSearchText}
+            onKeyPress={handleSubmitSearch}
+            type="search"
+            {...rest}
+          />
         </div>
       </Col>
       <Col className="px-0" lg={3}>
-        <Button color="primary" {...buttonProps} onClick={handleClickButton}>
+        <Button color="primary" onClick={handleClickSearch} {...buttonProps}>
           {get(buttonProps, 'children') || t('Tìm kiếm')}
         </Button>
-        <ToastContainer containerId={'Search'} />
       </Col>
     </Row>
   );
 };
 
-export default Search;
+export default Filter;

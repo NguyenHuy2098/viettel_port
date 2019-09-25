@@ -77,10 +77,10 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     );
   };
 
-  const getListKienChuaDongChuyenThu = (IV_PAGE_NO = 1): void => {
+  const getListKienChuaDongChuyenThu = (IV_PAGE_NO = 1, IV_PACKAGE_ID = ''): void => {
     dispatch(
       action_ZTMI236({
-        IV_PACKAGE_ID: '',
+        IV_PACKAGE_ID,
         IV_FREIGHT_UNIT_TYPE: SipDataType.KIEN,
         IV_FREIGHT_UNIT_STATUS: ['306', '402'],
         IV_LOC_ID: maBP,
