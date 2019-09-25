@@ -21,8 +21,8 @@ import { generatePath } from 'react-router-dom';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
-import { action_MIOA_ZTMI045 } from '../../../redux/MIOA_ZTMI045/actions';
-import { makeSelectorGet_MT_ZTMI045_OUT } from '../../../redux/MIOA_ZTMI045/selectors';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -64,6 +64,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   useEffect((): void => {
     getListChuyenThu();
     getListDiemDen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function toggleSelectForwardingItemModal(): void {
