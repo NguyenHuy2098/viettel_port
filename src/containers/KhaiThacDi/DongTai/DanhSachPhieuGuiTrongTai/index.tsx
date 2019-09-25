@@ -1,24 +1,29 @@
 /* eslint-disable max-lines */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { forEach, get, map, size } from 'lodash';
+import { forEach, get, map, noop, toString, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { Cell } from 'react-table';
+import moment from 'moment';
+import { push } from 'connected-react-router';
+import { generatePath } from 'react-router-dom';
+
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
-import moment from 'moment';
-import { push } from 'connected-react-router';
-import { generatePath } from 'react-router-dom';
 import routesMap from 'utils/routesMap';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -34,6 +39,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const idTai = get(props, 'match.params.idTai', '');
   const dataTai = useSelector(makeSelector046RowFirstChild);
   const dataTaiChild = useSelector(makeSelector046ListChildren);
+  const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOi));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 
@@ -42,6 +48,44 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
+  const [showPopupDongTai, setShowPopupDongTai] = useState<boolean>(false);
+  const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
+
+  const getListChuyenThu = (): void => {
+    // console.log('getListChuyenThu');
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID: '',
+        IV_FR_DATE: moment()
+          .subtract(7, 'day')
+          .format('YYYYMMDD'),
+        IV_TO_DATE: toString(moment().format('YYYYMMDD')),
+        IV_TOR_TYPE: 'ZC3',
+        IV_FR_LOC_ID: 'BDH',
+        IV_TO_LOC_ID: '',
+        IV_CUST_STATUS: '101',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
+  };
+
+  useEffect((): void => {
+    getListChuyenThu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleUpdateSelectedChuyenThu = (chuyenThu: API.RowMTZTMI047OUT): void => {
+    setSelectedChuyenThu(chuyenThu);
+  };
+
+  const handleShowPopupDongTai = (): void => {
+    setShowPopupDongTai(true);
+  };
+
+  const handleHidePopupDongTai = (): void => {
+    setShowPopupDongTai(false);
+  };
 
   function toggleSelectForwardingItemModal(): void {
     setSelectForwardingItemModal(!selectForwardingItemModal);
@@ -84,7 +128,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     forwardingItemList = [];
   }
 
-  function handleSelectBangKeItem(event: React.FormEvent<HTMLInputElement>): void {
+  const handleSelectBangKeItem = (event: React.FormEvent<HTMLInputElement>): void => {
     event.stopPropagation();
     const value = event.currentTarget.value;
     setUncheckAllForwardingItemCheckbox(undefined);
@@ -92,13 +136,13 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC1' });
     } else {
       forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
-        if (item.ITEM_ID === value) {
+        if (get(item, 'ITEM_ID', '') === value) {
           forwardingItemList.splice(index, 1);
         }
       });
     }
-    setForwardingItemListState(forwardingItemList);
-  }
+    setForwardingItemListState([...forwardingItemList]);
+  };
 
   const handleDeleteForwardingOrder = (torId: string): void => {
     const payload = {
@@ -167,7 +211,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển tải')}
           </Button>
-          <Button>
+          <Button onClick={handleShowPopupDongTai} disabled={size(forwardingItemListState) <= 0}>
             <i className="fa fa-cloud rotate-90" />
             {t('Đóng tải')}
           </Button>
@@ -226,6 +270,31 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       </div>
     );
   }
+
+  const dongTaiVaoChuyenThuCoSan = (): void => {
+    //Tao ngam 1 tai voi diem den cua bang ke hien tai
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '1',
+          IV_TOR_TYPE: 'ZC2',
+          IV_TOR_ID_CU: '',
+          IV_SLOCATION: 'BDH',
+          IV_DLOCATION: 'HUB1',
+          IV_DESCRIPTION: '',
+          T_ITEM: [
+            {
+              ITEM_ID: '',
+              ITEM_TYPE: '',
+            },
+          ],
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI016Response): void => {},
+        },
+      ),
+    );
+  };
   const dataTable = map(
     dataTaiChild,
     (item: API.Child): API.Child => {
@@ -306,7 +375,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dataTaiChild, uncheckAllForwardingItemCheckbox],
+    [uncheckAllForwardingItemCheckbox],
   );
 
   return dataTai ? (
@@ -333,6 +402,18 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         IV_FR_LOC_ID="BDH"
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
+      />
+      <ModalTwoTab
+        onHide={handleHidePopupDongTai}
+        visible={showPopupDongTai}
+        modalTitle={t('Gán tải vào chuyến thư')}
+        firstTabTitle={t('CHỌN CHUYẾN THƯ')}
+        secondTabTitle={t('TẠO CHUYẾN THƯ MỚI')}
+        onSubmitButton1={dongTaiVaoChuyenThuCoSan}
+        onSubmitButton2={noop}
+        tab1Contents={listChuyenThu}
+        onChooseItemInFirstTab={handleUpdateSelectedChuyenThu}
+        selectedChildInTab1={selectedChuyenThu}
       />
     </>
   ) : (

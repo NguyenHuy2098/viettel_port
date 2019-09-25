@@ -408,7 +408,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     getListTai(payload);
   };
 
-  function handleSelectBangKeItem(event: React.FormEvent<HTMLInputElement>): void {
+  const handleSelectBangKeItem = (event: React.FormEvent<HTMLInputElement>): void => {
     event.stopPropagation();
     const value = event.currentTarget.value;
     setUncheckAllForwardingItemCheckbox(undefined);
@@ -416,13 +416,13 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC1' });
     } else {
       forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
-        if (item.ITEM_ID === value) {
+        if (get(item, 'ITEM_ID', '') === value) {
           forwardingItemList.splice(index, 1);
         }
       });
     }
-    setForwardingItemListState(forwardingItemList);
-  }
+    setForwardingItemListState([...forwardingItemList]);
+  };
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
