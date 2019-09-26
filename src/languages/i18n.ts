@@ -3,7 +3,6 @@ import { initReactI18next } from 'react-i18next';
 import en from './en/resource.json';
 import vi from './vi/resource.json';
 
-// @ts-ignore
 i18n.use(initReactI18next).init({
   resources: {
     en: {

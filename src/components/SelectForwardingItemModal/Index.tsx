@@ -57,10 +57,10 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
           toString(
             moment()
               .subtract(7, 'days')
-              .format(' YYYYMMDD'),
+              .format('YYYYMMDD'),
           ),
         ),
-        IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
+        IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_TOR_TYPE: IV_TOR_TYPE,
         IV_FR_LOC_ID: IV_FR_LOC_ID,
         IV_TO_LOC_ID: IV_TO_LOC_ID,
@@ -108,27 +108,25 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
         <FormGroup>
           {map(
             listForwardingItemChuaHoanThanh,
-            (item: API.RowMTZTMI047OUT): JSX.Element => {
-              return (
-                <Label key={item.TOR_ID} check className="selectForwardingItem row">
-                  <Input
-                    type="radio"
-                    name="selectForwardingItem"
-                    value={item.TOR_ID}
-                    onChange={handleChangeForwardingItem}
-                  />
-                  <p>
-                    <span>{item.TOR_ID}</span>
-                    <span>TRUNGVT</span>
-                    <span>{trim(toString(moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')))}</span>
-                  </p>
-                  <span>
-                    <span>{item.LOG_LOCID_TO}</span>
-                    <span>SL: {item.ITEM_NO}</span>
-                  </span>
-                </Label>
-              );
-            },
+            (item: API.RowMTZTMI047OUT): JSX.Element => (
+              <Label key={item.TOR_ID} check className="selectForwardingItem row">
+                <Input
+                  type="radio"
+                  name="selectForwardingItem"
+                  value={item.TOR_ID}
+                  onChange={handleChangeForwardingItem}
+                />
+                <p>
+                  <span>{item.TOR_ID}</span>
+                  <span>{get(item, 'CREATED_BY', '') || ''}</span>
+                  <span>{trim(toString(moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')))}</span>
+                </p>
+                <span>
+                  <span>{item.LOG_LOCID_TO}</span>
+                  <span>SL: {item.ITEM_NO}</span>
+                </span>
+              </Label>
+            ),
           )}
         </FormGroup>
       </ModalBody>

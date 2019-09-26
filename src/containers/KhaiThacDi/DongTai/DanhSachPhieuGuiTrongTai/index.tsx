@@ -45,7 +45,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const dataTai = useSelector(makeSelector046RowFirstChild);
   const dataTaiChild = useSelector(makeSelector046ListChildren);
   const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
-  const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOi));
+  const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 

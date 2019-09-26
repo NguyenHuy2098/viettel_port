@@ -77,6 +77,21 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     );
   };
 
+  const getListTaiChuaDongChuyenThu = (IV_PAGENO = 1, IV_TOR_ID = ''): void => {
+    dispatch(
+      action_MIOA_ZTMI047({
+        IV_TOR_ID,
+        IV_TOR_TYPE: SipDataType.TAI,
+        IV_FR_LOC_ID: maBP,
+        IV_CUST_STATUS: SipDataState.TAO_MOI,
+        IV_FR_DATE: moment().format('YYYYMMDD'),
+        IV_TO_DATE: moment().format('YYYYMMDD'),
+        IV_PAGENO,
+        IV_NO_PER_PAGE: '10',
+      }),
+    );
+  };
+
   const getListKienChuaDongChuyenThu = (IV_PAGE_NO = 1, IV_PACKAGE_ID = ''): void => {
     dispatch(
       action_ZTMI236({
@@ -199,7 +214,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
             <ChuyenThuChuaHoanThanh />
           </TabPane>
           <TabPane tabId={2}>
-            <TaiChuaDongChuyenThu />
+            <TaiChuaDongChuyenThu getListTaiChuaDongChuyenThu={getListTaiChuaDongChuyenThu} />
           </TabPane>
           <TabPane tabId={3}>
             <KienChuaDongChuyenThu getListKienChuaDongChuyenThu={getListKienChuaDongChuyenThu} />

@@ -1,38 +1,40 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { forEach, map, get, noop, toString, trim, size } from 'lodash';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { generatePath } from 'react-router-dom';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
+import { forEach, map, get, noop, size } from 'lodash';
+import moment from 'moment';
 
+import DataTable from 'components/DataTable';
+import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
+import Pagination from 'components/Pagination';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
-import routesMap from 'utils/routesMap';
-import { Cell } from 'react-table';
-import DataTable from 'components/DataTable';
-import Pagination from 'components/Pagination';
-import { generatePath } from 'react-router-dom';
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import routesMap from 'utils/routesMap';
 
 let forwardingItemList: ForwardingItem[] = [];
 
+interface Props {
+  getListTaiChuaDongChuyenThu: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
+const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getListTaiChuaDongChuyenThu } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const userMaBp = useSelector(makeSelectorMaBP);
-
   const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
+  const userMaBp = useSelector(makeSelectorMaBP);
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
-
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [torIdSearch, setTorIdSearch] = useState<string>('');
@@ -81,40 +83,20 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
     };
   }
 
-  const getListTai = useCallback(
-    function(payload = {}): void {
-      dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: userMaBp,
-          IV_CUST_STATUS: '101',
-          IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
-          IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-          ...payload,
-        }),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, userMaBp],
-  );
-
   function onSuccessSelectedForwardingItem(): void {
-    getListTai();
+    getListTaiChuaDongChuyenThu();
     setUncheckAllForwardingItemCheckbox(false);
     setForwardingItemListState([]);
     forwardingItemList = [];
   }
 
-  useEffect((): void => getListTai(), [getListTai]);
+  useEffect((): void => {
+    getListTaiChuaDongChuyenThu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleSearchTai(): void {
-    const payload = {
-      IV_TOR_ID: torIdSearch,
-    };
-    getListTai(payload);
+    getListTaiChuaDongChuyenThu(1, torIdSearch);
   }
 
   function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
@@ -153,7 +135,9 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         onFailure: (error: HttpRequestErrorType): void => {
           alert(error.messages);
         },
-        onFinish: (): void => getListTai(),
+        onFinish: (): void => {
+          getListTaiChuaDongChuyenThu();
+        },
       }),
     );
   };
@@ -259,11 +243,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
   );
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
-    const payload = {
-      IV_TOR_ID: torIdSearch,
-      IV_PAGENO: selectedItem.selected + 1,
-    };
-    getListTai(payload);
+    getListTaiChuaDongChuyenThu(selectedItem.selected + 1, torIdSearch);
   };
 
   function handleSelectTaiItem(event: React.FormEvent<HTMLInputElement>): void {
@@ -386,11 +366,11 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
             onClick={handleChuyenVaoChuyenThu}
             disabled={disableFunctionalButton}
           >
-            <i className="fa fa-download mr-2 rotate-90"></i>
+            <i className="fa fa-download mr-2 rotate-90" />
             {t('Chuyển vào chuyến thư')}
           </Button>
           <Button color="primary" className="ml-2" onClick={handleDongChuyenThu} disabled={disableFunctionalButton}>
-            <i className="fa fa-truck mr-2"></i>
+            <i className="fa fa-truck mr-2" />
             {t('Đóng chuyến thư')}
           </Button>
         </Col>

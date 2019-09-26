@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { find, forEach, map, get, noop, size, toString, trim } from 'lodash';
+import { find, forEach, map, get, noop, size } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 import { toast, ToastContainer } from 'react-toastify';
@@ -114,8 +114,8 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         IV_TOR_ID: '',
         IV_FR_DATE: moment()
           .subtract(7, 'day')
-          .format(' YYYYMMDD'),
-        IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
+          .format('YYYYMMDD'),
+        IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_TOR_TYPE: 'ZC3',
         IV_FR_LOC_ID: userMaBp,
         IV_TO_LOC_ID: '',
@@ -135,7 +135,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: '20100101',
-          IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
+          IV_TO_DATE: moment().format('YYYYMMDD'),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
           ...payload,

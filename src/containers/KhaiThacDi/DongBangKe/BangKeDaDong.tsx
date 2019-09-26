@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { map, get, noop, toString, trim } from 'lodash';
+import { map, get, noop } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
@@ -41,8 +41,8 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '102',
-          IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
-          IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
+          IV_FR_DATE: moment().format('YYYYMMDD'),
+          IV_TO_DATE: moment().format('YYYYMMDD'),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
           ...payload,
