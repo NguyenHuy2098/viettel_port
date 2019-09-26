@@ -242,7 +242,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển tải')}
           </Button>
-          <Button disabled={disableFunctionalButton}>
+          <Button onClick={handleShowPopupDongTai} disabled={disableFunctionalButton}>
             <i className="fa fa-cloud rotate-90" />
             {t('Đóng tải')}
           </Button>
