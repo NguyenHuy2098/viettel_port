@@ -18,6 +18,7 @@ import watch_MIOA_ZTMI045_SagaAsync from './MIOA_ZTMI045/sagas';
 import watch_MIOA_ZTMI054_SagaAsync from './MIOA_ZTMI054/sagas';
 import watch_MIOA_ZTMI055_SagaAsync from './MIOA_ZTMI055/sagas';
 import watch_MIOA_ZTMI063_SagaAsync from './MIOA_ZTMI063/sagas';
+import watch_ZTMI240_SagaAsync from './ZTMI240/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -39,5 +40,6 @@ export default function* rootSagas(): SagaIterator {
     call(watch_MIOA_ZTMI054_SagaAsync),
     call(watch_MIOA_ZTMI055_SagaAsync),
     call(watch_MIOA_ZTMI063_SagaAsync),
+    call(watch_ZTMI240_SagaAsync),
   ]);
 }

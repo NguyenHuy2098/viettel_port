@@ -551,6 +551,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     );
     let newPackageItem011 = {
       COD: '',
+      COMODITY_CODE: 'V04', // Nhóm hàng hóa (tham chiếu trong bảng)
+      COMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
       Currency: '',
       Dimension_UoM: '',
       Goods_value: '',
@@ -569,6 +571,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       forEach(payloadPackageItemArr, (item: PackageItemInputType): void => {
         newPackageItem011 = {
           COD: '',
+          COMODITY_CODE: 'V04', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
           Currency: '',
           Dimension_UoM: '',
           Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
@@ -585,17 +589,16 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       });
     }
     const api011Payload = {
-      COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-      COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
-      Destination_city: provinceIdReceiver,
-      Destination_country: 'VN',
+      Destination_city: quocGia,
+      Destination_country: quocGia,
       Destination_district: districtIdReceiver,
       Destination_Ward: wardIdReceiver,
+      FWO_type: 'V004',
       loc_id: '',
       Movement_type: 'ZDD',
       Ordering_party: '9999999999',
       item: newArr011,
-      Sales_org: '50000005',
+      Sales_org: '',
       Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
       Source_city: provinceIdSender,
       Source_country: 'VN',
@@ -651,7 +654,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V05',
             );
             setTransportMethodArr(thisTransportMethodArr);
-            setPhuongThucVanChuyen(get(thisTransportMethodArr, '[0]', ''));
+            setPhuongThucVanChuyen(get(thisTransportMethodArr, '[0].SERVICE_TYPE', ''));
           },
         },
       ),
@@ -733,6 +736,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
     setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
     setProvinceIdReceiver(join(slice(thisValue, 110, 190), ''));
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
     if (isSubmit) {
       setCount(count + 1);
@@ -809,7 +814,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           toggleModalApiCreateSuccess();
         },
         onFailure: (error: HttpRequestErrorType): void => {
-          alert(error.messages);
+          alert(error.message);
         },
       }),
     );

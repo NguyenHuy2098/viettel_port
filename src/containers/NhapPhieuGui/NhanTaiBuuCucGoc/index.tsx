@@ -1,13 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import { Badge, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classNames from 'classnames';
+import { useSelector } from 'react-redux';
+import { select_CountZTMI0240 } from 'redux/ZTMI240/selectors';
 import QuetMa from './QuetMa';
-import DanhSachBangKe from './DanhSachBangKe';
+import PhieuGuiChuaDongBangKe from './PhieuGuiChuaDongBangKe';
 
 // eslint-disable-next-line max-lines-per-function
 function NhanTaiBuuCucGoc(): JSX.Element {
   const { t } = useTranslation();
+  const listPhieuGuiChuaDongBangKeCount = useSelector(select_CountZTMI0240);
 
   function renderTitle(): JSX.Element {
     return (
@@ -41,6 +44,7 @@ function NhanTaiBuuCucGoc(): JSX.Element {
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Phiếu gửi chưa đóng bảng kê')}
+              <Badge color="primary">{listPhieuGuiChuaDongBangKeCount}</Badge>
             </NavLink>
           </NavItem>
         </Nav>
@@ -49,7 +53,7 @@ function NhanTaiBuuCucGoc(): JSX.Element {
             <QuetMa />
           </TabPane>
           <TabPane tabId={2}>
-            <DanhSachBangKe />
+            <PhieuGuiChuaDongBangKe />
           </TabPane>
         </TabContent>
       </div>

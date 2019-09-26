@@ -560,7 +560,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Bưu cục')}:
             </Col>
             <Col xs="12" sm="8">
-              BNE (Api trả thiếu)
+              {packageInformation && packageInformation.SOURCE_PO_ID}
             </Col>
           </Row>
         </div>

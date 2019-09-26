@@ -21,6 +21,7 @@ const sapApis = [
   'MIOA_ZTMI054',
   'MIOA_ZTMI055',
   'MIOA_ZTMI063',
+  'ZTMI240',
 ];
 
 /**
