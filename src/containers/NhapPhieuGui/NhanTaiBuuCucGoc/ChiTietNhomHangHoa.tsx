@@ -34,7 +34,7 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
       IV_NO_PER_PAGE: '10',
     };
     dispatch(action_ZTMI241(payload));
-  }, [dispatch]);
+  }, [dispatch, childs]);
 
   const data = useSelector(select_ZTMI241);
 
