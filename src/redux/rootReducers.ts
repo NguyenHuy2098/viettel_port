@@ -12,6 +12,7 @@ import MIOA_ZTMI045 from './MIOA_ZTMI045/reducers';
 import MIOA_ZTMI054 from './MIOA_ZTMI054/reducers';
 import MIOA_ZTMI055 from './MIOA_ZTMI055/reducers';
 import ZTMI240 from './ZTMI240/reducers';
+import ZTMI241 from './ZTMI241/reducers';
 
 interface RootState {
   auth: UserState;
@@ -26,6 +27,7 @@ interface RootState {
   MIOA_ZTMI054: MIOAZTMI054StateType;
   MIOA_ZTMI055: MIOAZTMI055StateType;
   ZTMI240: MTZTMI240Row[];
+  ZTMI241: API.MTZTMI241OUT;
 }
 
 function createRootReducers(history: History): Reducer<RootState> {
@@ -43,6 +45,7 @@ function createRootReducers(history: History): Reducer<RootState> {
     MIOA_ZTMI054,
     MIOA_ZTMI055,
     ZTMI240,
+    ZTMI241,
   });
 }
 

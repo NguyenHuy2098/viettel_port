@@ -33,6 +33,7 @@ export const NHAP_PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te/tao-d
 export const PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te/:idDonHang`;
 export const NHAP_TU_FILE_EXCEL = `${NHAP_PHIEU_GUI}/nhap-tu-file-excel`;
 export const NHAN_TAI_BUU_CUC_GOC = `${NHAP_PHIEU_GUI}/nhan-tai-buu-cuc-goc`;
+export const CHI_TIET_NHOM_HANG_HOA = `${NHAP_PHIEU_GUI}/chi-tiet-nhom-hang-hoa`;
 
 export const DIEU_HANH = '/dieu-hanh';
 export const BIEN_BAN_NOI_BO = `${DIEU_HANH}/bien-ban-noi-bo`;
@@ -106,6 +107,7 @@ export default {
   PHIEU_GUI_QUOC_TE,
   NHAP_TU_FILE_EXCEL,
   NHAN_TAI_BUU_CUC_GOC,
+  CHI_TIET_NHOM_HANG_HOA,
   /**
    * Điều hành
    */

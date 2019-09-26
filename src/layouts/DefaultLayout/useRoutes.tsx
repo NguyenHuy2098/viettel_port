@@ -65,6 +65,10 @@ const NhanTaiBuuCucGoc = Loadable({
   loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc'),
   loading: Loading,
 });
+const ChiTietNhomHangHoa = Loadable({
+  loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc/ChiTietNhomHangHoa'),
+  loading: Loading,
+});
 
 // =============== KhaiThacDi =====================
 
@@ -279,6 +283,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.BAO_CAO, name: t('Báo cáo'), component: BaoCao },
     { path: routesMap.NHAN_TAI_BUU_CUC_GOC, name: t('Quét mã phiếu gửi'), component: NhanTaiBuuCucGoc },
     { path: routesMap.PHAN_CONG_PHAT_NHAN, name: t('Phân công phát nhận'), component: PhanCongPhatNhan },
+    { path: routesMap.CHI_TIET_NHOM_HANG_HOA, name: t('Chi tiết nhóm hàng hóa'), component: ChiTietNhomHangHoa },
   ];
 };
 

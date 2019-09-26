@@ -1,5 +1,9 @@
 /* eslint-disable max-lines, @typescript-eslint/interface-name-prefix, @typescript-eslint/no-explicit-any */
 declare namespace API {
+  export interface CHILD {
+    USER?: string;
+    NO_ITEM?: string;
+  }
   export interface Child {
     TOR_ID?: string;
     TOR_TYPE?: string;
@@ -118,7 +122,8 @@ declare namespace API {
     Weight_UoM?: string;
     Dimension_UoM?: string;
     quantity?: string;
-    COMMODITY_TYPE?: string;
+    Comodity_type?: string;
+    Comodity_code?: string;
   }
   export interface ItemZTMI012 {
     Flag?: string;
@@ -1414,6 +1419,29 @@ declare namespace API {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI068OUT[];
   }
+  export interface MTZTMI236OUT {
+    EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE[];
+    Row?: RowMTZTMI236OUT[];
+    PAGING?: PagingZTMI054;
+  }
+  export interface MTZTMI239OUT {
+    EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE[];
+    PACKAGE_ID?: string;
+    CONTENT?: string;
+  }
+  export interface MTZTMI240OUT {
+    EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE[];
+    Row?: RowMTZTMI240OUT[];
+  }
+  export interface MTZTMI241OUT {
+    EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE[];
+    Row?: RowMTZTMI241OUT[];
+    PAGING?: PagingZTMI054;
+  }
   export interface PAGING {
     IV_PAGENO?: number; // int32
     IV_NO_PER_PAGE?: number; // int32
@@ -1443,6 +1471,11 @@ declare namespace API {
     IV_NO_PER_PAGE?: string;
     EV_TOTAL_PAGE?: string;
     EV_TOTAL_ITEM?: string;
+  }
+  export interface RECEIVER {
+    RECEIVER_NAME?: string;
+    RECEIVER_PHONE?: string;
+    RECEIVER_ADDRESS?: string;
   }
   export interface RETURNMESSAGE {
     /**
@@ -1754,6 +1787,32 @@ declare namespace API {
     SERVICE_GROUP_DES?: string;
     TARGET_TIME?: string;
   }
+  export interface RowMTZTMI236OUT {
+    PACKAGE_ID?: string;
+    FREIGHT_UNIT?: string;
+    FREIGHT_UNIT_STATUS?: string;
+    FREIGHT_UNIT_TYPE?: string;
+    QUANTITY?: string;
+    GROSS_WEIGHT?: string;
+    CREADTED_ON?: string;
+    NEXT_LOC?: string;
+    SENDER?: SENDER;
+    RECEIVER?: RECEIVER;
+  }
+  export interface RowMTZTMI240OUT {
+    COMM_LOC_GROUP?: string;
+    TOTAL_ITEM?: string;
+    CHILD?: CHILD[];
+  }
+  export interface RowMTZTMI241OUT {
+    FREIGHT_UNIT?: string;
+    PACKAGE_ID?: string;
+    QUANTITY?: string;
+    GROSS_WEIGHT?: string;
+    USER?: string;
+    MANIFEST_LOC?: string;
+    CREATED_ON?: string;
+  }
   export interface RowRequestZTMI018 {
     /**
      * Mã chuyển thư
@@ -1944,6 +2003,30 @@ declare namespace API {
      * Mã bưu cục gốc
      */
     SALES_OFF_ID?: number; // int32
+    /**
+     * Hàng giá trị cao
+     */
+    DEFINE_GTC?: string;
+    /**
+     * Parent
+     */
+    PARENT_TOR?: string;
+    /**
+     * Parent tor type
+     */
+    PARENT_TOR_TYPE?: string;
+    /**
+     * Exec location
+     */
+    RECENT_LOC?: string;
+    /**
+     * Destination location
+     */
+    DEST_LOC?: string;
+    /**
+     * Child count ( trường hợp FU ko đếm child)
+     */
+    CHILD_COUNT?: string;
   }
   export interface RowResponseZTMI024 {
     /**
@@ -2200,6 +2283,11 @@ declare namespace API {
     Message?: string;
     Id?: string;
     Number?: string;
+  }
+  export interface SENDER {
+    SENDER_NAME?: string;
+    SENDER_PHONE?: string;
+    SENDER_ADDRESS?: string;
   }
   export interface SIOAZFII016Request {
     Row?: RowZFII016;
@@ -2550,6 +2638,162 @@ declare namespace API {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI067OUT[];
     RETURN_MESSAGE?: RETURNMESSAGE;
+  }
+  export interface ZTMI236Request {
+    /**
+     * Mã bưu gửi
+     */
+    IV_PACKAGE_ID?: string;
+    /**
+     * Loại bưu gửi
+     */
+    IV_FREIGHT_UNIT_TYPE?: string;
+    /**
+     * Trạng thái bưu gửi
+     */
+    IV_FREIGHT_UNIT_STATUS?: string[];
+    /**
+     * Location hiện tại của bưu gửi
+     */
+    IV_LOC_ID?: string;
+    /**
+     * Khung thời gian quét
+     */
+    IV_FR_DATE?: string;
+    /**
+     * Khung thời gian quét
+     */
+    IV_TO_DATE?: string;
+    /**
+     * Số trang cần hiển thị
+     */
+    IV_PAGE_NO?: string;
+    /**
+     * Số record cần hiển thị
+     */
+    IV_NO_PER_PAGE?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZTMI236Response {
+    MT_ZTMI236_OUT?: MTZTMI236OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZTMI239Request {
+    /**
+     * Mã bưu gửi
+     */
+    IV_PACKAGE_ID?: string;
+    /**
+     * Mã nhân viên quét bưu
+     */
+    IV_USER?: string;
+    /**
+     * Trạng thái: 1 là Create
+     */
+    IV_FLAG?: string;
+    /**
+     * Loại hàng hóa
+     */
+    IV_COMMODITY?: string;
+    /**
+     * Loại dịch vụ
+     */
+    IV_SERVICE?: string;
+    /**
+     * Thông tin line
+     */
+    IV_LINE?: string;
+    /**
+     * Điểm đóng bảng kê đến
+     */
+    IV_MANIFEST_LOC?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZTMI239Response {
+    MT_ZTMI239_OUT?: MTZTMI239OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZTMI240Request {
+    /**
+     * Trạng thái bưu gửi
+     */
+    IV_FREIGHT_UNIT_STATUS?: string[];
+    /**
+     * Mã location hiện tại
+     */
+    IV_LOC_ID?: string;
+    /**
+     * Thời gian quét bưu phẩm
+     */
+    IV_DATE?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZTMI240Response {
+    MT_ZTMI240_OUT?: MTZTMI240OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZTMI241Request {
+    /**
+     * Mã bưu gửi
+     */
+    IV_PACKAGE_ID?: string;
+    /**
+     * Trạng thái bưu gửi
+     */
+    IV_FREIGHT_UNIT_STATUS?: string[];
+    /**
+     * Mã location hiện tại
+     */
+    IV_LOC_ID?: string;
+    /**
+     * Nhóm hàng hóa + location đóng bảng kê đến
+     */
+    IV_COMMODITY_GROUP?: string;
+    /**
+     * Ngày quét bưu gửi
+     */
+    IV_DATE?: string;
+    /**
+     * Mã nhân viên quét bưu
+     */
+    IV_USER?: string;
+    /**
+     * Số trang cần hiển thị
+     */
+    IV_PAGE_NO?: string;
+    /**
+     * Số record cần hiển thị
+     */
+    IV_NO_PER_PAGE?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZTMI241Response {
+    MT_ZTMI241_OUT?: MTZTMI241OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
   }
 }
 declare namespace Paths {
@@ -3013,6 +3257,50 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.UserVoSoAddOrChangeResponse;
+    }
+  }
+  namespace ZTMI236 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZTMI236Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZTMI236Response;
+    }
+  }
+  namespace ZTMI239 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZTMI239Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZTMI239Response;
+    }
+  }
+  namespace ZTMI240 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZTMI240Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZTMI240Response;
+    }
+  }
+  namespace ZTMI241 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZTMI241Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZTMI241Response;
     }
   }
 }

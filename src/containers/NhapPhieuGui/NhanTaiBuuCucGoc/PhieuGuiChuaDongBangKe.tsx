@@ -29,7 +29,7 @@ function PhieuGuiChuaDongBangKe(): JSX.Element {
 
   const handleRedirectDetail = useCallback(
     (item: MTZTMI240Row): void => {
-      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: item.TOTAL_ITEM })));
+      dispatch(push(generatePath(routesMap.CHI_TIET_NHOM_HANG_HOA), item.CHILD));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [listPhieuGuiChuaDongBangKe],
@@ -66,8 +66,10 @@ function PhieuGuiChuaDongBangKe(): JSX.Element {
       COMM_LOC_GROUP: item.COMM_LOC_GROUP,
       TOTAL_ITEM: item.TOTAL_ITEM,
       DES: thisDes,
+      CHILD: item.CHILD,
     };
   });
+
   return (
     <>
       <Row className="sipTableContainer mt-3 sipTableRowClickable">
