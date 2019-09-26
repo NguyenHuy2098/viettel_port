@@ -61,8 +61,8 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           // IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_FR_DATE: moment()
             .subtract(7, 'day')
-            .format(' YYYYMMDD'),
-          IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
+            .format('YYYYMMDD'),
+          IV_TO_DATE: trim(toString(moment().format('YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
           ...payload,

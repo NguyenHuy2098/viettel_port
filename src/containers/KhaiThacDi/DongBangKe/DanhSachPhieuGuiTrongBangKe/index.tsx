@@ -311,6 +311,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     setShowPopUpGanTaiVaoChuyenThu(false);
   }, []);
 
+  // eslint-disable-next-line max-lines-per-function
   const handleActionDongBangKeWithoutRemovePhieuGui = (taiID: string): void => {
     dispatch(
       action_MIOA_ZTMI016(
@@ -330,16 +331,29 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         },
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
-                type: 'success',
-              },
-            );
+            if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongBangKe',
+                  type: 'success',
+                },
+              );
+            } else {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongBangKe',
+                  type: 'error',
+                },
+              );
+            }
           },
           onFailure: (error: Error): void => {
             toast(
@@ -372,7 +386,47 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     // remove các phiếu gửi không được tích
     dispatch(
       action_MIOA_ZTMI016(a, {
-        onSuccess: (): void => {
+        // eslint-disable-next-line max-lines-per-function
+        onSuccess: (data: API.MIOAZTMI016Response): void => {
+          if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+            toast(
+              <>
+                <i className="fa check mr-2" />
+                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'success',
+              },
+            );
+          } else {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'error',
+              },
+            );
+          }
+        },
+        onFailure: (error: Error): void => {
+          toast(
+            <>
+              <i className="fa fa-window-close-o mr-2" />
+              {get(error, 'messages[0]', 'Đã có lỗi xảy ra trong quá trình xóa')}
+            </>,
+            {
+              containerId: 'DanhSachPhieuGuiTrongBangKe',
+              type: 'error',
+            },
+          );
+        },
+        // eslint-disable-next-line max-lines-per-function
+        onFinish: (): void => {
+          // gan bang ke vao tai
           dispatch(
             action_MIOA_ZTMI016(
               {
@@ -391,8 +445,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
               },
               {
                 onSuccess: (data: API.MIOAZTMI016Response): void => {
-                  getListPhieuGui();
-                  if (size(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE')) > 0) {
+                  if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
                     toast(
                       <>
                         <i className="fa check mr-2" />
@@ -403,6 +456,17 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                         type: 'success',
                       },
                     );
+                  } else {
+                    toast(
+                      <>
+                        <i className="fa fa-window-close-o mr-2" />
+                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                      </>,
+                      {
+                        containerId: 'DanhSachPhieuGuiTrongBangKe',
+                        type: 'error',
+                      },
+                    );
                   }
                 },
                 onFailure: (error: Error): void => {
@@ -411,9 +475,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
               },
             ),
           );
-        },
-        onFailure: (error: Error): void => {
-          alert(error.message);
+          getListPhieuGui();
         },
       }),
     );
@@ -475,7 +537,21 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                       },
                       {
                         // eslint-disable-next-line max-lines-per-function
-                        onSuccess: (): void => {
+                        onSuccess: (): void => {},
+                        onFailure: (error: Error): void => {
+                          toast(
+                            <>
+                              <i className="fa fa-window-close-o mr-2" />
+                              {get(error, 'messages[0]', 'Đã có lỗi xảy ra trong quá trình xóa')}
+                            </>,
+                            {
+                              containerId: 'DanhSachPhieuGuiTrongBangKe',
+                              type: 'error',
+                            },
+                          );
+                        },
+                        // eslint-disable-next-line max-lines-per-function
+                        onFinish: (): void => {
                           // add bang ke hien tai vao tai moi tao
                           dispatch(
                             action_MIOA_ZTMI016(
@@ -595,7 +671,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                       </>,
                                       {
                                         containerId: 'DanhSachPhieuGuiTrongBangKe',
-                                        type: 'info',
+                                        type: 'success',
                                       },
                                     );
                                   } else {
@@ -895,7 +971,21 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                     },
                     {
                       // eslint-disable-next-line max-lines-per-function
-                      onSuccess: (): void => {
+                      onSuccess: (): void => {},
+                      onFailure: (error: Error): void => {
+                        toast(
+                          <>
+                            <i className="fa fa-window-close-o mr-2" />
+                            {get(error, 'messages[0]', 'Đã có lỗi xảy ra trong quá trình xóa')}
+                          </>,
+                          {
+                            containerId: 'DanhSachPhieuGuiTrongBangKe',
+                            type: 'error',
+                          },
+                        );
+                      },
+                      // eslint-disable-next-line max-lines-per-function
+                      onFinish: (): void => {
                         // Add bang ke hien tai vao tai moi tao
                         dispatch(
                           action_MIOA_ZTMI016(

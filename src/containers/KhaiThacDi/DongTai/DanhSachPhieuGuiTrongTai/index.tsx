@@ -468,16 +468,29 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                                 },
                                 {
                                   onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                    toast(
-                                      <>
-                                        <i className="fa check mr-2" />
-                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
-                                      </>,
-                                      {
-                                        containerId: 'DanhSachPhieuGuiTrongTai',
-                                        type: 'success',
-                                      },
-                                    );
+                                    if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+                                      toast(
+                                        <>
+                                          <i className="fa check mr-2" />
+                                          {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
+                                        </>,
+                                        {
+                                          containerId: 'DanhSachPhieuGuiTrongTai',
+                                          type: 'success',
+                                        },
+                                      );
+                                    } else {
+                                      toast(
+                                        <>
+                                          <i className="fa fa-window-close-o  mr-2" />
+                                          {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
+                                        </>,
+                                        {
+                                          containerId: 'DanhSachPhieuGuiTrongTai',
+                                          type: 'error',
+                                        },
+                                      );
+                                    }
                                   },
                                 },
                               ),
