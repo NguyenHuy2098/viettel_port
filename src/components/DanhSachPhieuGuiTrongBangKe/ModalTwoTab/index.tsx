@@ -65,16 +65,15 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
     if (ghiChu.length > 40) {
       toast(
         <>
-          <i className="fa check mr-2" />
+          <i className="fa window-close-o mr-2" />
           {t('Ghi chú không được vượt quá 40 ký tự')}
         </>,
         {
           containerId: 'DanhSachPhieuGuiTrongBangKe',
-          type: 'success',
+          type: 'error',
         },
       );
-    }
-    props.onSubmitButton2(selectedPlace, ghiChu);
+    } else props.onSubmitButton2(selectedPlace, ghiChu);
   };
 
   const renderTab1 = (): React.ReactNode => {

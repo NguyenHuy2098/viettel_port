@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { forEach, get, map, noop, toString, size } from 'lodash';
+import { find, forEach, get, map, toNumber, toString, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -24,6 +24,9 @@ import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
+import { toast, ToastContainer } from 'react-toastify';
+import { makeSelectorGet_MT_ZTMI045_OUT } from '../../../../redux/MIOA_ZTMI045/selectors';
+import { action_MIOA_ZTMI045 } from '../../../../redux/MIOA_ZTMI045/actions';
 
 interface Props {
   match: match;
@@ -39,6 +42,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const idTai = get(props, 'match.params.idTai', '');
   const dataTai = useSelector(makeSelector046RowFirstChild);
   const dataTaiChild = useSelector(makeSelector046ListChildren);
+  const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOi));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -50,6 +54,21 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   );
   const [showPopupDongTai, setShowPopupDongTai] = useState<boolean>(false);
   const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
+
+  const getListDiemDen = (): void => {
+    dispatch(
+      action_MIOA_ZTMI045({
+        row: [
+          {
+            IV_LOCTYPE: 'V001, V004',
+          },
+        ],
+        IV_BP: '',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
+  };
 
   const getListChuyenThu = (): void => {
     // console.log('getListChuyenThu');
@@ -72,6 +91,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
 
   useEffect((): void => {
     getListChuyenThu();
+    getListDiemDen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -271,6 +291,76 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   }
 
+  const addTaiVaoChuyenThuDuocChon = (maTaiMoiTao: string): void => {
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '2',
+          IV_TOR_TYPE: 'ZC3',
+          IV_TOR_ID_CU: get(selectedChuyenThu, '  TOR_ID', ''),
+          IV_SLOCATION: 'BDH',
+          IV_DLOCATION: 'HUB1',
+          IV_DESCRIPTION: '',
+          T_ITEM: [
+            {
+              ITEM_ID: maTaiMoiTao,
+              ITEM_TYPE: 'ZC2',
+            },
+          ],
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongTai',
+                  type: 'success',
+                },
+              );
+            } else {
+              toast(
+                <>
+                  <i className="fa window-close-o mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongTai',
+                  type: 'error',
+                },
+              );
+            }
+          },
+        },
+      ),
+    );
+  };
+
+  const addBangKeDuocChonVaoTaiMoi = (maTaiMoiTao: string): void => {
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '2',
+          IV_TOR_TYPE: 'ZC2',
+          IV_TOR_ID_CU: maTaiMoiTao,
+          IV_SLOCATION: 'BDH',
+          IV_DLOCATION: 'HUB1',
+          IV_DESCRIPTION: '',
+          T_ITEM: forwardingItemListState,
+        },
+        {
+          onSuccess: (): void => {
+            // add tai vua tao vao chuyen thu duoc chon
+            addTaiVaoChuyenThuDuocChon(maTaiMoiTao);
+          },
+        },
+      ),
+    );
+  };
+
   const dongTaiVaoChuyenThuCoSan = (): void => {
     //Tao ngam 1 tai voi diem den cua bang ke hien tai
     dispatch(
@@ -290,11 +380,124 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           ],
         },
         {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {},
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            const maTaiMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+            // add bang ke duoc chon vao tai moi
+            addBangKeDuocChonVaoTaiMoi(maTaiMoiTao);
+          },
         },
       ),
     );
+    handleHidePopupDongTai();
   };
+  // eslint-disable-next-line max-lines-per-function
+  const dongTaiVaoChuyenThuTaoMoi = (placeName: string, ghiChu: string): void => {
+    const place = find(listDiemDen, ['DESCR40', placeName]);
+    // tao ngam 1 tai voi diem den la diem den cua bang ke hien tai
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: '1',
+          IV_TOR_TYPE: 'ZC2',
+          IV_TOR_ID_CU: '',
+          IV_SLOCATION: 'BDH',
+          IV_DLOCATION: 'HUB1',
+          IV_DESCRIPTION: '',
+          T_ITEM: [
+            {
+              ITEM_ID: '',
+              ITEM_TYPE: '',
+            },
+          ],
+        },
+        {
+          // eslint-disable-next-line max-lines-per-function
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            const maTaiMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+            // add Bang ke duoc chon vao tai moi tao
+            dispatch(
+              action_MIOA_ZTMI016(
+                {
+                  IV_FLAG: '2',
+                  IV_TOR_TYPE: 'ZC2',
+                  IV_TOR_ID_CU: maTaiMoiTao,
+                  IV_SLOCATION: 'BDH',
+                  IV_DLOCATION: 'HUB1',
+                  IV_DESCRIPTION: '',
+                  T_ITEM: forwardingItemListState,
+                },
+                {
+                  // eslint-disable-next-line max-lines-per-function
+                  onSuccess: (): void => {
+                    //Tao chuyen thu theo thong tin vua duoc chon tu pop up
+                    dispatch(
+                      action_MIOA_ZTMI016(
+                        {
+                          IV_FLAG: '1',
+                          IV_TOR_TYPE: 'ZC3',
+                          IV_TOR_ID_CU: '',
+                          IV_SLOCATION: 'BHD',
+                          IV_DLOCATION: get(place, 'LOCNO', ''),
+                          IV_DESCRIPTION: ghiChu,
+                          T_ITEM: [
+                            {
+                              ITEM_ID: '',
+                              ITEM_TYPE: '',
+                            },
+                          ],
+                        },
+                        {
+                          onSuccess: (data: API.MIOAZTMI016Response): void => {
+                            const maChuyenThuVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+                            // add tai vua tao vao chuyen thu vua tao
+                            dispatch(
+                              action_MIOA_ZTMI016(
+                                {
+                                  IV_FLAG: '2',
+                                  IV_TOR_TYPE: 'ZC3',
+                                  IV_TOR_ID_CU: maChuyenThuVuaTao,
+                                  IV_SLOCATION: 'BDH',
+                                  IV_DLOCATION: 'HUB1',
+                                  IV_DESCRIPTION: '',
+                                  T_ITEM: [
+                                    {
+                                      ITEM_ID: maTaiMoiTao,
+                                      ITEM_TYPE: 'ZC2',
+                                    },
+                                  ],
+                                },
+                                {
+                                  onSuccess: (data: API.MIOAZTMI016Response): void => {
+                                    toast(
+                                      <>
+                                        <i className="fa check mr-2" />
+                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
+                                      </>,
+                                      {
+                                        containerId: 'DanhSachPhieuGuiTrongTai',
+                                        type: 'success',
+                                      },
+                                    );
+                                  },
+                                },
+                              ),
+                            );
+                          },
+                        },
+                      ),
+                    );
+                  },
+                },
+              ),
+            );
+          },
+        },
+      ),
+    );
+
+    handleHidePopupDongTai();
+  };
+
   const dataTable = map(
     dataTaiChild,
     (item: API.Child): API.Child => {
@@ -410,11 +613,12 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         firstTabTitle={t('CHỌN CHUYẾN THƯ')}
         secondTabTitle={t('TẠO CHUYẾN THƯ MỚI')}
         onSubmitButton1={dongTaiVaoChuyenThuCoSan}
-        onSubmitButton2={noop}
+        onSubmitButton2={dongTaiVaoChuyenThuTaoMoi}
         tab1Contents={listChuyenThu}
         onChooseItemInFirstTab={handleUpdateSelectedChuyenThu}
         selectedChildInTab1={selectedChuyenThu}
       />
+      <ToastContainer containerId={'DanhSachPhieuGuiTrongTai'} />
     </>
   ) : (
     <Fade in={true} timeout={1000}>

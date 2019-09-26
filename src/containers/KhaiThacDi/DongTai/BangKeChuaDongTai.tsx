@@ -7,6 +7,7 @@ import { find, forEach, map, get, noop, size, toString, trim } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 import { toast, ToastContainer } from 'react-toastify';
+import { Cell } from 'react-table';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -14,7 +15,6 @@ import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selec
 import { SipDataState, SipDataType } from 'utils/enums';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
-import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
