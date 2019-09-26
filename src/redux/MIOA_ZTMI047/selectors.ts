@@ -146,7 +146,7 @@ export const makeSelectorCountTaiChuaNhanBangKePhieuGui = (state: AppStateType):
  */
 export const makeSelectorBangKeChuaNhanPhieuGui = (state: AppStateType): API.RowMTZTMI047OUT[] => {
   return filter(
-    makeSelectorRow(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN)(state),
+    makeSelectorRow(SipDataType.BANG_KE, SipDataState.BANG_KE_DA_QUET_NHAN)(state),
     (tai: API.RowMTZTMI047OUT): boolean => {
       return !isEmpty(
         filter(get(tai, 'Childs'), (child: API.Child) => {
