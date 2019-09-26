@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useEffect } from 'react';
-import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'reactstrap';
+import { Row, TabContent, Col, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -86,10 +86,10 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Nhận bảng kê / phiếu gửi')}</h1>
-        <div className="sipTitleRightBlockInput m-0">
+        <Col xl={2} className="sipTitleRightBlockInput m-0 p-0">
           <i className="fa fa-search" />
           <Input type="text" placeholder={t('Tra cứu bảng kê/phiếu gửi ')} onKeyUp={handleForwardingSearch} />
-        </div>
+        </Col>
       </Row>
       <div className="sipTabContainer sipFlatContainer">
         <Nav tabs>
