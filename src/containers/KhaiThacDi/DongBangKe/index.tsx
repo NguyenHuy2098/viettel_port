@@ -15,6 +15,7 @@ import { generatePath } from 'react-router';
 import { SipDataState, SipDataType } from 'utils/enums';
 import queryString from 'query-string';
 import { History } from 'history';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
@@ -28,6 +29,7 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const tabParams = queryString.parse(get(props, 'history.location.search', {}));
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const getListBangKe = useCallback(
     function(): void {
@@ -35,7 +37,7 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC1',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
@@ -44,7 +46,8 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
         }),
       );
     },
-    [dispatch],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dispatch, userMaBp],
   );
 
   const [tab, setTab] = useState<number>(1);

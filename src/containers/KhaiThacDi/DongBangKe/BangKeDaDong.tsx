@@ -13,11 +13,13 @@ import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { SipDataState, SipDataType } from 'utils/enums';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listBangKeDaDong = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.DA_DONG));
   const countBangKeDaDong = useSelector(makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.DA_DONG));
@@ -37,7 +39,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC1',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '102',
           IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
@@ -47,10 +49,10 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
         }),
       );
     },
-    [dispatch],
+    [dispatch, userMaBp],
   );
 
-  useEffect((): void => getListBangKe(), [getListBangKe]);
+  useEffect((): void => getListBangKe(), [getListBangKe, userMaBp]);
 
   function handleSearchBangKe(): void {
     const payload = {

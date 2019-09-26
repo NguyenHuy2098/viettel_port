@@ -10,12 +10,14 @@ import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
 import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const QuetMa: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const [codeChuyenThu, setCodeChuyenThu] = useState<string>('4800000278');
 
@@ -37,7 +39,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                 alert('Error at step 1');
                 alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
               } else {
-                if (get(data, 'MT_ZTMI023_OUT.row[0].EXT_LOG_ID', '') === 'BDH') {
+                if (get(data, 'MT_ZTMI023_OUT.row[0].EXT_LOG_ID', '') === userMaBp) {
                   const thisTorId = get(data, 'MT_ZTMI023_OUT.row[0].TOR_ID', '');
                   dispatch(
                     action_MIOA_ZTMI063(
@@ -45,7 +47,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                         row: {
                           TOR_ID: thisTorId,
                         },
-                        IV_LOC_ID: 'BDH',
+                        IV_LOC_ID: userMaBp,
                         IV_USER: '',
                       },
                       {
@@ -63,7 +65,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                     ),
                   );
                 } else {
-                  alert("EXT_LOG_ID không khớp với bưu cục hiện tại (đang fake là 'BDH')");
+                  alert('EXT_LOG_ID không khớp với bưu cục hiện tại');
                 }
               }
             } else {

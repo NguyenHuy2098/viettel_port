@@ -17,11 +17,13 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
@@ -55,7 +57,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: moment()
             .subtract(7, 'day')
@@ -68,7 +70,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch],
+    [dispatch, userMaBp],
   );
 
   useEffect((): void => getListTai(), [getListTai]);

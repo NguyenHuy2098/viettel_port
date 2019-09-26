@@ -363,6 +363,10 @@ input.form-control:-moz-placeholder {
     }
   }
 }
+.sipSelectForwardingItemContainer {
+  overflow: auto;
+  max-height: 450px;
+}
 .sipTableContainer {
   display: block;
   background: #fff;

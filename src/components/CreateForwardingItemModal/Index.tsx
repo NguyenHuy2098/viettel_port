@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 interface Props {
   onHide: () => void;
@@ -19,6 +20,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { onHide, onSuccessCreated, visible, modalTitle, IV_TOR_TYPE } = props;
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const postOfficeList = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
 
@@ -34,7 +36,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     IV_FLAG: '1',
     IV_TOR_TYPE: IV_TOR_TYPE,
     IV_TOR_ID_CU: '',
-    IV_SLOCATION: 'BDH',
+    IV_SLOCATION: userMaBp,
     IV_DLOCATION: destination,
     IV_DESCRIPTION: note,
     T_ITEM: [

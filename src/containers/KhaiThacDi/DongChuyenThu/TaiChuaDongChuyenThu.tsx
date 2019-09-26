@@ -20,6 +20,7 @@ import { generatePath } from 'react-router-dom';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -27,6 +28,7 @@ let forwardingItemList: ForwardingItem[] = [];
 const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
@@ -39,6 +41,15 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
+  const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
+
+  useEffect((): void => {
+    if (forwardingItemListState.length > 0) {
+      setDisableFunctionalButton(false);
+    } else {
+      setDisableFunctionalButton(true);
+    }
+  }, [forwardingItemListState]);
 
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
@@ -76,7 +87,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
@@ -87,7 +98,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch],
+    [dispatch, userMaBp],
   );
 
   function onSuccessSelectedForwardingItem(): void {
@@ -154,7 +165,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         IV_FLAG: '1',
         IV_TOR_TYPE: 'ZC3',
         IV_TOR_ID_CU: '',
-        IV_SLOCATION: 'BHD',
+        IV_SLOCATION: userMaBp,
         IV_DLOCATION: 'HUB1',
         IV_DESCRIPTION: '',
         T_ITEM: [
@@ -177,7 +188,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
                   IV_FLAG: '2',
                   IV_TOR_TYPE: 'ZC3',
                   IV_TOR_ID_CU: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
-                  IV_SLOCATION: 'BHD',
+                  IV_SLOCATION: userMaBp,
                   IV_DLOCATION: 'HUB1',
                   IV_DESCRIPTION: '',
                   T_ITEM: forwardingItemListState,
@@ -369,11 +380,16 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
           </div>
         </Col>
         <Col xl={6} lg={4} xs={12} className="p-0 text-right">
-          <Button color="primary" className="ml-2" onClick={handleChuyenVaoChuyenThu}>
+          <Button
+            color="primary"
+            className="ml-2"
+            onClick={handleChuyenVaoChuyenThu}
+            disabled={disableFunctionalButton}
+          >
             <i className="fa fa-download mr-2 rotate-90"></i>
             {t('Chuyển vào chuyến thư')}
           </Button>
-          <Button color="primary" className="ml-2" onClick={handleDongChuyenThu}>
+          <Button color="primary" className="ml-2" onClick={handleDongChuyenThu} disabled={disableFunctionalButton}>
             <i className="fa fa-truck mr-2"></i>
             {t('Đóng chuyến thư')}
           </Button>
@@ -402,7 +418,7 @@ const TaiChuaDongChuyenThu: React.FC = (): JSX.Element => {
         modalTitle={t('Chọn chuyến thư')}
         forwardingItemList={forwardingItemListState}
         IV_TOR_TYPE="ZC3"
-        IV_FR_LOC_ID="HUB1"
+        IV_FR_LOC_ID={userMaBp}
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
       />

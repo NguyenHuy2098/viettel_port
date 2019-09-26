@@ -14,11 +14,13 @@ import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { SipDataState, SipDataType } from 'utils/enums';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listTaiDaDong = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
   const countTaiDaDong = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
@@ -38,7 +40,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '103',
           IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
@@ -49,7 +51,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch],
+    [dispatch, userMaBp],
   );
 
   useEffect((): void => getListTai(), [getListTai]);

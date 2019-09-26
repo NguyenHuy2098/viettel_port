@@ -9,11 +9,13 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
   const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);
@@ -22,7 +24,7 @@ const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
     const payload = {
       IV_TOR_ID: event.target.value,
       IV_TOR_TYPE: 'ZC1',
-      IV_FR_LOC_ID: 'BDH',
+      IV_FR_LOC_ID: userMaBp,
       IV_CUST_STATUS: '101',
     };
     dispatch(action_MIOA_ZTMI047(payload));
@@ -63,7 +65,7 @@ const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
             const payload = {
               IV_TOR_ID: '',
               IV_TOR_TYPE: 'ZC1',
-              IV_FR_LOC_ID: 'BDH',
+              IV_FR_LOC_ID: userMaBp,
               IV_CUST_STATUS: '101',
             };
             dispatch(action_MIOA_ZTMI047(payload));

@@ -7,6 +7,7 @@ import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import moment from 'moment';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 interface Props {
   onHide: () => void;
@@ -25,6 +26,7 @@ interface Props {
 const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
   const {
     onHide,
     onSuccessSelected,
@@ -76,7 +78,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       IV_FLAG: '2',
       IV_TOR_TYPE: TorTypeChuyenVao ? TorTypeChuyenVao : IV_TOR_TYPE,
       IV_TOR_ID_CU: radioTorId,
-      IV_SLOCATION: 'BDH',
+      IV_SLOCATION: userMaBp,
       IV_DLOCATION: 'HUB1',
       IV_DESCRIPTION: '',
       T_ITEM: forwardingItemList,
@@ -102,7 +104,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
   return (
     <Modal isOpen={visible} className="sipTitleModalCreateNew">
       <ModalHeader toggle={onHide}>{modalTitle}</ModalHeader>
-      <ModalBody>
+      <ModalBody className="sipSelectForwardingItemContainer">
         <FormGroup>
           {map(
             listForwardingItemChuaHoanThanh,

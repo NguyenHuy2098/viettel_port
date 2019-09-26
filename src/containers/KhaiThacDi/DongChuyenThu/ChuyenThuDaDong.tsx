@@ -13,11 +13,13 @@ import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuDaDong: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listChuyenThuDaDong = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU));
   const countChuyenThuDaDong = useSelector(
@@ -39,7 +41,7 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC3',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '104',
           IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
@@ -49,7 +51,8 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
         }),
       );
     },
-    [dispatch],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [dispatch, userMaBp],
   );
 
   useEffect((): void => {

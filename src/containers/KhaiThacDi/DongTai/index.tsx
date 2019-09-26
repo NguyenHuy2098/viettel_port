@@ -16,6 +16,7 @@ import moment from 'moment';
 import { generatePath } from 'react-router';
 import routesMap from 'utils/routesMap';
 import { SipDataState, SipDataType } from 'utils/enums';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';
@@ -30,6 +31,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const tabParams = queryString.parse(get(props, 'history.location.search', {}));
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const getListTai = useCallback(
     function(): void {
@@ -37,7 +39,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: trim(toString(moment().format(' YYYYMMDD'))),
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
@@ -47,7 +49,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch],
+    [dispatch, userMaBp],
   );
 
   const [tab, setTab] = useState<number>(1);

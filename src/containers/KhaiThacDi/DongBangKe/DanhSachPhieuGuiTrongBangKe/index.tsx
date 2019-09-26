@@ -37,6 +37,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 const forwardingItemList: ForwardingItem[] = [];
 
@@ -48,6 +49,7 @@ interface Props {
 const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
@@ -108,7 +110,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           .format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_TOR_TYPE: 'ZC3',
-        IV_FR_LOC_ID: 'BDH',
+        IV_FR_LOC_ID: userMaBp,
         IV_TO_LOC_ID: '',
         IV_CUST_STATUS: '101',
         IV_PAGENO: '1',
@@ -154,7 +156,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     const value = event.currentTarget.value;
     setUncheckAllForwardingItemCheckbox(undefined);
     if (event.currentTarget.checked) {
-      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC1' });
+      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: '' });
     } else {
       forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
         if (get(item, 'ITEM_ID') === value) {
@@ -212,7 +214,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           .format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_TOR_TYPE: 'ZC2',
-        IV_FR_LOC_ID: 'BDH',
+        IV_FR_LOC_ID: userMaBp,
         IV_TO_LOC_ID: '',
         IV_CUST_STATUS: '101',
         IV_PAGENO: '1',
@@ -234,7 +236,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           IV_FLAG: '1',
           IV_TOR_TYPE: 'ZC2',
           IV_TOR_ID_CU: '',
-          IV_SLOCATION: 'BHD',
+          IV_SLOCATION: userMaBp,
           IV_DLOCATION: get(place, 'LOCNO', ''),
           IV_DESCRIPTION: ghiChu,
           T_ITEM: [
@@ -319,7 +321,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           IV_FLAG: '2',
           IV_TOR_TYPE: 'ZC2',
           IV_TOR_ID_CU: toString(taiID),
-          IV_SLOCATION: 'BDH',
+          IV_SLOCATION: userMaBp,
           IV_DLOCATION: 'HUB1',
           IV_DESCRIPTION: '',
           T_ITEM: [
@@ -378,7 +380,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       IV_FLAG: '4',
       IV_TOR_TYPE: 'ZC1',
       IV_TOR_ID_CU: idBangKe,
-      IV_SLOCATION: 'BDH',
+      IV_SLOCATION: userMaBp,
       IV_DLOCATION: 'HUB1',
       IV_DESCRIPTION: '',
       T_ITEM: listUncheckForwardingItem,
@@ -433,7 +435,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 IV_FLAG: '2',
                 IV_TOR_TYPE: 'ZC2',
                 IV_TOR_ID_CU: toString(taiID),
-                IV_SLOCATION: 'BDH',
+                IV_SLOCATION: userMaBp,
                 IV_DLOCATION: 'HUB1',
                 IV_DESCRIPTION: '',
                 T_ITEM: [
@@ -507,7 +509,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             IV_FLAG: '1',
             IV_TOR_TYPE: 'ZC2',
             IV_TOR_ID_CU: '',
-            IV_SLOCATION: 'BDH',
+            IV_SLOCATION: userMaBp,
             IV_DLOCATION: 'HUB1',
             IV_DESCRIPTION: '',
             T_ITEM: [
@@ -530,7 +532,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                         IV_FLAG: '4',
                         IV_TOR_TYPE: 'ZC1',
                         IV_TOR_ID_CU: idBangKe,
-                        IV_SLOCATION: 'BDH',
+                        IV_SLOCATION: userMaBp,
                         IV_DLOCATION: 'HUB1',
                         IV_DESCRIPTION: '',
                         T_ITEM: listUncheckForwardingItem,
@@ -559,7 +561,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                 IV_FLAG: '2',
                                 IV_TOR_TYPE: 'ZC2',
                                 IV_TOR_ID_CU: maTaiVuaTao || '',
-                                IV_SLOCATION: 'BDH',
+                                IV_SLOCATION: userMaBp,
                                 IV_DLOCATION: 'HUB1',
                                 IV_DESCRIPTION: '',
                                 T_ITEM: [
@@ -578,7 +580,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                         IV_FLAG: '2',
                                         IV_TOR_TYPE: 'ZC3',
                                         IV_TOR_ID_CU: maChuyenThu || '',
-                                        IV_SLOCATION: 'BDH',
+                                        IV_SLOCATION: userMaBp,
                                         IV_DLOCATION: 'HUB1',
                                         IV_DESCRIPTION: '',
                                         T_ITEM: [
@@ -632,7 +634,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                         IV_FLAG: '2',
                         IV_TOR_TYPE: 'ZC2',
                         IV_TOR_ID_CU: maTaiVuaTao || '',
-                        IV_SLOCATION: 'BDH',
+                        IV_SLOCATION: userMaBp,
                         IV_DLOCATION: 'HUB1',
                         IV_DESCRIPTION: '',
                         T_ITEM: [
@@ -651,7 +653,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                 IV_FLAG: '2',
                                 IV_TOR_TYPE: 'ZC3',
                                 IV_TOR_ID_CU: maChuyenThu || '',
-                                IV_SLOCATION: 'BDH',
+                                IV_SLOCATION: userMaBp,
                                 IV_DLOCATION: 'HUB1',
                                 IV_DESCRIPTION: '',
                                 T_ITEM: [
@@ -717,7 +719,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          <Button onClick={handleChuyenVaoBangKe}>
+          <Button onClick={handleChuyenVaoBangKe} disabled={disableButtonDongBangKe}>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển bảng kê')}
           </Button>
@@ -846,8 +848,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const dataTable = map(
     dataBangKeChild,
     (item: API.Child): API.Child => {
+      const checkIfDashExistPackageId = findIndex(item.PACKAGE_ID, (item: string): boolean => {
+        return item === '_';
+      });
       return {
         TOR_ID: item.TOR_ID ? item.TOR_ID : '',
+        PACKAGE_ID: item.PACKAGE_ID
+          ? checkIfDashExistPackageId === -1
+            ? item.PACKAGE_ID
+            : join(slice(item.PACKAGE_ID, 0, checkIfDashExistPackageId), '')
+          : '',
         DES_LOC_IDTRQ: item.DES_LOC_IDTRQ ? item.DES_LOC_IDTRQ : '',
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
@@ -867,7 +877,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     //eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'select',
+        id: 'TOR_ID',
+        accessor: 'TOR_ID',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <Label check>
@@ -883,7 +894,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       },
       {
         Header: t('Mã phiếu gửi'),
-        accessor: 'TOR_ID',
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Điểm đến'),
@@ -941,7 +952,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           IV_FLAG: '1',
           IV_TOR_TYPE: 'ZC2',
           IV_TOR_ID_CU: '',
-          IV_SLOCATION: 'BDH',
+          IV_SLOCATION: userMaBp,
           IV_DLOCATION: 'HUB1',
           IV_DESCRIPTION: '',
           T_ITEM: [
@@ -964,7 +975,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                       IV_FLAG: '4',
                       IV_TOR_TYPE: 'ZC1',
                       IV_TOR_ID_CU: idBangKe,
-                      IV_SLOCATION: 'BDH',
+                      IV_SLOCATION: userMaBp,
                       IV_DLOCATION: 'HUB1',
                       IV_DESCRIPTION: '',
                       T_ITEM: listUncheckForwardingItem,
@@ -993,7 +1004,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                               IV_FLAG: '2',
                               IV_TOR_TYPE: 'ZC2',
                               IV_TOR_ID_CU: maTaiVuaTao,
-                              IV_SLOCATION: 'BDH',
+                              IV_SLOCATION: userMaBp,
                               IV_DLOCATION: 'HUB1',
                               IV_DESCRIPTION: '',
                               T_ITEM: [
@@ -1013,7 +1024,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                       IV_FLAG: '1',
                                       IV_TOR_TYPE: 'ZC3',
                                       IV_TOR_ID_CU: '',
-                                      IV_SLOCATION: 'BHD',
+                                      IV_SLOCATION: userMaBp,
                                       IV_DLOCATION: get(place, 'LOCNO', ''),
                                       IV_DESCRIPTION: ghiChu,
                                       T_ITEM: [
@@ -1033,7 +1044,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                                 IV_FLAG: '2',
                                                 IV_TOR_TYPE: 'ZC3',
                                                 IV_TOR_ID_CU: maChuyenThuMoiTao,
-                                                IV_SLOCATION: 'BDH',
+                                                IV_SLOCATION: userMaBp,
                                                 IV_DLOCATION: 'HUB1',
                                                 IV_DESCRIPTION: '',
                                                 T_ITEM: [
@@ -1079,7 +1090,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                       IV_FLAG: '2',
                       IV_TOR_TYPE: 'ZC2',
                       IV_TOR_ID_CU: maTaiVuaTao,
-                      IV_SLOCATION: 'BDH',
+                      IV_SLOCATION: userMaBp,
                       IV_DLOCATION: 'HUB1',
                       IV_DESCRIPTION: '',
                       T_ITEM: [
@@ -1099,7 +1110,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                               IV_FLAG: '1',
                               IV_TOR_TYPE: 'ZC3',
                               IV_TOR_ID_CU: '',
-                              IV_SLOCATION: 'BHD',
+                              IV_SLOCATION: userMaBp,
                               IV_DLOCATION: get(place, 'LOCNO', ''),
                               IV_DESCRIPTION: ghiChu,
                               T_ITEM: [
@@ -1119,7 +1130,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                         IV_FLAG: '2',
                                         IV_TOR_TYPE: 'ZC3',
                                         IV_TOR_ID_CU: maChuyenThuMoiTao,
-                                        IV_SLOCATION: 'BDH',
+                                        IV_SLOCATION: userMaBp,
                                         IV_DLOCATION: 'HUB1',
                                         IV_DESCRIPTION: '',
                                         T_ITEM: [
@@ -1181,11 +1192,10 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         onSuccessSelected={onSuccessSelectedForwardingItem}
         visible={selectForwardingItemModal}
         onHide={toggleSelectForwardingItemModal}
-        modalTitle={t('Chọn tải')}
+        modalTitle={t('Chọn bảng kê')}
         forwardingItemList={forwardingItemListState}
         IV_TOR_TYPE="ZC1"
-        TorTypeChuyenVao="ZC2"
-        IV_FR_LOC_ID={get(dataBangKe, 'LOG_LOCID_DES', '')}
+        IV_FR_LOC_ID={userMaBp}
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
       />

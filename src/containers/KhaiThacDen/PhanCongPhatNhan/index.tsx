@@ -8,6 +8,7 @@ import classNames from 'classnames';
 import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
 import { selectPhanCongNhan } from 'redux/MIOA_ZTMI035/selectors';
 import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 import PhanCongNhan from './PhanCongNhan';
 import PhanCongPhat from './PhanCongPhat';
 
@@ -19,6 +20,7 @@ interface Props {
 const PhanCongPhatNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
   const [tab, setTab] = useState<number>(1);
   const listPhanCongNhan = useSelector(selectPhanCongNhan);
   const listPhanCongPhat = useSelector(selectPhanCongPhat);
@@ -30,7 +32,7 @@ const PhanCongPhatNhan: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     dispatch(
       action_MIOA_ZTMI054({
-        iv_post: 'BDH',
+        iv_post: userMaBp,
         iv_position: 'NVLX',
         IV_PAGENO: '1',
         IV_NO_PER_PAGE: '10',

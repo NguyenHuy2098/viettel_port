@@ -25,8 +25,9 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { toast, ToastContainer } from 'react-toastify';
-import { makeSelectorGet_MT_ZTMI045_OUT } from '../../../../redux/MIOA_ZTMI045/selectors';
-import { action_MIOA_ZTMI045 } from '../../../../redux/MIOA_ZTMI045/actions';
+import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 interface Props {
   match: match;
@@ -38,6 +39,7 @@ let forwardingItemList: ForwardingItem[] = [];
 const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const idTai = get(props, 'match.params.idTai', '');
   const dataTai = useSelector(makeSelector046RowFirstChild);
@@ -52,6 +54,15 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
+  const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
+
+  useEffect((): void => {
+    if (forwardingItemListState.length > 0) {
+      setDisableFunctionalButton(false);
+    } else {
+      setDisableFunctionalButton(true);
+    }
+  }, [forwardingItemListState]);
   const [showPopupDongTai, setShowPopupDongTai] = useState<boolean>(false);
   const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
@@ -227,11 +238,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          <Button onClick={handleChuyenVaoTai}>
+          <Button onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển tải')}
           </Button>
-          <Button onClick={handleShowPopupDongTai} disabled={size(forwardingItemListState) <= 0}>
+          <Button disabled={disableFunctionalButton}>
             <i className="fa fa-cloud rotate-90" />
             {t('Đóng tải')}
           </Button>
@@ -591,7 +602,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [uncheckAllForwardingItemCheckbox],
+    [dataTaiChild, uncheckAllForwardingItemCheckbox],
   );
 
   return dataTai ? (
@@ -615,7 +626,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         modalTitle={t('Chọn tải')}
         forwardingItemList={forwardingItemListState}
         IV_TOR_TYPE="ZC2"
-        IV_FR_LOC_ID="BDH"
+        IV_FR_LOC_ID={userMaBp}
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
       />

@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { forEach, get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -18,6 +18,7 @@ import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -29,6 +30,7 @@ interface Props {
 const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const idChuyenThu = get(props, 'match.params.idChuyenThu', '');
   const dataChuyenThu = useSelector(makeSelector046RowFirstChild);
@@ -41,6 +43,15 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
+  const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
+
+  useEffect((): void => {
+    if (forwardingItemListState.length > 0) {
+      setDisableFunctionalButton(false);
+    } else {
+      setDisableFunctionalButton(true);
+    }
+  }, [forwardingItemListState]);
 
   function toggleSelectForwardingItemModal(): void {
     setSelectForwardingItemModal(!selectForwardingItemModal);
@@ -148,11 +159,11 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          <Button onClick={handleChuyenVaoChuyenThu}>
+          <Button onClick={handleChuyenVaoChuyenThu} disabled={disableFunctionalButton}>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển vào CT')}
           </Button>
-          <Button>
+          <Button disabled={disableFunctionalButton}>
             <i className="fa fa-truck" />
             {t('Đóng CT')}
           </Button>
@@ -320,7 +331,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
         modalTitle={t('Chọn chuyến thư')}
         forwardingItemList={forwardingItemListState}
         IV_TOR_TYPE="ZC3"
-        IV_FR_LOC_ID="HUB1"
+        IV_FR_LOC_ID={userMaBp}
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
       />

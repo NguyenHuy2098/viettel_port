@@ -23,6 +23,7 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -30,6 +31,7 @@ let forwardingItemList: ForwardingItem[] = [];
 const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
@@ -46,6 +48,15 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
+  const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
+
+  useEffect((): void => {
+    if (forwardingItemListState.length > 0) {
+      setDisableFunctionalButton(false);
+    } else {
+      setDisableFunctionalButton(true);
+    }
+  }, [forwardingItemListState]);
 
   const getListDiemDen = (): void => {
     dispatch(
@@ -106,7 +117,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           .format(' YYYYMMDD'),
         IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
         IV_TOR_TYPE: 'ZC3',
-        IV_FR_LOC_ID: 'BDH',
+        IV_FR_LOC_ID: userMaBp,
         IV_TO_LOC_ID: '',
         IV_CUST_STATUS: '101',
         IV_PAGENO: '1',
@@ -121,7 +132,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         action_MIOA_ZTMI047({
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC1',
-          IV_FR_LOC_ID: 'BDH',
+          IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: '20100101',
           IV_TO_DATE: trim(toString(moment().format(' YYYYMMDD'))),
@@ -132,7 +143,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch],
+    [dispatch, userMaBp],
   );
 
   function onSuccessSelectedForwardingItem(): void {
@@ -210,7 +221,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
             IV_FLAG: '1',
             IV_TOR_TYPE: 'ZC2',
             IV_TOR_ID_CU: '',
-            IV_SLOCATION: 'BDH',
+            IV_SLOCATION: userMaBp,
             IV_DLOCATION: 'HUB1',
             IV_DESCRIPTION: '',
             T_ITEM: [
@@ -231,7 +242,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                     IV_FLAG: '2',
                     IV_TOR_TYPE: 'ZC2',
                     IV_TOR_ID_CU: taiMoiTaoId,
-                    IV_SLOCATION: 'BDH',
+                    IV_SLOCATION: userMaBp,
                     IV_DLOCATION: 'HUB1',
                     IV_DESCRIPTION: '',
                     T_ITEM: forwardingItemListState,
@@ -245,7 +256,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                             IV_FLAG: '2',
                             IV_TOR_TYPE: 'ZC3',
                             IV_TOR_ID_CU: get(selectedChuyenThu, ' TOR_ID', ''),
-                            IV_SLOCATION: 'BDH',
+                            IV_SLOCATION: userMaBp,
                             IV_DLOCATION: 'HUB1',
                             IV_DESCRIPTION: '',
                             T_ITEM: [
@@ -295,7 +306,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           IV_FLAG: '1',
           IV_TOR_TYPE: 'ZC2',
           IV_TOR_ID_CU: '',
-          IV_SLOCATION: 'BDH',
+          IV_SLOCATION: userMaBp,
           IV_DLOCATION: 'HUB1',
           IV_DESCRIPTION: '',
           T_ITEM: [
@@ -316,7 +327,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   IV_FLAG: '2',
                   IV_TOR_TYPE: 'ZC2',
                   IV_TOR_ID_CU: maTaiVuaTao,
-                  IV_SLOCATION: 'BDH',
+                  IV_SLOCATION: userMaBp,
                   IV_DLOCATION: 'HUB1',
                   IV_DESCRIPTION: '',
                   T_ITEM: forwardingItemListState,
@@ -331,7 +342,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                           IV_FLAG: '1',
                           IV_TOR_TYPE: 'ZC3',
                           IV_TOR_ID_CU: '',
-                          IV_SLOCATION: 'BHD',
+                          IV_SLOCATION: userMaBp,
                           IV_DLOCATION: get(place, 'LOCNO', ''),
                           IV_DESCRIPTION: ghiChu,
                           T_ITEM: [
@@ -351,7 +362,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                                   IV_FLAG: '2',
                                   IV_TOR_TYPE: 'ZC3',
                                   IV_TOR_ID_CU: maChuyenThuMoiTao,
-                                  IV_SLOCATION: 'BDH',
+                                  IV_SLOCATION: userMaBp,
                                   IV_DLOCATION: get(place, 'LOCNO', ''),
                                   IV_DESCRIPTION: '',
                                   T_ITEM: [
@@ -526,16 +537,11 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           </div>
         </Col>
         <Col xl={6} lg={4} xs={12} className="p-0 text-right">
-          <Button color="primary" className="ml-2" onClick={handleChuyenVaoTai}>
+          <Button color="primary" className="ml-2" onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
             <i className="fa fa-cloud-download mr-2 rotate-90"></i>
             {t('Chuyển vào tải')}
           </Button>
-          <Button
-            color="primary"
-            className="ml-2"
-            onClick={handleShowPopupDongTai}
-            disabled={size(forwardingItemListState) <= 0}
-          >
+          <Button color="primary" className="ml-2" onClick={handleShowPopupDongTai} disabled={disableFunctionalButton}>
             <i className="fa fa-cloud mr-2 rotate-90"></i>
             {t('Đóng tải')}
           </Button>
@@ -564,7 +570,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         modalTitle={t('Chọn tải')}
         forwardingItemList={forwardingItemListState}
         IV_TOR_TYPE="ZC2"
-        IV_FR_LOC_ID="BDH"
+        IV_FR_LOC_ID={userMaBp}
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={101}
       />
