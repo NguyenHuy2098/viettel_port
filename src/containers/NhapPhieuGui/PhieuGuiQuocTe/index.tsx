@@ -595,7 +595,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       Destination_Ward: wardIdReceiver,
       FWO_type: 'V004',
       loc_id: '',
-      Movement_type: 'ZDD',
+      Movement_type: 'ZPD',
       Ordering_party: '9999999999',
       item: newArr011,
       Sales_org: '',
@@ -764,8 +764,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       CITY_DES: trim(provinceIdReceiver), // nhận trong trường hợp khách hàng vãng lai
       CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
       CONSIGNEE: '9999999999',
-      CONTRACT_DISCOUNT_AMOUNT: 0,
-      CONTRACT_DISCOUNT_TYPE: '0',
       COUNTRY_DES: trim(quocGia),
       COUNTRY_SRC: 'VN',
       CUS_ID: '', // Mã user trên hệ thống APP/Web
@@ -782,7 +780,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       ITEM: payloadPackageItemArr,
       LOCATION_ID_SRC: '',
       LOCATION_ID_DES: '',
-      MOVEMENT_TYPE: 'ZDD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
+      // Vinh comment từ 27/9/2019
+      MOVEMENT_TYPE: 'ZPD', // Loại hình gia nhận hàng hóa  ZDD: Điểm đến điểm,  ZDP: Điểm đến bưu cục, ZPD: Bưu cục đến điểm, ZPP: Bưu cục đến bưu cục
       NAME_CONSIG: trim(hoTenReceiver),
       NAME_OP: trim(hoTenSender),
       NAME_SHIPPER: trim(hoTenSender),
@@ -795,7 +794,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       PHONE_SHIPPER: trim(dienThoaiSender),
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
-      REQUEST_PICK_DATE: '',
+      REQUEST_PICK_DATE: null,
       SHIPPER: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Người gửi hàng- mã BP
       SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
       STREET_NAME_DES: trim(detailAddressReceiver), // Địa chỉ nhận trong trường hợp vãng lai

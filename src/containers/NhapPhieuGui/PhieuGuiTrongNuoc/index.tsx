@@ -311,7 +311,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
   const [choXemHang, setChoXemHang] = useState<string>('choXem');
-  const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZDD');
+  const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZPP');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
 
@@ -847,8 +847,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       CITY_DES: trim(provinceIdReceiver), // nhận trong trường hợp khách hàng vãng lai
       CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
       CONSIGNEE: '9999999999',
-      CONTRACT_DISCOUNT_AMOUNT: 0,
-      CONTRACT_DISCOUNT_TYPE: '0',
       COUNTRY_DES: 'VN',
       COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
       CUS_ID: '', // Mã user trên hệ thống APP/Web
@@ -876,7 +874,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       PHONE_SHIPPER: trim(dienThoaiSender),
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
-      REQUEST_PICK_DATE: '',
+      REQUEST_PICK_DATE: null,
       REQUEST_DELIV_DATE: thoiGianPhat ? '' : null, // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
       SHIPPER: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Người gửi hàng- mã BP
       SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
@@ -1595,10 +1593,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           </Label>
           <Col lg="8">
             <Input type="select" value={diemGiaoNhan} onChange={handleChangeTextboxValue(setDiemGiaoNhan)}>
-              <option value="ZDD">{t('Giao, gửi hàng tại nhà')}</option>
-              <option value="ZPP">{t('Giao, gửi hàng tại bưu cục')}</option>
-              <option value="ZDP">{t('Giao hàng tại bưu cục')}</option>
-              <option value="ZPD">{t('Gửi hàng tại bưu cục')}</option>
+              <option value="ZPP">{t('Giao hàng tại bưu cục')}</option>
+              <option value="ZPD">{t('Giao hàng tại nhà')}</option>
             </Input>
           </Col>
         </Row>

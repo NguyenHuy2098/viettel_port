@@ -60,6 +60,8 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
           alert(t('Có lỗi xảy ra!'));
         },
         onFinish: (): void => {
+          setNote('');
+          setDestination(get(postOfficeList, '[0].LOCNO', ''));
           onHide();
         },
       }),
