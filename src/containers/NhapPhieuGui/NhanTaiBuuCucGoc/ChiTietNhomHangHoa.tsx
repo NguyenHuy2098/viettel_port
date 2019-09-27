@@ -1,28 +1,37 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane, Col, Input } from 'reactstrap';
+import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane, Col, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { get } from 'lodash';
+import { get, size, forEach } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
 import DataTable from 'components/DataTable';
 import { Cell } from 'react-table';
 import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
-import moment from 'moment';
 import { Location } from 'history';
+import SelectForwardingItemModal from '../../../components/SelectForwardingItemModal/Index';
+import { makeSelectorMaBP } from '../../../redux/auth/selectors';
 
 interface Props {
   location: Location;
 }
-
+const forwardingItemList: ForwardingItem[] = [];
 // eslint-disable-next-line max-lines-per-function
 function ChiTietNhomHangHoa(props: Props): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [tab] = useState(1);
   const childs = get(props, 'location.state', []);
+  const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
+  const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
+  const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
+    undefined,
+  );
+  const userMaBp = useSelector(makeSelectorMaBP);
 
-  useEffect((): void => {
+  const dispatchZTMI241 = (): void => {
     const payload = {
       IV_PACKAGE_ID: '',
       IV_FREIGHT_UNIT_STATUS: [301, 304, 311, 600],
@@ -33,15 +42,64 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',
     };
+
+    // const payload = {
+    //   IV_PACKAGE_ID: '',
+    //   IV_FREIGHT_UNIT_STATUS: [600],
+    //   IV_LOC_ID: 'BDH',
+    //   IV_COMMODITY_GROUP: 'HTHU-Chậm-Nội vùng.TTHCM',
+    //   IV_DATE: '20190923',
+    //   IV_USER: 'chidnl',
+    //   IV_PAGE_NO: '1',
+    //   IV_NO_PER_PAGE: '10',
+    // };
     dispatch(action_ZTMI241(payload));
+  };
+
+  useEffect((): void => {
+    dispatchZTMI241();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, childs]);
 
   const data = useSelector(select_ZTMI241);
 
   const dataRow = get(data, 'Row', []);
 
+  function handleSelectBangKeItem(event: React.FormEvent<HTMLInputElement>): void {
+    event.stopPropagation();
+    const value = event.currentTarget.value;
+    setUncheckAllForwardingItemCheckbox(undefined);
+    if (event.currentTarget.checked) {
+      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: '' });
+    } else {
+      forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
+        if (get(item, 'ITEM_ID') === value) {
+          forwardingItemList.splice(index, 1);
+        }
+      });
+    }
+    setForwardingItemListState([...forwardingItemList]);
+  }
+
   const columns = useMemo(
+    // eslint-disable-next-line max-lines-per-function
     () => [
+      {
+        id: 'FREIGHT_UNIT',
+        accessor: 'FREIGHT_UNIT',
+        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
+          return (
+            <Label check>
+              <Input
+                defaultChecked={uncheckAllForwardingItemCheckbox}
+                type="checkbox"
+                value={get(row, 'values.FREIGHT_UNIT', '')}
+                onClick={handleSelectBangKeItem}
+              />
+            </Label>
+          );
+        },
+      },
       {
         Header: t('Mã phiếu gửi'),
         accessor: 'PACKAGE_ID',
@@ -79,8 +137,26 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [uncheckAllForwardingItemCheckbox],
   );
+
+  function toggleSelectForwardingItemModal(): void {
+    setSelectForwardingItemModal(!selectForwardingItemModal);
+  }
+
+  function handleChuyenVaoBangKe(): void {
+    if (size(forwardingItemListState) > 0) {
+      toggleSelectForwardingItemModal();
+    } else {
+      alert(t('Vui lòng chọn phiếu gửi!'));
+    }
+  }
+
+  function onSuccessSelectedForwardingItem(): void {
+    dispatchZTMI241();
+    setUncheckAllForwardingItemCheckbox(false);
+    setForwardingItemListState([]);
+  }
 
   function renderSearch(): JSX.Element {
     return (
@@ -110,7 +186,7 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thư - Nhanh')}</h1>
         <div className="sipTitleRightBlock">
-          <Button>
+          <Button onClick={handleChuyenVaoBangKe}>
             <i className="fa fa-file-excel-o" />
             {t('Chuyển bảng kê')}
           </Button>
@@ -149,6 +225,18 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
             </Row>
           </TabPane>
         </TabContent>
+        <SelectForwardingItemModal
+          onSuccessSelected={onSuccessSelectedForwardingItem}
+          visible={selectForwardingItemModal}
+          onHide={toggleSelectForwardingItemModal}
+          modalTitle={t('Chọn bảng kê')}
+          forwardingItemList={forwardingItemListState}
+          IV_TOR_TYPE="ZC1"
+          IV_FR_LOC_ID={userMaBp}
+          IV_TO_LOC_ID=""
+          IV_CUST_STATUS={101}
+          isFrom2
+        />
       </div>
     </>
   );

@@ -20,6 +20,7 @@ interface Props {
   IV_FR_LOC_ID: string;
   IV_TO_LOC_ID: string;
   IV_CUST_STATUS: number;
+  isFrom2?: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -114,16 +115,26 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
                   type="radio"
                   name="selectForwardingItem"
                   value={item.TOR_ID}
+                  checked={item.TOR_ID === radioTorId}
                   onChange={handleChangeForwardingItem}
                 />
                 <p>
                   <span>{item.TOR_ID}</span>
                   <span>{get(item, 'CREATED_BY', '') || ''}</span>
-                  <span>{trim(toString(moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')))}</span>
+                  {props.isFrom2 ? (
+                    <span>{get(item, 'Childs[0].DESCRIPTION') || ''}</span>
+                  ) : (
+                    <span>{trim(toString(moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')))}</span>
+                  )}
                 </p>
                 <span>
                   <span>{item.LOG_LOCID_TO}</span>
                   <span>SL: {item.ITEM_NO}</span>
+                  {props.isFrom2 ? (
+                    <span>
+                      {trim(toString(moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY - HH:mm:ss')))}
+                    </span>
+                  ) : null}
                 </span>
               </Label>
             ),
