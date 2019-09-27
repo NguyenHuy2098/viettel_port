@@ -86,10 +86,10 @@ const nav = (t: i18next.TFunction): any => {
             name: t('Đóng chuyến thư'),
             url: routesMap.DONG_CHUYEN_THU,
           },
-          {
-            name: t('Đóng bảng kê nội tỉnh'),
-            url: routesMap.DONG_BANG_KE_NOI_TINH,
-          },
+          // {
+          //   name: t('Đóng bảng kê nội tỉnh'),
+          //   url: routesMap.DONG_BANG_KE_NOI_TINH,
+          // },
           // {
           //   name: t('Thông tin bảng kê'),
           //   url: routesMap.THONG_TIN_BANG_KE,

@@ -6,7 +6,7 @@ import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import produce from 'immer';
-import { concat, get, includes, map, pull } from 'lodash';
+import { concat, get, includes, map, pull, size } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -14,13 +14,14 @@ import Search from 'components/Input/Search';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import Pagination from 'components/Pagination';
 import ChonChuyenThuModal from 'components/SelectForwardingItemModal/Index';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorZTMI236OUTPagingTotalPage, makeSelectorZTMI236OUTRow } from 'redux/ZTMI236/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import { action_MIOA_ZTMI022 } from '../../../redux/MIOA_ZTMI022/actions';
 
 interface Props {
   getListKienChuaDongChuyenThu: (IV_PAGENO?: number, IV_PACKAGE_ID?: string) => void;
@@ -34,8 +35,14 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const [showChonChuyenThuModal, setShowChonChuyenThuModal] = useState<boolean>(false);
   const [selectedKienIds, setSelectedKienIds] = useState<string[]>([]);
   const maBP = useSelector(makeSelectorMaBP);
+  const userId = useSelector(makeSelectorPreferredUsername);
   const totalPage = useSelector(makeSelectorZTMI236OUTPagingTotalPage);
   const listKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRow);
+
+  const selectedKienItems = useMemo(
+    () => map(selectedKienIds, (id: string) => ({ ITEM_ID: id, ITEM_TYPE: SipDataType.KIEN })),
+    [selectedKienIds],
+  );
 
   const onPaginationChange = ({ selected }: { selected: number }): void => {
     getListKienChuaDongChuyenThu(selected + 1);
@@ -69,8 +76,9 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     }
   };
 
-  const handleSuccessChuyenVaoChuyenThu = (): void => {
+  const handleSuccessChuyenThuAction = (): void => {
     getListKienChuaDongChuyenThu();
+    setSelectedKienIds([]);
   };
 
   const handleDeleteKien = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
@@ -102,6 +110,98 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         }),
       );
     };
+  };
+
+  // eslint-disable-next-line max-lines-per-function
+  const handleDongChuyenThu = (): void => {
+    if (size(selectedKienItems) > 0) {
+      const payloadTaoTaiMoi = {
+        IV_FLAG: '1',
+        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+        IV_TOR_ID_CU: '',
+        IV_SLOCATION: maBP,
+        IV_DLOCATION: 'HUB1',
+        IV_DESCRIPTION: '',
+        T_ITEM: [
+          {
+            ITEM_ID: '',
+            ITEM_TYPE: '',
+          },
+        ],
+      };
+      dispatch(
+        action_MIOA_ZTMI016(payloadTaoTaiMoi, {
+          //eslint-disable-next-line max-lines-per-function
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            if (data.Status) {
+              if (data.ErrorCode === 1) {
+                alert('Error at step 1');
+                alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+              } else {
+                const payloadGanBangKeVaoTai = {
+                  IV_FLAG: '2',
+                  IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+                  IV_TOR_ID_CU: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
+                  IV_SLOCATION: maBP,
+                  IV_DLOCATION: '',
+                  IV_DESCRIPTION: '',
+                  T_ITEM: selectedKienItems,
+                };
+                dispatch(
+                  action_MIOA_ZTMI016(payloadGanBangKeVaoTai, {
+                    //eslint-disable-next-line max-lines-per-function
+                    onSuccess: (data: API.MIOAZTMI016Response): void => {
+                      if (data.Status) {
+                        if (data.ErrorCode === 1) {
+                          alert('Error at step 2');
+                          alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+                        } else {
+                          const payloadDongChuyenThu = {
+                            row: {
+                              CU_NO: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
+                              FU_NO: '',
+                              STATUS_ID: '1',
+                              USER_ID: userId,
+                              LOC_ID: maBP,
+                            },
+                          };
+                          dispatch(
+                            action_MIOA_ZTMI022(payloadDongChuyenThu, {
+                              onSuccess: (data: API.MIOAZTMI022Response): void => {
+                                if (data.Status) {
+                                  if (data.ErrorCode === 1) {
+                                    alert('Error at step 3');
+                                    alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+                                  } else {
+                                    alert(t('Đóng chuyến thư thành công!'));
+                                    handleSuccessChuyenThuAction();
+                                  }
+                                } else {
+                                  alert('Error at step 3');
+                                  alert(data.Messages);
+                                }
+                              },
+                            }),
+                          );
+                        }
+                      } else {
+                        alert('Error at step 2');
+                        alert(data.Messages);
+                      }
+                    },
+                  }),
+                );
+              }
+            } else {
+              alert('Error at step 1');
+              alert(data.Messages);
+            }
+          },
+        }),
+      );
+    } else {
+      alert(t('Vui lòng chọn chuyến thư!'));
+    }
   };
 
   const columns = useMemo(
@@ -178,7 +278,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           <i className="fa fa-folder mr-1" />
           {t('Chuyển vào CT')}
         </Button>
-        <Button color="primary">
+        <Button color="primary" onClick={handleDongChuyenThu}>
           <i className="fa fa-truck mr-1" />
           {t('Đóng CT')}
         </Button>
@@ -199,11 +299,11 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         />
       </Row>
       <ChonChuyenThuModal
-        onSuccessSelected={handleSuccessChuyenVaoChuyenThu}
+        onSuccessSelected={handleSuccessChuyenThuAction}
         visible={showChonChuyenThuModal}
         onHide={handleHideChonChuyenThuModal}
         modalTitle={t('Chọn chuyến thư')}
-        forwardingItemList={map(selectedKienIds, (id: string) => ({ ITEM_ID: id, ITEM_TYPE: SipDataType.KIEN }))}
+        forwardingItemList={selectedKienItems}
         IV_TOR_TYPE={SipDataType.CHUYEN_THU}
         IV_FR_LOC_ID={maBP}
         IV_TO_LOC_ID=""
