@@ -37,15 +37,9 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   const getListChuyenThuDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
       action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
         IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-        IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: maBP,
         IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
-        IV_FR_DATE: '20190501',
-        IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO: IV_PAGENO,
-        IV_NO_PER_PAGE: '10',
       }),
     );
   };
