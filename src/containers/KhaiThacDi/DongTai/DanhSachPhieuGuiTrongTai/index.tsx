@@ -319,29 +319,28 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         },
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
-            if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
-              toast(
-                <>
-                  <i className="fa check mr-2" />
-                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                </>,
-                {
-                  containerId: 'DanhSachPhieuGuiTrongTai',
-                  type: 'success',
-                },
-              );
-            } else {
-              toast(
-                <>
-                  <i className="fa window-close-o mr-2" />
-                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                </>,
-                {
-                  containerId: 'DanhSachPhieuGuiTrongTai',
-                  type: 'error',
-                },
-              );
-            }
+            toast(
+              <>
+                <i className="fa check mr-2" />
+                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongTai',
+                type: 'success',
+              },
+            );
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'error',
+              },
+            );
           },
         },
       ),
@@ -364,6 +363,18 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           onSuccess: (): void => {
             // add tai vua tao vao chuyen thu duoc chon
             addTaiVaoChuyenThuDuocChon(maTaiMoiTao);
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'error',
+              },
+            );
           },
         },
       ),
@@ -393,6 +404,18 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             const maTaiMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
             // add bang ke duoc chon vao tai moi
             addBangKeDuocChonVaoTaiMoi(maTaiMoiTao);
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'error',
+              },
+            );
           },
         },
       ),
@@ -628,6 +651,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         IV_CUST_STATUS={101}
       />
       <ModalTwoTab
+        containerId={'DanhSachPhieuGuiTrongTai'}
         onHide={handleHidePopupDongTai}
         visible={showPopupDongTai}
         modalTitle={t('Gán tải vào chuyến thư')}

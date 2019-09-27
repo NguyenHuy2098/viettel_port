@@ -572,6 +572,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         IV_CUST_STATUS={101}
       />
       <ModalTwoTab
+        containerId={'BangKeChuaDongTai'}
         onHide={handleClosePopupDongtai}
         visible={showPopupDongTai}
         modalTitle={t('Gán tải vào chuyến thư')}

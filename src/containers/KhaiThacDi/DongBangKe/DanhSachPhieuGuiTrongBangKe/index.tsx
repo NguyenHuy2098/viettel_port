@@ -539,6 +539,9 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
               },
             );
           },
+          onFinish: (): void => {
+            getListPhieuGui();
+          },
         },
       ),
     );
@@ -1080,6 +1083,9 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 },
               );
             },
+            onFinish: (): void => {
+              getListPhieuGui();
+            },
           },
         ),
       );
@@ -1114,6 +1120,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         IV_CUST_STATUS={101}
       />
       <ModalTwoTab
+        containerId={'DanhSachPhieuGuiTrongBangKe'}
         onHide={closePopUpDongBangKeVaoTai}
         visible={showDongBangKeVaoTaiPopup}
         modalTitle="Gán bảng kê vào tải"
@@ -1126,6 +1133,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         selectedChildInTab1={selectedTai}
       />
       <ModalTwoTab
+        containerId={'DanhSachPhieuGuiTrongBangKe'}
         onHide={closePopUpDongTai}
         visible={showPopUpGanTaiVaoChuyenThu}
         modalTitle="Gán tải vào chuyến thư"

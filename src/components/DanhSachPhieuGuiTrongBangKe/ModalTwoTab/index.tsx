@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { map, get } from 'lodash';
 
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 interface Props {
   onHide: () => void;
@@ -34,6 +34,7 @@ interface Props {
   tab1Contents: API.RowMTZTMI047OUT[];
   onChooseItemInFirstTab: (item: API.RowMTZTMI047OUT) => void;
   selectedChildInTab1: API.RowMTZTMI047OUT | undefined;
+  containerId: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -69,7 +70,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
           {t('Ghi chú không được vượt quá 40 ký tự')}
         </>,
         {
-          containerId: 'DanhSachPhieuGuiTrongBangKe',
+          containerId: props.containerId,
           type: 'error',
         },
       );
