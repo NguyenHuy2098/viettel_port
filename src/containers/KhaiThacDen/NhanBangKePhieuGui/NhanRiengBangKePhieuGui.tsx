@@ -65,7 +65,7 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mã tải'),
+        Header: t('Mã bảng kê / Phiếu gửi'),
         accessor: 'TOR_ID',
       },
       {
