@@ -16,13 +16,13 @@ const Scan = (props: Props): JSX.Element => {
 
   return (
     <Row className={classNames('flex-fill', get(containerProps, 'className'))}>
-      <Col xs={6}>
+      <Col lg={9}>
         <div className="sipTitleRightBlockInput">
           {leftIcon || <i className="fa fa-barcode" />}
           <Input className="bg-gray-100" type="text" {...rest} />
         </div>
       </Col>
-      <Col className="px-0">
+      <Col className="px-0" lg={3}>
         <Button color="primary" {...buttonProps}>
           {get(buttonProps, 'children') || t('Quét mã')}
         </Button>

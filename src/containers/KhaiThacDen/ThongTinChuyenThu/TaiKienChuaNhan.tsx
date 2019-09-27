@@ -154,12 +154,12 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
           {/*  {t('Kiện')}&nbsp;({'20'})*/}
           {/*</Button>*/}
         </div>
-        <div className="btn-toolbar col-2 align-items-end flex-column">
-          <Button color="primary">
-            <i className="fa fa-cube mr-1" />
-            {t('Nhận')}
-          </Button>
-        </div>
+        {/*<div className="btn-toolbar col-2 align-items-end flex-column">*/}
+        {/*  <Button color="primary">*/}
+        {/*    <i className="fa fa-cube mr-1" />*/}
+        {/*    {t('Nhận')}*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
       </Row>
     );
   }
