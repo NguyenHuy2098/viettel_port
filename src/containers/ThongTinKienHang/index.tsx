@@ -281,7 +281,12 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
         Header: t('Người tác động'),
         accessor: '',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Thiếu api</>;
+          return (
+            <>{`${get(row, 'original.CHANGED_BY') || ''} ${get(row, 'original.NAME_CHANGED_BY') || ''} ${get(
+              row,
+              'original.MOB_CHANGED_BY',
+            ) || ''}`}</>
+          );
         },
       },
     ],
