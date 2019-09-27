@@ -23,7 +23,7 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { toast, ToastContainer } from 'react-toastify';
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
@@ -306,16 +306,16 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '2',
-          IV_TOR_TYPE: 'ZC3',
+          IV_FLAG: IV_FLAG.SUA,
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_TOR_ID_CU: get(selectedChuyenThu, '  TOR_ID', ''),
-          IV_SLOCATION: 'BDH',
-          IV_DLOCATION: 'HUB1',
+          IV_SLOCATION: get(selectedChuyenThu, '  LOG_LOCID_FR', ''),
+          IV_DLOCATION: get(selectedChuyenThu, '  LOG_LOCID_TO', ''),
           IV_DESCRIPTION: '',
           T_ITEM: [
             {
               ITEM_ID: maTaiMoiTao,
-              ITEM_TYPE: 'ZC2',
+              ITEM_TYPE: SipDataType.TAI,
             },
           ],
         },
@@ -354,11 +354,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '2',
-          IV_TOR_TYPE: 'ZC2',
+          IV_FLAG: IV_FLAG.SUA,
+          IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: maTaiMoiTao,
-          IV_SLOCATION: 'BDH',
-          IV_DLOCATION: 'HUB1',
+          IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
+          IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
           IV_DESCRIPTION: '',
           T_ITEM: forwardingItemListState,
         },
@@ -377,11 +377,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '1',
-          IV_TOR_TYPE: 'ZC2',
+          IV_FLAG: IV_FLAG.TAO,
+          IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: '',
-          IV_SLOCATION: 'BDH',
-          IV_DLOCATION: 'HUB1',
+          IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
+          IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
           IV_DESCRIPTION: '',
           T_ITEM: [
             {
@@ -408,11 +408,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '1',
-          IV_TOR_TYPE: 'ZC2',
+          IV_FLAG: IV_FLAG.TAO,
+          IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: '',
-          IV_SLOCATION: 'BDH',
-          IV_DLOCATION: 'HUB1',
+          IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
+          IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
           IV_DESCRIPTION: '',
           T_ITEM: [
             {
@@ -429,11 +429,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             dispatch(
               action_MIOA_ZTMI016(
                 {
-                  IV_FLAG: '2',
-                  IV_TOR_TYPE: 'ZC2',
+                  IV_FLAG: IV_FLAG.SUA,
+                  IV_TOR_TYPE: SipDataType.TAI,
                   IV_TOR_ID_CU: maTaiMoiTao,
-                  IV_SLOCATION: 'BDH',
-                  IV_DLOCATION: 'HUB1',
+                  IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
+                  IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
                   IV_DESCRIPTION: '',
                   T_ITEM: forwardingItemListState,
                 },
@@ -444,10 +444,10 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                     dispatch(
                       action_MIOA_ZTMI016(
                         {
-                          IV_FLAG: '1',
-                          IV_TOR_TYPE: 'ZC3',
+                          IV_FLAG: IV_FLAG.TAO,
+                          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                           IV_TOR_ID_CU: '',
-                          IV_SLOCATION: 'BHD',
+                          IV_SLOCATION: userMaBp,
                           IV_DLOCATION: get(place, 'LOCNO', ''),
                           IV_DESCRIPTION: ghiChu,
                           T_ITEM: [
@@ -464,16 +464,16 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                             dispatch(
                               action_MIOA_ZTMI016(
                                 {
-                                  IV_FLAG: '2',
-                                  IV_TOR_TYPE: 'ZC3',
+                                  IV_FLAG: IV_FLAG.SUA,
+                                  IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                   IV_TOR_ID_CU: maChuyenThuVuaTao,
-                                  IV_SLOCATION: 'BDH',
-                                  IV_DLOCATION: 'HUB1',
+                                  IV_SLOCATION: userMaBp,
+                                  IV_DLOCATION: get(place, 'LOCNO', ''),
                                   IV_DESCRIPTION: '',
                                   T_ITEM: [
                                     {
                                       ITEM_ID: maTaiMoiTao,
-                                      ITEM_TYPE: 'ZC2',
+                                      ITEM_TYPE: SipDataType.TAI,
                                     },
                                   ],
                                 },
