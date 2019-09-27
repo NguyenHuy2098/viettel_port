@@ -21,7 +21,7 @@ import { useSelector } from 'react-redux';
 import { map, get } from 'lodash';
 
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 
 interface Props {
   onHide: () => void;
@@ -30,7 +30,7 @@ interface Props {
   firstTabTitle: string;
   secondTabTitle: string;
   onSubmitButton1: () => void;
-  onSubmitButton2: (placeName: string, ghiChu: string) => void;
+  onSubmitButton2: (locNo: string, ghiChu: string) => void;
   tab1Contents: API.RowMTZTMI047OUT[];
   onChooseItemInFirstTab: (item: API.RowMTZTMI047OUT) => void;
   selectedChildInTab1: API.RowMTZTMI047OUT | undefined;
