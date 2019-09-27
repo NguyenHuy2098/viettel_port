@@ -69,7 +69,9 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         IV_TOR_TYPE: SipDataType.CHUYEN_THU,
         IV_FR_LOC_ID: maBP,
         IV_CUST_STATUS: SipDataState.TAO_MOI,
-        IV_FR_DATE: moment().format('YYYYMMDD'),
+        IV_FR_DATE: moment()
+          .subtract(1, 'day')
+          .format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_PAGENO,
         IV_NO_PER_PAGE: '10',

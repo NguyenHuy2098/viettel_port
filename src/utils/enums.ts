@@ -31,3 +31,10 @@ export enum SipDataState {
   PHIEU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC = 603,
   PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC = 604,
 }
+
+export enum IV_FLAG {
+  TAO = 1,
+  SUA = 2,
+  XOA = 3,
+  REMOVE = 4,
+}

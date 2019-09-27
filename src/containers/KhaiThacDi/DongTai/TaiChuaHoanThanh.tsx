@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { map, get, noop } from 'lodash';
+import { map, get, noop, toString, trim } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 
@@ -60,9 +60,9 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: moment()
-            .subtract(7, 'day')
+            .subtract(2, 'day')
             .format('YYYYMMDD'),
-          IV_TO_DATE: moment().format('YYYYMMDD'),
+          IV_TO_DATE: trim(toString(moment().format('YYYYMMDD'))),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
           ...payload,

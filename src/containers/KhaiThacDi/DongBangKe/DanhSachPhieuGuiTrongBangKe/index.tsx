@@ -38,6 +38,7 @@ import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 
 const forwardingItemList: ForwardingItem[] = [];
 
@@ -213,10 +214,10 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           .subtract(7, 'day')
           .format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: 'ZC2',
+        IV_TOR_TYPE: SipDataType.TAI,
         IV_FR_LOC_ID: userMaBp,
         IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: '101',
+        IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
         IV_PAGENO: '1',
         IV_NO_PER_PAGE: '5000',
       }),
@@ -233,8 +234,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '1',
-          IV_TOR_TYPE: 'ZC2',
+          IV_FLAG: IV_FLAG.TAO,
+          IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: '',
           IV_SLOCATION: userMaBp,
           IV_DLOCATION: get(place, 'LOCNO', ''),
@@ -264,7 +265,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   const handleDeleteForwardingOrder = (torId: string): void => {
     const payload = {
-      IV_FLAG: '3',
+      IV_FLAG: IV_FLAG.XOA,
       IV_TOR_ID_CU: torId,
       IV_SLOCATION: '',
       IV_DLOCATION: '',
@@ -318,16 +319,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '2',
-          IV_TOR_TYPE: 'ZC2',
+          IV_FLAG: IV_FLAG.SUA,
+          IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: toString(taiID),
-          IV_SLOCATION: userMaBp,
-          IV_DLOCATION: 'HUB1',
+          IV_SLOCATION: get(selectedTai, 'LOG_LOCID_FR', ''),
+          IV_DLOCATION: get(selectedTai, 'LOG_LOCID_TO', ''),
           IV_DESCRIPTION: '',
           T_ITEM: [
             {
               ITEM_ID: idBangKe,
-              ITEM_TYPE: 'ZC1',
+              ITEM_TYPE: SipDataType.BANG_KE,
             },
           ],
         },
@@ -377,11 +378,11 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   // eslint-disable-next-line max-lines-per-function
   const handleActionDongBangKeAfterRemovePhieuGui = (taiID: string): void => {
     const a = {
-      IV_FLAG: '4',
-      IV_TOR_TYPE: 'ZC1',
+      IV_FLAG: IV_FLAG.REMOVE,
+      IV_TOR_TYPE: SipDataType.BANG_KE,
       IV_TOR_ID_CU: idBangKe,
-      IV_SLOCATION: userMaBp,
-      IV_DLOCATION: 'HUB1',
+      IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
+      IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
       IV_DESCRIPTION: '',
       T_ITEM: listUncheckForwardingItem,
     };
@@ -432,16 +433,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           dispatch(
             action_MIOA_ZTMI016(
               {
-                IV_FLAG: '2',
-                IV_TOR_TYPE: 'ZC2',
+                IV_FLAG: IV_FLAG.SUA,
+                IV_TOR_TYPE: SipDataType.TAI,
                 IV_TOR_ID_CU: toString(taiID),
-                IV_SLOCATION: userMaBp,
-                IV_DLOCATION: 'HUB1',
+                IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
+                IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
                 IV_DESCRIPTION: '',
                 T_ITEM: [
                   {
                     ITEM_ID: idBangKe,
-                    ITEM_TYPE: 'ZC1',
+                    ITEM_TYPE: SipDataType.BANG_KE,
                   },
                 ],
               },
@@ -506,11 +507,11 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       dispatch(
         action_MIOA_ZTMI016(
           {
-            IV_FLAG: '1',
-            IV_TOR_TYPE: 'ZC2',
+            IV_FLAG: IV_FLAG.TAO,
+            IV_TOR_TYPE: SipDataType.TAI,
             IV_TOR_ID_CU: '',
-            IV_SLOCATION: userMaBp,
-            IV_DLOCATION: 'HUB1',
+            IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
+            IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
             IV_DESCRIPTION: '',
             T_ITEM: [
               {
@@ -523,17 +524,17 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             // eslint-disable-next-line max-lines-per-function
             onSuccess: (data: API.MIOAZTMI016Response): void => {
               if (get(data, 'MT_ZTMI016_OUT.ev_error') === 1) {
-                const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
+                const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
                 if (size(listUncheckForwardingItem) > 0) {
                   // Remove phieu gui khong duoc tic ngoai man hin danh sach phieu gui trong bang ke
                   dispatch(
                     action_MIOA_ZTMI016(
                       {
-                        IV_FLAG: '4',
-                        IV_TOR_TYPE: 'ZC1',
+                        IV_FLAG: IV_FLAG.REMOVE,
+                        IV_TOR_TYPE: SipDataType.BANG_KE,
                         IV_TOR_ID_CU: idBangKe,
-                        IV_SLOCATION: userMaBp,
-                        IV_DLOCATION: 'HUB1',
+                        IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
+                        IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
                         IV_DESCRIPTION: '',
                         T_ITEM: listUncheckForwardingItem,
                       },
@@ -558,16 +559,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                           dispatch(
                             action_MIOA_ZTMI016(
                               {
-                                IV_FLAG: '2',
-                                IV_TOR_TYPE: 'ZC2',
-                                IV_TOR_ID_CU: maTaiVuaTao || '',
-                                IV_SLOCATION: userMaBp,
-                                IV_DLOCATION: 'HUB1',
+                                IV_FLAG: IV_FLAG.SUA,
+                                IV_TOR_TYPE: SipDataType.TAI,
+                                IV_TOR_ID_CU: maTaiVuaTao,
+                                IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
+                                IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
                                 IV_DESCRIPTION: '',
                                 T_ITEM: [
                                   {
-                                    ITEM_ID: idBangKe || '',
-                                    ITEM_TYPE: 'ZC1',
+                                    ITEM_ID: idBangKe,
+                                    ITEM_TYPE: SipDataType.BANG_KE,
                                   },
                                 ],
                               },
@@ -577,16 +578,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                   dispatch(
                                     action_MIOA_ZTMI016(
                                       {
-                                        IV_FLAG: '2',
-                                        IV_TOR_TYPE: 'ZC3',
-                                        IV_TOR_ID_CU: maChuyenThu || '',
-                                        IV_SLOCATION: userMaBp,
-                                        IV_DLOCATION: 'HUB1',
+                                        IV_FLAG: IV_FLAG.SUA,
+                                        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+                                        IV_TOR_ID_CU: maChuyenThu,
+                                        IV_SLOCATION: get(selectedChuyenThu, 'LOG_LOCID_FR', ''),
+                                        IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO', ''),
                                         IV_DESCRIPTION: '',
                                         T_ITEM: [
                                           {
                                             ITEM_ID: maTaiVuaTao,
-                                            ITEM_TYPE: 'ZC2',
+                                            ITEM_TYPE: SipDataType.TAI,
                                           },
                                         ],
                                       },
@@ -631,16 +632,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   dispatch(
                     action_MIOA_ZTMI016(
                       {
-                        IV_FLAG: '2',
-                        IV_TOR_TYPE: 'ZC2',
-                        IV_TOR_ID_CU: maTaiVuaTao || '',
-                        IV_SLOCATION: userMaBp,
-                        IV_DLOCATION: 'HUB1',
+                        IV_FLAG: IV_FLAG.SUA,
+                        IV_TOR_TYPE: SipDataType.TAI,
+                        IV_TOR_ID_CU: maTaiVuaTao,
+                        IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
+                        IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
                         IV_DESCRIPTION: '',
                         T_ITEM: [
                           {
-                            ITEM_ID: idBangKe || '',
-                            ITEM_TYPE: 'ZC1',
+                            ITEM_ID: idBangKe,
+                            ITEM_TYPE: SipDataType.BANG_KE,
                           },
                         ],
                       },
@@ -650,16 +651,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                           dispatch(
                             action_MIOA_ZTMI016(
                               {
-                                IV_FLAG: '2',
-                                IV_TOR_TYPE: 'ZC3',
-                                IV_TOR_ID_CU: maChuyenThu || '',
-                                IV_SLOCATION: userMaBp,
-                                IV_DLOCATION: 'HUB1',
+                                IV_FLAG: IV_FLAG.SUA,
+                                IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+                                IV_TOR_ID_CU: maChuyenThu,
+                                IV_SLOCATION: get(selectedChuyenThu, 'LOG_LOCID_FR', ''),
+                                IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO', ''),
                                 IV_DESCRIPTION: '',
                                 T_ITEM: [
                                   {
                                     ITEM_ID: maTaiVuaTao,
-                                    ITEM_TYPE: 'ZC2',
+                                    ITEM_TYPE: SipDataType.TAI,
                                   },
                                 ],
                               },
@@ -684,7 +685,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                       </>,
                                       {
                                         containerId: 'DanhSachPhieuGuiTrongBangKe',
-                                        type: 'info',
+                                        type: 'error',
                                       },
                                     );
                                   }
@@ -949,11 +950,11 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '1',
-          IV_TOR_TYPE: 'ZC2',
+          IV_FLAG: IV_FLAG.TAO,
+          IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: '',
-          IV_SLOCATION: userMaBp,
-          IV_DLOCATION: 'HUB1',
+          IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
+          IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
           IV_DESCRIPTION: '',
           T_ITEM: [
             {
@@ -972,11 +973,11 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 dispatch(
                   action_MIOA_ZTMI016(
                     {
-                      IV_FLAG: '4',
-                      IV_TOR_TYPE: 'ZC1',
+                      IV_FLAG: IV_FLAG.REMOVE,
+                      IV_TOR_TYPE: SipDataType.BANG_KE,
                       IV_TOR_ID_CU: idBangKe,
-                      IV_SLOCATION: userMaBp,
-                      IV_DLOCATION: 'HUB1',
+                      IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
+                      IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
                       IV_DESCRIPTION: '',
                       T_ITEM: listUncheckForwardingItem,
                     },
@@ -1001,16 +1002,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                         dispatch(
                           action_MIOA_ZTMI016(
                             {
-                              IV_FLAG: '2',
-                              IV_TOR_TYPE: 'ZC2',
+                              IV_FLAG: IV_FLAG.SUA,
+                              IV_TOR_TYPE: SipDataType.TAI,
                               IV_TOR_ID_CU: maTaiVuaTao,
-                              IV_SLOCATION: userMaBp,
-                              IV_DLOCATION: 'HUB1',
+                              IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
+                              IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
                               IV_DESCRIPTION: '',
                               T_ITEM: [
                                 {
                                   ITEM_ID: idBangKe,
-                                  ITEM_TYPE: 'ZC1',
+                                  ITEM_TYPE: SipDataType.BANG_KE,
                                 },
                               ],
                             },
@@ -1021,8 +1022,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                 dispatch(
                                   action_MIOA_ZTMI016(
                                     {
-                                      IV_FLAG: '1',
-                                      IV_TOR_TYPE: 'ZC3',
+                                      IV_FLAG: IV_FLAG.TAO,
+                                      IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                       IV_TOR_ID_CU: '',
                                       IV_SLOCATION: userMaBp,
                                       IV_DLOCATION: get(place, 'LOCNO', ''),
@@ -1035,37 +1036,52 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                       ],
                                     },
                                     {
+                                      // eslint-disable-next-line max-lines-per-function
                                       onSuccess: (data: API.MIOAZTMI016Response): void => {
                                         if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
                                           const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
+                                          // add tai vao chuyen thu vua  tao
                                           dispatch(
                                             action_MIOA_ZTMI016(
                                               {
-                                                IV_FLAG: '2',
-                                                IV_TOR_TYPE: 'ZC3',
+                                                IV_FLAG: IV_FLAG.SUA,
+                                                IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                                 IV_TOR_ID_CU: maChuyenThuMoiTao,
                                                 IV_SLOCATION: userMaBp,
-                                                IV_DLOCATION: 'HUB1',
+                                                IV_DLOCATION: get(place, 'LOCNO', ''),
                                                 IV_DESCRIPTION: '',
                                                 T_ITEM: [
                                                   {
                                                     ITEM_ID: maTaiVuaTao,
-                                                    ITEM_TYPE: 'ZC2',
+                                                    ITEM_TYPE: SipDataType.TAI,
                                                   },
                                                 ],
                                               },
                                               {
                                                 onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                                  toast(
-                                                    <>
-                                                      <i className="fa check mr-2" />
-                                                      {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                                                    </>,
-                                                    {
-                                                      containerId: 'DanhSachPhieuGuiTrongBangKe',
-                                                      type: 'success',
-                                                    },
-                                                  );
+                                                  if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+                                                    toast(
+                                                      <>
+                                                        <i className="fa check mr-2" />
+                                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                                      </>,
+                                                      {
+                                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                                        type: 'success',
+                                                      },
+                                                    );
+                                                  } else {
+                                                    toast(
+                                                      <>
+                                                        <i className="fa fa-window-close-o mr-2" />
+                                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                                      </>,
+                                                      {
+                                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                                        type: 'error',
+                                                      },
+                                                    );
+                                                  }
                                                 },
                                               },
                                             ),
@@ -1084,19 +1100,20 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   ),
                 );
               } else {
+                //add bang ke hien tai vao tai moi tao
                 dispatch(
                   action_MIOA_ZTMI016(
                     {
-                      IV_FLAG: '2',
-                      IV_TOR_TYPE: 'ZC2',
+                      IV_FLAG: IV_FLAG.SUA,
+                      IV_TOR_TYPE: SipDataType.TAI,
                       IV_TOR_ID_CU: maTaiVuaTao,
-                      IV_SLOCATION: userMaBp,
-                      IV_DLOCATION: 'HUB1',
+                      IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
+                      IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
                       IV_DESCRIPTION: '',
                       T_ITEM: [
                         {
                           ITEM_ID: idBangKe,
-                          ITEM_TYPE: 'ZC1',
+                          ITEM_TYPE: SipDataType.BANG_KE,
                         },
                       ],
                     },
@@ -1107,8 +1124,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                         dispatch(
                           action_MIOA_ZTMI016(
                             {
-                              IV_FLAG: '1',
-                              IV_TOR_TYPE: 'ZC3',
+                              IV_FLAG: IV_FLAG.TAO,
+                              IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                               IV_TOR_ID_CU: '',
                               IV_SLOCATION: userMaBp,
                               IV_DLOCATION: get(place, 'LOCNO', ''),
@@ -1127,31 +1144,44 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                   dispatch(
                                     action_MIOA_ZTMI016(
                                       {
-                                        IV_FLAG: '2',
-                                        IV_TOR_TYPE: 'ZC3',
+                                        IV_FLAG: IV_FLAG.SUA,
+                                        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                         IV_TOR_ID_CU: maChuyenThuMoiTao,
                                         IV_SLOCATION: userMaBp,
-                                        IV_DLOCATION: 'HUB1',
+                                        IV_DLOCATION: get(place, 'LOCNO', ''),
                                         IV_DESCRIPTION: '',
                                         T_ITEM: [
                                           {
                                             ITEM_ID: maTaiVuaTao,
-                                            ITEM_TYPE: 'ZC2',
+                                            ITEM_TYPE: SipDataType.TAI,
                                           },
                                         ],
                                       },
                                       {
                                         onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                          toast(
-                                            <>
-                                              <i className="fa check mr-2" />
-                                              {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                                            </>,
-                                            {
-                                              containerId: 'DanhSachPhieuGuiTrongBangKe',
-                                              type: 'success',
-                                            },
-                                          );
+                                          if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
+                                            toast(
+                                              <>
+                                                <i className="fa check mr-2" />
+                                                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                              </>,
+                                              {
+                                                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                                type: 'success',
+                                              },
+                                            );
+                                          } else {
+                                            toast(
+                                              <>
+                                                <i className="fa fa-window-close-o mr-2" />
+                                                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                              </>,
+                                              {
+                                                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                                type: 'error',
+                                              },
+                                            );
+                                          }
                                         },
                                       },
                                     ),

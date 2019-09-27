@@ -60,7 +60,9 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC3',
           IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
-          IV_FR_DATE: moment().format('YYYYMMDD'),
+          IV_FR_DATE: moment()
+            .subtract(1, 'day')
+            .format('YYYYMMDD'),
           IV_TO_DATE: moment().format('YYYYMMDD'),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
