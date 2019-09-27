@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { find, forEach, get, map, toNumber, toString, size } from 'lodash';
+import { forEach, get, map, toNumber, toString, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -25,7 +25,6 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { toast, ToastContainer } from 'react-toastify';
-import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 
@@ -44,7 +43,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const idTai = get(props, 'match.params.idTai', '');
   const dataTai = useSelector(makeSelector046RowFirstChild);
   const dataTaiChild = useSelector(makeSelector046ListChildren);
-  const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -402,8 +400,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     handleHidePopupDongTai();
   };
   // eslint-disable-next-line max-lines-per-function
-  const dongTaiVaoChuyenThuTaoMoi = (placeName: string, ghiChu: string): void => {
-    const place = find(listDiemDen, ['DESCR40', placeName]);
+  const dongTaiVaoChuyenThuTaoMoi = (locNo: string, ghiChu: string): void => {
     // tao ngam 1 tai voi diem den la diem den cua bang ke hien tai
     dispatch(
       action_MIOA_ZTMI016(
@@ -448,7 +445,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                           IV_TOR_ID_CU: '',
                           IV_SLOCATION: userMaBp,
-                          IV_DLOCATION: get(place, 'LOCNO', ''),
+                          IV_DLOCATION: locNo,
                           IV_DESCRIPTION: ghiChu,
                           T_ITEM: [
                             {
@@ -468,7 +465,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                                   IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                   IV_TOR_ID_CU: maChuyenThuVuaTao,
                                   IV_SLOCATION: userMaBp,
-                                  IV_DLOCATION: get(place, 'LOCNO', ''),
+                                  IV_DLOCATION: locNo,
                                   IV_DESCRIPTION: '',
                                   T_ITEM: [
                                     {

@@ -129,7 +129,11 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeOption}
             >
               {map(listDiemDen, dd => {
-                return <option key={dd.LOCNO}>{dd.DESCR40}</option>;
+                return (
+                  <option key={dd.LOCNO} value={dd.LOCNO}>
+                    {dd.DESCR40}
+                  </option>
+                );
               })}
             </Input>
           </FormGroup>

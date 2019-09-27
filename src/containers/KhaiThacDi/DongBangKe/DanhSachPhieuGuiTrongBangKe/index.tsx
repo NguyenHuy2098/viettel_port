@@ -1,21 +1,7 @@
 /* eslint-disable max-lines */
 import React, { ChangeEvent, useState, useMemo, useCallback, useEffect } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import {
-  findIndex,
-  find,
-  forEach,
-  get,
-  map,
-  noop,
-  slice,
-  join,
-  size,
-  includes,
-  toString,
-  trim,
-  toNumber,
-} from 'lodash';
+import { findIndex, forEach, get, map, noop, slice, join, size, includes, toString, trim, toNumber } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -36,7 +22,6 @@ import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 
@@ -55,7 +40,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
-  const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const listTai = useSelector(makeSelectorRow('ZC2', 101));
   const listChuyenThu = useSelector(makeSelectorRow('ZC3', 101));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
@@ -229,8 +213,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const taoTaiMoi = (placeName: string, ghiChu: string): void => {
-    const place = find(listDiemDen, ['DESCR40', placeName]);
+  const taoTaiMoi = (locNo: string, ghiChu: string): void => {
     dispatch(
       action_MIOA_ZTMI016(
         {
@@ -238,7 +221,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: '',
           IV_SLOCATION: userMaBp,
-          IV_DLOCATION: get(place, 'LOCNO', ''),
+          IV_DLOCATION: locNo,
           IV_DESCRIPTION: ghiChu,
           T_ITEM: [
             {
@@ -629,6 +612,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                     ),
                   );
                 } else {
+                  // add bang ke hien tai vao tai moi tao
                   dispatch(
                     action_MIOA_ZTMI016(
                       {
@@ -647,52 +631,66 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                       },
                       {
                         // add tai vao chuyen thu vua chon
-                        onSuccess: (): void => {
-                          dispatch(
-                            action_MIOA_ZTMI016(
-                              {
-                                IV_FLAG: IV_FLAG.SUA,
-                                IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-                                IV_TOR_ID_CU: maChuyenThu,
-                                IV_SLOCATION: get(selectedChuyenThu, 'LOG_LOCID_FR', ''),
-                                IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO', ''),
-                                IV_DESCRIPTION: '',
-                                T_ITEM: [
-                                  {
-                                    ITEM_ID: maTaiVuaTao,
-                                    ITEM_TYPE: SipDataType.TAI,
-                                  },
-                                ],
-                              },
-                              {
-                                onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                  if (get(data, 'MT_ZTMI016_OUT.ev_error') === 1) {
-                                    toast(
-                                      <>
-                                        <i className="fa fa-check-circle mr-2" />
-                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                                      </>,
-                                      {
-                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
-                                        type: 'success',
-                                      },
-                                    );
-                                  } else {
-                                    toast(
-                                      <>
-                                        <i className="fa fa-window-close-o mr-2" />
-                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                                      </>,
-                                      {
-                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
-                                        type: 'error',
-                                      },
-                                    );
-                                  }
+                        // eslint-disable-next-line max-lines-per-function
+                        onSuccess: (data: API.MIOAZTMI016Response): void => {
+                          if (get(data, 'MT_ZTMI016_OUT.ev_error') === 1) {
+                            dispatch(
+                              action_MIOA_ZTMI016(
+                                {
+                                  IV_FLAG: IV_FLAG.SUA,
+                                  IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+                                  IV_TOR_ID_CU: maChuyenThu,
+                                  IV_SLOCATION: get(selectedChuyenThu, 'LOG_LOCID_FR', ''),
+                                  IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO', ''),
+                                  IV_DESCRIPTION: '',
+                                  T_ITEM: [
+                                    {
+                                      ITEM_ID: maTaiVuaTao,
+                                      ITEM_TYPE: SipDataType.TAI,
+                                    },
+                                  ],
                                 },
+                                {
+                                  onSuccess: (data1: API.MIOAZTMI016Response): void => {
+                                    if (get(data1, 'MT_ZTMI016_OUT.ev_error') === 1) {
+                                      toast(
+                                        <>
+                                          <i className="fa fa-check-circle mr-2" />
+                                          {get(data1, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                        </>,
+                                        {
+                                          containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                          type: 'success',
+                                        },
+                                      );
+                                    } else {
+                                      toast(
+                                        <>
+                                          <i className="fa fa-window-close-o mr-2" />
+                                          {get(data1, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                                        </>,
+                                        {
+                                          containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                          type: 'error',
+                                        },
+                                      );
+                                    }
+                                  },
+                                },
+                              ),
+                            );
+                          } else {
+                            toast(
+                              <>
+                                <i className="fa fa-window-close-o mr-2" />
+                                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                              </>,
+                              {
+                                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                                type: 'error',
                               },
-                            ),
-                          );
+                            );
+                          }
                         },
                       },
                     ),
@@ -945,8 +943,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   };
 
   // eslint-disable-next-line max-lines-per-function
-  const taoChuyenThuMoi = (placeName: string, ghiChu: string): void => {
-    const place = find(listDiemDen, ['DESCR40', placeName]);
+  const taoChuyenThuMoi = (locNo: string, ghiChu: string): void => {
     dispatch(
       action_MIOA_ZTMI016(
         {
@@ -1026,7 +1023,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                       IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                       IV_TOR_ID_CU: '',
                                       IV_SLOCATION: userMaBp,
-                                      IV_DLOCATION: get(place, 'LOCNO', ''),
+                                      IV_DLOCATION: locNo,
                                       IV_DESCRIPTION: ghiChu,
                                       T_ITEM: [
                                         {
@@ -1048,7 +1045,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                                 IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                                 IV_TOR_ID_CU: maChuyenThuMoiTao,
                                                 IV_SLOCATION: userMaBp,
-                                                IV_DLOCATION: get(place, 'LOCNO', ''),
+                                                IV_DLOCATION: locNo,
                                                 IV_DESCRIPTION: '',
                                                 T_ITEM: [
                                                   {
@@ -1128,7 +1125,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                               IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                               IV_TOR_ID_CU: '',
                               IV_SLOCATION: userMaBp,
-                              IV_DLOCATION: get(place, 'LOCNO', ''),
+                              IV_DLOCATION: locNo,
                               IV_DESCRIPTION: ghiChu,
                               T_ITEM: [
                                 {
@@ -1148,7 +1145,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                                         IV_TOR_TYPE: SipDataType.CHUYEN_THU,
                                         IV_TOR_ID_CU: maChuyenThuMoiTao,
                                         IV_SLOCATION: userMaBp,
-                                        IV_DLOCATION: get(place, 'LOCNO', ''),
+                                        IV_DLOCATION: locNo,
                                         IV_DESCRIPTION: '',
                                         T_ITEM: [
                                           {

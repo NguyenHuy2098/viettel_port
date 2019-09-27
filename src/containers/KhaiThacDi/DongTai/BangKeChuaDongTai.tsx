@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { find, forEach, map, get, noop, size } from 'lodash';
+import { forEach, map, get, noop, size } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 import { toast, ToastContainer } from 'react-toastify';
@@ -22,7 +22,6 @@ import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Inde
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
-import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 let forwardingItemList: ForwardingItem[] = [];
@@ -36,7 +35,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
   const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
-  const listDiemDen = useSelector(makeSelectorGet_MT_ZTMI045_OUT);
   const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
@@ -297,8 +295,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   };
 
   // eslint-disable-next-line max-lines-per-function
-  const dongTaiVaoChuyenThuMoiTao = (placeName: string, ghiChu: string): void => {
-    const place = find(listDiemDen, ['DESCR40', placeName]);
+  const dongTaiVaoChuyenThuMoiTao = (locNo: string, ghiChu: string): void => {
     // tao ngam 1 tai voi diem den duoc chon
     dispatch(
       action_MIOA_ZTMI016(
@@ -343,7 +340,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                           IV_TOR_TYPE: 'ZC3',
                           IV_TOR_ID_CU: '',
                           IV_SLOCATION: userMaBp,
-                          IV_DLOCATION: get(place, 'LOCNO', ''),
+                          IV_DLOCATION: locNo,
                           IV_DESCRIPTION: ghiChu,
                           T_ITEM: [
                             {
@@ -363,7 +360,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                                   IV_TOR_TYPE: 'ZC3',
                                   IV_TOR_ID_CU: maChuyenThuMoiTao,
                                   IV_SLOCATION: userMaBp,
-                                  IV_DLOCATION: get(place, 'LOCNO', ''),
+                                  IV_DLOCATION: locNo,
                                   IV_DESCRIPTION: '',
                                   T_ITEM: [
                                     {
