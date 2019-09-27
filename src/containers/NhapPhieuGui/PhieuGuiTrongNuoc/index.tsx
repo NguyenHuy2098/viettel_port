@@ -605,10 +605,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
     });
-    const servicePayload = find(
-      loaiHinhDichVuList,
-      (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
-    );
+    // const servicePayload = find(
+    //   loaiHinhDichVuList,
+    //   (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
+    // );
     let newPackageItem011 = {
       COD: '',
       Currency: '',
@@ -629,7 +629,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Dimension_UoM: '',
           Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
           Goods_value: '',
-          Service_type: loaiHinhDichVu,
+          Service_type: '',
           item_cat: 'PKG',
           Weight_UoM: 'G',
         };
@@ -647,9 +647,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       Movement_type: diemGiaoNhan,
       Ordering_party: '9999999999',
       item: newArr011,
-      Sales_org: '50000005',
-      Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
-      // Service_group: 'V01/V02/V04',
+      Sales_org: '',
+      // Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
+      Service_group: 'V01/V02/V04', // để theo yêu cầu của em Hường ngày 27/9/2019
       Source_city: provinceIdSender,
       Source_country: 'VN',
       Source_district: districtIdSender,
@@ -1037,7 +1037,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // setLoaiHangHoa('V3');
     // setNguoiThanhToan('PP');
     setChoXemHang('');
-    setDiemGiaoNhan('ZDD');
+    setDiemGiaoNhan('ZPP');
     setGhiChu('');
     setActiveTab('1');
     setPackageItemArr([]);
