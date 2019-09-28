@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { forEach, map, get, noop, size } from 'lodash';
+import { find, forEach, map, get, noop, size } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 import { toast, ToastContainer } from 'react-toastify';
@@ -12,7 +12,7 @@ import { Cell } from 'react-table';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
 import routesMap from 'utils/routesMap';
 import DataTable from 'components/DataTable';
@@ -111,7 +111,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       action_MIOA_ZTMI047({
         IV_TOR_ID: '',
         IV_FR_DATE: moment()
-          .subtract(7, 'day')
+          .subtract(1, 'day')
           .format('YYYYMMDD'),
         IV_TO_DATE: moment().format('YYYYMMDD'),
         IV_TOR_TYPE: 'ZC3',
@@ -132,7 +132,9 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: 'ZC1',
           IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
-          IV_FR_DATE: '20100101',
+          IV_FR_DATE: moment()
+            .subtract(1, 'day')
+            .format('YYYYMMDD'),
           IV_TO_DATE: moment().format('YYYYMMDD'),
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
@@ -212,15 +214,18 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   //eslint-disable-next-line max-lines-per-function
   const handleDongTaiVaoChuyenThuCoSan = (): void => {
     if (size(forwardingItemListState) > 0) {
+      const firstSelectedBangKe = find(listBangKeChuaDongTai, ['TOR_ID', forwardingItemListState[0].ITEM_ID]);
       // Tạo ngầm 1 tải với điểm đến là điểm đến của bảng kê hiện tại
       dispatch(
         action_MIOA_ZTMI016(
           {
-            IV_FLAG: '1',
-            IV_TOR_TYPE: 'ZC2',
+            IV_FLAG: IV_FLAG.TAO,
+            IV_TOR_TYPE: SipDataType.TAI,
             IV_TOR_ID_CU: '',
+            // theo VinhPT , userMaBp == bp_org_unit trong SSO
             IV_SLOCATION: userMaBp,
-            IV_DLOCATION: 'HUB1',
+            // theo VinhPT lay tu tai dau tien
+            IV_DLOCATION: get(firstSelectedBangKe, 'LOG_LOCID_TO'),
             IV_DESCRIPTION: '',
             T_ITEM: [
               {
@@ -234,77 +239,125 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
             onSuccess: (data: API.MIOAZTMI016Response): void => {
               const taiMoiTaoId = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
               // add bảng kê được chọn vào tải mới tạo
-              dispatch(
-                action_MIOA_ZTMI016(
-                  {
-                    IV_FLAG: '2',
-                    IV_TOR_TYPE: 'ZC2',
-                    IV_TOR_ID_CU: taiMoiTaoId,
-                    IV_SLOCATION: userMaBp,
-                    IV_DLOCATION: 'HUB1',
-                    IV_DESCRIPTION: '',
-                    T_ITEM: forwardingItemListState,
-                  },
-                  {
-                    onSuccess: (): void => {
-                      // add tải vừa tạo vào chuyến thư được chọn
-                      dispatch(
-                        action_MIOA_ZTMI016(
-                          {
-                            IV_FLAG: '2',
-                            IV_TOR_TYPE: 'ZC3',
-                            IV_TOR_ID_CU: get(selectedChuyenThu, ' TOR_ID', ''),
-                            IV_SLOCATION: userMaBp,
-                            IV_DLOCATION: 'HUB1',
-                            IV_DESCRIPTION: '',
-                            T_ITEM: [
-                              {
-                                ITEM_ID: taiMoiTaoId,
-                                ITEM_TYPE: 'ZC2',
-                              },
-                            ],
-                          },
-                          {
-                            onSuccess: (data: API.MIOAZTMI016Response): void => {
-                              toast(
-                                <>
-                                  <i className="fa check mr-2" />
-                                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                                </>,
-                                {
-                                  containerId: 'BangKeChuaDongTai',
-                                  type: 'success',
-                                },
-                              );
-                            },
-                          },
-                        ),
-                      );
-                    },
-                  },
-                ),
+              addBangKeDuocChonVaoTaiMoiTao(taiMoiTaoId, firstSelectedBangKe);
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  containerId: 'BangKeChuaDongTai',
+                  type: 'error',
+                },
               );
             },
           },
         ),
       );
-    } else {
-      alert(t('Vui lòng chọn bảng kê!'));
     }
+
+    const addBangKeDuocChonVaoTaiMoiTao = (
+      taiMoiTaoId: string,
+      firstSelectedBangKe: API.RowMTZTMI047OUT | undefined,
+    ): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.TAI,
+            IV_TOR_ID_CU: taiMoiTaoId,
+            // theo VinhPT , userMaBp == bp_org_unit trong SSO
+            IV_SLOCATION: userMaBp,
+            // theo VinhPT lay tu tai dau tien
+            IV_DLOCATION: get(firstSelectedBangKe, 'LOG_LOCID_TO'),
+            IV_DESCRIPTION: '',
+            T_ITEM: forwardingItemListState,
+          },
+          {
+            onSuccess: (): void => {
+              // add tải vừa tạo vào chuyến thư được chọn
+              addTaiVuaTaoVaoChuyenThuDuocChon(taiMoiTaoId);
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  containerId: 'BangKeChuaDongTai',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
+
+    const addTaiVuaTaoVaoChuyenThuDuocChon = (taiMoiTaoId: string): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+            IV_TOR_ID_CU: get(selectedChuyenThu, ' TOR_ID', ''),
+            IV_SLOCATION: get(selectedChuyenThu, ' LOG_LOCID_FR', ''),
+            IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO', ''),
+            IV_DESCRIPTION: '',
+            T_ITEM: [
+              {
+                ITEM_ID: taiMoiTaoId,
+                ITEM_TYPE: SipDataType.TAI,
+              },
+            ],
+          },
+          {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  containerId: 'BangKeChuaDongTai',
+                  type: 'success',
+                },
+              );
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  containerId: 'BangKeChuaDongTai',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
     handleClosePopupDongtai();
   };
 
   // eslint-disable-next-line max-lines-per-function
   const dongTaiVaoChuyenThuMoiTao = (locNo: string, ghiChu: string): void => {
+    const firstSelectedBangKe = find(listBangKeChuaDongTai, ['TOR_ID', forwardingItemListState[0].ITEM_ID]);
     // tao ngam 1 tai voi diem den duoc chon
     dispatch(
       action_MIOA_ZTMI016(
         {
-          IV_FLAG: '1',
-          IV_TOR_TYPE: 'ZC2',
+          IV_FLAG: IV_FLAG.TAO,
+          IV_TOR_TYPE: SipDataType.TAI,
           IV_TOR_ID_CU: '',
           IV_SLOCATION: userMaBp,
-          IV_DLOCATION: 'HUB1',
+          IV_DLOCATION: get(firstSelectedBangKe, 'LOG_LOCID_TO', ''),
           IV_DESCRIPTION: '',
           T_ITEM: [
             {
@@ -318,85 +371,145 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
             const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
             // add bang ke duoc chon vao tai moi tao
-            dispatch(
-              action_MIOA_ZTMI016(
-                {
-                  IV_FLAG: '2',
-                  IV_TOR_TYPE: 'ZC2',
-                  IV_TOR_ID_CU: maTaiVuaTao,
-                  IV_SLOCATION: userMaBp,
-                  IV_DLOCATION: 'HUB1',
-                  IV_DESCRIPTION: '',
-                  T_ITEM: forwardingItemListState,
-                },
-                {
-                  // eslint-disable-next-line max-lines-per-function
-                  onSuccess: (): void => {
-                    //tao chuyen thu
-                    dispatch(
-                      action_MIOA_ZTMI016(
-                        {
-                          IV_FLAG: '1',
-                          IV_TOR_TYPE: 'ZC3',
-                          IV_TOR_ID_CU: '',
-                          IV_SLOCATION: userMaBp,
-                          IV_DLOCATION: locNo,
-                          IV_DESCRIPTION: ghiChu,
-                          T_ITEM: [
-                            {
-                              ITEM_ID: '',
-                              ITEM_TYPE: '',
-                            },
-                          ],
-                        },
-                        {
-                          onSuccess: (data: API.MIOAZTMI016Response): void => {
-                            const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-                            // add tải vừa tạo vào chuyến thư vừa tạo
-                            dispatch(
-                              action_MIOA_ZTMI016(
-                                {
-                                  IV_FLAG: '2',
-                                  IV_TOR_TYPE: 'ZC3',
-                                  IV_TOR_ID_CU: maChuyenThuMoiTao,
-                                  IV_SLOCATION: userMaBp,
-                                  IV_DLOCATION: locNo,
-                                  IV_DESCRIPTION: '',
-                                  T_ITEM: [
-                                    {
-                                      ITEM_ID: maTaiVuaTao,
-                                      ITEM_TYPE: 'ZC2',
-                                    },
-                                  ],
-                                },
-                                {
-                                  onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                    toast(
-                                      <>
-                                        <i className="fa check mr-2" />
-                                        {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                                      </>,
-                                      {
-                                        containerId: 'DanhSachPhieuGuiTrongBangKe',
-                                        type: 'success',
-                                      },
-                                    );
-                                  },
-                                },
-                              ),
-                            );
-                          },
-                        },
-                      ),
-                    );
-                  },
-                },
-              ),
+            addBangKeDuocChonVaoTaiMoiTao(maTaiVuaTao);
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                containerId: 'BangKeChuaDongTai',
+                type: 'error',
+              },
             );
           },
         },
       ),
     );
+
+    const addBangKeDuocChonVaoTaiMoiTao = (maTaiVuaTao: string): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.TAI,
+            IV_TOR_ID_CU: maTaiVuaTao,
+            IV_SLOCATION: userMaBp,
+            IV_DLOCATION: get(firstSelectedBangKe, 'LOG_LOCID_TO', ''),
+            IV_DESCRIPTION: '',
+            T_ITEM: forwardingItemListState,
+          },
+          {
+            // eslint-disable-next-line max-lines-per-function
+            onSuccess: (): void => {
+              //tao chuyen thu theo thong tin duoc chon tu popup
+              taoChuyenThuTheoTHongTinDuocChon(maTaiVuaTao);
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  containerId: 'BangKeChuaDongTai',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
+
+    const taoChuyenThuTheoTHongTinDuocChon = (maTaiVuaTao: string): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.TAO,
+            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+            IV_TOR_ID_CU: '',
+            IV_SLOCATION: userMaBp,
+            IV_DLOCATION: locNo,
+            IV_DESCRIPTION: ghiChu,
+            T_ITEM: [
+              {
+                ITEM_ID: '',
+                ITEM_TYPE: '',
+              },
+            ],
+          },
+          {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+              // add tải vừa tạo vào chuyến thư vừa tạo
+              addTaiVuaTaoVaoChuyenThuVuaTao(maTaiVuaTao, maChuyenThuMoiTao);
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  containerId: 'BangKeChuaDongTai',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
+
+    const addTaiVuaTaoVaoChuyenThuVuaTao = (maTaiVuaTao: string, maChuyenThuMoiTao: string): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+            IV_TOR_ID_CU: maChuyenThuMoiTao,
+            IV_SLOCATION: userMaBp,
+            IV_DLOCATION: locNo,
+            IV_DESCRIPTION: '',
+            T_ITEM: [
+              {
+                ITEM_ID: maTaiVuaTao,
+                ITEM_TYPE: SipDataType.TAI,
+              },
+            ],
+          },
+          {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongBangKe',
+                  type: 'success',
+                },
+              );
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  containerId: 'BangKeChuaDongTai',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
     handleClosePopupDongtai();
   };
 

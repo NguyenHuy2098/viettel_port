@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { forEach, get, map, toNumber, toString, size } from 'lodash';
+import { forEach, get, map, toString, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -88,10 +88,10 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           .subtract(7, 'day')
           .format('YYYYMMDD'),
         IV_TO_DATE: toString(moment().format('YYYYMMDD')),
-        IV_TOR_TYPE: 'ZC3',
+        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
         IV_FR_LOC_ID: 'BDH',
         IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: '101',
+        IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
         IV_PAGENO: '1',
         IV_NO_PER_PAGE: '5000',
       }),
@@ -446,98 +446,145 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           onSuccess: (data: API.MIOAZTMI016Response): void => {
             const maTaiMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
             // add Bang ke duoc chon vao tai moi tao
-            dispatch(
-              action_MIOA_ZTMI016(
-                {
-                  IV_FLAG: IV_FLAG.SUA,
-                  IV_TOR_TYPE: SipDataType.TAI,
-                  IV_TOR_ID_CU: maTaiMoiTao,
-                  IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
-                  IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
-                  IV_DESCRIPTION: '',
-                  T_ITEM: forwardingItemListState,
-                },
-                {
-                  // eslint-disable-next-line max-lines-per-function
-                  onSuccess: (): void => {
-                    //Tao chuyen thu theo thong tin vua duoc chon tu pop up
-                    dispatch(
-                      action_MIOA_ZTMI016(
-                        {
-                          IV_FLAG: IV_FLAG.TAO,
-                          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-                          IV_TOR_ID_CU: '',
-                          IV_SLOCATION: userMaBp,
-                          IV_DLOCATION: locNo,
-                          IV_DESCRIPTION: ghiChu,
-                          T_ITEM: [
-                            {
-                              ITEM_ID: '',
-                              ITEM_TYPE: '',
-                            },
-                          ],
-                        },
-                        {
-                          onSuccess: (data: API.MIOAZTMI016Response): void => {
-                            const maChuyenThuVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-                            // add tai vua tao vao chuyen thu vua tao
-                            dispatch(
-                              action_MIOA_ZTMI016(
-                                {
-                                  IV_FLAG: IV_FLAG.SUA,
-                                  IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-                                  IV_TOR_ID_CU: maChuyenThuVuaTao,
-                                  IV_SLOCATION: userMaBp,
-                                  IV_DLOCATION: locNo,
-                                  IV_DESCRIPTION: '',
-                                  T_ITEM: [
-                                    {
-                                      ITEM_ID: maTaiMoiTao,
-                                      ITEM_TYPE: SipDataType.TAI,
-                                    },
-                                  ],
-                                },
-                                {
-                                  onSuccess: (data: API.MIOAZTMI016Response): void => {
-                                    if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
-                                      toast(
-                                        <>
-                                          <i className="fa check mr-2" />
-                                          {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
-                                        </>,
-                                        {
-                                          containerId: 'DanhSachPhieuGuiTrongTai',
-                                          type: 'success',
-                                        },
-                                      );
-                                    } else {
-                                      toast(
-                                        <>
-                                          <i className="fa fa-window-close-o  mr-2" />
-                                          {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
-                                        </>,
-                                        {
-                                          containerId: 'DanhSachPhieuGuiTrongTai',
-                                          type: 'error',
-                                        },
-                                      );
-                                    }
-                                  },
-                                },
-                              ),
-                            );
-                          },
-                        },
-                      ),
-                    );
-                  },
-                },
-              ),
+            addBangKeDuocChonVaoTaiMoiTao(maTaiMoiTao);
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
+              </>,
+              {
+                containerId: 'DanhSachPhieuGuiTrongBangKe',
+                type: 'error',
+              },
             );
           },
         },
       ),
     );
+
+    const addBangKeDuocChonVaoTaiMoiTao = (maTaiMoiTao: string): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.TAI,
+            IV_TOR_ID_CU: maTaiMoiTao,
+            IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
+            IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
+            IV_DESCRIPTION: '',
+            T_ITEM: forwardingItemListState,
+          },
+          {
+            // eslint-disable-next-line max-lines-per-function
+            onSuccess: (): void => {
+              //Tao chuyen thu theo thong tin vua duoc chon tu pop up
+              taoChuyenThuTheoThongTinVuaChonTuPopup(maTaiMoiTao);
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongBangKe',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
+
+    const taoChuyenThuTheoThongTinVuaChonTuPopup = (maTaiMoiTao: string): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.TAO,
+            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+            IV_TOR_ID_CU: '',
+            IV_SLOCATION: userMaBp,
+            IV_DLOCATION: locNo,
+            IV_DESCRIPTION: ghiChu,
+            T_ITEM: [
+              {
+                ITEM_ID: '',
+                ITEM_TYPE: '',
+              },
+            ],
+          },
+          {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              const maChuyenThuVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+              // add tai vua tao vao chuyen thu vua tao
+              addTaiVuaTaoVaoChuyenThuVuaTao(maTaiMoiTao, maChuyenThuVuaTao);
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongBangKe',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
+
+    const addTaiVuaTaoVaoChuyenThuVuaTao = (maTaiMoiTao: string, maChuyenThuVuaTao: string): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+            IV_TOR_ID_CU: maChuyenThuVuaTao,
+            IV_SLOCATION: userMaBp,
+            IV_DLOCATION: locNo,
+            IV_DESCRIPTION: '',
+            T_ITEM: [
+              {
+                ITEM_ID: maTaiMoiTao,
+                ITEM_TYPE: SipDataType.TAI,
+              },
+            ],
+          },
+          {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongTai',
+                  type: 'success',
+                },
+              );
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
+                </>,
+                {
+                  containerId: 'DanhSachPhieuGuiTrongBangKe',
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+    };
 
     handleHidePopupDongTai();
   };
