@@ -21,7 +21,7 @@ import { makeSelectorZTMI236OUTPagingTotalPage, makeSelectorZTMI236OUTRow } from
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
-import { action_MIOA_ZTMI022 } from '../../../redux/MIOA_ZTMI022/actions';
+import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 
 interface Props {
   getListKienChuaDongChuyenThu: (IV_PAGENO?: number, IV_PACKAGE_ID?: string) => void;

@@ -11,8 +11,8 @@ import DataTable from 'components/DataTable';
 import { Cell } from 'react-table';
 import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
 import { Location } from 'history';
-import SelectForwardingItemModal from '../../../components/SelectForwardingItemModal/Index';
-import { makeSelectorMaBP } from '../../../redux/auth/selectors';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 interface Props {
   location: Location;

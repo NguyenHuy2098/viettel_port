@@ -545,10 +545,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
     });
-    // const servicePayload = find(
-    //   transportMethodArr,
-    //   (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
-    // );
+    const servicePayload = find(
+      transportMethodArr,
+      (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
+    );
     let newPackageItem011 = {
       COD: '',
       COMODITY_CODE: 'V04', // Nhóm hàng hóa (tham chiếu trong bảng)
@@ -599,8 +599,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       Ordering_party: '9999999999',
       item: newArr011,
       Sales_org: '',
-      // Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
-      Service_group: 'V01/V02/V04', // để theo yêu cầu của em Hường ngày 27/9/2019
+      Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
+      // Service_group: 'V01/V02/V04', // để theo yêu cầu của em Hường ngày 27/9/2019
       Source_city: provinceIdSender,
       Source_country: 'VN',
       Source_district: districtIdSender,
