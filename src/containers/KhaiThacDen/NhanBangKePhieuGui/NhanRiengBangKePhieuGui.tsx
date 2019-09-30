@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/chuyenThu/actions';
+import { actionQuetNhan } from 'redux/common/actions';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function

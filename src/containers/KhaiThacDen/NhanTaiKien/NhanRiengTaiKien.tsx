@@ -11,7 +11,7 @@ import { push } from 'connected-react-router';
 
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/chuyenThu/actions';
+import { actionQuetNhan } from 'redux/common/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';

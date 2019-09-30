@@ -13,7 +13,7 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/chuyenThu/actions';
+import { actionQuetNhan } from 'redux/common/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';

@@ -11,7 +11,7 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/chuyenThu/actions';
+import { actionQuetNhan } from 'redux/common/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorPagingCount, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';

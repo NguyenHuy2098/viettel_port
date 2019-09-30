@@ -5,7 +5,7 @@ import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
 import { select } from 'utils/stateHelpers';
 
-export async function getZTMI022(payload: Partial<API.RowRequestZTMI022>): Promise<API.MIOAZTMI022Response> {
+export async function post_MIOA_ZTMI022(payload: Partial<API.RowRequestZTMI022>): Promise<API.MIOAZTMI022Response> {
   const maBP = select(makeSelectorMaBP);
   const userId = select(makeSelectorPreferredUsername);
   const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI022, {

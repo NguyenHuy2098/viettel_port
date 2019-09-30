@@ -1,7 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { all, call } from 'redux-saga/effects';
 import watchAuthSagaAsync from './auth/sagas';
-import watchChuyenThuSagaAsync from './chuyenThu/sagas';
+import watchCommonSagaAsync from './common/sagas';
 import watchErrorsSagaAsync from './errors/sagas';
 import watch_MIOA_ZTMI016_SagaAsync from './MIOA_ZTMI016/sagas';
 import watch_MIOA_ZTMI022_SagaAsync from './MIOA_ZTMI022/sagas';
@@ -26,7 +26,7 @@ import watch_ZTMI241_SagaAsync from './ZTMI241/sagas';
 export default function* rootSagas(): SagaIterator {
   yield all([
     call(watchAuthSagaAsync),
-    call(watchChuyenThuSagaAsync),
+    call(watchCommonSagaAsync),
     call(watchErrorsSagaAsync),
     call(watch_MIOA_ZTMI016_SagaAsync),
     call(watch_MIOA_ZTMI022_SagaAsync),
