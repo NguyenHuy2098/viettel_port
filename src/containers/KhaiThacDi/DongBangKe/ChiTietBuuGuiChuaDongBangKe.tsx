@@ -184,7 +184,12 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thư - Nhanh')}</h1>
+        <h1 className="sipTitle">
+          <button className="sipTitleBtnBack btn btn-secondary">
+            <i className="fa fa-arrow-left backIcon"></i>
+          </button>
+          {t('Thư - Nhanh')}
+        </h1>
         <div className="sipTitleRightBlock">
           <Button onClick={handleChuyenVaoBangKe}>
             <i className="fa fa-file-excel-o" />
