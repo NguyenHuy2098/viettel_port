@@ -50,7 +50,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         },
       },
       {
-        Header: t('Mã phiếu gửi'),
+        Header: t('Mã bưu gửi'),
         accessor: 'TOR_ID',
       },
       {
@@ -101,7 +101,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
               onClick: handleQuetPhieuGuiId,
             }}
             onChange={handleChangePhieuGuiId}
-            placeholder={t('Quét mã phiếu gửi')}
+            placeholder={t('Quét mã bưu gửi')}
           />
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
@@ -113,7 +113,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         {/*<div className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}
         {/*    <i className="fa fa-cube mr-1" />*/}
-        {/*    {t('Nhận phiếu gửi')}*/}
+        {/*    {t('Nhận bưu gửi')}*/}
         {/*  </Button>*/}
         {/*</div>*/}
       </Row>

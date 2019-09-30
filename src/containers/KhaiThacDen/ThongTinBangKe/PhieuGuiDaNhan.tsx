@@ -41,7 +41,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Mã phiếu gửi'),
+        Header: t('Mã bưu gửi'),
         accessor: 'TOR_ID',
       },
       {
@@ -99,7 +99,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
         <div className="btn-toolbar col-10">
           <Filter
             onChange={handleChangeSearchText}
-            placeholder={t('Tìm kiếm phiếu gửi')}
+            placeholder={t('Tìm kiếm bưu gửi')}
             searchResult={filteredListPhieuGuiDaNhan}
           />
         </div>

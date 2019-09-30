@@ -104,7 +104,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <div className="row mt-3" />
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Thông tin phiếu gửi')}</h1>
+        <h1 className="sipTitle">{t('Thông tin bưu gửi')}</h1>
       </Row>
       <div className="row mt-3" />
 
@@ -115,7 +115,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
               className={classNames({ active: tab === 1 })}
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
-              {t('Phiếu gửi chưa nhận')}
+              {t('Bưu gửi chưa nhận')}
               <Badge color="primary">{countPhieuGuiChuaNhan}</Badge>
             </NavLink>
           </NavItem>
@@ -124,7 +124,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
               className={classNames({ active: tab === 2 })}
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
-              {t('Phiếu gửi đã nhận')}
+              {t('Bưu gửi đã nhận')}
               <Badge color="primary">{countPhieuGuiDaNhan}</Badge>
             </NavLink>
           </NavItem>
