@@ -5,15 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get } from 'lodash';
+import { ceil, get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { actionQuetNhan } from 'redux/chuyenThu/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorPagingCount, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
@@ -23,8 +21,6 @@ import routesMap from 'utils/routesMap';
 const ShippingInformation: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const maBP = useSelector(makeSelectorMaBP);
-  const userId = useSelector(makeSelectorPreferredUsername);
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const listChuyenThuDaQuetNhan = useSelector(
     makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
@@ -32,7 +28,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   const countChuyenThuDaQuetNhan = useSelector(
     makeSelectorPagingCount(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
   );
-  const [idChuyenThu, setIdChuyenThu] = useState<string>();
+  const [idChuyenThu, setIdChuyenThu] = useState<string>('');
 
   const getListChuyenThuDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
@@ -54,44 +50,17 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   };
 
   const handleQuetNhanChuyenThu = (): void => {
-    dispatch(
-      action_MIOA_ZTMI023(
-        {
-          IV_ID: idChuyenThu,
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoChuyenThu: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
-            dispatch(
-              action_MIOA_ZTMI022(
-                {
-                  row: {
-                    CU_NO: '',
-                    FU_NO: get(infoChuyenThu, 'TOR_ID'),
-                    LOC_ID: maBP,
-                    STATUS_ID: '1',
-                    USER_ID: userId,
-                  },
-                },
-                // {
-                //   onSuccess: (data: API.MIOAZTMI022Response) => {
-                //     console.log(data);
-                //   },
-                // },
-              ),
-            );
-          },
-        },
-      ),
-    );
+    if (!isEmpty(idChuyenThu)) {
+      dispatch(actionQuetNhan({ IV_ID: idChuyenThu }));
+    }
   };
 
   const renderOrderInformationTitle = (): JSX.Element => (
     <Row className="mb-3 sipTitleContainer">
-      <Col className="px-0" md={9}>
+      <Col className="px-0" md={8}>
         <h3>{t('Nhận chuyến thư')}</h3>
       </Col>
-      <Col className="px-0" md={3}>
+      <Col className="px-0" md={4}>
         <InputGroup>
           <InputGroupAddon addonType="prepend">
             <span className="input-group-text">
@@ -106,7 +75,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
 
   const renderFindOrder = (): JSX.Element => (
     <Row className="sipBgWhiteContainer d-flex justify-content-between">
-      <Col md={10}>
+      <Col md={6}>
         <Scan
           buttonProps={{
             onClick: handleQuetNhanChuyenThu,

@@ -1419,6 +1419,11 @@ declare namespace API {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI068OUT[];
   }
+  export interface MTZTMI213OUT {
+    EV_ERROR?: number; // int32
+    RETURN_MESSAGE?: RETURNMESSAGE;
+    Row?: RowMTZTMI213OUT[];
+  }
   export interface MTZTMI236OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
@@ -1755,6 +1760,7 @@ declare namespace API {
     UNAME?: string;
     NAME_TEXT?: string;
     POSITION?: string;
+    BP?: string;
   }
   export interface RowMTZTMI058OUT {
     FWO_TYPE?: string;
@@ -1786,6 +1792,14 @@ declare namespace API {
     SERVICE_GROUP?: string;
     SERVICE_GROUP_DES?: string;
     TARGET_TIME?: string;
+  }
+  export interface RowMTZTMI213OUT {
+    FREIGHT_UNIT?: string;
+    PACKAGE_ID?: string;
+    QUANTITY?: string;
+    QUANTITY_UOM?: string;
+    GROSS_WEIGHT?: string;
+    WEIGHT_UOM?: string;
   }
   export interface RowMTZTMI236OUT {
     PACKAGE_ID?: string;
@@ -2639,6 +2653,42 @@ declare namespace API {
     Row?: RowMTZTMI067OUT[];
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+  export interface ZTMI213Request {
+    /**
+     * Mã kiện cần tách
+     */
+    PACKAGE_ID?: string;
+    row?: ZTMI213Row[];
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZTMI213Response {
+    MT_ZTMI213_OUT?: MTZTMI213OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZTMI213Row {
+    /**
+     * Số lượng 1 kiện con cần tách
+     */
+    QUANTITY?: string;
+    /**
+     * Đơn vị số lượng( mặc định EA)
+     */
+    QUANTITY_UOM?: string;
+    /**
+     * Trọng lượng 1 kiện con cần tách
+     */
+    GROSS_WEIGHT?: string;
+    /**
+     * Đơn vị trọng lượng ( mặc định G)
+     */
+    WEIGHT_UOM?: string;
+  }
   export interface ZTMI236Request {
     /**
      * Mã bưu gửi
@@ -3257,6 +3307,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.UserVoSoAddOrChangeResponse;
+    }
+  }
+  namespace ZTMI213 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZTMI213Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZTMI213Response;
     }
   }
   namespace ZTMI236 {

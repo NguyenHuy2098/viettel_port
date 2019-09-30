@@ -21,7 +21,7 @@ export function* takeGet_MIOA_ZTMI047(action: UnfoldSagaActionType): SagaIterato
           IV_FR_LOC_ID: '',
           IV_TO_LOC_ID: maBP,
           IV_CUST_STATUS: '',
-          IV_FR_DATE: today,
+          IV_FR_DATE: '20190901',
           IV_TO_DATE: today,
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '10',
