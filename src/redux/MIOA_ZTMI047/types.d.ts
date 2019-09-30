@@ -16,7 +16,7 @@ interface MIOAZTMI047StateType {
 
 interface ForwardingItem {
   ITEM_ID: string;
-  ITEM_TYPE: string;
+  ITEM_TYPE?: string;
 }
 
 interface PackageItemInputType {
