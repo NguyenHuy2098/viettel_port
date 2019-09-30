@@ -120,6 +120,10 @@ const TachPhieuGui = Loadable({
   loader: (): any => import('containers/KhaiThacDi/TachPhieuGui'),
   loading: Loading,
 });
+const ChiTietBuuGuiChuaDongBangKe = Loadable({
+  loader: (): any => import('containers/KhaiThacDi/DongBangKe/ChiTietBuuGuiChuaDongBangKe'),
+  loading: Loading,
+});
 
 // =============== KhaiThacDen =====================
 
@@ -284,6 +288,11 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.NHAN_TAI_BUU_CUC_GOC, name: t('Quét mã phiếu gửi'), component: NhanTaiBuuCucGoc },
     { path: routesMap.PHAN_CONG_PHAT_NHAN, name: t('Phân công phát nhận'), component: PhanCongPhatNhan },
     { path: routesMap.CHI_TIET_NHOM_HANG_HOA, name: t('Chi tiết nhóm hàng hóa'), component: ChiTietNhomHangHoa },
+    {
+      path: routesMap.CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE,
+      name: t('Chi tiết nhóm hàng hóa'),
+      component: ChiTietBuuGuiChuaDongBangKe,
+    },
   ];
 };
 

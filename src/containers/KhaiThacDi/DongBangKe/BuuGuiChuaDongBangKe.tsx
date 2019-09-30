@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useCallback } from 'react';
 import { Row } from 'reactstrap';
 import DataTable from 'components/DataTable/Printable';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
 import { findIndex, join, map, size, slice } from 'lodash';
 import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
+import { push } from 'connected-react-router';
+import { generatePath } from 'react-router';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
@@ -56,9 +59,17 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
     dispatch(action_ZTMI240(payload));
   }, [dispatch]);
 
+  const handleRedirectDetail = useCallback(
+    (item: MTZTMI240Row): void => {
+      dispatch(push(generatePath(routesMap.CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE), item.CHILD));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [listPhieuGuiChuaDongBangKe],
+  );
+
   return (
     <Row className="sipTableContainer mt-3 sipTableRowClickable">
-      <DataTable columns={columns} data={data} />
+      <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
     </Row>
   );
 };

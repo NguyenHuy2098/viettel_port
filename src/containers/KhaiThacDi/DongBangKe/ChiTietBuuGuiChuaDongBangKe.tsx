@@ -19,7 +19,7 @@ interface Props {
 }
 const forwardingItemList: ForwardingItem[] = [];
 // eslint-disable-next-line max-lines-per-function
-function ChiTietNhomHangHoa(props: Props): JSX.Element {
+function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [tab] = useState(1);
@@ -242,4 +242,4 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
   );
 }
 
-export default ChiTietNhomHangHoa;
+export default ChiTietBuuGuiChuaDongBangKe;

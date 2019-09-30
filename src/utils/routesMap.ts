@@ -25,6 +25,7 @@ export const DONG_CHUYEN_THU = `${KHAI_THAC_DI}/dong-chuyen-thu`;
 export const DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU = `${KHAI_THAC_DI}/danh-sach-tai-kien-trong-chuyen-thu/:idChuyenThu`;
 export const DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU_DA_DONG = `${KHAI_THAC_DI}/danh-sach-tai-kien-trong-chuyen-thu-da-dong/:idChuyenThu`;
 export const TACH_PHIEU_GUI = `${KHAI_THAC_DI}/tach-phieu-gui`;
+export const CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE = `${KHAI_THAC_DI}/chi-tiet-nhom-hang-hoa`;
 
 export const NHAP_PHIEU_GUI = '/nhap-phieu-gui';
 export const NHAP_PHIEU_GUI_TRONG_NUOC = `${NHAP_PHIEU_GUI}/phieu-gui-trong-nuoc/tao-don`;
@@ -97,6 +98,7 @@ export default {
   DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU,
   DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU_DA_DONG,
   TACH_PHIEU_GUI,
+  CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE,
   /**
    * Nhập phiếu gửi
    */
