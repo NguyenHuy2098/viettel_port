@@ -13,8 +13,8 @@ import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
 import { actionQuetNhan } from 'redux/common/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow, makeSelectorPagingCount, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { makeSelectorPagingCount, makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
@@ -32,11 +32,15 @@ const ShippingInformation: React.FC = (): JSX.Element => {
 
   const getListChuyenThuDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
-        IV_PAGENO: IV_PAGENO,
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
+          IV_PAGENO: IV_PAGENO,
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DEN },
+      ),
     );
   };
 

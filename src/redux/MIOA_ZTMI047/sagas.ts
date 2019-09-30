@@ -1,34 +1,32 @@
 import { SagaIterator } from 'redux-saga';
-import { select, takeEvery } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga/effects';
 import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
-import moment from 'moment';
+import { get } from 'lodash';
 
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { sapApiMap } from 'utils/apisMap';
-import HttpRequestError from 'utils/HttpRequetsError';
-import { sapApi } from 'utils/request';
+import { SipFlowType } from 'utils/enums';
+import { select } from 'utils/stateHelpers';
 import { ACTION_MIOA_ZTMI047 } from './actions';
+import { post_MIOA_ZTMI047 } from './helpers';
 
 export function* takeGet_MIOA_ZTMI047(action: UnfoldSagaActionType): SagaIterator {
-  const maBP = yield select(makeSelectorMaBP);
   yield unfoldSaga(
     {
-      handler: async (): Promise<MIOAZTMI047PayloadType> => {
-        const today = moment().format('YYYYMMDD');
-        const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI047, {
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: '',
-          IV_FR_LOC_ID: '',
-          IV_TO_LOC_ID: maBP,
-          IV_CUST_STATUS: '',
-          IV_FR_DATE: '20190901',
-          IV_TO_DATE: today,
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-          ...action.payload,
-        });
-        if (data.Status) return { data, params: action.payload };
-        throw new HttpRequestError(data.ErrorCode, data.Messages);
+      handler: async () => {
+        const maBP = select(makeSelectorMaBP);
+        const flowType = get(action, 'options.flow');
+        if (flowType === SipFlowType.KHAI_THAC_DEN) {
+          return await post_MIOA_ZTMI047({
+            IV_TO_LOC_ID: maBP,
+            ...action.payload,
+          });
+        } else if (flowType === SipFlowType.KHAI_THAC_DI) {
+          return await post_MIOA_ZTMI047({
+            IV_FR_LOC_ID: maBP,
+            ...action.payload,
+          });
+        }
+        return await post_MIOA_ZTMI047(action.payload);
       },
       key: action.type,
     },

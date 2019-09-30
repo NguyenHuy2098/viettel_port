@@ -4,14 +4,12 @@ import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'r
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { push } from 'connected-react-router';
-import moment from 'moment';
 import { generatePath } from 'react-router';
 import { size, trim } from 'lodash';
 
-import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountChuyenThuChuaNhanTaiKien, makeSelectorRowSize } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import ChuyenThuChuaNhanTaiKien from './ChuyenThuChuaNhanTaiKien';
 import TaiDaNhan from './TaiDaNhan';
@@ -22,62 +20,50 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
   const dispatch = useDispatch();
-  const maBP = useSelector(makeSelectorMaBP);
   const countChuyenThuChuaNhanTaiKien = useSelector(makeSelectorCountChuyenThuChuaNhanTaiKien);
   const countTaiDaNhan = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
   const countNhanRiengTaiKien = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
   const getChuyenThuChuaNhanTaiKien = (IV_PAGENO = 1): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-        IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: maBP,
-        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO: IV_PAGENO,
-        IV_NO_PER_PAGE: '5000',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
+          IV_PAGENO: IV_PAGENO,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DEN },
+      ),
     );
   };
 
   const getTaiDaNhan = (IV_PAGENO = 1): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_TOR_TYPE: SipDataType.TAI,
-        IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: maBP,
-        IV_CUST_STATUS: SipDataState.TAI_KIEN_DA_QUET_NHAN,
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO: IV_PAGENO,
-        IV_NO_PER_PAGE: '10',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.TAI_KIEN_DA_QUET_NHAN,
+          IV_PAGENO: IV_PAGENO,
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DEN },
+      ),
     );
   };
 
   const getTaiKienChuaNhan = (IV_PAGENO = 1): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_TOR_TYPE: SipDataType.TAI,
-        IV_FR_LOC_ID: '',
-        IV_TO_LOC_ID: maBP,
-        IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO: IV_PAGENO,
-        IV_NO_PER_PAGE: '10',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
+          IV_PAGENO: IV_PAGENO,
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DEN },
+      ),
     );
   };
 

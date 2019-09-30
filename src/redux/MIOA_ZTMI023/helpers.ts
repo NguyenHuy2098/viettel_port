@@ -4,7 +4,11 @@ import { sapApi } from 'utils/request';
 import { sapApiMap } from 'utils/apisMap';
 
 export async function post_MIOA_ZTMI023(payload: Partial<API.MIOAZTMI023Request>): Promise<API.MIOAZTMI023Response> {
-  const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI023, payload);
+  const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI023, {
+    IV_ID: '',
+    IV_FR_LOG_ID: '',
+    ...payload,
+  });
   const row = get(data, 'MT_ZTMI023_OUT.row');
   if (isArray(row) && size(row) > 0) {
     return data;

@@ -32,6 +32,11 @@ export enum SipDataState {
   PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC = 604,
 }
 
+export enum SipFlowType {
+  KHAI_THAC_DEN = 'KHAI_THAC_DEN',
+  KHAI_THAC_DI = 'KHAI_THAC_DI',
+}
+
 export enum IV_FLAG {
   TAO = 1,
   SUA = 2,
