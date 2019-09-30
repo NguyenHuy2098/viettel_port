@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get } from 'lodash';
+import { ceil, get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 // import blackBag from 'assets/img/blackBag.png';
@@ -13,9 +13,7 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { actionQuetNhan } from 'redux/chuyenThu/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -25,41 +23,12 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idTaiKien, setIdTaiKien] = useState<string>('');
-  const maBP = useSelector(makeSelectorMaBP);
-  const userId = useSelector(makeSelectorPreferredUsername);
   const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
   function handleQuetTaiKienId(): void {
-    dispatch(
-      action_MIOA_ZTMI023(
-        {
-          IV_ID: idTaiKien,
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoTaiKien: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
-            dispatch(
-              action_MIOA_ZTMI022(
-                {
-                  row: {
-                    CU_NO: '',
-                    FU_NO: get(infoTaiKien, 'TOR_ID'),
-                    LOC_ID: maBP,
-                    STATUS_ID: '1',
-                    USER_ID: userId,
-                  },
-                },
-                // {
-                //   onSuccess: (data: API.MIOAZTMI022Response) => {
-                //     console.log(data);
-                //   },
-                // },
-              ),
-            );
-          },
-        },
-      ),
-    );
+    if (!isEmpty(idTaiKien)) {
+      dispatch(actionQuetNhan({ IV_ID: idTaiKien }));
+    }
   }
 
   function handleChangeTaiKienId(event: React.ChangeEvent<HTMLInputElement>): void {

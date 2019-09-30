@@ -2,59 +2,37 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { generatePath } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, concat, get } from 'lodash';
+import { ceil, concat, get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { actionQuetNhan } from 'redux/chuyenThu/actions';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const maBP = useSelector(makeSelectorMaBP);
-  const userId = useSelector(makeSelectorPreferredUsername);
   const [idBangKePhieuGui, setIdBangKePhieuGui] = useState<string>('');
   const [listBangKePhieuGuiDaQuet, setListBangKePhieuGuiDaQuet] = useState<API.RowResponseZTMI023OUT[]>([]);
 
   const handleQuetBangKePhieuGuiId = (): void => {
-    dispatch(
-      action_MIOA_ZTMI023(
-        {
-          IV_ID: idBangKePhieuGui,
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoBangKePhieuGui: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
-            dispatch(
-              action_MIOA_ZTMI022(
-                {
-                  row: {
-                    CU_NO: '',
-                    FU_NO: get(infoBangKePhieuGui, 'TOR_ID'),
-                    LOC_ID: maBP,
-                    STATUS_ID: '1',
-                    USER_ID: userId,
-                  },
-                },
-                {
-                  onSuccess: () => {
-                    setListBangKePhieuGuiDaQuet(concat(listBangKePhieuGuiDaQuet, infoBangKePhieuGui));
-                  },
-                },
-              ),
-            );
+    if (!isEmpty(idBangKePhieuGui)) {
+      dispatch(
+        actionQuetNhan(
+          { IV_ID: idBangKePhieuGui },
+          {
+            onSuccess: (infoBangKePhieuGui: API.RowResponseZTMI023OUT) => {
+              setListBangKePhieuGuiDaQuet(concat(listBangKePhieuGuiDaQuet, infoBangKePhieuGui));
+            },
           },
-        },
-      ),
-    );
+        ),
+      );
+    }
   };
 
   const handleChangeBangKePhieuGuiId = (event: React.ChangeEvent<HTMLInputElement>): void => {

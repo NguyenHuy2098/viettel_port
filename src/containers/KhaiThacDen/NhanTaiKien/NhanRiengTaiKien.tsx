@@ -6,14 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
 import { Cell } from 'react-table';
 import moment from 'moment';
-import { ceil, get } from 'lodash';
+import { ceil, get, isEmpty } from 'lodash';
 import { push } from 'connected-react-router';
 
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { actionQuetNhan } from 'redux/chuyenThu/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -27,8 +25,6 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
   const { getTaiKienChuaNhan } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const maBP = useSelector(makeSelectorMaBP);
-  const userId = useSelector(makeSelectorPreferredUsername);
   const listTaiKienChuaNhan = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const [idTaiKien, setIdTaiKien] = useState<string>('');
@@ -38,36 +34,9 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const handleQuetTaiKienId = (): void => {
-    dispatch(
-      action_MIOA_ZTMI023(
-        {
-          IV_ID: idTaiKien,
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoTaiKien: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
-            dispatch(
-              action_MIOA_ZTMI022(
-                {
-                  row: {
-                    CU_NO: '',
-                    FU_NO: get(infoTaiKien, 'TOR_ID'),
-                    LOC_ID: maBP,
-                    STATUS_ID: '1',
-                    USER_ID: userId,
-                  },
-                },
-                // {
-                //   onSuccess: (data: API.MIOAZTMI022Response) => {
-                //     console.log(data);
-                //   },
-                // },
-              ),
-            );
-          },
-        },
-      ),
-    );
+    if (!isEmpty(idTaiKien)) {
+      dispatch(actionQuetNhan({ IV_ID: idTaiKien }));
+    }
   };
 
   const handlePrintRowItem = useCallback(

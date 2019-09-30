@@ -5,15 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get } from 'lodash';
+import { ceil, get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { actionQuetNhan } from 'redux/chuyenThu/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -23,43 +21,14 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idBangKePhieuGui, setIdBangKePhieuGui] = useState<string>('');
-  const maBP = useSelector(makeSelectorMaBP);
-  const userId = useSelector(makeSelectorPreferredUsername);
   const listBangKePhieuGuiChuaNhan = useSelector(
     makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN),
   );
 
-  function handleScanPhieuGuiId(): void {
-    dispatch(
-      action_MIOA_ZTMI023(
-        {
-          IV_ID: idBangKePhieuGui,
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoBangKePhieuGui: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
-            dispatch(
-              action_MIOA_ZTMI022(
-                {
-                  row: {
-                    CU_NO: '',
-                    FU_NO: get(infoBangKePhieuGui, 'TOR_ID'),
-                    LOC_ID: maBP,
-                    STATUS_ID: '1',
-                    USER_ID: userId,
-                  },
-                },
-                // {
-                //   onSuccess: (data: API.MIOAZTMI022Response) => {
-                //     console.log(data);
-                //   },
-                // },
-              ),
-            );
-          },
-        },
-      ),
-    );
+  function handleQuetBangKePhieuGuiId(): void {
+    if (!isEmpty(idBangKePhieuGui)) {
+      dispatch(actionQuetNhan({ IV_ID: idBangKePhieuGui }));
+    }
   }
 
   function handleChangePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -127,7 +96,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         <Col className="btn-toolbar col-10">
           <Scan
             buttonProps={{
-              onClick: handleScanPhieuGuiId,
+              onClick: handleQuetBangKePhieuGuiId,
             }}
             onChange={handleChangePhieuGuiId}
             placeholder={t('Quét mã bảng kê/phiếu gửi')}

@@ -4,15 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { ceil, get } from 'lodash';
+import { ceil, get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
+import { actionQuetNhan } from 'redux/chuyenThu/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 
@@ -21,8 +19,6 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [idPhieuGui, setIdPhieuGui] = useState<string>('');
-  const maBP = useSelector(makeSelectorMaBP);
-  const userId = useSelector(makeSelectorPreferredUsername);
   const listPhieuGuiChuaNhan = useSelector(
     makeSelector046ChildrenByLifecycle([
       SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT,
@@ -31,36 +27,9 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   );
 
   function handleQuetPhieuGuiId(): void {
-    dispatch(
-      action_MIOA_ZTMI023(
-        {
-          IV_ID: idPhieuGui,
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI023Response) => {
-            const infoPhieuGui: API.RowResponseZTMI023OUT = get(data, 'MT_ZTMI023_OUT.row[0]');
-            dispatch(
-              action_MIOA_ZTMI022(
-                {
-                  row: {
-                    CU_NO: '',
-                    FU_NO: get(infoPhieuGui, 'TOR_ID'),
-                    LOC_ID: maBP,
-                    STATUS_ID: '1',
-                    USER_ID: userId,
-                  },
-                },
-                // {
-                //   onSuccess: (data: API.MIOAZTMI022Response) => {
-                //     console.log(data);
-                //   },
-                // },
-              ),
-            );
-          },
-        },
-      ),
-    );
+    if (!isEmpty(idPhieuGui)) {
+      dispatch(actionQuetNhan({ IV_ID: idPhieuGui }));
+    }
   }
 
   function handleChangePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
