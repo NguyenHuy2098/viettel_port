@@ -58,6 +58,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_TOR_ID: '',
           IV_TOR_TYPE: 'ZC2',
           IV_FR_LOC_ID: userMaBp,
+          IV_TO_LOC_ID: '',
           IV_CUST_STATUS: '101',
           IV_FR_DATE: moment()
             .subtract(1, 'day')
