@@ -25,12 +25,7 @@ function* takeDongChuyenThu(action: UnfoldSagaActionType): SagaIterator {
           IV_FLAG: '1',
           IV_SLOCATION: maBP,
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-          T_ITEM: [
-            {
-              ITEM_ID: '',
-              ITEM_TYPE: '',
-            },
-          ],
+          T_ITEM: [],
         });
         const idChuyenThu = get(dataChuyenThuTaoMoi, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         const dataChuyenThuGanKien = await post_MIOA_ZTMI016({

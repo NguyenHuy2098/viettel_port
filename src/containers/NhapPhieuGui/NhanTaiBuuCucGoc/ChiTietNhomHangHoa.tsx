@@ -985,7 +985,6 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
           isFrom2
         />
         <ModalTwoTab
-          containerId={'DanhSachPhieuGuiTrongBangKe'}
           onHide={closePopUpDongBangKeVaoTai}
           visible={showDongBangKeVaoTaiPopup}
           modalTitle="Gán bảng kê vào tải"
@@ -998,7 +997,6 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
           selectedChildInTab1={selectedTai}
         />
         <ModalTwoTab
-          containerId={'DanhSachPhieuGuiTrongBangKe'}
           onHide={closePopUpDongTai}
           visible={showPopUpGanTaiVaoChuyenThu}
           modalTitle="Gán tải vào chuyến thư"

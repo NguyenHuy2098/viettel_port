@@ -6,7 +6,7 @@ import moment from 'moment';
 import { find, forEach, map, get, noop, size } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { Cell } from 'react-table';
 
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
@@ -248,7 +248,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'BangKeChuaDongTai',
                   type: 'error',
                 },
               );
@@ -287,7 +286,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'BangKeChuaDongTai',
                   type: 'error',
                 },
               );
@@ -322,7 +320,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
                 </>,
                 {
-                  containerId: 'BangKeChuaDongTai',
                   type: 'success',
                 },
               );
@@ -334,7 +331,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'BangKeChuaDongTai',
                   type: 'error',
                 },
               );
@@ -380,7 +376,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
               </>,
               {
-                containerId: 'BangKeChuaDongTai',
                 type: 'error',
               },
             );
@@ -414,7 +409,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'BangKeChuaDongTai',
                   type: 'error',
                 },
               );
@@ -454,7 +448,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'BangKeChuaDongTai',
                   type: 'error',
                 },
               );
@@ -489,7 +482,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'success',
                 },
               );
@@ -501,7 +493,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'BangKeChuaDongTai',
                   type: 'error',
                 },
               );
@@ -686,7 +677,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         IV_CUST_STATUS={101}
       />
       <ModalTwoTab
-        containerId={'BangKeChuaDongTai'}
         onHide={handleClosePopupDongtai}
         visible={showPopupDongTai}
         modalTitle={t('Gán tải vào chuyến thư')}
@@ -698,7 +688,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         selectedChildInTab1={selectedChuyenThu}
         onChooseItemInFirstTab={saveSelectedChuyenThu}
       />
-      <ToastContainer containerId={'BangKeChuaDongTai'} />
     </>
   );
 };

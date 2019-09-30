@@ -34,7 +34,6 @@ interface Props {
   tab1Contents: API.RowMTZTMI047OUT[];
   onChooseItemInFirstTab: (item: API.RowMTZTMI047OUT) => void;
   selectedChildInTab1: API.RowMTZTMI047OUT | undefined;
-  containerId: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -70,7 +69,6 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
           {t('Ghi chú không được vượt quá 40 ký tự')}
         </>,
         {
-          containerId: props.containerId,
           type: 'error',
         },
       );

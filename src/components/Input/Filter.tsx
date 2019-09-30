@@ -1,7 +1,7 @@
 import React, { KeyboardEvent, useCallback } from 'react';
 import { Button, ButtonProps, Col, Input, InputProps, Row, RowProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import classNames from 'classnames';
 import { get, isArray, isEmpty } from 'lodash';
 
@@ -25,7 +25,6 @@ const Filter = (props: Props): JSX.Element => {
           {t('Không tìm thấy dữ liệu!')}
         </>,
         {
-          containerId: 'Search',
           type: 'info',
         },
       );
@@ -51,7 +50,6 @@ const Filter = (props: Props): JSX.Element => {
         <Button color="primary" {...buttonProps} onClick={handleClickButton}>
           {get(buttonProps, 'children') || t('Tìm kiếm')}
         </Button>
-        <ToastContainer containerId={'Search'} />
       </Col>
     </Row>
   );

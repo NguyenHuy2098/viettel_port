@@ -24,7 +24,7 @@ import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 
@@ -326,7 +326,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                 {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongTai',
                 type: 'success',
               },
             );
@@ -338,7 +337,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -372,7 +370,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -413,7 +410,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -456,7 +452,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -490,7 +485,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -530,7 +524,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -565,7 +558,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                   {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongTai',
                   type: 'success',
                 },
               );
@@ -577,7 +569,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -699,7 +690,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         IV_CUST_STATUS={101}
       />
       <ModalTwoTab
-        containerId={'DanhSachPhieuGuiTrongTai'}
         onHide={handleHidePopupDongTai}
         visible={showPopupDongTai}
         modalTitle={t('Gán tải vào chuyến thư')}
@@ -711,7 +701,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         onChooseItemInFirstTab={handleUpdateSelectedChuyenThu}
         selectedChildInTab1={selectedChuyenThu}
       />
-      <ToastContainer containerId={'DanhSachPhieuGuiTrongTai'} />
     </>
   ) : (
     <Fade in={true} timeout={1000}>

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
 import produce from 'immer';
 import { concat, get, includes, map, pull, size } from 'lodash';
@@ -95,10 +96,10 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       dispatch(
         action_MIOA_ZTMI016(payload, {
           onSuccess: (): void => {
-            alert(t('Xóa thành công!'));
+            toast(t('Xóa thành công!'), { type: 'success' });
           },
           onFailure: (error: HttpRequestErrorType): void => {
-            alert(error.messages);
+            toast(t(error.messages), { type: 'error' });
           },
           onFinish: (): void => {
             dispatch(action_MIOA_ZTMI047(payload));
@@ -118,10 +119,10 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           },
           {
             onFailure: () => {
-              alert(t('Đóng chuyến thư thất bại!'));
+              toast(t('Đóng chuyến thư thất bại!'), { type: 'error' });
             },
             onSuccess: () => {
-              alert(t('Đóng chuyến thư thành công!'));
+              toast(t('Đóng chuyến thư thành công!'), { type: 'success' });
             },
             onFinish: () => {
               getListKienChuaDongChuyenThu();
@@ -130,7 +131,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
     } else {
-      alert(t('Vui lòng chọn kiện!'));
+      toast(t('Vui lòng chọn kiện!'), { type: 'error' });
     }
   };
 

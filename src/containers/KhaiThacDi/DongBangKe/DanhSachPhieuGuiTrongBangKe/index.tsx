@@ -7,7 +7,7 @@ import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -245,7 +245,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(error, 'messages[0]', t('Đã có lỗi xảy ra '))}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -332,7 +331,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'success',
               },
             );
@@ -346,7 +344,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -397,7 +394,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                       {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
                     </>,
                     {
-                      containerId: 'DanhSachPhieuGuiTrongBangKe',
                       type: 'success',
                     },
                   );
@@ -409,7 +405,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                       {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                     </>,
                     {
-                      containerId: 'DanhSachPhieuGuiTrongBangKe',
                       type: 'error',
                     },
                   );
@@ -425,7 +420,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
               {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
             </>,
             {
-              containerId: 'DanhSachPhieuGuiTrongBangKe',
               type: 'error',
             },
           );
@@ -496,7 +490,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -534,7 +527,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -573,7 +565,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'success',
               },
             );
@@ -585,7 +576,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -624,7 +614,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(error, 'messages[0]')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -912,7 +901,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
               </>,
               {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
                 type: 'error',
               },
             );
@@ -949,7 +937,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'success',
                 },
               );
@@ -961,7 +948,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -1004,7 +990,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -1044,7 +1029,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -1079,7 +1063,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
-                  containerId: 'DanhSachPhieuGuiTrongBangKe',
                   type: 'error',
                 },
               );
@@ -1121,7 +1104,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         IV_CUST_STATUS={101}
       />
       <ModalTwoTab
-        containerId={'DanhSachPhieuGuiTrongBangKe'}
         onHide={closePopUpDongBangKeVaoTai}
         visible={showDongBangKeVaoTaiPopup}
         modalTitle="Gán bảng kê vào tải"
@@ -1134,7 +1116,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         selectedChildInTab1={selectedTai}
       />
       <ModalTwoTab
-        containerId={'DanhSachPhieuGuiTrongBangKe'}
         onHide={closePopUpDongTai}
         visible={showPopUpGanTaiVaoChuyenThu}
         modalTitle="Gán tải vào chuyến thư"
@@ -1146,7 +1127,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         onChooseItemInFirstTab={handleChonChuyenThu}
         selectedChildInTab1={selectedChuyenThu}
       />
-      <ToastContainer containerId={'DanhSachPhieuGuiTrongBangKe'} />
     </>
   ) : (
     <Fade in={true} timeout={1000}>
