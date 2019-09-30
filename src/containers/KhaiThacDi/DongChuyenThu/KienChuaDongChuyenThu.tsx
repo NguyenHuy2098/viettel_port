@@ -274,7 +274,8 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         </Button>
       </Col>
       <Col className="d-flex justify-content-end">
-        <Button className="mr-3" color="primary" onClick={handleChuyenVaoChuyenThu}>
+        {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
+        <Button className="mr-3 hide" color="primary" onClick={handleChuyenVaoChuyenThu}>
           <i className="fa fa-folder mr-1" />
           {t('Chuyển vào CT')}
         </Button>

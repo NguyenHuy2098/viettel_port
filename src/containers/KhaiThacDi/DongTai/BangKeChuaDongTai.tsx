@@ -647,7 +647,8 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           </div>
         </Col>
         <Col xl={6} lg={4} xs={12} className="p-0 text-right">
-          <Button color="primary" className="ml-2" onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
+          {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
+          <Button color="primary" className="ml-2 hide" onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
             <i className="fa fa-cloud-download mr-2 rotate-90"></i>
             {t('Chuyển vào tải')}
           </Button>

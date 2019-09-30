@@ -37,7 +37,7 @@ const LapBienBan: React.FC = (): JSX.Element => {
             </Input>
           </FormGroup>
           <FormGroup>
-            <Label>{t('Mã chuyển thư')}</Label>
+            <Label>{t('Mã chuyến thư')}</Label>
             <Input type="text" placeholder={t('CT123')} />
           </FormGroup>
           <FormGroup>
@@ -121,7 +121,7 @@ const LapBienBan: React.FC = (): JSX.Element => {
             <tr>
               <th>{t('STT')}</th>
               <th>{t('Mã phiếu gửi')}</th>
-              <th>{t('Mã chuyển thư')}</th>
+              <th>{t('Mã chuyến thư')}</th>
               <th>{t('Ghi chú')}</th>
             </tr>
           </thead>

@@ -89,14 +89,14 @@ const FreightOrderReceive: React.FC = (): JSX.Element => {
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Khai thác chuyển thư đến')}</h1>
+        <h1 className="sipTitle">{t('Khai thác chuyến thư đến')}</h1>
       </Row>
       <div className="row mt-3" />
       <div className="mt-3" />
 
       <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
-          <Input type="text" placeholder="Mã chuyển thư" />
+          <Input type="text" placeholder="Mã chuyến thư" />
           <Button color="primary">Tìm kiếm</Button>
         </div>
       </Row>

@@ -40,8 +40,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
-  const listTai = useSelector(makeSelectorRow('ZC2', 101));
-  const listChuyenThu = useSelector(makeSelectorRow('ZC3', 101));
+  const listTai = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.TAO_MOI));
+  const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [disableButtonDongBangKe, setDisableButtonDongBangKe] = useState<boolean>(true);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -108,7 +108,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     getListDiemDen();
     getListChuyenThu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   useEffect((): void => {
     if (forwardingItemListState.length > 0) {
@@ -647,7 +647,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          <Button onClick={handleChuyenVaoBangKe} disabled={disableButtonDongBangKe}>
+          {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
+          <Button className="hide" onClick={handleChuyenVaoBangKe} disabled={disableButtonDongBangKe}>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển bảng kê')}
           </Button>

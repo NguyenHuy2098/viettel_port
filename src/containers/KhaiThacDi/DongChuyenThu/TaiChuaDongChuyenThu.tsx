@@ -360,9 +360,10 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           </div>
         </Col>
         <Col xl={6} lg={4} xs={12} className="p-0 text-right">
+          {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
           <Button
             color="primary"
-            className="ml-2"
+            className="ml-2 hide"
             onClick={handleChuyenVaoChuyenThu}
             disabled={disableFunctionalButton}
           >

@@ -236,7 +236,8 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          <Button onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
+          {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
+          <Button className="hide" onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển tải')}
           </Button>
