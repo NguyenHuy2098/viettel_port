@@ -42,8 +42,8 @@ const DataTable: React.FC<Props> = ({ columns, data, onRowClick }: Props): JSX.E
       }}
     >
       <thead>
-        {headerGroups.map(headerGroup => (
-          <tr>
+        {headerGroups.map((headerGroup, index) => (
+          <tr key={index}>
             {headerGroup.headers.map(column => (
               <th {...column.getHeaderProps()}>{column.render('Header')}</th>
             ))}

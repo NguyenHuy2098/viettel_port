@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
-import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Badge, Button, Input, Row, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
 import { get, size, toString, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -175,15 +175,9 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
           </NavItem>
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={1}>
-            <BangKeChuaHoanThanh />
-          </TabPane>
-          <TabPane tabId={2}>
-            <BuuGuiChuaDongBangKe />
-          </TabPane>
-          <TabPane tabId={3}>
-            <BangKeDaDong />
-          </TabPane>
+          {tab === 1 && <BangKeChuaHoanThanh />}
+          {tab === 2 && <BuuGuiChuaDongBangKe />}
+          {tab === 3 && <BangKeDaDong />}
         </TabContent>
       </div>
     </>
