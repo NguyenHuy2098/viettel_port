@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane, Col, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { get, size, forEach } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
 import DataTable from 'components/DataTable';
 import { Cell } from 'react-table';
@@ -13,6 +13,7 @@ import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
 import { Location } from 'history';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
 
 interface Props {
   location: Location;
@@ -181,6 +182,38 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     );
   }
 
+  const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
+  function toggleCreateForwardingItemModal(): void {
+    setCreateForwardingItemModal(!createForwardingItemModal);
+  }
+
+  const getListBangKe = useCallback(
+    function(): void {
+      // console.log(1);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
+  const getListDiemDen = (): void => {
+    dispatch(
+      action_MIOA_ZTMI045({
+        row: [
+          {
+            IV_LOCTYPE: 'V001, V004',
+          },
+        ],
+        IV_BP: '',
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '5000',
+      }),
+    );
+  };
+  useEffect((): void => {
+    getListDiemDen();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -195,9 +228,16 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             <i className="fa fa-file-excel-o" />
             {t('Chuyển bảng kê')}
           </Button>
-          <Button>
+          <Button onClick={toggleCreateForwardingItemModal}>
             <i className="fa fa-file-archive-o" />
             {t('Tạo bảng kê')}
+            <CreateForwardingItemModal
+              onSuccessCreated={getListBangKe}
+              visible={createForwardingItemModal}
+              onHide={toggleCreateForwardingItemModal}
+              modalTitle={t('Tạo bảng kê')}
+              IV_TOR_TYPE="ZC1"
+            />
           </Button>
           <Button>
             <i className="fa fa-download" />
