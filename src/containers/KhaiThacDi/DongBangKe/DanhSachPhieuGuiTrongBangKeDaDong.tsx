@@ -12,7 +12,7 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
-import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
+import DeleteConfirmModal from 'components/DeleteConfirmModal';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 interface Props {

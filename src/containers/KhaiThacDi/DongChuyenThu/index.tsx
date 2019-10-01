@@ -10,7 +10,7 @@ import { get, size, toString, trim } from 'lodash';
 import moment from 'moment';
 import queryString from 'query-string';
 
-import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
+import CreateForwardingItemModal from 'components/CreateForwardingItemModal';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -176,7 +176,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
               // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={useCallback((): void => handleChangeTab(1), [])}
             >
-              {t('CT chưa hoàn thành')}
+              {t('Chuyến thư chưa hoàn thành')}
               <Badge color="primary">{countChuyenThuChuaHoanThanh}</Badge>
             </NavLink>
           </NavItem>
@@ -206,7 +206,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
               // eslint-disable-next-line react-hooks/exhaustive-deps
               onClick={useCallback((): void => handleChangeTab(4), [])}
             >
-              {t('Chuyến Thư đã đóng')}
+              {t('Chuyến thư đã đóng')}
               <Badge color="primary">{countChuyenThuDaDong}</Badge>
             </NavLink>
           </NavItem>

@@ -34,8 +34,8 @@ import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 // import { makeSelectorProfile, makeSelectorUser, selectAuth } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import ChoosingAddressPopup from 'components/ChoosingAddressPopup/Index';
-import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems/Index';
+import ChoosingAddressPopup from 'components/ChoosingAddressPopup';
+import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 
 interface Props {

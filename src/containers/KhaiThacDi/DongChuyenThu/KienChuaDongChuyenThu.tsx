@@ -14,7 +14,7 @@ import DataTable from 'components/DataTable';
 import Search from 'components/Input/Search';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import Pagination from 'components/Pagination';
-import ChonChuyenThuModal from 'components/SelectForwardingItemModal/Index';
+import ChonChuyenThuModal from 'components/SelectForwardingItemModal';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { actionDongChuyenThu } from 'redux/common/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';

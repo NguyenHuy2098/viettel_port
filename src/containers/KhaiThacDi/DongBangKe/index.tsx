@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
-import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
+import CreateForwardingItemModal from 'components/CreateForwardingItemModal';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { push } from 'connected-react-router';

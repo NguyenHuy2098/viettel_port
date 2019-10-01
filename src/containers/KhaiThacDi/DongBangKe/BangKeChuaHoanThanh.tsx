@@ -9,7 +9,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { generatePath } from 'react-router-dom';
-import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
+import DeleteConfirmModal from 'components/DeleteConfirmModal';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import moment from 'moment';

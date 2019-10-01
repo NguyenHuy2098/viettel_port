@@ -10,9 +10,9 @@ import { forEach, map, get, noop, size } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
+import DeleteConfirmModal from 'components/DeleteConfirmModal';
 import Pagination from 'components/Pagination';
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';

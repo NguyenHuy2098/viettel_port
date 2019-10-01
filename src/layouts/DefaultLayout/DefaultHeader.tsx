@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import { get } from 'lodash';
 import logo from 'assets/img/logo.png';
-import HeaderSearch from 'components/HeaderSearch/Index';
+import HeaderSearch from 'components/HeaderSearch';
 import { logout } from 'redux/auth/actions';
 import { makeSelectorProfile } from 'redux/auth/selectors';
 import routesMap from 'utils/routesMap';

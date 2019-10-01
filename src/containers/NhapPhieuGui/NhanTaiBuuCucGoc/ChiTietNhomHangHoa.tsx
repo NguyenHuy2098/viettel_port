@@ -19,9 +19,9 @@ import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
 import DataTable from 'components/DataTable';
 import { Cell } from 'react-table';
 import { Location } from 'history';
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
-import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
+import CreateForwardingItemModal from 'components/CreateForwardingItemModal';
 import { goBack } from 'connected-react-router';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 

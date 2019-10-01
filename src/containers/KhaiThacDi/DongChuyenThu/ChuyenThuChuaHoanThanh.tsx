@@ -9,7 +9,7 @@ import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'r
 import { SipDataState, SipDataType } from 'utils/enums';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import routesMap from 'utils/routesMap';
-import DeleteConfirmModal from 'components/DeleteConfirmModal/Index';
+import DeleteConfirmModal from 'components/DeleteConfirmModal';
 import moment from 'moment';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
