@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane, Col, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { get, map, size, forEach, toString, includes, toNumber, trim } from 'lodash';
+import { get, map, size, forEach, includes, toNumber, trim } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
 import { toast } from 'react-toastify';
@@ -66,27 +66,27 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
   }
 
   const dispatchZTMI241 = (): void => {
-    const payload = {
-      IV_PACKAGE_ID: '',
-      IV_FREIGHT_UNIT_STATUS: [301, 304, 311, 600],
-      IV_LOC_ID: userMaBp,
-      IV_COMMODITY_GROUP: 'Thư-Nhanh-Nội vùng.TTHNI',
-      IV_DATE: moment().format('YYYYMMDD'),
-      IV_USER: get(childs, '[0].USER', ''),
-      IV_PAGE_NO: '1',
-      IV_NO_PER_PAGE: '10',
-    };
-
     // const payload = {
     //   IV_PACKAGE_ID: '',
-    //   IV_FREIGHT_UNIT_STATUS: [600],
+    //   IV_FREIGHT_UNIT_STATUS: [301, 304, 311, 600],
     //   IV_LOC_ID: userMaBp,
-    //   IV_COMMODITY_GROUP: 'HTHU-Chậm-Nội vùng.TTHCM',
-    //   IV_DATE: '20190923',
-    //   IV_USER: 'chidnl',
+    //   IV_COMMODITY_GROUP: 'Thư-Nhanh-Nội vùng.TTHNI',
+    //   IV_DATE: moment().format('YYYYMMDD'),
+    //   IV_USER: get(childs, '[0].USER', ''),
     //   IV_PAGE_NO: '1',
     //   IV_NO_PER_PAGE: '10',
     // };
+
+    const payload = {
+      IV_PACKAGE_ID: '',
+      IV_FREIGHT_UNIT_STATUS: [600],
+      IV_LOC_ID: userMaBp,
+      IV_COMMODITY_GROUP: 'HTHU-Chậm-Nội vùng.TTHCM',
+      IV_DATE: '20190923',
+      IV_USER: 'chidnl',
+      IV_PAGE_NO: '1',
+      IV_NO_PER_PAGE: '10',
+    };
     dispatch(action_ZTMI241(payload));
   };
 
@@ -210,115 +210,83 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
   };
 
   // eslint-disable-next-line max-lines-per-function
-  const handleActionDongBangKeWithoutRemovePhieuGui = (taiID: string): void => {
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.SUA,
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_TOR_ID_CU: toString(taiID),
-          IV_SLOCATION: get(selectedTai, 'LOG_LOCID_FR', ''),
-          IV_DLOCATION: get(selectedTai, 'LOG_LOCID_TO', ''),
-          IV_DESCRIPTION: '',
-          T_ITEM: [
-            {
-              ITEM_ID: idBangKe,
-              ITEM_TYPE: SipDataType.BANG_KE,
-            },
-          ],
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
-                type: 'success',
-              },
-            );
-            if (toNumber(get(data, 'MT_ZTMI016_OUT')) === 1) {
-            }
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
-              </>,
-              {
-                containerId: 'DanhSachPhieuGuiTrongBangKe',
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-  };
-
-  // eslint-disable-next-line max-lines-per-function
-  const handleActionDongBangKeAfterRemovePhieuGui = (taiID: string): void => {
-    const a = {
-      IV_FLAG: IV_FLAG.REMOVE,
+  const handleActionDongBangKe = (taiID: string): void => {
+    const payload016 = {
+      IV_FLAG: IV_FLAG.TAO,
       IV_TOR_TYPE: SipDataType.BANG_KE,
-      IV_TOR_ID_CU: idBangKe,
-      IV_SLOCATION: get(data, 'LOG_LOCID_SRC', ''),
-      IV_DLOCATION: get(data, 'LOG_LOCID_DES', ''),
-      IV_DESCRIPTION: '',
-      T_ITEM: listUncheckForwardingItem,
+      IV_TOR_ID_CU: '',
+      IV_SLOCATION: userMaBp,
+      IV_DLOCATION: get(selectedTai, 'LOG_LOCID_TO', ''),
+      IV_DESCRIPTION: get(selectedTai, 'Childs[0].DESCRIPTION', ''),
+      T_ITEM: [
+        {
+          ITEM_ID: '',
+          ITEM_TYPE: '',
+        },
+      ],
     };
-    // remove các phiếu gửi không được tích
+    // Tạo ngầm 1 bảng kê với điểm đến là điểm đến của danh sách bưu gửi bên ngoài
     dispatch(
-      action_MIOA_ZTMI016(a, {
+      action_MIOA_ZTMI016(payload016, {
         // eslint-disable-next-line max-lines-per-function
-        onSuccess: (): void => {
-          // gan bang ke vao tai
+        onSuccess: (data: API.MIOAZTMI016Response): void => {
+          const maBangKeVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+          const payload016Update = {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.BANG_KE,
+            IV_TOR_ID_CU: maBangKeVuaTao,
+            IV_SLOCATION: userMaBp,
+            IV_DLOCATION: get(selectedTai, 'LOG_LOCID_TO', ''),
+            IV_DESCRIPTION: '',
+            T_ITEM: forwardingItemListState,
+          };
+          // Add các bưu gửi được tích chọn bên ngoài vào bảng kê vừa tạo
           dispatch(
-            action_MIOA_ZTMI016(
-              {
-                IV_FLAG: IV_FLAG.SUA,
-                IV_TOR_TYPE: SipDataType.TAI,
-                IV_TOR_ID_CU: toString(taiID),
-                IV_SLOCATION: get(data, 'LOG_LOCID_SRC', ''),
-                IV_DLOCATION: get(data, 'LOG_LOCID_DES', ''),
-                IV_DESCRIPTION: '',
-                T_ITEM: [
-                  {
-                    ITEM_ID: idBangKe,
+            action_MIOA_ZTMI016(payload016Update, {
+              onSuccess: (data: API.MIOAZTMI016Response): void => {
+                const payload016Update2 = {
+                  IV_FLAG: IV_FLAG.SUA,
+                  IV_TOR_TYPE: SipDataType.TAI,
+                  IV_TOR_ID_CU: taiID,
+                  IV_SLOCATION: userMaBp,
+                  IV_DLOCATION: get(selectedTai, 'LOG_LOCID_TO', ''),
+                  IV_DESCRIPTION: '',
+                  T_ITEM: {
+                    ITEM_ID: maBangKeVuaTao,
                     ITEM_TYPE: SipDataType.BANG_KE,
                   },
-                ],
-              },
-              {
-                onSuccess: (data: API.MIOAZTMI016Response): void => {
-                  toast(
-                    <>
-                      <i className="fa check mr-2" />
-                      {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                    </>,
-                    {
-                      containerId: 'DanhSachPhieuGuiTrongBangKe',
-                      type: 'success',
+                };
+                // gán bảng kê vào tải
+                dispatch(
+                  action_MIOA_ZTMI016(payload016Update2, {
+                    onSuccess: (data: API.MIOAZTMI016Response): void => {
+                      toast(
+                        <>
+                          <i className="fa check mr-2" />
+                          {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                        </>,
+                        {
+                          containerId: 'DanhSachPhieuGuiTrongBangKe',
+                          type: 'success',
+                        },
+                      );
                     },
-                  );
-                },
-                onFailure: (error: Error): void => {
-                  toast(
-                    <>
-                      <i className="fa fa-window-close-o mr-2" />
-                      {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                    </>,
-                    {
-                      containerId: 'DanhSachPhieuGuiTrongBangKe',
-                      type: 'error',
+                    onFailure: (error: Error): void => {
+                      toast(
+                        <>
+                          <i className="fa fa-window-close-o mr-2" />
+                          {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                        </>,
+                        {
+                          containerId: 'DanhSachPhieuGuiTrongBangKe',
+                          type: 'error',
+                        },
+                      );
                     },
-                  );
-                },
+                  }),
+                );
               },
-            ),
+            }),
           );
         },
         onFailure: (error: Error): void => {
@@ -340,15 +308,6 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
       }),
     );
 
-    setShowDongBangKeVaoTaiPopup(false);
-  };
-
-  const handleActionDongBangKe = (taiID: string): void => {
-    if (size(listUncheckForwardingItem) > 0) {
-      handleActionDongBangKeAfterRemovePhieuGui(taiID);
-    } else {
-      handleActionDongBangKeWithoutRemovePhieuGui(taiID);
-    }
     setShowDongBangKeVaoTaiPopup(false);
   };
 

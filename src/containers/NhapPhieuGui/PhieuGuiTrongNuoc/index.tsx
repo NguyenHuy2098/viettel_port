@@ -695,7 +695,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         { GET: null },
         {
           onFailure: (error: HttpRequestErrorType): void => {
-            alert(error.message);
+            // alert(error.message);
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
             const thisData = get(data, 'MT_ZTMI068_OUT.Row', []);
@@ -908,7 +908,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           toggleModalApiCreateSuccess();
         },
         onFailure: (error: HttpRequestErrorType): void => {
-          alert(error.message);
+          // alert(error.message);
         },
       }),
     );

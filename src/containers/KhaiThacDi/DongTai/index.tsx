@@ -54,9 +54,6 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
 
   const [tab, setTab] = useState<number>(1);
   const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
-  const countBangKeBuuGuiChuaDongTai = useSelector(
-    makeSelectorTotalItem(SipDataType.BUU_GUI_CON, SipDataState.CHUA_HOAN_THANH),
-  );
   const countTaiDaDong = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
   const countBangKeChuaDongTai = useSelector(makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
 
@@ -149,16 +146,16 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
               <Badge color="primary">{countTaiChuaHoanThanh}</Badge>
             </NavLink>
           </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 2 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={React.useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Bưu gửi chưa đóng tải')}
-              <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
-            </NavLink>
-          </NavItem>
+          {/*<NavItem>*/}
+          {/*  <NavLink*/}
+          {/*    className={classNames({ active: tab === 2 })}*/}
+          {/*    // eslint-disable-next-line react-hooks/exhaustive-deps*/}
+          {/*    onClick={React.useCallback((): void => handleChangeTab(2), [])}*/}
+          {/*  >*/}
+          {/*    {t('Bưu gửi chưa đóng tải')}*/}
+          {/*    <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>*/}
+          {/*  </NavLink>*/}
+          {/*</NavItem>*/}
           <NavItem>
             <NavLink
               className={classNames({ active: tab === 3 })}

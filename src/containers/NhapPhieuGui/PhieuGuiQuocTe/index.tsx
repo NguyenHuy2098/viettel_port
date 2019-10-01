@@ -647,7 +647,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         { GET: null },
         {
           onFailure: (error: HttpRequestErrorType): void => {
-            alert(error.messages);
+            // alert(error.messages);
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
             const thisTransportMethodArr = filter(
@@ -814,7 +814,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           toggleModalApiCreateSuccess();
         },
         onFailure: (error: HttpRequestErrorType): void => {
-          alert(error.message);
+          // alert(error.message);
         },
       }),
     );
