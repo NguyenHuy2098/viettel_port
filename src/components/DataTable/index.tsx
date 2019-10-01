@@ -5,13 +5,12 @@ import { TableOptions, useTable } from 'react-table';
 import { isEmpty, noop } from 'lodash';
 import noData from './no-data.svg';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+/* eslint-disable @typescript-eslint/no-explicit-any */
 interface Props extends TableOptions<any> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   columns: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: (item: any) => void;
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function
 const DataTable: React.FC<Props> = ({ columns, data, onRowClick }: Props): JSX.Element => {
