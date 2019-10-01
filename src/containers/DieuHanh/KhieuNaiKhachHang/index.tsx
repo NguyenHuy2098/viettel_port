@@ -25,13 +25,13 @@ const ComplainCustomer: React.FC = (): JSX.Element => {
 
   const renderTopController = (): React.ReactElement => (
     <>
-      <Button onClick={toggle}>
-        <i className="fa fa-plus" />
+      <Button className="ml-2" color="primary" onClick={toggle}>
+        <i className="fa fa-plus mr-2" />
         {t('Thêm mới')}
       </Button>
-      <Button>
+      <Button className="ml-2" color="primary">
         <ExportExcel handleData={handleData}>
-          <i className="fa fa-share-square" />
+          <i className="fa fa-share-square mr-2" />
           {t('Xuất báo cáo')}
         </ExportExcel>
       </Button>

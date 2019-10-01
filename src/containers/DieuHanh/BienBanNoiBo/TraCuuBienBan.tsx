@@ -181,7 +181,7 @@ const LapBienBan: React.FC = (): JSX.Element => {
           <Col md={2} xs={12} className="mb-3">
             <Button color="primary">Tìm kiếm</Button>
             {/* fake button to open Report popup - please delete when finish popup function */}
-            <Button onClick={toggle} className="ml-3">
+            <Button color="dark" outline onClick={toggle} className="ml-3">
               Open popup
             </Button>
           </Col>

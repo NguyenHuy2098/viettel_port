@@ -294,14 +294,6 @@ input.form-control:-moz-placeholder {
 .sipTitleRightBlock {
   display: flex;
   & > .btn {
-    color: #fff !important;
-    background: #2db4a1 !important;
-    font-weight: 600;
-    margin-left: 15px;
-    border: none;
-    i {
-      margin-right: 5px;
-    }
     &.sipTitleRightBlockBtnIcon {
       background: #ffffff !important;
       border: 1px solid #e4e8eb;

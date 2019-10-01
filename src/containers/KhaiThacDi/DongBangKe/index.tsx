@@ -108,8 +108,8 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   function TaoBangKe(): JSX.Element {
     return (
       <>
-        <Button onClick={toggleCreateForwardingItemModal}>
-          <i className="fa fa-plus" />
+        <Button className="ml-2" color="primary" onClick={toggleCreateForwardingItemModal}>
+          <i className="fa fa-plus mr-2" />
           {t('Tạo bảng kê')}
         </Button>
         <CreateForwardingItemModal

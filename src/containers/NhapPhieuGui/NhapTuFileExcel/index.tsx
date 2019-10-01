@@ -18,16 +18,16 @@ const InputRevenue: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">Nhập từ file excel</h1>
         <div className="sipTitleRightBlock">
-          <Button>
-            <i className="fa fa-file-excel-o" />
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-file-excel-o mr-2" />
             Lấy file mẫu
           </Button>
-          <Button>
-            <i className="fa fa-file-archive-o" />
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-file-archive-o mr-2" />
             Tải lên
           </Button>
-          <Button>
-            <i className="fa fa-download" />
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-download mr-2" />
             Hoàn thành
           </Button>
         </div>

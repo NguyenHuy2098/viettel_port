@@ -1,20 +1,21 @@
 import { filter, get, includes, isArray, isNumber, size } from 'lodash';
+
 import { AppStateType } from 'redux/store';
 
 /**
  * Info
  * @param state
  */
-export function makeSelector046OUT(state: AppStateType): API.MTZTMI046OUT | null {
-  return get(state, 'response.MIOA_ZTMI046.MT_ZTMI046_OUT', null);
+export function makeSelector046OUT(state: AppStateType): API.MTZTMI046OUT | undefined {
+  return get(state, 'response.MIOA_ZTMI046.MT_ZTMI046_OUT');
 }
 
 /**
  * Info
  * @param state
  */
-export function makeSelector046RowFirstChild(state: AppStateType): API.RowMTZTMI046OUT | null {
-  return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0]', null);
+export function makeSelector046RowFirstChild(state: AppStateType): API.RowMTZTMI046OUT | undefined {
+  return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0]');
 }
 
 /**
@@ -22,7 +23,7 @@ export function makeSelector046RowFirstChild(state: AppStateType): API.RowMTZTMI
  * @param state
  */
 export function makeSelector046ListChildren(state: AppStateType): API.Child[] {
-  return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0].CHILDS', []);
+  return get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Row[0].CHILDS', []) || [];
 }
 
 /**

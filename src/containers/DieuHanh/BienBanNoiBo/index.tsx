@@ -10,12 +10,12 @@ const InternalRecord: React.FC = (): JSX.Element => {
 
   const renderTopController = (): React.ReactElement => (
     <>
-      <Button>
-        <i className="fa fa-plus" />
+      <Button className="ml-2" color="primary">
+        <i className="fa fa-plus mr-2" />
         {t('Thêm mới')}
       </Button>
-      <Button>
-        <i className="fa fa-search" />
+      <Button className="ml-2" color="primary">
+        <i className="fa fa-search mr-2" />
         {t('Tra cứu biên bản')}
       </Button>
     </>

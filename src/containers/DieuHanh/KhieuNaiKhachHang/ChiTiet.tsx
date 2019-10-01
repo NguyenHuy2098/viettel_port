@@ -19,8 +19,8 @@ const ComplainDetail: React.FC = (): JSX.Element => {
   });
 
   const renderTopController = (): React.ReactElement => (
-    <Button type="submit">
-      <i className="fa fa-download" />
+    <Button className="ml-2" color="primary" type="submit">
+      <i className="fa fa-download mr-2" />
       {t('Ghi lại')}
     </Button>
   );

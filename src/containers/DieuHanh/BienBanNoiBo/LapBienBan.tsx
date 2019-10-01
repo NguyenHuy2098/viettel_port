@@ -59,11 +59,13 @@ const LapBienBan: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Lập biên bản')}</h1>
         <div className="sipTitleRightBlock">
-          <Button>
-            <i className="fa fa-download" />
-            Ghi lại
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-download mr-2" />
+            {t('Ghi lại')}
           </Button>
-          <Button>Thoát</Button>
+          <Button className="ml-2" color="primary">
+            {t('Thoát')}
+          </Button>
         </div>
       </Row>
       <div className="sipContentContainer">
@@ -108,8 +110,8 @@ const LapBienBan: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Phiếu gửi')}</h1>
         <div className="sipTitleRightBlock">
-          <Button onClick={toggle}>
-            <i className="fa fa-plus" />
+          <Button className="ml-2" color="primary" onClick={toggle}>
+            <i className="fa fa-plus mr-2" />
             {t('Thêm phiếu gửi')}
           </Button>
           {renderModal()}

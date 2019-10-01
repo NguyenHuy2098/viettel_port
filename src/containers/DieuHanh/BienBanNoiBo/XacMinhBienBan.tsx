@@ -7,8 +7,8 @@ const VerificationRecord: React.FC = (): React.ReactElement => {
   const { t } = useTranslation();
 
   const renderTopController = (): React.ReactElement => (
-    <Button>
-      <i className="fa fa-refresh" />
+    <Button className="ml-2" color="primary">
+      <i className="fa fa-refresh mr-2" />
       {t('Cập nhật')}
     </Button>
   );

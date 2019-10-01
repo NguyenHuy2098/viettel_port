@@ -115,8 +115,8 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
             <i className="fa fa-search" />
             <Input type="text" placeholder={t('Tra cứu tải')} onKeyUp={handleForwardingSearch} />
           </div>
-          <Button onClick={toggleCreateForwardingItemModal}>
-            <i className="fa fa-plus" />
+          <Button className="ml-2" color="primary" onClick={toggleCreateForwardingItemModal}>
+            <i className="fa fa-plus mr-2" />
             {t('Tạo tải')}
           </Button>
           <CreateForwardingItemModal
