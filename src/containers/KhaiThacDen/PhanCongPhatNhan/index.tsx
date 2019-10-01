@@ -72,7 +72,7 @@ const PhanCongPhatNhan: React.FC<Props> = (props: Props): JSX.Element => {
               onClick={useCallback((): void => handleChangeTab(2), [])}
             >
               {t('Phân công nhận')}
-              <Badge color="primary">{listPhanCongNhan.length}</Badge>
+              <Badge color="primary">{listPhanCongNhan && listPhanCongNhan.length}</Badge>
             </NavLink>
           </NavItem>
         </Nav>

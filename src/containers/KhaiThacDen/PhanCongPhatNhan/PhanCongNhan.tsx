@@ -11,7 +11,6 @@ import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
 import { selectPhanCongNhan } from 'redux/MIOA_ZTMI035/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
-import ModalThemPhieuGui from './ModalThemPhieuGui';
 import ModalChonNhanVien from './ModalChonNhanVien';
 
 interface Props {
@@ -55,7 +54,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
               USER_ID: userIdSelected,
             },
           ],
-          IV_PAGENO: '3',
+          IV_PAGENO: '1',
           IV_NO_PER_PAGE: '11',
         },
         {
@@ -89,8 +88,8 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
               <Label check>
                 <Input
                   type="checkbox"
-                  value={row.original.TOR_ID || ''}
-                  checked={dataSelected.includes(row.original.TOR_ID)}
+                  value={row.original.TRQ_ID || ''}
+                  checked={dataSelected.includes(row.original.TRQ_ID)}
                   onChange={handleCheckBoxItemData}
                 />
               </Label>
@@ -105,6 +104,9 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Bưu cục đến'),
         accessor: 'TO_LOG_ID',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>Thiếu Api</>;
+        },
       },
       {
         Header: t('Địa chỉ phát'),
@@ -117,6 +119,9 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ngày gửi bưu phẩm'),
         accessor: 'Created_on',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>Thiếu Api</>;
+        },
       },
       {
         Header: t('Trạng thái'),
@@ -128,6 +133,12 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
 
   const listStaff = useSelector(makeSelectorGet_MT_ZTMI054_OUT);
+
+  const findBPFromUser = (userName: string): string | undefined => {
+    const user = find(listStaff, { UNAME: userName });
+    if (user) return user.BP;
+    return;
+  };
   const handleSelectStaffChange = useCallback(
     (IV_PARTY_ID: string): void => {
       dispatch(
@@ -139,7 +150,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
                 TRQ_ID: item,
               };
             }),
-            IV_PARTY_ID: IV_PARTY_ID,
+            IV_PARTY_ID: findBPFromUser(IV_PARTY_ID),
             IV_UNAME: userIdSelected,
           },
           {
@@ -154,7 +165,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [userIdSelected, dataSelected],
   );
 
-  const disableButton = listPhanCongNhan.length === 0;
+  const disableButton = !listPhanCongNhan || listPhanCongNhan.length === 0;
 
   return (
     <>
@@ -184,7 +195,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{listPhanCongNhan.length}</span>
+            {t('Tổng số')}: <span>{listPhanCongNhan && listPhanCongNhan.length}</span>
           </p>
         </Col>
       </Row>
@@ -200,7 +211,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
             disabled={disableButton || dataSelected.length === 0}
             currentUserId={userIdSelected}
           />
-          <ModalThemPhieuGui disabled={disableButton} />
+          {/*<ModalThemPhieuGui disabled={disableButton} />*/}
         </div>
       </Row>
       <Row className="sipTableContainer">

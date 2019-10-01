@@ -11,7 +11,6 @@ import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
 import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
-import ModalThemPhieuGui from './ModalThemPhieuGui';
 import ModalChonNhanVien from './ModalChonNhanVien';
 
 interface Props {
@@ -60,8 +59,8 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
               <Label check>
                 <Input
                   type="checkbox"
-                  value={row.original.FWO}
-                  checked={dataSelected.includes(row.original.FWO)}
+                  value={row.original.Package_ID}
+                  checked={dataSelected.includes(row.original.Package_ID)}
                   onChange={handleCheckBoxItemData}
                 />
               </Label>
@@ -76,6 +75,9 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Bưu cục đến'),
         accessor: 'TO_LOG_ID',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>Thiếu Api</>;
+        },
       },
       {
         Header: t('Địa chỉ phát'),
@@ -88,6 +90,9 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ngày gửi bưu phẩm'),
         accessor: 'Created_on',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>Thiếu Api</>;
+        },
       },
       {
         Header: t('Trạng thái'),
@@ -102,7 +107,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI040(
         {
-          FU_STATUS: '604,806',
+          FU_STATUS: '605,806',
           Delivery_postman: userIdSelected,
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '50',
@@ -130,20 +135,24 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const findBPFromUser = (userName: string): string | undefined => {
+    const user = find(listStaff, { UNAME: userName });
+    if (user) return user.BP;
+    return;
+  };
+
   const handleSelectStaffChange = useCallback(
     (IV_PARTY_ID: string): void => {
       const a = {
         IV_PARTY_RCO: 'ZTM002',
         IV_TRQ_ID: map(dataSelected, item => {
+          const itemPhanConPhat = find(convertData, { Package_ID: item });
           return {
-            TRQ_ID: item,
+            TRQ_ID: itemPhanConPhat && itemPhanConPhat.FWO,
           };
         }),
-        // IV_PARTY_ID: IV_PARTY_ID,
-        IV_PARTY_ID: '3006',
-        // IV_UNAME: userIdSelected,
-        // ma nhan vien lay tu sso token
-        IV_UNAME: 'YenPh',
+        IV_PARTY_ID: findBPFromUser(IV_PARTY_ID),
+        IV_UNAME: userIdSelected,
       };
       dispatch(
         action_MIOA_ZTMI055(a, {
@@ -202,7 +211,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
             disabled={disableButton || dataSelected.length === 0}
             currentUserId={userIdSelected}
           />
-          <ModalThemPhieuGui disabled={disableButton} />
+          {/*<ModalThemPhieuGui disabled={disableButton} />*/}
         </div>
       </Row>
       <Row className="sipTableContainer">
