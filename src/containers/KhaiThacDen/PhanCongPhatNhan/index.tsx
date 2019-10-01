@@ -33,7 +33,11 @@ const PhanCongPhatNhan: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI054({
         iv_post: userMaBp,
-        iv_position: 'NVLX',
+        row: [
+          {
+            iv_position: 'NVLX',
+          },
+        ],
         IV_PAGENO: '1',
         IV_NO_PER_PAGE: '10',
       }),
