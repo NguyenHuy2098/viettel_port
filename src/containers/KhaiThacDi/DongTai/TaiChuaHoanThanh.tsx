@@ -61,7 +61,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_TO_LOC_ID: '',
           IV_CUST_STATUS: '101',
           IV_FR_DATE: moment()
-            .subtract(1, 'day')
+            .subtract(2, 'day')
             .format('YYYYMMDD'),
           IV_TO_DATE: trim(toString(moment().format('YYYYMMDD'))),
           IV_PAGENO: '1',

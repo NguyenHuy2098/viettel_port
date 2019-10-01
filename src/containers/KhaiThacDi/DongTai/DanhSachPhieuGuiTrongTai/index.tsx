@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { forEach, get, map, toString, size } from 'lodash';
+import { includes, forEach, get, map, toString, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -48,6 +48,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 
   const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
+  const [listUncheckForwardingItem, setListUncheckForwardingItem] = useState<ForwardingItem[]>([]);
   const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
@@ -173,6 +174,31 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     setForwardingItemListState([...forwardingItemList]);
   };
 
+  function isForwardingItemSelected(item: API.Child, listForwardingItemId: string[]): boolean {
+    return includes(listForwardingItemId, item.TOR_ID);
+  }
+
+  useEffect((): void => {
+    const listForwardingItemId = map(forwardingItemListState, item => item.ITEM_ID);
+    const unSelectListForwardingItem: API.Child[] = [];
+    forEach(dataTaiChild, item => {
+      if (!isForwardingItemSelected(item, listForwardingItemId)) {
+        unSelectListForwardingItem.push(item);
+      }
+    });
+
+    // listUncheckForwardingItem
+    const tempListUncheckForwardingItem: ForwardingItem[] = map(
+      unSelectListForwardingItem,
+      (item: API.Child): ForwardingItem => ({
+        ITEM_ID: item.TOR_ID || '',
+        ITEM_TYPE: '',
+      }),
+    );
+
+    setListUncheckForwardingItem(tempListUncheckForwardingItem);
+  }, [forwardingItemListState, dataTaiChild]);
+
   const handleDeleteForwardingOrder = (torId: string): void => {
     const payload = {
       IV_FLAG: '3',
@@ -215,13 +241,13 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     };
   }
 
-  const handleRedirectDetail = useCallback(
-    (item: API.Child): void => {
-      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: item.TOR_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dataTaiChild],
-  );
+  // const handleRedirectDetail = useCallback(
+  //   (item: API.Child): void => {
+  //     dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: item.TOR_ID })));
+  //   },
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [dataTaiChild],
+  // );
 
   function renderTitle(): JSX.Element {
     return (
@@ -301,19 +327,19 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   }
 
-  const addTaiVaoChuyenThuDuocChon = (maTaiMoiTao: string): void => {
+  const addTaiHienTaiVaoChuyenThuDuocChon = (): void => {
     dispatch(
       action_MIOA_ZTMI016(
         {
           IV_FLAG: IV_FLAG.SUA,
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-          IV_TOR_ID_CU: get(selectedChuyenThu, '  TOR_ID', ''),
-          IV_SLOCATION: get(selectedChuyenThu, '  LOG_LOCID_FR', ''),
-          IV_DLOCATION: get(selectedChuyenThu, '  LOG_LOCID_TO', ''),
+          IV_TOR_ID_CU: get(selectedChuyenThu, 'TOR_ID', ''),
+          IV_SLOCATION: get(selectedChuyenThu, 'LOG_LOCID_FR', ''),
+          IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO', ''),
           IV_DESCRIPTION: '',
           T_ITEM: [
             {
-              ITEM_ID: maTaiMoiTao,
+              ITEM_ID: idTai,
               ITEM_TYPE: SipDataType.TAI,
             },
           ],
@@ -346,22 +372,82 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   };
 
-  const addBangKeDuocChonVaoTaiMoi = (maTaiMoiTao: string): void => {
+  const dongTaiVaoChuyenThuCoSan = (): void => {
+    //Remove các bảng kê không được tích chọn ra khỏi tải hiện tại
+    if (size(listUncheckForwardingItem) > 0) {
+      const a = {
+        IV_FLAG: IV_FLAG.REMOVE,
+        IV_TOR_TYPE: SipDataType.TAI,
+        IV_TOR_ID_CU: idTai,
+        IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''),
+        IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''),
+        IV_DESCRIPTION: '',
+        T_ITEM: forwardingItemListState,
+      };
+      dispatch(
+        action_MIOA_ZTMI016(a, {
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            toast(
+              <>
+                <i className="fa check mr-2" />
+                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Remove các bảng kê không được tích thành công')}
+              </>,
+              {
+                type: 'success',
+              },
+            );
+            // Add tai hien tai vao chuyen thu duoc chon
+            addTaiHienTaiVaoChuyenThuDuocChon();
+            getListPhieuGui();
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          },
+        }),
+      );
+    } else {
+      addTaiHienTaiVaoChuyenThuDuocChon();
+    }
+
+    handleHidePopupDongTai();
+  };
+
+  const addTaiVuaTaoVaoChuyenThuVuaTao = (maChuyenThuVuaTao: string, locNo: string): void => {
     dispatch(
       action_MIOA_ZTMI016(
         {
           IV_FLAG: IV_FLAG.SUA,
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_TOR_ID_CU: maTaiMoiTao,
-          IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
-          IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_TOR_ID_CU: maChuyenThuVuaTao,
+          IV_SLOCATION: userMaBp,
+          IV_DLOCATION: locNo,
           IV_DESCRIPTION: '',
-          T_ITEM: forwardingItemListState,
+          T_ITEM: [
+            {
+              ITEM_ID: idTai,
+              ITEM_TYPE: SipDataType.TAI,
+            },
+          ],
         },
         {
-          onSuccess: (): void => {
-            // add tai vua tao vao chuyen thu duoc chon
-            addTaiVaoChuyenThuDuocChon(maTaiMoiTao);
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            toast(
+              <>
+                <i className="fa check mr-2" />
+                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Remove các bảng kê không được tích thành công')}
+              </>,
+              {
+                type: 'success',
+              },
+            );
           },
           onFailure: (error: Error): void => {
             toast(
@@ -379,17 +465,16 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   };
 
-  const dongTaiVaoChuyenThuCoSan = (): void => {
-    //Tao ngam 1 tai voi diem den cua bang ke hien tai
+  const taoChuyenThuTheoThongTinVuaChon = (locNo: string, ghiChu: string): void => {
     dispatch(
       action_MIOA_ZTMI016(
         {
           IV_FLAG: IV_FLAG.TAO,
-          IV_TOR_TYPE: SipDataType.TAI,
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_TOR_ID_CU: '',
-          IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
-          IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
-          IV_DESCRIPTION: '',
+          IV_SLOCATION: userMaBp,
+          IV_DLOCATION: locNo,
+          IV_DESCRIPTION: ghiChu,
           T_ITEM: [
             {
               ITEM_ID: '',
@@ -399,9 +484,8 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         },
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
-            const maTaiMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-            // add bang ke duoc chon vao tai moi
-            addBangKeDuocChonVaoTaiMoi(maTaiMoiTao);
+            const maChuyenThuVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+            addTaiVuaTaoVaoChuyenThuVuaTao(maChuyenThuVuaTao, locNo);
           },
           onFailure: (error: Error): void => {
             toast(
@@ -417,156 +501,46 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         },
       ),
     );
-    handleHidePopupDongTai();
   };
+
   // eslint-disable-next-line max-lines-per-function
   const dongTaiVaoChuyenThuTaoMoi = (locNo: string, ghiChu: string): void => {
-    // tao ngam 1 tai voi diem den la diem den cua bang ke hien tai
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.TAO,
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_TOR_ID_CU: '',
-          IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
-          IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
-          IV_DESCRIPTION: '',
-          T_ITEM: [
-            {
-              ITEM_ID: '',
-              ITEM_TYPE: '',
-            },
-          ],
-        },
-        {
-          // eslint-disable-next-line max-lines-per-function
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            const maTaiMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-            // add Bang ke duoc chon vao tai moi tao
-            addBangKeDuocChonVaoTaiMoiTao(maTaiMoiTao);
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-
-    const addBangKeDuocChonVaoTaiMoiTao = (maTaiMoiTao: string): void => {
+    if (size(listUncheckForwardingItem) > 0) {
+      //remove cac bang ke khong duoc tich chon
       dispatch(
         action_MIOA_ZTMI016(
           {
-            IV_FLAG: IV_FLAG.SUA,
+            IV_FLAG: IV_FLAG.REMOVE,
             IV_TOR_TYPE: SipDataType.TAI,
-            IV_TOR_ID_CU: maTaiMoiTao,
-            IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), // diem di cua tai
-            IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), // diem den cua tai
+            IV_TOR_ID_CU: idTai,
+            IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''),
+            IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''),
             IV_DESCRIPTION: '',
-            T_ITEM: forwardingItemListState,
-          },
-          {
-            // eslint-disable-next-line max-lines-per-function
-            onSuccess: (): void => {
-              //Tao chuyen thu theo thong tin vua duoc chon tu pop up
-              taoChuyenThuTheoThongTinVuaChonTuPopup(maTaiMoiTao);
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-          },
-        ),
-      );
-    };
-
-    const taoChuyenThuTheoThongTinVuaChonTuPopup = (maTaiMoiTao: string): void => {
-      dispatch(
-        action_MIOA_ZTMI016(
-          {
-            IV_FLAG: IV_FLAG.TAO,
-            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-            IV_TOR_ID_CU: '',
-            IV_SLOCATION: userMaBp,
-            IV_DLOCATION: locNo,
-            IV_DESCRIPTION: ghiChu,
-            T_ITEM: [
-              {
-                ITEM_ID: '',
-                ITEM_TYPE: '',
-              },
-            ],
-          },
-          {
-            onSuccess: (data: API.MIOAZTMI016Response): void => {
-              const maChuyenThuVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-              // add tai vua tao vao chuyen thu vua tao
-              addTaiVuaTaoVaoChuyenThuVuaTao(maTaiMoiTao, maChuyenThuVuaTao);
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-          },
-        ),
-      );
-    };
-
-    const addTaiVuaTaoVaoChuyenThuVuaTao = (maTaiMoiTao: string, maChuyenThuVuaTao: string): void => {
-      dispatch(
-        action_MIOA_ZTMI016(
-          {
-            IV_FLAG: IV_FLAG.SUA,
-            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-            IV_TOR_ID_CU: maChuyenThuVuaTao,
-            IV_SLOCATION: userMaBp,
-            IV_DLOCATION: locNo,
-            IV_DESCRIPTION: '',
-            T_ITEM: [
-              {
-                ITEM_ID: maTaiMoiTao,
-                ITEM_TYPE: SipDataType.TAI,
-              },
-            ],
+            T_ITEM: listUncheckForwardingItem,
           },
           {
             onSuccess: (data: API.MIOAZTMI016Response): void => {
               toast(
                 <>
                   <i className="fa check mr-2" />
-                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', '')}
+                  {get(
+                    data,
+                    'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE',
+                    'Remove các bảng kê không được tích thành công',
+                  )}
                 </>,
                 {
                   type: 'success',
                 },
               );
+              // tao chuyen thu theo thong tin vua duoc chon thu popup
+              taoChuyenThuTheoThongTinVuaChon(locNo, ghiChu);
             },
             onFailure: (error: Error): void => {
               toast(
                 <>
                   <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
                 </>,
                 {
                   type: 'error',
@@ -576,7 +550,9 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           },
         ),
       );
-    };
+    } else {
+      taoChuyenThuTheoThongTinVuaChon(locNo, ghiChu);
+    }
 
     handleHidePopupDongTai();
   };
@@ -670,7 +646,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={dataTable} onRowClick={handleRedirectDetail} />
+        <DataTable
+          columns={columns}
+          data={dataTable}
+          // onRowClick={handleRedirectDetail}
+        />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}
