@@ -73,6 +73,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     // tempDivideQuantity = toNumber(event.currentTarget.value);
     setDivideQuantity(toNumber(event.currentTarget.value));
   };
+
   // eslint-disable-next-line max-lines-per-function
   const handleDevideCoupon = useCallback((): void => {
     if (size(thongTinPhieuGui) === 1) {
@@ -96,7 +97,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
               GROSS_WEIGHT: khoiLuongMotGoi * soGoiConLai,
               QUANTITY: soGoiConLai,
               QUANTITY_UOM: 'EA',
-              WEIGHT_UOM: 'G',
+              WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
             });
           } else {
             newSubPackages.push({
@@ -104,7 +105,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
               GROSS_WEIGHT: khoiLuongMotGoi * soLuongGoiTrongMotGio,
               QUANTITY: soLuongGoiTrongMotGio,
               QUANTITY_UOM: 'EA',
-              WEIGHT_UOM: 'G',
+              WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
             });
             soGoiConLai -= soLuongGoiTrongMotGio;
           }
@@ -317,7 +318,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
 
       {
         Header: t('Số lượng'),
-        accessor: 'Quantity',
+        accessor: 'QUANTITY',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <Input type="text" defaultValue={`${toNumber(get(row, 'values.QUANTITY'))}`} className="text-center" />
