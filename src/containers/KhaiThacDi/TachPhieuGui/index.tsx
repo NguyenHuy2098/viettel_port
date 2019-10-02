@@ -71,7 +71,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     // tempDivideQuantity = toNumber(event.currentTarget.value);
     setDivideQuantity(toNumber(event.currentTarget.value));
   };
-
+  // eslint-disable-next-line max-lines-per-function
   const handleDevideCoupon = useCallback((): void => {
     if (size(thongTinPhieuGui) === 1) {
       const newSubPackages: SubPackage[] = [];
@@ -110,7 +110,17 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       }
       setSubPackages(newSubPackages);
       setShowDivideCouponUI(true);
-      // setDivideQuantity(tempDivideQuantity);
+    } else {
+      toast(
+        <>
+          <i className="fa fa-window-close-o mr-2" />
+          Phiếu gửi không đủ tiêu chí để tách
+        </>,
+        {
+          containerId: 'SplitCoupon',
+          type: 'error',
+        },
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [thongTinPhieuGui, divideQuantity]);
