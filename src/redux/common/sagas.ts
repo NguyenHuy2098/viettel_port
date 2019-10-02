@@ -107,7 +107,6 @@ function* takeDongChuyenThu(action: UnfoldSagaActionType): SagaIterator {
         await post_MIOA_ZTMI022({
           FU_NO: idChuyenThu,
           STATUS_ID: '1',
-          LOC_ID: maBP,
         });
         return dataChuyenThuGanKien;
       },
@@ -129,10 +128,8 @@ function* takeQuetNhan(action: UnfoldSagaActionType): SagaIterator {
           IV_ID: get(action, 'payload.IV_ID'),
         });
         const item023: API.RowResponseZTMI023OUT = get(data023, 'MT_ZTMI023_OUT.row[0]');
-        const maBP = select(makeSelectorMaBP);
         await post_MIOA_ZTMI022({
           FU_NO: get(item023, 'TOR_ID'),
-          LOC_ID: maBP,
           STATUS_ID: '1',
         });
         return item023;

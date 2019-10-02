@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Loadable from 'react-loadable';
 import { OidcProvider } from 'redux-oidc';
 import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { ConnectedRouter } from 'connected-react-router';
 
 import Loading from 'components/Loading';
@@ -34,24 +34,21 @@ const ErrorLayout = Loadable({
 });
 
 const App: React.FC = (): JSX.Element => {
-  const renderApp = (): JSX.Element => (
-    <>
-      <Router history={history}>
-        <Switch>
-          <Route path={routesMap.AUTH} component={AuthLayout} />
-          <Route path={routesMap.ERROR} component={ErrorLayout} />
-          <PrivateRoute path={routesMap.ROOT} component={DefaultLayout} />
-        </Switch>
-      </Router>
-      <ToastContainer />
-    </>
-  );
+  useEffect(() => {
+    toast.configure();
+  }, []);
 
   return (
     <Provider store={store}>
       <ConnectedRouter history={history}>
         <OidcProvider store={store} userManager={userManager}>
-          {renderApp()}
+          <Router history={history}>
+            <Switch>
+              <Route path={routesMap.AUTH} component={AuthLayout} />
+              <Route path={routesMap.ERROR} component={ErrorLayout} />
+              <PrivateRoute path={routesMap.ROOT} component={DefaultLayout} />
+            </Switch>
+          </Router>
         </OidcProvider>
       </ConnectedRouter>
     </Provider>

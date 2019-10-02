@@ -16,7 +16,7 @@ export function throwErrorIfMalformed({ data }: Partial<AxiosResponse>): void {
   }
 
   if (!get(data, 'Status')) {
-    throw new HttpRequestError(get(data, 'errorCode'), get(data, 'Messages'));
+    throw new HttpRequestError(get(data, 'ErrorCode'), get(data, 'Messages'));
   }
 }
 

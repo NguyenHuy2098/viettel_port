@@ -186,32 +186,29 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
                           alert('Error at step 2');
                           alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
                         } else {
-                          const payloadDongChuyenThu = {
-                            row: {
-                              CU_NO: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
-                              FU_NO: '',
-                              STATUS_ID: '1',
-                              USER_ID: 'KT1',
-                              LOC_ID: 'HUB1',
-                            },
-                          };
                           dispatch(
-                            action_MIOA_ZTMI022(payloadDongChuyenThu, {
-                              onSuccess: (data: API.MIOAZTMI022Response): void => {
-                                if (data.Status) {
-                                  if (data.ErrorCode === 1) {
-                                    alert('Error at step 3');
-                                    alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
-                                  } else {
-                                    alert(t('Đóng chuyến thư thành công!'));
-                                    onSuccessSelectedForwardingItem();
-                                  }
-                                } else {
-                                  alert('Error at step 3');
-                                  alert(data.Messages);
-                                }
+                            action_MIOA_ZTMI022(
+                              {
+                                CU_NO: get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', ''),
+                                STATUS_ID: '1',
                               },
-                            }),
+                              {
+                                onSuccess: (data: API.MIOAZTMI022Response): void => {
+                                  if (data.Status) {
+                                    if (data.ErrorCode === 1) {
+                                      alert('Error at step 3');
+                                      alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+                                    } else {
+                                      alert(t('Đóng chuyến thư thành công!'));
+                                      onSuccessSelectedForwardingItem();
+                                    }
+                                  } else {
+                                    alert('Error at step 3');
+                                    alert(data.Messages);
+                                  }
+                                },
+                              },
+                            ),
                           );
                         }
                       } else {
