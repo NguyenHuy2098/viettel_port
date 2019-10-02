@@ -14,7 +14,7 @@ function* takeGet_ZTMI213(action: UnfoldSagaActionType): Iterable<SagaIterator> 
         const { data } = await sapApi.post(sapApiMap.ZTMI213, action.payload);
         if (get(data, 'MT_ZTMI213_OUT.EV_ERROR') !== 1)
           throw new HttpRequestError(data.ErrorCode, get(data, 'MT_ZTMI213_OUT.RETURN_MESSAGE.MESSAGE'));
-        if (data.Status) return get(data, 'MT_ZTMI213_OUT');
+        if (data.Status) return get(data, 'MT_ZTMI213_OUT.Row');
         throw new HttpRequestError(data.ErrorCode, data.Messages);
       },
       key: action.type,

@@ -12,6 +12,7 @@ import { action_ZTMI213 } from 'redux/ZTMI213/actions';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
+import { select_ZTMI213 } from 'redux/ZTMI213/selectors';
 
 interface SubPackage {
   ID: number;
@@ -33,6 +34,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   const [showListCoupon, setShowListCoupon] = useState<boolean>(false);
 
   const thongTinPhieuGui = useSelector(select_MT_ZTMI031_OUT);
+  const ZTMI213_ResponseRow = useSelector(select_ZTMI213);
 
   function renderShippingInformationTitle(): JSX.Element {
     return (
@@ -196,7 +198,6 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 type: 'success',
               },
             );
-            dispatchActionAPI_ZTMI031();
             setShowListCoupon(true);
           },
           onFailure: (error: Error): void => {
@@ -319,7 +320,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         accessor: 'Quantity',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
-            <Input type="text" defaultValue={`${toNumber(get(row, 'values.Quantity'))}`} className="text-center" />
+            <Input type="text" defaultValue={`${toNumber(get(row, 'values.QUANTITY'))}`} className="text-center" />
           );
         },
       },
@@ -364,7 +365,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       {showListCoupon && renderListCouponTitle()}
       {showListCoupon && (
         <Row className="sipTableContainer sipTableRowClickable">
-          <DataTable columns={columns} data={thongTinPhieuGui} onRowClick={noop} />
+          <DataTable columns={columns} data={ZTMI213_ResponseRow} onRowClick={noop} />
         </Row>
       )}
 

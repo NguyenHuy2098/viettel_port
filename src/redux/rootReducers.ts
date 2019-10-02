@@ -31,7 +31,7 @@ interface RootState {
   ZTMI236: ZTMI236StateType;
   ZTMI240: MTZTMI240Row[];
   ZTMI241: API.MTZTMI241OUT;
-  ZTMI213: API.MTZTMI213OUT;
+  ZTMI213: ZTMI213StateType;
 }
 
 function createRootReducers(history: History): Reducer<RootState> {
