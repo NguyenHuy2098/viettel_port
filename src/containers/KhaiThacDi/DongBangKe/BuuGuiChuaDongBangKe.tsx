@@ -10,6 +10,10 @@ import { push } from 'connected-react-router';
 import { generatePath } from 'react-router';
 import routesMap from 'utils/routesMap';
 
+interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
+  DES?: string;
+}
+
 // eslint-disable-next-line max-lines-per-function
 const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
@@ -60,8 +64,14 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
   }, [dispatch]);
 
   const handleRedirectDetail = useCallback(
-    (item: MTZTMI240Row): void => {
-      dispatch(push(generatePath(routesMap.CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE), item.CHILD));
+    (item: MTZTMI240RowTypeCustom): void => {
+      dispatch(
+        push(generatePath(routesMap.CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE), {
+          child: item.CHILD,
+          des: item.DES,
+          COMM_LOC_GROUP: item.COMM_LOC_GROUP,
+        }),
+      );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [listPhieuGuiChuaDongBangKe],

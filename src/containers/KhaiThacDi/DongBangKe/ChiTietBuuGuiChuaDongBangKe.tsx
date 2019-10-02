@@ -1,10 +1,28 @@
+/* eslint-disable max-lines */
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane, Col, Input, Label } from 'reactstrap';
+import {
+  Badge,
+  Button,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+  Col,
+  Input,
+  Label,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from 'reactstrap';
+// import moment from 'moment';
+import { goBack } from 'connected-react-router';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { get, size, forEach } from 'lodash';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
+import { get, size, forEach, map } from 'lodash';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
 import DataTable from 'components/DataTable';
@@ -14,53 +32,50 @@ import { Location } from 'history';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal/Index';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal/Index';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { AppStateType } from 'redux/store';
+import { actionDongBangKe } from 'redux/common/actions';
+import { SipDataType } from 'utils/enums';
 
 interface Props {
   location: Location;
 }
+
 const forwardingItemList: ForwardingItem[] = [];
+
 // eslint-disable-next-line max-lines-per-function
 function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [tab] = useState(1);
-  const childs = get(props, 'location.state', []);
+  const childs = get(props, 'location.state.child', []);
   const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
   const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
   const userMaBp = useSelector(makeSelectorMaBP);
+  const des = get(props, 'location.state.des', '');
+  const commLocGroup = get(props, 'location.state.COMM_LOC_GROUP', '');
 
-  const dispatchZTMI241 = (): void => {
+  const dispatchZTMI241 = useCallback((): void => {
     const payload = {
       IV_PACKAGE_ID: '',
       IV_FREIGHT_UNIT_STATUS: [301, 304, 311, 600],
       IV_LOC_ID: 'BDH',
-      IV_COMMODITY_GROUP: 'Thư-Nhanh-Nội vùng.TTHNI',
-      IV_DATE: moment().format('YYYYMMDD'),
+      IV_COMMODITY_GROUP: commLocGroup,
+      // IV_DATE: moment().format('YYYYMMDD'),
+      IV_DATE: '20190923',
       IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',
     };
-
-    // const payload = {
-    //   IV_PACKAGE_ID: '',
-    //   IV_FREIGHT_UNIT_STATUS: [600],
-    //   IV_LOC_ID: 'BDH',
-    //   IV_COMMODITY_GROUP: 'HTHU-Chậm-Nội vùng.TTHCM',
-    //   IV_DATE: '20190923',
-    //   IV_USER: 'chidnl',
-    //   IV_PAGE_NO: '1',
-    //   IV_NO_PER_PAGE: '10',
-    // };
     dispatch(action_ZTMI241(payload));
-  };
+  }, [commLocGroup, childs, dispatch]);
 
   useEffect((): void => {
     dispatchZTMI241();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, childs]);
+  }, [dispatchZTMI241]);
 
   const data = useSelector(select_ZTMI241);
 
@@ -214,11 +229,15 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleBack = (): void => {
+    dispatch(goBack());
+  };
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <button className="sipTitleBtnBack btn btn-secondary">
+          <button className="sipTitleBtnBack btn btn-secondary" onClick={handleBack}>
             <i className="fa fa-arrow-left backIcon"></i>
           </button>
           {t('Thư - Nhanh')}
@@ -239,10 +258,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
               IV_TOR_TYPE="ZC1"
             />
           </Button>
-          <Button>
-            <i className="fa fa-download" />
-            {t('Đóng bảng kê')}
-          </Button>
+          <DongBangKe forwardingItemListState={forwardingItemListState} des={des} />
           <Button>
             <i className="fa fa-download" />
             {t('Đóng tải')}
@@ -251,16 +267,17 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       </Row>
       <div className="sipTabContainer sipFlatContainer">
         <Nav tabs>
-          {childs.map((child: API.RowMTZTMI241OUT) => {
-            return (
-              <NavItem key={child.USER}>
-                <NavLink className={classNames({ active: tab === 1 })}>
-                  {child.USER}
-                  <Badge color="primary">01</Badge>
-                </NavLink>
-              </NavItem>
-            );
-          })}
+          {childs.length > 0 &&
+            childs.map((child: API.RowMTZTMI241OUT) => {
+              return (
+                <NavItem key={child.USER}>
+                  <NavLink className={classNames({ active: tab === 1 })}>
+                    {child.USER}
+                    <Badge color="primary">01</Badge>
+                  </NavLink>
+                </NavItem>
+              );
+            })}
         </Nav>
         <TabContent className="sipFlatContainer">
           <TabPane>
@@ -283,6 +300,189 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           isFrom2
         />
       </div>
+    </>
+  );
+}
+
+interface ForwardingItem {
+  ITEM_ID: string;
+  ITEM_TYPE?: string;
+}
+
+interface DongBangKeProps {
+  forwardingItemListState: ForwardingItem[];
+  des: string;
+}
+
+// eslint-disable-next-line max-lines-per-function
+function DongBangKe(props: DongBangKeProps): JSX.Element {
+  const forwardingItemListState = props.forwardingItemListState;
+  const [tab, setTab] = useState<number>(1);
+  const { t } = useTranslation();
+  const [isOpen, setIsOpen] = useState(false);
+  const des = props.des;
+
+  function toggle(): void {
+    setIsOpen(!isOpen);
+  }
+
+  function handleChangeTab(tab: number): void {
+    setTab(tab);
+  }
+
+  const [ganBangKeVaoTai, setGanBangKeVaoTai] = useState<boolean>(false);
+  function handleGanBangKeVaoTai(): void {
+    setGanBangKeVaoTai(true);
+  }
+
+  return (
+    <>
+      <Button onClick={toggle}>
+        <i className="fa fa-download" />
+        {t('Đóng bảng kê')}
+      </Button>
+      <Modal isOpen={isOpen} toggle={toggle}>
+        <ModalHeader toggle={toggle}>{t('Gán bảng kê vào tải')}</ModalHeader>
+        <ModalBody>
+          <div className="sipTabContainer sipFlatContainer ganBangKeVaoTaiPopUp">
+            <Nav tabs>
+              <NavItem>
+                {/* eslint-disable-next-line react/jsx-max-depth */}
+                <NavLink
+                  onClick={React.useCallback((): void => handleChangeTab(1), [])}
+                  className={classNames({ active: tab === 1 })}
+                >
+                  {t('Chọn tải')}
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                {/* eslint-disable-next-line react/jsx-max-depth */}
+                <NavLink
+                  onClick={React.useCallback((): void => handleChangeTab(2), [])}
+                  className={classNames({ active: tab === 2 })}
+                >
+                  {t('Tạo tải mới')}
+                </NavLink>
+              </NavItem>
+            </Nav>
+          </div>
+          <TabContent activeTab={tab} className="sipFlatContainer sipSelectForwardingItemContainer pl-1 pr-3">
+            <TabContent activeTab={tab} className="sipFlatContainer">
+              <TabPane tabId={1}>
+                {/* eslint-disable-next-line react/jsx-max-depth */}
+                <ChonTai
+                  ganBangKeVaoTai={ganBangKeVaoTai}
+                  setGanBangKeVaoTai={setGanBangKeVaoTai}
+                  forwardingItemListState={forwardingItemListState}
+                  des={des}
+                />
+              </TabPane>
+              <TabPane tabId={2}>
+                {/* eslint-disable-next-line react/jsx-max-depth */}
+                <TaoTai />
+              </TabPane>
+            </TabContent>
+          </TabContent>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleGanBangKeVaoTai}>
+            {t('Hoàn tất')}
+          </Button>{' '}
+        </ModalFooter>
+      </Modal>
+    </>
+  );
+}
+
+function TaoTai(): JSX.Element {
+  return <>tao tai moi</>;
+}
+
+interface ChonTaiProps {
+  ganBangKeVaoTai: boolean;
+  setGanBangKeVaoTai: Function;
+  forwardingItemListState: ForwardingItem[];
+  des: string;
+}
+
+// eslint-disable-next-line max-lines-per-function
+function ChonTai(props: ChonTaiProps): JSX.Element {
+  const dispatch = useDispatch();
+  const ganBangKeVaoTai = props.ganBangKeVaoTai;
+  const setGanBangKeVaoTai = props.setGanBangKeVaoTai;
+  const des = props.des;
+  const forwardingItemListState = props.forwardingItemListState;
+
+  React.useEffect((): void => {
+    const payload = {
+      IV_TOR_ID: '',
+      IV_FR_DATE: '20190510',
+      IV_TO_DATE: '20190917',
+      IV_TOR_TYPE: SipDataType.TAI,
+      IV_FR_LOC_ID: 'BDH',
+      IV_TO_LOC_ID: '',
+      IV_CUST_STATUS: '101',
+      IV_PAGENO: '1',
+      IV_NO_PER_PAGE: '5000',
+    };
+    dispatch(action_MIOA_ZTMI047(payload));
+  }, [dispatch]);
+
+  const data = useSelector(
+    (state: AppStateType) => get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', []),
+    shallowEqual,
+  );
+
+  const [itemSelect, setItemSelect] = useState<API.RowMTZTMI047OUT | null>(null);
+
+  function handleSelectItem(itemSelect: API.RowMTZTMI047OUT): void {
+    setItemSelect(itemSelect);
+  }
+
+  const reset = useCallback(
+    function reset(): void {
+      setItemSelect(null);
+      setGanBangKeVaoTai(false);
+    },
+    [setGanBangKeVaoTai, setItemSelect],
+  );
+
+  useEffect((): void => {
+    if (!ganBangKeVaoTai || !itemSelect) return;
+    const data = {
+      forwardingItemListState: forwardingItemListState,
+      itemSelect: itemSelect,
+      des: des,
+    };
+    dispatch(
+      actionDongBangKe(data, {
+        onFinish: (): void => {
+          reset();
+        },
+      }),
+    );
+  }, [ganBangKeVaoTai, itemSelect, dispatch, des, forwardingItemListState, reset]);
+
+  return (
+    <>
+      {map(data, (item: API.RowMTZTMI047OUT) => {
+        return (
+          <Label key={item.TOR_ID} check className="selectForwardingItem row">
+            {/* eslint-disable-next-line react/jsx-no-bind */}
+            <Input type="radio" name="selectForwardingItem" onClick={(): void => handleSelectItem(item)} />
+            <p>
+              <span>{item.TOR_ID}</span>
+              <span>{item.CREATED_BY}</span>
+            </p>
+            <span>
+              <span>SL:{item.ITEM_NO}</span>
+              <span style={{ background: 'darkgray', padding: '0px 4px 0px 4px', borderRadius: '4px' }}>
+                {item.LOG_LOCID_TO}
+              </span>
+            </span>
+          </Label>
+        );
+      })}
     </>
   );
 }
