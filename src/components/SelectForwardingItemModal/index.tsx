@@ -1,20 +1,23 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, FormGroup, Label, Input } from 'reactstrap';
-import { get, map, trim, toString } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { get, join, map, trim, toString } from 'lodash';
+import moment from 'moment';
+
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import moment from 'moment';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import HttpRequestError from 'utils/HttpRequetsError';
+import { toastError, toastSuccess } from '../Toast';
 
 interface Props {
   onHide: () => void;
-  onSuccessSelected: () => void;
+  onSuccessSelected?: (torId: string) => void;
   visible: boolean;
   modalTitle: string;
-  forwardingItemList: ForwardingItem[];
+  forwardingItemList: API.TITEM[];
   IV_TOR_TYPE: string;
   TorTypeChuyenVao?: string;
   IV_FR_LOC_ID: string;
@@ -40,9 +43,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     IV_CUST_STATUS,
     TorTypeChuyenVao,
   } = props;
-
   const listForwardingItemChuaHoanThanh = useSelector(makeSelectorRow(IV_TOR_TYPE, IV_CUST_STATUS));
-
   const [radioTorId, setRadioTorId] = useState<string>('');
 
   useEffect((): void => {
@@ -52,29 +53,23 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
 
   useEffect((): void => {
     if (visible) {
-      const payload047 = {
-        IV_TOR_ID: '',
-        IV_FR_DATE: trim(
-          toString(
-            moment()
-              .subtract(7, 'days')
-              .format('YYYYMMDD'),
-          ),
-        ),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: IV_TOR_TYPE,
-        IV_FR_LOC_ID: IV_FR_LOC_ID,
-        IV_TO_LOC_ID: IV_TO_LOC_ID,
-        IV_CUST_STATUS: IV_CUST_STATUS,
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '100',
-      };
-      dispatch(action_MIOA_ZTMI047(payload047));
+      dispatch(
+        action_MIOA_ZTMI047({
+          IV_FR_DATE: moment()
+            .subtract(7, 'days')
+            .format('YYYYMMDD'),
+          IV_TOR_TYPE: IV_TOR_TYPE,
+          IV_FR_LOC_ID: IV_FR_LOC_ID,
+          IV_TO_LOC_ID: IV_TO_LOC_ID,
+          IV_CUST_STATUS: IV_CUST_STATUS,
+          IV_NO_PER_PAGE: '1000',
+        }),
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
-  function handleChuyenVaoForwardingItem(e: FormEvent): void {
+  const handleChuyenVaoForwardingItem = (): void => {
     const payload = {
       IV_FLAG: '2',
       IV_TOR_TYPE: TorTypeChuyenVao ? TorTypeChuyenVao : IV_TOR_TYPE,
@@ -87,16 +82,20 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     dispatch(
       action_MIOA_ZTMI016(payload, {
         onSuccess: (): void => {
-          alert(t('Thành công!'));
-          onSuccessSelected();
+          toastSuccess(t('Chuyển vào thành công.'));
+          onSuccessSelected && onSuccessSelected(radioTorId);
         },
-        onFailure: (): void => {
-          alert(t('Có lỗi xảy ra!'));
+        onFailure: (error: HttpRequestError): void => {
+          if (error) {
+            toastError(join(error.messages, ' '));
+          } else {
+            toastError(t('Lỗi không xác định khi chuyển vào.'));
+          }
         },
-        onFinish: (): void => onHide(),
+        onFinish: onHide,
       }),
     );
-  }
+  };
 
   const handleChangeForwardingItem = (event: React.FormEvent<HTMLInputElement>): void => {
     setRadioTorId(event.currentTarget.value);

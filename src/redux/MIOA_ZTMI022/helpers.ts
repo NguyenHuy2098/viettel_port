@@ -1,4 +1,4 @@
-import { get } from 'lodash';
+import { get, toNumber } from 'lodash';
 
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { sapApiMap } from 'utils/apisMap';
@@ -18,7 +18,6 @@ export async function post_MIOA_ZTMI022(payload: Partial<API.RowRequestZTMI022>)
       ...payload,
     },
   });
-  const isSuccessful = !!get(data, 'MT_ZTMI022_OUT.EV_ERROR');
-  if (isSuccessful) return data;
-  throw new Error('Quét nhận thất bại.');
+  if (toNumber(get(data, 'MT_ZTMI022_OUT.EV_ERROR')) === 1) return data;
+  throw new Error(get(data, 'MT_ZTMI236_OUT.RETURN_MESSAGE[0].MESSAGE'));
 }

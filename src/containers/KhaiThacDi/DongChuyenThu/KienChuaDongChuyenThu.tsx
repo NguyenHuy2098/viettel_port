@@ -7,16 +7,16 @@ import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
 import produce from 'immer';
-import { concat, get, includes, map, pull, size } from 'lodash';
+import { concat, get, includes, map, pull } from 'lodash';
 import moment from 'moment';
 
+import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import DataTable from 'components/DataTable';
 import Search from 'components/Input/Search';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import Pagination from 'components/Pagination';
 import ChonChuyenThuModal from 'components/SelectForwardingItemModal';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { actionDongChuyenThu } from 'redux/common/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorZTMI236OUTPagingTotalPage, makeSelectorZTMI236OUTRow } from 'redux/ZTMI236/selectors';
@@ -109,32 +109,6 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     };
   };
 
-  // eslint-disable-next-line max-lines-per-function
-  const handleDongChuyenThu = (): void => {
-    if (size(selectedKienItems) > 0) {
-      dispatch(
-        actionDongChuyenThu(
-          {
-            T_ITEM: selectedKienItems,
-          },
-          {
-            onFailure: () => {
-              toast(t('Đóng chuyến thư thất bại!'), { type: 'error' });
-            },
-            onSuccess: () => {
-              toast(t('Đóng chuyến thư thành công!'), { type: 'success' });
-            },
-            onFinish: () => {
-              getListKienChuaDongChuyenThu();
-            },
-          },
-        ),
-      );
-    } else {
-      toast(t('Vui lòng chọn kiện!'), { type: 'error' });
-    }
-  };
-
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
@@ -205,15 +179,15 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         </Button>
       </Col>
       <Col className="d-flex justify-content-end">
-        {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
-        <Button className="mr-3 hide" color="primary" onClick={handleChuyenVaoChuyenThu}>
-          <i className="fa fa-folder mr-1" />
+        <Button color="primary" onClick={handleChuyenVaoChuyenThu}>
+          <i className="fa fa-download rotate-90 mr-2" />
           {t('Chuyển vào CT')}
         </Button>
-        <Button color="primary" onClick={handleDongChuyenThu}>
-          <i className="fa fa-truck mr-1" />
-          {t('Đóng CT')}
-        </Button>
+        <ButtonDongChuyenThu
+          className="ml-2"
+          listTaiKienCanGan={selectedKienItems}
+          onSuccess={handleSuccessChuyenThuAction}
+        />
       </Col>
     </Row>
   );

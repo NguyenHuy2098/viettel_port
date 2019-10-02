@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
-import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
+import { Badge, Button, Input, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
@@ -7,17 +7,15 @@ import classNames from 'classnames';
 import { push } from 'connected-react-router';
 import { History } from 'history';
 import { get, size, toString, trim } from 'lodash';
-import moment from 'moment';
 import queryString from 'query-string';
 
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import { action_ZTMI236 } from 'redux/ZTMI236/actions';
 import { makeSelectorZTMI236OUTRowCount } from 'redux/ZTMI236/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
@@ -35,7 +33,6 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const [tab, setTab] = useState<number>(1);
   const tabParams = queryString.parse(get(props, 'history.location.search', {}));
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
-  const maBP = useSelector(makeSelectorMaBP);
   const countChuyenThuChuaHoanThanh = useSelector(
     makeSelectorTotalItem(SipDataType.CHUYEN_THU, SipDataState.CHUA_HOAN_THANH),
   );
@@ -62,35 +59,37 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabParams]);
 
-  const getListChuyenThuTaoMoi = (IV_PAGENO = 1): void => {
+  const getListChuyenThuTaoMoi = (IV_PAGENO = 1, IV_TOR_ID = ''): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-        IV_FR_LOC_ID: maBP,
-        IV_CUST_STATUS: SipDataState.TAO_MOI,
-        IV_FR_DATE: moment()
-          .subtract(1, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO,
-        IV_NO_PER_PAGE: '10',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_ID,
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_PAGENO,
+        },
+        {},
+        {
+          flow: SipFlowType.KHAI_THAC_DI,
+        },
+      ),
     );
   };
 
   const getListTaiChuaDongChuyenThu = (IV_PAGENO = 1, IV_TOR_ID = ''): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID,
-        IV_TOR_TYPE: SipDataType.TAI,
-        IV_FR_LOC_ID: maBP,
-        IV_CUST_STATUS: SipDataState.TAO_MOI,
-        IV_FR_DATE: moment().format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO,
-        IV_NO_PER_PAGE: '10',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_ID,
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_PAGENO,
+        },
+        {},
+        {
+          flow: SipFlowType.KHAI_THAC_DI,
+        },
+      ),
     );
   };
 
@@ -100,11 +99,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         IV_PACKAGE_ID,
         IV_FREIGHT_UNIT_TYPE: SipDataType.KIEN,
         IV_FREIGHT_UNIT_STATUS: ['306', '402'],
-        IV_LOC_ID: maBP,
-        IV_FR_DATE: moment().format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGE_NO,
-        IV_NO_PER_PAGE: '10',
+        IV_PAGE_NO: toString(IV_PAGE_NO),
       }),
     );
   };
