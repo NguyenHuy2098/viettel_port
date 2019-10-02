@@ -274,6 +274,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [dienThoaiReceiver, setDienThoaiReceiver] = useState<string>('');
   const [hoTenReceiver, setHoTenReceiver] = useState<string>('');
   const [diaChiReceiver, setDiaChiReceiver] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
   const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>('');
   const [districtIdReceiver, setDistrictIdReceiver] = useState<string>('');
   const [wardIdReceiver, setWardIdReceiver] = useState<string>('');
@@ -325,7 +326,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     Description: '',
     NET_WEIGHT_OF_UNIT: '',
     Currency: '',
-    GROSS_WEIGHT_OF_UNIT: 'KG',
+    GROSS_WEIGHT_OF_UNIT: 'G',
     Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
     COD: '',
     NET_WEIGHT: '',
@@ -345,7 +346,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     Description: tenHang,
     NET_WEIGHT_OF_UNIT: '',
     Currency: '',
-    GROSS_WEIGHT_OF_UNIT: 'KG',
+    GROSS_WEIGHT_OF_UNIT: 'G',
     Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
     COD: '',
     NET_WEIGHT: '',
@@ -493,7 +494,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         Description: '',
         NET_WEIGHT_OF_UNIT: '',
         Currency: '',
-        GROSS_WEIGHT_OF_UNIT: 'KG',
+        GROSS_WEIGHT_OF_UNIT: 'G',
         Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
         COD: '',
         NET_WEIGHT: '',
@@ -511,7 +512,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             Description: '',
             NET_WEIGHT_OF_UNIT: '',
             Currency: '',
-            GROSS_WEIGHT_OF_UNIT: 'KG',
+            GROSS_WEIGHT_OF_UNIT: 'G',
             Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
             NET_WEIGHT: '',
             QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
@@ -681,9 +682,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
           GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
-          GROSS_WEIGHT_OF_UNIT: 'g',
+          GROSS_WEIGHT_OF_UNIT: 'G',
           NET_WEIGHT: '',
-          NET_WEIGHT_OF_UNIT: 'g',
+          NET_WEIGHT_OF_UNIT: '',
           Length: item.Length === '' ? undefined : item.Length,
           Hight: item.Hight === '' ? undefined : item.Hight,
           Width: item.Width === '' ? undefined : item.Width,
@@ -736,7 +737,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
     setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
     setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
-    setProvinceIdReceiver(join(slice(thisValue, 110, 190), ''));
+    setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
+    setDescription(join(slice(thisValue, 110, 150), ''));
     //trigger get Summary information dispatch
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
@@ -770,14 +772,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       CUS_ID: '', // Mã user trên hệ thống APP/Web
       DISTRICT_DES: trim(districtIdReceiver), // nhận trong trường hợp khách hàng vãng lai
       DISTRICT_SRC: trim(districtIdSender), // trong trường hợp khách hàng vãng lai
-      DESCRIPTION: '', // Mô tả chương trình khuyến mại
+      DESCRIPTION: trim(description), // Mô tả chương trình khuyến mại
       DISCTYPE: '', // Loại khuyến mại
       EMAIL_CONSIG: '',
       EMAIL_OP: '',
       EMAIL_SHIPPER: '',
       FREIGH_TERM: '', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận, Vinh bảo tạm thời để trống
       HOUSE_ID_SRC: '',
-      HOUSE_ID_DES: '',
+      HOUSE_ID_DES: trim(detailAddressReceiver),
       ITEM: payloadPackageItemArr,
       LOCATION_ID_SRC: '',
       LOCATION_ID_DES: '',
@@ -798,12 +800,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       REQUEST_PICK_DATE: null,
       SHIPPER: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Người gửi hàng- mã BP
       SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
-      STREET_NAME_DES: trim(detailAddressReceiver), // Địa chỉ nhận trong trường hợp vãng lai
+      STREET_NAME_DES: trim(wardIdReceiver), // Địa chỉ nhận trong trường hợp vãng lai
       STREET_NAME_SRC: trim(detailAddressSender), // trong trường hợp khách hàng vãng lai
       TEL_DES: trim(dienThoaiReceiver),
       TEL_SRC: trim(dienThoaiSender),
       TRANSPORTATION_MODE: '01', // Loại lịch trình 01: Lịch trình xe; 02: Lịch trình tàu bay; 03: Lịch trình tàu lửa; 04: Lịch trình tàu thủy
-      WARD_DES: trim(wardIdReceiver), // Mã xã phường nhận trong trường hợp vãng lai
+      WARD_DES: '', // Mã xã phường nhận trong trường hợp vãng lai
       WARD_SRC: trim(wardIdSender), // trong trường hợp khách hàng vãng lai
     };
     dispatch(
@@ -836,9 +838,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
           GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
-          GROSS_WEIGHT_OF_UNIT: 'g',
+          GROSS_WEIGHT_OF_UNIT: 'G',
           NET_WEIGHT: '',
-          NET_WEIGHT_OF_UNIT: 'g',
+          NET_WEIGHT_OF_UNIT: '',
           Length: item.Length === '' ? undefined : item.Length,
           Hight: item.Hight === '' ? undefined : item.Hight,
           Width: item.Width === '' ? undefined : item.Width,

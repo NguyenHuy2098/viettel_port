@@ -10,6 +10,7 @@ import routesMap from 'utils/routesMap';
 import DataTable from 'components/DataTable';
 import { generatePath } from 'react-router';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import moment from 'moment';
 
 // eslint-disable-next-line max-lines-per-function
 function PhieuGuiChuaDongBangKe(): JSX.Element {
@@ -21,9 +22,9 @@ function PhieuGuiChuaDongBangKe(): JSX.Element {
 
   useEffect((): void => {
     const payload = {
-      IV_FREIGHT_UNIT_STATUS: [301, 304, 311, 600],
+      IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: userMaBp,
-      IV_DATE: '20190923',
+      IV_DATE: moment().format('YYYYMMDD'),
     };
     dispatch(action_ZTMI240(payload));
     // eslint-disable-next-line react-hooks/exhaustive-deps

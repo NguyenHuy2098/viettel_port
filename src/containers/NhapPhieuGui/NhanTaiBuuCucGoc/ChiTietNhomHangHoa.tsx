@@ -66,27 +66,17 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
   }
 
   const dispatchZTMI241 = (): void => {
-    // const payload = {
-    //   IV_PACKAGE_ID: '',
-    //   IV_FREIGHT_UNIT_STATUS: [301, 304, 311, 600],
-    //   IV_LOC_ID: userMaBp,
-    //   IV_COMMODITY_GROUP: 'Thư-Nhanh-Nội vùng.TTHNI',
-    //   IV_DATE: moment().format('YYYYMMDD'),
-    //   IV_USER: get(childs, '[0].USER', ''),
-    //   IV_PAGE_NO: '1',
-    //   IV_NO_PER_PAGE: '10',
-    // };
-
     const payload = {
       IV_PACKAGE_ID: '',
-      IV_FREIGHT_UNIT_STATUS: [600],
+      IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: userMaBp,
-      IV_COMMODITY_GROUP: 'HTHU-Chậm-Nội vùng.TTHCM',
-      IV_DATE: '20190923',
-      IV_USER: 'chidnl',
+      IV_COMMODITY_GROUP: 'Thường-Chậm-Liên Khu vực.HUB3',
+      IV_DATE: moment().format('YYYYMMDD'),
+      IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',
     };
+
     dispatch(action_ZTMI241(payload));
   };
 
