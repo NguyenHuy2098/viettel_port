@@ -18,7 +18,9 @@ import NhanRiengTaiKien from './NhanRiengTaiKien';
 // eslint-disable-next-line max-lines-per-function
 const NhanTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<number>(1);
+  const [tab, setTab] = useState<number>(
+    Number(sessionStorage.getItem('tabNhanTaiKien') ? sessionStorage.getItem('tabNhanTaiKien') : 1),
+  );
   const dispatch = useDispatch();
   const countChuyenThuChuaNhanTaiKien = useSelector(makeSelectorCountChuyenThuChuaNhanTaiKien);
   const countTaiDaNhan = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
@@ -75,6 +77,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
   }, []);
 
   function handleChangeTab(tab: number): void {
+    sessionStorage.setItem('tabNhanTaiKien', tab.toString());
     setTab(tab);
   }
 
