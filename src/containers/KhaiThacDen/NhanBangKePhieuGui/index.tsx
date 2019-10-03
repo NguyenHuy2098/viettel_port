@@ -26,11 +26,14 @@ interface Props {
 const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [tab, setTab] = useState<number>(1);
+  const [tab, setTab] = useState<number>(
+    Number(sessionStorage.getItem('tabNhanBangKePhieuGui') ? sessionStorage.getItem('tabNhanBangKePhieuGui') : 1),
+  );
   const countTaiChuaNhanBangKePhieuGui = useSelector(makeSelectorCountTaiChuaNhanBangKePhieuGui);
   const countBangKeChuaNhanPhieuGui = useSelector(makeSelectorCountBangKeChuaNhanPhieuGui);
 
   function handleChangeTab(tab: number): void {
+    sessionStorage.setItem('tabNhanBangKePhieuGui', tab.toString());
     setTab(tab);
   }
 
