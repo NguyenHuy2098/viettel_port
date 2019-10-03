@@ -17,6 +17,8 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import PrintableModal from 'components/PrintableModal';
+import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -136,6 +138,21 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   }
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In thông tin chuyến thư'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -169,7 +186,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon" onClick={printChuyenThu(row.original)}>
-                <i className="fa fa-print fa-lg color-green" />
+                {renderPrintButton(row.original.TOR_ID)}
               </Button>
               <Button className="SipTableFunctionIcon">
                 <i className="fa fa-pencil fa-lg color-blue" />

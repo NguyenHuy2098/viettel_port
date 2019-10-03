@@ -15,6 +15,8 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import PrintableModal from 'components/PrintableModal';
+import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuDaDong: React.FC = (): JSX.Element => {
@@ -90,6 +92,21 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
     };
   }
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In thông tin chuyến thư'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -122,7 +139,7 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <Button className="SipTableFunctionIcon" onClick={printChuyenThu(row.original)}>
-              <i className="fa fa-print fa-lg color-green" />
+              {renderPrintButton(row.original.TOR_ID)}
             </Button>
           );
         },
