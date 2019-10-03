@@ -67,9 +67,9 @@ function* takeQuetNhan(action: UnfoldSagaActionType): SagaIterator {
           IV_ID: get(action, 'payload.IV_ID'),
         });
         const item023: API.RowResponseZTMI023OUT = get(data023, 'MT_ZTMI023_OUT.row[0]');
-        if (item023.ZVTP_CUST_STATUS !== SipDataState.CHUYEN_THU_DEN)
-          throw new Error('Chuyến thư không phải chuyến thư đến');
-
+        if (get(item023, 'ZVTP_CUST_STATUS') !== SipDataState.CHUYEN_THU_DEN) {
+          throw new Error('Chuyến thư không phải chuyến thư đến.');
+        }
         await post_MIOA_ZTMI022({
           FU_NO: get(item023, 'TOR_ID'),
           STATUS_ID: '1',

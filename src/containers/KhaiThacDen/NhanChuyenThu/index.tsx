@@ -1,22 +1,20 @@
-import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Col, Input, InputGroup, InputGroupAddon, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get, isEmpty } from 'lodash';
+import { ceil, get } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/common/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorPagingCount, makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import { toast } from 'react-toastify';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
@@ -29,7 +27,6 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   const countChuyenThuDaQuetNhan = useSelector(
     makeSelectorPagingCount(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
   );
-  const [idChuyenThu, setIdChuyenThu] = useState<string>('');
 
   const getListChuyenThuDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
@@ -49,36 +46,6 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     getListChuyenThuDaQuetNhan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const handleChangeCodeChuyenThu = (event: ChangeEvent<HTMLInputElement>): void => {
-    setIdChuyenThu(event.target.value);
-  };
-
-  const handleQuetNhanChuyenThu = (): void => {
-    if (!isEmpty(idChuyenThu)) {
-      dispatch(
-        actionQuetNhan(
-          { IV_ID: idChuyenThu },
-          {
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'message', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-            onSuccess: (): void => {
-              window.location.reload(false);
-            },
-          },
-        ),
-      );
-    }
-  };
 
   const renderOrderInformationTitle = (): JSX.Element => (
     <Row className="mb-3 sipTitleContainer">
@@ -101,13 +68,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   const renderFindOrder = (): JSX.Element => (
     <Row className="sipBgWhiteContainer d-flex justify-content-between">
       <Col md={6}>
-        <Scan
-          buttonProps={{
-            onClick: handleQuetNhanChuyenThu,
-          }}
-          onChange={handleChangeCodeChuyenThu}
-          placeholder={t('Quét mã chuyến thư')}
-        />
+        <Scan onSuccess={getListChuyenThuDaQuetNhan} placeholder={t('Quét mã chuyến thư')} />
       </Col>
       <Col className="d-flex justify-content-end align-items-center" md={2}>
         {t('Tổng số')}
