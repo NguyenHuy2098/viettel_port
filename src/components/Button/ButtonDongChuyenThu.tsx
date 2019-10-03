@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { get, isEmpty, isString, join, map, noop } from 'lodash';
 
-import ChonChuyenThuModal from 'components/SelectForwardingItemModal';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
@@ -146,19 +146,17 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
           </>
         )}
       </Button>
-      {showModal && (
-        <ChonChuyenThuModal
-          onSuccessSelected={handleDongChuyenThuById}
-          visible={showModal}
-          onHide={toggleModal}
-          modalTitle={t('Chọn chuyến thư')}
-          forwardingItemList={listTaiKienItemsCanGan || []}
-          IV_TOR_TYPE={SipDataType.CHUYEN_THU}
-          IV_FR_LOC_ID={userMaBp}
-          IV_TO_LOC_ID=""
-          IV_CUST_STATUS={SipDataState.TAO_MOI}
-        />
-      )}
+      <SelectForwardingItemModal
+        onSuccessSelected={handleDongChuyenThuById}
+        visible={showModal}
+        onHide={toggleModal}
+        modalTitle={t('Chọn chuyến thư')}
+        forwardingItemList={listTaiKienItemsCanGan || []}
+        IV_TOR_TYPE={SipDataType.CHUYEN_THU}
+        IV_FR_LOC_ID={userMaBp}
+        IV_TO_LOC_ID=""
+        IV_CUST_STATUS={SipDataState.TAO_MOI}
+      />
     </>
   );
 };

@@ -10,12 +10,12 @@ import produce from 'immer';
 import { concat, get, includes, map, pull } from 'lodash';
 import moment from 'moment';
 
+import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import DataTable from 'components/DataTable';
 import Search from 'components/Input/Search';
 import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
 import Pagination from 'components/Pagination';
-import ChonChuyenThuModal from 'components/SelectForwardingItemModal';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -33,7 +33,6 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { getListKienChuaDongChuyenThu } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [showChonChuyenThuModal, setShowChonChuyenThuModal] = useState<boolean>(false);
   const [selectedKienIds, setSelectedKienIds] = useState<string[]>([]);
   const maBP = useSelector(makeSelectorMaBP);
   const totalPage = useSelector(makeSelectorZTMI236OUTPagingTotalPage);
@@ -49,18 +48,10 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     getListKienChuaDongChuyenThu(1, searchText);
   };
 
-  const handleRedirectDetail = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+  const handleRedirectDetail = (item: API.RowMTZTMI047OUT) => {
     return (): void => {
       dispatch(push(generatePath(routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU, { idChuyenThu: item.TOR_ID })));
     };
-  };
-
-  const handleChuyenVaoChuyenThu = (): void => {
-    setShowChonChuyenThuModal(true);
-  };
-
-  const handleHideChonChuyenThuModal = (): void => {
-    setShowChonChuyenThuModal(false);
   };
 
   const handleSelectKien = (event: React.MouseEvent<HTMLInputElement>): void => {
@@ -78,7 +69,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     setSelectedKienIds([]);
   };
 
-  const handleDeleteKien = (item: API.RowMTZTMI047OUT): ((event: React.MouseEvent) => void) => {
+  const handleDeleteKien = () => {
     return (): void => {
       const payload = {
         IV_TOR_ID: '',
@@ -179,10 +170,11 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         </Button>
       </Col>
       <Col className="d-flex justify-content-end">
-        <Button color="primary" onClick={handleChuyenVaoChuyenThu}>
-          <i className="fa fa-download rotate-90 mr-2" />
-          {t('Chuyển vào CT')}
-        </Button>
+        <ButtonChuyenVaoChuyenThu
+          className="ml-2"
+          listTaiKienCanChuyen={selectedKienItems}
+          onSuccess={handleSuccessChuyenThuAction}
+        />
         <ButtonDongChuyenThu
           className="ml-2"
           listTaiKienCanGan={selectedKienItems}
@@ -204,17 +196,6 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           onPageChange={onPaginationChange}
         />
       </Row>
-      <ChonChuyenThuModal
-        onSuccessSelected={handleSuccessChuyenThuAction}
-        visible={showChonChuyenThuModal}
-        onHide={handleHideChonChuyenThuModal}
-        modalTitle={t('Chọn chuyến thư')}
-        forwardingItemList={selectedKienItems}
-        IV_TOR_TYPE={SipDataType.CHUYEN_THU}
-        IV_FR_LOC_ID={maBP}
-        IV_TO_LOC_ID=""
-        IV_CUST_STATUS={SipDataState.TAO_MOI}
-      />
     </>
   );
 };
