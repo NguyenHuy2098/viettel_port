@@ -56,9 +56,9 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
 
   useEffect(() => {
     const payload = {
-      IV_FREIGHT_UNIT_STATUS: [301],
+      IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: 'BDH',
-      IV_DATE: '20190923',
+      IV_DATE: '20191002',
     };
     dispatch(action_ZTMI240(payload));
   }, [dispatch]);

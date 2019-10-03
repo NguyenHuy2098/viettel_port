@@ -61,11 +61,11 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const dispatchZTMI241 = useCallback((): void => {
     const payload = {
       IV_PACKAGE_ID: '',
-      IV_FREIGHT_UNIT_STATUS: [301, 304, 311, 600],
+      IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: 'BDH',
       IV_COMMODITY_GROUP: commLocGroup,
       // IV_DATE: moment().format('YYYYMMDD'),
-      IV_DATE: '20190923',
+      IV_DATE: '20191002',
       IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',

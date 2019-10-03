@@ -11,6 +11,8 @@ import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
+import PrintableModal from 'components/PrintableModal';
+import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
 
 interface Props {
   match: match;
@@ -90,6 +92,21 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     dispatch(goBack());
   };
 
+  const renderPrintButton = (): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'sipTitleRightBlockBtnIcon',
+        children: <i className="fa fa-print" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In thông tin chuyến thư'),
+      }}
+    />
+  );
+
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
@@ -100,9 +117,10 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
           {t('Danh sách tải/kiện trong chuyến thư')}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
+          {renderPrintButton()}
+          {/* <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
-          </Button>
+          </Button> */}
         </div>
       </Row>
     );
