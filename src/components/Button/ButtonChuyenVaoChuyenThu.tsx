@@ -34,7 +34,7 @@ const ButtonChuyenVaoChuyenThu = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Button color="primary" onClick={handleChuyenVaoChuyenThu} {...rest}>
+      <Button color="primary" onClick={handleChuyenVaoChuyenThu} {...rest} className="hide">
         {props.children || (
           <>
             <i className="fa fa-download rotate-90 mr-2" />
