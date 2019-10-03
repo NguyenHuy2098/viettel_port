@@ -340,19 +340,18 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
       </Form>
     );
   }
+
   return (
-    <>
-      <Modal className="sipTitleModalCreateNew" isOpen={visible}>
-        <ModalHeader toggle={onHide}>Nhập địa chỉ</ModalHeader>
-        <ModalBody>{renderFormLocation()}</ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={handleValidate}>
-            {t('Ghi lại')}
-          </Button>{' '}
-          <Button onClick={onHide}>{t('Hủy')}</Button>
-        </ModalFooter>
-      </Modal>
-    </>
+    <Modal className="sipTitleModalCreateNew" isOpen={visible}>
+      <ModalHeader toggle={onHide}>Nhập địa chỉ</ModalHeader>
+      <ModalBody>{renderFormLocation()}</ModalBody>
+      <ModalFooter>
+        <Button color="primary" onClick={handleValidate}>
+          {t('Ghi lại')}
+        </Button>{' '}
+        <Button onClick={onHide}>{t('Hủy')}</Button>
+      </ModalFooter>
+    </Modal>
   );
 };
 export default ChoosingAddressPopup;

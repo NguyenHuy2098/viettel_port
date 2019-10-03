@@ -11,8 +11,8 @@ import { includes, forEach, get, map, toString, size } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import DeleteConfirmModal from 'components/DeleteConfirmModal';
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';

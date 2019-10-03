@@ -8,7 +8,7 @@ import queryString from 'query-string';
 import { History } from 'history';
 
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
-import CreateForwardingItemModal from 'components/CreateForwardingItemModal';
+import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { push } from 'connected-react-router';

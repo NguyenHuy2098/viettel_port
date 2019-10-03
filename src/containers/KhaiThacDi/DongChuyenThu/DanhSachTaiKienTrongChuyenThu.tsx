@@ -12,12 +12,12 @@ import { ceil, concat, filter, get, includes, isEmpty, map, noop, pull, size } f
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import DataTable from 'components/DataTable';
-import DeleteConfirmModal from 'components/DeleteConfirmModal';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import routesMap from 'utils/routesMap';
-import PrintableModal from 'components/PrintableModal';
+import PrintableModal from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
 import { SipDataType } from '../../../utils/enums';
 

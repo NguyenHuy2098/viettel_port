@@ -9,7 +9,7 @@ import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'r
 import { SipDataState, SipDataType } from 'utils/enums';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import routesMap from 'utils/routesMap';
-import DeleteConfirmModal from 'components/DeleteConfirmModal';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import moment from 'moment';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
@@ -17,7 +17,7 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import PrintableModal from 'components/PrintableModal';
+import PrintableModal from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
 
 // eslint-disable-next-line max-lines-per-function

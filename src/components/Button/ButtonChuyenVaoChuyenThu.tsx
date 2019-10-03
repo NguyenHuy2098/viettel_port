@@ -3,7 +3,7 @@ import { Button, ButtonProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { isEmpty } from 'lodash';
 
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
+import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import { toastError } from 'components/Toast';
 import { SipDataState, SipDataType } from 'utils/enums';
 

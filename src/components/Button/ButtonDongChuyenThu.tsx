@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { isEmpty, isString, join, noop } from 'lodash';
 
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
+import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { SipDataState, SipDataType } from 'utils/enums';

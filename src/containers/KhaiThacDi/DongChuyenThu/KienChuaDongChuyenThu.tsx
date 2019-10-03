@@ -14,7 +14,7 @@ import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import DataTable from 'components/DataTable';
 import Search from 'components/Input/Search';
-import ModalPopupConfirm from 'components/ModalConfirm/ModalPopupConfirm';
+import ModalPopupConfirm from 'components/Modal/ModalPopupConfirm';
 import Pagination from 'components/Pagination';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';

@@ -7,7 +7,7 @@ import JsBarcode from 'jsbarcode';
 import { ceil, get, isEmpty, toNumber } from 'lodash';
 
 import DataTable from 'components/DataTable/Printable';
-import DefaultHeadline from 'components/PrintableModal/DefaultHeadline';
+import DefaultHeadline from 'components/Printable/DefaultHeadline';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
 

@@ -9,7 +9,7 @@ interface Props {
   torId: string;
 }
 
-const Index: React.FC<Props> = (props: Props): JSX.Element => {
+const ModalConfirmDelete: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const { onDelete, onHide, visible, torId } = props;
 
@@ -35,4 +35,4 @@ const Index: React.FC<Props> = (props: Props): JSX.Element => {
   );
 };
 
-export default Index;
+export default ModalConfirmDelete;

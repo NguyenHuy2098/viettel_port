@@ -8,7 +8,7 @@ import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
-import PrintableModal from 'components/PrintableModal';
+import PrintableModal from 'components/Button/ButtonPrintable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelector046RowFirstChild,

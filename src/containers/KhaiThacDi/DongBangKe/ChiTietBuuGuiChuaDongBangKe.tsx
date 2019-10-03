@@ -25,9 +25,9 @@ import { goBack } from 'connected-react-router';
 import { Location } from 'history';
 import { get, size, forEach, map } from 'lodash';
 
-import CreateForwardingItemModal from 'components/CreateForwardingItemModal';
+import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import DataTable from 'components/DataTable';
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
+import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import { actionDongBangKe } from 'redux/common/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';

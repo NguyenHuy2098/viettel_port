@@ -12,7 +12,7 @@ import moment from 'moment';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
 import DataTable from 'components/DataTable';
-import DeleteConfirmModal from 'components/DeleteConfirmModal';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Search from 'components/Input/Search';
 import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';

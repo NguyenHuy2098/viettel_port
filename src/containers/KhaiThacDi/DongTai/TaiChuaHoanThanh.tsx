@@ -9,7 +9,7 @@ import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
-import DeleteConfirmModal from 'components/DeleteConfirmModal';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
