@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
@@ -7,7 +6,7 @@ import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import produce from 'immer';
-import { concat, get, includes, map, noop, pull } from 'lodash';
+import { concat, find, get, includes, map, noop, pull } from 'lodash';
 import moment from 'moment';
 
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
@@ -31,7 +30,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { getListTaiChuaDongChuyenThu } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
+  const listTaiChuaDongChuyenThu = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const [selectedTaiIds, setSelectedTaiIds] = useState<string[]>([]);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState<boolean>(false);
@@ -41,6 +40,10 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     () => map(selectedTaiIds, (id: string): API.TITEM => ({ ITEM_ID: id, ITEM_TYPE: SipDataType.TAI })),
     [selectedTaiIds],
   );
+
+  const diemDen = useMemo(() => {
+    return get(find(listTaiChuaDongChuyenThu, ['FREIGHT_UNIT', selectedTaiIds[0]]), 'NEXT_LOC', '');
+  }, [listTaiChuaDongChuyenThu, selectedTaiIds]);
 
   function toggleDeleteConfirmModal(): void {
     setShowDeleteConfirmModal(!showDeleteConfirmModal);
@@ -112,7 +115,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [listTaiChuaHoanThanh],
+    [listTaiChuaDongChuyenThu],
   );
 
   const handleSelectKien = (event: React.MouseEvent<HTMLInputElement>): void => {
@@ -215,11 +218,13 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       <Col className="d-flex justify-content-end">
         <ButtonChuyenVaoChuyenThu
           className="ml-2"
+          diemDen={diemDen}
           listTaiKienCanChuyen={selectedTaiItems}
           onSuccess={handleSuccessChuyenThuAction}
         />
         <ButtonDongChuyenThu
           className="ml-2"
+          diemDen={diemDen}
           listTaiKienCanGan={selectedTaiItems}
           onSuccess={handleSuccessChuyenThuAction}
         />
@@ -231,7 +236,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={listTaiChuaHoanThanh} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listTaiChuaDongChuyenThu} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

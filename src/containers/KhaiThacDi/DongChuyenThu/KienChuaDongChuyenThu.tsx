@@ -7,7 +7,7 @@ import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
 import produce from 'immer';
-import { concat, get, includes, map, pull } from 'lodash';
+import { concat, find, get, includes, map, pull } from 'lodash';
 import moment from 'moment';
 
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
@@ -37,6 +37,10 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const maBP = useSelector(makeSelectorMaBP);
   const totalPage = useSelector(makeSelectorZTMI236OUTPagingTotalPage);
   const listKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRow);
+
+  const diemDen = useMemo(() => {
+    return get(find(listKienChuaDongChuyenThu, ['FREIGHT_UNIT', selectedKienIds[0]]), 'NEXT_LOC', '');
+  }, [listKienChuaDongChuyenThu, selectedKienIds]);
 
   const selectedKienItems = useMemo(() => {
     return map(selectedKienIds, (id: string): API.TITEM => ({ ITEM_ID: id }));
@@ -174,11 +178,13 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       <Col className="d-flex justify-content-end">
         <ButtonChuyenVaoChuyenThu
           className="ml-2"
+          diemDen={diemDen}
           listTaiKienCanChuyen={selectedKienItems}
           onSuccess={handleSuccessChuyenThuAction}
         />
         <ButtonDongChuyenThu
           className="ml-2"
+          diemDen={diemDen}
           listTaiKienCanGan={selectedKienItems}
           onSuccess={handleSuccessChuyenThuAction}
         />

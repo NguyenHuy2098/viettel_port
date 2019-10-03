@@ -120,9 +120,14 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
           {/* <Button color="dark" outline>
             <i className="fa fa-print" />
           </Button> */}
-          <ButtonChuyenVaoChuyenThu className="ml-2" idChuyenThu={idChuyenThu} />
+          <ButtonChuyenVaoChuyenThu
+            className="ml-2"
+            diemDen={get(dataChuyenThu, 'LOG_LOCID_DES', '')}
+            idChuyenThu={idChuyenThu}
+          />
           <ButtonDongChuyenThu
             className="ml-2"
+            diemDen={get(dataChuyenThu, 'LOG_LOCID_DES', '')}
             idChuyenThu={idChuyenThu}
             listTaiKienCanRemove={deselectedTaiKienItems}
             onSuccess={getListPhieuGui}

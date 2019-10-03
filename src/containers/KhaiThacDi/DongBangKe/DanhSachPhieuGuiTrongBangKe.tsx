@@ -1098,10 +1098,9 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         onHide={toggleSelectForwardingItemModal}
         modalTitle={t('Chọn bảng kê')}
         forwardingItemList={forwardingItemListState}
-        IV_TOR_TYPE="ZC1"
-        IV_FR_LOC_ID={userMaBp}
+        IV_TOR_TYPE={SipDataType.BANG_KE}
         IV_TO_LOC_ID=""
-        IV_CUST_STATUS={101}
+        IV_CUST_STATUS={SipDataState.TAO_MOI}
       />
       <ModalTwoTab
         onHide={closePopUpDongBangKeVaoTai}

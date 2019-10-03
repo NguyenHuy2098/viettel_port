@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, ModalHeader, ModalFooter, ModalBody, FormGroup, Label, Input } from 'reactstrap';
+import { Button, FormGroup, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { get, join, map, trim, toString } from 'lodash';
+import { get, join, map, toString, trim } from 'lodash';
 import moment from 'moment';
 
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { SipFlowType } from 'utils/enums';
 import HttpRequestError from 'utils/HttpRequetsError';
 import { toastError, toastSuccess } from '../Toast';
 
@@ -19,18 +19,14 @@ interface Props {
   modalTitle: string;
   forwardingItemList: API.TITEM[];
   IV_TOR_TYPE: string;
-  TorTypeChuyenVao?: string;
-  IV_FR_LOC_ID: string;
   IV_TO_LOC_ID: string;
   IV_CUST_STATUS: number;
+  TorTypeChuyenVao?: string;
   isFrom2?: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
   const {
     onHide,
     onSuccessSelected,
@@ -38,34 +34,46 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     modalTitle,
     forwardingItemList,
     IV_TOR_TYPE,
-    IV_FR_LOC_ID,
     IV_TO_LOC_ID,
     IV_CUST_STATUS,
     TorTypeChuyenVao,
   } = props;
-  const listForwardingItemChuaHoanThanh = useSelector(makeSelectorRow(IV_TOR_TYPE, IV_CUST_STATUS));
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const userMaBp = useSelector(makeSelectorMaBP);
+  const [listItems, setListItems] = useState<API.RowMTZTMI047OUT[]>([]);
   const [radioTorId, setRadioTorId] = useState<string>('');
 
-  useEffect((): void => {
-    setRadioTorId(get(listForwardingItemChuaHoanThanh, '[0].TOR_ID'));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listForwardingItemChuaHoanThanh]);
-
-  useEffect((): void => {
+  const getListItems = (): void => {
     if (visible) {
       dispatch(
-        action_MIOA_ZTMI047({
-          IV_FR_DATE: moment()
-            .subtract(7, 'days')
-            .format('YYYYMMDD'),
-          IV_TOR_TYPE: IV_TOR_TYPE,
-          IV_FR_LOC_ID: IV_FR_LOC_ID,
-          IV_TO_LOC_ID: IV_TO_LOC_ID,
-          IV_CUST_STATUS: IV_CUST_STATUS,
-          IV_NO_PER_PAGE: '1000',
-        }),
+        action_MIOA_ZTMI047(
+          {
+            IV_FR_DATE: moment()
+              .subtract(7, 'days')
+              .format('YYYYMMDD'),
+            IV_TOR_TYPE: IV_TOR_TYPE,
+            IV_FR_LOC_ID: userMaBp,
+            IV_TO_LOC_ID: IV_TO_LOC_ID,
+            IV_CUST_STATUS: IV_CUST_STATUS,
+            IV_NO_PER_PAGE: '1000',
+          },
+          {
+            onSuccess: (data: MIOAZTMI047PayloadType): void => {
+              setListItems(get(data, 'data.MT_ZTMI047_OUT.Row'));
+            },
+          },
+          {
+            flow: SipFlowType.KHAI_THAC_DI,
+            stateless: true,
+          },
+        ),
       );
     }
+  };
+
+  useEffect((): void => {
+    getListItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
@@ -75,7 +83,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       IV_TOR_TYPE: TorTypeChuyenVao ? TorTypeChuyenVao : IV_TOR_TYPE,
       IV_TOR_ID_CU: radioTorId,
       IV_SLOCATION: userMaBp,
-      IV_DLOCATION: 'HUB1',
+      IV_DLOCATION: IV_TO_LOC_ID,
       IV_DESCRIPTION: '',
       T_ITEM: forwardingItemList,
     };
@@ -92,7 +100,10 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
             toastError(t('Lỗi không xác định khi chuyển vào.'));
           }
         },
-        onFinish: onHide,
+        onFinish: (): void => {
+          getListItems();
+          onHide && onHide();
+        },
       }),
     );
   };
@@ -107,7 +118,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       <ModalBody className="sipSelectForwardingItemContainer">
         <FormGroup>
           {map(
-            listForwardingItemChuaHoanThanh,
+            listItems,
             (item: API.RowMTZTMI047OUT): JSX.Element => (
               <Label key={item.TOR_ID} check className="selectForwardingItem row">
                 <Input

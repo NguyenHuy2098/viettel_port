@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { Button, ButtonProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { isEmpty, isString, join, noop } from 'lodash';
 
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { toastError, toastSuccess } from '../Toast';
 
 interface Props extends ButtonProps {
+  diemDen: string;
   idChuyenThu?: string;
   listTaiKienCanGan?: API.TITEM[];
   listTaiKienCanRemove?: API.TITEM[];
@@ -21,12 +21,11 @@ interface Props extends ButtonProps {
 
 // eslint-disable-next-line max-lines-per-function
 const ButtonDongChuyenThu = (props: Props): JSX.Element => {
-  const { idChuyenThu, listTaiKienCanGan, listTaiKienCanRemove, onFailure, onSuccess, ...rest } = props;
+  const { diemDen, idChuyenThu, listTaiKienCanGan, listTaiKienCanRemove, onFailure, onSuccess, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [processing, setProcessing] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const userMaBp = useSelector(makeSelectorMaBP);
 
   const toggleModal = (): void => {
     setShowModal(!showModal);
@@ -41,7 +40,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
               IV_FLAG: '4',
               IV_TOR_TYPE: SipDataType.CHUYEN_THU,
               IV_TOR_ID_CU: idChuyenThu,
-              IV_DLOCATION: 'HUB1',
+              IV_DLOCATION: diemDen,
               T_ITEM: listTaiKienCanRemove,
             },
             {
@@ -127,8 +126,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
         modalTitle={t('Chọn chuyến thư')}
         forwardingItemList={listTaiKienCanGan || []}
         IV_TOR_TYPE={SipDataType.CHUYEN_THU}
-        IV_FR_LOC_ID={userMaBp}
-        IV_TO_LOC_ID=""
+        IV_TO_LOC_ID={diemDen}
         IV_CUST_STATUS={SipDataState.TAO_MOI}
       />
     </>

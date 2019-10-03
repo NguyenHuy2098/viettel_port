@@ -927,10 +927,9 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
           onHide={toggleSelectForwardingItemModal}
           modalTitle={t('Chọn bảng kê')}
           forwardingItemList={forwardingItemListState}
-          IV_TOR_TYPE="ZC1"
-          IV_FR_LOC_ID={userMaBp}
+          IV_TOR_TYPE={SipDataType.BANG_KE}
           IV_TO_LOC_ID=""
-          IV_CUST_STATUS={101}
+          IV_CUST_STATUS={SipDataState.TAO_MOI}
           isFrom2
         />
         <ModalTwoTab
@@ -962,7 +961,7 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
           visible={createForwardingItemModal}
           onHide={toggleCreateForwardingItemModal}
           modalTitle={t('Tạo bảng kê')}
-          IV_TOR_TYPE="ZC1"
+          IV_TOR_TYPE={SipDataType.BANG_KE}
         />
       </div>
     </>

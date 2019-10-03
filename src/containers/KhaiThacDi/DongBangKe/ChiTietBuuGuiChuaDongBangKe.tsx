@@ -17,25 +17,24 @@ import {
   ModalBody,
   ModalFooter,
 } from 'reactstrap';
-// import moment from 'moment';
-import { goBack } from 'connected-react-router';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
-import { get, size, forEach, map } from 'lodash';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
-import { action_ZTMI241 } from 'redux/ZTMI241/actions';
-import DataTable from 'components/DataTable';
 import { Cell } from 'react-table';
-import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
+import classNames from 'classnames';
+import { goBack } from 'connected-react-router';
 import { Location } from 'history';
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { get, size, forEach, map } from 'lodash';
+
 import CreateForwardingItemModal from 'components/CreateForwardingItemModal';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { AppStateType } from 'redux/store';
+import DataTable from 'components/DataTable';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
 import { actionDongBangKe } from 'redux/common/actions';
-import { SipDataType } from 'utils/enums';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { action_ZTMI241 } from 'redux/ZTMI241/actions';
+import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
+import { AppStateType } from 'redux/store';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 interface Props {
   location: Location;
@@ -54,7 +53,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
-  const userMaBp = useSelector(makeSelectorMaBP);
   const des = get(props, 'location.state.des', '');
   const commLocGroup = get(props, 'location.state.COMM_LOC_GROUP', '');
 
@@ -238,7 +236,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <button className="sipTitleBtnBack btn btn-secondary" onClick={handleBack}>
-            <i className="fa fa-arrow-left backIcon"></i>
+            <i className="fa fa-arrow-left backIcon" />
           </button>
           {t('Thư - Nhanh')}
         </h1>
@@ -293,10 +291,9 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           onHide={toggleSelectForwardingItemModal}
           modalTitle={t('Chọn bảng kê')}
           forwardingItemList={forwardingItemListState}
-          IV_TOR_TYPE="ZC1"
-          IV_FR_LOC_ID={userMaBp}
+          IV_TOR_TYPE={SipDataType.BANG_KE}
           IV_TO_LOC_ID=""
-          IV_CUST_STATUS={101}
+          IV_CUST_STATUS={SipDataState.TAO_MOI}
           isFrom2
         />
       </div>

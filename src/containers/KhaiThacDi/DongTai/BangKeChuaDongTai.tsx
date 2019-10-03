@@ -2,27 +2,27 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { find, forEach, map, get, noop, size } from 'lodash';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { generatePath } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 import { Cell } from 'react-table';
+import { find, forEach, map, get, noop, size } from 'lodash';
+import moment from 'moment';
 
+import DataTable from 'components/DataTable';
+import DeleteConfirmModal from 'components/DeleteConfirmModal';
+import Pagination from 'components/Pagination';
+import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
+import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
-import DeleteConfirmModal from 'components/DeleteConfirmModal';
-import routesMap from 'utils/routesMap';
-import DataTable from 'components/DataTable';
-import Pagination from 'components/Pagination';
-import { generatePath } from 'react-router-dom';
-import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import routesMap from 'utils/routesMap';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -671,10 +671,9 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         onHide={toggleSelectForwardingItemModal}
         modalTitle={t('Chọn tải')}
         forwardingItemList={forwardingItemListState}
-        IV_TOR_TYPE="ZC2"
-        IV_FR_LOC_ID={userMaBp}
+        IV_TOR_TYPE={SipDataType.TAI}
         IV_TO_LOC_ID=""
-        IV_CUST_STATUS={101}
+        IV_CUST_STATUS={SipDataState.TAO_MOI}
       />
       <ModalTwoTab
         onHide={handleClosePopupDongtai}

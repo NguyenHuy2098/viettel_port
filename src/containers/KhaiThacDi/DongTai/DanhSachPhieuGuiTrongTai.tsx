@@ -1,32 +1,29 @@
 /* eslint-disable max-lines */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { includes, forEach, get, map, toString, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { goBack } from 'connected-react-router';
-import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useMemo } from 'react';
+import { generatePath, match } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { toast } from 'react-toastify';
+import { goBack, push } from 'connected-react-router';
+import { includes, forEach, get, map, toString, size } from 'lodash';
 import moment from 'moment';
-import { push } from 'connected-react-router';
-import { generatePath } from 'react-router-dom';
 
 import DataTable from 'components/DataTable';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
-import routesMap from 'utils/routesMap';
 import DeleteConfirmModal from 'components/DeleteConfirmModal';
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
-import { toast } from 'react-toastify';
-import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   match: match;
@@ -664,10 +661,9 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         onHide={toggleSelectForwardingItemModal}
         modalTitle={t('Chọn tải')}
         forwardingItemList={forwardingItemListState}
-        IV_TOR_TYPE="ZC2"
-        IV_FR_LOC_ID={userMaBp}
+        IV_TOR_TYPE={SipDataType.TAI}
         IV_TO_LOC_ID=""
-        IV_CUST_STATUS={101}
+        IV_CUST_STATUS={SipDataState.TAO_MOI}
       />
       <ModalTwoTab
         onHide={handleHidePopupDongTai}

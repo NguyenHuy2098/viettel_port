@@ -10,21 +10,6 @@ export function makeSelectorCountBangKeChuaDongTai(state: AppStateType): number 
   return size(makeSelectorBangKeChuaDongTai(state));
 }
 
-//__________________________________________________
-
-export function makeSelectorKienChuaDongChuyenThu(state: AppStateType): API.RowMTZTMI047OUT[] | [] {
-  return get(state, 'MIOA_ZTMI047.ZBIG.BHD.101.MT_ZTMI047_OUT.Row', []);
-}
-
-/**
- * @param IV_TOR_TYPE
- * @param IV_CUST_STATUS
- */
-export function makeSelectorPaging(IV_TOR_TYPE: string, IV_CUST_STATUS: number) {
-  return (state: AppStateType): API.Paging =>
-    get(state, `MIOA_ZTMI047.${IV_TOR_TYPE}.${IV_CUST_STATUS}.MT_ZTMI047_OUT.Paging`, {});
-}
-
 /**
  * @param IV_TOR_TYPE
  * @param IV_CUST_STATUS

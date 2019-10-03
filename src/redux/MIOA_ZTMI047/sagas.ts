@@ -31,6 +31,7 @@ export function* takeGet_MIOA_ZTMI047(action: UnfoldSagaActionType): SagaIterato
       key: action.type,
     },
     action.callbacks,
+    action.options,
   );
 }
 
