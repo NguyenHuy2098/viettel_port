@@ -49,11 +49,10 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI035(
         {
-          row: [
-            {
-              USER_ID: userIdSelected,
-            },
-          ],
+          row: {
+            USER_ID: userIdSelected,
+          },
+
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '11',
         },
