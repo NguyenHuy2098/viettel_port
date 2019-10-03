@@ -4,7 +4,7 @@ import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
 import { get } from 'lodash';
 
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { SipDataType } from 'utils/enums';
+import { SipDataState, SipDataType } from 'utils/enums';
 import { select } from 'utils/stateHelpers';
 import { DONG_CHUYEN_THU, QUET_NHAN, DONG_BANG_KE } from './actions';
 import { post_MIOA_ZTMI016 } from '../MIOA_ZTMI016/helpers';
@@ -128,6 +128,9 @@ function* takeQuetNhan(action: UnfoldSagaActionType): SagaIterator {
           IV_ID: get(action, 'payload.IV_ID'),
         });
         const item023: API.RowResponseZTMI023OUT = get(data023, 'MT_ZTMI023_OUT.row[0]');
+        if (item023.ZVTP_CUST_STATUS !== SipDataState.CHUYEN_THU_DEN)
+          throw new Error('Chuyến thư không phải chuyến thư đến');
+
         await post_MIOA_ZTMI022({
           FU_NO: get(item023, 'TOR_ID'),
           STATUS_ID: '1',

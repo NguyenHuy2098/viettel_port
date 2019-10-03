@@ -16,6 +16,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorPagingCount, makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import { toast } from 'react-toastify';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
@@ -55,7 +56,27 @@ const ShippingInformation: React.FC = (): JSX.Element => {
 
   const handleQuetNhanChuyenThu = (): void => {
     if (!isEmpty(idChuyenThu)) {
-      dispatch(actionQuetNhan({ IV_ID: idChuyenThu }));
+      dispatch(
+        actionQuetNhan(
+          { IV_ID: idChuyenThu },
+          {
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'message', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  type: 'error',
+                },
+              );
+            },
+            onSuccess: (): void => {
+              window.location.reload(false);
+            },
+          },
+        ),
+      );
     }
   };
 
