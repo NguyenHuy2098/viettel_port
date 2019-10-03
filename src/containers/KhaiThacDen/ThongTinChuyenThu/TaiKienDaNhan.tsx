@@ -52,7 +52,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Số lượng'),
-        accessor: 'ITEM_TEXT',
+        accessor: 'child_count',
       },
       {
         Header: t('Trọng lượng'),

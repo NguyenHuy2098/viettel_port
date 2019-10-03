@@ -17,6 +17,7 @@ declare namespace API {
     DATETIME_CHLC?: string;
     ZONLO?: string;
     DESCRIPTION?: string;
+    child_count?: string;
   }
   export interface Childs {
     TOR_ID?: string;
@@ -651,7 +652,7 @@ declare namespace API {
     /**
      *
      */
-    row?: RowRequestZTMI035[];
+    row?: RowRequestZTMI035;
     IV_PAGENO?: string;
     IV_NO_PER_PAGE?: string;
     LanguageId?: string;
@@ -969,10 +970,7 @@ declare namespace API {
      * Mã địa điểm bưu cục
      */
     iv_post?: string;
-    /**
-     *
-     */
-    iv_position?: string;
+    row?: MIOAZTMI054Row[];
     IV_PAGENO?: string;
     IV_NO_PER_PAGE?: string;
   }
@@ -983,6 +981,12 @@ declare namespace API {
     Messages?: string[];
     ObjectId?: string;
     Version?: number; // int32
+  }
+  export interface MIOAZTMI054Row {
+    /**
+     *
+     */
+    iv_position?: string;
   }
   export interface MIOAZTMI055Request {
     /**
@@ -1316,7 +1320,7 @@ declare namespace API {
   export interface MTZTMI035OUT {
     EV_ERROR?: string;
     row?: RowResponseZTMI035[];
-    PAGING?: PagingZTMI054[];
+    PAGING?: Paging[];
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -1423,6 +1427,14 @@ declare namespace API {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
     Row?: RowMTZTMI213OUT[];
+  }
+  export interface MTZTMI229OUT {
+    EV_ERROR?: number; // int32
+    EV_CODE?: number; // int32
+    EV_MESSAGE?: string;
+    DIMENSION_WEIGHT?: string;
+    WEIGHT_UOM?: string;
+    RETURN_MESSAGE?: RETURNMESSAGE;
   }
   export interface MTZTMI236OUT {
     EV_ERROR?: number; // int32
@@ -1568,7 +1580,7 @@ declare namespace API {
     SALES_GROUP?: string;
     SOURCE_LOCATION?: string;
     SOURCE_LOCATION_DESCRIPTION?: string;
-    HOUSE_NO_SOURCE?: number; // int32
+    HOUSE_NO_SOURCE?: string;
     STREET_ID_SOURCE?: string;
     WARD_ID_SOURCE?: number; // int32
     DISTRICT_ID_SOURCE?: string;
@@ -1576,7 +1588,7 @@ declare namespace API {
     COUNTRY_ID_SOURCE?: string;
     DESTINATION_LOCATION?: string;
     DESTINATION_LOCATION_NAME?: string;
-    HOUSE_NO_DES?: number; // int32
+    HOUSE_NO_DES?: string;
     STREET_ID_DES?: string;
     WARD_ID_DES?: number; // int32
     DISTRICT_ID_DES?: string;
@@ -2122,6 +2134,7 @@ declare namespace API {
     STATUS?: string;
     VOURCHER?: string;
     TIMEZONE?: string;
+    LOC_ID?: string;
   }
   export interface RowResponseZTMI038 {
     IT_FDELIVERY?: ITFDELIVERY[];
@@ -2688,6 +2701,55 @@ declare namespace API {
      * Đơn vị trọng lượng ( mặc định G)
      */
     WEIGHT_UOM?: string;
+  }
+  export interface ZTMI229Request {
+    /**
+     * Mã tỉnh/thành phố
+     */
+    CityID?: string;
+    /**
+     * Mã huyện/quận
+     */
+    DistrictID?: string;
+    /**
+     * Mã postal code phường/xã
+     */
+    Ward?: string;
+    /**
+     * Mã đối tác sử dụng dịch vụ
+     */
+    OrderingParty?: string;
+    /**
+     * Chiều dài bưu gửi
+     */
+    Length?: string;
+    /**
+     * Chiều rộng bưu gửi
+     */
+    Width?: string;
+    /**
+     * Chiều cao bưu gửi
+     */
+    Height?: string;
+    /**
+     * Mã dịch vụ chính
+     */
+    ServiceType?: string;
+    /**
+     * Đơn vị tính kích thước
+     */
+    Unit?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZTMI229Response {
+    MT_ZTMI229_OUT?: MTZTMI229OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
   }
   export interface ZTMI236Request {
     /**
@@ -3318,6 +3380,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.ZTMI213Response;
+    }
+  }
+  namespace ZTMI229 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZTMI229Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZTMI229Response;
     }
   }
   namespace ZTMI236 {

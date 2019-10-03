@@ -63,7 +63,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Số lượng'),
-        accessor: 'count',
+        accessor: 'child_count',
       },
       {
         Header: t('Trọng lượng'),
