@@ -123,7 +123,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
               type="select"
               name="select"
               id="exampleSelect"
-              defaultValue={'2'}
+              defaultValue={get(listDiemDen[0], 'LOCNO', '')}
               className="col-8"
               onChange={handleChangeOption}
             >
