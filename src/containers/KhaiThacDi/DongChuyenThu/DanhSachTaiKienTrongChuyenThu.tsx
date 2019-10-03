@@ -19,6 +19,7 @@ import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux
 import routesMap from 'utils/routesMap';
 import PrintableModal from 'components/PrintableModal';
 import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
+import { SipDataType } from '../../../utils/enums';
 
 interface Props {
   match: match;
@@ -42,11 +43,16 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataChuyenThuChildren]);
 
-  const deselectedTaiKienItems = useMemo(
-    () => filter(dataChuyenThuChildren, (child: API.Child) => !includes(selectedTaiKienIds, get(child, 'TOR_ID'))),
+  const deselectedTaiKienItems = useMemo(() => {
+    return map(
+      filter(dataChuyenThuChildren, (child: API.Child) => !includes(selectedTaiKienIds, get(child, 'TOR_ID'))),
+      (child: API.Child): API.TITEM => ({
+        ITEM_ID: get(child, 'TOR_ID'),
+        ITEM_TYPE: get(child, 'TOR_TYPE') === SipDataType.TAI ? SipDataType.TAI : '',
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dataChuyenThuChildren, selectedTaiKienIds],
-  );
+  }, [dataChuyenThuChildren, selectedTaiKienIds]);
 
   useEffect((): void => {
     getListPhieuGui();

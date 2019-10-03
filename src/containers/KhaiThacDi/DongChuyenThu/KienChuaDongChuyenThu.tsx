@@ -38,7 +38,9 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const totalPage = useSelector(makeSelectorZTMI236OUTPagingTotalPage);
   const listKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRow);
 
-  const selectedKienItems = useMemo(() => map(selectedKienIds, (id: string) => ({ ITEM_ID: id })), [selectedKienIds]);
+  const selectedKienItems = useMemo(() => {
+    return map(selectedKienIds, (id: string): API.TITEM => ({ ITEM_ID: id }));
+  }, [selectedKienIds]);
 
   const onPaginationChange = ({ selected }: { selected: number }): void => {
     getListKienChuaDongChuyenThu(selected + 1);
@@ -138,7 +140,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ngày gửi'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return moment(get(row, 'original.CREADTED_ON'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+          return moment(get(row, 'original.CREATED_ON'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
         },
       },
       {

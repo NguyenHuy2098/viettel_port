@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, ButtonProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { get, isEmpty, isString, join, map, noop } from 'lodash';
+import { isEmpty, isString, join, noop } from 'lodash';
 
 import SelectForwardingItemModal from 'components/SelectForwardingItemModal';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
@@ -13,8 +13,8 @@ import { toastError, toastSuccess } from '../Toast';
 
 interface Props extends ButtonProps {
   idChuyenThu?: string;
-  listTaiKienCanGan?: API.Child[];
-  listTaiKienCanRemove?: API.Child[];
+  listTaiKienCanGan?: API.TITEM[];
+  listTaiKienCanRemove?: API.TITEM[];
   onSuccess?: () => void;
   onFailure?: (error: Error) => void;
 }
@@ -32,35 +32,9 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
     setShowModal(!showModal);
   };
 
-  const listTaiKienItemsCanGan = useMemo(
-    () =>
-      map(
-        listTaiKienCanGan,
-        (child: API.Child): API.TITEM => ({
-          ITEM_ID: get(child, 'TOR_ID'),
-          ITEM_TYPE: get(child, 'TOR_TYPE') === SipDataType.TAI ? SipDataType.TAI : '',
-        }),
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [listTaiKienCanGan],
-  );
-
-  const listTaiKienItemsCanRemove = useMemo(
-    () =>
-      map(
-        listTaiKienCanRemove,
-        (child: API.Child): API.TITEM => ({
-          ITEM_ID: get(child, 'TOR_ID'),
-          ITEM_TYPE: get(child, 'TOR_TYPE') === SipDataType.TAI ? SipDataType.TAI : '',
-        }),
-      ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [listTaiKienCanRemove],
-  );
-
   const removeTaiKien = (): Promise<API.MIOAZTMI016Response> => {
     return new Promise((resolve, reject): void => {
-      if (!isEmpty(listTaiKienItemsCanRemove)) {
+      if (!isEmpty(listTaiKienCanRemove)) {
         dispatch(
           action_MIOA_ZTMI016(
             {
@@ -68,7 +42,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
               IV_TOR_TYPE: SipDataType.CHUYEN_THU,
               IV_TOR_ID_CU: idChuyenThu,
               IV_DLOCATION: 'HUB1',
-              T_ITEM: listTaiKienItemsCanRemove,
+              T_ITEM: listTaiKienCanRemove,
             },
             {
               onSuccess: (data: API.MIOAZTMI016Response) => {
@@ -151,7 +125,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
         visible={showModal}
         onHide={toggleModal}
         modalTitle={t('Chọn chuyến thư')}
-        forwardingItemList={listTaiKienItemsCanGan || []}
+        forwardingItemList={listTaiKienCanGan || []}
         IV_TOR_TYPE={SipDataType.CHUYEN_THU}
         IV_FR_LOC_ID={userMaBp}
         IV_TO_LOC_ID=""
