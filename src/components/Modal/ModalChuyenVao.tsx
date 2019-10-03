@@ -54,7 +54,6 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
               .format('YYYYMMDD'),
             IV_TOR_TYPE: IV_TOR_TYPE,
             IV_FR_LOC_ID: userMaBp,
-            IV_TO_LOC_ID: IV_TO_LOC_ID,
             IV_CUST_STATUS: IV_CUST_STATUS,
             IV_NO_PER_PAGE: '1000',
           },
