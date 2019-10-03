@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';
-import { map, get, noop } from 'lodash';
+import { map, get } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 
@@ -15,6 +15,8 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {
@@ -63,13 +65,6 @@ const TaiDaDong: React.FC = (): JSX.Element => {
     getListTai(payload);
   }
 
-  function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
-    return (event: React.MouseEvent): void => {
-      event.stopPropagation();
-      noop('print', tai.TOR_ID);
-    };
-  }
-
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
       dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI_DA_DONG, { idTai: item.TOR_ID })));
@@ -85,6 +80,20 @@ const TaiDaDong: React.FC = (): JSX.Element => {
     };
     getListTai(payload);
   };
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
@@ -116,11 +125,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Button className="SipTableFunctionIcon" onClick={printTai(row.original)}>
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],

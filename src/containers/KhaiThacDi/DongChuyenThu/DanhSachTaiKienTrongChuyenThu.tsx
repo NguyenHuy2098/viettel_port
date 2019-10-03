@@ -19,6 +19,7 @@ import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux
 import routesMap from 'utils/routesMap';
 import PrintableModal from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
 import { SipDataType } from '../../../utils/enums';
 
 interface Props {
@@ -91,7 +92,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
 
   const handleDeleteForwardingOrder = (): void => {};
 
-  const renderPrintButton = (): JSX.Element => (
+  const renderPrintButtonPhieuGiaoNhanChuyenThu = (): JSX.Element => (
     <PrintableModal
       btnProps={{
         className: 'sipTitleRightBlockBtnIcon',
@@ -116,7 +117,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
           {t('Danh sách tải/kiện trong chuyến thư')}
         </h1>
         <div className="sipTitleRightBlock">
-          {renderPrintButton()}
+          {renderPrintButtonPhieuGiaoNhanChuyenThu()}
           {/* <Button color="dark" outline>
             <i className="fa fa-print" />
           </Button> */}
@@ -194,6 +195,21 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     [dataChuyenThuChildren],
   );
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -245,9 +261,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.Child>): JSX.Element => (
           <>
-            <Button className="SipTableFunctionIcon">
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
+            {renderPrintButton(get(row, 'values.TOR_ID', ''))}
             <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
               <i className="fa fa-trash-o fa-lg color-red" />
             </Button>

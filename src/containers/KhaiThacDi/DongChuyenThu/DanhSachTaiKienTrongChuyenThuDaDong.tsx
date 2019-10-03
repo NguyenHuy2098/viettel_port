@@ -12,7 +12,8 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
 import PrintableModal from 'components/Button/ButtonPrintable';
-import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
+import PrintablePhieuGiaoNhanChuyenThu from '../../KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
 
 interface Props {
   match: match;
@@ -92,7 +93,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     dispatch(goBack());
   };
 
-  const renderPrintButton = (): JSX.Element => (
+  const renderPrintButtonPhieuGiaoNhanChuyenThu = (): JSX.Element => (
     <PrintableModal
       btnProps={{
         className: 'sipTitleRightBlockBtnIcon',
@@ -117,7 +118,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
           {t('Danh sách tải/kiện trong chuyến thư')}
         </h1>
         <div className="sipTitleRightBlock">
-          {renderPrintButton()}
+          {renderPrintButtonPhieuGiaoNhanChuyenThu()}
           {/* <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button> */}
@@ -179,6 +180,21 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     );
   }
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     () => [
       {
@@ -217,11 +233,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Button className="SipTableFunctionIcon">
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],

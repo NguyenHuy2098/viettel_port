@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row, Input, Label } from 'reactstrap';
+import { Row, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -17,6 +17,8 @@ import { actionQuetNhan } from 'redux/common/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiKienChuaNhan: React.FC = (): JSX.Element => {
@@ -41,6 +43,20 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
+  );
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
   );
 
   const columns = useMemo(
@@ -91,11 +107,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Button className="SipTableFunctionIcon">
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],

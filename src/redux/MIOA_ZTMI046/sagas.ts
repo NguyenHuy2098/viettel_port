@@ -13,6 +13,7 @@ export default function*(): SagaIterator {
         key: action.type,
       },
       action.callbacks,
+      action.options,
     );
   });
 }

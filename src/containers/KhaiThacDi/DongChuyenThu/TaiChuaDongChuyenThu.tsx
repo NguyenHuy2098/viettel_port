@@ -6,7 +6,7 @@ import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import produce from 'immer';
-import { concat, find, get, includes, map, noop, pull } from 'lodash';
+import { concat, find, get, includes, map, pull } from 'lodash';
 import moment from 'moment';
 
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
@@ -20,6 +20,8 @@ import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selec
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 interface Props {
   getListTaiChuaDongChuyenThu: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
@@ -66,17 +68,9 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     getListTaiChuaDongChuyenThu(1, torId);
   };
 
-  const printTai = (tai: API.RowMTZTMI047OUT) => {
-    return (event: React.MouseEvent): void => {
-      event.stopPropagation();
-      noop('print', tai.TOR_ID);
-    };
-  };
-
   const editTai = (tai: API.RowMTZTMI047OUT) => {
     return (event: React.MouseEvent): void => {
       event.stopPropagation();
-      noop('edit', tai.TOR_ID);
     };
   };
 
@@ -132,6 +126,21 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     getListTaiChuaDongChuyenThu(selectedItem.selected + 1);
   };
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -183,9 +192,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={printTai(row.original)}>
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
+              {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>

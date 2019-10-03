@@ -49,13 +49,18 @@ const PrintableModal = (props: Props): JSX.Element => {
     });
   };
 
+  const handleToggleShowModal = (event: React.MouseEvent): void => {
+    event.stopPropagation();
+    setVisible(!visible);
+  };
+
   const handleToggleVisible = (): void => {
     setVisible(!visible);
   };
 
   return (
     <>
-      <Button color="primary" onClick={handleToggleVisible} {...btnProps} />
+      <Button color="primary" onClick={handleToggleShowModal} {...btnProps} />
       <Modal isOpen={visible} size="xl" toggle={handleToggleVisible} {...modalProps}>
         <ModalHeader toggle={handleToggleVisible} {...modalHeaderProps}>
           {get(modalHeaderProps, 'children', 'Title')}

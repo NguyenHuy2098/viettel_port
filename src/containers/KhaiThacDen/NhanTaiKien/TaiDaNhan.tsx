@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button, Row } from 'reactstrap';
+import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
@@ -13,6 +13,8 @@ import Pagination from 'components/Pagination';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 interface Props {
   getTaiDaNhan: (IV_PAGENO: number) => void;
@@ -25,16 +27,24 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
   const listTaiDaNhan = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
 
-  const handlePrintRowItem = useCallback(
-    item => (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-      event.stopPropagation();
-    },
-    [],
-  );
-
   const onPaginationChange = (selectedItem: { selected: number }): void => {
     getTaiDaNhan(selectedItem.selected + 1);
   };
+
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
 
   const columns = useMemo(
     () => [
@@ -73,11 +83,7 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Button className="SipTableFunctionIcon" onClick={handlePrintRowItem(row.original)}>
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],

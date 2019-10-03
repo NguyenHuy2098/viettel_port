@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row } from 'reactstrap';
+import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import DataTable from 'components/DataTable';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +15,8 @@ import { actionQuetNhan } from 'redux/common/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 interface Props {
   getTaiKienChuaNhan: (IV_PAGENO: number) => void;
@@ -39,11 +41,19 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
     }
   };
 
-  const handlePrintRowItem = useCallback(
-    item => (event: React.MouseEvent<HTMLButtonElement, MouseEvent>): void => {
-      event.stopPropagation();
-    },
-    [],
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
   );
 
   const columns = useMemo(
@@ -83,11 +93,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Button className="SipTableFunctionIcon" onClick={handlePrintRowItem(row.original)}>
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],

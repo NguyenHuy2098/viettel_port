@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { ReactElement, useCallback } from 'react';
 import { TableOptions, useTable } from 'react-table';
 import classNames from 'classnames';
 import { noop } from 'lodash';
@@ -10,10 +10,11 @@ interface Props extends TableOptions<any> {
   columns: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onRowClick?: (item: any) => void;
+  renderFooter?: () => ReactElement;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const DataTable: React.FC<Props> = ({ columns, data, onRowClick }: Props): JSX.Element => {
+const DataTable: React.FC<Props> = ({ columns, data, onRowClick, renderFooter }: Props): JSX.Element => {
   // Use the state and functions returned from useTable to build your UI
   const { getTableProps, headerGroups, rows, prepareRow } = useTable({
     columns,
@@ -66,6 +67,7 @@ const DataTable: React.FC<Props> = ({ columns, data, onRowClick }: Props): JSX.E
             ),
         )}
       </tbody>
+      {renderFooter && renderFooter()}
     </Table>
   );
 };

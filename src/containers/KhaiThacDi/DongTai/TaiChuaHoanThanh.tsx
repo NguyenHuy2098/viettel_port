@@ -18,6 +18,8 @@ import { generatePath } from 'react-router-dom';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -83,13 +85,6 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     getListTai(payload);
   }
 
-  function printTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
-    return (event: React.MouseEvent): void => {
-      event.stopPropagation();
-      noop('print', tai.TOR_ID);
-    };
-  }
-
   function editTai(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
     return (): void => {
       noop('edit', tai.TOR_ID);
@@ -140,6 +135,21 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     getListTai(payload);
   };
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -172,9 +182,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={printTai(row.original)}>
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
+              {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>
