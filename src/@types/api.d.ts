@@ -1982,6 +1982,10 @@ declare namespace API {
      */
     GRO_WEI_UNI?: string;
     /**
+     * Mã loại bưu gửi
+     */
+    CCODE_TYPE?: string;
+    /**
      * Loại bưu gửi
      */
     CCODE_TYPE_DES?: string;

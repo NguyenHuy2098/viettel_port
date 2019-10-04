@@ -8,6 +8,7 @@ import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import {
+  concat,
   drop,
   get,
   filter,
@@ -42,7 +43,6 @@ interface Props {
   match: match;
 }
 
-let loaiHinhDichVu = '';
 let dichVuCongThem: string[] = [];
 // eslint-disable-next-line max-lines-per-function
 const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
@@ -310,7 +310,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
-  const [choXemHang, setChoXemHang] = useState<string>('choXem');
+  const [choXemHang, setChoXemHang] = useState<string>('1');
   const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZPP');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
@@ -468,7 +468,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     //_____non-validated items
     loaiHangHoa: trim(loaiHangHoa),
     nguoiThanhToan: trim(nguoiThanhToan),
-    choXemHang: trim(choXemHang),
     diemGiaoNhan: trim(diemGiaoNhan),
   };
 
@@ -532,8 +531,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               }),
             )
           : thisServiceType;
-      loaiHinhDichVu = join(thisTransportServiceType, '');
-      setPhuongThucVanChuyen(loaiHinhDichVu);
+      setPhuongThucVanChuyen(join(thisTransportServiceType, ''));
       // dichVuCongThem = [];
       // setThoiGianPhat(get(orderInformationInstane, 'TIME_DATE', ''));
       // setUncheckAllAdditionalCheckbox(false);
@@ -605,10 +603,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
     });
-    // const servicePayload = find(
-    //   loaiHinhDichVuList,
-    //   (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
-    // );
     let newPackageItem011 = {
       COD: '',
       Currency: '',
@@ -709,8 +703,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V04',
             );
             setDichVuCongThemList(thisDichVuCongThemList);
-            loaiHinhDichVu = get(thisLoaiHinhDichVuList, '[0]', '');
-            setPhuongThucVanChuyen(loaiHinhDichVu);
+            setPhuongThucVanChuyen(get(thisLoaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
           },
         },
       ),
@@ -786,19 +779,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
-  function handleGenerateServiceType(transportMethod: string): void {
-    loaiHinhDichVu = transportMethod;
-    forEach(dichVuCongThem, (item: string, index: number): void => {
-      loaiHinhDichVu += '/' + item;
-    });
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-  }
-
   function handleChangeTransportMethod(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
-      handleGenerateServiceType(event.currentTarget.value);
+      //trigger get Summary information dispatch
+      setCountGetSummaryInformation(countGetSummaryInformation + 1);
     };
   }
 
@@ -814,7 +799,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         }
       });
     }
-    handleGenerateServiceType(phuongThucVanChuyen);
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
   }
 
   function handleChangeDeliveryTime(date: Date): void {
@@ -829,15 +815,23 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
-    const paramsPackageItem = {
-      SERVICE_TYPE: loaiHinhDichVu,
+    const additionalServicePayloadList: PackageItemInputType[] = [];
+    additionalServicePayloadList.push({
+      SERVICE_TYPE: phuongThucVanChuyen,
       QUANTITY_OF_PACKAGE: '1',
       QUANTITY_OF_UNIT: 'ST',
-    };
-    const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
-      draftState.unshift(firstPackageItem);
-      draftState.push(paramsPackageItem);
     });
+    map(dichVuCongThem, (item: string): void => {
+      additionalServicePayloadList.push({
+        SERVICE_TYPE: item,
+        QUANTITY_OF_PACKAGE: '1',
+        QUANTITY_OF_UNIT: 'ST',
+      });
+    });
+    const dataPackageItemArr = produce(packageItemArr, (draftState): void => {
+      draftState.unshift(firstPackageItem);
+    });
+    const payloadPackageItemArr = concat(dataPackageItemArr, additionalServicePayloadList);
     const payload = {
       ADDRESS_CONSIG: '',
       ADDRESS_OP: trim(diaChiSender),
@@ -865,7 +859,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       NAME_CONSIG: trim(hoTenReceiver),
       NAME_OP: trim(hoTenSender),
       NAME_SHIPPER: trim(hoTenSender),
-      NOTE: trim(ghiChu), // Ghi chú cho bưu gửi
+      NOTE: choXemHang === '1' ? trim(ghiChu) + ' - Cho xem hàng' : trim(ghiChu) + ' - Không cho xem hàng', // Ghi chú cho bưu gửi
       OLD_CAMPAIGN_ID: 0,
       ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
       ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
@@ -1031,7 +1025,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setKichThuocCao('');
     setThoiGianPhat(new Date());
     setPhuongThucVanChuyen(get(loaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
-    loaiHinhDichVu = get(loaiHinhDichVuList, '[0].SERVICE_TYPE', '');
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
     // setLoaiHangHoa('V3');
@@ -1554,7 +1547,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <Input
                 type="radio"
                 name="deliveryRequirement"
-                value="choXem"
+                value="1"
                 defaultChecked
                 onChange={handleChangeTextboxValue(setChoXemHang)}
               />{' '}
@@ -1566,7 +1559,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <Input
                 type="radio"
                 name="deliveryRequirement"
-                value="khongChoXem"
+                value="2"
                 onChange={handleChangeTextboxValue(setChoXemHang)}
               />{' '}
               {t('Không cho khách xem hàng')}
@@ -1672,12 +1665,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         {renderPackageInfo()}
       </Row>
       <div className="display-block sipTitleRightBlock text-right">
-        <Button onClick={handleClearData}>
-          <i className="fa fa-refresh" />
+        <Button className="ml-2" color="primary" onClick={handleClearData}>
+          <i className="fa fa-refresh mr-2" />
           {t('Làm mới')}
         </Button>
-        <Button onClick={handleValidate}>
-          <i className="fa fa-download" />
+        <Button className="ml-2" color="primary" onClick={handleValidate}>
+          <i className="fa fa-download mr-2" />
           {t('Ghi lại')}
         </Button>
       </div>

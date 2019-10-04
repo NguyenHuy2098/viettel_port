@@ -315,16 +315,16 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
         <div className="sipTitleRightBlock">
-          <Button onClick={handleGotoEditForwardingOrder}>
-            <i className="fa fa-pencil" />
+          <Button className="ml-2" color="primary" onClick={handleGotoEditForwardingOrder}>
+            <i className="fa fa-pencil mr-2" />
             Sửa phiếu gửi
           </Button>
-          <Button>
-            <i className="fa fa-barcode" />
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-barcode mr-2" />
             In mã vạch
           </Button>
-          <Button>
-            <i className="fa fa-print" />
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-print mr-2" />
             In mã phiếu
           </Button>
         </div>

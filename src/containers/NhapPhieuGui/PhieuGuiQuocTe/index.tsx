@@ -290,7 +290,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
-  const [choXemHang, setChoXemHang] = useState<string>('choXem');
+  const [choXemHang, setChoXemHang] = useState<string>('1');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
 
@@ -313,7 +313,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   const newPackageItem: PackageItemInputType = {
     Width: '',
-    COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
     COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -333,7 +333,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   };
   const firstPackageItem = {
     Width: kichThuocRong,
-    COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
     COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -422,7 +422,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     kichThuocCao: trim(kichThuocCao) === '' ? undefined : trim(kichThuocCao),
     //_____non-validated items
     loaiHangHoa: trim(loaiHangHoa),
-    choXemHang: trim(choXemHang),
   };
 
   //______________check if Order Information exist
@@ -481,7 +480,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setPhuongThucVanChuyen(join(thisTransportServiceType, ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
-        COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
         COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -503,7 +502,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
-            COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
             COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -691,7 +690,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
@@ -788,7 +787,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       NAME_CONSIG: trim(hoTenReceiver),
       NAME_OP: trim(hoTenSender),
       NAME_SHIPPER: trim(hoTenSender),
-      NOTE: trim(ghiChu), // Ghi chú cho bưu gửi
+      NOTE: choXemHang === '1' ? trim(ghiChu) + ' - Cho xem hàng' : trim(ghiChu) + ' - Không cho xem hàng', // Ghi chú cho bưu gửi
       OLD_CAMPAIGN_ID: 0,
       ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
       ORDER_TYPE: 'V004', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
@@ -847,7 +846,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
@@ -1353,7 +1352,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               <Input
                 type="radio"
                 name="deliveryRequirement"
-                value="choXem"
+                value="1"
                 defaultChecked
                 onChange={handleChangeTextboxValue(setChoXemHang)}
               />{' '}
@@ -1365,7 +1364,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               <Input
                 type="radio"
                 name="deliveryRequirement"
-                value="khongChoXem"
+                value="2"
                 onChange={handleChangeTextboxValue(setChoXemHang)}
               />{' '}
               {t('Không cho khách xem hàng')}
@@ -1420,12 +1419,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         {renderPackageInfo()}
       </Row>
       <div className="display-block sipTitleRightBlock text-right">
-        <Button onClick={handleClearData}>
-          <i className="fa fa-refresh" />
+        <Button className="ml-2" color="primary" onClick={handleClearData}>
+          <i className="fa fa-refresh mr-2" />
           Làm mới
         </Button>
-        <Button onClick={handleValidate}>
-          <i className="fa fa-download" />
+        <Button className="ml-2" color="primary" onClick={handleValidate}>
+          <i className="fa fa-download mr-2" />
           Ghi lại
         </Button>
       </div>

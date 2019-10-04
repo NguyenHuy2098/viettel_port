@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { get, merge } from 'lodash';
 import store from 'redux/store';
-import { REACT_APP_API_ENDPOINT } from './env';
+import { REACT_APP_API_ENDPOINT, REACT_APP_CRM_API_ENDPOINT } from './env';
 import { throwErrorIfMalformed } from './errorHelpers';
 
 /**
@@ -55,6 +55,14 @@ sapApi.interceptors.response.use(
   },
 );
 
+/**
+ * CRM API instance
+ */
+export const crmApi = axios.create({
+  baseURL: REACT_APP_CRM_API_ENDPOINT,
+});
+
 export default {
   sapApi,
+  crmApi,
 };

@@ -27,12 +27,16 @@ const sapApis = [
   'ZTMI213',
 ];
 
+const crmApis = ['lvc'];
+
 /**
  * Convert api name array to apis map
  * Ex: { "MIOA_ZTMI016": "https://viettelpost.vn/api/MIOA_ZTMI016" }
  */
 export const sapApiMap = zipObject(sapApis, map(sapApis, (item: string): string => url.resolve('/', item)));
+export const crmApiMap = zipObject(crmApis, map(crmApis, (item: string): string => url.resolve('/', item)));
 
 export default {
   sapApiMap,
+  crmApiMap,
 };

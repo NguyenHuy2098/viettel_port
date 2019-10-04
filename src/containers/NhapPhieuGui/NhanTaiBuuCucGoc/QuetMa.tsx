@@ -8,9 +8,10 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
+import { action_MIOA_ZTMI235 } from 'redux/ZTMI235/actions';
 import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const QuetMa: React.FC = (): JSX.Element => {
@@ -18,8 +19,9 @@ const QuetMa: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
   const userMaBp = useSelector(makeSelectorMaBP);
+  const userId = useSelector(makeSelectorPreferredUsername);
 
-  const [codeChuyenThu, setCodeChuyenThu] = useState<string>('4800000278');
+  const [codeChuyenThu, setCodeChuyenThu] = useState<string>('');
 
   function handleChangeCodeChuyenThu(e: ChangeEvent<HTMLInputElement>): void {
     setCodeChuyenThu(e.target.value);
@@ -33,27 +35,50 @@ const QuetMa: React.FC = (): JSX.Element => {
           IV_ID: codeChuyenThu,
         },
         {
+          // eslint-disable-next-line max-lines-per-function
           onSuccess: (data: API.MIOAZTMI023Response): void => {
             if (data.Status) {
               if (data.ErrorCode === 1) {
                 alert('Error at step 1');
-                alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+                alert(get(data, 'MT_ZTMI023_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
               } else {
                 if (get(data, 'MT_ZTMI023_OUT.row[0].EXT_LOG_ID', '') === userMaBp) {
-                  const thisTorId = get(data, 'MT_ZTMI023_OUT.row[0].TOR_ID', '');
+                  const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
                   dispatch(
                     action_MIOA_ZTMI063(
                       {
                         row: {
-                          TOR_ID: thisTorId,
+                          TOR_ID: get(data023, 'TOR_ID', ''),
                         },
                         IV_LOC_ID: userMaBp,
-                        IV_USER: '',
+                        IV_USER: userId,
                       },
                       {
                         onSuccess: (data: API.MIOAZTMI063Response): void => {
                           if (data.Status) {
-                            alert(get(data, 'MT_ZTMI063_OUT.RETURN_MESSAGE[0].MESSAGE', ''));
+                            const payload235 = {
+                              mabuupham: get(data023, 'PACKAGE_ID', ''),
+                              gtc: get(data023, 'DEFINE_GTC', ''),
+                              comtype: get(data023, 'CCODE_TYPE', ''),
+                              nhomdichvu: get(data023, 'SERVGROUP', ''),
+                              loaidichvụ: get(data023, 'TRANSSRVREQ_CODE', ''),
+                              diemdi: get(data023, 'RECENT_LOC', ''),
+                              tinhden: get(data023, 'DEST_LOC', ''),
+                            };
+                            // const payload235 = {
+                            //   mabuupham: '2100030867',
+                            //   gtc: 'Y',
+                            //   comtype: 'V3',
+                            //   nhomdichvu: 'V02',
+                            //   loaidichvụ: 'VTH',
+                            //   diemdi: 'HCM',
+                            //   tinhden: 'HNI',
+                            // };
+                            dispatch(
+                              action_MIOA_ZTMI235(payload235, {
+                                onSuccess: (data: ZTMI235Response): void => {},
+                              }),
+                            );
                           } else {
                             alert(data.Messages);
                           }

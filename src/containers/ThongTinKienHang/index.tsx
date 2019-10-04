@@ -583,16 +583,16 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           {t('Thông tin kiện hàng')}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button onClick={handleGotoEditForwardingOrder}>
-            <i className="fa fa-pencil" />
+          <Button className="ml-2" color="primary" onClick={handleGotoEditForwardingOrder}>
+            <i className="fa fa-pencil mr-2" />
             {t('Sửa phiếu gửi')}
           </Button>
-          <Button>
-            <i className="fa fa-barcode" />
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-barcode mr-2" />
             {t('In mã vạch')}
           </Button>
-          <Button>
-            <i className="fa fa-print" />
+          <Button className="ml-2" color="primary">
+            <i className="fa fa-print mr-2" />
             {t('In mã phiếu')}
           </Button>
         </div>
