@@ -99,6 +99,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   React.useEffect((): void => {
     getListTaiCoSan();
     getListChuyenThuCoSan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dispatchZTMI241 = useCallback((): void => {
