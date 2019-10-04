@@ -558,6 +558,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
+        child_count: item.child_count,
       };
     },
   );
@@ -604,10 +605,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       },
       {
         Header: t('Số lượng'),
-        accessor: '',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          return <>Chưa có API</>;
-        },
+        accessor: 'child_count',
       },
       {
         Header: t('Trọng lượng'),

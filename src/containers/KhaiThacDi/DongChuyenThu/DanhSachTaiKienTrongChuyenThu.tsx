@@ -239,7 +239,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       },
       {
         Header: t('Số lượng'),
-        accessor: 'ITEM_NO',
+        accessor: 'child_count',
       },
       {
         Header: t('Trọng lượng'),

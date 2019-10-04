@@ -641,12 +641,17 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             <i className="fa fa-download rotate-90" />
             {t('Chuyển bảng kê')}
           </Button>
-          <Button onClick={openPopUpDongBangKeVaoTai} disabled={disableButtonDongBangKe}>
-            <i className="fa fa-building-o" />
+          <Button
+            color="primary"
+            className="ml-2"
+            onClick={openPopUpDongBangKeVaoTai}
+            disabled={disableButtonDongBangKe}
+          >
+            <i className="fa fa-building-o mr-2" />
             {t('Đóng bảng kê')}
           </Button>
-          <Button disabled={disableButtonDongBangKe} onClick={openPopUpDongTai}>
-            <i className="fa fa-cloud rotate-90" />
+          <Button color="primary" className="ml-2" disabled={disableButtonDongBangKe} onClick={openPopUpDongTai}>
+            <i className="fa fa-cloud rotate-90 mr-2" />
             {t('Đóng tải')}
           </Button>
         </div>
@@ -780,6 +785,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
+        child_count: item.child_count,
       };
     },
   );
@@ -820,10 +826,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       },
       {
         Header: t('Số lượng'),
-        accessor: '',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Chưa có API</>;
-        },
+        accessor: 'child_count',
       },
       {
         Header: t('Trọng lượng'),
