@@ -9,10 +9,10 @@ import moment from 'moment';
 import { ceil, get } from 'lodash';
 import { push } from 'connected-react-router';
 
-import PrintableModal from 'components/Button/ButtonPrintable';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
-import PrintablePhieuGiaoTuiThu from 'components/PrintablePhieuGiaoTuiThu';
+import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
@@ -34,7 +34,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

@@ -14,8 +14,8 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
-import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeDaDong: React.FC = (): JSX.Element => {
@@ -80,7 +80,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

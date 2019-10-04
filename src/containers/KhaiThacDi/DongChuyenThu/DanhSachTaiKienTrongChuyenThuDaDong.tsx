@@ -11,9 +11,9 @@ import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
-import PrintableModal from 'components/Button/ButtonPrintable';
-import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
-import PrintablePhieuGiaoNhanChuyenThu from '../../KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
+import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 
 interface Props {
   match: match;
@@ -94,7 +94,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
   };
 
   const renderPrintButtonPhieuGiaoNhanChuyenThu = (): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'sipTitleRightBlockBtnIcon',
         children: <i className="fa fa-print" />,
@@ -181,7 +181,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
   }
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

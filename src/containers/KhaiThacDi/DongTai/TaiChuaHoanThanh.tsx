@@ -18,8 +18,8 @@ import { generatePath } from 'react-router-dom';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
+import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -136,7 +136,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

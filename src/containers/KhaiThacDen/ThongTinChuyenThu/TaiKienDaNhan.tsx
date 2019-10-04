@@ -9,14 +9,14 @@ import { push } from 'connected-react-router';
 import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
-import Pagination from 'components/Pagination';
 import Filter from 'components/Input/Filter';
+import Pagination from 'components/Pagination';
+import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 type Props = RouteComponentProps;
 
@@ -28,7 +28,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const [searchText, setSearchText] = useState<string>('');
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

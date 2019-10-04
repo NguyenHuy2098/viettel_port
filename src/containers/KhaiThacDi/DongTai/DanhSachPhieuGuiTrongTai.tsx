@@ -23,8 +23,8 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
-import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 
 interface Props {
   match: match;
@@ -564,7 +564,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   );
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,
@@ -695,4 +695,5 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     </Fade>
   );
 };
+
 export default DanhSachPhieuGuiTrongTai;

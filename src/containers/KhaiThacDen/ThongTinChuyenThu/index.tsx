@@ -8,7 +8,7 @@ import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
-import PrintableModal from 'components/Button/ButtonPrintable';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelector046RowFirstChild,
@@ -16,7 +16,7 @@ import {
   makeSelector046CountChildren,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import PrintablePhieuGiaoNhanChuyenThu from './PrintablePhieuGiaoNhanChuyenThu';
+import PrintablePhieuGiaoNhanChuyenThu from '../../../components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import TaiKienDaNhan from './TaiKienDaNhan';
 import TaiKienChuaNhan from './TaiKienChuaNhan';
 
@@ -53,7 +53,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const renderPrintButton = (): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'sipTitleRightBlockBtnIcon',
         children: <i className="fa fa-print" />,

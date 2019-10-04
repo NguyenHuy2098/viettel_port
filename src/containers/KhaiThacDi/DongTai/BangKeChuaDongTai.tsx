@@ -10,11 +10,13 @@ import { Cell } from 'react-table';
 import { find, forEach, map, get, noop, size } from 'lodash';
 import moment from 'moment';
 
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import DataTable from 'components/DataTable';
+import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Pagination from 'components/Pagination';
-import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
-import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
@@ -23,8 +25,6 @@ import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
-import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
 
 let forwardingItemList: ForwardingItem[] = [];
 
@@ -532,7 +532,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

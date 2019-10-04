@@ -13,8 +13,8 @@ import Pagination from 'components/Pagination';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
+import PrintablePhieuGiaoTuiThu from '../../../components/Printable/PrintablePhieuGiaoTuiThu';
+import ButtonPrintable from '../../../components/Button/ButtonPrintable';
 
 interface Props {
   getTaiDaNhan: (IV_PAGENO: number) => void;
@@ -32,7 +32,7 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

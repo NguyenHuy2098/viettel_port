@@ -17,8 +17,8 @@ import Pagination from 'components/Pagination';
 import { generatePath } from 'react-router-dom';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import PrintableModal from 'components/Button/ButtonPrintable';
-import PrintablePhieuGiaoNhanChuyenThu from 'containers/KhaiThacDen/ThongTinChuyenThu/PrintablePhieuGiaoNhanChuyenThu';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -139,7 +139,7 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
   }
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

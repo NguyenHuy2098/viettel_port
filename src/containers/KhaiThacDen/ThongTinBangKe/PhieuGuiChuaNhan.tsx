@@ -6,7 +6,7 @@ import { Cell } from 'react-table';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
 
-import PrintableModal from 'components/Button/ButtonPrintable';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
@@ -34,7 +34,7 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

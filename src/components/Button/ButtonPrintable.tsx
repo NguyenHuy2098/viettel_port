@@ -26,7 +26,7 @@ interface Props {
 }
 
 // eslint-disable-next-line max-lines-per-function
-const PrintableModal = (props: Props): JSX.Element => {
+const ButtonPrintable = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const {
     btnCancelProps,
@@ -97,4 +97,4 @@ const PrintableModal = (props: Props): JSX.Element => {
   );
 };
 
-export default PrintableModal;
+export default ButtonPrintable;

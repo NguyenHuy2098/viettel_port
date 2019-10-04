@@ -8,13 +8,13 @@ import { RouteComponentProps } from 'react-router-dom';
 import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
 
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
+import Filter from 'components/Input/Filter';
 import Pagination from 'components/Pagination';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import Filter from 'components/Input/Filter';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
-import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
 
 type Props = RouteComponentProps;
 
@@ -29,7 +29,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
   const [searchText, setSearchText] = useState<string>('');
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,

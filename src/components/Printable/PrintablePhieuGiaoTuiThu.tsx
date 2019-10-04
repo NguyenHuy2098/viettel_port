@@ -142,7 +142,7 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
         <Col xs={4}>
           <div>
             <br />
-            <span></span>
+            <span />
           </div>
 
           <div>
@@ -162,7 +162,7 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
         </Col>
       </Row>
       <Row className="mb-4">
-        <Col className="font-italic" xs={8}></Col>
+        <Col className="font-italic" xs={8} />
         <Col xs={4}>
           <div className="text-center">{idChuyenThu}</div>
         </Col>

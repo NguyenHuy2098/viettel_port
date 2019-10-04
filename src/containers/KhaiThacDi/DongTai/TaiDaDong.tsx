@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { map, get } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { push } from 'connected-react-router';
-
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
-import routesMap from 'utils/routesMap';
+import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { push } from 'connected-react-router';
+import { map, get } from 'lodash';
+import moment from 'moment';
+
+import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import { generatePath } from 'react-router-dom';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
+import { SipDataState, SipDataType } from 'utils/enums';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {
@@ -81,7 +81,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
     getListTai(payload);
   };
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
+    <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-print fa-lg color-green" />,
