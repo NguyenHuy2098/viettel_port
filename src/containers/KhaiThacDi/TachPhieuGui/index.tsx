@@ -3,7 +3,21 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { floor, forEach, noop, map, get, isInteger, isNil, toNumber, trim, toLower, size } from 'lodash';
+import {
+  floor,
+  round,
+  forEach,
+  noop,
+  map,
+  get,
+  isInteger,
+  isNil,
+  toNumber,
+  toString,
+  trim,
+  toLower,
+  size,
+} from 'lodash';
 import { toast, ToastContainer } from 'react-toastify';
 import { Cell } from 'react-table';
 import moment from 'moment';
@@ -32,6 +46,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   const [divideQuantity, setDivideQuantity] = useState<number>(0);
   const [subPackages, setSubPackages] = useState<SubPackage[]>([]);
   const [showListCoupon, setShowListCoupon] = useState<boolean>(false);
+  const [enableDivideButton, setEnableDivideButton] = useState<boolean>(true);
 
   const thongTinPhieuGui = useSelector(select_MT_ZTMI031_OUT);
   const ZTMI213_ResponseRow = useSelector(select_ZTMI213);
@@ -52,12 +67,12 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-trash-o" />
           </Button>
-          <Button>
-            <i className="fa fa-barcode" />
+          <Button color="primary" className="ml-2">
+            <i className="fa fa-barcode mr-2" />
             {t('In mã vạch')}
           </Button>
-          <Button>
-            <i className="fa fa-print" />
+          <Button color="primary" className="ml-2">
+            <i className="fa fa-print mr-2" />
             {t(' In mã phiếu')}
           </Button>
           {/*<Button onClick={dispatchActionApi_ZTMI213}>*/}
@@ -70,7 +85,6 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   }
 
   const handerEnterDivideQuantity = (event: React.FormEvent<HTMLInputElement>): void => {
-    // tempDivideQuantity = toNumber(event.currentTarget.value);
     setDivideQuantity(toNumber(event.currentTarget.value));
   };
 
@@ -88,13 +102,16 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         });
       } else {
         let soGoiConLai = toNumber(thongTinPhieuGui[0].Quantity);
-        const khoiLuongMotGoi = toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / toNumber(thongTinPhieuGui[0].Quantity);
+        // const khoiLuongMotGoi = toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / toNumber(thongTinPhieuGui[0].Quantity);
         const soLuongGoiTrongMotGio = floor(toNumber(thongTinPhieuGui[0].Quantity) / divideQuantity);
         for (let i = 0; i < divideQuantity; i++) {
           if (i === divideQuantity - 1) {
             newSubPackages.push({
               ID: i,
-              GROSS_WEIGHT: khoiLuongMotGoi * soGoiConLai,
+              // GROSS_WEIGHT: khoiLuongMotGoi * soGoiConLai,
+              GROSS_WEIGHT:
+                toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) -
+                round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity) * (divideQuantity - 1),
               QUANTITY: soGoiConLai,
               QUANTITY_UOM: 'EA',
               WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
@@ -102,7 +119,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           } else {
             newSubPackages.push({
               ID: i,
-              GROSS_WEIGHT: khoiLuongMotGoi * soLuongGoiTrongMotGio,
+              // GROSS_WEIGHT: khoiLuongMotGoi * soLuongGoiTrongMotGio,
+              GROSS_WEIGHT: round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity),
               QUANTITY: soLuongGoiTrongMotGio,
               QUANTITY_UOM: 'EA',
               WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
@@ -175,15 +193,15 @@ const SplitCoupon: React.FC = (): JSX.Element => {
               <Input
                 className="text-center"
                 type="text"
-                value={subPackage.QUANTITY}
+                defaultValue={toString(subPackage.QUANTITY)}
                 onChange={handleOnChangeQuantiy(subPackage.ID)}
               />
             </Col>
             <Col xs="4" lg="4">
               <Input
                 className="text-center"
-                type="text"
-                value={`${subPackage.GROSS_WEIGHT} ${toLower(subPackage.WEIGHT_UOM)}`}
+                type="number"
+                defaultValue={`${subPackage.GROSS_WEIGHT}`}
                 onChange={handleChangeWeight(subPackage.ID)}
               />
             </Col>
@@ -193,7 +211,52 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     );
   };
 
+  const totalQuantityInvalid = (subPackages: SubPackage[]): boolean => {
+    let totalSubPackagesQuantity = 0;
+    for (let i = 0; i < subPackages.length; i++) {
+      totalSubPackagesQuantity += subPackages[i].QUANTITY;
+    }
+
+    return totalSubPackagesQuantity !== toNumber(thongTinPhieuGui[0].Quantity);
+  };
+
+  const totalWeightInvalid = (subPackages: SubPackage[]): boolean => {
+    let totalSubPackagesWeight = 0;
+    for (let i = 0; i < subPackages.length; i++) {
+      totalSubPackagesWeight += subPackages[i].GROSS_WEIGHT;
+    }
+    return totalSubPackagesWeight !== toNumber(thongTinPhieuGui[0].GROSS_WEIGHT);
+  };
+
+  // eslint-disable-next-line max-lines-per-function
   const dispatchActionApi_ZTMI213 = (): void => {
+    if (totalQuantityInvalid(subPackages)) {
+      toast(
+        <>
+          <i className="fa fa-window-close-o mr-2" />
+          {t('Tổng số lượng tách không hợp lệ ')}
+        </>,
+        {
+          containerId: 'SplitCoupon',
+          type: 'error',
+        },
+      );
+      return;
+    }
+
+    if (totalWeightInvalid(subPackages)) {
+      toast(
+        <>
+          <i className="fa fa-window-close-o mr-2" />
+          {t('Tổng khối lượng tách không hợp lệ ')}
+        </>,
+        {
+          containerId: 'SplitCoupon',
+          type: 'error',
+        },
+      );
+      return;
+    }
     dispatch(
       action_ZTMI213(
         {
@@ -212,6 +275,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 type: 'success',
               },
             );
+            setEnableDivideButton(false);
             setShowDivideCouponUI(false);
             setShowListCoupon(true);
           },
@@ -294,7 +358,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           <Label className="mr-3">{t('Số lượng tách')}</Label>
           <div className="sipScanCodeContainer">
             <Input type="number" onChange={handerEnterDivideQuantity} />
-            <Button color="primary" onClick={handleDevideCoupon} disabled={divideQuantity <= 0}>
+            <Button color="primary" onClick={handleDevideCoupon} disabled={divideQuantity <= 0 && enableDivideButton}>
               {t('Tách phiếu')}
             </Button>
           </div>
@@ -368,7 +432,12 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         accessor: 'QUANTITY',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
-            <Input type="text" defaultValue={`${toNumber(get(row, 'values.QUANTITY'))}`} className="text-center" />
+            <Input
+              type="text"
+              defaultValue={`${toNumber(get(row, 'values.QUANTITY'))}`}
+              className="text-center"
+              readOnly
+            />
           );
         },
       },
@@ -383,6 +452,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 get(row, 'original.WEIGHT_UOM', ''),
               )}`}
               className="text-center"
+              readOnly
             />
           );
         },
