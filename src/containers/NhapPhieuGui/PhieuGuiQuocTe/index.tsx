@@ -313,7 +313,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   const newPackageItem: PackageItemInputType = {
     Width: '',
-    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
     COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -333,7 +333,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   };
   const firstPackageItem = {
     Width: kichThuocRong,
-    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
     COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -480,7 +480,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setPhuongThucVanChuyen(join(thisTransportServiceType, ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
-        COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
         COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -502,7 +502,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
-            COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
             COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -690,7 +690,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
@@ -846,7 +846,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: 'VN',
-          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V4' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
