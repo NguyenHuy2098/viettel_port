@@ -3,10 +3,10 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, match } from 'react-router-dom';
+import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
-import { goBack, push } from 'connected-react-router';
+import { goBack } from 'connected-react-router';
 import { includes, forEach, get, map, toString, size } from 'lodash';
 import moment from 'moment';
 
@@ -23,7 +23,8 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import routesMap from 'utils/routesMap';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
+import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
 
 interface Props {
   match: match;
@@ -231,12 +232,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const handleBack = (): void => {
     dispatch(goBack());
   };
-
-  function handleGotoEditForwardingOrder(idDonHang: string): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
-    };
-  }
 
   // const handleRedirectDetail = useCallback(
   //   (item: API.Child): void => {
@@ -567,6 +562,20 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     },
   );
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bưu gửi của bảng kê'),
+      }}
+    />
+  );
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -619,12 +628,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <>
-              <Button
-                className="SipTableFunctionIcon"
-                onClick={handleGotoEditForwardingOrder(get(row, 'values.TOR_ID'))}
-              >
-                <i className="fa fa-pencil fa-lg color-blue" />
-              </Button>
+              {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
                 <i className="fa fa-trash-o fa-lg color-red" />
               </Button>

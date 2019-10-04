@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useMemo, useState } from 'react';
-import { Button, Row, Input, Label } from 'reactstrap';
+import { Row, Input, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -13,6 +13,8 @@ import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import Filter from 'components/Input/Filter';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
+import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
 
 type Props = RouteComponentProps;
 
@@ -26,6 +28,20 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     ]),
   );
   const [searchText, setSearchText] = useState<string>('');
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bưu gửi của bảng kê'),
+      }}
+    />
+  );
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -71,11 +87,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Button className="SipTableFunctionIcon">
-              <i className="fa fa-print fa-lg color-green" />
-            </Button>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],

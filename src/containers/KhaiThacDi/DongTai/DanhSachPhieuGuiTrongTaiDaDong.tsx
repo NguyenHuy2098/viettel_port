@@ -11,6 +11,8 @@ import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
+import PrintableModal from '../../../components/Button/ButtonPrintable';
+import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
 
 interface Props {
   match: match;
@@ -161,6 +163,21 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
     );
   }
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalBodyProps={{
+        children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bưu gửi của bảng kê'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     () => [
       {
@@ -199,13 +216,7 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
-            </>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],
