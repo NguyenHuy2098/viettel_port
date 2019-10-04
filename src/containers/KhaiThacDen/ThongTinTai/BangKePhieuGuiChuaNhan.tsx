@@ -1,44 +1,41 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, withRouter } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get, isEmpty } from 'lodash';
+import { ceil, get } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
-import { actionQuetNhan } from 'redux/common/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
+interface Props {
+  getThongTinTai: () => void;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
+const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getThongTinTai } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [idBangKePhieuGui, setIdBangKePhieuGui] = useState<string>('');
   const listBangKePhieuGuiChuaNhan = useSelector(
     makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN),
   );
-
-  function handleQuetBangKePhieuGuiId(): void {
-    if (!isEmpty(idBangKePhieuGui)) {
-      dispatch(actionQuetNhan({ IV_ID: idBangKePhieuGui }));
-    }
-  }
-
-  function handleChangePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
-    setIdBangKePhieuGui(event.target.value);
-  }
 
   const redirectToThongTinBangKe = useCallback((item: API.Child): void => {
     dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleSuccessQuetNhan = (): void => {
+    getThongTinTai();
+  };
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -90,17 +87,11 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     [],
   );
 
-  function renderToolbar(): JSX.Element {
+  const renderToolbar = (): JSX.Element => {
     return (
       <Row>
-        <Col className="btn-toolbar col-10">
-          <Scan
-            buttonProps={{
-              onClick: handleQuetBangKePhieuGuiId,
-            }}
-            onChange={handleChangePhieuGuiId}
-            placeholder={t('Quét mã bảng kê/phiếu gửi')}
-          />
+        <Col className="btn-toolbar" md={6}>
+          <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê/phiếu gửi')} />
         </Col>
         {/*<Col className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}
@@ -110,7 +101,7 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         {/*</Col>*/}
       </Row>
     );
-  }
+  };
 
   return (
     <>
@@ -128,4 +119,4 @@ const BangKePhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   );
 };
 
-export default withRouter(BangKePhieuGuiChuaNhan);
+export default BangKePhieuGuiChuaNhan;

@@ -37,15 +37,13 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     setTab(tab);
   }
 
+  const getThongTinChuyenThu = (): void => {
+    dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idChuyenThu }));
+  };
+
   useEffect((): void => {
     if (!isEmpty(idChuyenThu)) {
-      dispatch(
-        action_MIOA_ZTMI046({
-          IV_TOR_ID: idChuyenThu,
-          IV_NO_PER_PAGE: '10',
-          IV_PAGENO: '1',
-        }),
-      );
+      getThongTinChuyenThu();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
@@ -137,7 +135,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
             <TaiKienDaNhan />
           </TabPane>
           <TabPane tabId={1}>
-            <TaiKienChuaNhan />
+            <TaiKienChuaNhan getThongTinChuyenThu={getThongTinChuyenThu} />
           </TabPane>
         </TabContent>
       </div>

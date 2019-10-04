@@ -3,36 +3,41 @@ import { Button, ButtonProps, Col, Input, InputProps, Row, RowProps } from 'reac
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
-import { get, isEmpty, noop } from 'lodash';
+import { get, isEmpty, noop, size } from 'lodash';
 
 import { actionQuetNhan } from 'redux/common/actions';
-import { toastError, toastInfo } from '../Toast';
+import { toastError, toastInfo, toastSuccess } from '../Toast';
 
 interface Props extends InputProps {
   buttonProps?: ButtonProps;
   containerProps?: RowProps;
-  leftIcon?: React.ReactNode;
-  onSuccess?: () => void;
+  onSuccess?: (data: API.RowResponseZTMI023OUT) => void;
 }
 
+// eslint-disable-next-line max-lines-per-function
 const Scan = (props: Props): JSX.Element => {
-  const { buttonProps, containerProps, leftIcon, onSuccess, ...rest } = props;
+  const { buttonProps, containerProps, onSuccess, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [torId, setTorId] = useState<string>('');
+  const [shouldClear, setShouldClear] = useState<boolean>(false);
 
-  const handleSuccessScan = (): void => {
-    onSuccess && onSuccess();
+  const handleSuccessScan = (data: API.RowResponseZTMI023OUT): void => {
+    onSuccess && onSuccess(data);
+    toastSuccess('Quét nhận thành công.');
   };
 
   const handleQuetNhan = (): void => {
-    if (!isEmpty(torId)) {
+    if (!isEmpty(torId) && size(torId) >= 10) {
       dispatch(
         actionQuetNhan(
           { IV_ID: torId },
           {
             onFailure: (error: Error): void => {
               toastError(get(error, 'message', 'Đã có lỗi xảy ra.'));
+            },
+            onFinish: () => {
+              setShouldClear(true);
             },
             onSuccess: handleSuccessScan,
           },
@@ -47,17 +52,33 @@ const Scan = (props: Props): JSX.Element => {
     setTorId(event.currentTarget.value);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.charCode === 13) {
+      handleQuetNhan();
+    } else if (shouldClear) {
+      setShouldClear(false);
+      setTorId('');
+    }
+  };
+
   return (
     <Row className={classNames('flex-fill', get(containerProps, 'className'))}>
       <Col lg={9}>
         <div className="sipTitleRightBlockInput">
-          {leftIcon || <i className="fa fa-barcode" />}
-          <Input className="bg-gray-100" type="text" onChange={handleChangeValue} {...rest} />
+          <i className="fa fa-barcode" />
+          <Input
+            className="bg-gray-100"
+            onChange={handleChangeValue}
+            onKeyPress={handleKeyPress}
+            type="search"
+            value={torId}
+            {...rest}
+          />
         </div>
       </Col>
       <Col className="px-0" lg={3}>
         <Button color="primary" onClick={handleQuetNhan} {...buttonProps}>
-          {get(buttonProps, 'children') || t('Quét mã')}
+          {t('Quét mã')}
         </Button>
       </Col>
     </Row>

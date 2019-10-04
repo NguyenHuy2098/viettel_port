@@ -41,19 +41,23 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     ]),
   );
 
-  function handleChangeTab(tab: number): void {
+  const handleChangeTab = (tab: number): void => {
     setTab(tab);
-  }
+  };
+
+  const getThongTinBangKe = (): void => {
+    dispatch(
+      action_MIOA_ZTMI046({
+        IV_TOR_ID: idBangKe,
+        IV_NO_PER_PAGE: '10',
+        IV_PAGENO: '1',
+      }),
+    );
+  };
 
   useEffect((): void => {
     if (!isEmpty(idBangKe)) {
-      dispatch(
-        action_MIOA_ZTMI046({
-          IV_TOR_ID: idBangKe,
-          IV_NO_PER_PAGE: '10',
-          IV_PAGENO: '1',
-        }),
-      );
+      getThongTinBangKe();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idBangKe]);
@@ -134,7 +138,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
             <PhieuGuiDaNhan />
           </TabPane>
           <TabPane tabId={1}>
-            <PhieuGuiChuaNhan />
+            <PhieuGuiChuaNhan getThongTinBangKe={getThongTinBangKe} />
           </TabPane>
         </TabContent>
       </div>

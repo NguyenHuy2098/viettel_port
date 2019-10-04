@@ -35,19 +35,17 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
     makeSelector046CountChildrenByLifecycle(SipDataState.BANG_KE_DA_QUET_NHAN),
   );
 
-  function handleChangeTab(tab: number): void {
+  const handleChangeTab = (tab: number): void => {
     setTab(tab);
-  }
+  };
+
+  const getThongTinTai = (): void => {
+    dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idTaiKien }));
+  };
 
   useEffect((): void => {
     if (!isEmpty(idTaiKien)) {
-      dispatch(
-        action_MIOA_ZTMI046({
-          IV_TOR_ID: idTaiKien,
-          IV_NO_PER_PAGE: '10',
-          IV_PAGENO: '1',
-        }),
-      );
+      getThongTinTai();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idTaiKien]);
@@ -128,7 +126,7 @@ const ThongTinTai: React.FC<Props> = (props: Props): JSX.Element => {
             <BangKePhieuGuiDaNhan />
           </TabPane>
           <TabPane tabId={1}>
-            <BangKePhieuGuiChuaNhan />
+            <BangKePhieuGuiChuaNhan getThongTinTai={getThongTinTai} />
           </TabPane>
         </TabContent>
       </div>

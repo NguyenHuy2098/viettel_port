@@ -47,38 +47,12 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderOrderInformationTitle = (): JSX.Element => (
-    <Row className="mb-3 sipTitleContainer">
-      <Col className="px-0" md={8}>
-        <h3>{t('Nhận chuyến thư')}</h3>
-      </Col>
-      <Col className="px-0" md={4}>
-        <InputGroup>
-          <InputGroupAddon addonType="prepend">
-            <span className="input-group-text">
-              <i className="fa fa-search" />
-            </span>
-          </InputGroupAddon>
-          <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
-        </InputGroup>
-      </Col>
-    </Row>
-  );
-
-  const renderFindOrder = (): JSX.Element => (
-    <Row className="sipBgWhiteContainer d-flex justify-content-between">
-      <Col md={6}>
-        <Scan onSuccess={getListChuyenThuDaQuetNhan} placeholder={t('Quét mã chuyến thư')} />
-      </Col>
-      <Col className="d-flex justify-content-end align-items-center" md={2}>
-        {t('Tổng số')}
-        {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThuDaQuetNhan}</strong>
-      </Col>
-    </Row>
-  );
-
   const handlePageChange = ({ selected }: { selected: number }): void => {
     getListChuyenThuDaQuetNhan(selected + 1);
+  };
+
+  const handleSuccessQuetNhan = (): void => {
+    getListChuyenThuDaQuetNhan();
   };
 
   const handleRedirectDetail = useCallback(
@@ -124,10 +98,40 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     [],
   );
 
+  const renderInfo = (): JSX.Element => (
+    <Row className="mb-3 sipTitleContainer">
+      <Col className="px-0" md={8}>
+        <h3>{t('Nhận chuyến thư')}</h3>
+      </Col>
+      <Col className="px-0" md={4}>
+        <InputGroup>
+          <InputGroupAddon addonType="prepend">
+            <span className="input-group-text">
+              <i className="fa fa-search" />
+            </span>
+          </InputGroupAddon>
+          <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
+        </InputGroup>
+      </Col>
+    </Row>
+  );
+
+  const renderScanner = (): JSX.Element => (
+    <Row className="sipBgWhiteContainer d-flex justify-content-between">
+      <Col md={6}>
+        <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã chuyến thư')} />
+      </Col>
+      <Col className="d-flex justify-content-end align-items-center" md={2}>
+        {t('Tổng số')}
+        {t('HYPHEN', ':')}&nbsp;<strong>{countChuyenThuDaQuetNhan}</strong>
+      </Col>
+    </Row>
+  );
+
   return (
     <div>
-      {renderOrderInformationTitle()}
-      {renderFindOrder()}
+      {renderInfo()}
+      {renderScanner()}
       <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={listChuyenThuDaQuetNhan} onRowClick={handleRedirectDetail} />
         <Pagination

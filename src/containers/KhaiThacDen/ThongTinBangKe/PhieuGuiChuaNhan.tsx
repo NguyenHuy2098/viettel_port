@@ -1,26 +1,27 @@
-import React, { useMemo, useState } from 'react';
-import { Row, Input, Label } from 'reactstrap';
+import React, { useMemo } from 'react';
+import { Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Cell } from 'react-table';
-import { ceil, get, isEmpty } from 'lodash';
+import { ceil, get } from 'lodash';
 import moment from 'moment';
 
+import PrintableModal from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/common/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
-import PrintBangKeChiTiet from '../../../components/Printable/PrintBangKeChiTiet';
+
+interface Props {
+  getThongTinBangKe: () => void;
+}
 
 // eslint-disable-next-line max-lines-per-function
-const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
-  const dispatch = useDispatch();
+const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getThongTinBangKe } = props;
   const { t } = useTranslation();
-  const [idPhieuGui, setIdPhieuGui] = useState<string>('');
   const listPhieuGuiChuaNhan = useSelector(
     makeSelector046ChildrenByLifecycle([
       SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT,
@@ -28,15 +29,9 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     ]),
   );
 
-  function handleQuetPhieuGuiId(): void {
-    if (!isEmpty(idPhieuGui)) {
-      dispatch(actionQuetNhan({ IV_ID: idPhieuGui }));
-    }
-  }
-
-  function handleChangePhieuGuiId(event: React.ChangeEvent<HTMLInputElement>): void {
-    setIdPhieuGui(event.target.value);
-  }
+  const handleSuccessQuetNhan = (): void => {
+    getThongTinBangKe();
+  };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
     <PrintableModal
@@ -105,24 +100,18 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
     [],
   );
 
-  function renderToolbar(): JSX.Element {
+  const renderToolbar = (): JSX.Element => {
     return (
       <Row>
-        <div className="btn-toolbar col-10">
-          <Scan
-            buttonProps={{
-              onClick: handleQuetPhieuGuiId,
-            }}
-            onChange={handleChangePhieuGuiId}
-            placeholder={t('Quét mã bưu gửi')}
-          />
+        <Col className="btn-toolbar" md={6}>
+          <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bưu gửi')} />
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
           {/*</button>*/}
           {/*<button className="btn btn-outline-primary">*/}
           {/*  {t('Kiện')}&nbsp;({'20'})*/}
           {/*</button>*/}
-        </div>
+        </Col>
         {/*<div className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}
         {/*    <i className="fa fa-cube mr-1" />*/}
@@ -131,7 +120,7 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
         {/*</div>*/}
       </Row>
     );
-  }
+  };
 
   return (
     <>
@@ -149,4 +138,4 @@ const PhieuGuiChuaNhan: React.FC = (): JSX.Element => {
   );
 };
 
-export default withRouter(PhieuGuiChuaNhan);
+export default PhieuGuiChuaNhan;

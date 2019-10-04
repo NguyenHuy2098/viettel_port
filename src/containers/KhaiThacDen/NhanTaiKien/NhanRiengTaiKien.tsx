@@ -1,25 +1,24 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Row } from 'reactstrap';
+import React, { useCallback, useMemo } from 'react';
+import { Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import DataTable from 'components/DataTable';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
 import { Cell } from 'react-table';
 import moment from 'moment';
-import { ceil, get, isEmpty } from 'lodash';
+import { ceil, get } from 'lodash';
 import { push } from 'connected-react-router';
 
-import Pagination from 'components/Pagination';
+import PrintableModal from 'components/Button/ButtonPrintable';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/common/actions';
+import Pagination from 'components/Pagination';
+import PrintablePhieuGiaoTuiThu from 'components/PrintablePhieuGiaoTuiThu';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
 
 interface Props {
-  getTaiKienChuaNhan: (IV_PAGENO: number) => void;
+  getTaiKienChuaNhan: (IV_PAGENO?: number) => void;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -29,16 +28,9 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const listTaiKienChuaNhan = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
-  const [idTaiKien, setIdTaiKien] = useState<string>('');
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
     getTaiKienChuaNhan(selectedItem.selected + 1);
-  };
-
-  const handleQuetTaiKienId = (): void => {
-    if (!isEmpty(idTaiKien)) {
-      dispatch(actionQuetNhan({ IV_ID: idTaiKien }));
-    }
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
@@ -55,6 +47,10 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
       }}
     />
   );
+
+  const handleSuccessQuetNhan = (): void => {
+    getTaiKienChuaNhan();
+  };
 
   const columns = useMemo(
     () => [
@@ -101,10 +97,6 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
-  const handleOnChangeTaiKienId = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setIdTaiKien(event.target.value);
-  };
-
   const handleRedirectDetail = useCallback(
     (item: API.RowResponseZTMI023OUT): void => {
       dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
@@ -117,15 +109,9 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">
         <Row>
-          <div className="btn-toolbar col-10">
-            <Scan
-              buttonProps={{
-                onClick: handleQuetTaiKienId,
-              }}
-              onChange={handleOnChangeTaiKienId}
-              placeholder={t('Quét mã tải/kiện')}
-            />
-          </div>
+          <Col className="btn-toolbar" md={6}>
+            <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã tải/kiện')} />
+          </Col>
         </Row>
       </div>
       <Row className="sipTableContainer">

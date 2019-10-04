@@ -1,5 +1,5 @@
 .sipSummaryContent {
-  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
   border-radius: 3px;
   background: #fff;
   padding: 15px 0;
@@ -50,12 +50,12 @@
   margin-bottom: 15px;
 
   h3 {
-    color: #299f9a;
+    color: $primary;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 10px;
     .addNewPackageTabItemBtn {
-      background: #299f9a !important;
+      background: $primary !important;
       border: none;
       font-size: 12px;
       float: right;
@@ -115,10 +115,10 @@
 .sipTitleRightBlockInput {
   position: relative;
   i {
-    color: #9b9b9b;
+    cursor: pointer;
+    left: 10px;
     position: absolute;
     top: 10px;
-    left: 10px;
   }
   input.form-control {
     padding: 0 10px 0 30px;
@@ -126,7 +126,7 @@
 }
 
 .sipShippingInformationTitle {
-  margin-right: 0px;
+  margin-right: 0;
   background-color: #fff;
 }
 
@@ -143,25 +143,11 @@
     &:hover,
     &:focus {
       background: #ddf6f5 !important;
-      border: 1px solid #299f9a !important;
-      color: #299f9a !important;
+      border: 1px solid $primary !important;
+      color: $primary !important;
     }
   }
 }
-
-.sipTitleRightBlockInput {
-  position: relative;
-  i {
-    color: #9b9b9b;
-    position: absolute;
-    top: 10px;
-    left: 10px;
-  }
-  input.form-control {
-    padding: 0 10px 0 30px;
-  }
-}
-
 
 .findRecordButton {
   margin-bottom: 8px;
@@ -175,9 +161,9 @@
 
     &:hover,
     &.active {
-      color: #299f9a !important;
+      color: $primary !important;
       background: #ddf6f5 !important;
-      border: 1px solid #299f9a !important;
+      border: 1px solid $primary !important;
     }
   }
 }
@@ -193,7 +179,7 @@
 
     button {
       margin-left: 12px;
-      background-color: #2db4a1;
+      background-color: $primary;
       border-radius: 5px;
       color: #fff;
     }
@@ -214,7 +200,7 @@
 
 .sipSearchButtonComplainRecord {
   button {
-    background-color: #2db4a1;
+    background-color: $primary;
     border-radius: 5px;
     color: #fff;
   }
@@ -225,7 +211,7 @@
 
   h6 {
     font-size: 12px;
-    color: #299f9a;
+    color: $primary;
   }
 }
 
@@ -236,7 +222,7 @@
   padding: 15px;
   background: #ffffff;
   display: block;
-  box-shadow: 0px 2px 5px rgba(159, 163, 183, 0.51053);
+  box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
   position: relative;
 }
 
@@ -369,8 +355,8 @@
       color: inherit;
     }
     &.active {
-      color: #299f9a !important;
-      border-color: #299f9a !important;
+      color: $primary !important;
+      border-color: $primary !important;
       pointer-events: none;
     }
     &.deletablePackageItem {

@@ -1,42 +1,25 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { generatePath } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, concat, get, isEmpty } from 'lodash';
+import { ceil, concat, get } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/common/actions';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [idBangKePhieuGui, setIdBangKePhieuGui] = useState<string>('');
   const [listBangKePhieuGuiDaQuet, setListBangKePhieuGuiDaQuet] = useState<API.RowResponseZTMI023OUT[]>([]);
 
-  const handleQuetBangKePhieuGuiId = (): void => {
-    if (!isEmpty(idBangKePhieuGui)) {
-      dispatch(
-        actionQuetNhan(
-          { IV_ID: idBangKePhieuGui },
-          {
-            onSuccess: (infoBangKePhieuGui: API.RowResponseZTMI023OUT) => {
-              setListBangKePhieuGuiDaQuet(concat(listBangKePhieuGuiDaQuet, infoBangKePhieuGui));
-            },
-          },
-        ),
-      );
-    }
-  };
-
-  const handleChangeBangKePhieuGuiId = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setIdBangKePhieuGui(event.target.value);
+  const handleSuccessQuetNhan = (infoBangKePhieuGui: API.RowResponseZTMI023OUT): void => {
+    setListBangKePhieuGuiDaQuet(concat(listBangKePhieuGuiDaQuet, infoBangKePhieuGui));
   };
 
   const columns = useMemo(
@@ -99,15 +82,9 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
 
   const renderToolbar = (): JSX.Element => (
     <Row>
-      <div className="btn-toolbar col-10">
-        <Scan
-          buttonProps={{
-            onClick: handleQuetBangKePhieuGuiId,
-          }}
-          onChange={handleChangeBangKePhieuGuiId}
-          placeholder={t('Quét mã bảng kê/phiếu gửi')}
-        />
-      </div>
+      <Col className="btn-toolbar" md={6}>
+        <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê/phiếu gửi')} />
+      </Col>
     </Row>
   );
 

@@ -1,41 +1,32 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { Row, Input, Label } from 'reactstrap';
+import React, { useCallback, useMemo } from 'react';
+import { Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, withRouter } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, get, isEmpty } from 'lodash';
+import { ceil, get } from 'lodash';
 import moment from 'moment';
 
-// import blackBag from 'assets/img/blackBag.png';
-// import deliveryBox from 'assets/img/box.png';
+import PrintableModal from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import PrintablePhieuGiaoTuiThu from 'components/PrintablePhieuGiaoTuiThu';
 import Scan from 'components/Input/Scan';
-import { actionQuetNhan } from 'redux/common/actions';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintablePhieuGiaoTuiThu from '../../../components/PrintablePhieuGiaoTuiThu';
-import PrintableModal from '../../../components/Button/ButtonPrintable';
+
+interface Props {
+  getThongTinChuyenThu: () => void;
+}
 
 // eslint-disable-next-line max-lines-per-function
-const TaiKienChuaNhan: React.FC = (): JSX.Element => {
+const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getThongTinChuyenThu } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [idTaiKien, setIdTaiKien] = useState<string>('');
   const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
-
-  function handleQuetTaiKienId(): void {
-    if (!isEmpty(idTaiKien)) {
-      dispatch(actionQuetNhan({ IV_ID: idTaiKien }));
-    }
-  }
-
-  function handleChangeTaiKienId(event: React.ChangeEvent<HTMLInputElement>): void {
-    setIdTaiKien(event.target.value);
-  }
 
   const redirectToThongTinTai = useCallback(
     (item: API.Child) => {
@@ -58,6 +49,10 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
       }}
     />
   );
+
+  const handleSuccessQuetNhan = (): void => {
+    getThongTinChuyenThu();
+  };
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -118,14 +113,8 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   function renderToolbar(): JSX.Element {
     return (
       <Row>
-        <div className="btn-toolbar col-10">
-          <Scan
-            buttonProps={{
-              onClick: handleQuetTaiKienId,
-            }}
-            onChange={handleChangeTaiKienId}
-            placeholder={t('Quét mã tải/kiện')}
-          />
+        <Col className="btn-toolbar" md={6}>
+          <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã tải/kiện')} />
           {/*<Button className="sipButtonTypeC mr-2">*/}
           {/*  <img src={blackBag} alt="black-bag" className="mr-2" />*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
@@ -134,7 +123,7 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
           {/*  <img src={deliveryBox} alt="delivery-box" className="mr-2" />*/}
           {/*  {t('Kiện')}&nbsp;({'20'})*/}
           {/*</Button>*/}
-        </div>
+        </Col>
         {/*<div className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}
         {/*    <i className="fa fa-cube mr-1" />*/}
@@ -161,4 +150,4 @@ const TaiKienChuaNhan: React.FC = (): JSX.Element => {
   );
 };
 
-export default withRouter(TaiKienChuaNhan);
+export default TaiKienChuaNhan;
