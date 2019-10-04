@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { floor, forEach, noop, map, get, toNumber, trim, toLower, size } from 'lodash';
+import { floor, forEach, noop, map, get, isInteger, isNil, toNumber, trim, toLower, size } from 'lodash';
 import { toast, ToastContainer } from 'react-toastify';
 import { Cell } from 'react-table';
 import moment from 'moment';
@@ -39,7 +39,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   function renderShippingInformationTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Tách phiếu gửi')}</h1>
+        <h1 className="sipTitle">{t('Tách kiện')}</h1>
       </Row>
     );
   }
@@ -76,7 +76,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   const handleDevideCoupon = useCallback((): void => {
-    if (size(thongTinPhieuGui) === 1) {
+    if (size(thongTinPhieuGui) === 1 && isInteger(divideQuantity)) {
       const newSubPackages: SubPackage[] = [];
       if (toNumber(thongTinPhieuGui[0].Quantity) < divideQuantity) {
         newSubPackages.push({
@@ -84,7 +84,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           GROSS_WEIGHT: toNumber(thongTinPhieuGui[0].GROSS_WEIGHT),
           QUANTITY: toNumber(thongTinPhieuGui[0].Quantity),
           QUANTITY_UOM: 'EA',
-          WEIGHT_UOM: 'G',
+          WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
         });
       } else {
         let soGoiConLai = toNumber(thongTinPhieuGui[0].Quantity);
@@ -114,16 +114,29 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       setSubPackages(newSubPackages);
       setShowDivideCouponUI(true);
     } else {
-      toast(
-        <>
-          <i className="fa fa-window-close-o mr-2" />
-          Phiếu gửi không đủ tiêu chí để tách
-        </>,
-        {
-          containerId: 'SplitCoupon',
-          type: 'error',
-        },
-      );
+      if (!isInteger(divideQuantity)) {
+        toast(
+          <>
+            <i className="fa fa-window-close-o mr-2" />
+            {t('Số lượng tách phải là số nguyên')}
+          </>,
+          {
+            containerId: 'SplitCoupon',
+            type: 'error',
+          },
+        );
+      } else {
+        toast(
+          <>
+            <i className="fa fa-window-close-o mr-2" />
+            {t('Phiếu gửi không đủ tiêu chí để tách')}
+          </>,
+          {
+            containerId: 'SplitCoupon',
+            type: 'error',
+          },
+        );
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [thongTinPhieuGui, divideQuantity]);
@@ -192,13 +205,14 @@ const SplitCoupon: React.FC = (): JSX.Element => {
             toast(
               <>
                 <i className="fa fa-window-close-o mr-2" />
-                Tách kiện thành công
+                {t('Tách kiện thành công')}
               </>,
               {
                 containerId: 'SplitCoupon',
                 type: 'success',
               },
             );
+            setShowDivideCouponUI(false);
             setShowListCoupon(true);
           },
           onFailure: (error: Error): void => {
@@ -224,8 +238,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         <Row className="mb-3 sipTitleContainer">
           <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
           <div className="sipTitleRightBlock">
-            <Button onClick={dispatchActionApi_ZTMI213}>
-              <i className="fa fa-check-square-o" />
+            <Button onClick={dispatchActionApi_ZTMI213} color="primary" className="ml-2">
+              <i className="fa fa-check-square-o  mr-2" />
               {t('Hoàn thành')}
             </Button>
           </div>
@@ -280,8 +294,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           <Label className="mr-3">{t('Số lượng tách')}</Label>
           <div className="sipScanCodeContainer">
             <Input type="number" onChange={handerEnterDivideQuantity} />
-            <Button color="primary" onClick={handleDevideCoupon}>
-              Tách phiếu
+            <Button color="primary" onClick={handleDevideCoupon} disabled={divideQuantity <= 0}>
+              {t('Tách phiếu')}
             </Button>
           </div>
         </Col>
@@ -290,7 +304,40 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   }
 
   const dispatchActionAPI_ZTMI031 = useCallback((): void => {
-    dispatch(action_MIOA_ZTMI031({ FWO_ID: searchKey, Buyer_reference_Number: '' }));
+    dispatch(
+      action_MIOA_ZTMI031(
+        { FWO_ID: searchKey, Buyer_reference_Number: '' },
+        {
+          onSuccess: (data: API.MIOAZTMI031Response): void => {
+            if (isNil(data)) {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {t('Không có kết quả tìm kiếm')}
+                </>,
+                {
+                  containerId: 'SplitCoupon',
+                  type: 'error',
+                },
+              );
+            }
+          },
+          onFailure: (): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {t('Có lỗi xảy ra trong quá trình tìm kiếm kiện')}
+              </>,
+              {
+                containerId: 'SplitCoupon',
+                type: 'error',
+              },
+            );
+          },
+        },
+      ),
+    );
+    setShowDivideCouponUI(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchKey]);
 
