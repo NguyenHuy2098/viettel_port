@@ -5,13 +5,13 @@ import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { map, find, reject } from 'lodash';
-// import moment from 'moment';
+
+import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
 import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
-import ModalChonNhanVien from './ModalChonNhanVien';
 
 interface Props {
   match: match;
@@ -202,14 +202,16 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">Danh sách phân công</h1>
         <div className="sipTitleRightBlock">
-          <Button disabled={disableButton}>
-            <i className="fa fa-print" />
-            In phiếu phân công
+          <Button color="primary" disabled={disableButton}>
+            <i className="fa fa-print mr-2" />
+            {t('In phiếu phân công')}
           </Button>
-          <ModalChonNhanVien
-            onApplyChoosen={handleSelectStaffChange}
-            disabled={disableButton || dataSelected.length === 0}
+          <ButtonChonNhanVien
+            onApplyChosen={handleSelectStaffChange}
+            className="ml-2"
+            color="primary"
             currentUserId={userIdSelected}
+            disabled={disableButton || dataSelected.length === 0}
           />
           {/*<ModalThemPhieuGui disabled={disableButton} />*/}
         </div>

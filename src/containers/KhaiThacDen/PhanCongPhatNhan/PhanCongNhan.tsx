@@ -6,12 +6,12 @@ import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { map, find, reject } from 'lodash';
 
+import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
-import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
 import { selectPhanCongNhan } from 'redux/MIOA_ZTMI035/selectors';
+import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
-import ModalChonNhanVien from './ModalChonNhanVien';
 
 interface Props {
   match: match;
@@ -20,6 +20,7 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const getStatusDisplay = useCallback((statusCode: string) => {
     // if (statusCode === '301') return 'Chờ lấy hàng';
@@ -27,7 +28,6 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const dispatch = useDispatch();
   const [dataSelected, setDataSelected] = useState<string[]>([]);
   const listPhanCongNhan = useSelector(selectPhanCongNhan);
   const convertData = map(listPhanCongNhan, item => {
@@ -199,16 +199,18 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
         </Col>
       </Row>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">Danh sách phân công</h1>
+        <h1 className="sipTitle">{t('Danh sách phân công')}</h1>
         <div className="sipTitleRightBlock">
-          <Button disabled={disableButton}>
-            <i className="fa fa-print" />
-            In phiếu phân công
+          <Button color="primary" disabled={disableButton}>
+            <i className="fa fa-print mr-2" />
+            {t('In phiếu phân công')}
           </Button>
-          <ModalChonNhanVien
-            onApplyChoosen={handleSelectStaffChange}
-            disabled={disableButton || dataSelected.length === 0}
+          <ButtonChonNhanVien
+            onApplyChosen={handleSelectStaffChange}
+            className="ml-2"
+            color="primary"
             currentUserId={userIdSelected}
+            disabled={disableButton || dataSelected.length === 0}
           />
           {/*<ModalThemPhieuGui disabled={disableButton} />*/}
         </div>

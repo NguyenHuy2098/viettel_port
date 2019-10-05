@@ -1,31 +1,33 @@
 import React, { useCallback, useState } from 'react';
-import { Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, ButtonProps, ModalProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { map, filter } from 'lodash';
 
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 
-interface Props {
-  onApplyChoosen: (IV_PARTY_ID: string) => void;
-  disabled: boolean;
+interface Props extends ButtonProps {
+  onApplyChosen: (IV_PARTY_ID: string) => void;
   currentUserId: string | undefined;
+  disabled: boolean;
+  modalProps?: ModalProps;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const ModalChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
+const ButtonChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
+  const { onApplyChosen, currentUserId, disabled, modalProps, ...rest } = props;
   const { t } = useTranslation();
   const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
   const [idUserSelected, setIdUserSelected] = useState<undefined | string>(undefined);
 
-  function toggle(): void {
-    setModalCreateNew(!modalCreateNew);
-  }
-  const handleApplyClick = (): void => {
-    props.onApplyChoosen(idUserSelected || '');
+  const toggle = (): void => {
     setModalCreateNew(!modalCreateNew);
   };
-  const listStaff = filter(useSelector(makeSelectorGet_MT_ZTMI054_OUT), item => item.UNAME !== props.currentUserId);
+  const handleApplyClick = (): void => {
+    onApplyChosen(idUserSelected || '');
+    setModalCreateNew(!modalCreateNew);
+  };
+  const listStaff = filter(useSelector(makeSelectorGet_MT_ZTMI054_OUT), item => item.UNAME !== currentUserId);
 
   const handleChangeSelectUser = useCallback(
     (id: string | undefined) => (): void => {
@@ -37,11 +39,11 @@ const ModalChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Button onClick={toggle} disabled={props.disabled}>
-        <i className="fa fa-user-o" />
-        Chuyển phân công
+      <Button onClick={toggle} disabled={disabled} {...rest}>
+        <i className="fa fa-user-o mr-2" />
+        {t('Chuyển phân công')}
       </Button>
-      <Modal isOpen={modalCreateNew} toggle={toggle}>
+      <Modal isOpen={modalCreateNew} toggle={toggle} {...modalProps}>
         <ModalHeader toggle={toggle} className="no-border">
           {t('Chọn nhân viên')}
         </ModalHeader>
@@ -74,4 +76,4 @@ const ModalChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
   );
 };
 
-export default ModalChonNhanVien;
+export default ButtonChonNhanVien;
