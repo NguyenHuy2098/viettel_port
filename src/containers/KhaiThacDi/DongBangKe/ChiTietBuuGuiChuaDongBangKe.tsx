@@ -265,7 +265,10 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Đã chọn')}: <span className="color-primary">02/03</span>
+            {t('Đã chọn')}:{' '}
+            <span className="color-primary">
+              {size(forwardingItemListState)}/{size(dataRow)}
+            </span>
           </p>
         </Col>
       </Row>
