@@ -17,7 +17,7 @@ import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
 import { Location } from 'history';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
+// import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { AppStateType } from 'redux/store';
 import {
@@ -190,21 +190,21 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
         Header: t('Ngày gửi'),
         accessor: 'CREATED_ON',
       },
-      {
-        Header: t('Quản trị'),
-        Cell: ({ row }: Cell<API.RowMTZTMI241OUT>): JSX.Element => {
-          return (
-            <>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-pencil fa-lg color-blue" />
-              </Button>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-trash-o fa-lg color-red" />
-              </Button>
-            </>
-          );
-        },
-      },
+      // {
+      //   Header: t('Quản trị'),
+      //   Cell: ({ row }: Cell<API.RowMTZTMI241OUT>): JSX.Element => {
+      //     return (
+      //       <>
+      //         <Button className="SipTableFunctionIcon">
+      //           <i className="fa fa-pencil fa-lg color-blue" />
+      //         </Button>
+      //         <Button className="SipTableFunctionIcon">
+      //           <i className="fa fa-trash-o fa-lg color-red" />
+      //         </Button>
+      //       </>
+      //     );
+      //   },
+      // },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [uncheckAllForwardingItemCheckbox],
@@ -251,18 +251,19 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     );
   }
 
-  const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
-  function toggleCreateForwardingItemModal(): void {
-    setCreateForwardingItemModal(!createForwardingItemModal);
-  }
+  // const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
 
-  const getListBangKe = useCallback(
-    function(): void {
-      // console.log(1);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
+  // function toggleCreateForwardingItemModal(): void {
+  //   setCreateForwardingItemModal(!createForwardingItemModal);
+  // }
+
+  // const getListBangKe = useCallback(
+  //   function(): void {
+  //     // console.log(1);
+  //   },
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [],
+  // );
 
   const getListDiemDen = (): void => {
     dispatch(
@@ -458,7 +459,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             <i className="fa fa-file-excel-o mr-2" />
             {t('Chuyển bảng kê')}
           </Button>
-          <Button onClick={toggleCreateForwardingItemModal} color="primary" className="ml-2">
+          {/* <Button onClick={toggleCreateForwardingItemModal} color="primary" className="ml-2">
             <i className="fa fa-file-archive-o mr-2" />
             {t('Tạo bảng kê')}
             <CreateForwardingItemModal
@@ -468,7 +469,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
               modalTitle={t('Tạo bảng kê')}
               IV_TOR_TYPE="ZC1"
             />
-          </Button>
+          </Button> */}
           {/*<DongBangKe forwardingItemListState={forwardingItemListState} des={des} />*/}
           <Button
             onClick={handleShowPopupDongBangKe}
