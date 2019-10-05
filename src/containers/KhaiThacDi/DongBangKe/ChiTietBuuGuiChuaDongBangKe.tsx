@@ -108,8 +108,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: 'BDH',
       IV_COMMODITY_GROUP: commLocGroup,
-      IV_DATE: moment().format('YYYYMMDD'),
-      // IV_DATE: '20191004',
+      // IV_DATE: moment().format('YYYYMMDD'),
+      IV_DATE: '20191004',
       IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',
@@ -228,6 +228,27 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     setForwardingItemListState([]);
   }
 
+  const [search, setSearch] = useState<string>('');
+
+  function handleChangeSearch(e: { target: { value: string } }): void {
+    setSearch(e.target.value);
+  }
+
+  function handleSearch(): void {
+    const payload = {
+      IV_PACKAGE_ID: search,
+      IV_FREIGHT_UNIT_STATUS: [306],
+      IV_LOC_ID: 'BDH',
+      IV_COMMODITY_GROUP: commLocGroup,
+      // IV_DATE: moment().format('YYYYMMDD'),
+      IV_DATE: '20191004',
+      IV_USER: get(childs, '[0].USER', ''),
+      IV_PAGE_NO: '1',
+      IV_NO_PER_PAGE: '10',
+    };
+    dispatch(action_ZTMI241(payload));
+  }
+
   function renderSearch(): JSX.Element {
     return (
       <Row className="sipContentContainer">
@@ -235,9 +256,9 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm phiếu gửi')} />
+              <Input type="text" placeholder={t('Tìm kiếm phiếu gửi')} value={search} onChange={handleChangeSearch} />
             </div>
-            <Button color="primary" className="ml-2">
+            <Button color="primary" className="ml-2" onClick={handleSearch}>
               {t('Tìm kiếm')}
             </Button>
           </div>
