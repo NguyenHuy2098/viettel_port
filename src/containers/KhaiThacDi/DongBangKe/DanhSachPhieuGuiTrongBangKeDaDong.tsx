@@ -33,6 +33,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     (item: API.Child): API.Child => {
       return {
         TOR_ID: item.TOR_ID ? item.TOR_ID : '',
+        PACKAGE_ID: item.PACKAGE_ID,
         SRC_LOC_IDTRQ: item.SRC_LOC_IDTRQ ? item.SRC_LOC_IDTRQ : '',
         DES_LOC_IDTRQ: item.DES_LOC_IDTRQ ? item.DES_LOC_IDTRQ : '',
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
@@ -210,7 +211,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     () => [
       {
         Header: t('Mã phiếu gửi'),
-        accessor: 'TOR_ID',
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Điểm đi'),

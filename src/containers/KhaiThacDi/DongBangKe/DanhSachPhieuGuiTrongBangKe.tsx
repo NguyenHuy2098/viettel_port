@@ -771,16 +771,9 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const dataTable = map(
     dataBangKeChild,
     (item: API.Child): API.Child => {
-      const checkIfDashExistPackageId = findIndex(item.PACKAGE_ID, (item: string): boolean => {
-        return item === '_';
-      });
       return {
         TOR_ID: item.TOR_ID ? item.TOR_ID : '',
-        PACKAGE_ID: item.PACKAGE_ID
-          ? checkIfDashExistPackageId === -1
-            ? item.PACKAGE_ID
-            : join(slice(item.PACKAGE_ID, 0, checkIfDashExistPackageId), '')
-          : '',
+        PACKAGE_ID: item.PACKAGE_ID,
         DES_LOC_IDTRQ: item.DES_LOC_IDTRQ ? item.DES_LOC_IDTRQ : '',
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',

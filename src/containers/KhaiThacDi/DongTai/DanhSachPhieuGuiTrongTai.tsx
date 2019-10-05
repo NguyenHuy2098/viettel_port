@@ -259,7 +259,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             <i className="fa fa-download rotate-90" />
             {t('Chuyển tải')}
           </Button>
-          <Button onClick={handleShowPopupDongTai} disabled={disableFunctionalButton}>
+          <Button color="primary" className="ml-2" onClick={handleShowPopupDongTai} disabled={disableFunctionalButton}>
             <i className="fa fa-cloud rotate-90" />
             {t('Đóng tải')}
           </Button>
@@ -644,7 +644,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       {renderTitle()}
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
-      <Row className="sipTableContainer sipTableRowClickable">
+      <Row className="sipTableContainer">
         <DataTable
           columns={columns}
           data={dataTable}
