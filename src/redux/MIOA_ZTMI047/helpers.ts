@@ -11,7 +11,7 @@ export async function post_MIOA_ZTMI047(payload: Partial<API.MIOAZTMI047Request>
     IV_TO_LOC_ID: '',
     IV_CUST_STATUS: '',
     IV_FR_DATE: moment()
-      .subtract(7, 'day')
+      .subtract(2, 'day')
       .format('YYYYMMDD'),
     IV_TO_DATE: moment().format('YYYYMMDD'),
     IV_PAGENO: '1',
