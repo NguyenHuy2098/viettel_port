@@ -334,8 +334,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 type: 'success',
               },
             );
-            if (toNumber(get(data, 'MT_ZTMI016_OUT')) === 1) {
-            }
+            resetState();
           },
           onFailure: (error: Error): void => {
             toast(
@@ -351,6 +350,11 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         },
       ),
     );
+  };
+
+  const resetState = (): void => {
+    setForwardingItemListState([]);
+    setListUncheckForwardingItem([]);
   };
 
   // eslint-disable-next-line max-lines-per-function
@@ -397,6 +401,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                       type: 'success',
                     },
                   );
+                  resetState();
                 },
                 onFailure: (error: Error): void => {
                   toast(
@@ -568,6 +573,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                 type: 'success',
               },
             );
+            resetState();
           },
           onFailure: (error: Error): void => {
             toast(
@@ -936,6 +942,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
                   type: 'success',
                 },
               );
+              resetState();
             },
             onFailure: (error: Error): void => {
               toast(

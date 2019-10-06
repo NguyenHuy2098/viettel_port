@@ -78,6 +78,10 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   };
 
+  const reset = (): void => {
+    setForwardingItemListState([]);
+    setListUncheckForwardingItem([]);
+  };
   const getListChuyenThu = (): void => {
     // console.log('getListChuyenThu');
     dispatch(
@@ -347,6 +351,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                 type: 'success',
               },
             );
+            reset();
           },
           onFailure: (error: Error): void => {
             toast(
@@ -440,6 +445,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
                 type: 'success',
               },
             );
+            reset();
           },
           onFailure: (error: Error): void => {
             toast(
