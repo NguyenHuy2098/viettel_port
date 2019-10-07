@@ -1,41 +1,22 @@
-import React, { KeyboardEvent, useEffect } from 'react';
-import {
-  Row,
-  TabContent,
-  Col,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Badge,
-  Input,
-  InputGroupAddon,
-  InputGroup,
-} from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Row, TabContent, Col, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { generatePath, match } from 'react-router';
-import { size, trim } from 'lodash';
-import { push } from 'connected-react-router';
 
+import TraCuu from 'components/Input/TraCuu';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import {
   makeSelectorCountBangKeChuaNhanPhieuGui,
   makeSelectorCountTaiChuaNhanBangKePhieuGui,
 } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 import TaiChuaNhanBKPhieuGui from './TaiChuaNhanBKPhieuGui';
 import BangKeChuaNhanPhieuGui from './BangKeChuaNhanPhieuGui';
 import NhanRiengBangKePhieuGui from './NhanRiengBangKePhieuGui';
 
-interface Props {
-  match: match;
-}
 // eslint-disable-next-line max-lines-per-function
-const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
+const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(
@@ -85,32 +66,13 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleForwardingSearch(event: KeyboardEvent<HTMLInputElement>): void {
-    const thisValue = trim(event.currentTarget.value);
-    if (size(thisValue) && event.keyCode === 13) {
-      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: thisValue })));
-    }
-  }
-
   const renderToolbar = (): JSX.Element => (
     <Row className="mb-3 sipTitleContainer">
       <Col className="px-0" md={8}>
         <h3>{t('Nhận bảng kê / phiếu gửi')}</h3>
       </Col>
       <Col className="px-0" md={4}>
-        <InputGroup>
-          <InputGroupAddon addonType="prepend">
-            <span className="input-group-text">
-              <i className="fa fa-search" />
-            </span>
-          </InputGroupAddon>
-          <Input
-            className="w-25"
-            type="search"
-            placeholder={t('Tra cứu bảng kê/phiếu gửi ')}
-            onKeyUp={handleForwardingSearch}
-          />
-        </InputGroup>
+        <TraCuu placeholder={t('Tra cứu bảng kê/phiếu gửi')} />
       </Col>
     </Row>
   );

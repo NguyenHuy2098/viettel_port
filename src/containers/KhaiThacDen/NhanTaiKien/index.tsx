@@ -1,28 +1,13 @@
-import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  Col,
-  Row,
-  TabContent,
-  TabPane,
-  Nav,
-  NavItem,
-  NavLink,
-  Badge,
-  Input,
-  InputGroup,
-  InputGroupAddon,
-} from 'reactstrap';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Col, Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { push } from 'connected-react-router';
-import { generatePath } from 'react-router';
-import { size, trim } from 'lodash';
 
+import TraCuu from 'components/Input/TraCuu';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountChuyenThuChuaNhanTaiKien, makeSelectorRowSize } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 import ChuyenThuChuaNhanTaiKien from './ChuyenThuChuaNhanTaiKien';
 import TaiDaNhan from './TaiDaNhan';
 import NhanRiengTaiKien from './NhanRiengTaiKien';
@@ -93,27 +78,13 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     setTab(tab);
   };
 
-  const handleTraCuuTaiKien = (event: KeyboardEvent<HTMLInputElement>): void => {
-    const thisValue = event.currentTarget.value;
-    if (size(trim(thisValue)) && event.keyCode === 13) {
-      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: thisValue })));
-    }
-  };
-
   const renderToolbar = (): JSX.Element => (
     <Row className="mb-3 sipTitleContainer">
       <Col className="px-0" md={8}>
         <h3>{t('Nhận tải kiện')}</h3>
       </Col>
       <Col className="px-0" md={4}>
-        <InputGroup>
-          <InputGroupAddon addonType="prepend">
-            <span className="input-group-text">
-              <i className="fa fa-search" />
-            </span>
-          </InputGroupAddon>
-          <Input type="text" placeholder={t('Tra cứu tải/kiện')} onKeyUp={handleTraCuuTaiKien} />
-        </InputGroup>
+        <TraCuu placeholder={t('Tra cứu tải/kiện')} />
       </Col>
     </Row>
   );

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { Col, Input, InputGroup, InputGroupAddon, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
@@ -9,8 +9,9 @@ import { ceil, get } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import Pagination from 'components/Pagination';
 import Scan from 'components/Input/Scan';
+import TraCuu from 'components/Input/TraCuu';
+import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorPagingCount, makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
@@ -104,14 +105,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
         <h3>{t('Nhận chuyến thư')}</h3>
       </Col>
       <Col className="px-0" md={4}>
-        <InputGroup>
-          <InputGroupAddon addonType="prepend">
-            <span className="input-group-text">
-              <i className="fa fa-search" />
-            </span>
-          </InputGroupAddon>
-          <Input className="w-25" type="search" placeholder={t('Tra cứu chuyến thư')} />
-        </InputGroup>
+        <TraCuu placeholder={t('Tra cứu chuyến thư')} />
       </Col>
     </Row>
   );

@@ -33,7 +33,7 @@ const BangKeChuaNhanPhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mã tải'),
+        Header: t('Mã bảng kê'),
         accessor: 'TOR_ID',
       },
       {
