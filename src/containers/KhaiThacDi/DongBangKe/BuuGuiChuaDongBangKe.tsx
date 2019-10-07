@@ -9,7 +9,7 @@ import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
 import { push } from 'connected-react-router';
 import { generatePath } from 'react-router';
 import routesMap from 'utils/routesMap';
-// import moment from 'moment';
+import moment from 'moment';
 
 interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
   DES?: string;
@@ -59,8 +59,7 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
     const payload = {
       IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: 'BDH',
-      // IV_DATE: moment().format('YYYYMMDD'),
-      IV_DATE: '20191005',
+      IV_DATE: moment().format('YYYYMMDD'),
     };
     dispatch(action_ZTMI240(payload));
   }, [dispatch]);
