@@ -18,6 +18,7 @@ import {
   toLower,
   size,
 } from 'lodash';
+import { default as NumberFormat, NumberFormatValues } from 'react-number-format';
 import { toast, ToastContainer } from 'react-toastify';
 import { Cell } from 'react-table';
 import moment from 'moment';
@@ -169,11 +170,11 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     setSubPackages(newSubPackages);
   };
 
-  const handleChangeWeight = (subPackageId: number) => (event: React.FormEvent<HTMLInputElement>): void => {
+  const handleChangeWeight = (subPackageId: number) => (event: NumberFormatValues): void => {
     const newSubPackages = [...subPackages];
     forEach(newSubPackages, subPackage => {
       if (subPackage.ID === subPackageId) {
-        subPackage.GROSS_WEIGHT = toNumber(event.currentTarget.value);
+        subPackage.GROSS_WEIGHT = toNumber(event.value);
       }
     });
     setSubPackages(newSubPackages);
@@ -187,22 +188,22 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         return (
           <Row className="mb-2" key={index}>
             <Col xs="4" lg="4">
-              Bưu gửi {index}
+              Bưu gửi {index + 1}
             </Col>
             <Col xs="4" lg="4">
               <Input
                 className="text-center"
                 type="text"
-                defaultValue={toString(subPackage.QUANTITY)}
+                value={toString(subPackage.QUANTITY)}
                 onChange={handleOnChangeQuantiy(subPackage.ID)}
               />
             </Col>
             <Col xs="4" lg="4">
-              <Input
-                className="text-center"
-                type="number"
-                defaultValue={`${subPackage.GROSS_WEIGHT}`}
-                onChange={handleChangeWeight(subPackage.ID)}
+              <NumberFormat
+                className="text-center form-control"
+                value={subPackage.GROSS_WEIGHT}
+                suffix={` ${toLower(thongTinPhieuGui[0].WEIGHT_UOM)}`}
+                onValueChange={handleChangeWeight(subPackage.ID)}
               />
             </Col>
           </Row>
