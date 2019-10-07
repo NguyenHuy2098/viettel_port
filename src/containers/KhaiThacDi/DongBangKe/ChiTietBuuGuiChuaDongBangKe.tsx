@@ -61,6 +61,14 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   );
   const listChuyenThuCoSan = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
 
+  const reset = (): void => {
+    setForwardingItemListState([]);
+    setUncheckAllForwardingItemCheckbox(false);
+    setSelectedChuyenThu(undefined);
+    setSelectedTai(undefined);
+    dispatchZTMI241();
+  };
+
   const getListTaiCoSan = (): void => {
     const params = {
       IV_TOR_ID: '',
@@ -337,6 +345,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                 type: 'success',
               },
             );
+            reset();
           },
           onFailure: (error: Error): void => {
             toast(
@@ -371,6 +380,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                 type: 'success',
               },
             );
+            reset();
           },
           onFailure: (error: Error): void => {
             toast(
@@ -418,6 +428,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                 type: 'success',
               },
             );
+            reset();
           },
           onFailure: (error: Error): void => {
             toast(
@@ -451,6 +462,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                 type: 'success',
               },
             );
+            reset();
           },
           onFailure: (error: Error): void => {
             toast(

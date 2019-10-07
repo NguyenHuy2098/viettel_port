@@ -52,6 +52,14 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   const [codePhieuGui, setCodePhieuGui] = useState<string>('');
 
+  const resetState = (): void => {
+    setForwardingItemListState([]);
+    setListUncheckForwardingItem([]);
+    setSelectedTai(undefined);
+    setSelectedChuyenthu(undefined);
+    getListPhieuGui();
+  };
+
   const payload046 = {
     IV_TOR_ID: idBangKe,
     IV_PAGENO: '1',
@@ -350,11 +358,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         },
       ),
     );
-  };
-
-  const resetState = (): void => {
-    setForwardingItemListState([]);
-    setListUncheckForwardingItem([]);
   };
 
   // eslint-disable-next-line max-lines-per-function

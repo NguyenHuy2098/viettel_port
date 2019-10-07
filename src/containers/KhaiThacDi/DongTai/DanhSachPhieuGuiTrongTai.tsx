@@ -81,6 +81,8 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const reset = (): void => {
     setForwardingItemListState([]);
     setListUncheckForwardingItem([]);
+    setUncheckAllForwardingItemCheckbox(false);
+    getListPhieuGui();
   };
   const getListChuyenThu = (): void => {
     // console.log('getListChuyenThu');
