@@ -88,17 +88,17 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function handleChangeTab(tab: number): void {
+  const handleChangeTab = (tab: number): void => {
     sessionStorage.setItem('tabNhanTaiKien', tab.toString());
     setTab(tab);
-  }
+  };
 
-  function handleTraCuuTaiKien(e: KeyboardEvent<HTMLInputElement>): void {
-    const thisValue = e.currentTarget.value;
-    if (size(trim(thisValue)) && e.keyCode === 13) {
+  const handleTraCuuTaiKien = (event: KeyboardEvent<HTMLInputElement>): void => {
+    const thisValue = event.currentTarget.value;
+    if (size(trim(thisValue)) && event.keyCode === 13) {
       dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: thisValue })));
     }
-  }
+  };
 
   const renderToolbar = (): JSX.Element => (
     <Row className="mb-3 sipTitleContainer">

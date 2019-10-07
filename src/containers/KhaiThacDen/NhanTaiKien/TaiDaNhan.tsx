@@ -8,13 +8,13 @@ import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
 
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintablePhieuGiaoTuiThu from '../../../components/Printable/PrintablePhieuGiaoTuiThu';
-import ButtonPrintable from '../../../components/Button/ButtonPrintable';
 
 interface Props {
   getTaiDaNhan: (IV_PAGENO: number) => void;

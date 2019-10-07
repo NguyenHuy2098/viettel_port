@@ -136,8 +136,8 @@ export const makeSelectorBangKeChuaNhanPhieuGui = (state: AppStateType): API.Row
       return !isEmpty(
         filter(get(tai, 'Childs'), (child: API.Child) => {
           return (
-            toNumber(get(child, 'LIFECYCLE')) === SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT ||
-            toNumber(get(child, 'LIFECYCLE')) === SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC
+            toNumber(get(child, 'LIFECYCLE')) === SipDataState.BUU_GUI_CHUA_QUET_NHAN_TAI_TTKT ||
+            toNumber(get(child, 'LIFECYCLE')) === SipDataState.BUU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC
           );
         }),
       );

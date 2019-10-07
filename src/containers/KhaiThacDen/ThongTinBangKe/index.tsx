@@ -30,14 +30,14 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const countPhieuGui = useSelector(makeSelector046CountChildren);
   const countPhieuGuiChuaNhan = useSelector(
     makeSelector046CountChildrenByLifecycle([
-      SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_TTKT,
-      SipDataState.PHIEU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC,
+      SipDataState.BUU_GUI_CHUA_QUET_NHAN_TAI_TTKT,
+      SipDataState.BUU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC,
     ]),
   );
   const countPhieuGuiDaNhan = useSelector(
     makeSelector046CountChildrenByLifecycle([
-      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_TTKT,
-      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
+      SipDataState.BUU_GUI_DA_QUET_NHAN_TAI_TTKT,
+      SipDataState.BUU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
     ]),
   );
 

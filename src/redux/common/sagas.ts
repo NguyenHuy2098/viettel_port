@@ -2,18 +2,18 @@
 import { SagaIterator } from 'redux-saga';
 import { takeEvery } from 'redux-saga/effects';
 import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
-import { get, toString } from 'lodash';
+import { get, includes, toString } from 'lodash';
 
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { SipDataState, SipDataType, IV_FLAG } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { select } from 'utils/stateHelpers';
 import {
-  DONG_CHUYEN_THU,
-  QUET_NHAN,
   DONG_BANG_KE_VAO_TAI_CO_SAN,
   DONG_BANG_KE_VAO_TAI_MOI_TAO,
+  DONG_CHUYEN_THU,
   DONG_TAI_VAO_CHUYEN_THU_CO_SAN,
   DONG_TAI_VAO_CHUYEN_THU_TAO_MOI,
+  QUET_NHAN,
 } from './actions';
 import { post_MIOA_ZTMI016 } from '../MIOA_ZTMI016/helpers';
 import { post_MIOA_ZTMI022 } from '../MIOA_ZTMI022/helpers';
@@ -59,6 +59,7 @@ function* takeDongChuyenThu(action: UnfoldSagaActionType): SagaIterator {
  * 1. MIOA_ZTMI023 - Get thông tin
  * 2. MIOA_ZTMI022 - Quét nhận
  */
+// eslint-disable-next-line max-lines-per-function
 function* takeQuetNhan(action: UnfoldSagaActionType): SagaIterator {
   yield unfoldSaga(
     {
@@ -67,14 +68,43 @@ function* takeQuetNhan(action: UnfoldSagaActionType): SagaIterator {
           IV_ID: get(action, 'payload.IV_ID'),
         });
         const item023: API.RowResponseZTMI023OUT = get(data023, 'MT_ZTMI023_OUT.row[0]');
-        if (get(item023, 'ZVTP_CUST_STATUS') !== SipDataState.CHUYEN_THU_DEN) {
-          throw new Error('Chuyến thư không phải chuyến thư đến.');
+        const item023TorType = get(item023, 'TOR_TYPE');
+        const item023Status = get(item023, 'ZVTP_CUST_STATUS');
+
+        if (
+          // Chuyến thư
+          (item023TorType === SipDataType.CHUYEN_THU && item023Status === SipDataState.CHUYEN_THU_DEN) ||
+          // Tải / Kiện
+          (includes([SipDataType.TAI, SipDataType.KIEN], item023TorType) &&
+            item023Status === SipDataState.CHUYEN_THU_DA_QUET_NHAN) ||
+          // Bảng kê
+          (SipDataType.BANG_KE === item023TorType && item023Status === SipDataState.TAI_KIEN_DA_QUET_NHAN) ||
+          // Bưu gửi
+          (SipDataType.BUU_GUI === item023TorType &&
+            (item023Status === SipDataState.BUU_GUI_CHUA_QUET_NHAN_TAI_TTKT ||
+              item023Status === SipDataState.BUU_GUI_CHUA_QUET_NHAN_TAI_BUU_CUC))
+        ) {
+          await post_MIOA_ZTMI022({
+            FU_NO: get(item023, 'TOR_ID'),
+            STATUS_ID: '1',
+          });
+
+          return item023;
         }
-        await post_MIOA_ZTMI022({
-          FU_NO: get(item023, 'TOR_ID'),
-          STATUS_ID: '1',
-        });
-        return item023;
+
+        if (item023TorType === SipDataType.CHUYEN_THU) {
+          throw new Error('Chuyến thư không đủ điều kiện quét nhận.');
+        }
+
+        if (includes([SipDataType.TAI, SipDataType.KIEN], item023TorType)) {
+          throw new Error('Tải / Kiện không đủ điều kiện quét nhận.');
+        }
+
+        if (includes([SipDataType.BANG_KE, SipDataType.BUU_GUI], item023TorType)) {
+          throw new Error('Bảng kê / Bưu gửi không đủ điều kiện quét nhận.');
+        }
+
+        throw new Error('Dữ liệu không đúng để quét nhận.');
       },
       key: action.type,
     },

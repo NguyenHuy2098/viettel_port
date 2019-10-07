@@ -9,6 +9,7 @@ import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelector046RowFirstChild,
@@ -16,7 +17,6 @@ import {
   makeSelector046CountChildren,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
-import PrintablePhieuGiaoNhanChuyenThu from '../../../components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import TaiKienDaNhan from './TaiKienDaNhan';
 import TaiKienChuaNhan from './TaiKienChuaNhan';
 
@@ -33,9 +33,9 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const countKienChuaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const countKienDaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
 
-  function handleChangeTab(tab: number): void {
+  const handleChangeTab = (tab: number): void => {
     setTab(tab);
-  }
+  };
 
   const getThongTinChuyenThu = (): void => {
     dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idChuyenThu }));

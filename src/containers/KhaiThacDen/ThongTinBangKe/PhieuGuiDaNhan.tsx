@@ -23,8 +23,8 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const listPhieuGuiDaNhan = useSelector(
     makeSelector046ChildrenByLifecycle([
-      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_TTKT,
-      SipDataState.PHIEU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
+      SipDataState.BUU_GUI_DA_QUET_NHAN_TAI_TTKT,
+      SipDataState.BUU_GUI_DA_QUET_NHAN_TAI_BUU_CUC,
     ]),
   );
   const [searchText, setSearchText] = useState<string>('');
