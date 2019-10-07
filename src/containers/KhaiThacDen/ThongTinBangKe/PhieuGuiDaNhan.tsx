@@ -58,7 +58,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Mã bưu gửi'),
-        accessor: 'TOR_ID',
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Điểm đi'),

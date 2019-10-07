@@ -140,7 +140,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
           <p>{t('Thu hộ')}</p>
         </Col>
         <Col xs={9} className="pt-2">
-          <p>Loại hình : Thu hộ tiền cước</p>
+          <p>Loại hình : Chưa có API</p>
           <Row>
             <Col xs={6}>
               <p>
@@ -149,7 +149,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             </Col>
             <Col xs={6}>
               <p>
-                <strong>110.000 (vnđ)</strong>
+                <strong>{data && data.COD} (vnđ)</strong>
               </p>
             </Col>
           </Row>

@@ -3,16 +3,16 @@ import { Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Cell } from 'react-table';
-import { ceil, get } from 'lodash';
+import { ceil, get, split } from 'lodash';
 import moment from 'moment';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import Scan from 'components/Input/Scan';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
+import PrintableThongTinDonHang from '../../../components/PrintableThongTinDonHang';
 
 interface Props {
   getThongTinBangKe: () => void;
@@ -33,20 +33,23 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     getThongTinBangKe();
   };
 
-  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <ButtonPrintable
-      btnProps={{
-        className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
-      }}
-      modalBodyProps={{
-        children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
-      }}
-      modalHeaderProps={{
-        children: t('In danh sách bưu gửi của bảng kê'),
-      }}
-    />
-  );
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => {
+    const thisIdChuyenThu = split(idChuyenThu, '_');
+    return (
+      <ButtonPrintable
+        btnProps={{
+          className: 'SipTableFunctionIcon',
+          children: <i className="fa fa-print fa-lg color-green" />,
+        }}
+        modalBodyProps={{
+          children: <PrintableThongTinDonHang idDonHang={thisIdChuyenThu[0]} />,
+        }}
+        modalHeaderProps={{
+          children: t('In danh sách bưu gửi của bảng kê'),
+        }}
+      />
+    );
+  };
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -63,7 +66,7 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Mã bưu gửi'),
-        accessor: 'TOR_ID',
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Điểm đi'),
@@ -92,7 +95,7 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return renderPrintButton(get(row, 'values.TOR_ID', ''));
+          return renderPrintButton(get(row, 'values.PACKAGE_ID', ''));
         },
       },
     ],
