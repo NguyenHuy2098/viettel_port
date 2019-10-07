@@ -60,7 +60,7 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
       IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: 'BDH',
       // IV_DATE: moment().format('YYYYMMDD'),
-      IV_DATE: '20191004',
+      IV_DATE: '20191005',
     };
     dispatch(action_ZTMI240(payload));
   }, [dispatch]);

@@ -63,7 +63,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           IV_FR_LOC_ID: userMaBp,
           IV_CUST_STATUS: '101',
           IV_FR_DATE: moment()
-            .subtract(7, 'day')
+            .subtract(2, 'day')
             .format('YYYYMMDD'),
           IV_TO_DATE: moment().format('YYYYMMDD'),
           IV_PAGENO: '1',
