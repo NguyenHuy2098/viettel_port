@@ -152,7 +152,7 @@ const ThongTinBangKePhieuGui = Loadable({
   loading: Loading,
 });
 const KhaiThacTai = Loadable({
-  loader: (): any => import('containers/KhaiThacDen/KhaiThacDen'),
+  loader: (): any => import('containers/KhaiThacDen/KhaiThacTai'),
   loading: Loading,
 });
 const NhanBangKePhieuGui = Loadable({
