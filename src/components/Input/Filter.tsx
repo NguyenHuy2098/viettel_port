@@ -40,7 +40,7 @@ const Filter = (props: Props): JSX.Element => {
 
   return (
     <Row className={classNames('flex-fill', get(containerProps, 'className'))}>
-      <Col lg={9}>
+      <Col lg={5}>
         <div className="sipTitleRightBlockInput">
           {leftIcon || <i className="fa fa-search" />}
           <Input className="bg-gray-100" onKeyPress={handleInputKeyPress} type="search" {...rest} />

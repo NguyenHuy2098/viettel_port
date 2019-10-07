@@ -1,5 +1,17 @@
 import React, { KeyboardEvent, useEffect } from 'react';
-import { Row, TabContent, Col, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'reactstrap';
+import {
+  Row,
+  TabContent,
+  Col,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+  Badge,
+  Input,
+  InputGroupAddon,
+  InputGroup,
+} from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -80,15 +92,32 @@ const NhanBangKePhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
     }
   }
 
+  const renderToolbar = (): JSX.Element => (
+    <Row className="mb-3 sipTitleContainer">
+      <Col className="px-0" md={8}>
+        <h3>{t('Nhận bảng kê / phiếu gửi')}</h3>
+      </Col>
+      <Col className="px-0" md={4}>
+        <InputGroup>
+          <InputGroupAddon addonType="prepend">
+            <span className="input-group-text">
+              <i className="fa fa-search" />
+            </span>
+          </InputGroupAddon>
+          <Input
+            className="w-25"
+            type="search"
+            placeholder={t('Tra cứu bảng kê/phiếu gửi ')}
+            onKeyUp={handleForwardingSearch}
+          />
+        </InputGroup>
+      </Col>
+    </Row>
+  );
+
   return (
     <>
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Nhận bảng kê / phiếu gửi')}</h1>
-        <Col xl={2} className="sipTitleRightBlockInput m-0 p-0">
-          <i className="fa fa-search" />
-          <Input type="text" placeholder={t('Tra cứu bảng kê/phiếu gửi ')} onKeyUp={handleForwardingSearch} />
-        </Col>
-      </Row>
+      {renderToolbar()}
       <div className="sipTabContainer sipFlatContainer">
         <Nav tabs>
           <NavItem>

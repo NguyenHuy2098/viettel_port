@@ -1,6 +1,18 @@
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge, Input } from 'reactstrap';
+import {
+  Col,
+  Row,
+  TabContent,
+  TabPane,
+  Nav,
+  NavItem,
+  NavLink,
+  Badge,
+  Input,
+  InputGroup,
+  InputGroupAddon,
+} from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { push } from 'connected-react-router';
@@ -88,18 +100,27 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     }
   }
 
+  const renderToolbar = (): JSX.Element => (
+    <Row className="mb-3 sipTitleContainer">
+      <Col className="px-0" md={8}>
+        <h3>{t('Nhận tải kiện')}</h3>
+      </Col>
+      <Col className="px-0" md={4}>
+        <InputGroup>
+          <InputGroupAddon addonType="prepend">
+            <span className="input-group-text">
+              <i className="fa fa-search" />
+            </span>
+          </InputGroupAddon>
+          <Input type="text" placeholder={t('Tra cứu tải/kiện')} onKeyUp={handleTraCuuTaiKien} />
+        </InputGroup>
+      </Col>
+    </Row>
+  );
+
   return (
     <>
-      <div className="row mt-3" />
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Nhận tải kiện')}</h1>
-        <div className="sipTitleRightBlockInput m-0">
-          <i className="fa fa-search" />
-          <Input type="text" placeholder={t('Tra cứu tải/kiện')} onKeyUp={handleTraCuuTaiKien} />
-        </div>
-      </Row>
-      <div className="row mt-3" />
-
+      {renderToolbar()}
       <div className="sipTabContainer sipFlatContainer">
         <Nav tabs className="shadow-sm">
           <NavItem>

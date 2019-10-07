@@ -56,7 +56,7 @@ const PhanCongPhatNhan: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Phân Công Phát/Nhận')}</h1>
+        <h3>{t('Phân Công Phát/Nhận')}</h3>
       </Row>
       <div className="row mt-3" />
       <div className="sipTabContainer sipFlatContainer">
