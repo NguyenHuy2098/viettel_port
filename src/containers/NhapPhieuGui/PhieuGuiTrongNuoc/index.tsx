@@ -737,7 +737,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Width: item.Width === '' ? undefined : item.Width,
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
-          Currency: 'VN',
+          Currency: '',
           COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
           COD: item.COD === '' ? undefined : item.COD,
@@ -932,7 +932,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Width: item.Width === '' ? undefined : item.Width,
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
-          Currency: 'VN',
+          Currency: '',
           COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
           COD: item.COD === '' ? undefined : item.COD,

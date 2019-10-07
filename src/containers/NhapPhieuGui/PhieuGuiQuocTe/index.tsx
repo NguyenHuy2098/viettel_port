@@ -195,18 +195,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       .required(t('Vui lòng nhập trọng lượng'))
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
       .typeError(t('Vui lòng nhập định dạng số')),
-    kichThuocDai: yup
-      .number()
-      .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số')),
-    kichThuocRong: yup
-      .number()
-      .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số')),
-    kichThuocCao: yup
-      .number()
-      .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số')),
   });
 
   const packageItemErrors: PackageItemErrors[] = [];
@@ -283,9 +271,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [soLuong, setSoLuong] = useState<string>('');
   const [giaTri, setGiaTri] = useState<string>('');
   const [trongLuong, setTrongLuong] = useState<string>('');
-  const [kichThuocDai, setKichThuocDai] = useState<string>('');
-  const [kichThuocRong, setKichThuocRong] = useState<string>('');
-  const [kichThuocCao, setKichThuocCao] = useState<string>('');
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
@@ -332,15 +317,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     NET_WEIGHT: '',
   };
   const firstPackageItem = {
-    Width: kichThuocRong,
     COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
     COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: giaTri,
     GROSS_WEIGHT: trongLuong,
-    Length: kichThuocDai,
-    Hight: kichThuocCao,
     PACKAGING_MATERIAL: '',
     QUANTITY_OF_PACKAGE: soLuong,
     Description: tenHang,
@@ -417,9 +399,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     soLuong: trim(soLuong) === '' ? undefined : trim(soLuong),
     giaTri: trim(giaTri) === '' ? undefined : trim(giaTri),
     trongLuong: trim(trongLuong) === '' ? undefined : trim(trongLuong),
-    kichThuocDai: trim(kichThuocDai) === '' ? undefined : trim(kichThuocDai),
-    kichThuocRong: trim(kichThuocRong) === '' ? undefined : trim(kichThuocRong),
-    kichThuocCao: trim(kichThuocCao) === '' ? undefined : trim(kichThuocCao),
     //_____non-validated items
     loaiHangHoa: trim(loaiHangHoa),
   };
@@ -461,9 +440,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setTrongLuong(
         orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(2) : '',
       );
-      setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(2) : '');
-      setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(2) : '');
-      setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(2) : '');
       const thisServiceType: string[] = drop(get(orderInformationInstane, 'SERVICE_TYPE', ''), 1);
       const thisTransportServiceType =
         findIndex(thisServiceType, (item: string): boolean => {
@@ -689,7 +665,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Width: item.Width === '' ? undefined : item.Width,
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
-          Currency: 'VN',
+          Currency: '',
           COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
@@ -845,7 +821,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           Width: item.Width === '' ? undefined : item.Width,
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
-          Currency: 'VN',
+          Currency: '',
           COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
@@ -928,9 +904,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setSoLuong('');
     setGiaTri('');
     setTrongLuong('');
-    setKichThuocDai('');
-    setKichThuocRong('');
-    setKichThuocCao('');
     setPhuongThucVanChuyen('VCN');
     // setLoaiHangHoa('V3');
     // setNguoiThanhToan('PP');
@@ -1194,40 +1167,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  function renderPackageSize(): JSX.Element {
-    return (
-      <Row className="sipInputItemGroup">
-        <Col xs="12" md="4" className="mb-2">
-          <Input
-            type="text"
-            placeholder={t('Dài (cm)')}
-            value={kichThuocDai}
-            onChange={handleChangeTextboxValue(setKichThuocDai)}
-          />
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocDai')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input
-            type="text"
-            placeholder={t('Rộng (cm)')}
-            value={kichThuocRong}
-            onChange={handleChangeTextboxValue(setKichThuocRong)}
-          />
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocRong')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input
-            type="text"
-            placeholder={t('Cao (cm)')}
-            value={kichThuocCao}
-            onChange={handleChangeTextboxValue(setKichThuocCao)}
-          />
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocCao')}</div>
-        </Col>
-      </Row>
-    );
-  }
-
   function renderPackageType(): JSX.Element {
     return (
       <Row>
@@ -1330,12 +1269,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
           </Col>
-        </Row>
-        <Row className="sipInputItem mb-0">
-          <Label xs="12" lg="4">
-            {t('Kích thước')}
-          </Label>
-          <Col lg="8">{renderPackageSize()}</Col>
         </Row>
       </div>
     );

@@ -69,40 +69,6 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
     };
   }
 
-  function renderPackageSize(item: PackageItemInputType, index: number): JSX.Element {
-    return (
-      <Row className="sipInputItemGroup">
-        <Col xs="12" md="4" className="mb-2">
-          <Input
-            type="text"
-            placeholder={t('Dài (cm)')}
-            value={item.Length}
-            onChange={handleChangeTextboxValue('Length', index)}
-          />
-          <div className="sipInputItemError">{handleErrorMessage(index, 'Length')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input
-            type="text"
-            placeholder={t('Rộng (cm)')}
-            value={item.Width}
-            onChange={handleChangeTextboxValue('Width', index)}
-          />
-          <div className="sipInputItemError">{handleErrorMessage(index, 'Width')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input
-            type="text"
-            placeholder={t('Cao (cm)')}
-            value={item.Hight}
-            onChange={handleChangeTextboxValue('Hight', index)}
-          />
-          <div className="sipInputItemError">{handleErrorMessage(index, 'Hight')}</div>
-        </Col>
-      </Row>
-    );
-  }
-
   function renderPackageType(index: number): JSX.Element {
     return (
       <Row className="sipInputItem">
@@ -203,12 +169,6 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GROSS_WEIGHT')}</div>
           </Col>
-        </Row>
-        <Row className="sipInputItem mb-0">
-          <Label xs="12" lg="4">
-            {t('Kích thước')}
-          </Label>
-          <Col lg="8">{renderPackageSize(item, index)}</Col>
         </Row>
       </div>
     );
