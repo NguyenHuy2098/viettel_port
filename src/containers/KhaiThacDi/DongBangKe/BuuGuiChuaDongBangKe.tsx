@@ -9,7 +9,7 @@ import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
 import { push } from 'connected-react-router';
 import { generatePath } from 'react-router';
 import routesMap from 'utils/routesMap';
-// import moment from 'moment';
+import moment from 'moment';
 
 interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
   DES?: string;
