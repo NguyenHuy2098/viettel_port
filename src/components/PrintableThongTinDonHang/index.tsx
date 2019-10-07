@@ -1,15 +1,10 @@
-import React, { ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import { Cell } from 'react-table';
 import JsBarcode from 'jsbarcode';
 import moment from 'moment';
-
-import { ceil, get, isEmpty } from 'lodash';
-import DataTable from 'components/DataTable/Printable';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import logo from '../../assets/img/logo.png';
+import { get, isEmpty } from 'lodash';
 import { action_MIOA_ZTMI031 } from '../../redux/MIOA_ZTMI031/actions';
 import { action_GET_ADDRESS } from '../../redux/SearchLocation/actions';
 
@@ -52,6 +47,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idDonHang]);
 
+  // eslint-disable-next-line max-lines-per-function
   useEffect((): void => {
     if (data) {
       if (data.PROVINCE_ID_SOURCE) {
@@ -137,6 +133,66 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  function renderABC(): JSX.Element {
+    return (
+      <Row className="border-bottom">
+        <Col xs={3} className="border-right pt-2">
+          <p>{t('Thu hộ')}</p>
+        </Col>
+        <Col xs={9} className="pt-2">
+          <p>Loại hình : Thu hộ tiền cước</p>
+          <Row>
+            <Col xs={6}>
+              <p>
+                <strong>Tiền thu hộ:</strong>
+              </p>
+            </Col>
+            <Col xs={6}>
+              <p>
+                <strong>110.000 (vnđ)</strong>
+              </p>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    );
+  }
+
+  function renderKhachHangNhan(): JSX.Element {
+    return (
+      <Row className="border-bottom">
+        <Col xs={3} className="border-right pt-2">
+          <p>{t('Khách hàng nhận')}</p>
+        </Col>
+        <Col xs={9} className="pt-2">
+          <p>Người nhận : {data && data.CONSIGNEE_NAME}</p>
+          <p>Điện thoại: {data && data.MOBILE_PHONE_DES}</p>
+          <p>
+            Đia chỉ:
+            {data &&
+              `${data.HOUSE_NO_DES ? data.HOUSE_NO_DES : ''}${' '}
+                  ${data.STREET_ID_DES ? data.STREET_ID_DES : ''}${' '}
+                  ${wardReceiver}${' '}
+                  ${districtReceiver}${' '}
+                  ${provinceReceiver}`}
+          </p>
+          <table className="table">
+            <tr>
+              <td className="border-0">{wardReceiver}</td>
+              <td className="border-0">Tỉnh phát:</td>
+            </tr>
+            <tr>
+              <td className="border-0">{districtReceiver}</td>
+              <td className="border-0">
+                <strong>{provinceReceiver}</strong>
+              </td>
+            </tr>
+          </table>
+        </Col>
+      </Row>
+    );
+  }
+
   return (
     <Container>
       <Col className="border">
@@ -180,56 +236,8 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             </p>
           </Col>
         </Row>
-        <Row className="border-bottom">
-          <Col xs={3} className="border-right pt-2">
-            <p>{t('Khách hàng nhận')}</p>
-          </Col>
-          <Col xs={9} className="pt-2">
-            <p>Người nhận : {data && data.CONSIGNEE_NAME}</p>
-            <p>Điện thoại: {data && data.MOBILE_PHONE_DES}</p>
-            <p>
-              Đia chỉ:
-              {data &&
-                `${data.HOUSE_NO_DES ? data.HOUSE_NO_DES : ''}${' '}
-                  ${data.STREET_ID_DES ? data.STREET_ID_DES : ''}${' '}
-                  ${wardReceiver}${' '}
-                  ${districtReceiver}${' '}
-                  ${provinceReceiver}`}
-            </p>
-            <table className="table">
-              <tr>
-                <td className="border-0">{wardReceiver}</td>
-                <td className="border-0">Tỉnh phát:</td>
-              </tr>
-              <tr>
-                <td className="border-0">{districtReceiver}</td>
-                <td className="border-0">
-                  <strong>{provinceReceiver}</strong>
-                </td>
-              </tr>
-            </table>
-          </Col>
-        </Row>
-        <Row className="border-bottom">
-          <Col xs={3} className="border-right pt-2">
-            <p>{t('Thu hộ')}</p>
-          </Col>
-          <Col xs={9} className="pt-2">
-            <p>Loại hình : Thu hộ tiền cước</p>
-            <Row>
-              <Col xs={6}>
-                <p>
-                  <strong>Tiền thu hộ:</strong>
-                </p>
-              </Col>
-              <Col xs={6}>
-                <p>
-                  <strong>110.000 (vnđ)</strong>
-                </p>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        {renderKhachHangNhan()}
+        {renderABC()}
         <Row className="border-bottom">
           <Col xs={6} className="border-right pt-2">
             <div>
