@@ -9,6 +9,7 @@ import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
 import { action_MIOA_ZTMI235 } from 'redux/ZTMI235/actions';
+import { action_ZTMI239 } from 'redux/ZTMI239/actions';
 import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
@@ -54,29 +55,50 @@ const QuetMa: React.FC = (): JSX.Element => {
                         IV_USER: userId,
                       },
                       {
+                        // eslint-disable-next-line max-lines-per-function
                         onSuccess: (data: API.MIOAZTMI063Response): void => {
                           if (data.Status) {
                             const payload235 = {
-                              mabuupham: get(data023, 'PACKAGE_ID', ''),
-                              gtc: get(data023, 'DEFINE_GTC', ''),
-                              comtype: get(data023, 'CCODE_TYPE', ''),
-                              nhomdichvu: get(data023, 'SERVGROUP', ''),
-                              loaidichvụ: get(data023, 'TRANSSRVREQ_CODE', ''),
-                              diemdi: get(data023, 'RECENT_LOC', ''),
-                              tinhden: get(data023, 'DEST_LOC', ''),
+                              MaBuuPham: get(data023, 'PACKAGE_ID', ''),
+                              GTC: get(data023, 'DEFINE_GTC', ''),
+                              COMTYPE: get(data023, 'CCODE_TYPE', ''),
+                              NHOMDICHVU: get(data023, 'SERVGROUP', ''),
+                              LOAIDICHVU: get(data023, 'TRANSSRVREQ_CODE', ''),
+                              DIEMDI: get(data023, 'RECENT_LOC', ''),
+                              TINHDEN: get(data023, 'DEST_LOC', ''),
                             };
                             // const payload235 = {
-                            //   mabuupham: '2100030867',
-                            //   gtc: 'Y',
-                            //   comtype: 'V3',
-                            //   nhomdichvu: 'V02',
-                            //   loaidichvụ: 'VTH',
-                            //   diemdi: 'HCM',
-                            //   tinhden: 'HNI',
+                            //   MaBuuPham: '2100030867',
+                            //   GTC: 'Y',
+                            //   COMTYPE: 'V3',
+                            //   NHOMDICHVU: 'V02',
+                            //   LOAIDICHVU: 'VTH',
+                            //   DIEMDI: 'HCM',
+                            //   TINHDEN: 'HNI',
                             // };
                             dispatch(
                               action_MIOA_ZTMI235(payload235, {
-                                onSuccess: (data: ZTMI235Response): void => {},
+                                onSuccess: (data: ZTMI235Response): void => {
+                                  const payload239 = {
+                                    IV_PACKAGE_ID: codeChuyenThu,
+                                    IV_FLAG: '1',
+                                    IV_USER: userId,
+                                    IV_COMMODITY: get(data, 'loaiHangHoa', ''),
+                                    IV_SERVICE: get(data, 'loaiDichVu', ''),
+                                    IV_LINE: get(data, 'line', ''),
+                                    IV_MANIFEST_LOC: get(data, 'dongBangKe', ''),
+                                  };
+                                  dispatch(
+                                    action_ZTMI239(payload239, {
+                                      onSuccess: (data: API.ZTMI239Response): void => {
+                                        alert(get(data, 'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE'));
+                                      },
+                                      onFailure: (error: HttpRequestErrorType): void => {
+                                        alert(error.messages);
+                                      },
+                                    }),
+                                  );
+                                },
                               }),
                             );
                           } else {
@@ -159,7 +181,7 @@ const QuetMa: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [dataNhanChuyenThu],
   );
 
   function renderForwardingOrderCodeScan(): JSX.Element {

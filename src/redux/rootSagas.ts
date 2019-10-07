@@ -24,6 +24,7 @@ import watch_ZTMI240_SagaAsync from './ZTMI240/sagas';
 import watch_ZTMI241_SagaAsync from './ZTMI241/sagas';
 import watch_ZTMI213_SagaAsync from './ZTMI213/sagas';
 import watch_ZTMI235_SagaAsync from './ZTMI235/sagas';
+import watch_ZTMI239_SagaAsync from './ZTMI239/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -51,5 +52,6 @@ export default function* rootSagas(): SagaIterator {
     call(watch_ZTMI241_SagaAsync),
     call(watch_ZTMI213_SagaAsync),
     call(watch_ZTMI235_SagaAsync),
+    call(watch_ZTMI239_SagaAsync),
   ]);
 }

@@ -25,6 +25,8 @@ const sapApis = [
   'ZTMI240',
   'ZTMI241',
   'ZTMI213',
+  'ZTMI235',
+  'ZTMI239',
 ];
 
 const crmApis = ['lvc'];
