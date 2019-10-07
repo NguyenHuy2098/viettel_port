@@ -6,7 +6,7 @@ import { generatePath, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, filter, get, includes } from 'lodash';
+import { ceil, filter, get, includes, map } from 'lodash';
 import moment from 'moment';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
@@ -116,6 +116,21 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [listTaiKienDaNhan],
   );
 
+  const filteredListTaiKienDaNhanNew = map(
+    filteredListTaiKienDaNhan,
+    (item: API.Child): API.Child => {
+      return {
+        TOR_ID: item.TOR_ID ? item.TOR_ID : '',
+        SRC_LOC_IDTRQ: item.SRC_LOC_IDTRQ ? item.SRC_LOC_IDTRQ : '',
+        DES_LOC_IDTRQ: item.DES_LOC_IDTRQ ? item.DES_LOC_IDTRQ : '',
+        ITEM_TEXT: '1',
+        TOR_TYPE: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
+        DATETIME_CHLC: item.DATETIME_CHLC ? item.DATETIME_CHLC : '',
+        GRO_WEI_VAL: item.GRO_WEI_VAL ? item.GRO_WEI_VAL : '',
+      };
+    },
+  );
+
   function renderToolbar(): JSX.Element {
     return (
       <Row>
@@ -140,7 +155,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={filteredListTaiKienDaNhan} onRowClick={redirectToThongTinTai} />
+        <DataTable columns={columns} data={filteredListTaiKienDaNhanNew} onRowClick={redirectToThongTinTai} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

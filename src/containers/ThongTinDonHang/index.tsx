@@ -13,6 +13,8 @@ import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTM
 import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
 import { goBack } from 'connected-react-router';
+import PrintableModal from '../../components/Button/ButtonPrintable';
+import PrintableThongTinDonHang from '../../components/PrintableThongTinDonHang';
 
 interface Props {
   match: match;
@@ -153,6 +155,24 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
   };
 
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <PrintableModal
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-print fa-lg color-green" />,
+      }}
+      modalProps={{
+        size: 'lg',
+      }}
+      modalBodyProps={{
+        children: <PrintableThongTinDonHang idDonHang={idDonHang} />,
+      }}
+      modalHeaderProps={{
+        children: t('In Thông Tin Đơn Hàng'),
+      }}
+    />
+  );
+
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
@@ -206,13 +226,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
         Header: t('Quản trị'),
         accessor: '',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <>
-              <Button className="SipTableFunctionIcon">
-                <i className="fa fa-print fa-lg color-green" />
-              </Button>
-            </>
-          );
+          return renderPrintButton(get(row, 'values.TOR_ID', ''));
         },
       },
     ],
