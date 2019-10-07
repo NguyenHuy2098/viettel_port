@@ -47,7 +47,6 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   const [divideQuantity, setDivideQuantity] = useState<number>(0);
   const [subPackages, setSubPackages] = useState<SubPackage[]>([]);
   const [showListCoupon, setShowListCoupon] = useState<boolean>(false);
-  const [enableDivideButton, setEnableDivideButton] = useState<boolean>(true);
 
   const thongTinPhieuGui = useSelector(select_MT_ZTMI031_OUT);
   const ZTMI213_ResponseRow = useSelector(select_ZTMI213);
@@ -276,8 +275,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 type: 'success',
               },
             );
-            setEnableDivideButton(false);
             setShowDivideCouponUI(false);
+            setDivideQuantity(0);
             setShowListCoupon(true);
           },
           onFailure: (error: Error): void => {
@@ -359,7 +358,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           <Label className="mr-3">{t('Số lượng tách')}</Label>
           <div className="sipScanCodeContainer">
             <Input type="number" onChange={handerEnterDivideQuantity} />
-            <Button color="primary" onClick={handleDevideCoupon} disabled={divideQuantity <= 0 && enableDivideButton}>
+            <Button color="primary" onClick={handleDevideCoupon} disabled={divideQuantity <= 0}>
               {t('Tách phiếu')}
             </Button>
           </div>
@@ -369,6 +368,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   }
 
   const dispatchActionAPI_ZTMI031 = useCallback((): void => {
+    setShowListCoupon(false);
     dispatch(
       action_MIOA_ZTMI031(
         { FWO_ID: searchKey, Buyer_reference_Number: '' },
