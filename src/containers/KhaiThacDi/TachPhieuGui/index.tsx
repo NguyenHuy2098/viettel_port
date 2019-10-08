@@ -215,6 +215,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     let totalSubPackagesQuantity = 0;
     for (let i = 0; i < subPackages.length; i++) {
       totalSubPackagesQuantity += subPackages[i].QUANTITY;
+      if (subPackages[i].QUANTITY === 0) return true;
     }
 
     return totalSubPackagesQuantity !== toNumber(thongTinPhieuGui[0].Quantity);
@@ -224,7 +225,9 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     let totalSubPackagesWeight = 0;
     for (let i = 0; i < subPackages.length; i++) {
       totalSubPackagesWeight += subPackages[i].GROSS_WEIGHT;
+      if (subPackages[i].GROSS_WEIGHT === 0) return true;
     }
+
     return totalSubPackagesWeight !== toNumber(thongTinPhieuGui[0].GROSS_WEIGHT);
   };
 
@@ -257,6 +260,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       );
       return;
     }
+
     dispatch(
       action_ZTMI213(
         {
@@ -328,6 +332,13 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     );
   };
 
+  const disableButtonTachPhieu = useMemo((): boolean => {
+    if (divideQuantity <= 0) {
+      return true;
+    }
+    return false;
+  }, [divideQuantity]);
+
   function renderCouponInformation(): JSX.Element {
     return (
       <Row className="sipSummaryContent">
@@ -357,8 +368,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         <Col xs={12} className="mt-3">
           <Label className="mr-3">{t('Số lượng tách')}</Label>
           <div className="sipScanCodeContainer">
-            <Input type="number" onChange={handerEnterDivideQuantity} />
-            <Button color="primary" onClick={handleDevideCoupon} disabled={divideQuantity <= 0}>
+            <Input type="number" onChange={handerEnterDivideQuantity} value={divideQuantity} />
+            <Button color="primary" onClick={handleDevideCoupon} disabled={disableButtonTachPhieu}>
               {t('Tách phiếu')}
             </Button>
           </div>
@@ -398,6 +409,9 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 type: 'error',
               },
             );
+          },
+          onFinish: (): void => {
+            setDivideQuantity(0);
           },
         },
       ),
