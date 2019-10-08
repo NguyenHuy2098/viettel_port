@@ -22,6 +22,7 @@ import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selec
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 interface Props {
   getListTaiChuaDongChuyenThu: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
@@ -140,7 +141,20 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       }}
     />
   );
-
+  const inMaCoTaiButton = (idTai: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-barcode fa-lg color-blue" />,
+      }}
+      modalBodyProps={{
+        children: <PrintableMaCoTai idTai={idTai} />,
+      }}
+      modalHeaderProps={{
+        children: t('In mã cổ tải'),
+      }}
+    />
+  );
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -192,6 +206,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
+              {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
                 <i className="fa fa-pencil fa-lg color-blue" />

@@ -21,6 +21,7 @@ import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { SipDataType } from 'utils/enums';
+import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 interface Props {
   match: match;
@@ -215,6 +216,20 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     />
   );
 
+  const inMaCoTaiButton = (idTai: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-barcode fa-lg color-blue" />,
+      }}
+      modalBodyProps={{
+        children: <PrintableMaCoTai idTai={idTai} />,
+      }}
+      modalHeaderProps={{
+        children: t('In mã cổ tải'),
+      }}
+    />
+  );
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -266,6 +281,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.Child>): JSX.Element => (
           <>
+            {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
             {renderPrintButton(get(row, 'values.TOR_ID', ''))}
             <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
               <i className="fa fa-trash-o fa-lg color-red" />

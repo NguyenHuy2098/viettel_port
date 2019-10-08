@@ -16,6 +16,7 @@ import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTui
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 interface Props {
   getTaiKienChuaNhan: (IV_PAGENO?: number) => void;
@@ -44,6 +45,20 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
       }}
       modalHeaderProps={{
         children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
+  const inMaCoTaiButton = (idTai: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-barcode fa-lg color-blue" />,
+      }}
+      modalBodyProps={{
+        children: <PrintableMaCoTai idTai={idTai} />,
+      }}
+      modalHeaderProps={{
+        children: t('In mã cổ tải'),
       }}
     />
   );
@@ -89,7 +104,12 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return renderPrintButton(get(row, 'values.TOR_ID', ''));
+          return (
+            <>
+              {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
+              {renderPrintButton(get(row, 'values.TOR_ID', ''))}
+            </>
+          );
         },
       },
     ],

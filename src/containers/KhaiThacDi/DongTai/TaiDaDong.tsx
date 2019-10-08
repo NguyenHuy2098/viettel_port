@@ -17,6 +17,7 @@ import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'r
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {
@@ -94,6 +95,20 @@ const TaiDaDong: React.FC = (): JSX.Element => {
       }}
     />
   );
+  const inMaCoTaiButton = (idTai: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-barcode fa-lg color-blue" />,
+      }}
+      modalBodyProps={{
+        children: <PrintableMaCoTai idTai={idTai} />,
+      }}
+      modalHeaderProps={{
+        children: t('In mã cổ tải'),
+      }}
+    />
+  );
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
@@ -125,7 +140,12 @@ const TaiDaDong: React.FC = (): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return renderPrintButton(get(row, 'values.TOR_ID', ''));
+          return (
+            <>
+              {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
+              {renderPrintButton(get(row, 'values.TOR_ID', ''))}
+            </>
+          );
         },
       },
     ],

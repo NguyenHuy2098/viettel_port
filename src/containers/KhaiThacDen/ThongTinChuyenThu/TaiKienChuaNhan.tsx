@@ -16,6 +16,7 @@ import Scan from 'components/Input/Scan';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 interface Props {
   getThongTinChuyenThu: () => void;
@@ -46,6 +47,20 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       }}
       modalHeaderProps={{
         children: t('In danh sách bảng kê thuộc tải'),
+      }}
+    />
+  );
+  const inMaCoTaiButton = (idTai: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-barcode fa-lg color-blue" />,
+      }}
+      modalBodyProps={{
+        children: <PrintableMaCoTai idTai={idTai} />,
+      }}
+      modalHeaderProps={{
+        children: t('In mã cổ tải'),
       }}
     />
   );
@@ -102,7 +117,12 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return renderPrintButton(get(row, 'values.TOR_ID', ''));
+          return (
+            <>
+              {renderPrintButton(get(row, 'values.TOR_ID', ''))}
+              {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
+            </>
+          );
         },
       },
     ],

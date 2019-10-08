@@ -20,6 +20,7 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -149,6 +150,20 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
       }}
     />
   );
+  const inMaCoTaiButton = (idTai: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <i className="fa fa-barcode fa-lg color-blue" />,
+      }}
+      modalBodyProps={{
+        children: <PrintableMaCoTai idTai={idTai} />,
+      }}
+      modalHeaderProps={{
+        children: t('In mã cổ tải'),
+      }}
+    />
+  );
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
@@ -182,7 +197,9 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
+              {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
+
               <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>
@@ -195,7 +212,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [listTaiChuaHoanThanh],
   );
 
   const data = map(listTaiChuaHoanThanh, (item: API.RowMTZTMI047OUT) => {
