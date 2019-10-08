@@ -13,7 +13,7 @@ body {
 }
 //.btn-primary {
 //  background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
-//  border-color: #299f9a;
+//  border-color: $primary;
 //}
 .no-margin {
   margin: 0 !important;
@@ -113,7 +113,7 @@ input.form-control:-moz-placeholder {
       display: inline-block;
     }
     &:checked {
-      color: #299f9a;
+      color: $primary;
       &:after {
         content: '\F192';
       }
@@ -143,7 +143,7 @@ input.form-control:-moz-placeholder {
       display: inline-block;
     }
     &:checked {
-      color: #299f9a;
+      color: $primary;
       &:after {
         content: '\F14A';
       }
@@ -163,8 +163,6 @@ input.form-control:-moz-placeholder {
     position: absolute;
     top: 14px;
     right: 4px;
-    background: #2db4a1 !important;
-    color: #fff !important;
     box-shadow: none;
     font-size: 12px;
     padding: 0;
@@ -218,19 +216,19 @@ input.form-control:-moz-placeholder {
         padding: 12px 8px 12px 38px;
         position: relative;
         i {
-          color: #299f9a !important;
+          color: $primary !important;
           font-size: 18px;
           position: absolute;
           top: 12px;
           left: 10px;
         }
         &.active {
-          color: #fd8301 !important;
+          color: $secondary !important;
         }
         &:hover {
-          border-color: #299f9a !important;
+          border-color: $primary !important;
           background: #fff !important;
-          color: #299f9a !important;
+          color: $primary !important;
         }
       }
       .nav-dropdown {
@@ -246,9 +244,9 @@ input.form-control:-moz-placeholder {
           }
         }
         &.open .nav-dropdown-toggle {
-          border-color: #299f9a !important;
+          border-color: $primary !important;
           background: #fff !important;
-          color: #299f9a !important;
+          color: $primary !important;
           &:before {
             -webkit-transform: rotate(90deg);
             transform: rotate(90deg);
@@ -315,7 +313,7 @@ input.form-control:-moz-placeholder {
   .modal-content {
     border: none;
     .modal-header {
-      background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
+      background-color: $primary;
       padding: 10px 15px;
       .modal-title {
         font-size: 18px;
@@ -337,7 +335,7 @@ input.form-control:-moz-placeholder {
       padding: 20px 20px 0;
       .form-group {
         label {
-          color: #299f9a;
+          color: $primary;
           font-weight: 600;
         }
       }
@@ -376,7 +374,7 @@ input.form-control:-moz-placeholder {
     min-width: 800px;
     th {
       border-top: none;
-      color: #299f9a;
+      color: $primary;
       font-weight: 600;
     }
     th,
@@ -431,7 +429,7 @@ html:not([dir='rtl']) .sidebar {
   border: none;
   line-height: inherit;
   font-weight: inherit;
-  color: #299f9a !important;
+  color: $primary !important;
   box-shadow: none !important;
   position: relative;
   top: -1px;
@@ -469,7 +467,7 @@ html:not([dir='rtl']) .sidebar {
     .sipPaginationPrev {
       margin-top: 2px;
       .page-link {
-        background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
+        background-color: $primary;
         color: #fff;
         border-radius: 4px;
         min-width: 32px;
@@ -538,11 +536,11 @@ html:not([dir='rtl']) .sidebar {
           border-radius: 8px;
         }
         &.active {
-          border-bottom-color: #fd8301;
+          border-bottom-color: $secondary;
           color: #4a4a4a;
           font-weight: bold;
           .badge {
-            background-color: #299f9a;
+            background-color: $primary;
           }
         }
       }
@@ -563,8 +561,8 @@ html:not([dir='rtl']) .sidebar {
 }
 .sipButtonTypeC {
   background-color: white;
-  color: #1f7673;
-  border-color: #299f9a;
+  color: $primary;
+  border-color: $primary;
   display: flex;
   align-items: center;
 }
@@ -623,7 +621,7 @@ html:not([dir='rtl']) .sidebar {
     span {
       display: block;
       &:first-child {
-        color: #299f9a;
+        color: $primary;
         font-weight: 600;
         font-size: 15px;
         margin-bottom: 3px;
@@ -746,7 +744,7 @@ html:not([dir='rtl']) .sidebar {
     width: 250px;
     overflow: visible;
     .nav-link {
-      background: #2db4a1;
+      background: $primary;
       color: #fff;
     }
   }

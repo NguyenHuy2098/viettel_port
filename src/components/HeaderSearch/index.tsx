@@ -1,11 +1,12 @@
-import React, { useState, FormEvent, KeyboardEvent, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { generatePath } from 'react-router-dom';
-import { includes, size, trim } from 'lodash';
+import React, { useState, useEffect } from 'react';
 import { Button, Input, FormGroup } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { action_CHECK_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
+import { useDispatch } from 'react-redux';
+import { generatePath } from 'react-router-dom';
 import { push, replace } from 'connected-react-router';
+import { includes, size, trim } from 'lodash';
+
+import { action_CHECK_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -16,8 +17,6 @@ interface Props {
 const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  //________hook to trigger input focus validating
   const [searchValue, setSearchValue] = useState<string>('');
 
   useEffect((): void => {
@@ -34,11 +33,6 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
     setSearchValue(event.currentTarget.value);
   };
 
-  const payloadOrder = {
-    FWO_ID: searchValue,
-    BUYER_REFERENCE_NUMBER: '',
-  };
-
   const handleOrderSearch = (): void => {
     if (size(trim(searchValue))) {
       if (includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN)) {
@@ -46,13 +40,18 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
       } else {
         dispatch(push(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
       }
-      dispatch(action_CHECK_MIOA_ZTMI031(payloadOrder));
+      dispatch(
+        action_CHECK_MIOA_ZTMI031({
+          FWO_ID: searchValue,
+          BUYER_REFERENCE_NUMBER: '',
+        }),
+      );
     }
   };
 
-  function handleEnterSearch(e: KeyboardEvent<HTMLInputElement>): void {
-    if (e.keyCode === 13) handleOrderSearch();
-  }
+  const handleEnterSearch = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.charCode === 13) handleOrderSearch();
+  };
 
   return (
     <>
@@ -62,9 +61,9 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
           placeholder={t('Tra cứu đơn hàng')}
           value={searchValue}
           onChange={handleChangeTextboxValue}
-          onKeyUp={handleEnterSearch}
+          onKeyPress={handleEnterSearch}
         />
-        <Button onClick={handleOrderSearch}>
+        <Button color="primary" onClick={handleOrderSearch}>
           <i className="fa fa-search fa-lg" />
         </Button>
       </FormGroup>
