@@ -10,7 +10,6 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
-import TraCuu from 'components/Input/TraCuu';
 import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorPagingCount, makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
@@ -103,9 +102,6 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     <Row className="mb-3 sipTitleContainer">
       <Col className="px-0" md={8}>
         <h3>{t('Nhận chuyến thư')}</h3>
-      </Col>
-      <Col className="px-0" md={4}>
-        <TraCuu placeholder={t('Tra cứu chuyến thư')} />
       </Col>
     </Row>
   );

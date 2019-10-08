@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
-import TraCuu from 'components/Input/TraCuu';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import {
   makeSelectorCountBangKeChuaNhanPhieuGui,
@@ -70,9 +69,6 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
     <Row className="mb-3 sipTitleContainer">
       <Col className="px-0" md={8}>
         <h3>{t('Nhận bảng kê / phiếu gửi')}</h3>
-      </Col>
-      <Col className="px-0" md={4}>
-        <TraCuu placeholder={t('Tra cứu bảng kê/phiếu gửi')} />
       </Col>
     </Row>
   );

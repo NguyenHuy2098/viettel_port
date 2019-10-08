@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 
-import TraCuu from 'components/Input/TraCuu';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountChuyenThuChuaNhanTaiKien, makeSelectorRowSize } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
@@ -82,9 +81,6 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     <Row className="mb-3 sipTitleContainer">
       <Col className="px-0" md={8}>
         <h3>{t('Nhận tải kiện')}</h3>
-      </Col>
-      <Col className="px-0" md={4}>
-        <TraCuu placeholder={t('Tra cứu tải/kiện')} />
       </Col>
     </Row>
   );
