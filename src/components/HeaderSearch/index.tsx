@@ -30,11 +30,11 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
   }, [props.url]);
 
   const handleChangeTextboxValue = (event: React.FormEvent<HTMLInputElement>): void => {
-    setSearchValue(event.currentTarget.value);
+    setSearchValue(trim(event.currentTarget.value));
   };
 
   const handleOrderSearch = (): void => {
-    if (size(trim(searchValue))) {
+    if (size(searchValue)) {
       if (includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN)) {
         dispatch(replace(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
       } else {
