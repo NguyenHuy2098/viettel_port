@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { map, get, noop } from 'lodash';
+import { map, get } from 'lodash';
 import moment from 'moment';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
@@ -85,28 +85,6 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
     getListChuyenThu(payload);
   };
 
-  function printChuyenThu(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
-    return (event: React.MouseEvent): void => {
-      event.stopPropagation();
-      noop('print', tai.TOR_ID);
-    };
-  }
-
-  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <ButtonPrintable
-      btnProps={{
-        className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
-      }}
-      modalBodyProps={{
-        children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={idChuyenThu} />,
-      }}
-      modalHeaderProps={{
-        children: t('In thông tin chuyến thư'),
-      }}
-    />
-  );
-
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -138,9 +116,18 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
-            <Button className="SipTableFunctionIcon" onClick={printChuyenThu(row.original)}>
-              {renderPrintButton(row.original.TOR_ID)}
-            </Button>
+            <ButtonPrintable
+              btnProps={{
+                className: 'SipTableFunctionIcon',
+                children: <i className="fa fa-print fa-lg color-green" />,
+              }}
+              modalBodyProps={{
+                children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={get(row, 'original.TOR_ID')} />,
+              }}
+              modalHeaderProps={{
+                children: t('In thông tin chuyến thư'),
+              }}
+            />
           );
         },
       },

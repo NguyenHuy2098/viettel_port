@@ -1,24 +1,25 @@
 import React, { useEffect, useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
-import { push } from 'connected-react-router';
-import { map, get, noop } from 'lodash';
 import { Button, Col, Input, Row } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { generatePath } from 'react-router-dom';
+import { Cell } from 'react-table';
+import { push } from 'connected-react-router';
+import { map, get } from 'lodash';
+import moment from 'moment';
+
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import routesMap from 'utils/routesMap';
-import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
-import moment from 'moment';
-import { Cell } from 'react-table';
-import DataTable from 'components/DataTable';
-import Pagination from 'components/Pagination';
-import { generatePath } from 'react-router-dom';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
-import ButtonPrintable from 'components/Button/ButtonPrintable';
-import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -131,28 +132,6 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
     getListChuyenThu(payload);
   };
 
-  function printChuyenThu(tai: API.RowMTZTMI047OUT): (event: React.MouseEvent) => void {
-    return (event: React.MouseEvent): void => {
-      event.stopPropagation();
-      noop('print', tai.TOR_ID);
-    };
-  }
-
-  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <ButtonPrintable
-      btnProps={{
-        className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
-      }}
-      modalBodyProps={{
-        children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={idChuyenThu} />,
-      }}
-      modalHeaderProps={{
-        children: t('In thông tin chuyến thư'),
-      }}
-    />
-  );
-
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -185,9 +164,18 @@ const ChuyenThuChuaHoanThanh: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={printChuyenThu(row.original)}>
-                {renderPrintButton(row.original.TOR_ID)}
-              </Button>
+              <ButtonPrintable
+                btnProps={{
+                  className: 'SipTableFunctionIcon',
+                  children: <i className="fa fa-print fa-lg color-green" />,
+                }}
+                modalBodyProps={{
+                  children: <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={get(row, 'original.TOR_ID')} />,
+                }}
+                modalHeaderProps={{
+                  children: t('In thông tin chuyến thư'),
+                }}
+              />
               <Button className="SipTableFunctionIcon">
                 <i className="fa fa-pencil fa-lg color-blue" />
               </Button>
