@@ -4,7 +4,7 @@ import { Button, Row, Input, Label, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { map, find, reject } from 'lodash';
+import { get, isEmpty, map, find, reject } from 'lodash';
 
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
@@ -12,6 +12,7 @@ import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
 import { selectPhanCongNhan } from 'redux/MIOA_ZTMI035/selectors';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
+import { toast } from 'react-toastify';
 
 interface Props {
   match: match;
@@ -39,13 +40,14 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   });
   const [userIdSelected, setUserIdSelected] = useState<string | undefined>(undefined);
 
-  const handleSelectUserChange = useCallback(event => {
-    if (event.target.value === '') setUserIdSelected(undefined);
-    setUserIdSelected(event.target.value);
+  const handleSelectUserChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.currentTarget.value === '') setUserIdSelected(undefined);
+    else setUserIdSelected(event.currentTarget.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dispatchAPI035 = useCallback(() => {
+    if (isEmpty(userIdSelected)) return;
     dispatch(
       action_MIOA_ZTMI035(
         {
@@ -57,6 +59,17 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           IV_NO_PER_PAGE: '11',
         },
         {
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          },
           onFinish: (): void => {
             setDataSelected([]);
           },
@@ -103,9 +116,9 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Bưu cục đến'),
         accessor: 'TO_LOG_ID',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Thiếu Api</>;
-        },
+        // Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+        //   return <>Thiếu Api</>;
+        // },
       },
       {
         Header: t('Địa chỉ phát'),
@@ -118,9 +131,9 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ngày gửi bưu phẩm'),
         accessor: 'Created_on',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Thiếu Api</>;
-        },
+        // Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+        //   return <>Thiếu Api</>;
+        // },
       },
       {
         Header: t('Trạng thái'),
@@ -175,7 +188,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
               <i className="fa fa-search mr-2" />
               <Input type="select" className="pl-4" onChange={handleSelectUserChange}>
                 {/* eslint-disable-next-line react/jsx-max-depth */}
-                <option value="">{t('Chọn nhân viên')}</option>
+                <option value={''}>{t('Chọn nhân viên')}</option>
                 {map(listStaff, item => (
                   <option value={item.UNAME} key={item.UNAME}>
                     {item.NAME_TEXT}
