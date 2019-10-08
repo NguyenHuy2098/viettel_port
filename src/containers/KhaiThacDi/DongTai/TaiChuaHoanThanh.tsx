@@ -197,6 +197,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
   const data = map(listTaiChuaHoanThanh, (item: API.RowMTZTMI047OUT) => {
     const thisDescription = get(item, 'Childs[0].DESCRIPTION', '');
     return {
@@ -208,6 +209,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
       NOTE_OF: thisDescription ? thisDescription : '',
     };
   });
+
   return (
     <>
       <Row className="sipContentContainer">

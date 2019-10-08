@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { Cell } from 'react-table';
 import JsBarcode from 'jsbarcode';
 import moment from 'moment';
-
 import { ceil, get, isEmpty } from 'lodash';
 import DataTable from 'components/DataTable/Printable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
@@ -35,7 +34,7 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
           {
             onSuccess: (data: API.MIOAZTMI046Response): void => {
               setData(get(data, 'MT_ZTMI046_OUT.Row[0].CHILDS', []) || []);
-              setInfoChuyenThu(get(data, 'MT_ZTMI046_OUT.Row[0].CHILDS[0]'));
+              setInfoChuyenThu(get(data, 'MT_ZTMI046_OUT.Row[0]'));
             },
           },
           {
@@ -70,7 +69,9 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
       {
         Header: t('T.Lượng NET'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return `${ceil(get(row, 'original.GRO_WEI_VAL'), 2)} ${get(row, 'original.GRO_WEI_UNI')}`;
+          return get(row, 'original.GRO_WEI_VAL', '')
+            ? `${ceil(get(row, 'original.GRO_WEI_VAL'), 2)} ${get(row, 'original.GRO_WEI_UNI')}`
+            : '';
         },
       },
       {
@@ -83,7 +84,9 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
       },
       {
         Header: t('GHI CHÚ'),
-        accessor: 'DESCRIPTION',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.DESCRIPTION', '');
+        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -134,7 +137,7 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
             {get(infoChuyenThu, 'LOG_LOCID_SRC')}
           </div>
           <div>
-            {t('Mã túi thư')}
+            {t('Mã tải')}
             {t('COLON', ': ')}
             {get(infoChuyenThu, 'TOR_ID')}
           </div>
