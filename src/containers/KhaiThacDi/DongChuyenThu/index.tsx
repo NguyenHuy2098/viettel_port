@@ -5,10 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
 import { push } from 'connected-react-router';
 import { History } from 'history';
-import { get, toString } from 'lodash';
+import { get, isEmpty, toString } from 'lodash';
 import queryString from 'query-string';
 
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
+import { toastError } from 'components/Toast';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
@@ -41,7 +42,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const countKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRowCount);
 
-  function handleChangeTab(tab: number): void {
+  const handleChangeTab = (tab: number): void => {
     setTab(tab);
     dispatch(
       push({
@@ -49,7 +50,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         search: queryString.stringify({ tab }),
       }),
     );
-  }
+  };
 
   useEffect((): void => {
     if (tabParams.tab) {
@@ -57,6 +58,12 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabParams]);
+
+  const toastErrorOnSearch = (error: Error, torId: string): void => {
+    if (!isEmpty(torId)) {
+      toastError(error.message);
+    }
+  };
 
   const getListChuyenThuTaoMoi = (IV_PAGENO = 1, IV_TOR_ID = ''): void => {
     dispatch(
@@ -67,7 +74,11 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           IV_CUST_STATUS: SipDataState.TAO_MOI,
           IV_PAGENO,
         },
-        {},
+        {
+          onFailure: (error: Error) => {
+            toastErrorOnSearch(error, IV_TOR_ID);
+          },
+        },
         {
           flow: SipFlowType.KHAI_THAC_DI,
         },
@@ -84,7 +95,11 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           IV_CUST_STATUS: SipDataState.TAO_MOI,
           IV_PAGENO,
         },
-        {},
+        {
+          onFailure: (error: Error) => {
+            toastErrorOnSearch(error, IV_TOR_ID);
+          },
+        },
         {
           flow: SipFlowType.KHAI_THAC_DI,
         },
@@ -94,12 +109,38 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
 
   const getListKienChuaDongChuyenThu = (IV_PAGE_NO = 1, IV_PACKAGE_ID = ''): void => {
     dispatch(
-      action_ZTMI236({
-        IV_PACKAGE_ID,
-        IV_FREIGHT_UNIT_TYPE: SipDataType.KIEN,
-        IV_FREIGHT_UNIT_STATUS: ['306', '402'],
-        IV_PAGE_NO: toString(IV_PAGE_NO),
-      }),
+      action_ZTMI236(
+        {
+          IV_PACKAGE_ID,
+          IV_FREIGHT_UNIT_TYPE: SipDataType.KIEN,
+          IV_FREIGHT_UNIT_STATUS: ['306', '402'],
+          IV_PAGE_NO: toString(IV_PAGE_NO),
+        },
+        {
+          onFailure: (error: Error) => {
+            toastErrorOnSearch(error, IV_PACKAGE_ID);
+          },
+        },
+      ),
+    );
+  };
+
+  const getListChuyenThuDaDong = (IV_PAGENO = 1, IV_TOR_ID = ''): void => {
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_ID,
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.HOAN_THANH_CHUYEN_THU,
+          IV_PAGENO,
+        },
+        {
+          onFailure: (error: Error) => {
+            toastErrorOnSearch(error, IV_TOR_ID);
+          },
+        },
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
     );
   };
 
@@ -196,7 +237,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <ChuyenThuChuaHoanThanh />
+            <ChuyenThuChuaHoanThanh getListChuyenThuTaoMoi={getListChuyenThuTaoMoi} />
           </TabPane>
           <TabPane tabId={2}>
             <TaiChuaDongChuyenThu getListTaiChuaDongChuyenThu={getListTaiChuaDongChuyenThu} />
@@ -205,7 +246,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
             <KienChuaDongChuyenThu getListKienChuaDongChuyenThu={getListKienChuaDongChuyenThu} />
           </TabPane>
           <TabPane tabId={4}>
-            <ChuyenThuDaDong />
+            <ChuyenThuDaDong getListChuyenThuDaDong={getListChuyenThuDaDong} />
           </TabPane>
         </TabContent>
       </div>

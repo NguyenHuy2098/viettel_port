@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import moment from 'moment';
 
 import { sapApi } from 'utils/request';
@@ -18,5 +19,6 @@ export async function post_MIOA_ZTMI047(payload: Partial<API.MIOAZTMI047Request>
     IV_NO_PER_PAGE: '10',
     ...payload,
   });
-  return { data, params: payload };
+  if (get(data, 'MT_ZTMI047_OUT.EV_ERROR') === 1) return { data, params: payload };
+  throw new Error('Không tìm thấy dữ liệu.');
 }

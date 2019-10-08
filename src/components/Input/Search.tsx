@@ -2,7 +2,7 @@ import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import { Button, ButtonProps, Col, Input, InputProps, Row, RowProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { get } from 'lodash';
+import { get, trim } from 'lodash';
 
 interface Props extends InputProps {
   buttonProps?: ButtonProps;
@@ -18,7 +18,7 @@ const Filter = (props: Props): JSX.Element => {
 
   const submitSearch = (text = ''): void => {
     if (onSubmitSearch) {
-      onSubmitSearch(text);
+      onSubmitSearch(trim(text));
     }
   };
 
@@ -44,14 +44,15 @@ const Filter = (props: Props): JSX.Element => {
           <Input
             className="bg-gray-100"
             onChange={handleChangeSearchText}
+            onEmptied={handleClickSearch}
             onKeyPress={handleSubmitSearch}
             type="search"
             {...rest}
           />
         </div>
       </Col>
-      <Col className="px-0" lg={4} xl={3}>
-        <Button color="primary" onClick={handleClickSearch} {...buttonProps}>
+      <Col className="px-0">
+        <Button className="w-100" color="primary" onClick={handleClickSearch} {...buttonProps}>
           {get(buttonProps, 'children') || t('Tìm kiếm')}
         </Button>
       </Col>

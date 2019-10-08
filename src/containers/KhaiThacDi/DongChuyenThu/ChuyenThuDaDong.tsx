@@ -1,73 +1,45 @@
-import React, { useEffect, useCallback, useMemo, useState } from 'react';
-import { Button, Col, Input, Row } from 'reactstrap';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { map, get } from 'lodash';
+import { get } from 'lodash';
 import moment from 'moment';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
+import Search from 'components/Input/Search';
 import Pagination from 'components/Pagination';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
+interface Props {
+  getListChuyenThuDaDong: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const ChuyenThuDaDong: React.FC = (): JSX.Element => {
+const ChuyenThuDaDong: React.FC<Props> = (props: Props): JSX.Element => {
+  const { getListChuyenThuDaDong } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
-
   const listChuyenThuDaDong = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU));
   const countChuyenThuDaDong = useSelector(
     makeSelectorTotalItem(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU),
   );
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU));
 
-  const [torIdSearch, setTorIdSearch] = useState<string>('');
-
-  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(event.currentTarget.value);
-    };
-  }
-
-  const getListChuyenThu = useCallback(
-    function(payload = {}): void {
-      dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC3',
-          IV_FR_LOC_ID: userMaBp,
-          IV_CUST_STATUS: '104',
-          IV_FR_DATE: moment().format('YYYYMMDD'),
-          IV_TO_DATE: moment().format('YYYYMMDD'),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-          ...payload,
-        }),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, userMaBp],
-  );
-
   useEffect((): void => {
-    getListChuyenThu();
-  }, [getListChuyenThu]);
+    getListChuyenThuDaDong();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  function handleSearchChuyenThu(): void {
-    const payload = {
-      IV_TOR_ID: torIdSearch,
-    };
-    getListChuyenThu(payload);
-  }
+  const handleSearchChuyenThu = (searchText: string): void => {
+    getListChuyenThuDaDong(1, searchText);
+  };
 
   const handleRedirectDetail = useCallback(
     (item: API.RowMTZTMI047OUT): void => {
@@ -78,11 +50,7 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
   );
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
-    const payload = {
-      IV_TOR_ID: torIdSearch,
-      IV_PAGENO: selectedItem.selected + 1,
-    };
-    getListChuyenThu(payload);
+    getListChuyenThuDaDong(selectedItem.selected + 1);
   };
 
   const columns = useMemo(
@@ -98,7 +66,7 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Số lượng'),
-        accessor: 'countChuyenThu',
+        accessor: 'ITEM_NO',
       },
       {
         Header: t('Người nhập'),
@@ -106,11 +74,15 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Ngày nhập'),
-        accessor: 'CREATED_ON',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return moment(get(row, 'original.DATETIME_CHLC'), 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY');
+        },
       },
       {
         Header: t('Ghi chú'),
-        accessor: 'NOTE_OF',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.Childs[0].DESCRIPTION', '') || '';
+        },
       },
       {
         Header: t('Quản trị'),
@@ -133,50 +105,32 @@ const ChuyenThuDaDong: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [listChuyenThuDaDong],
   );
-  const data = map(listChuyenThuDaDong, (item: API.RowMTZTMI047OUT) => {
-    const thisDescription = get(item, 'Childs[0].DESCRIPTION', '');
-    return {
-      TOR_ID: item.TOR_ID ? item.TOR_ID : '',
-      LOG_LOCID_TO: item.LOG_LOCID_TO ? item.LOG_LOCID_TO : '',
-      countChuyenThu: item.ITEM_NO ? item.ITEM_NO : '',
-      CREATED_BY: item.CREATED_BY ? item.CREATED_BY : '',
-      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
-      NOTE_OF: thisDescription ? thisDescription : '',
-    };
-  });
+
+  const renderToolbar = (): JSX.Element => (
+    <Row>
+      <Col lg={6} xl={4}>
+        <Search onSubmitSearch={handleSearchChuyenThu} placeholder={t('Tìm kiếm chuyến thư')} />
+      </Col>
+      <Col lg={1}>
+        <Button color="white" className="sipTitleRightBlockBtnIcon sipBoxShadow">
+          <i className="fa fa-trash-o" />
+        </Button>
+      </Col>
+      <Col>
+        <p className="text-right mt-2 mb-0">
+          {t('Tổng số')}: <span>{countChuyenThuDaDong}</span>
+        </p>
+      </Col>
+    </Row>
+  );
+
   return (
     <>
-      <Row className="sipContentContainer">
-        <Col xl={6} lg={9} xs={12} className="p-0">
-          <div className="d-flex">
-            <div className="sipTitleRightBlockInput m-0">
-              <i className="fa fa-search" />
-              <Input
-                value={torIdSearch}
-                type="text"
-                placeholder={t('Tìm kiếm chuyến thư')}
-                onChange={handleChangeTextboxValue(setTorIdSearch)}
-              />
-            </div>
-            <Button color="primary" className="ml-2" onClick={handleSearchChuyenThu}>
-              {t('Tìm kiếm')}
-            </Button>
-            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-              <i className="fa fa-trash-o" />
-            </Button>
-          </div>
-        </Col>
-        <Col>
-          <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countChuyenThuDaDong}</span>
-          </p>
-        </Col>
-      </Row>
-      <div className="mt-3" />
+      <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listChuyenThuDaDong} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
