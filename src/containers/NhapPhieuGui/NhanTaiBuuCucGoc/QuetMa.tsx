@@ -13,6 +13,7 @@ import { action_ZTMI239 } from 'redux/ZTMI239/actions';
 import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { toast } from 'react-toastify';
 
 // eslint-disable-next-line max-lines-per-function
 const QuetMa: React.FC = (): JSX.Element => {
@@ -40,8 +41,15 @@ const QuetMa: React.FC = (): JSX.Element => {
           onSuccess: (data: API.MIOAZTMI023Response): void => {
             if (data.Status) {
               if (data.ErrorCode === 1) {
-                alert('Error at step 1');
-                alert(get(data, 'MT_ZTMI023_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+                toast(
+                  <>
+                    <i className="fa fa-window-close-o mr-2" />
+                    {get(data, 'MT_ZTMI023_OUT.RETURN_MESSAGE[0].MESSAGE', t('Đã có lỗi xảy ra '))}
+                  </>,
+                  {
+                    type: 'error',
+                  },
+                );
               } else {
                 if (get(data, 'MT_ZTMI023_OUT.row[0].EXT_LOG_ID', '') === userMaBp) {
                   const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
@@ -91,10 +99,29 @@ const QuetMa: React.FC = (): JSX.Element => {
                                   dispatch(
                                     action_ZTMI239(payload239, {
                                       onSuccess: (data: API.ZTMI239Response): void => {
-                                        alert(get(data, 'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE'));
+                                        toast(
+                                          <>
+                                            <i className="fa fa-window-close-o mr-2" />
+                                            {get(data, 'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE', t('Thành công!'))}
+                                          </>,
+                                          {
+                                            type: 'success',
+                                          },
+                                        );
                                       },
                                       onFailure: (error: HttpRequestErrorType): void => {
-                                        alert(error.messages);
+                                        toast(
+                                          <>
+                                            <i className="fa fa-window-close-o mr-2" />
+                                            {get(error, 'messages', t('Đã có lỗi xảy ra '))}
+                                          </>,
+                                          {
+                                            type: 'error',
+                                          },
+                                        );
+                                      },
+                                      onFinish: (): void => {
+                                        setCodeChuyenThu('');
                                       },
                                     }),
                                   );
@@ -102,25 +129,65 @@ const QuetMa: React.FC = (): JSX.Element => {
                               }),
                             );
                           } else {
-                            alert(data.Messages);
+                            toast(
+                              <>
+                                <i className="fa fa-window-close-o mr-2" />
+                                {get(data, 'Messages', t('Đã có lỗi xảy ra '))}
+                              </>,
+                              {
+                                type: 'error',
+                              },
+                            );
                           }
                         },
                         onFailure: (error: HttpRequestErrorType): void => {
-                          alert(error.messages);
+                          toast(
+                            <>
+                              <i className="fa fa-window-close-o mr-2" />
+                              {get(error, 'messages', t('Đã có lỗi xảy ra '))}
+                            </>,
+                            {
+                              type: 'error',
+                            },
+                          );
                         },
                       },
                     ),
                   );
                 } else {
-                  alert('EXT_LOG_ID không khớp với bưu cục hiện tại');
+                  toast(
+                    <>
+                      <i className="fa fa-window-close-o mr-2" />
+                      {t('EXT_LOG_ID không khớp với bưu cục hiện tại')}
+                    </>,
+                    {
+                      type: 'error',
+                    },
+                  );
                 }
               }
             } else {
-              alert(data.Messages);
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(data, 'Messages', t('Đã có lỗi xảy ra '))}
+                </>,
+                {
+                  type: 'error',
+                },
+              );
             }
           },
           onFailure: (error: HttpRequestErrorType): void => {
-            alert(error.messages);
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages', t('Đã có lỗi xảy ra '))}
+              </>,
+              {
+                type: 'error',
+              },
+            );
           },
         },
       ),

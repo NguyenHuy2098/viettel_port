@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -306,15 +306,84 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   }
 
+  const [codeBkPhieuGui, setCodeBkPhieuGui] = useState<string>('');
+
+  function handleChangeCodeBkPhieuGui(e: ChangeEvent<HTMLInputElement>): void {
+    setCodeBkPhieuGui(e.target.value);
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  function handleScanCodeBkPhieuGui(): void {
+    const payload016 = {
+      IV_FLAG: '2',
+      IV_TOR_TYPE: 'ZC3',
+      IV_TOR_ID_CU: get(dataTai, 'TOR_ID', ''), // Mã Tải hiện tại
+      IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), //điểm đi tải hiện tại
+      IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), //điểm đến tải hiện tại
+      IV_DESCRIPTION: '',
+      T_ITEM: [
+        {
+          ITEM_ID: codeBkPhieuGui, //mã bảng kê vừa quét
+          ITEM_TYPE: 'ZC1',
+        },
+      ],
+    };
+    dispatch(
+      action_MIOA_ZTMI016(payload016, {
+        onSuccess: (data: API.MIOAZTMI016Response): void => {
+          if (data.Status) {
+            getListPhieuGui();
+            setCodeBkPhieuGui('');
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Thành công!')}
+              </>,
+              {
+                type: 'success',
+              },
+            );
+          } else {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(data, 'Messages', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          }
+        },
+        onFailure: (error: HttpRequestErrorType): void => {
+          toast(
+            <>
+              <i className="fa fa-window-close-o mr-2" />
+              {get(error, 'messages', 'Đã có lỗi xảy ra')}
+            </>,
+            {
+              type: 'error',
+            },
+          );
+        },
+      }),
+    );
+  }
+
   function renderShippingInformationAndScanCode(): JSX.Element {
     return (
       <div className="sipContentContainer">
         <div className="d-flex">
           <div className="sipTitleRightBlockInput m-0">
             <i className="fa fa-barcode" />
-            <Input type="text" placeholder={t('Quét mã bảng kê/phiếu gửi')} />
+            <Input
+              type="text"
+              placeholder={t('Quét mã bảng kê/phiếu gửi')}
+              onChange={handleChangeCodeBkPhieuGui}
+              value={codeBkPhieuGui}
+            />
           </div>
-          <Button color="primary" className="ml-2">
+          <Button color="primary" className="ml-2" onClick={handleScanCodeBkPhieuGui}>
             {t('Quét mã')}
           </Button>
           <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
