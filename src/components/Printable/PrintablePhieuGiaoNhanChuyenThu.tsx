@@ -68,7 +68,7 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
       {
         Header: t('T.Lượng NET'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          const groWeiVal = Number(get(row, 'original.GRO_WEI_VAL'));
+          const groWeiVal = toNumber(get(row, 'original.GRO_WEI_VAL'));
           return groWeiVal ? `${ceil(groWeiVal, 2)} ${get(row, 'original.GRO_WEI_UNI')}` : '';
         },
       },
