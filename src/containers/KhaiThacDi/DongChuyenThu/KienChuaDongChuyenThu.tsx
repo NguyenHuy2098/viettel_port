@@ -167,7 +167,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
 
   const renderToolbar = (): JSX.Element => (
     <Row>
-      <Col lg={4} xs={12}>
+      <Col lg={6} xl={4}>
         <Search onSubmitSearch={handleTimKiemKien} placeholder={t('Tìm kiếm kiện')} />
       </Col>
       <Col lg={1}>
