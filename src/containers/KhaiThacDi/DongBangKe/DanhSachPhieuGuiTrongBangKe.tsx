@@ -736,6 +736,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
               action_MIOA_ZTMI016(payload016, {
                 onSuccess: (data: API.MIOAZTMI016Response): void => {
                   if (data.Status) {
+                    getListPhieuGui();
                     alert(get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', ''));
                   } else {
                     alert(data.Messages);

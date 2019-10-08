@@ -739,15 +739,18 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       ADDRESS_SHIPPER: trim(diaChiSender),
       BUYERS_REFERENCE_NUMBER: trim(maPhieuGui),
       CAMPAIGN: '',
-      CITY_DES: trim(provinceIdReceiver), // nhận trong trường hợp khách hàng vãng lai
+      CITY_DES: trim(quocGia), // khi đơn quốc tế thì truyền city_des= country_des
+      CITY_NAME: trim(provinceIdReceiver),
       CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
       CONSIGNEE: '9999999999',
       COUNTRY_DES: trim(quocGia),
       COUNTRY_SRC: 'VN',
       CUS_ID: '', // Mã user trên hệ thống APP/Web
       DISTRICT_DES: trim(districtIdReceiver), // nhận trong trường hợp khách hàng vãng lai
+      DISTRICT_NAME: trim(districtIdReceiver), // nhận trong trường hợp khách hàng vãng lai
       DISTRICT_SRC: trim(districtIdSender), // trong trường hợp khách hàng vãng lai
-      DESCRIPTION: trim(description), // Mô tả chương trình khuyến mại
+      DESCRIPTION: '', // Mô tả chương trình khuyến mại
+      DES_NAME: trim(description), // Description cuối của chuỗi địa chỉ
       DISCTYPE: '', // Loại khuyến mại
       EMAIL_CONSIG: '',
       EMAIL_OP: '',

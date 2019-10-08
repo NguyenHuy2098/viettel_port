@@ -70,7 +70,7 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
       IV_PACKAGE_ID: '',
       IV_FREIGHT_UNIT_STATUS: [306],
       IV_LOC_ID: userMaBp,
-      IV_COMMODITY_GROUP: 'Thường-Chậm-Liên Khu vực.HUB3',
+      IV_COMMODITY_GROUP: 'Thường-Hỏa tốc-Nội vùng.HUB1',
       IV_DATE: moment().format('YYYYMMDD'),
       IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
@@ -882,20 +882,30 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
         </h1>
         <div className="sipTitleRightBlock">
           {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
-          <Button className="hide" onClick={handleChuyenVaoBangKe} disabled={disableButtonDongBangKe}>
-            <i className="fa fa-file-excel-o" />
+          <Button
+            color="primary"
+            className="hide ml-2"
+            onClick={handleChuyenVaoBangKe}
+            disabled={disableButtonDongBangKe}
+          >
+            <i className="fa fa-file-excel-o mr-2" />
             {t('Chuyển bảng kê')}
           </Button>
-          <Button onClick={toggleCreateForwardingItemModal}>
-            <i className="fa fa-file-archive-o" />
+          <Button className="ml-2" color="primary" onClick={toggleCreateForwardingItemModal}>
+            <i className="fa fa-file-archive-o mr-2" />
             {t('Tạo bảng kê')}
           </Button>
-          <Button onClick={openPopUpDongBangKeVaoTai} disabled={disableButtonDongBangKe}>
-            <i className="fa fa-download" />
+          <Button
+            className="ml-2"
+            color="primary"
+            onClick={openPopUpDongBangKeVaoTai}
+            disabled={disableButtonDongBangKe}
+          >
+            <i className="fa fa-download mr-2" />
             {t('Đóng bảng kê')}
           </Button>
-          <Button disabled={disableButtonDongBangKe} onClick={openPopUpDongTai}>
-            <i className="fa fa-download" />
+          <Button className="ml-2" color="primary" disabled={disableButtonDongBangKe} onClick={openPopUpDongTai}>
+            <i className="fa fa-download mr-2" />
             {t('Đóng tải')}
           </Button>
         </div>
