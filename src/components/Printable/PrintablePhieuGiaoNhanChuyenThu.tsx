@@ -61,6 +61,9 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
       },
       {
         Header: t('S.L (bp)'),
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.child_count');
+        },
       },
       {
         Header: t('T.Lượng NET'),
@@ -79,10 +82,11 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
       },
       {
         Header: t('BƯU CỤC GỐC'),
+        accessor: 'SRC_LOC_IDTRQ',
       },
       {
         Header: t('NƠI ĐI'),
-        accessor: 'SRC_LOC_IDTRQ',
+        accessor: 'DES_LOC_IDTRQ',
       },
       {
         Header: t('NƠI ĐẾN'),
@@ -90,6 +94,7 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
       },
       {
         Header: t('BƯU CỤC PHÁT'),
+        accessor: 'DES_LOC_IDTRQ',
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,6 +119,7 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
           <div className="font-weight-bold">
             {t('Chuyến thư')}
             {t('COLON', ': ')}
+            {get(infoChuyenThu, 'TOR_ID')}
           </div>
           <div>
             {t('Dự định đi')}
