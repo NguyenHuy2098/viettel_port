@@ -92,6 +92,11 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
 
   const handleDeleteForwardingOrder = (): void => {};
 
+  const handleSuccessDongChuyenThu = (): void => {
+    getListPhieuGui();
+    setSelectedTaiKienIds([]);
+  };
+
   const renderPrintButtonPhieuGiaoNhanChuyenThu = (): JSX.Element => (
     <ButtonPrintable
       btnProps={{
@@ -131,7 +136,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
             diemDen={get(dataChuyenThu, 'LOG_LOCID_DES', '')}
             idChuyenThu={idChuyenThu}
             listTaiKienCanRemove={deselectedTaiKienItems}
-            onSuccess={getListPhieuGui}
+            onSuccess={handleSuccessDongChuyenThu}
           />
         </div>
       </Row>

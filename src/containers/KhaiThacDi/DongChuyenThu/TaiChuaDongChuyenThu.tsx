@@ -210,6 +210,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleSuccessChuyenThuAction = (): void => {
     getListTaiChuaDongChuyenThu();
+    setSelectedTaiIds([]);
   };
 
   const renderToolbar = (): JSX.Element => (
