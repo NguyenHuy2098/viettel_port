@@ -487,7 +487,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           <button className="sipTitleBtnBack btn btn-secondary" onClick={handleBack}>
             <i className="fa fa-arrow-left backIcon" />
           </button>
-          {t('Thư - Nhanh')}
+          {commLocGroup}
         </h1>
         <div className="sipTitleRightBlock">
           <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2">
