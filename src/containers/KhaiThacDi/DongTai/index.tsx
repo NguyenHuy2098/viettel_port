@@ -1,22 +1,17 @@
-import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Badge, Button, Input, Row, TabContent, TabPane, Nav, NavItem, NavLink } from 'reactstrap';
-import { get, size, toString, trim } from 'lodash';
 import classNames from 'classnames';
-import queryString from 'query-string';
 import { History } from 'history';
+import { get, toString } from 'lodash';
+import queryString from 'query-string';
 
-import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { push } from 'connected-react-router';
-import moment from 'moment';
-import { generatePath } from 'react-router';
-import routesMap from 'utils/routesMap';
-import { SipDataState, SipDataType } from 'utils/enums';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';
@@ -31,26 +26,19 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const tabParams = queryString.parse(get(props, 'history.location.search', {}));
-  const userMaBp = useSelector(makeSelectorMaBP);
 
-  const getListTai = useCallback(
-    function(): void {
-      dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: userMaBp,
-          IV_CUST_STATUS: '101',
-          IV_FR_DATE: moment().format('YYYYMMDD'),
-          IV_TO_DATE: moment().format('YYYYMMDD'),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-        }),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, userMaBp],
-  );
+  const getListTai = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
+    );
+  };
 
   const [tab, setTab] = useState<number>(1);
   const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
@@ -95,26 +83,15 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
     });
   }
 
-  function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
-    const thisValue = e.currentTarget.value;
-    if (size(trim(thisValue)) && e.keyCode === 13) {
-      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: thisValue })));
-    }
-  }
-
-  function toggleCreateForwardingItemModal(): void {
+  const toggleCreateForwardingItemModal = (): void => {
     setCreateForwardingItemModal(!createForwardingItemModal);
-  }
+  };
 
-  function renderTitle(): JSX.Element {
+  const renderTitle = (): JSX.Element => {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng tải')}</h1>
         <div className="sipTitleRightBlock">
-          <div className="sipTitleRightBlockInput">
-            <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu tải')} onKeyUp={handleForwardingSearch} />
-          </div>
           <Button className="ml-2" color="primary" onClick={toggleCreateForwardingItemModal}>
             <i className="fa fa-plus mr-2" />
             {t('Tạo tải')}
@@ -129,7 +106,7 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
         </div>
       </Row>
     );
-  }
+  };
 
   return (
     <>

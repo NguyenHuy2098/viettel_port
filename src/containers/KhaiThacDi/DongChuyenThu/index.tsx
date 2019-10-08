@@ -1,12 +1,11 @@
-import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
-import { Badge, Button, Input, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath } from 'react-router';
 import classNames from 'classnames';
 import { push } from 'connected-react-router';
 import { History } from 'history';
-import { get, size, toString, trim } from 'lodash';
+import { get, toString } from 'lodash';
 import queryString from 'query-string';
 
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
@@ -124,26 +123,15 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function toggleCreateForwardingItemModal(): void {
+  const toggleCreateForwardingItemModal = (): void => {
     setCreateForwardingItemModal(!createForwardingItemModal);
-  }
+  };
 
-  function handleForwardingSearch(event: KeyboardEvent<HTMLInputElement>): void {
-    const thisValue = event.currentTarget.value;
-    if (size(trim(thisValue)) && event.keyCode === 13) {
-      dispatch(push(generatePath(routesMap.DANH_SACH_TAI_KIEN_TRONG_CHUYEN_THU, { idChuyenThu: thisValue })));
-    }
-  }
-
-  function renderTitle(): JSX.Element {
+  const renderTitle = (): JSX.Element => {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng chuyến thư')}</h1>
         <div className="sipTitleRightBlock">
-          <div className="sipTitleRightBlockInput">
-            <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu chuyến thư')} onKeyUp={handleForwardingSearch} />
-          </div>
           <Button className="ml-2" color="primary" onClick={toggleCreateForwardingItemModal}>
             <i className="fa fa-plus mr-2" />
             {t('Tạo chuyến thư')}
@@ -158,7 +146,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         </div>
       </Row>
     );
-  }
+  };
 
   return (
     <>

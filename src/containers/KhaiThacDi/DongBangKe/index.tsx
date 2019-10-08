@@ -1,21 +1,17 @@
-import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
-import { Badge, Button, Input, Row, TabContent, Nav, NavItem, NavLink } from 'reactstrap';
-import { get, size, toString, trim } from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import classNames from 'classnames';
-import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import { History } from 'history';
+import queryString from 'query-string';
+import { get, toString } from 'lodash';
+
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { push } from 'connected-react-router';
-import moment from 'moment';
-import routesMap from 'utils/routesMap';
-import { generatePath } from 'react-router';
-import { SipDataState, SipDataType } from 'utils/enums';
-import queryString from 'query-string';
-import { History } from 'history';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import BangKeChuaHoanThanh from './BangKeChuaHoanThanh';
 import BuuGuiChuaDongBangKe from './BuuGuiChuaDongBangKe';
 import BangKeDaDong from './BangKeDaDong';
@@ -29,26 +25,19 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const tabParams = queryString.parse(get(props, 'history.location.search', {}));
-  const userMaBp = useSelector(makeSelectorMaBP);
 
-  const getListBangKe = useCallback(
-    function(): void {
-      dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC1',
-          IV_FR_LOC_ID: userMaBp,
-          IV_CUST_STATUS: '101',
-          IV_FR_DATE: moment().format('YYYYMMDD'),
-          IV_TO_DATE: moment().format('YYYYMMDD'),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-        }),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, userMaBp],
-  );
+  const getListBangKe = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.BANG_KE,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
+    );
+  };
 
   const [tab, setTab] = useState<number>(1);
   const countBangKeChuaHoanThanh = useSelector(
@@ -76,9 +65,9 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  function toggleCreateForwardingItemModal(): void {
+  const toggleCreateForwardingItemModal = (): void => {
     setCreateForwardingItemModal(!createForwardingItemModal);
-  }
+  };
 
   useEffect((): void => {
     if (tabParams.tab) {
@@ -87,7 +76,7 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tabParams]);
 
-  function handleChangeTab(tab: number): void {
+  const handleChangeTab = (tab: number): void => {
     setTab(tab);
     props.history.push({
       pathname: props.history.location.pathname,
@@ -95,17 +84,9 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
         tab,
       }),
     });
-  }
+  };
 
-  function handleForwardingSearch(e: KeyboardEvent<HTMLInputElement>): void {
-    const thisValue = e.currentTarget.value;
-    if (size(trim(thisValue)) && e.keyCode === 13) {
-      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: thisValue })));
-    }
-  }
-
-  // eslint-disable-next-line max-lines-per-function
-  function TaoBangKe(): JSX.Element {
+  const TaoBangKe = (): JSX.Element => {
     return (
       <>
         <Button className="ml-2" color="primary" onClick={toggleCreateForwardingItemModal}>
@@ -121,22 +102,18 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
         />
       </>
     );
-  }
+  };
 
-  function renderTitle(): JSX.Element {
+  const renderTitle = (): JSX.Element => {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Đóng bảng kê')}</h1>
         <div className="sipTitleRightBlock">
-          <div className="sipTitleRightBlockInput">
-            <i className="fa fa-search" />
-            <Input type="text" placeholder={t('Tra cứu bảng kê')} onKeyUp={handleForwardingSearch} />
-          </div>
           <TaoBangKe />
         </div>
       </Row>
     );
-  }
+  };
 
   return (
     <>
