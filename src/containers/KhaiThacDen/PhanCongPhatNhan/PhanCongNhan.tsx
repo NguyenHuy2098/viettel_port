@@ -9,7 +9,6 @@ import { get, isEmpty, map, find, reject } from 'lodash';
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
-import { selectPhanCongNhan } from 'redux/MIOA_ZTMI035/selectors';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { toast } from 'react-toastify';
@@ -30,7 +29,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const [dataSelected, setDataSelected] = useState<string[]>([]);
-  const listPhanCongNhan = useSelector(selectPhanCongNhan);
+  const [listPhanCongNhan, setListPhanCongNhan] = useState<API.RowResponseZTMI035[]>([]);
   const convertData = map(listPhanCongNhan, item => {
     return {
       ...item,
@@ -47,7 +46,6 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const dispatchAPI035 = useCallback(() => {
-    if (isEmpty(userIdSelected)) return;
     dispatch(
       action_MIOA_ZTMI035(
         {
@@ -58,7 +56,11 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           IV_PAGENO: '1',
           IV_NO_PER_PAGE: '11',
         },
+
         {
+          onSuccess: (data: API.MIOAZTMI035Response): void => {
+            setListPhanCongNhan(get(data, 'data.MT_ZTMI035_OUT.row', []));
+          },
           onFailure: (error: Error): void => {
             toast(
               <>
@@ -69,17 +71,22 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
                 type: 'error',
               },
             );
+            setListPhanCongNhan([]);
           },
           onFinish: (): void => {
             setDataSelected([]);
           },
         },
+        { stateless: true },
       ),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userIdSelected]);
 
   useEffect((): void => {
+    if (isEmpty(userIdSelected)) {
+      return;
+    }
     dispatchAPI035();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userIdSelected]);
