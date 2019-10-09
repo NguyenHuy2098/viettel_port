@@ -68,12 +68,13 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       action_MIOA_ZTMI045({
         row: [
           {
-            IV_LOCTYPE: 'V001, V004',
+            IV_LOCTYPE: 'V001',
           },
+          { IV_LOCTYPE: 'V004' },
         ],
         IV_BP: '',
         IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
+        IV_NO_PER_PAGE: '200',
       }),
     );
   };

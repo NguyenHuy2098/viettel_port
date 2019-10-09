@@ -117,7 +117,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         ],
         IV_BP: '',
         IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
+        IV_NO_PER_PAGE: '200',
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
