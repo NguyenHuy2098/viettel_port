@@ -15,8 +15,12 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { toast } from 'react-toastify';
 
+interface Props {
+  handleChangeTab: (tab: number) => void;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const QuetMa: React.FC = (): JSX.Element => {
+const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
@@ -108,6 +112,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                                             type: 'success',
                                           },
                                         );
+                                        handleChangeTab(2);
                                       },
                                       onFailure: (error: HttpRequestErrorType): void => {
                                         toast(

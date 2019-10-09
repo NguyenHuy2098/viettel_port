@@ -51,7 +51,7 @@ function NhanTaiBuuCucGoc(): JSX.Element {
         </Nav>
         <TabContent activeTab={tab} className="sipFlatContainer">
           <TabPane tabId={1}>
-            <QuetMa />
+            <QuetMa handleChangeTab={handleChangeTab} />
           </TabPane>
           <TabPane tabId={2}>
             <BuuGuiChuaDongBangKe />
