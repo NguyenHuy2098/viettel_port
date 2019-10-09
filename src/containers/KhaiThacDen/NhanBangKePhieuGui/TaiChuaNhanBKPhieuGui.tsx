@@ -104,7 +104,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
     </>

@@ -113,7 +113,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Danh sách tải/kiện trong chuyến thư')}
         </h1>
@@ -184,7 +184,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
@@ -255,7 +255,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Quay lại')}
         </h1>

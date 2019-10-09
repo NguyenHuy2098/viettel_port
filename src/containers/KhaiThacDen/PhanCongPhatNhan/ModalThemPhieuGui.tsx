@@ -66,7 +66,7 @@ const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );

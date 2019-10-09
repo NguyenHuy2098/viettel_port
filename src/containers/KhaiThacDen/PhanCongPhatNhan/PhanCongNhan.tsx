@@ -222,7 +222,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
         <h1 className="sipTitle">{t('Danh sách phân công')}</h1>
         <div className="sipTitleRightBlock">
           <Button color="primary" disabled={disableButton}>
-            <i className="fa fa-print mr-2" />
+            <img className="mr-2" src={'../../assets/img/icon/iconPrintWhite.svg'} alt="VTPostek" />
             {t('In phiếu phân công')}
           </Button>
           <ButtonChonNhanVien

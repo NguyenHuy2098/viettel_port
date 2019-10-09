@@ -203,10 +203,10 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       //     return (
       //       <>
       //         <Button className="SipTableFunctionIcon">
-      //           <i className="fa fa-pencil fa-lg color-blue" />
+      //           <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
       //         </Button>
       //         <Button className="SipTableFunctionIcon">
-      //           <i className="fa fa-trash-o fa-lg color-red" />
+      //           <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
       //         </Button>
       //       </>
       //     );
@@ -486,13 +486,13 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <button className="sipTitleBtnBack btn btn-secondary" onClick={handleBack}>
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </button>
           {commLocGroup}
         </h1>
         <div className="sipTitleRightBlock">
           <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2">
-            <i className="fa fa-file-excel-o mr-2" />
+            <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>
           {/* <Button onClick={toggleCreateForwardingItemModal} color="primary" className="ml-2">

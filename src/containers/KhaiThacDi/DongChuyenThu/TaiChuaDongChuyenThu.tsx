@@ -131,7 +131,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
@@ -209,10 +209,10 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
               {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );
@@ -234,8 +234,9 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         <Search onSubmitSearch={handleSearchTai} placeholder={t('Tìm kiếm tải')} />
       </Col>
       <Col lg={1}>
-        <Button color="white" className="sipTitleRightBlockBtnIcon sipBoxShadow">
-          <i className="fa fa-trash-o" />
+        {/*_______________temporary hide because of no requirement______________*/}
+        <Button color="white" className="sipTitleRightBlockBtnIcon sipBoxShadow hide">
+          <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
         </Button>
       </Col>
       <Col className="d-flex justify-content-end">
@@ -264,7 +265,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
       <DeleteConfirmModal

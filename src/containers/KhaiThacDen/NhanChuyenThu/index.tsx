@@ -128,7 +128,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={handlePageChange}
+          onThisPaginationChange={handlePageChange}
         />
       </Row>
     </div>

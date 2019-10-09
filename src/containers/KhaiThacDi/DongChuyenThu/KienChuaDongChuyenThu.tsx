@@ -153,7 +153,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(row.original)}>
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <ModalPopupConfirm handleDoSomething={handleDeleteKien} />
             </>
@@ -171,8 +171,9 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         <Search onSubmitSearch={handleTimKiemKien} placeholder={t('Tìm kiếm kiện')} />
       </Col>
       <Col lg={1}>
-        <Button color="white" className="sipTitleRightBlockBtnIcon sipBoxShadow">
-          <i className="fa fa-trash-o" />
+        {/*_______________temporary hide because of no requirement______________*/}
+        <Button color="white" className="sipTitleRightBlockBtnIcon sipBoxShadow hide">
+          <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
         </Button>
       </Col>
       <Col className="d-flex justify-content-end">
@@ -201,7 +202,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
     </>

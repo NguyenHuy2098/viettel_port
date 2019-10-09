@@ -38,7 +38,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
@@ -140,7 +140,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
     </>

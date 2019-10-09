@@ -59,12 +59,26 @@
       border: none;
       font-size: 12px;
       float: right;
-      padding: 2px 8px;
+      padding: 3px 12px 2px;
       color: #fff !important;
-      border-radius: 10px;
-      i {
-        margin-right: 4px;
+      border-radius: 13px;
+      img {
+        position: relative;
+        top: -1px;
+        margin-right: 6px !important;
       }
+    }
+  }
+}
+
+.sipOrderAdditionalServiceContainer {
+  label.form-check-label {
+    position: relative;
+    padding-left: 42px;
+    .form-check-input {
+      position: absolute;
+      top: -1px;
+      left: 14px;
     }
   }
 }
@@ -224,6 +238,15 @@
   display: block;
   box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
   position: relative;
+  .highcharts-title {
+    font-family: Core Sans GS;
+  }
+  .highcharts-legend {
+    span, text {
+      font-weight: normal !important;
+      font-family: Core Sans GS;
+    }
+  }
 }
 
 .sipFilter {
@@ -267,7 +290,11 @@
     flex-direction: column;
     color: #787b85;
     border-right: 1px solid #e1e1e1;
-
+    img {
+      position: relative;
+      margin-right: 5px;
+      top: -3px;
+    }
     &:last-child {
       border-right: 0;
     }

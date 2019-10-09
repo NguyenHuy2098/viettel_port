@@ -95,13 +95,13 @@ const DongBangKeNoiTinh: React.FC = (): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-print fa-lg color-green" />
+                <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );

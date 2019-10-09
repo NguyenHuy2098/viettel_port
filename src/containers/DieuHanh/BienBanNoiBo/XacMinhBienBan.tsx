@@ -77,7 +77,7 @@ const VerificationRecord: React.FC = (): React.ReactElement => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Xác minh biên bản')}
         </h1>

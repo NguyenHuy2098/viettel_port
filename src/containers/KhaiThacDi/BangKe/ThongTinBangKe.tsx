@@ -62,7 +62,7 @@ const ThongTinBangKe: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <Button className="SipTableFunctionIcon">
-              <i className="fa fa-print fa-lg color-green" />
+              <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
             </Button>
           );
         },
@@ -77,13 +77,14 @@ const ThongTinBangKe: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Thông tin bảng kê')}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-trash-o" />
+          {/*_______________temporary hide because of no requirement______________*/}
+          <Button className="sipTitleRightBlockBtnIcon hide">
+            <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
           </Button>
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />

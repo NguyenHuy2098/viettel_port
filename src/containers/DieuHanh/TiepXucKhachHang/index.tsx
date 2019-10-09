@@ -64,10 +64,10 @@ const CommunicateCustomer: React.FC = (props): JSX.Element => {
     return (
       <>
         <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
+          <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
         </Button>
         <Button>
-          <i className="fa fa-trash-o fa-lg color-red" />
+          <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
         </Button>
       </>
     );

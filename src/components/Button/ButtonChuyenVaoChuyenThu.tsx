@@ -35,7 +35,7 @@ const ButtonChuyenVaoChuyenThu = (props: Props): JSX.Element => {
       <Button color="primary" onClick={handleChuyenVaoChuyenThu} {...rest} className="hide">
         {props.children || (
           <>
-            <i className="fa fa-download rotate-90 mr-2" />
+            <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển vào CT')}
           </>
         )}

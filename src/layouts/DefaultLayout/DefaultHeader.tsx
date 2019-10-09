@@ -38,38 +38,38 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <ButtonDropdown isOpen={dropdownOpenNotifications} toggle={toggleDropdownOpenNotifications}>
         <DropdownToggle nav>
-          <i className="fa fa-bell-o fa-lg" />
+          <img src={'../../assets/img/icon/iconBell.svg'} alt="VTPostek" />
           <Badge pill color="danger">
             5
           </Badge>
         </DropdownToggle>
         <DropdownMenu right>
           <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="VTPostek" />
             <span>
               Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
             </span>
           </DropdownItem>
           <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="VTPostek" />
             <span>
               Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
             </span>
           </DropdownItem>
           <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="VTPostek" />
             <span>
               Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
             </span>
           </DropdownItem>
           <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="VTPostek" />
             <span>
               Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
             </span>
           </DropdownItem>
           <DropdownItem title="Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin">
-            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
+            <img src={'../../assets/img/avatars/6.jpg'} className="img-avatar" alt="VTPostek" />
             <span>
               Bạn có 2 đơn hàng mới từ nhà cung cấp Ultimate Product Store, yêu cầu về việc cung cấp thông tin
             </span>
@@ -132,12 +132,12 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
     <Nav className="ml-auto" navbar>
       <NavItem className="d-md-down-none">
         <NavLink to="#" className="nav-link">
-          <i className="fa fa-heart-o fa-lg" />
+          <img src={'../../assets/img/icon/iconHeart.svg'} alt="VTPostek" />
         </NavLink>
       </NavItem>
       <NavItem className="d-md-down-none">
         <NavLink to="#" className="nav-link">
-          <i className="fa fa-clock-o fa-lg" />
+          <img src={'../../assets/img/icon/iconClock.svg'} alt="VTPostek" />
         </NavLink>
       </NavItem>
       <NavItem className="sipHeaderNoti">{renderHeaderNotifications()}</NavItem>

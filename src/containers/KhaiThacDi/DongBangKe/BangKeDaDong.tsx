@@ -83,7 +83,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
@@ -159,8 +159,9 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
             <Button color="primary" className="ml-2" onClick={handleSearchBangKe}>
               {t('Tìm kiếm')}
             </Button>
-            <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-              <i className="fa fa-trash-o" />
+            {/*_______________temporary hide because of no requirement______________*/}
+            <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow hide">
+              <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
             </Button>
           </div>
         </Col>
@@ -177,7 +178,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
     </>

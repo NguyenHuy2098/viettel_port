@@ -65,7 +65,7 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <Button className="SipTableFunctionIcon">
-              <i className="fa fa-print fa-lg color-green" />
+              <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
             </Button>
           );
         },

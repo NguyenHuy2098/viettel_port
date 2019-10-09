@@ -89,63 +89,40 @@ input.form-control:-moz-placeholder {
 
 .form-check-label {
   box-sizing: border-box;
-  input.form-check-input[type='radio'] {
-    font: normal normal normal 14px/1 FontAwesome;
+  input.form-check-input {
     appearance: none;
     -moz-appearance: none;
     -webkit-appearance: none;
     -ms-appearance: none;
     -o-appearance: none;
-    font-size: 20px;
     position: relative;
     margin: 0 6px 0 0;
     top: 3px;
-    color: #888;
     outline: none;
     &:after {
-      content: '\F10C';
-      background: #fff;
+      content: '';
       position: relative;
-      top: -2px;
-      left: -2px;
-      height: 15px;
-      width: 15px;
+      top: 1px;
+      height: 20px;
+      width: 22px;
       display: inline-block;
+      background-size: contain;
+      background-repeat: no-repeat;
     }
-    &:checked {
-      color: $primary;
+    &[type='radio'] {
       &:after {
-        content: '\F192';
+        background-image: url('../assets/img/icon/iconRadio.svg');
+      }
+      &:checked:after {
+        background-image: url('../assets/img/icon/iconRadioChecked.svg');
       }
     }
-  }
-  input.form-check-input[type='checkbox'] {
-    font: normal normal normal 14px/1 FontAwesome;
-    appearance: none;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    -ms-appearance: none;
-    -o-appearance: none;
-    font-size: 20px;
-    position: relative;
-    margin: 0 6px 0 0;
-    top: 3px;
-    color: #888;
-    outline: none;
-    &:after {
-      content: '\F096';
-      background: #fff;
-      position: relative;
-      top: -2px;
-      left: -2px;
-      height: 15px;
-      width: 15px;
-      display: inline-block;
-    }
-    &:checked {
-      color: $primary;
+    &[type='checkbox'] {
       &:after {
-        content: '\F14A';
+        background-image: url('../assets/img/icon/iconCheckbox.svg');
+      }
+      &:checked:after {
+        background-image: url('../assets/img/icon/iconCheckboxChecked.svg');
       }
     }
   }
@@ -169,6 +146,8 @@ input.form-control:-moz-placeholder {
     height: 27px;
     width: 27px;
     border: none;
+    min-height: 0;
+    line-height: 27px;
   }
 }
 .sipHeaderNoti {
@@ -213,14 +192,36 @@ input.form-control:-moz-placeholder {
         color: #4a4a4a !important;
         border-left: 4px solid transparent !important;
         background: #f9f9f9 !important;
-        padding: 12px 8px 12px 38px;
+        padding: 15px 8px 15px 38px;
         position: relative;
         i {
           color: $primary !important;
           font-size: 18px;
           position: absolute;
-          top: 12px;
-          left: 10px;
+          top: 9px;
+          left: 7px;
+          width: 24px;
+          height: 24px;
+          background-repeat: no-repeat;
+          background-size: contain;
+          &.sipIcon-home {
+            background-image: url('../assets/img/icon/icon-home.svg');
+          }
+          &.sipIcon-dieuhanh {
+            background-image: url('../assets/img/icon/icon-dieuhanh.svg');
+          }
+          &.sipIcon-edit {
+            background-image: url('../assets/img/icon/icon-edit.svg');
+          }
+          &.sipIcon-truck {
+            background-image: url('../assets/img/icon/icon-truck.svg');
+          }
+          &.sipIcon-package {
+            background-image: url('../assets/img/icon/icon-package.svg');
+          }
+          &.sipIcon-contact {
+            background-image: url('../assets/img/icon/icon-contact.svg');
+          }
         }
         &.active {
           color: $secondary !important;
@@ -286,12 +287,18 @@ input.form-control:-moz-placeholder {
     top: -3px;
     &.sipTitleBtnBack {
       color: #000 !important;
+      padding: 0;
     }
   }
 }
 .sipTitleRightBlock {
   display: flex;
   & > .btn {
+    img {
+      margin-right: 5px;
+      position: relative;
+      top: -3px;
+    }
     &.sipTitleRightBlockBtnIcon {
       background: #ffffff !important;
       border: 1px solid #e4e8eb;
@@ -380,25 +387,33 @@ input.form-control:-moz-placeholder {
     th,
     td {
       padding: 8px;
+      vertical-align: middle;
+      &:first-child {
+        padding: 8px 10px 8px 20px;
+      }
     }
     .SipTableFunctionIcon {
       white-space: nowrap;
       .btn {
         padding: 0;
-        background: none;
+        background: none !important;
         border: none;
         box-shadow: none;
-        margin: 0 10px;
+        margin: 0 5px;
         font-size: 12px;
+        height: 28px;
+        min-height: 0;
       }
     }
     .SipTableFunctionIcon {
       padding: 0;
-      background: none;
+      background: none !important;
       border: none;
       box-shadow: none;
-      margin: 0 10px;
+      margin: 0 5px;
       font-size: 12px;
+      height: 28px;
+      min-height: 0;
     }
   }
 }
@@ -439,6 +454,9 @@ html:not([dir='rtl']) .sidebar {
   border-top: 2px solid #c8ced3;
   padding: 15px;
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   .pagination {
     margin: 0;
     text-align: center;
@@ -450,7 +468,6 @@ html:not([dir='rtl']) .sidebar {
         border: none;
         font-size: 18px;
         color: #52575a;
-        font-weight: 600;
         padding: 0 5px;
         height: 36px;
         min-width: 36px;
@@ -465,20 +482,34 @@ html:not([dir='rtl']) .sidebar {
     }
     .sipPaginationNext,
     .sipPaginationPrev {
-      margin-top: 2px;
+      position: relative;
+      top: -3px;
       .page-link {
-        background-color: $primary;
         color: #fff;
         border-radius: 4px;
         min-width: 32px;
         height: 32px;
         line-height: 30px;
+        background: none !important;
+        border: none !important;
+        box-shadow: none !important;
       }
       &.disabled .page-link {
-        background: #ccc;
-        box-shadow: none;
+        opacity: 0.4;
       }
     }
+    .sipPaginationNext {
+      margin-left: 5px;
+    }
+    .sipPaginationPrev {
+      margin-right: 5px;
+    }
+  }
+}
+.sipPaginationTotal {
+  & > span {
+    font-size: 16px;
+    margin-left: 8px;
   }
 }
 .sipBgWhiteContainer {
@@ -497,20 +528,18 @@ html:not([dir='rtl']) .sidebar {
   height: 100%;
 }
 .sipScanCodeContainer {
-  width: 320px;
+  width: 400px;
   max-width: 100%;
   margin-right: 15px;
   display: inline-block;
   input.form-control {
     margin-right: 15px;
     float: left;
-    width: calc(100% - 100px);
+    width: calc(100% - 120px);
   }
-  .btn {
-    white-space: nowrap;
-    width: 80px;
-    padding: 6px 0;
-  }
+}
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: #f4f4f4;
 }
 
 .sipTabContainer {
@@ -725,6 +754,24 @@ html:not([dir='rtl']) .sidebar {
   }
   100% {
     background-position: 0 50%;
+  }
+}
+.sipOrderInputRow {
+  margin: 0 -10px;
+}
+.sipOrderInputCol {
+  padding: 0 10px;
+}
+.btn-primary {
+  padding: 0 12px;
+  min-height: 32px;
+  line-height: 32px;
+  box-sizing: border-box;
+}
+.sipOrderBtnSave {
+  img {
+    position: relative;
+    top: -2px;
   }
 }
 

@@ -40,7 +40,7 @@ const ButtonChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <>
       <Button onClick={toggle} disabled={disabled} {...rest}>
-        <i className="fa fa-user-o mr-2" />
+        <img src={'../../assets/img/icon/iconChuyenPhanCong.svg'} alt="VTPostek" />
         {t('Chuyển phân công')}
       </Button>
       <Modal isOpen={modalCreateNew} toggle={toggle} {...modalProps}>

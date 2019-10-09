@@ -64,8 +64,9 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
-            <i className="fa fa-trash-o" />
+          {/*_______________temporary hide because of no requirement______________*/}
+          <Button className="sipTitleRightBlockBtnIcon hide">
+            <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
           </Button>
           <Button color="primary" className="ml-2">
             <i className="fa fa-barcode mr-2" />
@@ -342,25 +343,25 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   function renderCouponInformation(): JSX.Element {
     return (
       <Row className="sipSummaryContent">
-        <Col lg="4" xs="12">
+        <Col lg="4" xl={5} xs="12">
           <Row>
             <Col xs="4">{t('Mã phiếu')}: </Col>
-            <Col xs="6">{thongTinPhieuGui[0].FWO}</Col>
+            <Col xs="7">{thongTinPhieuGui[0].FWO}</Col>
           </Row>
 
           <Row>
             <Col xs="4">{t('Ngày gửi')}: </Col>
-            <Col xs="6">{moment(trim(thongTinPhieuGui[0].CREATED_ON), 'YYYYMMDD').format('DD/MM/YYYY')}</Col>
+            <Col xs="7">{moment(trim(thongTinPhieuGui[0].CREATED_ON), 'YYYYMMDD').format('DD/MM/YYYY')}</Col>
           </Row>
         </Col>
-        <Col lg="4" xs="12">
+        <Col lg="4" xs="12" xl={5}>
           <Row>
             <Col xs="4">{t('Số lượng')}: </Col>
-            <Col xs="4">{toNumber(thongTinPhieuGui[0].Quantity)}</Col>
+            <Col xs="7">{toNumber(thongTinPhieuGui[0].Quantity)}</Col>
           </Row>
           <Row>
             <Col xs="4">{t('Trọng lượng')}: </Col>
-            <Col xs="4">{`${toNumber(get(thongTinPhieuGui[0], 'GROSS_WEIGHT', '0'))} ${toLower(
+            <Col xs="7">{`${toNumber(get(thongTinPhieuGui[0], 'GROSS_WEIGHT', '0'))} ${toLower(
               get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
             )}`}</Col>
           </Row>

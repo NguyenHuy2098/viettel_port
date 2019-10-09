@@ -8,12 +8,12 @@ const nav = (t: i18next.TFunction): any => {
     items: [
       {
         name: t('Trang chủ'),
-        icon: 'fa fa-home',
+        icon: 'sipIcon-home',
         url: routesMap.HOME,
       },
       {
         name: t('Điều hành'),
-        icon: 'fa fa-user-circle-o',
+        icon: 'sipIcon-dieuhanh',
         url: routesMap.DIEU_HANH,
         children: [
           {
@@ -48,7 +48,7 @@ const nav = (t: i18next.TFunction): any => {
       },
       {
         name: t('Nhận tại bưu cục gốc'),
-        icon: 'fa fa-pencil-square-o',
+        icon: 'sipIcon-edit',
         url: routesMap.NHAP_PHIEU_GUI,
         children: [
           {
@@ -71,7 +71,7 @@ const nav = (t: i18next.TFunction): any => {
       },
       {
         name: t('Khai thác đi'),
-        icon: 'fa fa-truck',
+        icon: 'sipIcon-truck',
         url: routesMap.KHAI_THAC_DI,
         children: [
           {
@@ -102,7 +102,7 @@ const nav = (t: i18next.TFunction): any => {
       },
       {
         name: t('Khai thác đến'),
-        icon: 'fa fa-cubes',
+        icon: 'sipIcon-package',
         url: routesMap.KHAI_THAC_DEN,
         children: [
           {
@@ -155,13 +155,13 @@ const nav = (t: i18next.TFunction): any => {
       // },
       // {
       //   name: t('Thông tin đơn hàng new'),
-      //   icon: 'icon-info',
+      //   icon: 'sipIcon-info',
       //   url: routesMap.THONG_TIN_DON_HANG_NEW,
       // },
-      {
-        name: t('Danh bạ'),
-        icon: 'fa fa-address-book-o',
-      },
+      // {
+      //   name: t('Danh bạ'),
+      //   icon: 'icon-contact',
+      // },
     ],
   };
 };

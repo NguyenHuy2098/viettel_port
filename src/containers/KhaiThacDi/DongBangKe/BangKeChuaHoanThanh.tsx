@@ -134,7 +134,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
@@ -173,16 +173,16 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
         accessor: 'NOTE_OF',
       },
       {
-        Header: t('Quản trị'),
+        Header: t('   Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );
@@ -221,8 +221,9 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
             <Button color="primary" className="ml-2" onClick={handleSearchBangKe}>
               {t('Tìm kiếm')}
             </Button>
-            <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-              <i className="fa fa-trash-o" />
+            {/*_______________temporary hide because of no requirement______________*/}
+            <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow hide">
+              <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
             </Button>
           </div>
         </Col>
@@ -239,7 +240,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
       <DeleteConfirmModal

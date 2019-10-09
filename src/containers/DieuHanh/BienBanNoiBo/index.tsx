@@ -112,7 +112,7 @@ const InternalRecord: React.FC = (): JSX.Element => {
           <i className="fa fa-check fa-lg color-green" />
         </Button>
         <Button>
-          <i className="fa fa-pencil fa-lg color-blue" />
+          <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
         </Button>
       </>
     );

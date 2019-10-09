@@ -107,13 +107,13 @@ const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon" onClick={printBangKe(row.original)}>
-                <i className="fa fa-print fa-lg color-green" />
+                <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon" onClick={editBangKe(row.original)}>
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon" onClick={deleteBangKe(row.original)}>
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );
@@ -146,8 +146,9 @@ const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
             <Button color="primary" className="ml-2">
               {t('Tìm kiếm')}
             </Button>
-            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-              <i className="fa fa-trash-o" />
+            {/*_______________temporary hide because of no requirement______________*/}
+            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow hide">
+              <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
             </Button>
           </div>
         </Col>

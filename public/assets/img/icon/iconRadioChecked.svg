@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>tick_box_tron_focus@</title>
+    <desc>Created with Sketch.</desc>
+    <g id="tick_box_tron_focus" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <rect id="Rectangle-Copy-39" transform="translate(12.000000, 12.000000) rotate(90.000000) translate(-12.000000, -12.000000) " x="0" y="0" width="24" height="24"></rect>
+            <g id="tick_box_focus" transform="translate(3.000000, 3.000000)">
+                <circle id="Oval-3-Copy-6" stroke="#299F9A" fill="#FFFFFF" cx="9" cy="9" r="9"></circle>
+                <circle id="Oval-3-Copy-7" fill="#299F9A" cx="9" cy="9" r="6"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

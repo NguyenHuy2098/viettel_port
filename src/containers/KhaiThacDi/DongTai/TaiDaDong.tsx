@@ -85,7 +85,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
@@ -195,7 +195,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
     </>

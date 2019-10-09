@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>tick_box_vuong_focus@</title>
+    <desc>Created with Sketch.</desc>
+    <g id="tick_box_vuong_focus" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <rect id="Rectangle-Copy-37" transform="translate(12.000000, 12.000000) rotate(90.000000) translate(-12.000000, -12.000000) " x="0" y="0" width="24" height="24"></rect>
+            <g transform="translate(3.000000, 3.000000)">
+                <rect id="Rectangle-3-Copy-2" stroke="#299F9A" fill="#299F9A" x="0" y="0" width="18" height="18" rx="3"></rect>
+                <path d="M15.8005094,4.85218371 L15.1523896,4.20122308 C14.8849755,3.93292564 14.4490617,3.93292564 14.1799224,4.20122308 L7.38214046,11.0311112 L3.82121954,7.45429341 C3.55409297,7.18628477 3.11789166,7.18628477 2.84875229,7.45429341 L2.20034493,8.10554284 C1.93321836,8.37384028 1.93321836,8.81166473 2.20034493,9.08227259 L6.89360649,13.7958167 C7.02817618,13.931265 7.20185158,14 7.37753978,14 C7.55322798,14 7.72891618,13.931265 7.86147308,13.7958167 L15.7936084,5.82891345 C16.067636,5.55599518 16.067636,5.12048114 15.8005094,4.85218371" id="Fill-1" fill="#FFFFFF"></path>
+            </g>
+        </g>
+    </g>
+</svg>

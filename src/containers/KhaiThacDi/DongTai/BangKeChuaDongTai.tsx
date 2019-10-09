@@ -536,7 +536,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
@@ -596,10 +596,10 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
             <>
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );
@@ -641,19 +641,20 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
             <Button color="primary" className="ml-2" onClick={handleSearchTai}>
               {t('Tìm kiếm')}
             </Button>
-            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-              <i className="fa fa-trash-o" />
+            {/*_______________temporary hide because of no requirement______________*/}
+            <Button color="white" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow hide">
+              <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
             </Button>
           </div>
         </Col>
         <Col xl={6} lg={4} xs={12} className="p-0 text-right">
           {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
           <Button color="primary" className="ml-2 hide" onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
-            <i className="fa fa-cloud-download mr-2 rotate-90"></i>
+            <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển vào tải')}
           </Button>
           <Button color="primary" className="ml-2" onClick={handleShowPopupDongTai} disabled={disableFunctionalButton}>
-            <i className="fa fa-cloud mr-2 rotate-90"></i>
+            <img src={'../../assets/img/icon/iconDongTai.svg'} alt="VTPostek" />
             {t('Đóng tải')}
           </Button>
         </Col>
@@ -665,7 +666,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={totalPage}
-          onPageChange={onPaginationChange}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
       <DeleteConfirmModal

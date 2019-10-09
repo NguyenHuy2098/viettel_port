@@ -62,7 +62,7 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <Button className="SipTableFunctionIcon">
-              <i className="fa fa-print fa-lg color-green" />
+              <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
             </Button>
           );
         },
@@ -114,7 +114,7 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
           pageCount={1}
-          // onPageChange={handlePageChange}
+          // onThisPaginationChange={handlePageChange}
         />
       </Row>
     </>

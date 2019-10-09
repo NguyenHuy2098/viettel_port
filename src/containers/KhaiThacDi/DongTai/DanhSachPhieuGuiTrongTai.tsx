@@ -253,7 +253,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Danh sách bảng kê/phiếu gửi trong tải')}
         </h1>
@@ -262,12 +262,12 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             <i className="fa fa-print" />
           </Button>
           {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
-          <Button className="hide" onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
-            <i className="fa fa-download rotate-90" />
+          <Button color="primary" className="hide" onClick={handleChuyenVaoTai} disabled={disableFunctionalButton}>
+            <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển tải')}
           </Button>
           <Button color="primary" className="ml-2" onClick={handleShowPopupDongTai} disabled={disableFunctionalButton}>
-            <i className="fa fa-cloud rotate-90" />
+            <img src={'../../assets/img/icon/iconDongTai.svg'} alt="VTPostek" />
             {t('Đóng tải')}
           </Button>
         </div>
@@ -387,8 +387,9 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           <Button color="primary" className="ml-2" onClick={handleScanCodeBkPhieuGui}>
             {t('Quét mã')}
           </Button>
-          <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow">
-            <i className="fa fa-trash-o" />
+          {/*_______________temporary hide because of no requirement______________*/}
+          <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow hide">
+            <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
           </Button>
         </div>
       </div>
@@ -645,7 +646,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
@@ -706,7 +707,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             <>
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
               <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );
@@ -763,7 +764,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Quay lại')}
         </h1>

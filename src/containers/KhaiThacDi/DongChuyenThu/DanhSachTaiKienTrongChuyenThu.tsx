@@ -8,7 +8,7 @@ import { Cell } from 'react-table';
 import { goBack, push } from 'connected-react-router';
 import produce from 'immer';
 import moment from 'moment';
-import { ceil, concat, filter, get, includes, isEmpty, map, noop, pull, size } from 'lodash';
+import { ceil, concat, filter, get, includes, isEmpty, map, pull, size } from 'lodash';
 
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
@@ -119,7 +119,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Danh sách tải/kiện trong chuyến thư')}
         </h1>
@@ -178,17 +178,12 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const renderShippingInformationAndScanCode = (): JSX.Element => (
     <Row className="sipBgWhiteContainer d-flex justify-content-between">
       <Col md={4}>
-        <Scan
-          buttonProps={{
-            onClick: noop,
-          }}
-          onChange={noop}
-          placeholder={t('Quét mã chuyến thư')}
-        />
+        <Scan placeholder={t('Quét mã chuyến thư')} />
       </Col>
       <Col>
-        <Button color="gray" className="sipTitleRightBlockBtnIcon sipBoxShadow">
-          <i className="fa fa-trash-o" />
+        {/*_______________temporary hide because of no requirement______________*/}
+        <Button color="gray" className="sipTitleRightBlockBtnIcon sipBoxShadow hide">
+          <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
         </Button>
       </Col>
     </Row>
@@ -219,7 +214,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     <ButtonPrintable
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalBodyProps={{
         children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
@@ -298,7 +293,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
             {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
             {renderPrintButton(get(row, 'values.TOR_ID', ''))}
             <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
-              <i className="fa fa-trash-o fa-lg color-red" />
+              <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
             </Button>
           </>
         ),
@@ -328,7 +323,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Quay lại')}
         </h1>

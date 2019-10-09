@@ -159,7 +159,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     <PrintableModal
       btnProps={{
         className: 'SipTableFunctionIcon',
-        children: <i className="fa fa-print fa-lg color-green" />,
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
       modalProps={{
         size: 'lg',
@@ -356,7 +356,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button onClick={handleBack} className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Quay lại')}
         </h1>

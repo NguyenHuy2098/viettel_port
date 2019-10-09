@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>btn_history@</title>
+    <desc>Created with Sketch.</desc>
+    <g id="btn_history" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g>
+            <rect id="Rectangle-Copy-3" x="0" y="0" width="24" height="24"></rect>
+            <g id="history-clock-button" fill="#9EA3A8" fill-rule="nonzero" opacity="0.9">
+                <path d="M12.6,0 C8.4,0 4.68,2.31428571 2.76,5.84661654 L0,3.04511278 L0,10.962406 L7.8,10.962406 L4.44,7.5518797 C6,4.50676692 9,2.43609023 12.6,2.43609023 C17.52,2.43609023 21.6,6.57744361 21.6,11.5714286 C21.6,16.5654135 17.52,20.7067669 12.6,20.7067669 C8.64,20.7067669 5.4,18.1488722 4.08,14.6165414 L1.56,14.6165414 C2.88,19.4887218 7.32,23.1428571 12.6,23.1428571 C18.96,23.1428571 24,17.9052632 24,11.5714286 C24,5.23759398 18.84,0 12.6,0 Z M10.8,6.09022556 L10.8,12.3022556 L16.44,15.712782 L17.4,14.1293233 L12.6,11.206015 L12.6,6.09022556 L10.8,6.09022556 L10.8,6.09022556 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

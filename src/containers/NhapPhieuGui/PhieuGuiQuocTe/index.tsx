@@ -935,11 +935,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5">
+            <Col xs="5" xl={7}>
               {t('Cước cộng thêm')}
               {t('HYPHEN', ':')}
             </Col>
-            <Col xs="7" className="text-semibold">
+            <Col xs="7" xl={5} className="text-semibold">
               <NumberFormat value={cuocCongThem} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
             </Col>
           </Row>
@@ -947,8 +947,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         <div className="sipLine row" />
         <Row>
           <Row className="sipSendingCouponItem mb-3">
-            <Col xs="6">{t('Tổng cước')}</Col>
-            <Col xs="6" className="color-orange text-semibold">
+            <Col xs="5">{t('Tổng cước')}</Col>
+            <Col xs="7" className="color-orange text-semibold">
               <NumberFormat value={tongCuoc} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
             </Col>
           </Row>
@@ -1148,7 +1148,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   function renderSendingCouponInfo(): JSX.Element {
     return (
-      <Col xl="6" xs="12">
+      <Col className="sipOrderInputCol" xl="6" xs="12">
         <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>{t('Thông tin phiếu gửi')}</h3>
@@ -1202,7 +1202,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         <h3>
           {t('Thông tin hàng hóa')}
           <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
-            <i className="fa fa-plus" />
+            <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
             {t('Thêm')}
           </Button>
         </h3>
@@ -1326,7 +1326,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   function renderPackageInfo(): JSX.Element {
     return (
-      <Col xl="6" xs="12">
+      <Col className="sipOrderInputCol" xl="6" xs="12">
         <div className="sipContentContainer">
           {renderPackageInfoDetail()}
           <AdditionalPackageTabItemsInternational
@@ -1350,18 +1350,18 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         <h1 className="sipTitle">{t('Phiếu gửi quốc tế')}</h1>
       </Row>
       {renderSendingCoupon()}
-      <Row className="mb-3">
+      <Row className="mb-3 sipOrderInputRow">
         {renderSendingCouponInfo()}
         {renderPackageInfo()}
       </Row>
-      <div className="display-block sipTitleRightBlock text-right">
+      <div className="display-block sipTitleRightBlock text-right sipOrderBtnSave">
         <Button className="ml-2" color="primary" onClick={handleClearData}>
-          <i className="fa fa-refresh mr-2" />
-          Làm mới
+          <img className="mr-2" src={'../../assets/img/icon/iconRefresh.svg'} alt="VTPostek" />
+          {t('Làm mới')}
         </Button>
         <Button className="ml-2" color="primary" onClick={handleValidate}>
-          <i className="fa fa-download mr-2" />
-          Ghi lại
+          <img className="mr-2" src={'../../assets/img/icon/iconComplete.svg'} alt="VTPostek" />
+          {t('Ghi lại')}
         </Button>
       </div>
       <ModalAddNewSuccess

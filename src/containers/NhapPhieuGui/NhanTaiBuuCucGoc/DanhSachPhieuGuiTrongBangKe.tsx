@@ -38,11 +38,12 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
   function renderTopController(): JSX.Element {
     return (
       <>
-        <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-trash-o" />
+        {/*_______________temporary hide because of no requirement______________*/}
+        <Button className="sipTitleRightBlockBtnIcon hide">
+          <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
         </Button>
         <Button className="sipTitleRightBlockBtnIcon">
-          <i className="fa fa-print" />
+          <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
         </Button>
         <Button>
           <i className="fa fa-download" />
@@ -79,10 +80,10 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
           return (
             <>
               <Button className="SipTableFunctionIcon" onClick={redirectToPreviousLocation}>
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );
@@ -107,7 +108,7 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <Button className="sipTitleBtnBack">
-            <i className="fa fa-arrow-left backIcon" />
+            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
           {t('Danh sách phiếu gửi trong bảng kê')}
         </h1>

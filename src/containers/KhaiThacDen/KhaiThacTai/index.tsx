@@ -72,7 +72,7 @@ const OperationSack: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <Button className="SipTableFunctionIcon" onClick={handleControllerClick(row.original)}>
-              <i className="fa fa-pencil fa-lg color-blue" />
+              <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
             </Button>
           );
         },

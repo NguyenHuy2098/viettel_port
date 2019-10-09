@@ -1,21 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactPaginate, { ReactPaginateProps } from 'react-paginate';
+import { useTranslation } from 'react-i18next';
 
-function Pagination(props: ReactPaginateProps): JSX.Element {
+interface Props extends ReactPaginateProps {
+  onThisPaginationChange?: (selectedItem: { selected: number }) => void;
+}
+
+function Pagination(props: Props): JSX.Element {
+  const { t } = useTranslation();
+  const [pageCurrent, setPageCurrent] = useState<number>(1);
+
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    setPageCurrent(selectedItem.selected + 1);
+    props.onThisPaginationChange && props.onThisPaginationChange(selectedItem);
+  };
+
   return (
     <nav className="sipPagination">
+      <div className="sipPaginationTotal">
+        {t('Hiển thị')}
+        <span>
+          {pageCurrent}/{props.pageCount}
+        </span>
+      </div>
       <ReactPaginate
         containerClassName="pagination"
-        previousClassName="sipPaginationPrev pull-left page-item"
-        nextClassName="sipPaginationNext pull-right page-item"
+        previousClassName="sipPaginationPrev page-item"
+        nextClassName="sipPaginationNext page-item"
         previousLinkClassName="page-link"
         nextLinkClassName="page-link"
         pageClassName="page-item"
         pageLinkClassName="page-link"
-        previousLabel={<i className="fa fa-arrow-left" />}
-        nextLabel={<i className="fa fa-arrow-right" />}
+        previousLabel={<img src={'../../assets/img/icon/iconBack.svg'} alt="VTPostek" />}
+        nextLabel={<img src={'../../assets/img/icon/iconNext.svg'} alt="VTPostek" />}
         activeClassName="selected"
         breakClassName="page-item"
+        onPageChange={onPaginationChange}
         {...props}
       />
     </nav>

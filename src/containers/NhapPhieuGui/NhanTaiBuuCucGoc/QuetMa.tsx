@@ -24,14 +24,11 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
+  debugger;
   const userMaBp = useSelector(makeSelectorMaBP);
   const userId = useSelector(makeSelectorPreferredUsername);
 
   const [codeChuyenThu, setCodeChuyenThu] = useState<string>('');
-
-  function handleChangeCodeChuyenThu(e: ChangeEvent<HTMLInputElement>): void {
-    setCodeChuyenThu(e.target.value);
-  }
 
   // eslint-disable-next-line max-lines-per-function
   function handleSearchCodeChuyenThu(): void {
@@ -155,6 +152,7 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
                               type: 'error',
                             },
                           );
+                          setCodeChuyenThu('');
                         },
                       },
                     ),
@@ -193,11 +191,22 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
                 type: 'error',
               },
             );
+            setCodeChuyenThu('');
           },
         },
       ),
     );
   }
+
+  function handleChangeCodeChuyenThu(e: ChangeEvent<HTMLInputElement>): void {
+    setCodeChuyenThu(e.target.value);
+  }
+
+  const handleKeyPressCodeChuyenThu = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.charCode === 13) {
+      handleSearchCodeChuyenThu();
+    }
+  };
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -242,10 +251,10 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-pencil fa-lg color-blue" />
+                <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <Button className="SipTableFunctionIcon">
-                <i className="fa fa-trash-o fa-lg color-red" />
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
           );
@@ -263,6 +272,7 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
           <Input
             value={codeChuyenThu}
             onChange={handleChangeCodeChuyenThu}
+            onKeyPress={handleKeyPressCodeChuyenThu}
             type="text"
             placeholder="Quét mã phiếu gửi"
           />

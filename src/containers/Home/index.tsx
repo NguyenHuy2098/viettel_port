@@ -14,35 +14,35 @@ const Home: React.FC = (): JSX.Element => {
       <Row className="topDashBroad mb-4">
         <Col xs="12" className="col-sm itemCol pt-3">
           <span className="font-lg">
-            <i className="fa fa-file-text-o fa-lg color-red mr-2" />
+            <img src={'../../assets/img/icon/iconBangKe1.svg'} alt="VTPostek" />
             {t('Bảng kê chưa đóng')}
           </span>
           <div className="font-2xl color-gray-dark pt-2 pb-2">20</div>
         </Col>
         <Col xs="12" className="col-sm itemCol pt-3">
           <span className="font-lg">
-            <i className="fa fa-refresh fa-lg color-purple mr-2" />
+            <img src={'../../assets/img/icon/iconTai1.svg'} alt="VTPostek" />
             {t('Tải chưa đóng')}
           </span>
           <div className="font-2xl color-gray-dark pt-2 pb-2">02</div>
         </Col>
         <Col xs="12" className="col-sm itemCol pt-3">
           <span className="font-lg">
-            <i className="fa fa-bus fa-lg color-green mr-2" />
+            <img src={'../../assets/img/icon/iconChuyenThu.svg'} alt="VTPostek" />
             {t('Chuyến thư chưa đóng')}
           </span>
           <div className="font-2xl color-gray-dark pt-2 pb-2">01</div>
         </Col>
         <Col xs="12" className="col-sm itemCol pt-3">
           <span className="font-lg">
-            <i className="fa fa-file-text-o fa-lg color-blue mr-2" />
+            <img src={'../../assets/img/icon/iconBangKe2.svg'} alt="VTPostek" />
             {t('Bảng kê chưa nhận')}
           </span>
           <div className="font-2xl color-gray-dark pt-2 pb-2">20</div>
         </Col>
         <Col xs="12" className="col-sm itemCol pt-3">
           <span className="font-lg">
-            <i className="fa fa-refresh fa-lg color-orange mr-2" />
+            <img src={'../../assets/img/icon/iconTai2.svg'} alt="VTPostek" />
             {t('Tải chưa nhận')}
           </span>
           <div className="font-2xl color-gray-dark pt-2 pb-2">20</div>
