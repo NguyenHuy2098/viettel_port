@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +22,7 @@ import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { SipDataType } from 'utils/enums';
-import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
 interface Props {
   match: match;
@@ -195,7 +196,20 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
 
   const handleRedirectDetail = useCallback(
     (item: API.Child): void => {
-      dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
+      dispatch(
+        action_MIOA_ZTMI046(
+          {
+            IV_TOR_ID: item.TOR_ID,
+            IV_PAGENO: '1',
+            IV_NO_PER_PAGE: '10',
+          },
+          {
+            onSuccess: (): void => {
+              dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
+            },
+          },
+        ),
+      );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dataChuyenThuChildren],
