@@ -4,8 +4,9 @@ import { Badge, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstr
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
 import { select_CountZTMI0240 } from 'redux/ZTMI240/selectors';
+import BuuGuiChuaDongBangKe from 'containers/KhaiThacDi/DongBangKe/BuuGuiChuaDongBangKe';
 import QuetMa from './QuetMa';
-import PhieuGuiChuaDongBangKe from './PhieuGuiChuaDongBangKe';
+// import PhieuGuiChuaDongBangKe from './PhieuGuiChuaDongBangKe';
 
 // eslint-disable-next-line max-lines-per-function
 function NhanTaiBuuCucGoc(): JSX.Element {
@@ -53,7 +54,7 @@ function NhanTaiBuuCucGoc(): JSX.Element {
             <QuetMa />
           </TabPane>
           <TabPane tabId={2}>
-            <PhieuGuiChuaDongBangKe />
+            <BuuGuiChuaDongBangKe />
           </TabPane>
         </TabContent>
       </div>
