@@ -19,7 +19,10 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
   const [listBangKePhieuGuiDaQuet, setListBangKePhieuGuiDaQuet] = useState<API.RowResponseZTMI023OUT[]>([]);
 
   const handleSuccessQuetNhan = (infoBangKePhieuGui: API.RowResponseZTMI023OUT): void => {
-    setListBangKePhieuGuiDaQuet(concat(listBangKePhieuGuiDaQuet, infoBangKePhieuGui));
+    const check = listBangKePhieuGuiDaQuet.map(item => item.TOR_ID === infoBangKePhieuGui.TOR_ID);
+    if (check.length === 0) {
+      setListBangKePhieuGuiDaQuet(concat(listBangKePhieuGuiDaQuet, infoBangKePhieuGui));
+    }
   };
 
   const columns = useMemo(
