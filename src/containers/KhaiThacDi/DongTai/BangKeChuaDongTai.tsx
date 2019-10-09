@@ -7,9 +7,9 @@ import { generatePath } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 import { Cell } from 'react-table';
-import { find, forEach, map, get, noop, size } from 'lodash';
+import { find, forEach, map, get, noop, size, isEmpty } from 'lodash';
 import moment from 'moment';
-
+import { toastError } from 'components/Toast';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import DataTable from 'components/DataTable';
@@ -130,19 +130,26 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const getListTai = useCallback(
     function(payload = {}): void {
       dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC1',
-          IV_FR_LOC_ID: userMaBp,
-          IV_CUST_STATUS: '101',
-          IV_FR_DATE: moment()
-            .subtract(1, 'day')
-            .format('YYYYMMDD'),
-          IV_TO_DATE: moment().format('YYYYMMDD'),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-          ...payload,
-        }),
+        action_MIOA_ZTMI047(
+          {
+            IV_TOR_ID: '',
+            IV_TOR_TYPE: 'ZC1',
+            IV_FR_LOC_ID: userMaBp,
+            IV_CUST_STATUS: '101',
+            IV_FR_DATE: moment()
+              .subtract(1, 'day')
+              .format('YYYYMMDD'),
+            IV_TO_DATE: moment().format('YYYYMMDD'),
+            IV_PAGENO: '1',
+            IV_NO_PER_PAGE: '10',
+            ...payload,
+          },
+          {
+            onFailure: (error: Error) => {
+              toastErrorOnSearch(error, payload.IV_TOR_ID);
+            },
+          },
+        ),
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -157,6 +164,12 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   }
 
   useEffect((): void => getListTai(), [getListTai]);
+
+  const toastErrorOnSearch = (error: Error, torId: string): void => {
+    if (!isEmpty(torId)) {
+      toastError(error.message);
+    }
+  };
 
   function handleSearchTai(): void {
     const payload = {

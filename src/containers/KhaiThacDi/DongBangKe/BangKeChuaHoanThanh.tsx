@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { map, get } from 'lodash';
+import { map, get, isEmpty } from 'lodash';
 import { push } from 'connected-react-router';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -19,6 +19,7 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
+import { toastError } from 'components/Toast';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -54,22 +55,35 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   }
 
+  const toastErrorOnSearch = (error: Error, torId: string): void => {
+    if (!isEmpty(torId)) {
+      toastError(error.message);
+    }
+  };
+
   const getListBangKe = useCallback(
     function(payload = {}): void {
       dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC1',
-          IV_FR_LOC_ID: userMaBp,
-          IV_CUST_STATUS: '101',
-          IV_FR_DATE: moment()
-            .subtract(2, 'day')
-            .format('YYYYMMDD'),
-          IV_TO_DATE: moment().format('YYYYMMDD'),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-          ...payload,
-        }),
+        action_MIOA_ZTMI047(
+          {
+            IV_TOR_ID: '',
+            IV_TOR_TYPE: 'ZC1',
+            IV_FR_LOC_ID: userMaBp,
+            IV_CUST_STATUS: '101',
+            IV_FR_DATE: moment()
+              .subtract(2, 'day')
+              .format('YYYYMMDD'),
+            IV_TO_DATE: moment().format('YYYYMMDD'),
+            IV_PAGENO: '1',
+            IV_NO_PER_PAGE: '10',
+            ...payload,
+          },
+          {
+            onFailure: (error: Error) => {
+              toastErrorOnSearch(error, payload.IV_TOR_ID);
+            },
+          },
+        ),
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

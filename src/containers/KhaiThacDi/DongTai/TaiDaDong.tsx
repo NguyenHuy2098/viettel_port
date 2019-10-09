@@ -5,9 +5,9 @@ import { Button, Col, Input, Row } from 'reactstrap';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { map, get } from 'lodash';
+import { map, get, isEmpty } from 'lodash';
 import moment from 'moment';
-
+import { toastError } from 'components/Toast';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
@@ -37,20 +37,33 @@ const TaiDaDong: React.FC = (): JSX.Element => {
     };
   }
 
+  const toastErrorOnSearch = (error: Error, torId: string): void => {
+    if (!isEmpty(torId)) {
+      toastError(error.message);
+    }
+  };
+
   const getListTai = useCallback(
     function(payload = {}): void {
       dispatch(
-        action_MIOA_ZTMI047({
-          IV_TOR_ID: '',
-          IV_TOR_TYPE: 'ZC2',
-          IV_FR_LOC_ID: userMaBp,
-          IV_CUST_STATUS: '103',
-          IV_FR_DATE: moment().format('YYYYMMDD'),
-          IV_TO_DATE: moment().format('YYYYMMDD'),
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '10',
-          ...payload,
-        }),
+        action_MIOA_ZTMI047(
+          {
+            IV_TOR_ID: '',
+            IV_TOR_TYPE: 'ZC2',
+            IV_FR_LOC_ID: userMaBp,
+            IV_CUST_STATUS: '103',
+            IV_FR_DATE: moment().format('YYYYMMDD'),
+            IV_TO_DATE: moment().format('YYYYMMDD'),
+            IV_PAGENO: '1',
+            IV_NO_PER_PAGE: '10',
+            ...payload,
+          },
+          {
+            onFailure: (error: Error) => {
+              toastErrorOnSearch(error, payload.IV_TOR_ID);
+            },
+          },
+        ),
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
