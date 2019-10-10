@@ -9,7 +9,7 @@ import moment from 'moment';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import PrintableThongTinDonHang from 'components/PrintableThongTinDonHang';
+import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 import Scan from 'components/Input/Scan';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState, SipFlowType } from 'utils/enums';
@@ -42,7 +42,7 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
           children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
         }}
         modalBodyProps={{
-          children: <PrintableThongTinDonHang idDonHang={thisIdChuyenThu[0]} />,
+          children: <PrintableThongTinDonHang idDonHang={thisIdChuyenThu[0]} idChuyenThu={idChuyenThu} />,
         }}
         modalHeaderProps={{
           children: t('In danh sách bưu gửi của bảng kê'),

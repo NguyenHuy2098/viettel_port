@@ -14,7 +14,7 @@ import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
 import { goBack } from 'connected-react-router';
 import PrintableModal from '../../components/Button/ButtonPrintable';
-import PrintableThongTinDonHang from '../../components/PrintableThongTinDonHang';
+import PrintableThongTinDonHang from '../../components/Printable/PrintableThongTinDonHang';
 
 interface Props {
   match: match;
@@ -165,7 +165,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
         size: 'lg',
       }}
       modalBodyProps={{
-        children: <PrintableThongTinDonHang idDonHang={idDonHang} />,
+        children: <PrintableThongTinDonHang idDonHang={idDonHang} idChuyenThu={idChuyenThu} />,
       }}
       modalHeaderProps={{
         children: t('In Thông Tin Đơn Hàng'),

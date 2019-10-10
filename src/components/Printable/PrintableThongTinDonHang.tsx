@@ -4,17 +4,18 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import JsBarcode from 'jsbarcode';
 import moment from 'moment';
-import { get, isEmpty } from 'lodash';
-import { action_MIOA_ZTMI031 } from '../../redux/MIOA_ZTMI031/actions';
-import { action_GET_ADDRESS } from '../../redux/SearchLocation/actions';
+import { head, get, isEmpty, split } from 'lodash';
+import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
+import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 
 interface Props {
   idDonHang: string;
+  idChuyenThu: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const PrintableThongTinDonHang = (props: Props): JSX.Element => {
-  const { idDonHang } = props;
+  const { idDonHang, idChuyenThu } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [data, setData] = useState<API.RowMTZTMI031OUT | undefined>(undefined);
@@ -34,8 +35,8 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             BUYER_REFERENCE_NUMBER: '',
           },
           {
-            onSuccess: (response: API.RowMTZTMI031OUT): void => {
-              setData(get(response, '0', undefined) || undefined);
+            onSuccess: (data: API.MIOAZTMI031Response): void => {
+              setData(get(data, 'MT_ZTMI031_OUT.Row[0]'));
             },
           },
           {
@@ -127,11 +128,11 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
   }, [data]);
 
   useEffect(() => {
-    JsBarcode('#barcode', idDonHang, {
+    JsBarcode('#barcode', idChuyenThu, {
       displayValue: false,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [idChuyenThu]);
 
   function renderABC(): JSX.Element {
     return (
@@ -158,6 +159,23 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
     );
   }
 
+  const renderTableBody = (): JSX.Element => {
+    return (
+      <tbody>
+        <tr>
+          <td className="border-0">{wardReceiver}</td>
+          <td className="border-0">Tỉnh phát:</td>
+        </tr>
+        <tr>
+          <td className="border-0">{districtReceiver}</td>
+          <td className="border-0">
+            <strong>{provinceReceiver}</strong>
+          </td>
+        </tr>
+      </tbody>
+    );
+  };
+
   function renderKhachHangNhan(): JSX.Element {
     return (
       <Row className="border-bottom">
@@ -176,18 +194,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}
           </p>
-          <table className="table">
-            <tr>
-              <td className="border-0">{wardReceiver}</td>
-              <td className="border-0">Tỉnh phát:</td>
-            </tr>
-            <tr>
-              <td className="border-0">{districtReceiver}</td>
-              <td className="border-0">
-                <strong>{provinceReceiver}</strong>
-              </td>
-            </tr>
-          </table>
+          <table className="table">{renderTableBody()}</table>
         </Col>
       </Row>
     );
@@ -215,7 +222,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             <p className="">
               <img className="" id="barcode" alt="barcode" />
             </p>
-            <p className="text-center">{idDonHang}</p>
+            <p className="text-center">{props.idChuyenThu}</p>
           </Col>
         </Row>
         <Row className="border-bottom">
@@ -241,7 +248,9 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
         <Row className="border-bottom">
           <Col xs={6} className="border-right pt-2">
             <div>
-              <p className="lin">{t('Nội dung ')} : Hàng dễ võ</p>
+              <p className="lin">
+                {t('Nội dung ')} :{head(split(get(data, 'HEADER_NOTE', ''), '/'))}
+              </p>
               {/*{moment(get(infoChuyenThu, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY ')}*/}
             </div>
             <div>

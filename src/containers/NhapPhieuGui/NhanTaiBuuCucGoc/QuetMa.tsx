@@ -113,16 +113,11 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
                                           },
                                         );
                                         dispatch(
-                                          action_ZTMI240(
-                                            {
-                                              IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
-                                            },
-                                            {
-                                              onSuccess: (): void => {
-                                                handleChangeTab(2);
-                                              },
-                                            },
-                                          ),
+                                          action_ZTMI240({
+                                            IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+                                            IV_LOC_ID: userMaBp,
+                                            IV_DATE: moment().format('YYYYMMDD'),
+                                          }),
                                         );
                                       },
                                       onFailure: (error: HttpRequestErrorType): void => {
