@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Fade, Input, Row } from 'reactstrap';
-import { find, get, map, size } from 'lodash';
+import { find, get, map, size, toNumber } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -13,6 +13,7 @@ import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux
 import moment from 'moment';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
+import { SipDataTorType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -34,9 +35,13 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
         TOR_ID: item.TOR_ID ? item.TOR_ID : '',
         DES_LOC_IDTRQ: item.DES_LOC_IDTRQ ? item.DES_LOC_IDTRQ : '',
         SRC_LOC_IDTRQ: item.SRC_LOC_IDTRQ ? item.SRC_LOC_IDTRQ : '',
-        GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
+        GRO_WEI_VAL: toNumber(get(item, 'GRO_WEI_VAL', ''))
+          ? `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`
+          : '',
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
+        TOR_TYPE: item.TOR_TYPE,
+        child_count: item.child_count,
       };
     },
   );
@@ -194,10 +199,10 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
       },
       {
         Header: t('Số lượng'),
-        accessor: '',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Chưa có API</>;
-        },
+        accessor: 'child_count',
+        // Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+        //   return <>Chưa có API</>;
+        // },
       },
       {
         Header: t('Trọng lượng'),
@@ -209,8 +214,10 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
       },
       {
         Header: t('Loại'),
-        Cell: (): JSX.Element => {
-          return <>Thiếu API</>;
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
         },
       },
       {

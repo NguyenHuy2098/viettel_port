@@ -24,7 +24,7 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType, SipFlowType, SipDataTorType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 interface Props {
@@ -569,6 +569,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
         child_count: item.child_count,
+        TOR_TYPE: item.TOR_TYPE,
       };
     },
   );
@@ -627,8 +628,10 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
       },
       {
         Header: t('Loại'),
-        Cell: (): JSX.Element => {
-          return <>Thiếu API</>;
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
         },
       },
       {
