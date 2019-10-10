@@ -126,6 +126,9 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Bưu cục đến'),
         accessor: 'NEXT_LOC',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.NEXT_LOC', '');
+        },
       },
       {
         Header: t('Số lượng'),

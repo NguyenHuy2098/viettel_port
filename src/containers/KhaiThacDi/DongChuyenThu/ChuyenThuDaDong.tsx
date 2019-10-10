@@ -63,6 +63,9 @@ const ChuyenThuDaDong: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Điểm đến'),
         accessor: 'LOG_LOCID_TO',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.LOG_LOCID_TO', '');
+        },
       },
       {
         Header: t('Số lượng'),
