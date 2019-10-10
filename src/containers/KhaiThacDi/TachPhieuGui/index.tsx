@@ -26,7 +26,6 @@ import moment from 'moment';
 import { action_ZTMI213 } from 'redux/ZTMI213/actions';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
-import { select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
 import { select_ZTMI213 } from 'redux/ZTMI213/selectors';
 
 interface SubPackage {
@@ -48,7 +47,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   const [subPackages, setSubPackages] = useState<SubPackage[]>([]);
   const [showListCoupon, setShowListCoupon] = useState<boolean>(false);
 
-  const thongTinPhieuGui = useSelector(select_MT_ZTMI031_OUT);
+  // const thongTinPhieuGui = useSelector(select_MT_ZTMI031_OUT);
+  const [thongTinPhieuGui, setThongTinPhieuGui] = useState<API.RowMTZTMI031OUT[]>([]);
   const ZTMI213_ResponseRow = useSelector(select_ZTMI213);
 
   function renderShippingInformationTitle(): JSX.Element {
@@ -399,6 +399,8 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                   type: 'error',
                 },
               );
+            } else {
+              setThongTinPhieuGui(get(data, 'MT_ZTMI031_OUT.Row'));
             }
           },
           onFailure: (): void => {
@@ -417,6 +419,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
             setDivideQuantity(0);
           },
         },
+        { stateless: true },
       ),
     );
     setShowDivideCouponUI(false);
