@@ -4,7 +4,7 @@ import { Button, Row, Input, Label, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { get, map, find, reject, isEmpty } from 'lodash';
+import { get, map, find, reject } from 'lodash';
 import moment from 'moment';
 
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
@@ -91,9 +91,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ngày gửi bưu phẩm'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return isEmpty(get(row, 'original.CREATE_ON'))
-            ? ''
-            : moment(get(row, 'original.CREATE_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY');
+          return moment(get(row, 'original.CREATED_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY');
         },
       },
       {
