@@ -1,15 +1,16 @@
 import React, { useMemo, useEffect, useCallback } from 'react';
 import { Row } from 'reactstrap';
-import DataTable from 'components/DataTable/Printable';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { action_ZTMI240 } from 'redux/ZTMI240/actions';
-import { findIndex, join, map, size, slice } from 'lodash';
-import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
-import { push } from 'connected-react-router';
 import { generatePath } from 'react-router';
+import { push } from 'connected-react-router';
+import { findIndex, join, map, size, slice, toString } from 'lodash';
+
+import DataTable from 'components/DataTable/Printable';
+import { action_ZTMI240 } from 'redux/ZTMI240/actions';
+import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
+import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import moment from 'moment';
 
 interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
   DES?: string;
@@ -19,7 +20,8 @@ interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
 const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const listPhieuGuiChuaDongBangKe = useSelector(select_ZTMI0240);
+  const listBuuGuiChuaDongBangKe = useSelector(select_ZTMI0240);
+
   const columns = useMemo(
     () => [
       {
@@ -38,7 +40,8 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-  const data = map(listPhieuGuiChuaDongBangKe, (item: MTZTMI240Row) => {
+
+  const data = map(listBuuGuiChuaDongBangKe, (item: MTZTMI240Row) => {
     const thisDes = join(
       slice(
         item.COMM_LOC_GROUP,
@@ -56,13 +59,13 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
   });
 
   useEffect(() => {
-    const payload = {
-      IV_FREIGHT_UNIT_STATUS: [306],
-      IV_LOC_ID: 'BDH',
-      IV_DATE: moment().format('YYYYMMDD'),
-    };
-    dispatch(action_ZTMI240(payload));
-  }, [dispatch]);
+    dispatch(
+      action_ZTMI240({
+        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleRedirectDetail = useCallback(
     (item: MTZTMI240RowTypeCustom): void => {
@@ -75,7 +78,7 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [listPhieuGuiChuaDongBangKe],
+    [listBuuGuiChuaDongBangKe],
   );
 
   return (

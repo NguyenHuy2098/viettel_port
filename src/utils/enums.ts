@@ -32,6 +32,7 @@ export enum SipDataState {
   /**
    * Kien/Phieu gui/Buu gui - 3xx~8xx
    */
+  NHAN_TAI_BUU_CUC_GOC = 306,
   KIEN_CHUA_QUET_NHAN_THUOC_CHUYEN_THU_DA_NHAN_TAI_TTKT = 401,
   BUU_GUI_CHUA_QUET_NHAN_TAI_TTKT = 403,
   BUU_GUI_DA_QUET_NHAN_TAI_TTKT = 404,

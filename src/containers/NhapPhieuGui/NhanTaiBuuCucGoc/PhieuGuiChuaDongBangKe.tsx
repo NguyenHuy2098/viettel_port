@@ -1,34 +1,32 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 import { Row } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { generatePath } from 'react-router';
 import { push } from 'connected-react-router';
-import { findIndex, join, map, size, slice } from 'lodash';
+import { findIndex, join, map, size, slice, toString } from 'lodash';
+
+import DataTable from 'components/DataTable';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
 import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
+import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import DataTable from 'components/DataTable';
-import { generatePath } from 'react-router';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
-import moment from 'moment';
 
 // eslint-disable-next-line max-lines-per-function
 function PhieuGuiChuaDongBangKe(): JSX.Element {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const userMaBp = useSelector(makeSelectorMaBP);
 
   const listPhieuGuiChuaDongBangKe = useSelector(select_ZTMI0240);
 
   useEffect((): void => {
-    const payload = {
-      IV_FREIGHT_UNIT_STATUS: [306],
-      IV_LOC_ID: userMaBp,
-      IV_DATE: moment().format('YYYYMMDD'),
-    };
-    dispatch(action_ZTMI240(payload));
+    dispatch(
+      action_ZTMI240({
+        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+      }),
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, userMaBp]);
+  }, []);
 
   const handleRedirectDetail = useCallback(
     (item: MTZTMI240Row): void => {
