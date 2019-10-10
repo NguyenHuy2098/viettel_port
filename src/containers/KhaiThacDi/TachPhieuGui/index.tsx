@@ -346,18 +346,20 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         <Col lg="4" xl={5} xs="12">
           <Row>
             <Col xs="4">{t('Mã phiếu')}: </Col>
-            <Col xs="7">{thongTinPhieuGui[0].FWO}</Col>
+            <Col xs="7">{get(thongTinPhieuGui[0], 'FWO', '')}</Col>
           </Row>
 
           <Row>
             <Col xs="4">{t('Ngày gửi')}: </Col>
-            <Col xs="7">{moment(trim(thongTinPhieuGui[0].CREATED_ON), 'YYYYMMDD').format('DD/MM/YYYY')}</Col>
+            <Col xs="7">
+              {moment(trim(get(thongTinPhieuGui[0], 'CREATED_ON'), ''), 'YYYYMMDD').format('DD/MM/YYYY')}
+            </Col>
           </Row>
         </Col>
         <Col lg="4" xs="12" xl={5}>
           <Row>
             <Col xs="4">{t('Số lượng')}: </Col>
-            <Col xs="7">{toNumber(thongTinPhieuGui[0].Quantity)}</Col>
+            <Col xs="7">{toNumber(get(thongTinPhieuGui[0], 'Quantity', '0'))}</Col>
           </Row>
           <Row>
             <Col xs="4">{t('Trọng lượng')}: </Col>

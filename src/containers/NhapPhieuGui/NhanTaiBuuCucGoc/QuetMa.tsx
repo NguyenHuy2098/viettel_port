@@ -87,6 +87,7 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
                             // };
                             dispatch(
                               action_MIOA_ZTMI235(payload235, {
+                                // eslint-disable-next-line max-lines-per-function
                                 onSuccess: (data: ZTMI235Response): void => {
                                   const payload239 = {
                                     IV_PACKAGE_ID: codeChuyenThu,
@@ -110,13 +111,19 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
                                           },
                                         );
                                         dispatch(
-                                          action_ZTMI240({
-                                            IV_FREIGHT_UNIT_STATUS: [306],
-                                            IV_LOC_ID: userMaBp,
-                                            IV_DATE: moment().format('YYYYMMDD'),
-                                          }),
+                                          action_ZTMI240(
+                                            {
+                                              IV_FREIGHT_UNIT_STATUS: [306],
+                                              IV_LOC_ID: userMaBp,
+                                              IV_DATE: moment().format('YYYYMMDD'),
+                                            },
+                                            {
+                                              onSuccess: (): void => {
+                                                handleChangeTab(2);
+                                              },
+                                            },
+                                          ),
                                         );
-                                        handleChangeTab(2);
                                       },
                                       onFailure: (error: HttpRequestErrorType): void => {
                                         toast(

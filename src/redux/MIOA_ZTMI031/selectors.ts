@@ -53,7 +53,7 @@ const defaultInstance = {
 };
 
 export const select_MT_ZTMI031_OUT = (state: AppStateType): API.RowMTZTMI031OUT[] => {
-  return get(state, 'MIOA_ZTMI031.response', []);
+  return get(state, 'MIOA_ZTMI031.response.MT_ZTMI031_OUT.Row', []);
 };
 
 export function select_MT_ZTMI031_INSTANE(state: AppStateType): API.RowMTZTMI031OUT {
