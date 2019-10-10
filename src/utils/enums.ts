@@ -6,6 +6,14 @@ export enum SipDataType {
   TAI = 'ZC2',
 }
 
+export enum SipDataTorType {
+  ZC1 = 'Bảng kê',
+  ZC2 = 'Tải',
+  ZC3 = 'Chuyến thư',
+  ZBIG = 'Kiện',
+  SZML = 'Bưu gửi',
+}
+
 export enum SipDataState {
   /**
    * Tai/Bang ke/Chuyen thu - 1xx

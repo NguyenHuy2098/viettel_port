@@ -21,7 +21,7 @@ import routesMap from 'utils/routesMap';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
-import { SipDataType, SipFlowType } from 'utils/enums';
+import { SipDataType, SipFlowType, SipDataTorType } from 'utils/enums';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
 interface Props {
@@ -289,7 +289,12 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       },
       {
         Header: t('Loại'),
-        accessor: 'TOR_TYPE',
+        // accessor: 'TOR_TYPE',
+        Cell: ({ row }: Cell<API.Child>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
+        },
       },
       {
         Header: t('Quản trị'),
