@@ -521,10 +521,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     const payloadPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
     });
-    const servicePayload = find(
-      transportMethodArr,
-      (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
-    );
+    // const servicePayload = find(
+    //   transportMethodArr,
+    //   (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
+    // );
     let newPackageItem011 = {
       COD: '',
       COMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
@@ -565,18 +565,16 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       });
     }
     const api011Payload = {
-      Destination_city: quocGia,
-      Destination_country: quocGia,
-      Destination_district: districtIdReceiver,
+      Destination_city: quocGia, //--- 40 kí tự
+      Destination_country: quocGia, //- khi đơn quốc tế thì truyền city_des= country_des
+      Destination_district: districtIdReceiver, //--- 40 kí tự
       Destination_Ward: wardIdReceiver,
-      FWO_type: 'V004',
+      FWO_type: 'V003',
       loc_id: '',
       Movement_type: 'ZPD',
       Ordering_party: '9999999999',
-      item: newArr011,
-      Sales_org: '',
-      Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
-      // Service_group: 'V01/V02/V04', // để theo yêu cầu của em Hường ngày 27/9/2019
+      Item: newArr011,
+      Service_group: 'V05',
       Source_city: provinceIdSender,
       Source_country: 'VN',
       Source_district: districtIdSender,

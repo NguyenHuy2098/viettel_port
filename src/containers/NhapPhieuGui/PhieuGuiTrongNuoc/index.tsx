@@ -640,7 +640,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       loc_id: '',
       Movement_type: diemGiaoNhan,
       Ordering_party: '9999999999',
-      item: newArr011,
+      Item: newArr011,
       Sales_org: '',
       // Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
       Service_group: 'V01/V02/V04', // để theo yêu cầu của em Hường ngày 27/9/2019
