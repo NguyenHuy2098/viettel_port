@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Cell } from 'react-table';
 import JsBarcode from 'jsbarcode';
 import moment from 'moment';
-import { ceil, get, isEmpty } from 'lodash';
+import { ceil, get, isEmpty, toNumber } from 'lodash';
 import DataTable from 'components/DataTable/Printable';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import logo from '../../assets/img/logo.png';
@@ -69,7 +69,7 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
       {
         Header: t('T.Lượng NET'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return get(row, 'original.GRO_WEI_VAL', '')
+          return toNumber(get(row, 'original.GRO_WEI_VAL', ''))
             ? `${ceil(get(row, 'original.GRO_WEI_VAL'), 2)} ${get(row, 'original.GRO_WEI_UNI')}`
             : '';
         },
