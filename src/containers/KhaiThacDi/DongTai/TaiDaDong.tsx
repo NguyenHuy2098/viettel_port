@@ -5,26 +5,26 @@ import { Button, Col, Input, Row } from 'reactstrap';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { map, get, isEmpty } from 'lodash';
+import { get, isEmpty, map } from 'lodash';
 import moment from 'moment';
+
 import { toastError } from 'components/Toast';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const userMaBp = useSelector(makeSelectorMaBP);
-
   const listTaiDaDong = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
   const countTaiDaDong = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
@@ -48,20 +48,17 @@ const TaiDaDong: React.FC = (): JSX.Element => {
       dispatch(
         action_MIOA_ZTMI047(
           {
-            IV_TOR_ID: '',
-            IV_TOR_TYPE: 'ZC2',
-            IV_FR_LOC_ID: userMaBp,
-            IV_CUST_STATUS: '103',
-            IV_FR_DATE: moment().format('YYYYMMDD'),
-            IV_TO_DATE: moment().format('YYYYMMDD'),
-            IV_PAGENO: '1',
-            IV_NO_PER_PAGE: '10',
+            IV_TOR_TYPE: SipDataType.TAI,
+            IV_CUST_STATUS: SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU,
             ...payload,
           },
           {
             onFailure: (error: Error) => {
               toastErrorOnSearch(error, payload.IV_TOR_ID);
             },
+          },
+          {
+            flow: SipFlowType.KHAI_THAC_DI,
           },
         ),
       );
@@ -73,10 +70,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
   useEffect((): void => getListTai(), [getListTai]);
 
   function handleSearchTai(): void {
-    const payload = {
-      IV_TOR_ID: torIdSearch,
-    };
-    getListTai(payload);
+    getListTai({ IV_TOR_ID: torIdSearch });
   }
 
   const handleRedirectDetail = useCallback(

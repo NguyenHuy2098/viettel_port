@@ -1,10 +1,10 @@
 import { get, toNumber } from 'lodash';
-import moment from 'moment';
 
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
 import { select } from 'utils/stateHelpers';
+import { today, yesterday } from 'utils/timeHelper';
 
 export async function post_ZTMI236(payload: Partial<API.ZTMI236Request>): Promise<API.ZTMI236Response> {
   const { data } = await sapApi.post(sapApiMap.ZTMI236, {
@@ -12,10 +12,8 @@ export async function post_ZTMI236(payload: Partial<API.ZTMI236Request>): Promis
     IV_FREIGHT_UNIT_TYPE: '',
     IV_FREIGHT_UNIT_STATUS: [],
     IV_LOC_ID: select(makeSelectorMaBP),
-    IV_FR_DATE: moment()
-      .subtract(7, 'day')
-      .format('YYYYMMDD'),
-    IV_TO_DATE: moment().format('YYYYMMDD'),
+    IV_FR_DATE: yesterday,
+    IV_TO_DATE: today,
     IV_PAGE_NO: '1',
     IV_NO_PER_PAGE: '10',
     ...payload,

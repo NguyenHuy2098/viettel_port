@@ -1,33 +1,31 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { map, get, noop, toString, trim, isEmpty } from 'lodash';
-import { Button, Col, Input, Row } from 'reactstrap';
+import { generatePath } from 'react-router-dom';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
+import { get, isEmpty, map, noop } from 'lodash';
+import moment from 'moment';
+
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
+import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import { toastError } from 'components/Toast';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
-import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
-import routesMap from 'utils/routesMap';
-import { Cell } from 'react-table';
-import DataTable from 'components/DataTable';
-import Pagination from 'components/Pagination';
-import { generatePath } from 'react-router-dom';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
-import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
-import ButtonPrintable from 'components/Button/ButtonPrintable';
-import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const userMaBp = useSelector(makeSelectorMaBP);
-
   const listTaiChuaHoanThanh = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
@@ -54,37 +52,30 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   }
 
-  const getListTai = useCallback(
-    function(payload = {}): void {
-      dispatch(
-        action_MIOA_ZTMI047(
-          {
-            IV_TOR_ID: '',
-            IV_TOR_TYPE: 'ZC2',
-            IV_FR_LOC_ID: userMaBp,
-            IV_TO_LOC_ID: '',
-            IV_CUST_STATUS: '101',
-            IV_FR_DATE: moment()
-              .subtract(2, 'day')
-              .format('YYYYMMDD'),
-            IV_TO_DATE: trim(toString(moment().format('YYYYMMDD'))),
-            IV_PAGENO: '1',
-            IV_NO_PER_PAGE: '10',
-            ...payload,
+  const getListTai = (payload = {}): void => {
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          ...payload,
+        },
+        {
+          onFailure: (error: Error) => {
+            toastErrorOnSearch(error, get(payload, 'IV_TOR_ID'));
           },
-          {
-            onFailure: (error: Error) => {
-              toastErrorOnSearch(error, payload.IV_TOR_ID);
-            },
-          },
-        ),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, userMaBp],
-  );
+        },
+        {
+          flow: SipFlowType.KHAI_THAC_DI,
+        },
+      ),
+    );
+  };
 
-  useEffect((): void => getListTai(), [getListTai]);
+  useEffect((): void => {
+    getListTai();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const toastErrorOnSearch = (error: Error, torId: string): void => {
     if (!isEmpty(torId)) {

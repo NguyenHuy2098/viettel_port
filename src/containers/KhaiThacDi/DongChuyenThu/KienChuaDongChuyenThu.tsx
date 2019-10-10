@@ -83,12 +83,6 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         IV_FR_LOC_ID: maBP,
         IV_TO_LOC_ID: '',
         IV_CUST_STATUS: SipDataState.TAO_MOI,
-        IV_FR_DATE: moment()
-          .subtract(1, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '20',
       };
       dispatch(
         action_MIOA_ZTMI016(payload, {

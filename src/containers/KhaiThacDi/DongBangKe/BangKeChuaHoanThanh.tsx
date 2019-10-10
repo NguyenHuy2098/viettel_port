@@ -1,32 +1,30 @@
-import React, { useEffect, useCallback, useMemo, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { map, get, isEmpty } from 'lodash';
-import { push } from 'connected-react-router';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow, makeSelectorTotalPage, makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
-import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
-import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
+import { push } from 'connected-react-router';
+import { get, isEmpty, map } from 'lodash';
 import moment from 'moment';
+
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { toastError } from 'components/Toast';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
-
   const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
   const countBangKeChuaHoanThanh = useSelector(
     makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH),
@@ -61,43 +59,33 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     }
   };
 
-  const getListBangKe = useCallback(
-    function(payload = {}): void {
-      dispatch(
-        action_MIOA_ZTMI047(
-          {
-            IV_TOR_ID: '',
-            IV_TOR_TYPE: 'ZC1',
-            IV_FR_LOC_ID: userMaBp,
-            IV_CUST_STATUS: '101',
-            IV_FR_DATE: moment()
-              .subtract(2, 'day')
-              .format('YYYYMMDD'),
-            IV_TO_DATE: moment().format('YYYYMMDD'),
-            IV_PAGENO: '1',
-            IV_NO_PER_PAGE: '10',
-            ...payload,
+  const getListBangKe = (payload = {}): void => {
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.BANG_KE,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          ...payload,
+        },
+        {
+          onFailure: (error: Error) => {
+            toastErrorOnSearch(error, get(payload, 'IV_TOR_ID'));
           },
-          {
-            onFailure: (error: Error) => {
-              toastErrorOnSearch(error, payload.IV_TOR_ID);
-            },
-          },
-        ),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, userMaBp],
-  );
+        },
+        {
+          flow: SipFlowType.KHAI_THAC_DI,
+        },
+      ),
+    );
+  };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect((): void => getListBangKe(), [getListBangKe, userMaBp]);
+  useEffect((): void => {
+    getListBangKe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function handleSearchBangKe(): void {
-    const payload = {
-      IV_TOR_ID: torIdSearch,
-    };
-    getListBangKe(payload);
+    getListBangKe({ IV_TOR_ID: torIdSearch });
   }
 
   const handleDeleteManifest = (torId: string): void => {

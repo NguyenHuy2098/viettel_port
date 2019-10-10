@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { forEach, get, map, noop, size, includes, toString, trim, toNumber } from 'lodash';
+import { forEach, get, includes, map, noop, size, toNumber, toString, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -17,7 +17,7 @@ import Scan from 'components/Input/Scan';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
@@ -95,19 +95,15 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   const getListChuyenThu = (): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: 'ZC3',
-        IV_FR_LOC_ID: userMaBp,
-        IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: '101',
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
     );
   };
 
@@ -199,19 +195,15 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
 
   const getListTai = (): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: SipDataType.TAI,
-        IV_FR_LOC_ID: userMaBp,
-        IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
     );
   };
 

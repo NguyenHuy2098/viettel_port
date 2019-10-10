@@ -1,29 +1,29 @@
 /* eslint-disable max-lines */
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane, Col, Input, Label } from 'reactstrap';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Badge, Button, Col, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
-import { get, map, size, forEach, includes, toNumber, trim } from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
 import { toast } from 'react-toastify';
 import { match } from 'react-router-dom';
-
-import { action_ZTMI241 } from 'redux/ZTMI241/actions';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
-import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
-import DataTable from 'components/DataTable';
 import { Cell } from 'react-table';
+import { goBack } from 'connected-react-router';
+import classNames from 'classnames';
 import { Location } from 'history';
+import { forEach, get, includes, map, size, toNumber, toString, trim } from 'lodash';
+
+import DataTable from 'components/DataTable';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
-import { goBack } from 'connected-react-router';
-import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { action_ZTMI241 } from 'redux/ZTMI241/actions';
+import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
+import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { today } from 'utils/timeHelper';
 
 interface Props {
   location: Location;
@@ -68,10 +68,10 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
   const dispatchZTMI241 = (): void => {
     const payload = {
       IV_PACKAGE_ID: '',
-      IV_FREIGHT_UNIT_STATUS: [306],
+      IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
       IV_LOC_ID: userMaBp,
       IV_COMMODITY_GROUP: 'Thường-Hỏa tốc-Nội vùng.HUB1',
-      IV_DATE: moment().format('YYYYMMDD'),
+      IV_DATE: today,
       IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',
@@ -87,19 +87,17 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
 
   const getListChuyenThu = (): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: 'ZC3',
-        IV_FR_LOC_ID: userMaBp,
-        IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: '101',
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        {
+          flow: SipFlowType.KHAI_THAC_DI,
+        },
+      ),
     );
   };
 
@@ -142,19 +140,15 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
 
   const getListTai = (): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: SipDataType.TAI,
-        IV_FR_LOC_ID: userMaBp,
-        IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
     );
   };
 

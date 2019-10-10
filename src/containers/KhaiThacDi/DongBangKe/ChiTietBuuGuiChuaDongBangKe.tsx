@@ -1,13 +1,12 @@
 /* eslint-disable max-lines */
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane, Col, Input, Label } from 'reactstrap';
-import moment from 'moment';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Badge, Button, Col, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import { goBack } from 'connected-react-router';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
-import { get, size, forEach } from 'lodash';
-import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { forEach, get, size, toString } from 'lodash';
 
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
@@ -17,7 +16,6 @@ import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
 import { Location } from 'history';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-// import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { AppStateType } from 'redux/store';
 import {
@@ -26,9 +24,10 @@ import {
   actionDongTaiVaoChuyenThuCoSan,
   actionDongTaiVaoChuyenThuTaoMoi,
 } from 'redux/common/actions';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { sevenDaysAgo, today } from 'utils/timeHelper';
 
 interface Props {
   location: Location;
@@ -70,37 +69,32 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   };
 
   const getListTaiCoSan = (): void => {
-    const params = {
-      IV_TOR_ID: '',
-      IV_FR_DATE: moment()
-        .subtract(7, 'day')
-        .format('YYYYMMDD'),
-      IV_TO_DATE: moment().format('YYYYMMDD'),
-      IV_TOR_TYPE: SipDataType.TAI,
-      IV_FR_LOC_ID: userMaBp,
-      IV_TO_LOC_ID: '',
-      IV_CUST_STATUS: SipDataState.TAO_MOI,
-      IV_PAGENO: '1',
-      IV_NO_PER_PAGE: '5000',
-    };
-    dispatch(action_MIOA_ZTMI047(params));
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_FR_DATE: sevenDaysAgo,
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
+    );
   };
 
   const getListChuyenThuCoSan = (): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_FR_DATE: moment()
-          .subtract(7, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-        IV_FR_LOC_ID: userMaBp,
-        IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: SipDataState.TAO_MOI,
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_FR_DATE: sevenDaysAgo,
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
     );
   };
 
@@ -113,24 +107,14 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const dispatchZTMI241 = useCallback((): void => {
     const payload = {
       IV_PACKAGE_ID: '',
-      IV_FREIGHT_UNIT_STATUS: [306],
-      IV_LOC_ID: 'BDH',
+      IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+      IV_LOC_ID: userMaBp,
       IV_COMMODITY_GROUP: commLocGroup,
-      IV_DATE: moment().format('YYYYMMDD'),
+      IV_DATE: today,
       IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',
     };
-    // const payload = {
-    //   IV_PACKAGE_ID: '',
-    //   IV_FREIGHT_UNIT_STATUS: [306],
-    //   IV_LOC_ID: 'BDH',
-    //   IV_COMMODITY_GROUP: 'Thư-Chậm-Liên vùng.HUB1',
-    //   IV_DATE: '20191002',
-    //   IV_USER: 'HOADT',
-    //   IV_PAGE_NO: '1',
-    //   IV_NO_PER_PAGE: '10',
-    // };
     dispatch(action_ZTMI241(payload));
   }, [commLocGroup, childs, dispatch]);
 
@@ -244,11 +228,10 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   function handleSearch(): void {
     const payload = {
       IV_PACKAGE_ID: search,
-      IV_FREIGHT_UNIT_STATUS: [306],
-      IV_LOC_ID: 'BDH',
+      IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+      IV_LOC_ID: userMaBp,
       IV_COMMODITY_GROUP: commLocGroup,
-      // IV_DATE: moment().format('YYYYMMDD'),
-      IV_DATE: '20191005',
+      IV_DATE: today,
       IV_USER: get(childs, '[0].USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',

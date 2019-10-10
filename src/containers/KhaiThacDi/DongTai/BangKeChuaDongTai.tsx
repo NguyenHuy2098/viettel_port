@@ -7,8 +7,9 @@ import { generatePath } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { toast } from 'react-toastify';
 import { Cell } from 'react-table';
-import { find, forEach, map, get, noop, size, isEmpty } from 'lodash';
+import { find, forEach, get, isEmpty, map, noop, size } from 'lodash';
 import moment from 'moment';
+
 import { toastError } from 'components/Toast';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
@@ -22,7 +23,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 
@@ -111,19 +112,15 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
 
   const getListChuyenThu = (): void => {
     dispatch(
-      action_MIOA_ZTMI047({
-        IV_TOR_ID: '',
-        IV_FR_DATE: moment()
-          .subtract(1, 'day')
-          .format('YYYYMMDD'),
-        IV_TO_DATE: moment().format('YYYYMMDD'),
-        IV_TOR_TYPE: 'ZC3',
-        IV_FR_LOC_ID: userMaBp,
-        IV_TO_LOC_ID: '',
-        IV_CUST_STATUS: '101',
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '5000',
-      }),
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
     );
   };
 
@@ -132,22 +129,17 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       dispatch(
         action_MIOA_ZTMI047(
           {
-            IV_TOR_ID: '',
-            IV_TOR_TYPE: 'ZC1',
-            IV_FR_LOC_ID: userMaBp,
-            IV_CUST_STATUS: '101',
-            IV_FR_DATE: moment()
-              .subtract(1, 'day')
-              .format('YYYYMMDD'),
-            IV_TO_DATE: moment().format('YYYYMMDD'),
-            IV_PAGENO: '1',
-            IV_NO_PER_PAGE: '10',
+            IV_TOR_TYPE: SipDataType.BANG_KE,
+            IV_CUST_STATUS: SipDataState.TAO_MOI,
             ...payload,
           },
           {
             onFailure: (error: Error) => {
               toastErrorOnSearch(error, payload.IV_TOR_ID);
             },
+          },
+          {
+            flow: SipFlowType.KHAI_THAC_DI,
           },
         ),
       );
