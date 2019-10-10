@@ -22,14 +22,25 @@ const Scan = (props: Props): JSX.Element => {
   const { buttonProps, containerProps, flow, onSuccess, targetItemId, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [torId, setTorId] = useState<string>('');
+  const [scanning, setScanning] = useState<boolean>(false);
   const [shouldClear, setShouldClear] = useState<boolean>(false);
+  const [torId, setTorId] = useState<string>('');
+
+  const handleBeginScanning = (): void => {
+    setScanning(true);
+  };
+
+  const handleFinishScanning = (): void => {
+    setShouldClear(true);
+    setScanning(false);
+  };
 
   const quetDi = (): void => {
     dispatch(
       actionQuetDi(
         { IV_ID: torId, targetItemId },
         {
+          onBeginning: handleBeginScanning,
           onFailure: (error: Error): void => {
             if (has(error, 'messages')) {
               toastError(join(get(error, 'messages'), ' '));
@@ -37,12 +48,10 @@ const Scan = (props: Props): JSX.Element => {
               toastError(get(error, 'message', 'Đã có lỗi xảy ra.'));
             }
           },
-          onFinish: () => {
-            setShouldClear(true);
-          },
+          onFinish: handleFinishScanning,
           onSuccess: (data: API.RowResponseZTMI023OUT) => {
             onSuccess && onSuccess(data);
-            toastSuccess('Quét nhận thành công.');
+            toastSuccess('Quét thành công.');
           },
         },
       ),
@@ -54,12 +63,11 @@ const Scan = (props: Props): JSX.Element => {
       actionQuetNhan(
         { IV_ID: torId },
         {
+          onBeginning: handleBeginScanning,
           onFailure: (error: Error): void => {
             toastError(get(error, 'message', 'Đã có lỗi xảy ra.'));
           },
-          onFinish: () => {
-            setShouldClear(true);
-          },
+          onFinish: handleFinishScanning,
           onSuccess: (data: API.RowResponseZTMI023OUT) => {
             onSuccess && onSuccess(data);
             toastSuccess('Quét nhận thành công.');
@@ -98,7 +106,7 @@ const Scan = (props: Props): JSX.Element => {
     <Row className={classNames('flex-fill', get(containerProps, 'className'))}>
       <Col lg={9}>
         <div className="sipTitleRightBlockInput">
-          <i className="fa fa-barcode" />
+          {scanning ? <i className="fa fa-spinner fa-spin" /> : <i className="fa fa-barcode" />}
           <Input
             className="bg-gray-100"
             onChange={handleChangeValue}
