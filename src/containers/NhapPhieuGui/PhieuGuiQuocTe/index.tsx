@@ -739,7 +739,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       BUYERS_REFERENCE_NUMBER: trim(maPhieuGui),
       CAMPAIGN: '',
       CITY_DES: trim(quocGia), // khi đơn quốc tế thì truyền city_des= country_des
-      CITY_NAME: trim(provinceIdReceiver),
+      CITY_NAME: trim(provinceIdReceiver) !== '' ? trim(provinceIdReceiver) : trim(quocGia),
       CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
       CONSIGNEE: '9999999999',
       COUNTRY_DES: trim(quocGia),

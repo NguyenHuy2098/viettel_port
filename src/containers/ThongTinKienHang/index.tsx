@@ -310,7 +310,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   //eslint-disable-next-line max-lines-per-function
   function renderOrderInformation(): JSX.Element {
     return (
-      <Col xl="4" xs="12" className="mb-4">
+      <Col xl="4" xs="12" className="mb-3 sipOrderInputCol">
         <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3>{t('Thông tin bưu kiện')}</h3>
@@ -364,7 +364,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   function renderSenderCustomer(): JSX.Element {
     return (
-      <Col xl="4" xs="12" className="mb-4">
+      <Col xl="4" xs="12" className="mb-3 sipOrderInputCol">
         <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3> {t('Người gửi')}</h3>
@@ -405,7 +405,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   function renderReceiverCustomer(): JSX.Element {
     return (
-      <Col xl="4" xs="12" className="mb-4">
+      <Col xl="4" xs="12" className="mb-3 sipOrderInputCol">
         <div className="sipContentContainer">
           <div className="sipInputBlock">
             <h3> {t('Người nhận')}</h3>
@@ -597,7 +597,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
           </Button>
         </div>
       </Row>
-      <Row>
+      <Row className="sipOrderInputRow">
         {renderOrderInformation()}
         {renderSenderCustomer()}
         {renderReceiverCustomer()}

@@ -244,7 +244,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   function renderSenderCustomer(): JSX.Element {
     return (
-      <Col xl="6" xs="12" className="mb-4">
+      <Col xl="6" xs="12" className="mb-3 sipOrderInputCol">
         <div className="sipContentContainer">
           <div className="sipInputBlock mb-0">
             <h3> {t('Người gửi')}</h3>
@@ -285,7 +285,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   function renderReceiveCustomer(): JSX.Element {
     return (
-      <Col xl="6" xs="12" className="mb-4">
+      <Col xl="6" xs="12" className="mb-3 sipOrderInputCol">
         <div className="sipContentContainer">
           <div className="sipInputBlock mb-0">
             <h3> {t('Người nhận')}</h3>
@@ -343,11 +343,10 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
           </Button>
         </div>
       </Row>
-      <Row>
+      <Row className="sipOrderInputRow">
         {renderSenderCustomer()}
         {renderReceiveCustomer()}
       </Row>
-      <div className="row mt-3" />
       <h1 className="sipTitle">{t('Danh sách kiện hàng')}</h1>
       {renderTable()}
     </>
