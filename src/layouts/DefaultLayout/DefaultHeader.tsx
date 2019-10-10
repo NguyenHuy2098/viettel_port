@@ -90,37 +90,37 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
         <DropdownItem header tag="div" className="text-center">
           <strong>Account</strong>
         </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-bell-o" /> Updates<Badge color="info">42</Badge>
-        </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-envelope-o" /> Messages<Badge color="success">42</Badge>
-        </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-tasks" /> Tasks<Badge color="danger">42</Badge>
-        </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-comments" /> Comments<Badge color="warning">42</Badge>
-        </DropdownItem>
-        <DropdownItem header tag="div" className="text-center">
-          <strong>Settings</strong>
-        </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-user" /> Profile
-        </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-wrench" /> Settings
-        </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-usd" /> Payments<Badge color="secondary">42</Badge>
-        </DropdownItem>
-        <DropdownItem>
-          <i className="fa fa-file" /> Projects<Badge color="primary">42</Badge>
-        </DropdownItem>
-        <DropdownItem divider />
-        <DropdownItem>
-          <i className="fa fa-shield" /> Lock Account
-        </DropdownItem>
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-bell-o" /> Updates<Badge color="info">42</Badge>*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-envelope-o" /> Messages<Badge color="success">42</Badge>*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-tasks" /> Tasks<Badge color="danger">42</Badge>*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-comments" /> Comments<Badge color="warning">42</Badge>*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem header tag="div" className="text-center">*/}
+        {/*  <strong>Settings</strong>*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-user" /> Profile*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-wrench" /> Settings*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-usd" /> Payments<Badge color="secondary">42</Badge>*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-file" /> Projects<Badge color="primary">42</Badge>*/}
+        {/*</DropdownItem>*/}
+        {/*<DropdownItem divider />*/}
+        {/*<DropdownItem>*/}
+        {/*  <i className="fa fa-shield" /> Lock Account*/}
+        {/*</DropdownItem>*/}
         <DropdownItem onClick={handleLogout}>
           <i className="fa fa-lock" /> Logout
         </DropdownItem>
@@ -130,17 +130,17 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
 
   const renderNav = (): JSX.Element => (
     <Nav className="ml-auto" navbar>
-      <NavItem className="d-md-down-none">
+      <NavItem className="d-md-down-none hide">
         <NavLink to="#" className="nav-link">
           <img src={'../../assets/img/icon/iconHeart.svg'} alt="VTPostek" />
         </NavLink>
       </NavItem>
-      <NavItem className="d-md-down-none">
+      <NavItem className="d-md-down-none hide">
         <NavLink to="#" className="nav-link">
           <img src={'../../assets/img/icon/iconClock.svg'} alt="VTPostek" />
         </NavLink>
       </NavItem>
-      <NavItem className="sipHeaderNoti">{renderHeaderNotifications()}</NavItem>
+      <NavItem className="sipHeaderNoti hide">{renderHeaderNotifications()}</NavItem>
       <NavItem>{renderHeaderUser()}</NavItem>
     </Nav>
   );
