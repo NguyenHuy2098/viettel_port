@@ -2,9 +2,11 @@ import React, { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Row } from 'reactstrap';
-import { get } from 'lodash';
 import { Cell } from 'react-table';
+import { toast } from 'react-toastify';
+import { get, toString } from 'lodash';
 import moment from 'moment';
+
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
@@ -13,8 +15,8 @@ import { action_ZTMI239 } from 'redux/ZTMI239/actions';
 import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
-import { toast } from 'react-toastify';
-import { action_ZTMI240 } from '../../../redux/ZTMI240/actions';
+import { action_ZTMI240 } from 'redux/ZTMI240/actions';
+import { SipDataState } from 'utils/enums';
 
 interface Props {
   handleChangeTab: (tab: number) => void;
@@ -113,9 +115,7 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
                                         dispatch(
                                           action_ZTMI240(
                                             {
-                                              IV_FREIGHT_UNIT_STATUS: [306],
-                                              IV_LOC_ID: userMaBp,
-                                              IV_DATE: moment().format('YYYYMMDD'),
+                                              IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
                                             },
                                             {
                                               onSuccess: (): void => {

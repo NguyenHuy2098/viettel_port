@@ -27,7 +27,7 @@ import {
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { sevenDaysAgo, today } from 'utils/timeHelper';
+import { today } from 'utils/timeHelper';
 
 interface Props {
   location: Location;
@@ -72,7 +72,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     dispatch(
       action_MIOA_ZTMI047(
         {
-          IV_FR_DATE: sevenDaysAgo,
           IV_TOR_TYPE: SipDataType.TAI,
           IV_CUST_STATUS: SipDataState.TAO_MOI,
           IV_NO_PER_PAGE: '5000',
@@ -87,7 +86,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     dispatch(
       action_MIOA_ZTMI047(
         {
-          IV_FR_DATE: sevenDaysAgo,
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_CUST_STATUS: SipDataState.TAO_MOI,
           IV_NO_PER_PAGE: '5000',
@@ -98,7 +96,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     );
   };
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     getListTaiCoSan();
     getListChuyenThuCoSan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -116,7 +114,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       IV_NO_PER_PAGE: '10',
     };
     dispatch(action_ZTMI241(payload));
-  }, [commLocGroup, childs, dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commLocGroup, childs]);
 
   useEffect((): void => {
     dispatchZTMI241();

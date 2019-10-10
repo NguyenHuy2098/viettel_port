@@ -10,7 +10,6 @@ import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { SipFlowType } from 'utils/enums';
 import HttpRequestError from 'utils/HttpRequetsError';
-import { sevenDaysAgo } from 'utils/timeHelper';
 import { toastError, toastSuccess } from '../Toast';
 
 interface Props {
@@ -50,7 +49,6 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       dispatch(
         action_MIOA_ZTMI047(
           {
-            IV_FR_DATE: sevenDaysAgo,
             IV_TOR_TYPE: IV_TOR_TYPE,
             IV_CUST_STATUS: IV_CUST_STATUS,
             IV_NO_PER_PAGE: '1000',

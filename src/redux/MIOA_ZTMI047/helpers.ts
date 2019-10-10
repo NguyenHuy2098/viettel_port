@@ -2,7 +2,7 @@ import { get } from 'lodash';
 
 import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
-import { today, yesterday } from 'utils/timeHelper';
+import { today, sevenDaysAgo } from 'utils/timeHelper';
 
 export async function post_MIOA_ZTMI047(payload: Partial<API.MIOAZTMI047Request>): Promise<MIOAZTMI047PayloadType> {
   const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI047, {
@@ -11,7 +11,7 @@ export async function post_MIOA_ZTMI047(payload: Partial<API.MIOAZTMI047Request>
     IV_FR_LOC_ID: '',
     IV_TO_LOC_ID: '',
     IV_CUST_STATUS: '',
-    IV_FR_DATE: yesterday,
+    IV_FR_DATE: sevenDaysAgo,
     IV_TO_DATE: today,
     IV_PAGENO: '1',
     IV_NO_PER_PAGE: '10',
