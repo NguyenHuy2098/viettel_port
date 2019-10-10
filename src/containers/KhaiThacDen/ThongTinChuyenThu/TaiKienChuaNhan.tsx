@@ -11,12 +11,12 @@ import moment from 'moment';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import Scan from 'components/Input/Scan';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState } from 'utils/enums';
+import { SipDataState, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 interface Props {
   getThongTinChuyenThu: () => void;
@@ -134,7 +134,11 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <Col className="btn-toolbar" md={6}>
-          <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã tải/kiện')} />
+          <Scan
+            flow={SipFlowType.KHAI_THAC_DEN}
+            onSuccess={handleSuccessQuetNhan}
+            placeholder={t('Quét mã tải/kiện')}
+          />
           {/*<Button className="sipButtonTypeC mr-2">*/}
           {/*  <img src={blackBag} alt="black-bag" className="mr-2" />*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}

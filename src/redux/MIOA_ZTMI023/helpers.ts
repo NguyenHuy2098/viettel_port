@@ -10,8 +10,6 @@ export async function post_MIOA_ZTMI023(payload: Partial<API.MIOAZTMI023Request>
     ...payload,
   });
   const row = get(data, 'MT_ZTMI023_OUT.row');
-  if (isArray(row) && size(row) > 0) {
-    return data;
-  }
+  if (isArray(row) && size(row) > 0) return data;
   throw new Error('Không tìm thấy.');
 }

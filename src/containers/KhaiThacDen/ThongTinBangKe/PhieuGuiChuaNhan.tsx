@@ -9,10 +9,10 @@ import moment from 'moment';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
+import PrintableThongTinDonHang from 'components/PrintableThongTinDonHang';
 import Scan from 'components/Input/Scan';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState } from 'utils/enums';
-import PrintableThongTinDonHang from '../../../components/PrintableThongTinDonHang';
+import { SipDataState, SipFlowType } from 'utils/enums';
 
 interface Props {
   getThongTinBangKe: () => void;
@@ -107,7 +107,7 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <Col className="btn-toolbar" md={6}>
-          <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bưu gửi')} />
+          <Scan flow={SipFlowType.KHAI_THAC_DEN} onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bưu gửi')} />
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
           {/*</button>*/}

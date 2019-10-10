@@ -11,6 +11,7 @@ import moment from 'moment';
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
 import routesMap from 'utils/routesMap';
+import { SipFlowType } from '../../../utils/enums';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
@@ -86,7 +87,11 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
   const renderToolbar = (): JSX.Element => (
     <Row>
       <Col className="btn-toolbar" md={6}>
-        <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê/phiếu gửi')} />
+        <Scan
+          flow={SipFlowType.KHAI_THAC_DEN}
+          onSuccess={handleSuccessQuetNhan}
+          placeholder={t('Quét mã bảng kê/phiếu gửi')}
+        />
       </Col>
     </Row>
   );

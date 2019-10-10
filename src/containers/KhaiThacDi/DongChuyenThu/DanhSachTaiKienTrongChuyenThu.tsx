@@ -7,8 +7,8 @@ import { generatePath, match } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { goBack, push } from 'connected-react-router';
 import produce from 'immer';
-import moment from 'moment';
 import { ceil, concat, filter, get, includes, isEmpty, map, pull, size } from 'lodash';
+import moment from 'moment';
 
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
@@ -16,12 +16,12 @@ import DataTable from 'components/DataTable';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
+import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
 import routesMap from 'utils/routesMap';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
-import { SipDataType } from 'utils/enums';
+import { SipDataType, SipFlowType } from 'utils/enums';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
 interface Props {
@@ -58,7 +58,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   }, [dataChuyenThuChildren, selectedTaiKienIds]);
 
   useEffect((): void => {
-    getListPhieuGui();
+    getListTaiKien();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
 
@@ -66,7 +66,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     dispatch(goBack());
   };
 
-  const getListPhieuGui = (): void => {
+  const getListTaiKien = (): void => {
     dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idChuyenThu }));
   };
 
@@ -95,7 +95,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const handleDeleteForwardingOrder = (): void => {};
 
   const handleSuccessDongChuyenThu = (): void => {
-    getListPhieuGui();
+    getListTaiKien();
     setSelectedTaiKienIds([]);
   };
 
@@ -176,9 +176,14 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   );
 
   const renderShippingInformationAndScanCode = (): JSX.Element => (
-    <Row className="sipBgWhiteContainer d-flex justify-content-between">
+    <Row className="sipBgWhiteContainer justify-content-between">
       <Col md={4}>
-        <Scan placeholder={t('Quét mã chuyến thư')} />
+        <Scan
+          flow={SipFlowType.KHAI_THAC_DI}
+          onSuccess={getListTaiKien}
+          placeholder={t('Quét mã tải/kiện')}
+          targetItemId={idChuyenThu}
+        />
       </Col>
       <Col>
         {/*_______________temporary hide because of no requirement______________*/}
@@ -333,4 +338,5 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     </Fade>
   );
 };
+
 export default DanhSachPhieuGuiTrongChuyenThu;

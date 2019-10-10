@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,10 +10,13 @@ import { goBack } from 'connected-react-router';
 import { includes, forEach, get, map, toString, size } from 'lodash';
 import moment from 'moment';
 
-import DataTable from 'components/DataTable';
-import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
-import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import DataTable from 'components/DataTable';
+import Scan from 'components/Input/Scan';
+import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
@@ -21,10 +24,8 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import ButtonPrintable from 'components/Button/ButtonPrintable';
-import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 
 interface Props {
   match: match;
@@ -83,7 +84,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     setForwardingItemListState([]);
     setListUncheckForwardingItem([]);
     setUncheckAllForwardingItemCheckbox(false);
-    getListPhieuGui();
+    getListBangKePhieuGui();
   };
   const getListChuyenThu = (): void => {
     // console.log('getListChuyenThu');
@@ -152,12 +153,12 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     IV_NO_PER_PAGE: '10',
   };
 
-  const getListPhieuGui = (): void => {
+  const getListBangKePhieuGui = (): void => {
     dispatch(action_MIOA_ZTMI046(payload046));
   };
 
   function onSuccessSelectedForwardingItem(): void {
-    getListPhieuGui();
+    getListBangKePhieuGui();
     setUncheckAllForwardingItemCheckbox(false);
     setForwardingItemListState([]);
     forwardingItemList = [];
@@ -226,13 +227,13 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         onFailure: (error: HttpRequestErrorType): void => {
           alert(error.messages);
         },
-        onFinish: (): void => getListPhieuGui(),
+        onFinish: (): void => getListBangKePhieuGui(),
       }),
     );
   };
 
-  React.useEffect((): void => {
-    getListPhieuGui();
+  useEffect((): void => {
+    getListBangKePhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idTai]);
 
@@ -307,94 +308,24 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   }
 
-  const [codeBkPhieuGui, setCodeBkPhieuGui] = useState<string>('');
-
-  function handleChangeCodeBkPhieuGui(e: ChangeEvent<HTMLInputElement>): void {
-    setCodeBkPhieuGui(e.target.value);
-  }
-
-  // eslint-disable-next-line max-lines-per-function
-  function handleScanCodeBkPhieuGui(): void {
-    const payload016 = {
-      IV_FLAG: '2',
-      IV_TOR_TYPE: 'ZC3',
-      IV_TOR_ID_CU: get(dataTai, 'TOR_ID', ''), // Mã Tải hiện tại
-      IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''), //điểm đi tải hiện tại
-      IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''), //điểm đến tải hiện tại
-      IV_DESCRIPTION: '',
-      T_ITEM: [
-        {
-          ITEM_ID: codeBkPhieuGui, //mã bảng kê vừa quét
-          ITEM_TYPE: 'ZC1',
-        },
-      ],
-    };
-    dispatch(
-      action_MIOA_ZTMI016(payload016, {
-        onSuccess: (data: API.MIOAZTMI016Response): void => {
-          if (data.Status) {
-            getListPhieuGui();
-            setCodeBkPhieuGui('');
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Thành công!')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-          } else {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(data, 'Messages', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          }
-        },
-        onFailure: (error: HttpRequestErrorType): void => {
-          toast(
-            <>
-              <i className="fa fa-window-close-o mr-2" />
-              {get(error, 'messages', 'Đã có lỗi xảy ra')}
-            </>,
-            {
-              type: 'error',
-            },
-          );
-        },
-      }),
-    );
-  }
-
-  function renderShippingInformationAndScanCode(): JSX.Element {
-    return (
-      <div className="sipContentContainer">
-        <div className="d-flex">
-          <div className="sipTitleRightBlockInput m-0">
-            <i className="fa fa-barcode" />
-            <Input
-              type="text"
-              placeholder={t('Quét mã bảng kê/phiếu gửi')}
-              onChange={handleChangeCodeBkPhieuGui}
-              value={codeBkPhieuGui}
-            />
-          </div>
-          <Button color="primary" className="ml-2" onClick={handleScanCodeBkPhieuGui}>
-            {t('Quét mã')}
-          </Button>
-          {/*_______________temporary hide because of no requirement______________*/}
-          <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow hide">
-            <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
-          </Button>
-        </div>
-      </div>
-    );
-  }
+  const renderShippingInformationAndScanCode = (): JSX.Element => (
+    <Row className="sipBgWhiteContainer">
+      <Col md={4}>
+        <Scan
+          flow={SipFlowType.KHAI_THAC_DI}
+          onSuccess={getListBangKePhieuGui}
+          placeholder={t('Quét mã bảng kê/phiếu gửi')}
+          targetItemId={idTai}
+        />
+      </Col>
+      <Col>
+        {/*_______________temporary hide because of no requirement______________*/}
+        <Button color="gray" className="sipTitleRightBlockBtnIcon ml-2 sipBoxShadow hide">
+          <img src={'../../assets/img/icon/iconRemove2.svg'} alt="VTPostek" />
+        </Button>
+      </Col>
+    </Row>
+  );
 
   const addTaiHienTaiVaoChuyenThuDuocChon = (): void => {
     dispatch(
@@ -468,7 +399,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
             );
             // Add tai hien tai vao chuyen thu duoc chon
             addTaiHienTaiVaoChuyenThuDuocChon();
-            getListPhieuGui();
+            getListBangKePhieuGui();
           },
           onFailure: (error: Error): void => {
             toast(

@@ -12,7 +12,7 @@ import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState } from 'utils/enums';
+import { SipDataState, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -91,7 +91,11 @@ const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <Col className="btn-toolbar" md={6}>
-          <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê/phiếu gửi')} />
+          <Scan
+            flow={SipFlowType.KHAI_THAC_DEN}
+            onSuccess={handleSuccessQuetNhan}
+            placeholder={t('Quét mã bảng kê/phiếu gửi')}
+          />
         </Col>
         {/*<Col className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}

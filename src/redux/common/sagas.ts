@@ -2,7 +2,7 @@
 import { SagaIterator } from 'redux-saga';
 import { takeEvery } from 'redux-saga/effects';
 import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
-import { get, includes, toString } from 'lodash';
+import { get, head, includes, split, toString } from 'lodash';
 
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
@@ -13,11 +13,13 @@ import {
   DONG_CHUYEN_THU,
   DONG_TAI_VAO_CHUYEN_THU_CO_SAN,
   DONG_TAI_VAO_CHUYEN_THU_TAO_MOI,
+  QUET_DI,
   QUET_NHAN,
 } from './actions';
 import { post_MIOA_ZTMI016 } from '../MIOA_ZTMI016/helpers';
 import { post_MIOA_ZTMI022 } from '../MIOA_ZTMI022/helpers';
 import { post_MIOA_ZTMI023 } from '../MIOA_ZTMI023/helpers';
+import { post_MIOA_ZTMI031 } from '../MIOA_ZTMI031/helpers';
 
 /**
  * 1. MIOA_ZTMI016 - Tạo mới chuyến thư
@@ -52,6 +54,87 @@ function* takeDongChuyenThu(action: UnfoldSagaActionType): SagaIterator {
       key: action.type,
     },
     action.callbacks,
+  );
+}
+
+// eslint-disable-next-line max-lines-per-function
+function* takeQuetDi(action: UnfoldSagaActionType): SagaIterator {
+  yield unfoldSaga(
+    {
+      // eslint-disable-next-line max-lines-per-function
+      handler: async (): Promise<API.RowResponseZTMI023OUT | API.RowMTZTMI031OUT> => {
+        const ivId = get(action, 'payload.IV_ID');
+        const torId = head(split(ivId, '_'));
+        const targetItemId = get(action, 'payload.targetItemId');
+        const targetItemResponse = await post_MIOA_ZTMI023({ IV_ID: targetItemId });
+        const targetItem = get(targetItemResponse, 'MT_ZTMI023_OUT.row[0]');
+        const targetTorType = get(targetItem, 'TOR_TYPE');
+
+        let scanningItem: API.RowResponseZTMI023OUT | API.RowMTZTMI031OUT;
+
+        if (includes(ivId, '_')) {
+          const response031 = await post_MIOA_ZTMI031({ FWO_ID: torId });
+          scanningItem = get(response031, 'MT_ZTMI031_OUT.Row[0]');
+        } else {
+          const response023 = await post_MIOA_ZTMI023({ IV_ID: ivId });
+          scanningItem = get(response023, 'MT_ZTMI023_OUT.row[0]');
+        }
+
+        const scanningTorType: string = get(scanningItem, 'TOR_TYPE');
+
+        if (targetTorType === SipDataType.CHUYEN_THU) {
+          await post_MIOA_ZTMI016({
+            IV_FLAG: '2',
+            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+            IV_TOR_ID_CU: targetItemId,
+            IV_SLOCATION: get(targetItem, 'FR_LOG_ID'),
+            IV_DLOCATION: get(targetItem, 'TO_LOG_ID'),
+            T_ITEM: [
+              {
+                ITEM_ID: scanningTorType === SipDataType.TAI ? ivId : get(scanningItem, 'FREIGHT_UNIT'),
+                ITEM_TYPE: scanningTorType === SipDataType.TAI ? SipDataType.TAI : '',
+              },
+            ],
+          });
+          return scanningItem;
+        } else if (targetTorType === SipDataType.TAI) {
+          await post_MIOA_ZTMI016({
+            IV_FLAG: '2',
+            IV_TOR_TYPE: SipDataType.TAI,
+            IV_TOR_ID_CU: targetItemId,
+            IV_SLOCATION: get(targetItem, 'FR_LOG_ID'),
+            IV_DLOCATION: get(targetItem, 'TO_LOG_ID'),
+            T_ITEM: [
+              {
+                ITEM_ID: ivId,
+                ITEM_TYPE: SipDataType.BANG_KE,
+              },
+            ],
+          });
+          return scanningItem;
+        } else if (targetTorType === SipDataType.BANG_KE) {
+          await post_MIOA_ZTMI016({
+            IV_FLAG: '2',
+            IV_TOR_TYPE: SipDataType.BANG_KE,
+            IV_TOR_ID_CU: targetItemId,
+            IV_SLOCATION: get(targetItem, 'FR_LOG_ID'),
+            IV_DLOCATION: get(targetItem, 'TO_LOG_ID'),
+            T_ITEM: [
+              {
+                ITEM_ID: get(scanningItem, 'FREIGHT_UNIT'),
+                ITEM_TYPE: '',
+              },
+            ],
+          });
+          return scanningItem;
+        }
+
+        throw new Error('Không đủ điều kiện quét.');
+      },
+      key: action.type,
+    },
+    action.callbacks,
+    action.options,
   );
 }
 
@@ -451,6 +534,7 @@ function* takeActionDongTaiVaoChuyenThuTaoMoi(action: UnfoldSagaActionType): Sag
 
 export default function*(): SagaIterator {
   yield takeEvery(DONG_CHUYEN_THU, takeDongChuyenThu);
+  yield takeEvery(QUET_DI, takeQuetDi);
   yield takeEvery(QUET_NHAN, takeQuetNhan);
   yield takeEvery(DONG_BANG_KE_VAO_TAI_CO_SAN, takeDongBangKeVaoTaiCoSan);
   yield takeEvery(DONG_BANG_KE_VAO_TAI_MOI_TAO, takeDongBangKeVaoTaiMoiTao);

@@ -12,11 +12,11 @@ import { push } from 'connected-react-router';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
 
 interface Props {
   getTaiKienChuaNhan: (IV_PAGENO?: number) => void;
@@ -130,7 +130,11 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
       <div className="shadow-sm p-3 mb-3 bg-white">
         <Row>
           <Col className="btn-toolbar" md={6}>
-            <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã tải/kiện')} />
+            <Scan
+              flow={SipFlowType.KHAI_THAC_DEN}
+              onSuccess={handleSuccessQuetNhan}
+              placeholder={t('Quét mã tải/kiện')}
+            />
           </Col>
         </Row>
       </div>

@@ -109,7 +109,11 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   const renderScanner = (): JSX.Element => (
     <Row className="sipBgWhiteContainer d-flex justify-content-between">
       <Col md={6}>
-        <Scan onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã chuyến thư')} />
+        <Scan
+          flow={SipFlowType.KHAI_THAC_DEN}
+          onSuccess={handleSuccessQuetNhan}
+          placeholder={t('Quét mã chuyến thư')}
+        />
       </Col>
       <Col className="d-flex justify-content-end align-items-center" md={2}>
         {t('Tổng số')}
