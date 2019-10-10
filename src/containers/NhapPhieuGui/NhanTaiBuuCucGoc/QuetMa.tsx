@@ -199,7 +199,7 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
             toast(
               <>
                 <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages', t('Đã có lỗi xảy ra '))}
+                {get(error, 'message', t('Đã có lỗi xảy ra '))}
               </>,
               {
                 type: 'error',

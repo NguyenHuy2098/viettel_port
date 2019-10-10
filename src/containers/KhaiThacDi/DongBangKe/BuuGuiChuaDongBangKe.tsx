@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
 import { push } from 'connected-react-router';
-import { findIndex, join, map, size, slice, toString } from 'lodash';
+import { findIndex, get, join, map, size, slice, toString } from 'lodash';
 
 import DataTable from 'components/DataTable/Printable';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
@@ -42,19 +42,20 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
   );
 
   const data = map(listBuuGuiChuaDongBangKe, (item: MTZTMI240Row) => {
+    const thisCommLocGroup = get(item, 'COMM_LOC_GROUP', '');
     const thisDes = join(
       slice(
-        item.COMM_LOC_GROUP,
-        findIndex(item.COMM_LOC_GROUP, (item: string): boolean => item === '.') + 1,
-        size(item.COMM_LOC_GROUP),
+        thisCommLocGroup,
+        findIndex(thisCommLocGroup, (item: string): boolean => item === '.') + 1,
+        size(thisCommLocGroup),
       ),
       '',
     );
     return {
-      COMM_LOC_GROUP: item.COMM_LOC_GROUP,
-      TOTAL_ITEM: item.TOTAL_ITEM,
+      COMM_LOC_GROUP: item.COMM_LOC_GROUP ? item.COMM_LOC_GROUP : '',
+      TOTAL_ITEM: item.TOTAL_ITEM ? item.TOTAL_ITEM : '',
       DES: thisDes,
-      CHILD: item.CHILD,
+      CHILD: item.CHILD ? item.CHILD : '',
     };
   });
 
@@ -71,9 +72,9 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
     (item: MTZTMI240RowTypeCustom): void => {
       dispatch(
         push(generatePath(routesMap.CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE), {
-          child: item.CHILD,
-          des: item.DES,
-          COMM_LOC_GROUP: item.COMM_LOC_GROUP,
+          child: item.CHILD ? item.CHILD : '',
+          des: item.DES ? item.DES : '',
+          COMM_LOC_GROUP: item.COMM_LOC_GROUP ? item.COMM_LOC_GROUP : '',
         }),
       );
     },

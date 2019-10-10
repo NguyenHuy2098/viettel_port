@@ -24,6 +24,7 @@ import {
   toString,
   trim,
 } from 'lodash';
+import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -897,9 +898,21 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI012(payload, {
         onSuccess: (data: API.MIOAZTMI012Response): void => {
-          const idPhieuGuiSuccess = get(data, 'MT_ZTMI012_OUT.FWO_ID', '');
-          setMaPhieuGui(idPhieuGuiSuccess);
-          toggleModalApiCreateSuccess();
+          if (get(data, 'MT_ZTMI012_OUT.EV_ERROR') === '00') {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {t('Dữ liệu không hợp lệ, vui lòng kiểm tra lại thông tin đơn hàng của bạn')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          } else {
+            const idPhieuGuiSuccess = get(data, 'MT_ZTMI012_OUT.FWO_ID', '');
+            setMaPhieuGui(idPhieuGuiSuccess);
+            toggleModalApiCreateSuccess();
+          }
         },
         onFailure: (error: HttpRequestErrorType): void => {
           // alert(error.message);
