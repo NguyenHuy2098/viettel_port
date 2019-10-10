@@ -24,7 +24,6 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
-  debugger;
   const userMaBp = useSelector(makeSelectorMaBP);
   const userId = useSelector(makeSelectorPreferredUsername);
 
