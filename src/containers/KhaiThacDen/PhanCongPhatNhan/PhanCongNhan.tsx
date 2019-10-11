@@ -140,7 +140,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Mã phiếu gửi'),
+        Header: t('Mã bưu gửi'),
         accessor: 'PACKET_ID',
       },
       {

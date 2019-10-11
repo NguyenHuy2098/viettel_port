@@ -55,8 +55,8 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
   const columns = useMemo(
     () => [
       {
-        Header: t('Mã phiếu gửi'),
-        accessor: 'TOR_ID',
+        Header: t('Mã bưu gửi'),
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Điểm đến'),
@@ -147,7 +147,7 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
 
       <Row className="sipBgWhiteContainer">
         <div className="sipScanCodeContainer">
-          <Input type="text" placeholder="Quét mã phiếu gửi" />
+          <Input type="text" placeholder="Quét mã bưu gửi" />
           <Button color="primary">Quét mã</Button>
         </div>
       </Row>

@@ -236,7 +236,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
 
   const renderToolbar = (): JSX.Element => (
     <Row>
-      <Col lg={6} xl={4}>
+      <Col lg={6} xl={5}>
         <Search onSubmitSearch={handleSearchTai} placeholder={t('Tìm kiếm tải')} />
       </Col>
       <Col lg={1}>

@@ -104,7 +104,7 @@ const Scan = (props: Props): JSX.Element => {
 
   return (
     <Row className={classNames('flex-fill', get(containerProps, 'className'))}>
-      <Col lg={9}>
+      <Col xs={8} md={9}>
         <div className="sipTitleRightBlockInput">
           {scanning ? <i className="fa fa-spinner fa-spin" /> : <i className="fa fa-barcode" />}
           <Input
@@ -117,7 +117,7 @@ const Scan = (props: Props): JSX.Element => {
           />
         </div>
       </Col>
-      <Col className="px-0" lg={3}>
+      <Col className="px-0" md={3} xs={4}>
         <Button color="primary" onClick={handleScan} {...buttonProps}>
           {t('Quét mã')}
         </Button>

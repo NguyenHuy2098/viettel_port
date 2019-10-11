@@ -45,7 +45,7 @@ const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Mã phiếu gửi'),
+        Header: t('Mã bưu gửi'),
         accessor: 'TOR_ID_M',
       },
       {
@@ -92,7 +92,7 @@ const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
                   {/* eslint-disable-next-line react/jsx-max-depth */}
                   <i className="fa fa-search" />
                   {/* eslint-disable-next-line react/jsx-max-depth */}
-                  <Input type="text" placeholder={t('Quét mã phiếu gửi')} />
+                  <Input type="text" placeholder={t('Quét mã bưu gửi')} />
                 </div>
                 {/* eslint-disable-next-line react/jsx-max-depth */}
                 <Button color="primary" className="ml-2">

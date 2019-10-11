@@ -283,7 +283,7 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
             onChange={handleChangeCodeChuyenThu}
             onKeyPress={handleKeyPressCodeChuyenThu}
             type="text"
-            placeholder="Quét mã phiếu gửi"
+            placeholder="Quét mã bưu gửi"
           />
           <Button onClick={handleSearchCodeChuyenThu} color="primary">
             Quét mã

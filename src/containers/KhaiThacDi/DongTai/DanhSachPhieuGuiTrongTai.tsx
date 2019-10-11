@@ -305,11 +305,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
 
   const renderShippingInformationAndScanCode = (): JSX.Element => (
     <Row className="sipBgWhiteContainer">
-      <Col md={4}>
+      <Col md={6}>
         <Scan
           flow={SipFlowType.KHAI_THAC_DI}
           onSuccess={getListBangKePhieuGui}
-          placeholder={t('Quét mã bảng kê/phiếu gửi')}
+          placeholder={t('Quét mã bảng kê')}
           targetItemId={idTai}
         />
       </Col>
@@ -602,7 +602,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
         },
       },
       {
-        Header: t('Mã bảng kê/phiếu gửi'),
+        Header: t('Mã bảng kê'),
         accessor: 'TOR_ID',
       },
       {

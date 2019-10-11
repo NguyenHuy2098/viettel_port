@@ -11,6 +11,9 @@ body {
 .app-header.navbar {
   padding-right: 15px;
 }
+.min-width-100px {
+  min-width: 100px;
+}
 //.btn-primary {
 //  background: linear-gradient(180deg, #18a796 0%, #47c4ae 100%);
 //  border-color: $primary;
@@ -297,7 +300,7 @@ input.form-control:-moz-placeholder {
     img {
       margin-right: 5px;
       position: relative;
-      top: -3px;
+      top: -1px;
     }
     &.sipTitleRightBlockBtnIcon {
       background: #ffffff !important;

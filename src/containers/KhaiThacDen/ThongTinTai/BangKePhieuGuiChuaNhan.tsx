@@ -91,11 +91,7 @@ const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <Col className="btn-toolbar" md={6}>
-          <Scan
-            flow={SipFlowType.KHAI_THAC_DEN}
-            onSuccess={handleSuccessQuetNhan}
-            placeholder={t('Quét mã bảng kê/phiếu gửi')}
-          />
+          <Scan flow={SipFlowType.KHAI_THAC_DEN} onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê')} />
         </Col>
         {/*<Col className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}

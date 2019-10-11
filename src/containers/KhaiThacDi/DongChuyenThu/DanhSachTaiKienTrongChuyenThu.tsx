@@ -177,7 +177,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
 
   const renderShippingInformationAndScanCode = (): JSX.Element => (
     <Row className="sipBgWhiteContainer justify-content-between">
-      <Col md={4}>
+      <Col md={6}>
         <Scan
           flow={SipFlowType.KHAI_THAC_DI}
           onSuccess={getListTaiKien}

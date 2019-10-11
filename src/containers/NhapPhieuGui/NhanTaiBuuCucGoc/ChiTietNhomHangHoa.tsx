@@ -786,7 +786,7 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
         },
       },
       {
-        Header: t('Mã phiếu gửi'),
+        Header: t('Mã bưu gửi'),
         accessor: 'PACKAGE_ID',
       },
       {

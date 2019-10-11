@@ -87,11 +87,7 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
   const renderToolbar = (): JSX.Element => (
     <Row>
       <Col className="btn-toolbar" md={6}>
-        <Scan
-          flow={SipFlowType.KHAI_THAC_DEN}
-          onSuccess={handleSuccessQuetNhan}
-          placeholder={t('Quét mã bảng kê/phiếu gửi')}
-        />
+        <Scan flow={SipFlowType.KHAI_THAC_DEN} onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê')} />
       </Col>
     </Row>
   );

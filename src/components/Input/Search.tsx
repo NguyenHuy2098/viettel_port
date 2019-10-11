@@ -38,7 +38,7 @@ const Filter = (props: Props): JSX.Element => {
 
   return (
     <Row className={classNames('flex-fill', get(containerProps, 'className'))}>
-      <Col lg={8} xl={9}>
+      <Col xs={8} lg={9}>
         <div className="sipTitleRightBlockInput">
           {leftIcon || <i className="fa fa-search" />}
           <Input
@@ -51,8 +51,8 @@ const Filter = (props: Props): JSX.Element => {
           />
         </div>
       </Col>
-      <Col className="px-0">
-        <Button className="w-100" color="primary" onClick={handleClickSearch} {...buttonProps}>
+      <Col xs={4} lg={3} className="pl-0">
+        <Button className="w-100 min-width-100px" color="primary" onClick={handleClickSearch} {...buttonProps}>
           {get(buttonProps, 'children') || t('Tìm kiếm')}
         </Button>
       </Col>
