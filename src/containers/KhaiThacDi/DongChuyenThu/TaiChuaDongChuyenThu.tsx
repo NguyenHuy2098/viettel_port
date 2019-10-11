@@ -203,6 +203,9 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ghi chú'),
         accessor: 'Childs[0].DESCRIPTION',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.Childs[0].DESCRIPTION', '');
+        },
       },
       {
         Header: t('Quản trị'),
