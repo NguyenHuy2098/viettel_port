@@ -10,6 +10,7 @@ import DataTable from 'components/DataTable/Printable';
 import DefaultHeadline from 'components/Printable/DefaultHeadline';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
+import { SipDataType } from 'utils/enums';
 
 interface Props {
   idChuyenThu: string;
@@ -55,6 +56,13 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
       {
         Header: t('SỐ HIỆU TẢI KIỆN'),
         accessor: 'TOR_ID',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const torType = get(row, 'original.TOR_TYPE', '');
+          if (torType === SipDataType.BUU_GUI || torType === SipDataType.KIEN) {
+            return get(row, 'original.PACKAGE_ID', '');
+          }
+          return get(row, 'original.TOR_ID', '');
+        },
       },
       {
         Header: t('MÃ SỐ BẢNG KÊ'),

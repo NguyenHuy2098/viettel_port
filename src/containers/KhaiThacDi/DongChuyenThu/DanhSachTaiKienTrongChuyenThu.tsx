@@ -215,20 +215,26 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     [dataChuyenThuChildren],
   );
 
-  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <ButtonPrintable
-      btnProps={{
-        className: 'SipTableFunctionIcon',
-        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
-      }}
-      modalBodyProps={{
-        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
-      }}
-      modalHeaderProps={{
-        children: t('In danh sách bảng kê thuộc tải'),
-      }}
-    />
-  );
+  const renderPrintButton = (item: API.Child): JSX.Element => {
+    let children = <PrintablePhieuGiaoTuiThu idChuyenThu={get(item, 'TOR_ID', '')} />;
+    if (SipDataType.KIEN === item.TOR_TYPE) {
+      children = <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={get(item, 'TOR_ID', '')} />;
+    }
+    return (
+      <ButtonPrintable
+        btnProps={{
+          className: 'SipTableFunctionIcon',
+          children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
+        }}
+        modalBodyProps={{
+          children: children,
+        }}
+        modalHeaderProps={{
+          children: t('In danh sách bảng kê thuộc tải'),
+        }}
+      />
+    );
+  };
 
   const inMaCoTaiButton = (idTai: string): JSX.Element => (
     <ButtonPrintable
@@ -308,7 +314,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
         Cell: ({ row }: Cell<API.Child>): JSX.Element => (
           <>
             {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
-            {renderPrintButton(get(row, 'values.TOR_ID', ''))}
+            {renderPrintButton(row.original)}
             <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
               <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
             </Button>

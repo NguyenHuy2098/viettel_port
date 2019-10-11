@@ -184,20 +184,26 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     );
   }
 
-  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <ButtonPrintable
-      btnProps={{
-        className: 'SipTableFunctionIcon',
-        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
-      }}
-      modalBodyProps={{
-        children: <PrintablePhieuGiaoTuiThu idChuyenThu={idChuyenThu} />,
-      }}
-      modalHeaderProps={{
-        children: t('In danh sách bảng kê thuộc tải'),
-      }}
-    />
-  );
+  const renderPrintButton = (item: API.Child): JSX.Element => {
+    let children = <PrintablePhieuGiaoTuiThu idChuyenThu={get(item, 'TOR_ID', '')} />;
+    if (SipDataType.KIEN === item.TOR_TYPE) {
+      children = <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={get(item, 'TOR_ID', '')} />;
+    }
+    return (
+      <ButtonPrintable
+        btnProps={{
+          className: 'SipTableFunctionIcon',
+          children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
+        }}
+        modalBodyProps={{
+          children: children,
+        }}
+        modalHeaderProps={{
+          children: t('In danh sách bảng kê thuộc tải'),
+        }}
+      />
+    );
+  };
 
   const columns = useMemo(
     () => [
@@ -246,7 +252,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return renderPrintButton(get(row, 'values.TOR_ID', ''));
+          return renderPrintButton(get(row, 'original', ''));
         },
       },
     ],
