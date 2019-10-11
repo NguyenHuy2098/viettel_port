@@ -34,7 +34,7 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Điểm đến'),
-        // ac/cessor: 'DES',
+        accessor: 'DES',
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
