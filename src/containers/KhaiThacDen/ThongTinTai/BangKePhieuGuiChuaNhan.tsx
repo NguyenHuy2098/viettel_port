@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button, Col, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
@@ -14,6 +14,8 @@ import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 
 interface Props {
   getThongTinTai: () => void;
@@ -36,6 +38,21 @@ const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const handleSuccessQuetNhan = (): void => {
     getThongTinTai();
   };
+
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        className: 'SipTableFunctionIcon',
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
+      }}
+      modalBodyProps={{
+        children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bưu gửi của bảng kê'),
+      }}
+    />
+  );
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -75,11 +92,7 @@ const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Button className="SipTableFunctionIcon">
-              <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
-            </Button>
-          );
+          return <>{renderPrintButton(get(row, 'values.TOR_ID', ''))}</>;
         },
       },
     ],
