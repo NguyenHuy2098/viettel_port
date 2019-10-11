@@ -65,6 +65,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
 
   useEffect((): void => {
     dispatchApi054();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dispatchAPI035 = useCallback(() => {
