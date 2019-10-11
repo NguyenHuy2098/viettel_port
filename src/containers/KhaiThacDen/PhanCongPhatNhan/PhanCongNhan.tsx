@@ -12,6 +12,8 @@ import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { toast } from 'react-toastify';
+import { action_MIOA_ZTMI054 } from '../../../redux/MIOA_ZTMI054/actions';
+import { makeSelectorMaBP } from '../../../redux/auth/selectors';
 
 interface Props {
   match: match;
@@ -21,6 +23,7 @@ interface Props {
 const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const getStatusDisplay = useCallback((statusCode: string) => {
     // if (statusCode === '301') return 'Chờ lấy hàng';
@@ -43,6 +46,25 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     if (event.currentTarget.value === '') setUserIdSelected(undefined);
     else setUserIdSelected(event.currentTarget.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const dispatchApi054 = (): void => {
+    dispatch(
+      action_MIOA_ZTMI054({
+        iv_post: userMaBp,
+        row: [
+          {
+            iv_position: 'NVBH',
+          },
+        ],
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '10',
+      }),
+    );
+  };
+
+  useEffect((): void => {
+    dispatchApi054();
   }, []);
 
   const dispatchAPI035 = useCallback(() => {

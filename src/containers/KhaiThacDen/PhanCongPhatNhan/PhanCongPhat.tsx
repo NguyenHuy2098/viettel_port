@@ -13,6 +13,8 @@ import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
 import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
+import { action_MIOA_ZTMI054 } from '../../../redux/MIOA_ZTMI054/actions';
+import { makeSelectorMaBP } from '../../../redux/auth/selectors';
 
 interface Props {
   match: match;
@@ -22,6 +24,7 @@ interface Props {
 const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const userMaBp = useSelector(makeSelectorMaBP);
 
   const getStatusDisplay = useCallback((statusCode: string) => {
     // if (statusCode === '605') return 'Chờ phát';
@@ -102,6 +105,21 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dataSelected],
   );
+  useEffect((): void => {
+    dispatch(
+      action_MIOA_ZTMI054({
+        iv_post: userMaBp,
+        row: [
+          {
+            iv_position: 'NVBH',
+          },
+        ],
+        IV_PAGENO: '1',
+        IV_NO_PER_PAGE: '10',
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const dispatchGetListPhieuGui = useCallback(() => {
     dispatch(

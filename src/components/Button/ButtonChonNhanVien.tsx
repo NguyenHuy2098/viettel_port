@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter, ButtonProps, ModalProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { map, filter } from 'lodash';
 
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
+import { action_MIOA_ZTMI054 } from '../../redux/MIOA_ZTMI054/actions';
+import { makeSelectorMaBP } from '../../redux/auth/selectors';
 
 interface Props extends ButtonProps {
   onApplyChosen: (IV_PARTY_ID: string) => void;
@@ -17,10 +19,29 @@ interface Props extends ButtonProps {
 const ButtonChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
   const { onApplyChosen, currentUserId, disabled, modalProps, ...rest } = props;
   const { t } = useTranslation();
+  const userMaBp = useSelector(makeSelectorMaBP);
+
+  const dispatch = useDispatch();
+
   const [modalCreateNew, setModalCreateNew] = useState<boolean>(false);
   const [idUserSelected, setIdUserSelected] = useState<undefined | string>(undefined);
 
   const toggle = (): void => {
+    if (!modalCreateNew) {
+      dispatch(
+        action_MIOA_ZTMI054({
+          iv_post: userMaBp,
+          row: [
+            {
+              iv_position: 'NVBH',
+            },
+          ],
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
+        }),
+      );
+    }
+
     setModalCreateNew(!modalCreateNew);
   };
   const handleApplyClick = (): void => {

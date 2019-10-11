@@ -35,7 +35,7 @@ const PhanCongPhatNhan: React.FC<Props> = (props: Props): JSX.Element => {
         iv_post: userMaBp,
         row: [
           {
-            iv_position: 'NVLX',
+            iv_position: 'NVBH',
           },
         ],
         IV_PAGENO: '1',
