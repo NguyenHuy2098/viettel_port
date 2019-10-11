@@ -91,19 +91,27 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
       },
       {
         Header: t('BƯU CỤC GỐC'),
-        accessor: 'SRC_LOC_IDTRQ',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.SRC_LOC_IDTRQ', '');
+        },
       },
       {
         Header: t('NƠI ĐI'),
-        accessor: 'DES_LOC_IDTRQ',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.SRC_LOC_IDTRQ', '');
+        },
       },
       {
         Header: t('NƠI ĐẾN'),
-        accessor: 'DES_LOC_IDTRQ',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.DES_LOC_IDTRQ', '');
+        },
       },
       {
         Header: t('BƯU CỤC PHÁT'),
-        accessor: 'DES_LOC_IDTRQ',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return get(row, 'original.DES_LOC_IDTRQ', '');
+        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
