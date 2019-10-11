@@ -3,8 +3,9 @@ import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
+import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { findIndex, get, join, map, size, slice, toString } from 'lodash';
+import { findIndex, get, join, size, slice, toString } from 'lodash';
 
 import DataTable from 'components/DataTable/Printable';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
@@ -27,37 +28,38 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
       {
         Header: t('Nhóm hàng'),
         accessor: 'COMM_LOC_GROUP',
+        Cell: ({ row }: Cell<API.Child>): string => {
+          return get(row, 'original.COMM_LOC_GROUP', '');
+        },
       },
       {
         Header: t('Số lượng'),
         accessor: 'TOTAL_ITEM',
+        Cell: ({ row }: Cell<API.Child>): string => {
+          return get(row, 'original.TOTAL_ITEM', '');
+        },
       },
       {
         Header: t('Điểm đến'),
         accessor: 'DES',
+        Cell: ({ row }: Cell<API.Child>): string => {
+          const thisCommLocGroup = get(row, 'original.COMM_LOC_GROUP', '');
+          if (!thisCommLocGroup) return '';
+          const thisDes = join(
+            slice(
+              thisCommLocGroup,
+              findIndex(thisCommLocGroup, (item: string): boolean => item === '.') + 1,
+              size(thisCommLocGroup),
+            ),
+            '',
+          );
+          return thisDes;
+        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-
-  const data = map(listBuuGuiChuaDongBangKe, (item: MTZTMI240Row) => {
-    const thisCommLocGroup = get(item, 'COMM_LOC_GROUP', '');
-    const thisDes = join(
-      slice(
-        thisCommLocGroup,
-        findIndex(thisCommLocGroup, (item: string): boolean => item === '.') + 1,
-        size(thisCommLocGroup),
-      ),
-      '',
-    );
-    return {
-      COMM_LOC_GROUP: item.COMM_LOC_GROUP ? item.COMM_LOC_GROUP : '',
-      TOTAL_ITEM: item.TOTAL_ITEM ? item.TOTAL_ITEM : '',
-      DES: thisDes,
-      CHILD: item.CHILD ? item.CHILD : '',
-    };
-  });
 
   useEffect(() => {
     dispatch(
@@ -84,7 +86,7 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
 
   return (
     <Row className="sipTableContainer mt-3 sipTableRowClickable">
-      <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+      <DataTable columns={columns} data={listBuuGuiChuaDongBangKe} onRowClick={handleRedirectDetail} />
     </Row>
   );
 };
