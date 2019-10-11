@@ -14,6 +14,7 @@ import moment from 'moment';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
+import { SipDataTorType, SipDataType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -38,6 +39,9 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
         GRO_WEI_VAL: `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`,
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
+        child_count: item.child_count,
+        TOR_TYPE: item.TOR_TYPE ? item.TOR_TYPE : '',
+        PACKAGE_ID: item.PACKAGE_ID,
       };
     },
   );
@@ -198,8 +202,15 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
   const columns = useMemo(
     () => [
       {
-        Header: t('Mã BK/PG'),
+        Header: t('Mã tải/kiện'),
         accessor: 'TOR_ID',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const torType = get(row, 'original.TOR_TYPE', '');
+          if (torType === SipDataType.BUU_GUI || torType === SipDataType.KIEN) {
+            return get(row, 'original.PACKAGE_ID', '');
+          }
+          return get(row, 'original.TOR_ID', '');
+        },
       },
       {
         Header: t('Điểm đi'),
@@ -211,10 +222,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       },
       {
         Header: t('Số lượng'),
-        accessor: '',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Chưa có API</>;
-        },
+        accessor: 'child_count',
       },
       {
         Header: t('Trọng lượng'),
@@ -226,8 +234,13 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       },
       {
         Header: t('Loại'),
-        Cell: (): JSX.Element => {
-          return <>Thiếu API</>;
+        accessor: 'TOR_TYPE',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(row, 'original.TOR_TYPE', '')
+            ? get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '')
+            : '';
+          if (value) return value;
+          return '';
         },
       },
       {

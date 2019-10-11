@@ -149,7 +149,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     <Row className="sipSummaryContent">
       <Col lg="5" xs="12">
         <Row>
-          <Col xs="5">{t('Mã tải/kiện')}: </Col>
+          <Col xs="5">{t('Mã chuyến thư')}: </Col>
           <Col xs="7">{get(dataChuyenThu, 'TOR_ID', '')}</Col>
         </Row>
         <Row>
@@ -266,6 +266,13 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       {
         Header: t('Mã tải/kiện'),
         accessor: 'TOR_ID',
+        Cell: ({ row }: Cell<API.Child>): string => {
+          const torType = get(row, 'original.TOR_TYPE', '');
+          if (torType === SipDataType.BUU_GUI || torType === SipDataType.KIEN) {
+            return get(row, 'original.PACKAGE_ID', '');
+          }
+          return get(row, 'original.TOR_ID', '');
+        },
       },
       {
         Header: t('Điểm đến'),
