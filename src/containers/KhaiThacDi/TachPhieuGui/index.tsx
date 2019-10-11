@@ -234,6 +234,34 @@ const SplitCoupon: React.FC = (): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   const dispatchActionApi_ZTMI213 = (): void => {
+    for (let i = 0; i < subPackages.length; i++) {
+      if (subPackages[i].QUANTITY === 0) {
+        toast(
+          <>
+            <i className="fa fa-window-close-o mr-2" />
+            {t('Số lượng bưu gửi phải khác 0')}
+          </>,
+          {
+            containerId: 'SplitCoupon',
+            type: 'error',
+          },
+        );
+        return;
+      }
+      if (subPackages[i].GROSS_WEIGHT === 0) {
+        toast(
+          <>
+            <i className="fa fa-window-close-o mr-2" />
+            {t('Trọng lượng bưu gửi phải khác 0')}
+          </>,
+          {
+            containerId: 'SplitCoupon',
+            type: 'error',
+          },
+        );
+        return;
+      }
+    }
     if (totalQuantityInvalid(subPackages)) {
       toast(
         <>
