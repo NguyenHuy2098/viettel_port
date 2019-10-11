@@ -94,19 +94,22 @@ const PrintBangKeChiTiet = (props: Props): JSX.Element => {
       {
         Header: t('Cước phí'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return `Thiếu API`;
+          // return `Thiếu API`;
+          return ``;
         },
       },
       {
         Header: t('Phụ phí khác'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return `Thiếu API`;
+          // return `Thiếu API`;
+          return ``;
         },
       },
       {
         Header: t('Mã KH'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return `Thiếu API`;
+          // return `Thiếu API`;
+          return ``;
         },
       },
     ],
@@ -132,13 +135,16 @@ const PrintBangKeChiTiet = (props: Props): JSX.Element => {
           </td>
 
           <td>
-            <div className="font-weight-bold">Thiếu API</div>
+            {/*<div className="font-weight-bold">Thiếu API</div>*/}
+            <div className="font-weight-bold"></div>
           </td>
           <td>
-            <div className="font-weight-bold">Thiếu API</div>
+            {/*<div className="font-weight-bold">Thiếu API</div>*/}
+            <div className="font-weight-bold"></div>
           </td>
           <td>
-            <div className="font-weight-bold">Thiếu API</div>
+            {/*<div className="font-weight-bold">Thiếu API</div>*/}
+            <div className="font-weight-bold"></div>
           </td>
         </tr>
       </tfoot>
