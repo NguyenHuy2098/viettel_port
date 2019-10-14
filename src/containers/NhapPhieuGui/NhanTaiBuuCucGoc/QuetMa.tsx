@@ -18,12 +18,8 @@ import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/sele
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
 import { SipDataState } from 'utils/enums';
 
-interface Props {
-  handleChangeTab: (tab: number) => void;
-}
-
 // eslint-disable-next-line max-lines-per-function
-const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
+const QuetMa: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);

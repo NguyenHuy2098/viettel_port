@@ -25,7 +25,7 @@ const TabView: React.FC<Props> = (props: Props): JSX.Element => {
   const { defaultTab, location, navs, tabContentProps, tabKey, tabs } = props;
   const dispatch = useDispatch();
   const theTabKey = isNil(tabKey) || isEmpty(tabKey) ? 'tab' : tabKey;
-  const theDefaultTab = isNil(defaultTab) ? 0 : defaultTab;
+  const theDefaultTab = isNil(defaultTab) ? 1 : defaultTab;
   const queryString = useMemo((): ParsedQuery => parse(location.search), [location.search]);
 
   const activeTab = useMemo((): number => {
@@ -63,8 +63,8 @@ const TabView: React.FC<Props> = (props: Props): JSX.Element => {
     <div className="sipTabContainer sipFlatContainer">
       <Nav className="shadow-sm" tabs>
         {map(navs, (navItem, index) => (
-          <NavItem key={`navItem-${index}`}>
-            <NavLink className={classNames({ active: activeTab === index })} onClick={toggleTab(index)}>
+          <NavItem key={`navItem-${index + 1}`}>
+            <NavLink className={classNames({ active: activeTab === index + 1 })} onClick={toggleTab(index + 1)}>
               {navItem.children}
             </NavLink>
           </NavItem>
@@ -72,7 +72,7 @@ const TabView: React.FC<Props> = (props: Props): JSX.Element => {
       </Nav>
       <TabContent activeTab={activeTab} className="sipFlatContainer" {...tabContentProps}>
         {map(tabs, (tabPane, index) => (
-          <TabPane key={`tabPane-${index}`} tabId={index}>
+          <TabPane key={`tabPane-${index + 1}`} tabId={index + 1}>
             {tabPane.children}
           </TabPane>
         ))}
