@@ -59,9 +59,12 @@
       border: none;
       font-size: 12px;
       float: right;
-      padding: 3px 12px 2px;
+      padding: 0 12px;
       color: #fff !important;
       border-radius: 13px;
+      min-height: 0;
+      height: 25px;
+      line-height: 22px;
       img {
         position: relative;
         top: -1px;
@@ -412,6 +415,9 @@
   input {
     top: 15px !important;
   }
+}
+.sipTableNoBreakWord {
+  word-break: normal;
 }
 @media screen and (max-width: 575px) {
   .topDashBroad {

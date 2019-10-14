@@ -55,117 +55,129 @@ const QuetMa: React.FC<Props> = ({ handleChangeTab }: Props): JSX.Element => {
                 );
               } else {
                 if (get(data, 'MT_ZTMI023_OUT.row[0].EXT_LOG_ID', '') === userMaBp) {
-                  const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
-                  dispatch(
-                    action_MIOA_ZTMI063(
-                      {
-                        row: {
-                          TOR_ID: get(data023, 'TOR_ID', ''),
+                  if (get(data, 'MT_ZTMI023_OUT.row[0].ZVTP_CUST_STATUS', 0) === 304) {
+                    const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
+                    dispatch(
+                      action_MIOA_ZTMI063(
+                        {
+                          row: {
+                            TOR_ID: get(data023, 'TOR_ID', ''),
+                          },
+                          IV_LOC_ID: userMaBp,
+                          IV_USER: userId,
                         },
-                        IV_LOC_ID: userMaBp,
-                        IV_USER: userId,
-                      },
-                      {
-                        // eslint-disable-next-line max-lines-per-function
-                        onSuccess: (data: API.MIOAZTMI063Response): void => {
-                          if (data.Status) {
-                            const payload235 = {
-                              MaBuuPham: get(data023, 'PACKAGE_ID', ''),
-                              GTC: get(data023, 'DEFINE_GTC', ''),
-                              COMTYPE: get(data023, 'CCODE_TYPE', ''),
-                              NHOMDICHVU: get(data023, 'SERVGROUP', ''),
-                              LOAIDICHVU: get(data023, 'TRANSSRVREQ_CODE', ''),
-                              DIEMDI: get(data023, 'RECENT_LOC', ''),
-                              TINHDEN: get(data023, 'DEST_LOC', ''),
-                            };
-                            // const payload235 = {
-                            //   MaBuuPham: '2100030867',
-                            //   GTC: 'Y',
-                            //   COMTYPE: 'V3',
-                            //   NHOMDICHVU: 'V02',
-                            //   LOAIDICHVU: 'VTH',
-                            //   DIEMDI: 'HCM',
-                            //   TINHDEN: 'HNI',
-                            // };
-                            dispatch(
-                              action_MIOA_ZTMI235(payload235, {
-                                // eslint-disable-next-line max-lines-per-function
-                                onSuccess: (data: ZTMI235Response): void => {
-                                  const payload239 = {
-                                    IV_PACKAGE_ID: codeChuyenThu,
-                                    IV_FLAG: '1',
-                                    IV_USER: userId,
-                                    IV_COMMODITY: get(data, 'loaiHangHoa', ''),
-                                    IV_SERVICE: get(data, 'loaiDichVu', ''),
-                                    IV_LINE: get(data, 'line', ''),
-                                    IV_MANIFEST_LOC: get(data, 'dongBangKe', ''),
-                                  };
-                                  dispatch(
-                                    action_ZTMI239(payload239, {
-                                      onSuccess: (data: API.ZTMI239Response): void => {
-                                        toast(
-                                          <>
-                                            <i className="fa fa-window-close-o mr-2" />
-                                            {get(data, 'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE', t('Thành công!'))}
-                                          </>,
-                                          {
-                                            type: 'success',
-                                          },
-                                        );
-                                        dispatch(
-                                          action_ZTMI240({
-                                            IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
-                                            IV_LOC_ID: userMaBp,
-                                            IV_DATE: moment().format('YYYYMMDD'),
-                                          }),
-                                        );
-                                      },
-                                      onFailure: (error: HttpRequestErrorType): void => {
-                                        toast(
-                                          <>
-                                            <i className="fa fa-window-close-o mr-2" />
-                                            {get(error, 'messages', t('Đã có lỗi xảy ra '))}
-                                          </>,
-                                          {
-                                            type: 'error',
-                                          },
-                                        );
-                                      },
-                                      onFinish: (): void => {
-                                        setCodeChuyenThu('');
-                                      },
-                                    }),
-                                  );
+                        {
+                          // eslint-disable-next-line max-lines-per-function
+                          onSuccess: (data: API.MIOAZTMI063Response): void => {
+                            if (data.Status) {
+                              const payload235 = {
+                                MaBuuPham: get(data023, 'PACKAGE_ID', ''),
+                                GTC: get(data023, 'DEFINE_GTC', ''),
+                                COMTYPE: get(data023, 'CCODE_TYPE', ''),
+                                NHOMDICHVU: get(data023, 'SERVGROUP', ''),
+                                LOAIDICHVU: get(data023, 'TRANSSRVREQ_CODE', ''),
+                                DIEMDI: get(data023, 'RECENT_LOC', ''),
+                                TINHDEN: get(data023, 'DEST_LOC', ''),
+                              };
+                              // const payload235 = {
+                              //   MaBuuPham: '2100030867',
+                              //   GTC: 'Y',
+                              //   COMTYPE: 'V3',
+                              //   NHOMDICHVU: 'V02',
+                              //   LOAIDICHVU: 'VTH',
+                              //   DIEMDI: 'HCM',
+                              //   TINHDEN: 'HNI',
+                              // };
+                              dispatch(
+                                action_MIOA_ZTMI235(payload235, {
+                                  // eslint-disable-next-line max-lines-per-function
+                                  onSuccess: (data: ZTMI235Response): void => {
+                                    const payload239 = {
+                                      IV_PACKAGE_ID: codeChuyenThu,
+                                      IV_FLAG: '1',
+                                      IV_USER: userId,
+                                      IV_COMMODITY: get(data, 'loaiHangHoa', ''),
+                                      IV_SERVICE: get(data, 'loaiDichVu', ''),
+                                      IV_LINE: get(data, 'line', ''),
+                                      IV_MANIFEST_LOC: get(data, 'dongBangKe', ''),
+                                    };
+                                    dispatch(
+                                      action_ZTMI239(payload239, {
+                                        onSuccess: (data: API.ZTMI239Response): void => {
+                                          toast(
+                                            <>
+                                              <i className="fa fa-window-close-o mr-2" />
+                                              {get(data, 'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE', t('Thành công!'))}
+                                            </>,
+                                            {
+                                              type: 'success',
+                                            },
+                                          );
+                                          dispatch(
+                                            action_ZTMI240({
+                                              IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+                                              IV_LOC_ID: userMaBp,
+                                              IV_DATE: moment().format('YYYYMMDD'),
+                                            }),
+                                          );
+                                        },
+                                        onFailure: (error: HttpRequestErrorType): void => {
+                                          toast(
+                                            <>
+                                              <i className="fa fa-window-close-o mr-2" />
+                                              {get(error, 'messages', t('Đã có lỗi xảy ra '))}
+                                            </>,
+                                            {
+                                              type: 'error',
+                                            },
+                                          );
+                                        },
+                                        onFinish: (): void => {
+                                          setCodeChuyenThu('');
+                                        },
+                                      }),
+                                    );
+                                  },
+                                }),
+                              );
+                            } else {
+                              toast(
+                                <>
+                                  <i className="fa fa-window-close-o mr-2" />
+                                  {get(data, 'Messages', t('Đã có lỗi xảy ra '))}
+                                </>,
+                                {
+                                  type: 'error',
                                 },
-                              }),
-                            );
-                          } else {
+                              );
+                            }
+                          },
+                          onFailure: (error: HttpRequestErrorType): void => {
                             toast(
                               <>
                                 <i className="fa fa-window-close-o mr-2" />
-                                {get(data, 'Messages', t('Đã có lỗi xảy ra '))}
+                                {get(error, 'messages', t('Đã có lỗi xảy ra '))}
                               </>,
                               {
                                 type: 'error',
                               },
                             );
-                          }
+                            setCodeChuyenThu('');
+                          },
                         },
-                        onFailure: (error: HttpRequestErrorType): void => {
-                          toast(
-                            <>
-                              <i className="fa fa-window-close-o mr-2" />
-                              {get(error, 'messages', t('Đã có lỗi xảy ra '))}
-                            </>,
-                            {
-                              type: 'error',
-                            },
-                          );
-                          setCodeChuyenThu('');
-                        },
+                      ),
+                    );
+                  } else {
+                    toast(
+                      <>
+                        <i className="fa fa-window-close-o mr-2" />
+                        {t('Bưu gửi không hợp lệ')}
+                      </>,
+                      {
+                        type: 'error',
                       },
-                    ),
-                  );
+                    );
+                  }
                 } else {
                   toast(
                     <>

@@ -181,7 +181,7 @@ const PrintablePhieuGiaoNhanChuyenThu = (props: Props): JSX.Element => {
         </Col>
       </Row>
       <Row className="mb-4">
-        <Col xs={12}>
+        <Col xs={12} className="sipTableNoBreakWord">
           <DataTable columns={columns} data={data} />
         </Col>
       </Row>
