@@ -62,6 +62,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
 
   useEffect((): void => {
     getListChuyenThuCoSan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const dongTaiKienVaoChuyenThuTaoMoi = (locNo: string, description: string): void => {
