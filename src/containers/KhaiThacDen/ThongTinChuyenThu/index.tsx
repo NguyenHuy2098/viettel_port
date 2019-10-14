@@ -1,15 +1,15 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Button, Row, Col, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
+import React, { useEffect } from 'react';
+import { Button, Row, Col, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import classNames from 'classnames';
 import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
+import TabView from 'components/Tab/TabView';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelector046RowFirstChild,
@@ -26,16 +26,11 @@ type Props = RouteComponentProps;
 const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [tab, setTab] = useState<number>(1);
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const chuyenThu = useSelector(makeSelector046RowFirstChild);
   const countTaiKien = useSelector(makeSelector046CountChildren);
   const countKienChuaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const countKienDaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
-
-  const handleChangeTab = (tab: number): void => {
-    setTab(tab);
-  };
 
   const getThongTinChuyenThu = (): void => {
     dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idChuyenThu }));
@@ -109,36 +104,34 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <div className="row mt-3" />
 
-      <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 1 })}
-              onClick={useCallback((): void => handleChangeTab(1), [])}
-            >
-              {t('Tải kiện chưa nhận')}
-              <Badge color="primary">{countKienChuaNhan}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 2 })}
-              onClick={useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Tải kiện đã nhận')}
-              <Badge color="primary">{countKienDaNhan}</Badge>
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={2}>
-            <TaiKienDaNhan />
-          </TabPane>
-          <TabPane tabId={1}>
-            <TaiKienChuaNhan getThongTinChuyenThu={getThongTinChuyenThu} />
-          </TabPane>
-        </TabContent>
-      </div>
+      <TabView
+        navs={[
+          {
+            children: (
+              <>
+                {t('Tải kiện chưa nhận')}
+                <Badge color="primary">{countKienChuaNhan}</Badge>
+              </>
+            ),
+          },
+          {
+            children: (
+              <>
+                {t('Tải kiện đã nhận')}
+                <Badge color="primary">{countKienDaNhan}</Badge>
+              </>
+            ),
+          },
+        ]}
+        tabs={[
+          {
+            children: <TaiKienChuaNhan getThongTinChuyenThu={getThongTinChuyenThu} />,
+          },
+          {
+            children: <TaiKienDaNhan />,
+          },
+        ]}
+      />
     </>
   );
 };

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Row, TabContent, Col, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
+import React, { useEffect } from 'react';
+import { Row, Col, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 
+import TabView from 'components/Tab/TabView';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import {
   makeSelectorCountBangKeChuaNhanPhieuGui,
@@ -18,16 +18,8 @@ import NhanRiengBangKePhieuGui from './NhanRiengBangKePhieuGui';
 const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const [tab, setTab] = useState<number>(
-    Number(sessionStorage.getItem('tabNhanBangKePhieuGui') ? sessionStorage.getItem('tabNhanBangKePhieuGui') : 1),
-  );
   const countTaiChuaNhanBangKePhieuGui = useSelector(makeSelectorCountTaiChuaNhanBangKePhieuGui);
   const countBangKeChuaNhanPhieuGui = useSelector(makeSelectorCountBangKeChuaNhanPhieuGui);
-
-  function handleChangeTab(tab: number): void {
-    sessionStorage.setItem('tabNhanBangKePhieuGui', tab.toString());
-    setTab(tab);
-  }
 
   const getTaiKienDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
@@ -65,58 +57,47 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const renderToolbar = (): JSX.Element => (
-    <Row className="mb-3 sipTitleContainer">
-      <Col className="px-0" md={8}>
-        <h3>{t('Nhận bảng kê / phiếu gửi')}</h3>
-      </Col>
-    </Row>
-  );
-
   return (
     <>
-      {renderToolbar()}
-      <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 1 })}
-              onClick={React.useCallback((): void => handleChangeTab(1), [])}
-            >
-              {t('Tải chưa nhận bảng kê / phiếu gửi')}
-              <Badge color="primary">{countTaiChuaNhanBangKePhieuGui}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 2 })}
-              onClick={React.useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Bảng kê chưa nhận phiếu gửi')}
-              <Badge color="primary">{countBangKeChuaNhanPhieuGui}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 3 })}
-              onClick={React.useCallback((): void => handleChangeTab(3), [])}
-            >
-              {t('Nhận riêng bảng kê / phiếu gửi')}
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={1}>
-            <TaiChuaNhanBKPhieuGui getTaiKienDaQuetNhan={getTaiKienDaQuetNhan} />
-          </TabPane>
-          <TabPane tabId={2}>
-            <BangKeChuaNhanPhieuGui getBangKeDaQuetNhan={getBangKeDaQuetNhan} />
-          </TabPane>
-          <TabPane tabId={3}>
-            <NhanRiengBangKePhieuGui />
-          </TabPane>
-        </TabContent>
-      </div>
+      <Row className="mb-3 sipTitleContainer">
+        <Col className="px-0" md={8}>
+          <h3>{t('Nhận bảng kê / phiếu gửi')}</h3>
+        </Col>
+      </Row>
+      <TabView
+        navs={[
+          {
+            children: (
+              <>
+                {t('Tải chưa nhận bảng kê / phiếu gửi')}
+                <Badge color="primary">{countTaiChuaNhanBangKePhieuGui}</Badge>
+              </>
+            ),
+          },
+          {
+            children: (
+              <>
+                {t('Bảng kê chưa nhận phiếu gửi')}
+                <Badge color="primary">{countBangKeChuaNhanPhieuGui}</Badge>
+              </>
+            ),
+          },
+          {
+            children: t('Nhận riêng bảng kê / phiếu gửi'),
+          },
+        ]}
+        tabs={[
+          {
+            children: <TaiChuaNhanBKPhieuGui getTaiKienDaQuetNhan={getTaiKienDaQuetNhan} />,
+          },
+          {
+            children: <BangKeChuaNhanPhieuGui getBangKeDaQuetNhan={getBangKeDaQuetNhan} />,
+          },
+          {
+            children: <NhanRiengBangKePhieuGui />,
+          },
+        ]}
+      />
     </>
   );
 };

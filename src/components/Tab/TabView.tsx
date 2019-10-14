@@ -27,7 +27,11 @@ const TabView: React.FC<Props> = (props: Props): JSX.Element => {
   const theTabKey = isNil(tabKey) || isEmpty(tabKey) ? 'tab' : tabKey;
   const theDefaultTab = isNil(defaultTab) ? 0 : defaultTab;
   const queryString = useMemo((): ParsedQuery => parse(location.search), [location.search]);
-  const activeTab = useMemo((): number => toNumber(get(queryString, theTabKey, theDefaultTab)), [queryString]);
+
+  const activeTab = useMemo((): number => {
+    return toNumber(get(queryString, theTabKey, theDefaultTab));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryString]);
 
   const navigateTo = (tabId: number): void => {
     dispatch(
