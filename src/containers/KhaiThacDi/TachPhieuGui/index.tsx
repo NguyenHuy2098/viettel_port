@@ -10,6 +10,7 @@ import {
   noop,
   map,
   get,
+  includes,
   isInteger,
   isNil,
   toNumber,
@@ -313,10 +314,12 @@ const SplitCoupon: React.FC = (): JSX.Element => {
             setShowListCoupon(true);
           },
           onFailure: (error: Error): void => {
+            const errorMessage = get(error, 'messages', 'Đã có lỗi xảy ra ');
+
             toast(
               <>
                 <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages', 'Đã có lỗi xảy ra ')}
+                {includes(errorMessage, '306') ? t('Chỉ cho phép tách kiện ở trạng thái 306') : errorMessage}
               </>,
               {
                 containerId: 'SplitCoupon',
