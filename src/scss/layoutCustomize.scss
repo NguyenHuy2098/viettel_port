@@ -650,6 +650,9 @@ html:not([dir='rtl']) .sidebar {
   & > p {
     margin: 0;
     width: calc(100% - 32px);
+    &.temporaryP {
+      width:  calc(100% - 42px);
+    }
     span {
       display: block;
       &:first-child {

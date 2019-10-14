@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, ButtonProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
-import { isEmpty, isString, join, noop } from 'lodash';
+import { toast } from 'react-toastify';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { get, isEmpty, isString, join, noop, toString } from 'lodash';
 
-import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { AppStateType } from 'redux/store';
 import { toastError, toastSuccess } from '../Toast';
+import ModalTwoTab from '../DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 
 interface Props extends ButtonProps {
   diemDen: string;
@@ -24,11 +28,78 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
   const { diemDen, idChuyenThu, listTaiKienCanGan, listTaiKienCanRemove, onFailure, onSuccess, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const userMaBp = useSelector(makeSelectorMaBP);
   const [processing, setProcessing] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
+
+  const listTaiCoSan = useSelector(
+    (state: AppStateType) => get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', []),
+    shallowEqual,
+  );
 
   const toggleModal = (): void => {
     setShowModal(!showModal);
+  };
+
+  const getListChuyenThuCoSan = (): void => {
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: '5000',
+        },
+        {},
+        { flow: SipFlowType.KHAI_THAC_DI },
+      ),
+    );
+  };
+
+  const saveSelectedChuyenThu = (chuyenThu: API.RowMTZTMI047OUT | undefined): void => {
+    setSelectedChuyenThu(chuyenThu);
+  };
+
+  useEffect((): void => {
+    getListChuyenThuCoSan();
+  }, []);
+
+  const dongTaiKienVaoChuyenThuTaoMoi = (locNo: string, description: string): void => {
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: IV_FLAG.TAO,
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_TOR_ID_CU: '',
+          IV_SLOCATION: userMaBp,
+          IV_DLOCATION: locNo,
+          IV_DESCRIPTION: description,
+          T_ITEM: [
+            {
+              ITEM_ID: '',
+              ITEM_TYPE: '',
+            },
+          ],
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI016Response): void => {
+            const maChuyenThuVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
+            handleDongChuyenThuById(toString(maChuyenThuVuaTao));
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          },
+        },
+      ),
+    );
   };
 
   const removeTaiKien = (): Promise<API.MIOAZTMI016Response> => {
@@ -79,7 +150,10 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
       );
     });
   };
-
+  const dongTaiKienVaoChuyenThuCoSan = (): void => {
+    handleDongChuyenThuById(get(selectedChuyenThu, 'TOR_ID', ''));
+    toggleModal();
+  };
   const handleDongChuyenThuById = async (torId: string): Promise<void> => {
     if (!isString(torId) || isEmpty(torId)) return;
     setProcessing(true);
@@ -119,15 +193,27 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
           </>
         )}
       </Button>
-      <SelectForwardingItemModal
-        onSuccessSelected={handleDongChuyenThuById}
-        visible={showModal}
+      {/*<SelectForwardingItemModal*/}
+      {/*  onSuccessSelected={handleDongChuyenThuById}*/}
+      {/*  visible={showModal}*/}
+      {/*  onHide={toggleModal}*/}
+      {/*  modalTitle={t('Chọn chuyến thư')}*/}
+      {/*  forwardingItemList={listTaiKienCanGan || []}*/}
+      {/*  IV_TOR_TYPE={SipDataType.CHUYEN_THU}*/}
+      {/*  IV_TO_LOC_ID={diemDen}*/}
+      {/*  IV_CUST_STATUS={SipDataState.TAO_MOI}*/}
+      {/*/>*/}
+      <ModalTwoTab
         onHide={toggleModal}
-        modalTitle={t('Chọn chuyến thư')}
-        forwardingItemList={listTaiKienCanGan || []}
-        IV_TOR_TYPE={SipDataType.CHUYEN_THU}
-        IV_TO_LOC_ID={diemDen}
-        IV_CUST_STATUS={SipDataState.TAO_MOI}
+        visible={showModal}
+        modalTitle={t('Đóng chuyến thư')}
+        firstTabTitle={t('Chọn chuyến thư')}
+        secondTabTitle={t('Tạo mới chuyến thư')}
+        onSubmitButton1={dongTaiKienVaoChuyenThuCoSan}
+        onSubmitButton2={dongTaiKienVaoChuyenThuTaoMoi}
+        tab1Contents={listTaiCoSan}
+        onChooseItemInFirstTab={saveSelectedChuyenThu}
+        selectedChildInTab1={selectedChuyenThu}
       />
     </>
   );

@@ -87,7 +87,7 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
                 onChange={handleChooseItem(item)}
                 checked={get(props, 'selectedChildInTab1.TOR_ID') === item.TOR_ID}
               />
-              <p>
+              <p className="temporaryP">
                 <span>{item.TOR_ID}</span>
                 <span>{item.CREATED_BY}</span>
               </p>
