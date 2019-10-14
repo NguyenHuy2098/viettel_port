@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Col, Row, TabContent, TabPane, Nav, NavItem, NavLink, Badge } from 'reactstrap';
+import React, { useEffect } from 'react';
+import { Col, Row, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 
+import TabView from 'components/Tab/TabView';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorCountChuyenThuChuaNhanTaiKien, makeSelectorRowSize } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
@@ -14,9 +14,6 @@ import NhanRiengTaiKien from './NhanRiengTaiKien';
 // eslint-disable-next-line max-lines-per-function
 const NhanTaiKien: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<number>(
-    Number(sessionStorage.getItem('tabNhanTaiKien') ? sessionStorage.getItem('tabNhanTaiKien') : 1),
-  );
   const dispatch = useDispatch();
   const countChuyenThuChuaNhanTaiKien = useSelector(makeSelectorCountChuyenThuChuaNhanTaiKien);
   const countTaiDaNhan = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
@@ -72,64 +69,52 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleChangeTab = (tab: number): void => {
-    sessionStorage.setItem('tabNhanTaiKien', tab.toString());
-    setTab(tab);
-  };
-
-  const renderToolbar = (): JSX.Element => (
-    <Row className="mb-3 sipTitleContainer">
-      <Col className="px-0" md={8}>
-        <h3>{t('Nhận tải kiện')}</h3>
-      </Col>
-    </Row>
-  );
-
   return (
     <>
-      {renderToolbar()}
-      <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs className="shadow-sm">
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 1 })}
-              onClick={useCallback((): void => handleChangeTab(1), [])}
-            >
-              {t('Chuyến thư chưa nhận tải/kiện')}
-              <Badge color="primary">{countChuyenThuChuaNhanTaiKien}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 2 })}
-              onClick={useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Tải đã nhận')}
-              <Badge color="primary">{countTaiDaNhan}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 3 })}
-              onClick={useCallback((): void => handleChangeTab(3), [])}
-            >
-              {t('Nhận riêng tải/kiện')}
-              <Badge color="primary">{countNhanRiengTaiKien}</Badge>
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={1}>
-            <ChuyenThuChuaNhanTaiKien getChuyenThuChuaNhanTaiKien={getChuyenThuChuaNhanTaiKien} />
-          </TabPane>
-          <TabPane tabId={2}>
-            <TaiDaNhan getTaiDaNhan={getTaiDaNhan} />
-          </TabPane>
-          <TabPane tabId={3}>
-            <NhanRiengTaiKien getTaiKienChuaNhan={getTaiKienChuaNhan} />
-          </TabPane>
-        </TabContent>
-      </div>
+      <Row className="mb-3 sipTitleContainer">
+        <Col className="px-0" md={8}>
+          <h3>{t('Nhận tải kiện')}</h3>
+        </Col>
+      </Row>
+      <TabView
+        navs={[
+          {
+            children: (
+              <>
+                {t('Chuyến thư chưa nhận tải/kiện')}
+                <Badge color="primary">{countChuyenThuChuaNhanTaiKien}</Badge>
+              </>
+            ),
+          },
+          {
+            children: (
+              <>
+                {t('Tải đã nhận')}
+                <Badge color="primary">{countTaiDaNhan}</Badge>
+              </>
+            ),
+          },
+          {
+            children: (
+              <>
+                {t('Nhận riêng tải/kiện')}
+                <Badge color="primary">{countNhanRiengTaiKien}</Badge>
+              </>
+            ),
+          },
+        ]}
+        tabs={[
+          {
+            children: <ChuyenThuChuaNhanTaiKien getChuyenThuChuaNhanTaiKien={getChuyenThuChuaNhanTaiKien} />,
+          },
+          {
+            children: <TaiDaNhan getTaiDaNhan={getTaiDaNhan} />,
+          },
+          {
+            children: <NhanRiengTaiKien getTaiKienChuaNhan={getTaiKienChuaNhan} />,
+          },
+        ]}
+      />
     </>
   );
 };
