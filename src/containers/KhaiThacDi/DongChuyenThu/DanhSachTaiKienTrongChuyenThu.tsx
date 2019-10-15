@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, match } from 'react-router-dom';
+import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { goBack, push } from 'connected-react-router';
+import { goBack } from 'connected-react-router';
 import produce from 'immer';
 import { ceil, concat, filter, get, includes, isEmpty, map, pull, size } from 'lodash';
 import moment from 'moment';
@@ -17,7 +17,6 @@ import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
-import routesMap from 'utils/routesMap';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
@@ -194,26 +193,26 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     </Row>
   );
 
-  const handleRedirectDetail = useCallback(
-    (item: API.Child): void => {
-      dispatch(
-        action_MIOA_ZTMI046(
-          {
-            IV_TOR_ID: item.TOR_ID,
-            IV_PAGENO: '1',
-            IV_NO_PER_PAGE: '10',
-          },
-          {
-            onSuccess: (): void => {
-              dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
-            },
-          },
-        ),
-      );
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dataChuyenThuChildren],
-  );
+  // const handleRedirectDetail = useCallback(
+  //   (item: API.Child): void => {
+  //     dispatch(
+  //       action_MIOA_ZTMI046(
+  //         {
+  //           IV_TOR_ID: item.TOR_ID,
+  //           IV_PAGENO: '1',
+  //           IV_NO_PER_PAGE: '10',
+  //         },
+  //         {
+  //           onSuccess: (): void => {
+  //             dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_TAI, { idTai: item.TOR_ID })));
+  //           },
+  //         },
+  //       ),
+  //     );
+  //   },
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [dataChuyenThuChildren],
+  // );
 
   const renderPrintButton = (item: API.Child): JSX.Element => {
     let children = <PrintablePhieuGiaoTuiThu idChuyenThu={get(item, 'TOR_ID', '')} />;
@@ -332,7 +331,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={dataChuyenThuChildren} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={dataChuyenThuChildren} />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}
