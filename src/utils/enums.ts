@@ -44,6 +44,7 @@ export enum SipDataState {
 export enum SipFlowType {
   KHAI_THAC_DEN = 'KHAI_THAC_DEN',
   KHAI_THAC_DI = 'KHAI_THAC_DI',
+  BUU_CUC_GOC = 'BUU_CUC_GOC',
 }
 
 export enum IV_FLAG {

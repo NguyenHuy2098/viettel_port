@@ -50,89 +50,87 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   useEffect((): void => {
-    if (data) {
-      if (data.PROVINCE_ID_SOURCE) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: data.PROVINCE_ID_SOURCE },
-            {
-              onSuccess: (data: VtpAddressResponse): void => {
-                setProvinceSender(get(data, 'LocationModels[0].N'));
-              },
+    if (get(data, 'PROVINCE_ID_SOURCE')) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: get(data, 'PROVINCE_ID_SOURCE') },
+          {
+            onSuccess: (data: VtpAddressResponse): void => {
+              setProvinceSender(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (data.DISTRICT_ID_SOURCE) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: data.DISTRICT_ID_SOURCE },
-            {
-              onSuccess: (data: VtpAddressResponse): void => {
-                setDistrictSender(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (get(data, 'DISTRICT_ID_SOURCE')) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: get(data, 'DISTRICT_ID_SOURCE') },
+          {
+            onSuccess: (data: VtpAddressResponse): void => {
+              setDistrictSender(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (data.WARD_ID_SOURCE) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: data.WARD_ID_SOURCE },
-            {
-              onSuccess: (data: VtpAddressResponse): void => {
-                setWardSender(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (get(data, 'WARD_ID_SOURCE')) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: get(data, 'WARD_ID_SOURCE') },
+          {
+            onSuccess: (data: VtpAddressResponse): void => {
+              setWardSender(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (data.PROVINCE_ID_DES) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: data.PROVINCE_ID_DES },
-            {
-              onSuccess: (data: VtpAddressResponse): void => {
-                setProvinceReceiver(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (get(data, 'PROVINCE_ID_DES')) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: get(data, 'PROVINCE_ID_DES') },
+          {
+            onSuccess: (data: VtpAddressResponse): void => {
+              setProvinceReceiver(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (data.DISTRICT_ID_DES) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: data.DISTRICT_ID_DES },
-            {
-              onSuccess: (data: VtpAddressResponse): void => {
-                setDistrictReceiver(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (get(data, 'DISTRICT_ID_DES')) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: get(data, 'DISTRICT_ID_DES') },
+          {
+            onSuccess: (data: VtpAddressResponse): void => {
+              setDistrictReceiver(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
-      if (data.WARD_ID_DES) {
-        dispatch(
-          action_GET_ADDRESS(
-            { Id: data.WARD_ID_DES },
-            {
-              onSuccess: (data: VtpAddressResponse): void => {
-                setWardReceiver(get(data, 'LocationModels[0].N'));
-              },
+          },
+        ),
+      );
+    }
+    if (get(data, 'WARD_ID_DES')) {
+      dispatch(
+        action_GET_ADDRESS(
+          { Id: get(data, 'WARD_ID_DES') },
+          {
+            onSuccess: (data: VtpAddressResponse): void => {
+              setWardReceiver(get(data, 'LocationModels[0].N'));
             },
-          ),
-        );
-      }
+          },
+        ),
+      );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   useEffect(() => {
-    JsBarcode('#barcode', idChuyenThu, {
+    JsBarcode('#barcode', idDonHang, {
       displayValue: false,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idChuyenThu]);
+  }, [idDonHang]);
 
   function renderABC(): JSX.Element {
     return (
@@ -150,7 +148,9 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             </Col>
             <Col xs={6}>
               <p>
-                <strong>{data && data.COD} (vnđ)</strong>
+                <strong>
+                  {get(data, 'COD')} ({get(data, 'Item[0].CURRENCY_ITEM')})
+                </strong>
               </p>
             </Col>
           </Row>
@@ -183,13 +183,12 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
           <p>{t('Khách hàng nhận')}</p>
         </Col>
         <Col xs={9} className="pt-2">
-          <p>Người nhận : {data && data.CONSIGNEE_NAME}</p>
-          <p>Điện thoại: {data && data.MOBILE_PHONE_DES}</p>
+          <p>Người nhận : {get(data, 'CONSIGNEE_NAME')}</p>
+          <p>Điện thoại: {get(data, 'MOBILE_PHONE_DES')}</p>
           <p>
             Đia chỉ:
-            {data &&
-              `${data.HOUSE_NO_DES ? data.HOUSE_NO_DES : ''}${' '}
-                  ${data.STREET_ID_DES ? data.STREET_ID_DES : ''}${' '}
+            {`${get(data, 'HOUSE_NO_DES') ? get(data, 'HOUSE_NO_DES') : ''}${' '}
+                  ${get(data, 'STREET_ID_DES') ? get(data, 'STREET_ID_DES') : ''}${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}
@@ -206,13 +205,13 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
         <Row className="p-1 border-bottom">
           <Col xs={6} className="">
             <h5 className="font-weight-bold mt-2">
-              {t('Dịch vụ')}: {data && data.SERVICE_TYPE}
+              {t('Dịch vụ')}: {get(data, 'SERVICE_TYPE')}
             </h5>
-            <p>{data && moment(data.CREATED_ON, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</p>
+            <p>{moment(get(data, 'CREATED_ON'), 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</p>
           </Col>
           <Col xs={6} className="">
             <h5 className="font-weight-bold mt-2">
-              {t('BC GỐC')}: {data && data.SOURCE_PO_ID}
+              {t('BC GỐC')}: {get(data, 'SOURCE_PO_ID')}
             </h5>
             <p>Điện thoại: -/- </p>
           </Col>
@@ -222,7 +221,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             <p className="">
               <img className="" id="barcode" alt="barcode" />
             </p>
-            <p className="text-center">{props.idChuyenThu}</p>
+            <p className="text-center">{idChuyenThu}</p>
           </Col>
         </Row>
         <Row className="border-bottom">
@@ -230,13 +229,12 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             <p>{t('Khách hàng gửi')}</p>
           </Col>
           <Col xs={9} className="pt-2">
-            <p>Người gửi : {data && data.SHIPER_NAME}</p>
-            <p>Điện thoại : {data && data.MOBILE_PHONE_SRC}</p>
+            <p>Người gửi : {get(data, 'SHIPER_NAME')}</p>
+            <p>Điện thoại : {get(data, 'MOBILE_PHONE_SRC')}</p>
             <p>
               Địa chỉ :
-              {data &&
-                `${data.HOUSE_NO_SOURCE ? data.HOUSE_NO_SOURCE : ''}${' '}
-                  ${data.STREET_ID_SOURCE ? data.STREET_ID_SOURCE : ''}${' '}
+              {`${get(data, 'HOUSE_NO_SOURCE') ? get(data, 'HOUSE_NO_SOURCE') : ''}${' '}
+                  ${get(data, 'STREET_ID_SOURCE') ? get(data, 'STREET_ID_SOURCE') : ''}${' '}
                   ${wardSender}${' '}
                   ${districtSender}${' '}
                   ${provinceSender}`}
