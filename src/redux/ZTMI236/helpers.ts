@@ -19,5 +19,5 @@ export async function post_ZTMI236(payload: Partial<API.ZTMI236Request>): Promis
     ...payload,
   });
   if (toNumber(get(data, 'MT_ZTMI236_OUT.EV_ERROR')) === 1) return data;
-  throw new Error(get(data, 'MT_ZTMI236_OUT.RETURN_MESSAGE[0].MESSAGE'));
+  throw new Error('Không tìm thấy dữ liệu.');
 }
