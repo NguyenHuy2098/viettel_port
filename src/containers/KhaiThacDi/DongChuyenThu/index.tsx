@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import React, { useEffect, useState } from 'react';
+import { Badge, Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
-import { push } from 'connected-react-router';
 import { History } from 'history';
-import { get, isEmpty, toString } from 'lodash';
-import queryString from 'query-string';
+import { isEmpty, toString } from 'lodash';
 
+import TabView from 'components/Tab/TabView';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { toastError } from 'components/Toast';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
@@ -16,7 +14,6 @@ import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import { action_ZTMI236 } from 'redux/ZTMI236/actions';
 import { makeSelectorZTMI236OUTRowCount } from 'redux/ZTMI236/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 import ChuyenThuChuaHoanThanh from './ChuyenThuChuaHoanThanh';
 import TaiChuaDongChuyenThu from './TaiChuaDongChuyenThu';
 import KienChuaDongChuyenThu from './KienChuaDongChuyenThu';
@@ -30,8 +27,6 @@ interface Props {
 const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [tab, setTab] = useState<number>(1);
-  const tabParams = queryString.parse(get(props, 'history.location.search', {}));
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
   const countChuyenThuChuaHoanThanh = useSelector(
     makeSelectorTotalItem(SipDataType.CHUYEN_THU, SipDataState.CHUA_HOAN_THANH),
@@ -41,23 +36,6 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   );
   const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const countKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRowCount);
-
-  const handleChangeTab = (tab: number): void => {
-    setTab(tab);
-    dispatch(
-      push({
-        pathname: routesMap.DONG_CHUYEN_THU,
-        search: queryString.stringify({ tab }),
-      }),
-    );
-  };
-
-  useEffect((): void => {
-    if (tabParams.tab) {
-      setTab(parseInt(toString(tabParams.tab)));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabParams]);
 
   const toastErrorOnSearch = (error: Error, torId: string): void => {
     if (!isEmpty(torId)) {
@@ -193,62 +171,56 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       {renderTitle()}
       <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 1 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={useCallback((): void => handleChangeTab(1), [])}
-            >
-              {t('Chuyến thư chưa hoàn thành')}
-              <Badge color="primary">{countChuyenThuChuaHoanThanh}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 2 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Tải chưa đóng chuyến thư')}
-              <Badge color="primary">{countTaiChuaHoanThanh}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 3 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={useCallback((): void => handleChangeTab(3), [])}
-            >
-              {t('Kiện chưa đóng chuyến thư')}
-              <Badge color="primary">{countKienChuaDongChuyenThu}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 4 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={useCallback((): void => handleChangeTab(4), [])}
-            >
-              {t('Chuyến thư đã đóng')}
-              <Badge color="primary">{countChuyenThuDaDong}</Badge>
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={1}>
-            <ChuyenThuChuaHoanThanh getListChuyenThuTaoMoi={getListChuyenThuTaoMoi} />
-          </TabPane>
-          <TabPane tabId={2}>
-            <TaiChuaDongChuyenThu getListTaiChuaDongChuyenThu={getListTaiChuaDongChuyenThu} />
-          </TabPane>
-          <TabPane tabId={3}>
-            <KienChuaDongChuyenThu getListKienChuaDongChuyenThu={getListKienChuaDongChuyenThu} />
-          </TabPane>
-          <TabPane tabId={4}>
-            <ChuyenThuDaDong getListChuyenThuDaDong={getListChuyenThuDaDong} />
-          </TabPane>
-        </TabContent>
+        <TabView
+          navs={[
+            {
+              children: (
+                <>
+                  {t('Chuyến thư chưa hoàn thành')}
+                  <Badge color="primary">{countChuyenThuChuaHoanThanh}</Badge>
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  {t('Tải chưa đóng chuyến thư')}
+                  <Badge color="primary">{countTaiChuaHoanThanh}</Badge>
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  {t('Kiện chưa đóng chuyến thư')}
+                  <Badge color="primary">{countKienChuaDongChuyenThu}</Badge>
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  {t('Chuyến thư đã đóng')}
+                  <Badge color="primary">{countChuyenThuDaDong}</Badge>
+                </>
+              ),
+            },
+          ]}
+          tabs={[
+            {
+              children: <ChuyenThuChuaHoanThanh getListChuyenThuTaoMoi={getListChuyenThuTaoMoi} />,
+            },
+            {
+              children: <TaiChuaDongChuyenThu getListTaiChuaDongChuyenThu={getListTaiChuaDongChuyenThu} />,
+            },
+            {
+              children: <KienChuaDongChuyenThu getListKienChuaDongChuyenThu={getListKienChuaDongChuyenThu} />,
+            },
+            {
+              children: <ChuyenThuDaDong getListChuyenThuDaDong={getListChuyenThuDaDong} />,
+            },
+          ]}
+        />
       </div>
     </>
   );

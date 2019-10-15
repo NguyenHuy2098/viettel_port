@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import { Badge, Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import { History } from 'history';
-import { get, toString } from 'lodash';
-import queryString from 'query-string';
 
+import TabView from 'components/Tab/TabView';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorTotalItem } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
-import BuuGuiChuaDongTai from './BuuGuiChuaDongTai';
 import TaiChuaHoanThanh from './TaiChuaHoanThanh';
 import BangKeChuaDongTai from './BangKeChuaDongTai';
 import TaiDaDong from './TaiDaDong';
@@ -25,7 +22,6 @@ interface Props {
 const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const tabParams = queryString.parse(get(props, 'history.location.search', {}));
 
   const getListTai = (): void => {
     dispatch(
@@ -40,7 +36,6 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
     );
   };
 
-  const [tab, setTab] = useState<number>(1);
   const countTaiChuaHoanThanh = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.CHUA_HOAN_THANH));
   const countTaiDaDong = useSelector(makeSelectorTotalItem(SipDataType.TAI, SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU));
   const countBangKeChuaDongTai = useSelector(makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
@@ -62,26 +57,9 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   useEffect((): void => {
-    if (tabParams.tab) {
-      setTab(parseInt(toString(tabParams.tab)));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabParams]);
-
-  useEffect((): void => {
     dispatch(action_MIOA_ZTMI045(payloadGetPostOfficeList));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
-
-  function handleChangeTab(tab: number): void {
-    setTab(tab);
-    props.history.push({
-      pathname: props.history.location.pathname,
-      search: queryString.stringify({
-        tab,
-      }),
-    });
-  }
 
   const toggleCreateForwardingItemModal = (): void => {
     setCreateForwardingItemModal(!createForwardingItemModal);
@@ -112,62 +90,56 @@ const DongTai: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       {renderTitle()}
       <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 1 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={React.useCallback((): void => handleChangeTab(1), [])}
-            >
-              {t('Tải chưa hoàn thành')}
-              <Badge color="primary">{countTaiChuaHoanThanh}</Badge>
-            </NavLink>
-          </NavItem>
-          {/*<NavItem>*/}
-          {/*  <NavLink*/}
-          {/*    className={classNames({ active: tab === 2 })}*/}
-          {/*    // eslint-disable-next-line react-hooks/exhaustive-deps*/}
-          {/*    onClick={React.useCallback((): void => handleChangeTab(2), [])}*/}
-          {/*  >*/}
-          {/*    {t('Bưu gửi chưa đóng tải')}*/}
-          {/*    <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>*/}
-          {/*  </NavLink>*/}
-          {/*</NavItem>*/}
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 3 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={React.useCallback((): void => handleChangeTab(3), [])}
-            >
-              {t('Bảng kê chưa đóng tải')}
-              <Badge color="primary">{countBangKeChuaDongTai}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 4 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={React.useCallback((): void => handleChangeTab(4), [])}
-            >
-              {t('Tải đã đóng')}
-              <Badge color="primary">{countTaiDaDong}</Badge>
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={1}>
-            <TaiChuaHoanThanh />
-          </TabPane>
-          <TabPane tabId={2}>
-            <BuuGuiChuaDongTai />
-          </TabPane>
-          <TabPane tabId={3}>
-            <BangKeChuaDongTai />
-          </TabPane>
-          <TabPane tabId={4}>
-            <TaiDaDong />
-          </TabPane>
-        </TabContent>
+        <TabView
+          navs={[
+            {
+              children: (
+                <>
+                  {t('Tải chưa hoàn thành')}
+                  <Badge color="primary">{countTaiChuaHoanThanh}</Badge>
+                </>
+              ),
+            },
+            // {
+            //   children: (
+            //     <>
+            //       {t('Bưu gửi chưa đóng tải')}
+            //       <Badge color="primary">{countBangKeBuuGuiChuaDongTai}</Badge>
+            //     </>
+            //   ),
+            // },
+            {
+              children: (
+                <>
+                  {t('Bảng kê chưa đóng tải')}
+                  <Badge color="primary">{countBangKeChuaDongTai}</Badge>
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  {t('Tải đã đóng')}
+                  <Badge color="primary">{countTaiDaDong}</Badge>
+                </>
+              ),
+            },
+          ]}
+          tabs={[
+            {
+              children: <TaiChuaHoanThanh />,
+            },
+            // {
+            //   children: <BuuGuiChuaDongTai />,
+            // },
+            {
+              children: <BangKeChuaDongTai />,
+            },
+            {
+              children: <TaiDaDong />,
+            },
+          ]}
+        />
       </div>
     </>
   );

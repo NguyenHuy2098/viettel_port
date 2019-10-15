@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Badge, Button, Nav, NavItem, NavLink, Row, TabContent } from 'reactstrap';
+import { Badge, Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import classNames from 'classnames';
 import { History } from 'history';
-import queryString from 'query-string';
-import { get, toString } from 'lodash';
 
+import TabView from 'components/Tab/TabView';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -24,7 +22,6 @@ interface Props {
 const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const tabParams = queryString.parse(get(props, 'history.location.search', {}));
 
   const getListBangKe = (): void => {
     dispatch(
@@ -39,7 +36,6 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
     );
   };
 
-  const [tab, setTab] = useState<number>(1);
   const countBangKeChuaHoanThanh = useSelector(
     makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH),
   );
@@ -67,23 +63,6 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
 
   const toggleCreateForwardingItemModal = (): void => {
     setCreateForwardingItemModal(!createForwardingItemModal);
-  };
-
-  useEffect((): void => {
-    if (tabParams.tab) {
-      setTab(parseInt(toString(tabParams.tab)));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tabParams]);
-
-  const handleChangeTab = (tab: number): void => {
-    setTab(tab);
-    props.history.push({
-      pathname: props.history.location.pathname,
-      search: queryString.stringify({
-        tab,
-      }),
-    });
   };
 
   const TaoBangKe = (): JSX.Element => {
@@ -119,43 +98,45 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       {renderTitle()}
       <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 1 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={React.useCallback((): void => handleChangeTab(1), [])}
-            >
-              {t('Bảng kê chưa hoàn thành')}
-              <Badge color="primary">{countBangKeChuaHoanThanh}</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 2 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={React.useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Bưu gửi chưa đóng BK')}
-              <Badge color="primary">03</Badge>
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 3 })}
-              // eslint-disable-next-line react-hooks/exhaustive-deps
-              onClick={React.useCallback((): void => handleChangeTab(3), [])}
-            >
-              {t('Bảng Kê đã đóng')}
-              <Badge color="primary">{countBangKeDaDong}</Badge>
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={tab} className="sipFlatContainer">
-          {tab === 1 && <BangKeChuaHoanThanh />}
-          {tab === 2 && <BuuGuiChuaDongBangKe />}
-          {tab === 3 && <BangKeDaDong />}
-        </TabContent>
+        <TabView
+          navs={[
+            {
+              children: (
+                <>
+                  {t('Bảng kê chưa hoàn thành')}
+                  <Badge color="primary">{countBangKeChuaHoanThanh}</Badge>
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  {t('Bưu gửi chưa đóng BK')}
+                  <Badge color="primary">03</Badge>
+                </>
+              ),
+            },
+            {
+              children: (
+                <>
+                  {t('Bảng Kê đã đóng')}
+                  <Badge color="primary">{countBangKeDaDong}</Badge>
+                </>
+              ),
+            },
+          ]}
+          tabs={[
+            {
+              children: <BangKeChuaHoanThanh />,
+            },
+            {
+              children: <BuuGuiChuaDongBangKe />,
+            },
+            {
+              children: <BangKeDaDong />,
+            },
+          ]}
+        />
       </div>
     </>
   );

@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import React, { useState, FormEvent } from 'react';
-import { find, get, map, size, toString, trim } from 'lodash';
+import { find, get, map, size, toString } from 'lodash';
 import { TabContent, TabPane, Nav, NavLink, Button, Row, Col, Label, Input } from 'reactstrap';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
@@ -43,7 +43,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
     index: number,
   ): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
-      onChangeValue(valueName, trim(event.currentTarget.value), index);
+      onChangeValue(valueName, event.currentTarget.value, index);
       // check validate
       if (isSubmit) {
         setCount(count + 1);

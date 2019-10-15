@@ -251,7 +251,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           <Button onClick={handleBack} className="sipTitleBtnBack">
             <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
-          {t('Danh sách bảng kê/phiếu gửi trong tải')}
+          {t('Danh sách bảng kê trong tải')}
         </h1>
         <div className="sipTitleRightBlock">
           <Button className="sipTitleRightBlockBtnIcon">
