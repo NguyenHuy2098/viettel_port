@@ -1,27 +1,26 @@
 /* eslint-disable max-lines */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
-import { forEach, get, includes, map, noop, size, toNumber, toString, trim } from 'lodash';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { forEach, get, includes, map, noop, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
-import { toast } from 'react-toastify';
 import moment from 'moment';
 
+import ButtonDongBangKe from 'components/Button/DanhSachPhieuGuiTrongBangKe/ButtonDongBangKe';
+import ButtonDongTai from 'components/Button/DanhSachPhieuGuiTrongBangKe/ButtonDongTai';
 import DataTable from 'components/DataTable';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
-import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
-import Scan from 'components/Input/Scan';
+import FadedNoData from 'components/NoData/FadedNodata';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
-import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 
@@ -35,20 +34,13 @@ interface Props {
 const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
 
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
-  const listTai = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.TAO_MOI));
-  const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [disableButtonDongBangKe, setDisableButtonDongBangKe] = useState<boolean>(true);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
-  const [showDongBangKeVaoTaiPopup, setShowDongBangKeVaoTaiPopup] = useState<boolean>(false);
-  const [showPopUpGanTaiVaoChuyenThu, setShowPopUpGanTaiVaoChuyenThu] = useState<boolean>(false);
-  const [selectedChuyenThu, setSelectedChuyenthu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
-  const [selectedTai, setSelectedTai] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
   const payload046 = {
     IV_TOR_ID: idBangKe,
@@ -71,8 +63,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const resetState = (): void => {
     setForwardingItemListState([]);
     setListUncheckForwardingItem([]);
-    setSelectedTai(undefined);
-    setSelectedChuyenthu(undefined);
     setUncheckAllForwardingItemCheckbox(false);
     getListPhieuGui();
   };
@@ -193,66 +183,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     };
   }
 
-  const getListTai = (): void => {
-    dispatch(
-      action_MIOA_ZTMI047(
-        {
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
-          IV_NO_PER_PAGE: '5000',
-        },
-        {},
-        { flow: SipFlowType.KHAI_THAC_DI },
-      ),
-    );
-  };
-
-  useEffect((): void => {
-    getListTai();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const taoTaiMoi = (locNo: string, ghiChu: string): void => {
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.TAO,
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_TOR_ID_CU: '',
-          IV_SLOCATION: userMaBp,
-          IV_DLOCATION: locNo,
-          IV_DESCRIPTION: ghiChu,
-          T_ITEM: [
-            {
-              ITEM_ID: '',
-              ITEM_TYPE: '',
-            },
-          ],
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            if (data && data.MT_ZTMI016_OUT) {
-              const newTaiId = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-              handleActionDongBangKe(newTaiId);
-            }
-          },
-
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', t('Đã có lỗi xảy ra '))}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-  };
-
   const handleDeleteForwardingOrder = (torId: string): void => {
     const payload = {
       IV_FLAG: IV_FLAG.XOA,
@@ -289,340 +219,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     dispatch(goBack());
   };
 
-  const openPopUpDongBangKeVaoTai = useCallback((): void => {
-    setShowDongBangKeVaoTaiPopup(true);
-  }, []);
-
-  const closePopUpDongBangKeVaoTai = useCallback((): void => {
-    setShowDongBangKeVaoTaiPopup(false);
-  }, []);
-
-  const openPopUpDongTai = useCallback((): void => {
-    setShowPopUpGanTaiVaoChuyenThu(true);
-  }, []);
-  const closePopUpDongTai = useCallback((): void => {
-    setShowPopUpGanTaiVaoChuyenThu(false);
-  }, []);
-
   // eslint-disable-next-line max-lines-per-function
-  const handleActionDongBangKeWithoutRemovePhieuGui = (taiID: string): void => {
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.SUA,
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_TOR_ID_CU: toString(taiID),
-          IV_SLOCATION: get(selectedTai, 'LOG_LOCID_FR', ''),
-          IV_DLOCATION: get(selectedTai, 'LOG_LOCID_TO', ''),
-          IV_DESCRIPTION: '',
-          T_ITEM: [
-            {
-              ITEM_ID: idBangKe,
-              ITEM_TYPE: SipDataType.BANG_KE,
-            },
-          ],
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-            resetState();
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra ')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-  };
-
-  // eslint-disable-next-line max-lines-per-function
-  const handleActionDongBangKeAfterRemovePhieuGui = (taiID: string): void => {
-    const a = {
-      IV_FLAG: IV_FLAG.REMOVE,
-      IV_TOR_TYPE: SipDataType.BANG_KE,
-      IV_TOR_ID_CU: idBangKe,
-      IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
-      IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
-      IV_DESCRIPTION: '',
-      T_ITEM: listUncheckForwardingItem,
-    };
-    // remove các phiếu gửi không được tích
-    dispatch(
-      action_MIOA_ZTMI016(a, {
-        // eslint-disable-next-line max-lines-per-function
-        onSuccess: (): void => {
-          // gan bang ke vao tai
-          dispatch(
-            action_MIOA_ZTMI016(
-              {
-                IV_FLAG: IV_FLAG.SUA,
-                IV_TOR_TYPE: SipDataType.TAI,
-                IV_TOR_ID_CU: toString(taiID),
-                IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
-                IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
-                IV_DESCRIPTION: '',
-                T_ITEM: [
-                  {
-                    ITEM_ID: idBangKe,
-                    ITEM_TYPE: SipDataType.BANG_KE,
-                  },
-                ],
-              },
-              {
-                onSuccess: (data: API.MIOAZTMI016Response): void => {
-                  toast(
-                    <>
-                      <i className="fa check mr-2" />
-                      {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                    </>,
-                    {
-                      type: 'success',
-                    },
-                  );
-                  resetState();
-                },
-                onFailure: (error: Error): void => {
-                  toast(
-                    <>
-                      <i className="fa fa-window-close-o mr-2" />
-                      {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                    </>,
-                    {
-                      type: 'error',
-                    },
-                  );
-                },
-              },
-            ),
-          );
-        },
-        onFailure: (error: Error): void => {
-          toast(
-            <>
-              <i className="fa fa-window-close-o mr-2" />
-              {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-            </>,
-            {
-              type: 'error',
-            },
-          );
-        },
-        // eslint-disable-next-line max-lines-per-function
-        onFinish: (): void => {
-          getListPhieuGui();
-        },
-      }),
-    );
-
-    setShowDongBangKeVaoTaiPopup(false);
-  };
-
-  const handleActionDongBangKe = (taiID: string): void => {
-    if (size(listUncheckForwardingItem) > 0) {
-      handleActionDongBangKeAfterRemovePhieuGui(taiID);
-    } else {
-      handleActionDongBangKeWithoutRemovePhieuGui(taiID);
-    }
-    setShowDongBangKeVaoTaiPopup(false);
-  };
-
-  const handleActionDongBangKeVaoTaiCoSan = (): void => {
-    handleActionDongBangKe(get(selectedTai, 'TOR_ID', ''));
-  };
-
-  // eslint-disable-next-line max-lines-per-function
-  const handleDongTaiSauKhiChonChuyenThu = (): void => {
-    const maChuyenThu = get(selectedChuyenThu, 'TOR_ID', '');
-
-    if (size(trim(maChuyenThu)) > 0) {
-      //tao tai moi
-      dispatch(
-        action_MIOA_ZTMI016(
-          {
-            IV_FLAG: IV_FLAG.TAO,
-            IV_TOR_TYPE: SipDataType.TAI,
-            IV_TOR_ID_CU: '',
-            IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
-            IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
-            IV_DESCRIPTION: '',
-            T_ITEM: [
-              {
-                ITEM_ID: '',
-                ITEM_TYPE: '',
-              },
-            ],
-          },
-          {
-            // eslint-disable-next-line max-lines-per-function
-            onSuccess: (data: API.MIOAZTMI016Response): void => {
-              if (get(data, 'MT_ZTMI016_OUT.ev_error') === 1) {
-                const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-                if (size(listUncheckForwardingItem) > 0) {
-                  // Remove phieu gui khong duoc tick ngoai man hin danh sach phieu gui trong bang ke
-                  dongTaiVoiChuyenThuCoSanAfterRemovePhieuGui(maTaiVuaTao);
-                } else {
-                  // add bang ke hien tai vao tai moi tao
-                  addBangKeHienTaiVaoTaiMoiTao(maTaiVuaTao);
-                }
-              }
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-          },
-        ),
-      );
-    }
-
-    closePopUpDongTai();
-  };
-
-  const dongTaiVoiChuyenThuCoSanAfterRemovePhieuGui = (maTaiVuaTao: string): void => {
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.REMOVE,
-          IV_TOR_TYPE: SipDataType.BANG_KE,
-          IV_TOR_ID_CU: idBangKe,
-          IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
-          IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
-          IV_DESCRIPTION: '',
-          T_ITEM: listUncheckForwardingItem,
-        },
-        {
-          // eslint-disable-next-line max-lines-per-function
-          onSuccess: (): void => {
-            // add bang ke hien tai vao tai moi tao
-            addBangKeHienTaiVaoTaiMoiTao(maTaiVuaTao);
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-          onFinish: (): void => {
-            getListPhieuGui();
-          },
-        },
-      ),
-    );
-  };
-
-  const addTaiVaoChuyenThuDuocChon = (maTaiVuaTao: string): void => {
-    const maChuyenThu = get(selectedChuyenThu, 'TOR_ID', '');
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.SUA,
-          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-          IV_TOR_ID_CU: maChuyenThu,
-          IV_SLOCATION: get(selectedChuyenThu, 'LOG_LOCID_FR', ''),
-          IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO', ''),
-          IV_DESCRIPTION: '',
-          T_ITEM: [
-            {
-              ITEM_ID: maTaiVuaTao,
-              ITEM_TYPE: SipDataType.TAI,
-            },
-          ],
-        },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-            resetState();
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-  };
-
-  const addBangKeHienTaiVaoTaiMoiTao = (maTaiVuaTao: string): void => {
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.SUA,
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_TOR_ID_CU: maTaiVuaTao,
-          IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''),
-          IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''),
-          IV_DESCRIPTION: '',
-          T_ITEM: [
-            {
-              ITEM_ID: idBangKe,
-              ITEM_TYPE: SipDataType.BANG_KE,
-            },
-          ],
-        },
-        {
-          onSuccess: (): void => {
-            // add tai vao chuyen thu vua chon
-            addTaiVaoChuyenThuDuocChon(maTaiVuaTao);
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-  };
-
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
@@ -646,19 +243,19 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>
-          <Button
-            color="primary"
-            className="ml-2"
-            onClick={openPopUpDongBangKeVaoTai}
-            disabled={disableButtonDongBangKe}
-          >
-            <img className="mr-2" src={'../../assets/img/icon/iconBangKe.svg'} alt="VTPostek" />
-            {t('Đóng bảng kê')}
-          </Button>
-          <Button color="primary" className="ml-2" disabled={disableButtonDongBangKe} onClick={openPopUpDongTai}>
-            <img src={'../../assets/img/icon/iconDongTai.svg'} alt="VTPostek" />
-            {t('Đóng tải')}
-          </Button>
+          <ButtonDongBangKe
+            disableButtonDongBangKe={disableButtonDongBangKe}
+            listUncheckForwardingItem={listUncheckForwardingItem}
+            idBangKe={idBangKe}
+            callBackAfterDongBangKe={resetState}
+          />
+          <ButtonDongTai
+            disableButtonDongTai={disableButtonDongBangKe}
+            listUncheckForwardingItem={listUncheckForwardingItem}
+            idBangKe={idBangKe}
+            callBackAfterRemovePhieuGui={getListPhieuGui}
+            callBackAfterDongTai={resetState}
+          />
         </div>
       </Row>
     );
@@ -790,232 +387,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     [uncheckAllForwardingItemCheckbox],
   );
 
-  const handleChonChuyenThu = (chuyenThu: API.RowMTZTMI047OUT | undefined): void => {
-    setSelectedChuyenthu(chuyenThu);
-  };
-
-  const handleChonTai = (tai: API.RowMTZTMI047OUT | undefined): void => {
-    setSelectedTai(tai);
-  };
-
-  // eslint-disable-next-line max-lines-per-function
-  const taoChuyenThuMoi = (locNo: string, ghiChu: string): void => {
-    // tao ngam 1 tai
-    dispatch(
-      action_MIOA_ZTMI016(
-        {
-          IV_FLAG: IV_FLAG.TAO,
-          IV_TOR_TYPE: SipDataType.TAI,
-          IV_TOR_ID_CU: '',
-          IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
-          IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
-          IV_DESCRIPTION: '',
-          T_ITEM: [
-            {
-              ITEM_ID: '',
-              ITEM_TYPE: '',
-            },
-          ],
-        },
-        {
-          // eslint-disable-next-line max-lines-per-function
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
-              const maTaiVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-              if (size(listUncheckForwardingItem) > 0) {
-                // Remove cac phieu gui khong duoc tich o ben ngoi man hinh
-                dongTaiVaoChuyenThuAfterRemovePhieuGui(maTaiVuaTao);
-              } else {
-                //add bang ke hien tai vao tai moi tao
-                addBangKeHienTaiVaoTaiMoiTao(maTaiVuaTao);
-              }
-            }
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-
-    //===================================================================================================
-
-    // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-    const addTaiVaoChuyenThuVuaTao = (maTaiVuaTao: string, maChuyenThuMoiTao: string) => {
-      dispatch(
-        action_MIOA_ZTMI016(
-          {
-            IV_FLAG: IV_FLAG.SUA,
-            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-            IV_TOR_ID_CU: maChuyenThuMoiTao,
-            IV_SLOCATION: userMaBp,
-            IV_DLOCATION: locNo,
-            IV_DESCRIPTION: '',
-            T_ITEM: [
-              {
-                ITEM_ID: maTaiVuaTao,
-                ITEM_TYPE: SipDataType.TAI,
-              },
-            ],
-          },
-          {
-            onSuccess: (data: API.MIOAZTMI016Response): void => {
-              toast(
-                <>
-                  <i className="fa check mr-2" />
-                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                </>,
-                {
-                  type: 'success',
-                },
-              );
-              resetState();
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-          },
-        ),
-      );
-    };
-
-    const taoChuyenThuMoiTheoThongTinTuPopup = (maTaiVuaTao: string): void => {
-      dispatch(
-        action_MIOA_ZTMI016(
-          {
-            IV_FLAG: IV_FLAG.TAO,
-            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
-            IV_TOR_ID_CU: '',
-            IV_SLOCATION: userMaBp,
-            IV_DLOCATION: locNo,
-            IV_DESCRIPTION: ghiChu,
-            T_ITEM: [
-              {
-                ITEM_ID: '',
-                ITEM_TYPE: '',
-              },
-            ],
-          },
-          {
-            // eslint-disable-next-line max-lines-per-function
-            onSuccess: (data: API.MIOAZTMI016Response): void => {
-              if (toNumber(get(data, 'MT_ZTMI016_OUT.ev_error', '0')) === 1) {
-                const maChuyenThuMoiTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
-                // add tai vao chuyen thu vua tao
-                addTaiVaoChuyenThuVuaTao(maTaiVuaTao, maChuyenThuMoiTao);
-              }
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-          },
-        ),
-      );
-    };
-
-    const addBangKeHienTaiVaoTaiMoiTao = (maTaiVuaTao: string): void => {
-      dispatch(
-        action_MIOA_ZTMI016(
-          {
-            IV_FLAG: IV_FLAG.SUA,
-            IV_TOR_TYPE: SipDataType.TAI,
-            IV_TOR_ID_CU: maTaiVuaTao,
-            IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
-            IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
-            IV_DESCRIPTION: '',
-            T_ITEM: [
-              {
-                ITEM_ID: idBangKe,
-                ITEM_TYPE: SipDataType.BANG_KE,
-              },
-            ],
-          },
-          {
-            // eslint-disable-next-line max-lines-per-function
-            onSuccess: (): void => {
-              // Tao chuyen thu theo thong tin vua duoc chon tu popup
-              taoChuyenThuMoiTheoThongTinTuPopup(maTaiVuaTao);
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-          },
-        ),
-      );
-    };
-
-    const dongTaiVaoChuyenThuAfterRemovePhieuGui = (maTaiVuaTao: string): void => {
-      dispatch(
-        action_MIOA_ZTMI016(
-          {
-            IV_FLAG: IV_FLAG.REMOVE,
-            IV_TOR_TYPE: SipDataType.BANG_KE,
-            IV_TOR_ID_CU: idBangKe,
-            IV_SLOCATION: get(dataBangKe, 'LOG_LOCID_SRC', ''), //(Điểm đi của bảng kê)
-            IV_DLOCATION: get(dataBangKe, 'LOG_LOCID_DES', ''), //(Điểm đến của bảng kê)
-            IV_DESCRIPTION: '',
-            T_ITEM: listUncheckForwardingItem,
-          },
-          {
-            // eslint-disable-next-line max-lines-per-function
-            onSuccess: (): void => {
-              // Add bang ke hien tai vao tai moi tao
-              addBangKeHienTaiVaoTaiMoiTao(maTaiVuaTao);
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-            onFinish: (): void => {
-              getListPhieuGui();
-            },
-          },
-        ),
-      );
-    };
-
-    closePopUpDongTai();
-  };
-
   return dataBangKe ? (
     <>
       {renderTitle()}
@@ -1040,44 +411,9 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={SipDataState.TAO_MOI}
       />
-      <ModalTwoTab
-        onHide={closePopUpDongBangKeVaoTai}
-        visible={showDongBangKeVaoTaiPopup}
-        modalTitle="Gán bảng kê vào tải"
-        firstTabTitle={'CHỌN TẢI'}
-        secondTabTitle={'TẠO TẢI MỚI'}
-        tab1Contents={listTai}
-        onSubmitButton1={handleActionDongBangKeVaoTaiCoSan}
-        onSubmitButton2={taoTaiMoi}
-        onChooseItemInFirstTab={handleChonTai}
-        selectedChildInTab1={selectedTai}
-      />
-      <ModalTwoTab
-        onHide={closePopUpDongTai}
-        visible={showPopUpGanTaiVaoChuyenThu}
-        modalTitle="Gán tải vào chuyến thư"
-        firstTabTitle={'CHỌN CHUYẾN THƯ'}
-        secondTabTitle={'TẠO CHUYẾN THƯ MỚI'}
-        tab1Contents={listChuyenThu}
-        onSubmitButton1={handleDongTaiSauKhiChonChuyenThu}
-        onSubmitButton2={taoChuyenThuMoi}
-        onChooseItemInFirstTab={handleChonChuyenThu}
-        selectedChildInTab1={selectedChuyenThu}
-      />
     </>
   ) : (
-    <Fade in={true} timeout={1000}>
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
-          {t('Quay lại')}
-        </h1>
-      </Row>
-      <div className="row mb-5" />
-      <h3 className="text-center">{t('Không tìm thấy dữ liệu!')}</h3>
-    </Fade>
+    <FadedNoData />
   );
 };
 export default DanhSachPhieuGuiTrongBangKe;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Fade, Input, Row } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { find, get, map, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
@@ -7,12 +7,14 @@ import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { Cell } from 'react-table';
+import moment from 'moment';
+
 import DataTable from 'components/DataTable';
+import FadedNoData from 'components/NoData/FadedNodata';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
-import moment from 'moment';
-import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 interface Props {
@@ -273,18 +275,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
       />
     </>
   ) : (
-    <Fade in={true} timeout={1000}>
-      <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
-          {t('Quay lại')}
-        </h1>
-      </Row>
-      <div className="row mb-5" />
-      <h3 className="text-center">{t('Không tìm thấy dữ liệu!')}</h3>
-    </Fade>
+    <FadedNoData />
   );
 };
 export default DanhSachPhieuGuiTrongBangKeDaDong;
