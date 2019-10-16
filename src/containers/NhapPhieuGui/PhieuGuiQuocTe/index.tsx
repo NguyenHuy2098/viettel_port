@@ -328,7 +328,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     GROSS_WEIGHT: trongLuong,
     PACKAGING_MATERIAL: '',
     QUANTITY_OF_PACKAGE: soLuong,
-    Description: tenHang,
+    Description: trim(tenHang),
     NET_WEIGHT_OF_UNIT: '',
     Currency: '',
     GROSS_WEIGHT_OF_UNIT: 'G',
@@ -667,7 +667,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         const packageItemValidate = {
           Flag: 'I',
           PACKAGING_MATERIAL: '',
-          Description: item.Description,
+          Description: trim(item.Description),
           PACKAGE_TYPE: '',
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
@@ -840,7 +840,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         const packageItemValidate = {
           Flag: 'I',
           PACKAGING_MATERIAL: '',
-          Description: item.Description,
+          Description: trim(item.Description),
           PACKAGE_TYPE: '',
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
