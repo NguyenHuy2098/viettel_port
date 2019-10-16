@@ -10,6 +10,7 @@ interface Props {
   removePackageItem: (index: number) => void;
   data: PackageItemInputType[];
   onChangeValue: (valueName: string, value: string | undefined, index: number) => void;
+  onChangeCommodityType: (value: string, index: number) => void;
   isSubmit: boolean;
   packageItemErrorsList: PackageItemErrors[];
   activeTab: string;
@@ -19,7 +20,15 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
-  const { activeTab, setActiveTab, data, isSubmit, onChangeValue, packageItemErrorsList } = props;
+  const {
+    activeTab,
+    setActiveTab,
+    data,
+    isSubmit,
+    onChangeValue,
+    packageItemErrorsList,
+    onChangeCommodityType,
+  } = props;
 
   //________hook to trigger input focus validating
   const [count, setCount] = useState<number>(0);
@@ -44,6 +53,16 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
   ): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       onChangeValue(valueName, event.currentTarget.value, index);
+      // check validate
+      if (isSubmit) {
+        setCount(count + 1);
+      }
+    };
+  }
+
+  function handleChangeCommodityType(index: number): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      onChangeCommodityType(event.currentTarget.value, index);
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -81,10 +100,10 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
               <Label check xs="12" className="pl-0 pr-0">
                 <Input
                   type="radio"
-                  value="V99"
+                  value="V3"
                   name={`packageType_${index}`}
                   defaultChecked
-                  onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
+                  onChange={handleChangeCommodityType(index)}
                 />{' '}
                 {t('Hàng hóa')}
               </Label>
@@ -93,9 +112,9 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
               <Label check xs="12" className="pl-0 pr-0">
                 <Input
                   type="radio"
-                  value="V04"
+                  value="V2"
                   name={`packageType_${index}`}
-                  onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
+                  onChange={handleChangeCommodityType(index)}
                 />{' '}
                 {t('Thư')}
               </Label>

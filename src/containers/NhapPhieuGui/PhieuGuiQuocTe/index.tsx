@@ -362,6 +362,20 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setCount(count + 1);
     }
   }
+  function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
+    const newCommodityCode = value === 'V2' ? 'V04' : 'V99';
+    const newArr = produce(packageItemArr, (draftState): void => {
+      set(draftState[index], 'COMMODITY_TYPE', value);
+      set(draftState[index], 'COMMODITY_CODE', newCommodityCode);
+    });
+    setPackageItemArr(newArr);
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  }
   function handleActiveTab(tab: string): void {
     setActiveTab(tab);
   }
@@ -1348,6 +1362,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             removePackageItem={removePackageItem}
             data={packageItemArr}
             onChangeValue={adjustPackageItemValue}
+            onChangeCommodityType={adjustPackageItemCommodityType}
             isSubmit={isSubmit}
             packageItemErrorsList={packageItemErrorsList}
             activeTab={activeTab}

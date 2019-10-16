@@ -208,7 +208,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             <h5 className="font-weight-bold mt-2">
               {t('Dịch vụ')}: {get(data, 'SERVICE_TYPE')}
             </h5>
-            <p>{moment(get(data, 'CREATED_ON'), 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}</p>
+            <p>{moment(get(data, 'CREATED_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</p>
           </Col>
           <Col xs={6} className="">
             <h5 className="font-weight-bold mt-2">
@@ -250,7 +250,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
               <p className="lin">
                 {t('Nội dung ')} :{head(split(get(data, 'HEADER_NOTE', ''), '/'))}
               </p>
-              {/*{moment(get(infoChuyenThu, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY ')}*/}
+              {/*{moment(get(infoChuyenThu, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format('DD/MM/YYYY')}*/}
             </div>
             <div>
               <p>{t('Ưu tiên giao ')} : Gia hàng từ 8h đến 10h sáng</p>

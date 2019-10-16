@@ -81,6 +81,12 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
     detailAddress: yup.string().required('Vui lòng nhập địa chỉ cụ thể'),
   });
 
+  const handleClearData = (): void => {
+    setIsSubmit(false);
+    setErrors([]);
+    onHide();
+  };
+
   const handleSave = (): void => {
     onChoose(addressData);
     onHide();
@@ -343,13 +349,13 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
 
   return (
     <Modal className="sipTitleModalCreateNew" isOpen={visible}>
-      <ModalHeader toggle={onHide}>Nhập địa chỉ</ModalHeader>
+      <ModalHeader toggle={handleClearData}>Nhập địa chỉ</ModalHeader>
       <ModalBody>{renderFormLocation()}</ModalBody>
       <ModalFooter>
         <Button color="primary" onClick={handleValidate}>
           {t('Ghi lại')}
         </Button>{' '}
-        <Button onClick={onHide}>{t('Hủy')}</Button>
+        <Button onClick={handleClearData}>{t('Hủy')}</Button>
       </ModalFooter>
     </Modal>
   );

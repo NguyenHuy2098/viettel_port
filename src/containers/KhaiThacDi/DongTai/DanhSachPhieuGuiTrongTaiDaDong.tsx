@@ -39,7 +39,7 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
           ? `${parseFloat(get(item, 'GRO_WEI_VAL', '')).toFixed(2)} ${item.GRO_WEI_UNI}`
           : '',
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
-        DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY '),
+        DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format('DD/MM/YYYY'),
         TOR_TYPE: item.TOR_TYPE,
         child_count: item.child_count,
       };

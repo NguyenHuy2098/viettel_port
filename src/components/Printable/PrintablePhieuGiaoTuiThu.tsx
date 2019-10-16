@@ -129,7 +129,7 @@ const PrintablePhieuGiaoTuiThu = (props: Props): JSX.Element => {
           <div>
             {t('Ngày tháng')}
             {t('COLON', ': ')}
-            {moment(get(infoChuyenThu, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format(' DD/MM/YYYY ')}
+            {moment(get(infoChuyenThu, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format('DD/MM/YYYY')}
           </div>
           <div>
             {t('Từ')}

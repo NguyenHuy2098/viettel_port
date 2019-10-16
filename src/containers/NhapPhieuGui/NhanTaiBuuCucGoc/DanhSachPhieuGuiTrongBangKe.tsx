@@ -99,7 +99,7 @@ function DanhSachPhieuGuiTrongBangKe(props: Props): JSX.Element {
       LOG_LOCID_TO: item.LOG_LOCID_TO,
       countChuyenThu: 222,
       PERSONAL: item.ITEM_NO,
-      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY '),
+      CREATED_ON: moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY'),
       NOTE_OF: item.EXEC_CONT,
     };
   });

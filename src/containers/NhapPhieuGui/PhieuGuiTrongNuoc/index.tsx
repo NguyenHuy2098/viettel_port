@@ -24,6 +24,7 @@ import {
   toString,
   trim,
 } from 'lodash';
+import moment from 'moment';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
@@ -333,8 +334,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   const newPackageItem: PackageItemInputType = {
     Width: '',
-    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: '',
@@ -388,6 +389,20 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function adjustPackageItemValue(valueName: string, value: string | undefined, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], valueName, value);
+    });
+    setPackageItemArr(newArr);
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  }
+  function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
+    const newCommodityCode = value === 'V2' ? 'V04' : 'V99';
+    const newArr = produce(packageItemArr, (draftState): void => {
+      set(draftState[index], 'COMMODITY_TYPE', value);
+      set(draftState[index], 'COMMODITY_CODE', newCommodityCode);
     });
     setPackageItemArr(newArr);
     //trigger get Summary information dispatch
@@ -534,8 +549,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
-        COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-        COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
         GOODS_VALUE: '',
@@ -556,8 +571,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
-            COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-            COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
             GOODS_VALUE: '',
@@ -734,8 +749,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: '',
-          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
           COD: item.COD === '' ? undefined : item.COD,
         };
         packageTabSchema
@@ -865,7 +878,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
       REQUEST_PICK_DATE: null,
-      REQUEST_DELIV_DATE: thoiGianPhat ? '' : null, // tạm thời để trống field này, khi có yêu cầu cú pháp thì dùng moment để format
+      REQUEST_DELIV_DATE: moment(thoiGianPhat).format('DD/MM/YYYY'),
       SALE_OFFICE: userMaBp, // mã bưu cục
       SHIPPER: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Người gửi hàng- mã BP
       SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
@@ -941,8 +954,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Note: '',
           GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
           Currency: '',
-          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
           COD: item.COD === '' ? undefined : item.COD,
         };
         packageTabSchema
@@ -1649,6 +1660,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             removePackageItem={removePackageItem}
             data={packageItemArr}
             onChangeValue={adjustPackageItemValue}
+            onChangeCommodityType={adjustPackageItemCommodityType}
             isSubmit={isSubmit}
             packageItemErrorsList={packageItemErrorsList}
             activeTab={activeTab}

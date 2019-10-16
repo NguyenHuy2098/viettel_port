@@ -327,7 +327,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Ngày tạo')}:
               </Col>
               <Col xs="12" sm="7">
-                {packageInformation && moment(packageInformation.CREATED_ON, 'YYYYMMDDHHmmss').format(' DD/MM/YYYY ')}
+                {packageInformation && moment(packageInformation.CREATED_ON, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
               </Col>
             </Row>
             <Row className="sipInputItem">
