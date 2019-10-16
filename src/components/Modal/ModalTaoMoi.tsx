@@ -88,7 +88,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
             {map(postOfficeList, (item: API.RowMTZTMI045OUT, index: number) => {
               return (
                 <option key={index} value={item.LOCNO}>
-                  {item.DESCR40}
+                  {item.LOCNO}
                 </option>
               );
             })}
