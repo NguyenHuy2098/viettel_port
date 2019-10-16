@@ -165,7 +165,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
         size: 'lg',
       }}
       modalBodyProps={{
-        children: <PrintableThongTinDonHang idDonHang={idDonHang} idChuyenThu={idChuyenThu} />,
+        children: <PrintableThongTinDonHang idDonHang={idDonHang} idChuyenThu={idChuyenThu} type="TTDH" />,
       }}
       modalHeaderProps={{
         children: t('In Thông Tin Đơn Hàng'),

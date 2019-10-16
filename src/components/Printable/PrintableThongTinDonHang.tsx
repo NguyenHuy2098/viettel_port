@@ -11,11 +11,12 @@ import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 interface Props {
   idDonHang: string;
   idChuyenThu: string;
+  type: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const PrintableThongTinDonHang = (props: Props): JSX.Element => {
-  const { idDonHang, idChuyenThu } = props;
+  const { idDonHang, idChuyenThu, type } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [data, setData] = useState<API.RowMTZTMI031OUT | undefined>(undefined);
@@ -126,11 +127,11 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
   }, [data]);
 
   useEffect(() => {
-    JsBarcode('#barcode', idDonHang, {
+    JsBarcode('#barcode', type === 'TTDH' ? idDonHang : idChuyenThu, {
       displayValue: false,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idDonHang]);
+  }, [idChuyenThu, idDonHang, type]);
 
   function renderABC(): JSX.Element {
     return (
@@ -221,7 +222,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             <p className="">
               <img className="" id="barcode" alt="barcode" />
             </p>
-            <p className="text-center">{idChuyenThu}</p>
+            <p className="text-center">{type === 'TTDH' ? idDonHang : idChuyenThu}</p>
           </Col>
         </Row>
         <Row className="border-bottom">

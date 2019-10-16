@@ -42,7 +42,7 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
           children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
         }}
         modalBodyProps={{
-          children: <PrintableThongTinDonHang idDonHang={thisIdChuyenThu[0]} idChuyenThu={idChuyenThu} />,
+          children: <PrintableThongTinDonHang idDonHang={thisIdChuyenThu[0]} idChuyenThu={idChuyenThu} type="PGCN" />,
         }}
         modalHeaderProps={{
           children: t('In danh sách bưu gửi của bảng kê'),
