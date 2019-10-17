@@ -219,8 +219,12 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     if (SipDataType.KIEN === item.TOR_TYPE) {
       children = <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={get(item, 'TOR_ID', '')} />;
     }
-    const value = get(SipDataTorType, get(item, 'TOR_TYPE', ''), '');
-    const title = t('In danh sách bảng kê thuộc ' + value.toLowerCase());
+
+    let title = t('In danh sách bảng kê thuộc chuyến thư');
+    if (get(item, 'TOR_TYPE', '') === SipDataType.TAI) {
+      title = t('In danh sách bảng kê thuộc chuyến tải');
+    }
+
     return (
       <ButtonPrintable
         btnProps={{
