@@ -127,11 +127,11 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
   }, [data]);
 
   useEffect(() => {
-    JsBarcode('#barcode', type === 'TTDH' ? idDonHang : idChuyenThu, {
+    JsBarcode('#barcode', idChuyenThu, {
       displayValue: false,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [idChuyenThu, idDonHang, type]);
+  }, [idChuyenThu, type]);
 
   function renderABC(): JSX.Element {
     return (
@@ -222,7 +222,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             <p className="">
               <img className="" id="barcode" alt="barcode" />
             </p>
-            <p className="text-center">{type === 'TTDH' ? idDonHang : idChuyenThu}</p>
+            <p className="text-center">{idChuyenThu}</p>
           </Col>
         </Row>
         <Row className="border-bottom">

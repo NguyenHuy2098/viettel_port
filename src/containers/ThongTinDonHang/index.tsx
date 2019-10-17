@@ -226,7 +226,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
         Header: t('Quản trị'),
         accessor: '',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return renderPrintButton(get(row, 'values.TOR_ID', ''));
+          return renderPrintButton(get(row, 'values.PACKAGE_ID', ''));
         },
       },
     ],

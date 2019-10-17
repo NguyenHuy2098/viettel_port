@@ -878,7 +878,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       POSTAL_CODE_DES: '', // Mã thánh phố nhận trong trường hợp khách hàng vãng lai
       POSTAL_CODE_SRC: '', // Mã thành phố trong trường hợp khách hàng vãng lai – nếu is null then default is 1000
       REQUEST_PICK_DATE: null,
-      REQUEST_DELIV_DATE: moment(thoiGianPhat).format('DD/MM/YYYY'),
+      REQUEST_DELIV_DATE: moment(thoiGianPhat).format('YYYYMMDDHHmmss'),
       SALE_OFFICE: userMaBp, // mã bưu cục
       SHIPPER: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Người gửi hàng- mã BP
       SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
