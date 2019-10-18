@@ -16,7 +16,7 @@ import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
-import { SipDataState } from 'utils/enums';
+import { SipDataState, SipDataType } from 'utils/enums';
 
 // eslint-disable-next-line max-lines-per-function
 const QuetMa: React.FC = (): JSX.Element => {
@@ -221,6 +221,12 @@ const QuetMa: React.FC = (): JSX.Element => {
     () => [
       {
         Header: t('Số vận đơn'),
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          if (get(row, 'original.TOR_TYPE', '') === SipDataType.BUU_GUI) {
+            return get(row, 'original.PACKAGE_ID', '');
+          }
+          return get(row, 'original.TOR_ID', '');
+        },
         accessor: 'TOR_ID',
       },
       {
