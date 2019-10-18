@@ -917,37 +917,38 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   function handleClearData(): void {
-    setIsSubmit(false);
-    setErrors([]);
-    setMaPhieuGui('');
-    setMaKhachHang('');
-    setDienThoaiSender('');
-    setHoTenSender('');
-    setDiaChiSender('');
-    setProvinceSender('');
-    setDistrictSender('');
-    setWardSender('');
-    setDetailAddressSender('');
-    setDienThoaiReceiver('');
-    setHoTenReceiver('');
-    setDiaChiReceiver('');
-    setDetailAddressReceiver('');
-    setTenHang('');
-    setSoLuong('');
-    setGiaTri('');
-    setTrongLuong('');
-    setPhuongThucVanChuyen('VCN');
-    // setLoaiHangHoa('V3');
-    // setNguoiThanhToan('PP');
-    setChoXemHang('');
-    setGhiChu('');
-    setActiveTab('1');
-    setPackageItemArr([]);
-    setPackageItemErrorsList([]);
-    tabValid = true;
-    setCuocChinh('0 đ');
-    setCuocCongThem('0 đ');
-    setTongCuoc('0 đ');
+    window.location.reload();
+    // setIsSubmit(false);
+    // setErrors([]);
+    // setMaPhieuGui('');
+    // setMaKhachHang('');
+    // setDienThoaiSender('');
+    // setHoTenSender('');
+    // setDiaChiSender('');
+    // setProvinceSender('');
+    // setDistrictSender('');
+    // setWardSender('');
+    // setDetailAddressSender('');
+    // setDienThoaiReceiver('');
+    // setHoTenReceiver('');
+    // setDiaChiReceiver('');
+    // setDetailAddressReceiver('');
+    // setTenHang('');
+    // setSoLuong('');
+    // setGiaTri('');
+    // setTrongLuong('');
+    // setPhuongThucVanChuyen('VCN');
+    // // setLoaiHangHoa('V3');
+    // // setNguoiThanhToan('PP');
+    // setChoXemHang('');
+    // setGhiChu('');
+    // setActiveTab('1');
+    // setPackageItemArr([]);
+    // setPackageItemErrorsList([]);
+    // tabValid = true;
+    // setCuocChinh('0 đ');
+    // setCuocCongThem('0 đ');
+    // setTongCuoc('0 đ');
   }
 
   function renderSendingCoupon(): JSX.Element {
