@@ -24,6 +24,7 @@ import {
   toString,
   trim,
 } from 'lodash';
+import numeral from 'numeral';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -467,13 +468,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     hoTenReceiver: trim(hoTenReceiver),
     diaChiReceiver: trim(diaChiReceiver),
     tenHang: trim(tenHang),
-    soLuong: trim(soLuong) === '' ? undefined : trim(soLuong),
-    giaTri: trim(giaTri) === '' ? undefined : trim(giaTri),
-    tienThuHo: trim(tienThuHo) === '' ? undefined : trim(tienThuHo),
-    trongLuong: trim(trongLuong) === '' ? undefined : trim(trongLuong),
-    kichThuocDai: trim(kichThuocDai) === '' ? undefined : trim(kichThuocDai),
-    kichThuocRong: trim(kichThuocRong) === '' ? undefined : trim(kichThuocRong),
-    kichThuocCao: trim(kichThuocCao) === '' ? undefined : trim(kichThuocCao),
+    soLuong: trim(soLuong) === '' ? undefined : trim(getValueOfNumberFormat(soLuong)),
+    giaTri: trim(giaTri) === '' ? undefined : trim(getValueOfNumberFormat(giaTri)),
+    tienThuHo: trim(tienThuHo) === '' ? undefined : trim(getValueOfNumberFormat(tienThuHo)),
+    trongLuong: trim(trongLuong) === '' ? undefined : trim(getValueOfNumberFormat(trongLuong)),
+    kichThuocDai: trim(kichThuocDai) === '' ? undefined : trim(getValueOfNumberFormat(kichThuocDai)),
+    kichThuocRong: trim(kichThuocRong) === '' ? undefined : trim(getValueOfNumberFormat(kichThuocRong)),
+    kichThuocCao: trim(kichThuocCao) === '' ? undefined : trim(getValueOfNumberFormat(kichThuocCao)),
     // maKhuyenMai,
     thoiGianPhat,
     //_____non-validated items
@@ -481,6 +482,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     nguoiThanhToan: trim(nguoiThanhToan),
     diemGiaoNhan: trim(diemGiaoNhan),
   };
+
+  function getValueOfNumberFormat(value: string): string {
+    return numeral(value)
+      .value()
+      .toString();
+  }
 
   //______________check if Order Information exist
   //eslint-disable-next-line max-lines-per-function
@@ -1345,7 +1352,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Input
             type="text"
             placeholder={t('Dài (cm)')}
-            value={kichThuocDai}
+            value={numberFormat(kichThuocDai)}
             onChange={handleChangeTextboxValue(setKichThuocDai)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocDai')}</div>
@@ -1354,7 +1361,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Input
             type="text"
             placeholder={t('Rộng (cm)')}
-            value={kichThuocRong}
+            value={numberFormat(kichThuocRong)}
             onChange={handleChangeTextboxValue(setKichThuocRong)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocRong')}</div>
@@ -1363,7 +1370,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Input
             type="text"
             placeholder={t('Cao (cm)')}
-            value={kichThuocCao}
+            value={numberFormat(kichThuocCao)}
             onChange={handleChangeTextboxValue(setKichThuocCao)}
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocCao')}</div>
@@ -1401,6 +1408,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         </Col>
       </Row>
     );
+  }
+
+  function numberFormat(value: string): string {
+    return value ? numeral(value).format('0,0') : '';
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -1446,7 +1457,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Số lượng')}
-              value={soLuong}
+              value={numberFormat(soLuong)}
               onChange={handleChangeTextboxValue(setSoLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuong')}</div>
@@ -1462,7 +1473,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 <Input
                   type="text"
                   placeholder={t('Nhập giá trị (đ)')}
-                  value={giaTri}
+                  value={numberFormat(giaTri)}
                   onChange={handleChangeTextboxValue(setGiaTri)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
@@ -1471,7 +1482,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 <Input
                   type="text"
                   placeholder={t('Nhập tiền thu hộ (đ)')}
-                  value={tienThuHo}
+                  value={numberFormat(tienThuHo)}
                   onChange={handleChangeTextboxValue(setTienThuHo)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(errors, 'tienThuHo')}</div>
@@ -1488,7 +1499,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              value={trongLuong}
+              value={numberFormat(trongLuong)}
               onChange={handleChangeTextboxValue(setTrongLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
@@ -1595,6 +1606,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               className="form-control"
               selected={thoiGianPhat}
               onChange={handleChangeDeliveryTime}
+              dateFormat="dd/MM/yyyy"
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'thoiGianPhat')}</div>
           </Col>
