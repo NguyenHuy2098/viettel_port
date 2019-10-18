@@ -59,6 +59,8 @@ export const PHAN_CONG_PHAT_NHAN = `${KHAI_THAC_DEN}/phan-cong-phat-nhan`;
 export const KHACH_HANG = '/khach-hang';
 export const TIEP_XUC_KHACH_HANG = `${KHACH_HANG}/tiep-xuc-khach-hang`;
 
+export const KE_KHAI_CHI_PHI = `/ke-khai-chi-phi`;
+
 export default {
   ROOT: '/',
   HOME: '/home',
@@ -147,4 +149,8 @@ export default {
   THONG_TIN_DON_HANG: '/thong-tin-don-hang/:idDonHang',
   THONG_TIN_DON_HANG_ORIGIN: '/thong-tin-don-hang',
   THONG_TIN_KIEN_HANG_ORIGIN: '/thong-tin-kien-hang',
+  /**
+   * FICO
+   */
+  KE_KHAI_CHI_PHI,
 };

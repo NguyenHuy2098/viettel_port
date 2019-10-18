@@ -131,6 +131,11 @@ const nav = (t: i18next.TFunction): any => {
           },
         ],
       },
+      {
+        name: t('Kê khai chi phí'),
+        icon: 'sipIcon-home',
+        url: routesMap.KE_KHAI_CHI_PHI,
+      },
       // {
       //   name: t('Báo cáo'),
       //   icon: 'fa fa-sticky-note-o',

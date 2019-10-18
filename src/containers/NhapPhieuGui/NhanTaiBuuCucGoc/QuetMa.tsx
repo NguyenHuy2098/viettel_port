@@ -50,7 +50,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                   },
                 );
               } else {
-                if (get(data, 'MT_ZTMI023_OUT.row[0].EXT_LOG_ID', '') === userMaBp) {
+                if (get(data, 'MT_ZTMI023_OUT.row[0].TO_LOG_ID', '') === userMaBp) {
                   if (get(data, 'MT_ZTMI023_OUT.row[0].ZVTP_CUST_STATUS', 0) === 304) {
                     const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
                     dispatch(
@@ -75,15 +75,6 @@ const QuetMa: React.FC = (): JSX.Element => {
                                 DIEMDI: get(data023, 'RECENT_LOC', ''),
                                 TINHDEN: get(data023, 'DEST_LOC', ''),
                               };
-                              // const payload235 = {
-                              //   MaBuuPham: '2100030867',
-                              //   GTC: 'Y',
-                              //   COMTYPE: 'V3',
-                              //   NHOMDICHVU: 'V02',
-                              //   LOAIDICHVU: 'VTH',
-                              //   DIEMDI: 'HCM',
-                              //   TINHDEN: 'HNI',
-                              // };
                               dispatch(
                                 action_MIOA_ZTMI235(payload235, {
                                   // eslint-disable-next-line max-lines-per-function
@@ -178,7 +169,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                   toast(
                     <>
                       <i className="fa fa-window-close-o mr-2" />
-                      {t('EXT_LOG_ID không khớp với bưu cục hiện tại')}
+                      {t('TO_LOG_ID không khớp với bưu cục hiện tại')}
                     </>,
                     {
                       type: 'error',

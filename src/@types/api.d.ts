@@ -275,6 +275,7 @@ declare namespace API {
     FWO_no?: string;
     Ordering_party?: string;
     Name_OP?: string;
+    Address_OP?: string;
     Phone_OP?: string;
     Email_OP?: string;
     Shipper?: string;
@@ -284,7 +285,7 @@ declare namespace API {
     Email_shipper?: string;
     Consignee?: string;
     Name_consig?: string;
-    ADDRESS_CONSIG?: string;
+    Address_consig?: string;
     Phone_consig?: string;
     Email_consig?: string;
     VAT_No_payer?: string;
@@ -304,7 +305,7 @@ declare namespace API {
     district_des?: string;
     flag_header?: string;
     Promocode?: string;
-    VOUCHER_ID?: string;
+    Voucher_id?: string;
     Campaign?: string;
     Disctype?: string;
     Description?: string;
@@ -313,9 +314,9 @@ declare namespace API {
     location_ID_src?: string;
     location_ID_des?: string;
     request_pick_date?: string;
-    CONFIRM_PICK_DATE?: string;
+    confirm_pick_date?: string;
     request_deliv_date?: string;
-    CONFIRM_DELIV_DATE?: string;
+    confirm_deliv_date?: string;
     Freigh_term?: string;
     Cus_id?: string;
     item?: ItemZTMI012[];
@@ -323,6 +324,8 @@ declare namespace API {
     des_name?: string;
     Transportation_mode?: string;
     house_id_des?: string;
+    city_name?: string;
+    district_name?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -1430,8 +1433,6 @@ declare namespace API {
   }
   export interface MTZTMI229OUT {
     EV_ERROR?: number; // int32
-    EV_CODE?: number; // int32
-    EV_MESSAGE?: string;
     DIMENSION_WEIGHT?: string;
     WEIGHT_UOM?: string;
     RETURN_MESSAGE?: RETURNMESSAGE;
@@ -1625,6 +1626,7 @@ declare namespace API {
     MOVEMENT_TYPE?: string;
     PUB_FEE?: string;
     IMPORT_TAX?: string;
+    HEADER_NOTE?: string;
   }
   export interface RowMTZTMI045OUT {
     /**
@@ -1819,8 +1821,10 @@ declare namespace API {
     FREIGHT_UNIT_STATUS?: string;
     FREIGHT_UNIT_TYPE?: string;
     QUANTITY?: string;
+    QUANTITY_OF_UNIT?: string;
     GROSS_WEIGHT?: string;
-    CREADTED_ON?: string;
+    GROSS_WEIGHT_OF_UNIT?: string;
+    CREATED_ON?: string;
     NEXT_LOC?: string;
     SENDER?: SENDER;
     RECEIVER?: RECEIVER;
@@ -1834,7 +1838,9 @@ declare namespace API {
     FREIGHT_UNIT?: string;
     PACKAGE_ID?: string;
     QUANTITY?: string;
+    QUANTITY_OF_UNIT?: string;
     GROSS_WEIGHT?: string;
+    GROSS_WEIGHT_OF_UNIT?: string;
     USER?: string;
     MANIFEST_LOC?: string;
     CREATED_ON?: string;
@@ -2269,7 +2275,7 @@ declare namespace API {
      * Tổng số trang
      */
     Total_page?: string;
-    CREATE_ON?: string;
+    CREATED_ON?: string;
     SHIPPER_NAME?: string;
     SERVICE_TYPE?: string;
     SERVICE_TYPE_NAME?: string;
@@ -2749,6 +2755,19 @@ declare namespace API {
   }
   export interface ZTMI229Response {
     MT_ZTMI229_OUT?: MTZTMI229OUT;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZTMI235Response {
+    maBuuPham?: string;
+    loaiHangHoa?: string;
+    loaiDichVu?: string;
+    line?: string;
+    dongBangKe?: string;
+    dongChuyenThu?: string;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -3395,6 +3414,11 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.ZTMI229Response;
+    }
+  }
+  namespace ZTMI235 {
+    namespace Responses {
+      export type $200 = Definitions.ZTMI235Response;
     }
   }
   namespace ZTMI236 {

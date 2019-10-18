@@ -156,18 +156,18 @@ const Chart1: React.FC<HighChartsReact.Props> = (props: HighChartsReact.Props): 
   });
 
   return (
-    <Row>
-      <Col xs="12" sm="4" md="4" className=" mb-4">
+    <Row className="sipOrderInputRow">
+      <Col xs="12" sm="4" md="4" className="sipOrderInputCol mb-4">
         <div className="sipGenDashBoard">
           <HighChartsReact highcharts={HighCharts} options={pieOptions1} {...props} />
         </div>
       </Col>
-      <Col xs="12" sm="4" md="4" className=" mb-4">
+      <Col xs="12" sm="4" md="4" className="sipOrderInputCol mb-4">
         <div className="sipGenDashBoard">
           <HighChartsReact highcharts={HighCharts} options={pieOptions} {...props} />
         </div>
       </Col>
-      <Col xs="12" sm="4" md="4" className=" mb-4">
+      <Col xs="12" sm="4" md="4" className="sipOrderInputCol mb-4">
         <div className="sipGenDashBoard">
           <HighChartsReact highcharts={HighCharts} options={barOptions} {...props} />
         </div>

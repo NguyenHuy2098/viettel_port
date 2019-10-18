@@ -190,6 +190,11 @@ const RedirectToHome = Loadable({
   loader: (): any => import('./RedirectToHome'),
   loading: Loading,
 });
+
+const KeKhaiChiPhi = Loadable({
+  loader: (): any => import('containers/KeKhaiChiPhi/DanhSachBangKe'),
+  loading: Loading,
+});
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function
@@ -288,6 +293,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
     { path: routesMap.NHAN_TAI_BUU_CUC_GOC, name: t('Quét mã phiếu gửi'), component: NhanTaiBuuCucGoc },
     { path: routesMap.PHAN_CONG_PHAT_NHAN, name: t('Phân công phát nhận'), component: PhanCongPhatNhan },
     { path: routesMap.CHI_TIET_NHOM_HANG_HOA, name: t('Chi tiết nhóm hàng hóa'), component: ChiTietNhomHangHoa },
+    { path: routesMap.KE_KHAI_CHI_PHI, name: t('Kê khai chi phí'), component: KeKhaiChiPhi },
     {
       path: routesMap.CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE,
       name: t('Chi tiết nhóm hàng hóa'),
