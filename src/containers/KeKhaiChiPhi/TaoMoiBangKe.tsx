@@ -1,62 +1,36 @@
 import React, { useMemo } from 'react';
-import { Button, Input, Row, Label } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { Button, Input, Row, Label } from 'reactstrap';
 import { useDispatch } from 'react-redux';
 import { match } from 'react-router-dom';
-import { push } from 'connected-react-router';
 import { Cell } from 'react-table';
+import { goBack } from 'connected-react-router';
 
 import DataTable from 'components/DataTable';
-import ButtonPrintable from '../../components/Button/ButtonPrintable';
-import PrintBangKeChiTiet from '../../components/Printable/PrintBangKeChiTiet';
-import routesMap from '../../utils/routesMap';
 
 interface Props {
   match: match;
 }
 
 // eslint-disable-next-line max-lines-per-function
-const DanhSachBangKe = (props: Props): JSX.Element => {
+const TaoMoiBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
-  const redirectToTaoMoiBangKe = (): void => {
-    dispatch(push(routesMap.TAO_MOI_BANG_KE));
-  };
 
   const renderTopController = (): JSX.Element => {
     return (
       <>
         <Button color="primary" className="ml-2">
           <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
-          {t('Xuất file Excel')}
-        </Button>
-        <Button color="primary" className="ml-2">
-          <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
           {t('In bảng kê')}
         </Button>
-        <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>
+        <Button color="primary" className="ml-2">
           <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
           {t('Thêm mới')}
         </Button>
       </>
     );
   };
-
-  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <ButtonPrintable
-      btnProps={{
-        className: 'SipTableFunctionIcon',
-        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
-      }}
-      modalBodyProps={{
-        children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
-      }}
-      modalHeaderProps={{
-        children: t('In danh sách bưu gửi của bảng kê'),
-      }}
-    />
-  );
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
@@ -100,7 +74,6 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <>
-              {renderPrintButton('')}
               <Button className="SipTableFunctionIcon">
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
@@ -113,14 +86,18 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     [],
   );
 
+  const handleBack = (): void => {
+    dispatch(goBack());
+  };
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button className="sipTitleBtnBack">
+          <Button className="sipTitleBtnBack" onClick={handleBack}>
             <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
           </Button>
-          {t('Kê khai chi phí thường xuyên')}
+          {t('Tạo mới bảng kê')}
         </h1>
         <div className="sipTitleRightBlock">{renderTopController()}</div>
       </Row>
@@ -139,4 +116,4 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   );
 };
 
-export default DanhSachBangKe;
+export default TaoMoiBangKe;

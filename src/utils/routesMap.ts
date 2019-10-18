@@ -60,6 +60,7 @@ export const KHACH_HANG = '/khach-hang';
 export const TIEP_XUC_KHACH_HANG = `${KHACH_HANG}/tiep-xuc-khach-hang`;
 
 export const KE_KHAI_CHI_PHI = `/ke-khai-chi-phi`;
+export const TAO_MOI_BANG_KE = `${KE_KHAI_CHI_PHI}/tao-moi-bang-ke`;
 
 export default {
   ROOT: '/',
@@ -153,4 +154,5 @@ export default {
    * FICO
    */
   KE_KHAI_CHI_PHI,
+  TAO_MOI_BANG_KE,
 };
