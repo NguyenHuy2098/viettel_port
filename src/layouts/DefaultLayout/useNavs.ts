@@ -133,7 +133,7 @@ const nav = (t: i18next.TFunction): any => {
       },
       {
         name: t('Kê khai chi phí'),
-        icon: 'sipIcon-home',
+        icon: 'sipIcon-money',
         url: routesMap.KE_KHAI_CHI_PHI,
       },
       // {
