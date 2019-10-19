@@ -1,12 +1,17 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, FormGroup, Input, Label, Row } from 'reactstrap';
-import { useDispatch } from 'react-redux';
+import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
+import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
-import { Cell } from 'react-table';
+import { Cell, Row as TableRow } from 'react-table';
 import { goBack } from 'connected-react-router';
+import { get } from 'lodash';
 
-import DataTable from 'components/DataTable';
+import DataTable from 'components/DataTable/Grouped';
+import { toastError } from 'components/Toast';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
+import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -16,43 +21,52 @@ interface Props {
 const TaoMoiBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
+
+  const getListTai = (payload = {}): void => {
+    dispatch(
+      action_MIOA_ZTMI047(
+        {
+          IV_TOR_TYPE: SipDataType.BANG_KE,
+          IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
+          IV_NO_PER_PAGE: 5000,
+          ...payload,
+        },
+        {
+          onFailure: (error: Error) => {
+            toastError(error, get(payload, 'IV_TOR_ID'));
+          },
+        },
+        {
+          flow: SipFlowType.KHAI_THAC_DI,
+        },
+      ),
+    );
+  };
+
+  useEffect(() => {
+    getListTai();
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'select',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          );
-        },
-      },
-      {
-        Header: t('Mã bảng kê'),
+        Header: t('Mã chuyến thư'),
         accessor: 'TOR_ID',
       },
       {
-        Header: t('Điểm đến'),
-        accessor: 'DES_LOC_IDTRQ',
+        Header: t('Bưu cục đi'),
+        accessor: 'LOG_LOCID_FR',
+      },
+      {
+        Header: t('Bưu cục đến'),
+        accessor: 'LOG_LOCID_TO',
       },
       {
         Header: t('Số lượng'),
-        accessor: 'child_count',
-      },
-      {
-        Header: t('Trọng lượng'),
-        accessor: 'GRO_WEI_VAL',
-      },
-      {
-        Header: t('Ngày gửi'),
-        accessor: 'DATETIME_CHLC',
-      },
-      {
-        Header: t('Loại'),
-        accessor: 'TYPE',
+        accessor: 'ITEM_NO',
       },
       {
         Header: t('Quản trị'),
@@ -68,7 +82,7 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [listBangKeChuaDongTai],
   );
 
   const handleBack = (): void => {
@@ -150,6 +164,24 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
     </>
   );
 
+  function renderGroupedRow(rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element {
+    return (
+      <Row>
+        <Col>
+          {t('Nhóm số lượng')} {index}
+        </Col>
+        <Col>
+          <div className="d-flex justify-content-end">
+            <Button color="primary" className=" ml-2" outlin>
+              <i className="fa fa-plus mr-2" />
+              {t('Thêm mới')}
+            </Button>
+          </div>
+        </Col>
+      </Row>
+    );
+  }
+
   return (
     <>
       <Row className="mb-3">
@@ -182,7 +214,12 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
       <Row>
         <Col>
           <div className="sipTableContainer">
-            <DataTable columns={columns} data={[]} />
+            <DataTable
+              columns={columns}
+              data={listBangKeChuaDongTai}
+              groupKey={'ITEM_NO'}
+              renderGroupedRow={renderGroupedRow}
+            />
           </div>
         </Col>
       </Row>
