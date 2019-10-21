@@ -640,7 +640,7 @@ function Item(props: ItemProps): JSX.Element {
         ),
       );
     } catch (error) {}
-  }, [tab, userMaBp, commLocGroup, dispatch]);
+  }, [tab, userMaBp, commLocGroup, dispatch, child]);
 
   return (
     <NavItem key={child.USER}>
