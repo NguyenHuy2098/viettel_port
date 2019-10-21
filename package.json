@@ -68,6 +68,7 @@
     "redux-unfold-saga": "^1.5.1",
     "simple-line-icons": "^2.4.1",
     "typescript": "^3.6.4",
+    "xlsx": "^0.15.1",
     "xlsx-populate": "^1.20.1",
     "yup": "^0.27.0"
   },
