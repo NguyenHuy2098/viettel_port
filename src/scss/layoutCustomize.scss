@@ -391,6 +391,10 @@ input.form-control:-moz-placeholder {
     color: #191919;
     margin: 0;
     min-width: 800px;
+    .row {
+      margin-left: -10px;
+      margin-right: -10px;
+    }
     th {
       border-top: none;
       color: $primary;

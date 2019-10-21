@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { get } from 'lodash';
@@ -10,6 +10,8 @@ import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
 import moment from 'moment';
 
+import { action_ZFI002 } from 'redux/ZFI002/actions';
+import { select_ZFI002 } from 'redux/ZFI002/selectors';
 import DataTable from 'components/DataTable';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
@@ -31,9 +33,24 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
+  const dataTable = useSelector(select_ZFI002);
   const [tuKy, setTuKy] = useState<string>('01/01/2019');
   const [denKy, setDenKy] = useState<string>('01/01/2020');
   const [filterTimeValue, setFilterTimeValue] = useState<string>('');
+
+  React.useEffect((): void => {
+    const payloadListBk = {
+      TU_KY: '201901',
+      DEN_KY: '201910',
+      MA_BUU_CUC: 'BDH',
+      BK_ID: '',
+      BK_STATUS: '2',
+      IV_PAGENO: '1',
+      IV_NO_PER_PAGE: '10',
+    };
+    dispatch(action_ZFI002(payloadListBk));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function handleChangeDeliveryTime(event: any, picker: any): void {
@@ -87,48 +104,48 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     />
   );
 
-  const data = [
-    {
-      TYPE1: 'a',
-      TYPE2: 'b',
-      TYPE3: 'c',
-      TYPE4: 'd',
-      TYPE5: 'A',
-      TYPE6: 'f',
-    },
-    {
-      TYPE1: 'a',
-      TYPE2: 'b',
-      TYPE3: 'c',
-      TYPE4: 'd',
-      TYPE5: 'B',
-      TYPE6: 'f',
-    },
-    {
-      TYPE1: 'a',
-      TYPE2: 'b',
-      TYPE3: 'c',
-      TYPE4: 'd',
-      TYPE5: 'C',
-      TYPE6: 'f',
-    },
-    {
-      TYPE1: 'a',
-      TYPE2: 'b',
-      TYPE3: 'c',
-      TYPE4: 'd',
-      TYPE5: 'D',
-      TYPE6: 'f',
-    },
-    {
-      TYPE1: 'a',
-      TYPE2: 'b',
-      TYPE3: 'c',
-      TYPE4: 'd',
-      TYPE5: 'A',
-      TYPE6: 'f',
-    },
-  ];
+  // const data = [
+  //   {
+  //     TYPE1: 'a',
+  //     TYPE2: 'b',
+  //     TYPE3: 'c',
+  //     TYPE4: 'd',
+  //     TYPE5: 'A',
+  //     TYPE6: 'f',
+  //   },
+  //   {
+  //     TYPE1: 'a',
+  //     TYPE2: 'b',
+  //     TYPE3: 'c',
+  //     TYPE4: 'd',
+  //     TYPE5: 'B',
+  //     TYPE6: 'f',
+  //   },
+  //   {
+  //     TYPE1: 'a',
+  //     TYPE2: 'b',
+  //     TYPE3: 'c',
+  //     TYPE4: 'd',
+  //     TYPE5: 'C',
+  //     TYPE6: 'f',
+  //   },
+  //   {
+  //     TYPE1: 'a',
+  //     TYPE2: 'b',
+  //     TYPE3: 'c',
+  //     TYPE4: 'd',
+  //     TYPE5: 'D',
+  //     TYPE6: 'f',
+  //   },
+  //   {
+  //     TYPE1: 'a',
+  //     TYPE2: 'b',
+  //     TYPE3: 'c',
+  //     TYPE4: 'd',
+  //     TYPE5: 'A',
+  //     TYPE6: 'f',
+  //   },
+  // ];
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
@@ -145,23 +162,23 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Mã bảng kê'),
-        accessor: 'TYPE1',
+        accessor: 'BK_ID',
       },
       {
         Header: t('Người nhập'),
-        accessor: 'TYPE2',
+        accessor: 'CRE_BY',
       },
       {
         Header: t('Ngày tạo'),
-        accessor: 'TYPE3',
+        accessor: 'CRE_TIME',
       },
       {
         Header: t('Kỳ'),
-        accessor: 'TYPE4',
+        accessor: 'BK_MONTH',
       },
       {
         Header: t('Trạng thái'),
-        accessor: 'TYPE5',
+        accessor: 'BK_STATUS',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           const type5 = get(row, 'values.TYPE5');
           const type5Text = get(stateMap, type5);
@@ -174,7 +191,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Người duyệt'),
-        accessor: 'TYPE6',
+        accessor: 'BK_ID',
       },
       {
         Header: t('Quản trị'),
@@ -233,7 +250,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       </Row>
 
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={data} />
+        <DataTable columns={columns} data={dataTable} />
       </Row>
     </>
   );

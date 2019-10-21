@@ -22,7 +22,7 @@ import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selec
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
-import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
 interface Props {
   getListTaiChuaDongChuyenThu: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;

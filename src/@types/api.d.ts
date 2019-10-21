@@ -47,6 +47,40 @@ declare namespace API {
   export interface GenUserVoSoResponse {
     Users?: UserVoSoViewModel[];
   }
+  export interface HEADER {
+    MA_BUU_CUC?: string;
+    USER_ID?: string;
+    BK_MONTH?: string;
+    BK_YEAR?: string;
+  }
+  export interface HEADERMTDETAILRECEIVER {
+    BK_ID?: string;
+    BK_YEAR?: string;
+    BK_MONTH?: string;
+    BK_STATUS?: number; // int32
+    CRE_BY?: string;
+    CRE_TIME?: string;
+    UDP_TIME?: string;
+  }
+  export interface ITEM {
+    LINE_ITEM?: string;
+    KHOAN_MUC?: string;
+    MAU_HD?: string;
+    KIHIEU_HD?: string;
+    SO_HD?: string;
+    NGAY_HD?: string;
+    NGUOI_BAN?: string;
+    MST?: string;
+    DESCR?: string;
+    AMOUNT?: string;
+    TAX?: string;
+    TAX_AMOUNT?: string;
+    SUM_AMOUNT?: string;
+    URL?: string;
+  }
+  export interface ITEMDELBK {
+    LINE?: string;
+  }
   export interface ITEMMTZFII016OUT {
     ZUONR?: number; // int32
     BUDAT?: number; // int32
@@ -68,6 +102,23 @@ declare namespace API {
      * Mô tả chi tiết lỗi
      */
     CONTENT?: string;
+  }
+  export interface ITEMUPDATEBK {
+    LINE_ITEM?: string;
+    KHOAN_MUC?: string;
+    MAU_HD?: string;
+    KIHIEU_HD?: string;
+    SO_HD?: string;
+    NGAY_HD?: string;
+    NGUOI_BAN?: string;
+    MST?: string;
+    DESCR?: string;
+    AMOUNT?: string;
+    PHU_PHI?: string;
+    TAX?: string;
+    TAX_AMOUNT?: string;
+    SUM_AMOUNT?: string;
+    URL?: string;
   }
   export interface ITFDELIVERY {
     CODE?: string;
@@ -153,6 +204,43 @@ declare namespace API {
      * Mã  FU - FU(30 và 58) - Freight_Unit(31)
      */
     FU_ID?: string;
+  }
+  export interface LIST {
+    km_id?: string;
+    km_text?: string;
+  }
+  export interface LISTMTDETAILRECEIVER {
+    LINE_ITEM?: string;
+    TEN_KM?: string;
+    MAU_HD?: string;
+    KIHIEU_HD?: string;
+    SO_HD?: string;
+    NGAY_HD?: string;
+    NGUOI_BAN?: string;
+    MST?: string;
+    DESCR?: string;
+    URL?: string;
+    STATUS_ITEM?: number; // int32
+    AMOUNT?: string;
+    AMOUNT_INIT?: string;
+    PHU_PHI?: string;
+    PHU_PHI_INIT?: string;
+    TAX?: string;
+    TAX_INIT?: string;
+    TAX_AMOUNT?: string;
+    TAX_AMOUNT_INIT?: string;
+    SUM_AMOUNT?: string;
+    SUM_AMOUNT_INIT?: string;
+    NOTE?: string;
+  }
+  export interface ListMTBKRECEIVER {
+    BK_ID?: string;
+    BK_YEAR?: string;
+    BK_MONTH?: string;
+    BK_STATUS?: number; // int32
+    CRE_BY?: string;
+    CRE_TIME?: string;
+    UDP_TIME?: string;
   }
   export interface LocationAddEsRequest {
     I?: string;
@@ -1213,6 +1301,47 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+  export interface MTBKRECEIVER {
+    List?: ListMTBKRECEIVER[];
+    /**
+     * 0: Là lỗi, 1: là OK
+     */
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
+    Paging?: PagingZTMI054;
+  }
+  export interface MTCRBKRECEIVER {
+    BK_ID?: string;
+    /**
+     * 0: Là lỗi, 1: là OK
+     */
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
+  }
+  export interface MTDELRECEIVER {
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
+  }
+  export interface MTDETAILRECEIVER {
+    header?: HEADERMTDETAILRECEIVER;
+    list?: LISTMTDETAILRECEIVER[];
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
+    Paging?: PagingZTMI054;
+  }
+  export interface MTKMRECEIVER {
+    list?: LIST[];
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
+  }
+  export interface MTSUBMITRECEIVER {
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
+  }
+  export interface MTUDPRECEIVER {
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
+  }
   export interface MTZFII016OUT {
     Row?: RowMTZFII016OUT;
     PAGING?: PagingZTMI054;
@@ -1377,6 +1506,7 @@ declare namespace API {
      *
      */
     Row?: RowMTZTMI045OUT[];
+    Paging?: Paging[];
   }
   export interface MTZTMI045V03OUT {
     EV_ERROR?: string;
@@ -1485,9 +1615,21 @@ declare namespace API {
     EV_TOTAL_ITEM?: string;
   }
   export interface PagingZTMI054 {
+    /**
+     *
+     */
     IV_PAGE_NO?: string;
+    /**
+     *
+     */
     IV_NO_PER_PAGE?: string;
+    /**
+     *
+     */
     EV_TOTAL_PAGE?: string;
+    /**
+     *
+     */
     EV_TOTAL_ITEM?: string;
   }
   export interface RECEIVER {
@@ -2667,6 +2809,126 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+  export interface ZFI001Request {
+    KM_FLAG?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI001Response {
+    MT_KM_RECEIVER?: MTKMRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZFI002Request {
+    TU_KY?: string;
+    DEN_KY?: string;
+    MA_BUU_CUC?: string;
+    BK_ID?: string;
+    BK_STATUS?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI002Response {
+    /**
+     *
+     */
+    MT_BK_RECEIVER?: MTBKRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZFI003Request {
+    header?: HEADER;
+    item?: ITEM[];
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI003Response {
+    /**
+     *
+     */
+    MT_CRBK_RECEIVER?: MTCRBKRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZFI004Request {
+    BK_ID?: string;
+    ITEM?: ITEMDELBK;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI004Response {
+    MT_DEL_RECEIVER?: MTDELRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZFI005Request {
+    BK_ID?: string;
+    MA_BUU_CUC?: string;
+    USER_ID?: string;
+    item?: ITEMUPDATEBK[];
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI005Response {
+    MT_UDP_RECEIVER?: MTUDPRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZFI006Request {
+    BK_ID?: string;
+    MA_BUU_CUC?: string;
+    USER_ID?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI006Response {
+    MT_SUBMIT_RECEIVER?: MTSUBMITRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZFI007Request {
+    MA_BUU_CUC?: string;
+    BK_ID?: string;
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI007Response {
+    MT_DETAIL_RECEIVER?: MTDETAILRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
   export interface ZTMI063OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
@@ -3392,6 +3654,83 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.UserVoSoAddOrChangeResponse;
+    }
+  }
+  namespace ZFI001 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI001Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI001Response;
+    }
+  }
+  namespace ZFI002 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI002Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI002Response;
+    }
+  }
+  namespace ZFI003 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI003Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI003Response;
+    }
+  }
+  namespace ZFI004 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI004Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI004Response;
+    }
+  }
+  namespace ZFI005 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI005Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI005Response;
+    }
+  }
+  namespace ZFI006 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI006Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI006Response;
+    }
+  }
+  namespace ZFI007 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI007Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI007Response;
     }
   }
   namespace ZTMI213 {

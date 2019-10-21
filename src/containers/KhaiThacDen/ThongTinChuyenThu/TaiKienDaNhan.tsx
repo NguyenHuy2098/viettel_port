@@ -17,7 +17,7 @@ import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTui
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
-import PrintableMaCoTai from '../../../components/Printable/PrintableMaCoTai';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
 type Props = RouteComponentProps;
 

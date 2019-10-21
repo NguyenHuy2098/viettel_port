@@ -13,8 +13,8 @@ import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTM
 import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
 import { goBack } from 'connected-react-router';
-import PrintableModal from '../../components/Button/ButtonPrintable';
-import PrintableThongTinDonHang from '../../components/Printable/PrintableThongTinDonHang';
+import PrintableModal from 'components/Button/ButtonPrintable';
+import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 
 interface Props {
   match: match;
