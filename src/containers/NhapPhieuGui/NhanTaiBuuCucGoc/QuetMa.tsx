@@ -50,7 +50,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                   },
                 );
               } else {
-                if (get(data, 'MT_ZTMI023_OUT.row[0].TO_LOG_ID', '') === userMaBp) {
+                if (get(data, 'MT_ZTMI023_OUT.row[0].TO_LOG_ID', '').search(userMaBp) !== -1) {
                   if (get(data, 'MT_ZTMI023_OUT.row[0].ZVTP_CUST_STATUS', 0) === 304) {
                     const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
                     dispatch(

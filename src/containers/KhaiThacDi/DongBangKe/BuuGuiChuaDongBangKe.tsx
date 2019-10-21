@@ -1,14 +1,17 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useEffect, useCallback } from 'react';
 import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { toString } from 'lodash';
 import { generatePath } from 'react-router';
 import { Cell } from 'react-table';
+import { SipDataState } from 'utils/enums';
 import { push } from 'connected-react-router';
 import { findIndex, get, join, size, slice } from 'lodash';
 import DataTable from 'components/DataTable/Printable';
 import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
 import routesMap from 'utils/routesMap';
+import { action_ZTMI240 } from 'redux/ZTMI240/actions';
 
 interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
   DES?: string;
@@ -18,6 +21,16 @@ interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
 const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(
+      action_ZTMI240({
+        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const listBuuGuiChuaDongBangKe = useSelector(select_ZTMI0240);
 
   const columns = useMemo(
