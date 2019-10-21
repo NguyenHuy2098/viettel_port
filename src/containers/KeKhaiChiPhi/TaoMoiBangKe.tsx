@@ -172,7 +172,7 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
         </Col>
         <Col>
           <div className="d-flex justify-content-end">
-            <Button color="primary" className=" ml-2" outlin>
+            <Button color="primary" className=" ml-2" outline>
               <i className="fa fa-plus mr-2" />
               {t('Thêm mới')}
             </Button>
