@@ -220,7 +220,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       children = <PrintablePhieuGiaoNhanChuyenThu idChuyenThu={get(item, 'TOR_ID', '')} />;
     }
 
-    let title = t('In danh sách bảng kê thuộc chuyến thư');
+    let title = t('In danh sách tải kiện thuộc chuyến thư');
     if (get(item, 'TOR_TYPE', '') === SipDataType.TAI) {
       title = t('In danh sách bảng kê thuộc chuyến tải');
     }
