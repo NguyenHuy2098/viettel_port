@@ -1,16 +1,13 @@
-import React, { useMemo, useEffect, useCallback } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { findIndex, get, join, size, slice, toString } from 'lodash';
-
+import { findIndex, get, join, size, slice } from 'lodash';
 import DataTable from 'components/DataTable/Printable';
-import { action_ZTMI240 } from 'redux/ZTMI240/actions';
 import { select_ZTMI0240 } from 'redux/ZTMI240/selectors';
-import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 interface MTZTMI240RowTypeCustom extends MTZTMI240Row {
@@ -60,15 +57,6 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
-
-  useEffect(() => {
-    dispatch(
-      action_ZTMI240({
-        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
-      }),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleRedirectDetail = useCallback(
     (item: MTZTMI240RowTypeCustom): void => {

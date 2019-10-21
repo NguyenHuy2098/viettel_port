@@ -3,7 +3,9 @@ import { Badge, Button, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
-
+import { toString } from 'lodash';
+import { action_ZTMI240 } from 'redux/ZTMI240/actions';
+import { select_CountZTMI0240 } from 'redux/ZTMI240/selectors';
 import TabView from 'components/Tab/TabView';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
@@ -22,6 +24,16 @@ interface Props {
 const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const countBuuGuiChuaDongBangKe = useSelector(select_CountZTMI0240);
+
+  useEffect(() => {
+    dispatch(
+      action_ZTMI240({
+        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+      }),
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getListBangKe = (): void => {
     dispatch(
@@ -112,7 +124,7 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
               children: (
                 <>
                   {t('Bưu gửi chưa đóng BK')}
-                  <Badge color="primary">03</Badge>
+                  <Badge color="primary">{countBuuGuiChuaDongBangKe}</Badge>
                 </>
               ),
             },

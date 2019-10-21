@@ -18,6 +18,7 @@ function* takeGet_ZTMI241(action: UnfoldSagaActionType): Iterable<SagaIterator> 
       key: action.type,
     },
     action.callbacks,
+    action.options,
   );
 }
 

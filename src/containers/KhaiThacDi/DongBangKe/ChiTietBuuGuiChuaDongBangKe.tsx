@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { forEach, get, size, toString } from 'lodash';
-
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
 import DataTable from 'components/DataTable';
@@ -33,13 +32,18 @@ interface Props {
   location: Location;
 }
 
+interface ChildType {
+  NO_ITEM: string;
+  USER: string;
+}
+
 const forwardingItemList: ForwardingItem[] = [];
 
 // eslint-disable-next-line max-lines-per-function
 function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [tab] = useState(1);
+  const [tab, setTab] = useState(0);
   const childs = get(props, 'location.state.child', []);
   const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
   const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
@@ -463,6 +467,27 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     handleHidePopupDongTai();
   };
 
+  function handleChangeTab(index: number): void {
+    setTab(index);
+  }
+
+  React.useEffect(() => {
+    try {
+      const user = childs[tab].USER;
+      const payload = {
+        IV_PACKAGE_ID: search,
+        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+        IV_LOC_ID: userMaBp,
+        IV_COMMODITY_GROUP: commLocGroup,
+        IV_DATE: today,
+        IV_USER: user,
+        IV_PAGE_NO: '1',
+        IV_NO_PER_PAGE: '10',
+      };
+      dispatch(action_ZTMI241(payload));
+    } catch (error) {}
+  }, [tab]);
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -512,16 +537,17 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       <div className="sipTabContainer sipFlatContainer">
         <Nav tabs>
           {childs.length > 0 &&
-            childs.map((child: API.RowMTZTMI241OUT) => {
-              return (
-                <NavItem key={child.USER}>
-                  <NavLink className={classNames({ active: tab === 1 })}>
-                    {child.USER}
-                    <Badge color="primary">01</Badge>
-                  </NavLink>
-                </NavItem>
-              );
-            })}
+            childs.map((child: API.RowMTZTMI241OUT, index: number) => (
+              <Item
+                key={index}
+                child={child}
+                tab={tab}
+                index={index}
+                handleChangeTab={handleChangeTab}
+                userMaBp={userMaBp}
+                commLocGroup={commLocGroup}
+              />
+            ))}
         </Nav>
         <TabContent className="sipFlatContainer">
           <TabPane>
@@ -568,6 +594,65 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
         />
       </div>
     </>
+  );
+}
+
+interface ItemProps {
+  child: API.RowMTZTMI241OUT;
+  tab: number;
+  handleChangeTab: Function;
+  index: number;
+  userMaBp: string;
+  commLocGroup: string;
+}
+
+function Item(props: ItemProps): JSX.Element {
+  const child = props.child;
+  const tab = props.tab;
+  const handleChangeTab = props.handleChangeTab;
+  const index = props.index;
+  const userMaBp = props.userMaBp;
+  const commLocGroup = props.commLocGroup;
+  const dispatch = useDispatch();
+
+  const [count, setCount] = React.useState<number>(0);
+  React.useEffect(() => {
+    try {
+      const payload = {
+        IV_PACKAGE_ID: '',
+        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+        IV_LOC_ID: userMaBp,
+        IV_COMMODITY_GROUP: commLocGroup,
+        IV_DATE: today,
+        IV_USER: child.USER,
+        IV_PAGE_NO: '1',
+        IV_NO_PER_PAGE: '10',
+      };
+      dispatch(
+        action_ZTMI241(
+          payload,
+          {
+            onSuccess: (res: API.MTZTMI241OUT): void => {
+              setCount(size(res.Row));
+            },
+          },
+          { stateless: true },
+        ),
+      );
+    } catch (error) {}
+  }, [tab]);
+
+  return (
+    <NavItem key={child.USER}>
+      <NavLink
+        className={classNames({ active: tab === index })}
+        // eslint-disable-next-line react/jsx-no-bind
+        onClick={(): void => handleChangeTab(index)}
+      >
+        {child.USER}
+        <Badge color="primary">{count}</Badge>
+      </NavLink>
+    </NavItem>
   );
 }
 
