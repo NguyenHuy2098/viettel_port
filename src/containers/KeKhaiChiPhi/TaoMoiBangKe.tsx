@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
+import { Button, Col, FormGroup, Input, Label, Row } from 'reactstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell, Row as TableRow } from 'react-table';
 import { goBack } from 'connected-react-router';
 import { get } from 'lodash';
+import XLSX from 'xlsx';
 
 import DataTable from 'components/DataTable/Grouped';
 import { toastError } from 'components/Toast';
@@ -46,11 +47,11 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
 
   useEffect(() => {
     getListTai();
-    //eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = useMemo(
-    //eslint-disable-next-line max-lines-per-function
+    // eslint-disable-next-line max-lines-per-function
     () => [
       {
         Header: t('Mã chuyến thư'),
@@ -87,6 +88,19 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
 
   const handleBack = (): void => {
     dispatch(goBack());
+  };
+
+  const handleChangeFilePath = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    const reader = new FileReader();
+    reader.onload = (event: ProgressEvent<FileReader>): void => {
+      const data = new Uint8Array(get(event, 'target.result'));
+      const workbook = XLSX.read(data, { type: 'array' });
+
+      // eslint-disable-next-line no-console
+      console.log(workbook);
+      /* DO SOMETHING WITH workbook HERE */
+    };
+    reader.readAsArrayBuffer(get(event, 'target.files[0]'));
   };
 
   const renderFirstControllers = (): JSX.Element => (
@@ -153,10 +167,11 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
 
   const renderSecondControllers = (): JSX.Element => (
     <>
-      <Button color="primary" className="ml-2">
+      <Input className="hide" id="xlsx-input" onChange={handleChangeFilePath} type="file" />
+      <Label className="btn btn-primary ml-2 mb-0" htmlFor="xlsx-input">
         <i className="fa fa-upload mr-2" />
         {t('Tải lên')}
-      </Button>
+      </Label>
       <Button color="primary" className="ml-2">
         <i className="fa fa-plus mr-2" />
         {t('Thêm khoản mục')}
