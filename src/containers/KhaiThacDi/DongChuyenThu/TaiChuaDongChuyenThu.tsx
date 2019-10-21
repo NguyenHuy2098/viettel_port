@@ -41,11 +41,13 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
 
   const selectedTaiItems = useMemo(
     () => map(selectedTaiIds, (id: string): API.TITEM => ({ ITEM_ID: id, ITEM_TYPE: SipDataType.TAI })),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [selectedTaiIds],
   );
 
   const diemDen = useMemo(() => {
     return get(find(listTaiChuaDongChuyenThu, ['FREIGHT_UNIT', selectedTaiIds[0]]), 'NEXT_LOC', '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listTaiChuaDongChuyenThu, selectedTaiIds]);
 
   function toggleDeleteConfirmModal(): void {

@@ -39,10 +39,12 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
 
   const diemDen = useMemo(() => {
     return get(find(listKienChuaDongChuyenThu, ['FREIGHT_UNIT', selectedKienIds[0]]), 'NEXT_LOC', '');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listKienChuaDongChuyenThu, selectedKienIds]);
 
   const selectedKienItems = useMemo(() => {
     return map(selectedKienIds, (id: string): API.TITEM => ({ ITEM_ID: id }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedKienIds]);
 
   const onPaginationChange = ({ selected }: { selected: number }): void => {

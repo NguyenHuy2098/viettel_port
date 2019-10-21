@@ -369,6 +369,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       return true;
     }
     return false;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [divideQuantity]);
 
   function renderCouponInformation(): JSX.Element {
