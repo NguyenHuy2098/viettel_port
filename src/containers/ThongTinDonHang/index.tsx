@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import { generatePath, match } from 'react-router-dom';
-import { drop, findIndex, get, map, size, slice } from 'lodash';
+import { drop, findIndex, get, size, slice } from 'lodash';
 import DataTable from 'components/DataTable';
 import { Button, Row, Col, Fade } from 'reactstrap';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
@@ -31,19 +31,6 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   const orderInformation = useSelector(select_MT_ZTMI031_OUT);
   const orderInformationInstane = useSelector(select_MT_ZTMI031_INSTANE);
-  const orderInfoTableData = map(
-    orderInformation,
-    (item: API.RowMTZTMI031OUT, index: number): API.RowMTZTMI031OUT => {
-      return {
-        PACKAGE_ID: get(item, 'PACKAGE_ID', ''),
-        ITEM_DESCRIPTION: get(item, 'ITEM_DESCRIPTION', ''),
-        FWO: get(item, 'FWO', ''),
-        GROSS_WEIGHT: item.GROSS_WEIGHT ? parseFloat(item.GROSS_WEIGHT).toFixed(2) : '',
-        Quantity: item.Quantity ? parseFloat(item.Quantity).toFixed(2) : '',
-        SERVICE_TYPE: get(item, 'SERVICE_TYPE', ''),
-      };
-    },
-  );
   const [provinceSender, setProvinceSender] = useState<string>('');
   const [districtSender, setDistrictSender] = useState<string>('');
   const [wardSender, setWardSender] = useState<string>('');
@@ -183,6 +170,11 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Tên hàng'),
         accessor: 'ITEM_DESCRIPTION',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Cell: ({ row }: any): JSX.Element => {
+          const thisWeight = get(row, 'values.ITEM_DESCRIPTION', '');
+          return <>{thisWeight ? thisWeight : ''}</>;
+        },
       },
       {
         Header: t('Giá trị'),
@@ -194,10 +186,20 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Trọng lượng'),
         accessor: 'GROSS_WEIGHT',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Cell: ({ row }: any): JSX.Element => {
+          const thisWeight = get(row, 'values.GROSS_WEIGHT', '');
+          return <>{thisWeight ? parseFloat(thisWeight).toFixed(2) : ''}</>;
+        },
       },
       {
         Header: t('Số lượng'),
         accessor: 'Quantity',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Cell: ({ row }: any): JSX.Element => {
+          const thisQuantity = get(row, 'values.Quantity', '');
+          return <>{thisQuantity ? parseFloat(thisQuantity).toFixed(0) : ''}</>;
+        },
       },
       {
         Header: t('Dịch vụ'),
@@ -237,7 +239,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   function renderTable(): JSX.Element {
     return (
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={orderInfoTableData} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={orderInformation} onRowClick={handleRedirectDetail} />
       </Row>
     );
   }

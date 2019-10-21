@@ -6,6 +6,7 @@ import { generatePath } from 'react-router-dom';
 import { push, replace } from 'connected-react-router';
 import { includes, size, trim } from 'lodash';
 
+import { toastError } from 'components/Toast';
 import { action_CHECK_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import routesMap from 'utils/routesMap';
 
@@ -35,15 +36,22 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleOrderSearch = (): void => {
     if (size(searchValue)) {
-      if (includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN)) {
-        dispatch(replace(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
-      } else {
-        dispatch(push(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
-      }
+      const payload = {
+        FWO_ID: searchValue,
+        BUYER_REFERENCE_NUMBER: '',
+      };
       dispatch(
-        action_CHECK_MIOA_ZTMI031({
-          FWO_ID: searchValue,
-          BUYER_REFERENCE_NUMBER: '',
+        action_CHECK_MIOA_ZTMI031(payload, {
+          onSuccess: (): void => {
+            if (includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN)) {
+              dispatch(replace(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
+            } else {
+              dispatch(push(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
+            }
+          },
+          onFailure: (): void => {
+            toastError(t('Không tìm thấy đơn hàng!'));
+          },
         }),
       );
     }
