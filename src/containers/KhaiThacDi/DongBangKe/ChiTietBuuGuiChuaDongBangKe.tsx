@@ -486,7 +486,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       };
       dispatch(action_ZTMI241(payload));
     } catch (error) {}
-  }, [tab]);
+  }, [tab, childs, search, userMaBp, commLocGroup, dispatch]);
 
   return (
     <>
@@ -640,7 +640,7 @@ function Item(props: ItemProps): JSX.Element {
         ),
       );
     } catch (error) {}
-  }, [tab]);
+  }, [tab, userMaBp, commLocGroup, dispatch]);
 
   return (
     <NavItem key={child.USER}>
