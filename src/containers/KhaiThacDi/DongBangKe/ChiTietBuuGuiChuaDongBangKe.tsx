@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { forEach, get, size, toString } from 'lodash';
+import { forEach, get, size, toString, trim } from 'lodash';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
 import DataTable from 'components/DataTable';
@@ -230,7 +230,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
 
   function handleSearch(): void {
     const payload = {
-      IV_PACKAGE_ID: search,
+      IV_PACKAGE_ID: trim(search),
       IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
       IV_LOC_ID: userMaBp,
       IV_COMMODITY_GROUP: commLocGroup,
@@ -475,7 +475,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     try {
       const user = childs[tab].USER;
       const payload = {
-        IV_PACKAGE_ID: search,
+        IV_PACKAGE_ID: trim(search),
         IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
         IV_LOC_ID: userMaBp,
         IV_COMMODITY_GROUP: commLocGroup,

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { find, get, map, size } from 'lodash';
+import { find, get, map, size, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
@@ -16,6 +16,7 @@ import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { SipDataType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -66,7 +67,12 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
 
   function handleSearchPhieuGui(): void {
     if (size(torIdSearch) > 0) {
-      const result = find(dataTableOrigin, (item: API.Child) => item.TOR_ID === torIdSearch);
+      const result = find(dataTableOrigin, (item: API.Child) => {
+        if (item.TOR_TYPE === SipDataType.BUU_GUI) {
+          return item.PACKAGE_ID === trim(torIdSearch);
+        }
+        return item.TOR_ID === trim(torIdSearch);
+      });
       if (result) {
         setDataTable([result]);
         setDataTableCount(1);
