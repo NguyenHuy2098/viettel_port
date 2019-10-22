@@ -3,15 +3,19 @@ import { useTranslation } from 'react-i18next';
 import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
 import XLSX, { WorkBook } from 'xlsx';
+import { get } from 'lodash';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import DataTable from 'components/DataTable/Grouped';
+import useLoggedInUser from 'hooks/useLoggedInUser';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
   const { t } = useTranslation();
   const [data, setData] = useState([]);
+
+  const userLogin = useLoggedInUser();
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -83,28 +87,45 @@ const TaoMoiBangKe = (): JSX.Element => {
     </>
   );
 
+  const years = useMemo(() => Array.from(new Array(20), (val, index) => index + new Date().getFullYear()), []);
+
+  const [month, setMonth] = React.useState<string>('1');
+  function handleChangeMonth(e: React.FormEvent<HTMLInputElement>): void {
+    setMonth(e.currentTarget.value);
+  }
+
+  const [year, setYear] = React.useState<string>('2019');
+  function handleChangeYear(e: React.FormEvent<HTMLInputElement>): void {
+    setYear(e.currentTarget.value);
+  }
+
   const renderFilters = (): JSX.Element => (
     <div className="bg-white p-3 shadow-sm">
       <Row>
         <Col xs={12} md={3} xl={2}>
           <FormGroup>
-            <Input type="select" name="select" id="exampleSelect">
+            <Input type="select" name="select" id="exampleSelect" onChange={handleChangeMonth}>
               <option>1</option>
               <option>2</option>
               <option>3</option>
               <option>4</option>
               <option>5</option>
+              <option>6</option>
+              <option>7</option>
+              <option>8</option>
+              <option>9</option>
+              <option>10</option>
+              <option>11</option>
+              <option>12</option>
             </Input>
           </FormGroup>
         </Col>
         <Col xs={12} md={3} xl={2}>
           <FormGroup>
-            <Input type="select" name="select" id="exampleSelect">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+            <Input type="select" name="select" id="exampleSelect" onChange={handleChangeYear}>
+              {years.map(year => {
+                return <option key={year}>{year}</option>;
+              })}
             </Input>
           </FormGroup>
         </Col>
@@ -117,12 +138,20 @@ const TaoMoiBangKe = (): JSX.Element => {
       <Row>
         <Col>
           <div>{t('Mã bảng kê')}:</div>
-          <div>{t('Trạng thái')}:</div>
-          <div>{t('Kỳ')}:</div>
+          <div>
+            {t('Trạng thái')}: {t('Tạo mới')}
+          </div>
+          <div>
+            {t('Kỳ')}: {`${month}/${year}`}
+          </div>
         </Col>
         <Col>
-          <div>{t('Người tạo')}:</div>
-          <div>{t('Đơn vị')}:</div>
+          <div>
+            {t('Người tạo')}: {get(userLogin, 'user.profile.preferred_username', '')}
+          </div>
+          <div>
+            {t('Đơn vị')}: {get(userLogin, 'user.profile.bp_org_unit', '')}
+          </div>
         </Col>
         <Col>
           <div>{t('Tổng giá trị')}:</div>
