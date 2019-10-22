@@ -1,18 +1,14 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, FormGroup, Input, Label, Row } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
+import { useDispatch } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell, Row as TableRow } from 'react-table';
 import { goBack } from 'connected-react-router';
-import { get } from 'lodash';
-import XLSX from 'xlsx';
+import XLSX, { WorkBook } from 'xlsx';
 
+import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import DataTable from 'components/DataTable/Grouped';
-import { toastError } from 'components/Toast';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -22,52 +18,42 @@ interface Props {
 const TaoMoiBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const listBangKeChuaDongTai = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.CHUA_HOAN_THANH));
-
-  const getListTai = (payload = {}): void => {
-    dispatch(
-      action_MIOA_ZTMI047(
-        {
-          IV_TOR_TYPE: SipDataType.BANG_KE,
-          IV_CUST_STATUS: SipDataState.CHUA_HOAN_THANH,
-          IV_NO_PER_PAGE: 5000,
-          ...payload,
-        },
-        {
-          onFailure: (error: Error) => {
-            toastError(error, get(payload, 'IV_TOR_ID'));
-          },
-        },
-        {
-          flow: SipFlowType.KHAI_THAC_DI,
-        },
-      ),
-    );
-  };
-
-  useEffect(() => {
-    getListTai();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const [data, setData] = useState([]);
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mã chuyến thư'),
-        accessor: 'TOR_ID',
+        Header: t('Mẫu hợp đồng'),
+        accessor: 'Mẫu hóa đơn',
       },
       {
-        Header: t('Bưu cục đi'),
-        accessor: 'LOG_LOCID_FR',
+        Header: t('Ký hiệu'),
+        accessor: 'Ký hiệu hóa đơn',
       },
       {
-        Header: t('Bưu cục đến'),
-        accessor: 'LOG_LOCID_TO',
+        Header: t('Số'),
+        accessor: 'Số hóa đơn',
       },
       {
-        Header: t('Số lượng'),
+        Header: t('Ngày'),
+        accessor: 'Ngày hóa đơn',
+      },
+      {
+        Header: t('Trạng thái'),
         accessor: 'ITEM_NO',
+      },
+      {
+        Header: t('Người bán'),
+        accessor: 'Tên người bán',
+      },
+      {
+        Header: t('MST'),
+        accessor: 'Mã số thuế người bán',
+      },
+      {
+        Header: t('Hàng hoá'),
+        accessor: 'Hàng hóa, dịch vụ chưa thuế',
       },
       {
         Header: t('Quản trị'),
@@ -83,24 +69,16 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [listBangKeChuaDongTai],
+    [data],
   );
 
   const handleBack = (): void => {
     dispatch(goBack());
   };
 
-  const handleChangeFilePath = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent<FileReader>): void => {
-      const data = new Uint8Array(get(event, 'target.result'));
-      const workbook = XLSX.read(data, { type: 'array' });
-
-      // eslint-disable-next-line no-console
-      console.log(workbook);
-      /* DO SOMETHING WITH workbook HERE */
-    };
-    reader.readAsArrayBuffer(get(event, 'target.files[0]'));
+  const handleChangeFile = (workbook: WorkBook): void => {
+    const first_sheet_name = workbook.SheetNames[0];
+    setData(XLSX.utils.sheet_to_json(workbook.Sheets[first_sheet_name], { range: 2 }));
   };
 
   const renderFirstControllers = (): JSX.Element => (
@@ -167,11 +145,7 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
 
   const renderSecondControllers = (): JSX.Element => (
     <>
-      <Input className="hide" id="xlsx-input" onChange={handleChangeFilePath} type="file" />
-      <Label className="btn btn-primary ml-2 mb-0" htmlFor="xlsx-input">
-        <i className="fa fa-upload mr-2" />
-        {t('Tải lên')}
-      </Label>
+      <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} />
       <Button color="primary" className="ml-2">
         <i className="fa fa-plus mr-2" />
         {t('Thêm khoản mục')}
@@ -179,12 +153,10 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
     </>
   );
 
-  function renderGroupedRow(rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element {
+  const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
     return (
       <Row>
-        <Col>
-          {t('Nhóm số lượng')} {index}
-        </Col>
+        <Col>{index}</Col>
         <Col>
           <div className="d-flex justify-content-end">
             <Button color="primary" className=" ml-2" outline>
@@ -195,7 +167,7 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
         </Col>
       </Row>
     );
-  }
+  };
 
   return (
     <>
@@ -231,8 +203,8 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
           <div className="sipTableContainer">
             <DataTable
               columns={columns}
-              data={listBangKeChuaDongTai}
-              groupKey={'ITEM_NO'}
+              data={data}
+              groupKey={'Khoản mục chi phí'}
               renderGroupedRow={renderGroupedRow}
             />
           </div>
