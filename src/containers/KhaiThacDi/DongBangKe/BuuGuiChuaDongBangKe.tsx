@@ -73,10 +73,25 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
 
   const handleRedirectDetail = useCallback(
     (item: MTZTMI240RowTypeCustom): void => {
+      let des = '';
+
+      try {
+        const thisCommLocGroup = get(item, 'COMM_LOC_GROUP', '');
+        if (!thisCommLocGroup) des = '';
+        des = join(
+          slice(
+            thisCommLocGroup,
+            findIndex(thisCommLocGroup, (item: string): boolean => item === '.') + 1,
+            size(thisCommLocGroup),
+          ),
+          '',
+        );
+      } catch (error) {}
+
       dispatch(
         push(generatePath(routesMap.CHI_TIET_BUU_BUI_CHUA_DONG_BANG_KE), {
           child: item.CHILD ? item.CHILD : '',
-          des: item.DES ? item.DES : '',
+          des: des,
           COMM_LOC_GROUP: item.COMM_LOC_GROUP ? item.COMM_LOC_GROUP : '',
         }),
       );
