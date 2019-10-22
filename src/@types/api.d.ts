@@ -241,6 +241,7 @@ declare namespace API {
     CRE_BY?: string;
     CRE_TIME?: string;
     UDP_TIME?: string;
+    UDP_BY?: string;
   }
   export interface LocationAddEsRequest {
     I?: string;

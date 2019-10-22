@@ -15,7 +15,7 @@ import { select_ZFI002, select_ZFI002Count } from 'redux/ZFI002/selectors';
 import DataTable from 'components/DataTable';
 import routesMap from 'utils/routesMap';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
-import Pagination from '../../components/Pagination';
+import Pagination from 'components/Pagination';
 
 interface Props {
   match: match;
@@ -78,13 +78,11 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function handleChangeDeliveryTime(event: any, picker: any): void {
-    if (tuKy && denKy) {
-      setTuKy(moment(get(picker, 'startDate')).format('YYYYMM'));
-      setDenKy(moment(get(picker, 'endDate')).format('YYYYMM'));
-      setFilterTimeValue(
-        `${moment(get(picker, 'startDate')).format('MM/YYYY')} - ${moment(get(picker, 'endDate')).format('MM/YYYY')}`,
-      );
-    }
+    setTuKy(moment(get(picker, 'startDate')).format('YYYYMM'));
+    setDenKy(moment(get(picker, 'endDate')).format('YYYYMM'));
+    setFilterTimeValue(
+      `${moment(get(picker, 'startDate')).format('MM/YYYY')} - ${moment(get(picker, 'endDate')).format('MM/YYYY')}`,
+    );
   }
 
   const redirectToTaoMoiBangKe = (): void => {
@@ -117,7 +115,8 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     //eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'select',
+        Header: t(''),
+        accessor: 'BK_YEAR',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
             <Label check>
@@ -170,9 +169,10 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Người cập nhật'),
-        accessor: 'UDP_BY',
+        accessor: 'UPD_BY',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          return <>Chưa có mô tả</>;
+          const thisUpdBy = get(row, 'values.UPD_BY');
+          return <>{thisUpdBy ? thisUpdBy : ''}</>;
         },
       },
       {
@@ -216,7 +216,12 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
         </Col>
         <Col className="sipFilterCol">
           <DateRangePicker onApply={handleChangeDeliveryTime}>
-            <Input value={filterTimeValue} type="text" placeholder="Nhập khoảng thời gian" />
+            <Input
+              value={filterTimeValue}
+              onChange={handleChangeTextboxValue(setFilterTimeValue)}
+              type="text"
+              placeholder="Nhập khoảng thời gian"
+            />
           </DateRangePicker>
         </Col>
         <Col className="sipFilterCol">
@@ -226,7 +231,11 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
               {map(
                 stateMap,
                 (item: string, index: number): JSX.Element => {
-                  return <option value={index}>{item}</option>;
+                  return (
+                    <option key={index} value={index}>
+                      {item}
+                    </option>
+                  );
                 },
               )}
             </Input>
