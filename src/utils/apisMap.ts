@@ -27,9 +27,12 @@ const sapApis = [
   'ZTMI213',
   'ZTMI235',
   'ZTMI239',
-  'ZFI002',
-  'ZFI004',
   'ZFI001',
+  'ZFI002',
+  'ZFI003',
+  'ZFI004',
+  'ZFI005',
+  'ZFI006',
   'ZFI007',
 ];
 
