@@ -3,12 +3,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Col, Input, Label, Row } from 'reactstrap';
 import { forEach, get, includes, map, noop, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
 import moment from 'moment';
 
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonDongBangKe from 'components/Button/DanhSachPhieuGuiTrongBangKe/ButtonDongBangKe';
 import ButtonDongTai from 'components/Button/DanhSachPhieuGuiTrongBangKe/ButtonDongTai';
 import DataTable from 'components/DataTable';
@@ -215,18 +215,12 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idBangKe]);
 
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
-
   // eslint-disable-next-line max-lines-per-function
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Danh sách phiếu gửi trong bảng kê')}
         </h1>
         <div className="sipTitleRightBlock">

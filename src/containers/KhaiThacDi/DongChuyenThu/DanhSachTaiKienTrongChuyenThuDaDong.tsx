@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { match } from 'react-router-dom';
+import { Cell } from 'react-table';
 import { Button, Col, Fade, Input, Row } from 'reactstrap';
 import { find, get, map, size } from 'lodash';
-import { useTranslation } from 'react-i18next';
-import { goBack } from 'connected-react-router';
-import { match } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useMemo } from 'react';
-import { Cell } from 'react-table';
-import DataTable from 'components/DataTable';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import moment from 'moment';
+
+import DataTable from 'components/DataTable';
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
+import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataTorType, SipDataType } from 'utils/enums';
 
 interface Props {
@@ -88,14 +88,10 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     dispatch(action_MIOA_ZTMI046(payload046));
   };
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     getListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
-
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
 
   const renderPrintButtonPhieuGiaoNhanChuyenThu = (): JSX.Element => (
     <ButtonPrintable
@@ -116,9 +112,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Danh sách tải/kiện trong chuyến thư')}
         </h1>
         <div className="sipTitleRightBlock">
@@ -273,9 +267,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
     <Fade in={true} timeout={1000}>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Quay lại')}
         </h1>
       </Row>

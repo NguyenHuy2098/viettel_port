@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { find, get, map, size, trim } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { goBack } from 'connected-react-router';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { Cell } from 'react-table';
 import moment from 'moment';
 
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
 import FadedNoData from 'components/NoData/FadedNodata';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
@@ -98,14 +98,8 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     };
   }
 
-  const payload046 = {
-    IV_TOR_ID: idBangKe,
-    IV_PAGENO: '1',
-    IV_NO_PER_PAGE: '10',
-  };
-
   const getListPhieuGui = (): void => {
-    dispatch(action_MIOA_ZTMI046(payload046));
+    dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idBangKe }));
   };
 
   const handleDeleteForwardingOrder = (torId: string): void => {
@@ -135,22 +129,16 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     );
   };
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     getListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idBangKe]);
-
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
 
   function renderTitle(): JSX.Element {
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Danh sách phiếu gửi trong bảng kê')}
         </h1>
         <div className="sipTitleRightBlock">

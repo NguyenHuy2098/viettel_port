@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { goBack } from 'connected-react-router';
 import produce from 'immer';
 import { ceil, concat, filter, get, includes, isEmpty, map, pull, size } from 'lodash';
 import moment from 'moment';
 
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import DataTable from 'components/DataTable';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
@@ -60,10 +60,6 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     getListTaiKien();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
-
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
 
   const getListTaiKien = (): void => {
     dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idChuyenThu }));
@@ -117,9 +113,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Danh sách tải/kiện trong chuyến thư')}
         </h1>
         <div className="sipTitleRightBlock">
@@ -350,9 +344,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     <Fade in={true} timeout={1000}>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Quay lại')}
         </h1>
       </Row>

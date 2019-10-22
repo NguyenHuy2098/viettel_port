@@ -1,20 +1,21 @@
 /* eslint-disable max-lines */
 import React, { useMemo, useState } from 'react';
+import { Button, Row, Col, Fade } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { generatePath, match } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { generatePath, match } from 'react-router-dom';
 import { drop, findIndex, get, size, slice } from 'lodash';
+
+import ButtonGoBack from 'components/Button/ButtonGoBack';
+import PrintableModal from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
-import { Button, Row, Col, Fade } from 'reactstrap';
+import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
 import routesMap from 'utils/routesMap';
-import { goBack } from 'connected-react-router';
-import PrintableModal from 'components/Button/ButtonPrintable';
-import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 
 interface Props {
   match: match;
@@ -25,10 +26,6 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const idDonHang = get(props, 'match.params.idDonHang');
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
-
   const orderInformation = useSelector(select_MT_ZTMI031_OUT);
   const orderInformationInstane = useSelector(select_MT_ZTMI031_INSTANE);
   const [provinceSender, setProvinceSender] = useState<string>('');
@@ -356,9 +353,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     <Fade in={true} timeout={1000}>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Quay lại')}
         </h1>
       </Row>

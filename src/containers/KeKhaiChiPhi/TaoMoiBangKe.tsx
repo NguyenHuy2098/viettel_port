@@ -1,23 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
-import { useDispatch } from 'react-redux';
-import { match } from 'react-router-dom';
 import { Cell, Row as TableRow } from 'react-table';
-import { goBack } from 'connected-react-router';
 import XLSX, { WorkBook } from 'xlsx';
 
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import DataTable from 'components/DataTable/Grouped';
 
-interface Props {
-  match: match;
-}
-
 // eslint-disable-next-line max-lines-per-function
-const TaoMoiBangKe = (props: Props): JSX.Element => {
+const TaoMoiBangKe = (): JSX.Element => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
   const columns = useMemo(
@@ -71,10 +64,6 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
   );
-
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
 
   const handleChangeFile = (workbook: WorkBook): void => {
     const first_sheet_name = workbook.SheetNames[0];
@@ -173,12 +162,10 @@ const TaoMoiBangKe = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3">
         <Col>
-          <h1 className="sipTitle">
-            <Button className="sipTitleBtnBack" onClick={handleBack}>
-              <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-            </Button>
-            {t('Tạo mới bảng kê')}
-          </h1>
+          <div className="d-flex sipTitle">
+            <ButtonGoBack />
+            <h4>{t('Tạo mới bảng kê')}</h4>
+          </div>
         </Col>
         <Col className="d-flex justify-content-end">{renderFirstControllers()}</Col>
       </Row>

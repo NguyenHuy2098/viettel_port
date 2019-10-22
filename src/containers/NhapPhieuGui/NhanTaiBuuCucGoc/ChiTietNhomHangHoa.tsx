@@ -6,11 +6,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { goBack } from 'connected-react-router';
 import classNames from 'classnames';
 import { Location } from 'history';
 import { forEach, get, includes, map, size, toNumber, toString, trim } from 'lodash';
 
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
@@ -56,10 +56,6 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
   const [selectedTai, setSelectedTai] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
   const [selectedChuyenThu, setSelectedChuyenthu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
   const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
-
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
 
   function toggleCreateForwardingItemModal(): void {
     setCreateForwardingItemModal(!createForwardingItemModal);
@@ -870,9 +866,7 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <button className="sipTitleBtnBack btn btn-secondary" onClick={handleBack}>
-            <i className="fa fa-arrow-left backIcon"></i>
-          </button>
+          <ButtonGoBack />
           {t('Thư - Nhanh')}
         </h1>
         <div className="sipTitleRightBlock">

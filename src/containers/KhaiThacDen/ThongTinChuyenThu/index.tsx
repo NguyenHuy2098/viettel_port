@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
-import { Button, Row, Col, Badge } from 'reactstrap';
+import { Row, Col, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
-import { goBack } from 'connected-react-router';
 import { get, isEmpty } from 'lodash';
 import moment from 'moment';
 
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import TabView from 'components/Tab/TabView';
@@ -43,10 +43,6 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
 
-  const handleGoBack = (): void => {
-    dispatch(goBack());
-  };
-
   const renderPrintButton = (): JSX.Element => (
     <ButtonPrintable
       btnProps={{
@@ -66,9 +62,7 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleGoBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Thông tin chuyến thư')}
         </h1>
         <div className="sipTitleRightBlock">{renderPrintButton()}</div>

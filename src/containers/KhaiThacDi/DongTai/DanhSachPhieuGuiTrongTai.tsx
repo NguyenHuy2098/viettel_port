@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
-import { goBack } from 'connected-react-router';
 import { forEach, get, includes, map, size } from 'lodash';
 import moment from 'moment';
 
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import DataTable from 'components/DataTable';
@@ -232,10 +232,6 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idTai]);
 
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
-
   // const handleRedirectDetail = useCallback(
   //   (item: API.Child): void => {
   //     dispatch(push(generatePath(routesMap.DANH_SACH_PHIEU_GUI_TRONG_BANG_KE, { idBangKe: item.TOR_ID })));
@@ -248,9 +244,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     return (
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Danh sách bảng kê trong tải')}
         </h1>
         <div className="sipTitleRightBlock">
@@ -692,9 +686,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     <Fade in={true} timeout={1000}>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBack} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
+          <ButtonGoBack />
           {t('Quay lại')}
         </h1>
       </Row>

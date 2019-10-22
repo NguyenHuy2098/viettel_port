@@ -1,31 +1,32 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Badge, Button, Col, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
-import { goBack } from 'connected-react-router';
 import { useTranslation } from 'react-i18next';
-import classNames from 'classnames';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { forEach, get, size, toString, trim } from 'lodash';
-import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
-import { action_ZTMI241 } from 'redux/ZTMI241/actions';
-import DataTable from 'components/DataTable';
 import { Cell } from 'react-table';
-import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
+import { toast } from 'react-toastify';
+import { Badge, Button, Col, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import classNames from 'classnames';
+import { forEach, get, size, toString, trim } from 'lodash';
 import { Location } from 'history';
+
+import ButtonGoBack from 'components/Button/ButtonGoBack';
+import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import DataTable from 'components/DataTable';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { AppStateType } from 'redux/store';
 import {
   actionDongBangKeVaoTaiMoiTao,
   actionDongBanKeVaoTaiCoSan,
   actionDongTaiVaoChuyenThuCoSan,
   actionDongTaiVaoChuyenThuTaoMoi,
 } from 'redux/common/actions';
-import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
-import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
+import { action_ZTMI241 } from 'redux/ZTMI241/actions';
+import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
+import { AppStateType } from 'redux/store';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { today } from 'utils/timeHelper';
 
 interface Props {
@@ -302,10 +303,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleBack = (): void => {
-    dispatch(goBack());
-  };
-
   const handleHidePopupDongBangKe = (): void => {
     setShowPopUpDongBangKe(false);
   };
@@ -492,9 +489,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <button className="sipTitleBtnBack btn btn-secondary" onClick={handleBack}>
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </button>
+          <ButtonGoBack />
           {commLocGroup}
         </h1>
         <div className="sipTitleRightBlock">
