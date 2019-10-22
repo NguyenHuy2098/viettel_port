@@ -236,7 +236,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       IV_LOC_ID: userMaBp,
       IV_COMMODITY_GROUP: commLocGroup,
       IV_DATE: today,
-      IV_USER: get(childs, '[0].USER', ''),
+      IV_USER: get(childs[tab], 'USER', ''),
       IV_PAGE_NO: '1',
       IV_NO_PER_PAGE: '10',
     };
