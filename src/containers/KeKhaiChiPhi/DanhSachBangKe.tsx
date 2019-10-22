@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { get, map } from 'lodash';
+import { get, map, size, toString } from 'lodash';
 import { Button, Col, Input, Row, Label } from 'reactstrap';
 import { Cell } from 'react-table';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -11,11 +11,15 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 import moment from 'moment';
 
 import { action_ZFI002 } from 'redux/ZFI002/actions';
+import { action_ZFI004 } from 'redux/ZFI004/actions';
 import { select_ZFI002, select_ZFI002Count } from 'redux/ZFI002/selectors';
 import DataTable from 'components/DataTable';
 import routesMap from 'utils/routesMap';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import Pagination from 'components/Pagination';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { toastError, toastSuccess } from 'components/Toast';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 
 interface Props {
   match: match;
@@ -31,20 +35,34 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   const dataTable = useSelector(select_ZFI002);
   const totalPage = useSelector(select_ZFI002Count);
 
-  const [tuKy, setTuKy] = useState<string>('');
-  const [denKy, setDenKy] = useState<string>('');
+  const [tuKy, setTuKy] = useState<string>(moment().format('YYYYMM'));
+  const [denKy, setDenKy] = useState<string>(moment().format('YYYYMM'));
   const [filterTimeValue, setFilterTimeValue] = useState<string>('');
   const [idSearch, setIdSearch] = useState<string>('');
   const [typeSearch, setTypeSearch] = useState<string>('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+  const [deleteTorId, setDeleteTorId] = useState<string>('');
+  function toggleDeleteConfirmModal(): void {
+    setDeleteConfirmModal(!deleteConfirmModal);
+  }
+  function handleDeleteItem(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      event.stopPropagation();
+      setDeleteTorId(torId);
+      toggleDeleteConfirmModal();
+    };
+  }
 
   const getListBangKe = (payload = {}): void => {
     const payloadListBk = {
-      TU_KY: moment().format('YYYYMM'),
-      DEN_KY: moment().format('YYYYMM'),
+      TU_KY: tuKy,
+      DEN_KY: denKy,
       MA_BUU_CUC: userMaBp,
-      BK_ID: '',
-      BK_STATUS: '2',
-      IV_PAGENO: '1',
+      BK_ID: idSearch,
+      BK_STATUS: typeSearch,
+      IV_PAGENO: currentPage,
       IV_NO_PER_PAGE: '10',
       ...payload,
     };
@@ -52,10 +70,14 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   };
 
   function handleSearchBangKe(): void {
-    getListBangKe({ BK_ID: idSearch, TU_KY: tuKy, DEN_KY: denKy, BK_STATUS: typeSearch });
+    if (size(idSearch) > 0 || size(filterTimeValue) > 0 || size(typeSearch) > 0) {
+      setCurrentPage(1);
+      getListBangKe({ BK_ID: idSearch, TU_KY: tuKy, DEN_KY: denKy, BK_STATUS: typeSearch, IV_PAGENO: '1' });
+    }
   }
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
+    setCurrentPage(selectedItem.selected + 1);
     getListBangKe({
       BK_ID: idSearch,
       TU_KY: tuKy,
@@ -63,6 +85,25 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       BK_STATUS: typeSearch,
       IV_PAGENO: selectedItem.selected + 1,
     });
+  };
+
+  const handleDeleteManifest = (torId: string): void => {
+    dispatch(
+      action_ZFI004(
+        {
+          BK_ID: torId,
+        },
+        {
+          onSuccess: (): void => {
+            toastSuccess(t('Xóa thành công.'));
+          },
+          onFailure: (error: HttpRequestErrorType): void => {
+            toastError(get(error, 'messages[0]'));
+          },
+          onFinish: (): void => getListBangKe(),
+        },
+      ),
+    );
   };
 
   React.useEffect((): void => {
@@ -180,7 +221,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           const thisStatus = get(row, 'values.BK_STATUS', 0);
           return thisStatus === 0 ? (
-            <Button className="SipTableFunctionIcon">
+            <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.BK_ID', ''))}>
               <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
             </Button>
           ) : (
@@ -232,7 +273,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
                 stateMap,
                 (item: string, index: number): JSX.Element => {
                   return (
-                    <option key={index} value={index}>
+                    <option key={index} value={toString(index)}>
                       {item}
                     </option>
                   );
@@ -258,6 +299,12 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           onThisPaginationChange={onPaginationChange}
         />
       </Row>
+      <DeleteConfirmModal
+        visible={deleteConfirmModal}
+        onDelete={handleDeleteManifest}
+        onHide={toggleDeleteConfirmModal}
+        torId={deleteTorId}
+      />
     </>
   );
 };
