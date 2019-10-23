@@ -12,7 +12,7 @@ function* takeGet_LOCATIONSUGGEST_DETAIL(action: UnfoldSagaActionType): Iterable
     {
       handler: async (): Promise<DetailSuggestedLocation> => {
         const { data } = await crmApi.get(`${crmApiMapParam}${get(action, 'payload.id')}`);
-        return data;
+        if (data) return data;
         throw new HttpRequestError(data.ErrorCode, data.Messages);
       },
       key: action.type,
