@@ -485,9 +485,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   function getValueOfNumberFormat(value: string): string {
-    return numeral(value)
-      .value()
-      .toString();
+    if (isNaN(parseFloat(value))) {
+      return value;
+    } else {
+      return numeral(value)
+        .value()
+        .toString();
+    }
   }
 
   //______________check if Order Information exist
@@ -637,10 +641,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     if (size(payloadPackageItemArr) >= 1) {
       forEach(payloadPackageItemArr, (item: PackageItemInputType): void => {
         newPackageItem011 = {
-          COD: item.COD ? toString(parseInt(item.COD)) : '',
+          COD: item.COD ? toString(parseInt(getValueOfNumberFormat(item.COD))) : '',
           Currency: '',
           Dimension_UoM: '',
-          Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
+          Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(getValueOfNumberFormat(item.GROSS_WEIGHT))) : '',
           Goods_value: '',
           Service_type: '',
           item_cat: 'PKG',
@@ -1007,7 +1011,34 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     const dataPackageItemArr = produce(packageItemArr, (draftState): void => {
       draftState.unshift(firstPackageItem);
     });
-    const payloadPackageItemArr = concat(dataPackageItemArr, additionalServicePayloadList);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const dataPackageItemArrUnformattedNumber: PackageItemInputType[] = [];
+    if (size(dataPackageItemArr) >= 1) {
+      forEach(dataPackageItemArr, (item: PackageItemInputType): void => {
+        const newPackageItemTemp = {
+          Width: item.Width ? trim(getValueOfNumberFormat(item.Width)) : '',
+          COMMODITY_CODE: item.COMMODITY_CODE,
+          COMMODITY_TYPE: item.COMMODITY_TYPE, // Nhóm hàng hóa (tham chiếu trong bảng)
+          PACKAGE_TYPE: item.PACKAGE_TYPE, // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
+          QUANTITY_OF_UNIT: item.QUANTITY_OF_UNIT, // Đơn vị bưu gửi, luôn là EA
+          GOODS_VALUE: item.GOODS_VALUE ? trim(getValueOfNumberFormat(item.GOODS_VALUE)) : '',
+          GROSS_WEIGHT: item.GROSS_WEIGHT ? trim(getValueOfNumberFormat(item.GROSS_WEIGHT)) : '',
+          Length: item.Length ? trim(getValueOfNumberFormat(item.Length)) : '',
+          Hight: item.Length ? trim(getValueOfNumberFormat(item.Length)) : '',
+          PACKAGING_MATERIAL: item.PACKAGING_MATERIAL,
+          QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE ? trim(getValueOfNumberFormat(item.QUANTITY_OF_PACKAGE)) : '',
+          Description: item.Description,
+          NET_WEIGHT_OF_UNIT: item.NET_WEIGHT_OF_UNIT,
+          Currency: item.Currency,
+          GROSS_WEIGHT_OF_UNIT: item.GROSS_WEIGHT_OF_UNIT,
+          Flag: item.Flag, // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
+          COD: item.COD ? trim(getValueOfNumberFormat(item.COD)) : '',
+          NET_WEIGHT: item.NET_WEIGHT,
+        };
+        dataPackageItemArrUnformattedNumber.push(newPackageItemTemp);
+      });
+    }
+    const payloadPackageItemArr = concat(dataPackageItemArrUnformattedNumber, additionalServicePayloadList);
     const payload = {
       ADDRESS_CONSIG: '',
       ADDRESS_OP: trim(diaChiSender),
@@ -1898,7 +1929,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         toggle={toggleModalApiCreateSuccess}
         idPhieuGuiSuccess={maPhieuGui}
       />
-      {size(locationSuggestSender) > 0 || size(locationSuggestSender) > 0 ? (
+      {size(locationSuggestSender) > 0 || size(locationSuggestReceiver) > 0 ? (
         <button className="sipInputAddressDropdownOverlay" onClick={handleHideChooseLocationDropdown}></button>
       ) : (
         <></>
