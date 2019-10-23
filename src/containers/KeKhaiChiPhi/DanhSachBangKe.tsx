@@ -20,6 +20,7 @@ import Pagination from 'components/Pagination';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { toastError, toastSuccess } from 'components/Toast';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import InBangKe from './InBangKe';
 
 interface Props {
   match: match;
@@ -140,10 +141,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           <img src={'../../assets/img/icon/iconExport.svg'} alt="VTPostek" />
           {t('Xuất file Excel')}
         </Button>
-        <Button color="primary" className="ml-2">
-          <img src={'../../assets/img/icon/iconPrintWhite.svg'} alt="VTPostek" />
-          {t('In bảng kê')}
-        </Button>
+        <InBangKe />
         <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>
           <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
           {t('Thêm mới')}

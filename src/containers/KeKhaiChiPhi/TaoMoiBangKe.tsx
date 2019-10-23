@@ -9,6 +9,7 @@ import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import DataTable from 'components/DataTable/Grouped';
 import useLoggedInUser from 'hooks/useLoggedInUser';
+import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
@@ -164,10 +165,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   const renderSecondControllers = (): JSX.Element => (
     <>
       <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} />
-      <Button color="primary" className="ml-2">
-        <i className="fa fa-plus mr-2" />
-        {t('Thêm khoản mục')}
-      </Button>
+      <ThemMoiKhoanMuc />
     </>
   );
 
