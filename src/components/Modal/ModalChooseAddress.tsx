@@ -16,7 +16,7 @@ import {
   Modal,
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { action_GET_PROVINCE, action_GET_DISTRICT, action_GET_WARD } from 'redux/SearchLocation/actions';
+import { action_GET_PROVINCE, action_GET_DISTRICT, action_GET_WARD } from 'redux/LocationSearch/actions';
 import * as yup from 'yup';
 
 interface Props {

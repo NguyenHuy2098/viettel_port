@@ -17,7 +17,7 @@ import watch_MIOA_ZTMI045_SagaAsync from './MIOA_ZTMI045/sagas';
 import watch_MIOA_ZTMI054_SagaAsync from './MIOA_ZTMI054/sagas';
 import watch_MIOA_ZTMI055_SagaAsync from './MIOA_ZTMI055/sagas';
 import watch_MIOA_ZTMI063_SagaAsync from './MIOA_ZTMI063/sagas';
-import watch_SearchLocation_SagaAsync from './SearchLocation/sagas';
+import watch_LocationSearch_SagaAsync from './LocationSearch/sagas';
 import watch_SIOA_ZTMI068_SagaAsync from './SIOA_ZTMI068/sagas';
 import watch_ZTMI236_SagaAsync from './ZTMI236/sagas';
 import watch_ZTMI240_SagaAsync from './ZTMI240/sagas';
@@ -28,6 +28,8 @@ import watch_ZTMI239_SagaAsync from './ZTMI239/sagas';
 import watch_ZFI002_SagaAsync from './ZFI002/sagas';
 import watch_ZFI004_SagaAsync from './ZFI004/sagas';
 import watch_ZFI001_SagaAsync from './ZFI001/sagas';
+import watch_LocationSuggest from './LocationSuggest/sagas';
+import watch_LocationSuggestDetail from './LocationSuggestDetail/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -48,7 +50,7 @@ export default function* rootSagas(): SagaIterator {
     call(watch_MIOA_ZTMI054_SagaAsync),
     call(watch_MIOA_ZTMI055_SagaAsync),
     call(watch_MIOA_ZTMI063_SagaAsync),
-    call(watch_SearchLocation_SagaAsync),
+    call(watch_LocationSearch_SagaAsync),
     call(watch_SIOA_ZTMI068_SagaAsync),
     call(watch_ZTMI236_SagaAsync),
     call(watch_ZTMI240_SagaAsync),
@@ -58,6 +60,8 @@ export default function* rootSagas(): SagaIterator {
     call(watch_ZTMI239_SagaAsync),
     call(watch_ZFI002_SagaAsync),
     call(watch_ZFI004_SagaAsync),
+    call(watch_LocationSuggest),
+    call(watch_LocationSuggestDetail),
     call(watch_ZFI001_SagaAsync),
   ]);
 }

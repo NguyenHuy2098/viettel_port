@@ -3635,7 +3635,7 @@ declare namespace Paths {
       export type $200 = Definitions.SIOZTMI028Response;
     }
   }
-  namespace SearchLocation {
+  namespace LocationSearch {
     export interface BodyParameters {
       request?: Parameters.Request;
     }

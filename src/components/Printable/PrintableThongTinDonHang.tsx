@@ -6,7 +6,7 @@ import JsBarcode from 'jsbarcode';
 import moment from 'moment';
 import { head, get, isEmpty, split } from 'lodash';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
-import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
+import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
 
 interface Props {
   idDonHang: string;

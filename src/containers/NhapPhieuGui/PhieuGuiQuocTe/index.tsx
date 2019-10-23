@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Row, ListGroup, ListGroupItem } from 'reactstrap';
 import {
   drop,
   get,
@@ -26,12 +26,13 @@ import {
 } from 'lodash';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import 'react-datepicker/dist/react-datepicker.css';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
+import { action_LOCATIONSUGGEST } from 'redux/LocationSuggest/actions';
+import { action_LOCATIONSUGGEST_DETAIL } from 'redux/LocationSuggestDetail/actions';
 import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
-import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
+import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 // import { makeSelectProfile } from 'redux/auth/selectors';
@@ -721,6 +722,88 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
+  //_________________Location suggest event handle__________________________
+
+  const [countLocationSuggestSender, setCountLocationSuggestSender] = useState<number>(0);
+  const [locationSuggestSender, setLocationSuggestSender] = useState<SuggestedItem[]>([]);
+  const handleKeyPressDiaChiSender = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    setCountLocationSuggestSender(countLocationSuggestSender + 1);
+  };
+
+  const handleHideChooseLocationDropdown = (): void => {
+    setLocationSuggestSender([]);
+  };
+
+  React.useEffect((): void => {
+    if (countLocationSuggestSender > 0 && size(diaChiSender) > 0) {
+      dispatch(
+        action_LOCATIONSUGGEST(
+          { q: diaChiSender },
+          {
+            onSuccess: (data: SuggestedLocation): void => {
+              setLocationSuggestSender(get(data, 'items'));
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              setLocationSuggestSender([]);
+            },
+          },
+        ),
+      );
+    } else {
+      setLocationSuggestSender([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countLocationSuggestSender]);
+
+  function handleChooseLocationSuggest(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
+        return item.id === id;
+      });
+      setDiaChiSender(get(thisItem, 'name', ''));
+      dispatch(
+        action_LOCATIONSUGGEST_DETAIL(
+          { id: get(thisItem, 'id', '') },
+          {
+            onSuccess: (data: DetailSuggestedLocation): void => {
+              const dataComponents = get(data, 'components');
+              const thisProvince = find(dataComponents, (item: Component): boolean => {
+                return item.type === 'PROVINCE';
+              });
+              setProvinceIdSender(get(thisProvince, 'code', ''));
+              const thisDistrict = find(dataComponents, (item: Component): boolean => {
+                return item.type === 'DISTRICT';
+              });
+              setDistrictIdSender(get(thisDistrict, 'code', ''));
+              const thisWard = find(dataComponents, (item: Component): boolean => {
+                return item.type === 'WARD';
+              });
+              setWardIdSender(get(thisWard, 'code', ''));
+              const thisStreet = find(dataComponents, (item: Component): boolean => {
+                return item.type === 'STREET';
+              });
+              setDetailAddressSender(get(thisStreet, 'name', ''));
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {t('Không lấy được thông tin địa chỉ.')}
+                </>,
+                {
+                  type: 'error',
+                },
+              );
+            },
+          },
+        ),
+      );
+      setLocationSuggestSender([]);
+    };
+  }
+
+  //___________________________________________________________________
+
   function handleChangeReceiverAddress(event: React.FormEvent<HTMLInputElement>): void {
     const thisValue = event.currentTarget.value;
     setDiaChiReceiver(thisValue);
@@ -1048,7 +1131,20 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
               value={diaChiSender}
               onChange={handleChangeTextboxValue(setDiaChiSender)}
+              onKeyUp={handleKeyPressDiaChiSender}
             />
+            <ListGroup className="sipInputAddressDropdown">
+              {map(
+                locationSuggestSender,
+                (item: SuggestedItem, index: number): JSX.Element => {
+                  return (
+                    <ListGroupItem tag="button" key={index} onClick={handleChooseLocationSuggest(item.id)}>
+                      {get(item, 'name', '')}
+                    </ListGroupItem>
+                  );
+                },
+              )}
+            </ListGroup>
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
             <p className="sipInputItemDescription">
               ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
@@ -1401,6 +1497,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         toggle={toggleModalApiCreateSuccess}
         idPhieuGuiSuccess={maPhieuGui}
       />
+      {size(locationSuggestSender) > 0 ? (
+        <button className="sipInputAddressDropdownOverlay" onClick={handleHideChooseLocationDropdown}></button>
+      ) : (
+        <></>
+      )}
     </>
   );
 };

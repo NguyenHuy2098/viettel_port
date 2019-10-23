@@ -14,7 +14,7 @@ import DataTable from 'components/DataTable';
 import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
-import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
+import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
 import routesMap from 'utils/routesMap';
 
 interface Props {

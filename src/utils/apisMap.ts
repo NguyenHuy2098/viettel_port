@@ -32,7 +32,7 @@ const sapApis = [
   'ZFI001',
 ];
 
-const crmApis = ['lvc'];
+const crmApis = ['suggest'];
 
 /**
  * Convert api name array to apis map
@@ -40,6 +40,7 @@ const crmApis = ['lvc'];
  */
 export const sapApiMap = zipObject(sapApis, map(sapApis, (item: string): string => url.resolve('/', item)));
 export const crmApiMap = zipObject(crmApis, map(crmApis, (item: string): string => url.resolve('/', item)));
+export const crmApiMapParam = 'suggest/';
 
 export default {
   sapApiMap,

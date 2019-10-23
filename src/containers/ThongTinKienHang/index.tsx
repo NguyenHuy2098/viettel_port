@@ -9,7 +9,7 @@ import { Button, Row, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
-import { action_GET_ADDRESS } from 'redux/SearchLocation/actions';
+import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import moment from 'moment';
