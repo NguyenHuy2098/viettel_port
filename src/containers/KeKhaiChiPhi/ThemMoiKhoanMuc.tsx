@@ -2,70 +2,58 @@ import React from 'react';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { action_ZFI001 } from 'redux/ZFI001/actions';
+import { select_ZFI001 } from 'redux/ZFI001/selectors';
+import { get } from 'lodash';
+import { cleanAccents } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 function ThemMoiKhoanMuc(): JSX.Element {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    const payloads = {
+      KM_FLAG: 'X',
+    };
+    dispatch(action_ZFI001(payloads));
+  }, [dispatch]);
+
+  const data = useSelector(select_ZFI001);
+
+  const [search, setSearch] = React.useState<string>('');
+  function handleSearch(e: React.FormEvent<HTMLInputElement>): void {
+    setSearch(e.currentTarget.value);
+  }
+
+  const [list, setList] = React.useState<API.LIST[]>([]);
+  React.useEffect((): void => {
+    const list = data.filter(
+      item =>
+        cleanAccents(get(item, 'km_text', '').toLowerCase()).includes(search) ||
+        !search ||
+        get(item, 'km_id', '').includes(search),
+    );
+    setList(list);
+  }, [search, data]);
 
   // eslint-disable-next-line max-lines-per-function
   function renderAddNewItem(): JSX.Element {
     return (
       <div className="p-0 col-12 col-lg-8 col-xl-12 khoan-muc">
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
-        <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom">
-          <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-            <input name="packageType" type="radio" className="form-check-input" value="V3" /> 0304 - Chi phí vận chuyển
-          </label>
-        </div>
+        {list.map(
+          (item: API.LIST): JSX.Element => {
+            return (
+              <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom" key={item.km_id}>
+                <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
+                  <input name="packageType" type="radio" className="form-check-input" value="V3" /> {item.km_id} -{' '}
+                  {item.km_text}
+                </label>
+              </div>
+            );
+          },
+        )}
       </div>
     );
   }
@@ -88,7 +76,7 @@ function ThemMoiKhoanMuc(): JSX.Element {
         <ModalBody>
           <div className="sipTitleRightBlockInput m-0">
             <i className="fa fa-search" />
-            <input placeholder="Tìm kiếm bảng kê" type="text" className="form-control" />
+            <input placeholder="Tìm kiếm bảng kê" type="text" className="form-control" onChange={handleSearch} />
           </div>
           <Scrollbars style={{ height: 300 }}>{renderAddNewItem()}</Scrollbars>
         </ModalBody>
