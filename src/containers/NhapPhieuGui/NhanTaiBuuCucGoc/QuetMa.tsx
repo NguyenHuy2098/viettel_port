@@ -91,20 +91,26 @@ const QuetMa: React.FC = (): JSX.Element => {
                                     dispatch(
                                       action_ZTMI239(payload239, {
                                         onSuccess: (data: API.ZTMI239Response): void => {
-                                          toast(
-                                            <>
-                                              <i className="fa fa-window-close-o mr-2" />
-                                              {get(data, 'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE', t('Thành công!'))}
-                                            </>,
-                                            {
-                                              type: 'success',
-                                            },
-                                          );
-                                          dispatch(
-                                            action_ZTMI240({
-                                              IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
-                                            }),
-                                          );
+                                          setTimeout(function() {
+                                            toast(
+                                              <>
+                                                <i className="fa fa-window-close-o mr-2" />
+                                                {get(
+                                                  data,
+                                                  'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE',
+                                                  t('Thành công!'),
+                                                )}
+                                              </>,
+                                              {
+                                                type: 'success',
+                                              },
+                                            );
+                                            dispatch(
+                                              action_ZTMI240({
+                                                IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+                                              }),
+                                            );
+                                          }, 1000);
                                         },
                                         onFailure: (error: HttpRequestErrorType): void => {
                                           toast(

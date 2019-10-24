@@ -16,7 +16,7 @@ body {
 }
 .btn {
   padding: 0 12px;
-  min-height: 32px;
+  height: 32px;
   line-height: 32px;
   box-sizing: border-box;
 }
@@ -316,7 +316,7 @@ input.form-control:-moz-placeholder {
       border: 1px solid #e4e8eb;
       box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
       padding: 0 10px;
-      height: 35px;
+      height: 32px;
       img, i {
         color: #a1a6ab;
         margin: 0;

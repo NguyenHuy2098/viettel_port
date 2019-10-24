@@ -67,6 +67,16 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
+
+  useEffect((): void => {
+    if (selectedTaiIds.length > 0) {
+      setDisableFunctionalButton(false);
+    } else {
+      setDisableFunctionalButton(true);
+    }
+  }, [selectedTaiIds]);
+
   const handleSearchTai = (torId: string): void => {
     getListTaiChuaDongChuyenThu(1, torId);
   };
@@ -228,7 +238,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [selectedTaiIds],
+    [selectedTaiIds, listTaiChuaDongChuyenThu],
   );
 
   const handleSuccessChuyenThuAction = (): void => {
@@ -255,6 +265,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           onSuccess={handleSuccessChuyenThuAction}
         />
         <ButtonDongChuyenThu
+          disableButton={disableFunctionalButton}
           className="ml-2"
           diemDen={diemDen}
           listTaiKienCanGan={selectedTaiItems}

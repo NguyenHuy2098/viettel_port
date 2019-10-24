@@ -45,6 +45,7 @@ const HeaderSearch: React.FC<Props> = (props: Props): JSX.Element => {
           onSuccess: (): void => {
             if (includes(props.url, routesMap.THONG_TIN_DON_HANG_ORIGIN)) {
               dispatch(replace(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
+              window.location.reload();
             } else {
               dispatch(push(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang: searchValue })));
             }

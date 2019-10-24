@@ -314,6 +314,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     setShowPopUpDongBangKe(true);
   };
   const dongBangKeVaoTaiCoSan = (): void => {
+    debugger;
     dispatch(
       actionDongBanKeVaoTaiCoSan(
         { selectedTai, des, forwardingItemListState },
@@ -493,7 +494,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           {commLocGroup}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2">
+          {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
+          <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2 hide">
             <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>

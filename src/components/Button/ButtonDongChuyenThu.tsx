@@ -21,11 +21,21 @@ interface Props extends ButtonProps {
   listTaiKienCanRemove?: API.TITEM[];
   onSuccess?: () => void;
   onFailure?: (error: Error) => void;
+  disableButton?: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const ButtonDongChuyenThu = (props: Props): JSX.Element => {
-  const { diemDen, idChuyenThu, listTaiKienCanGan, listTaiKienCanRemove, onFailure, onSuccess, ...rest } = props;
+  const {
+    diemDen,
+    idChuyenThu,
+    listTaiKienCanGan,
+    listTaiKienCanRemove,
+    onFailure,
+    onSuccess,
+    disableButton,
+    ...rest
+  } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const userMaBp = useSelector(makeSelectorMaBP);
@@ -161,8 +171,11 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
     try {
       await removeTaiKien();
       await dongChuyenThu(torId);
-      toastSuccess(t('Đóng chuyến thư thành công.'));
-      onSuccess && onSuccess();
+      // issue: đóng CT xong gọi lại api047 listTải chưa lên ngay, phải delay lại 1s thì lên
+      setTimeout(function() {
+        toastSuccess(t('Đóng chuyến thư thành công.'));
+        onSuccess && onSuccess();
+      }, 1000);
     } catch (error) {
       if (error) {
         toastError(join(error.messages, ' '));
@@ -186,7 +199,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Button color="primary" onClick={handleDongChuyenThu} {...rest}>
+      <Button color="primary" onClick={handleDongChuyenThu} {...rest} disabled={disableButton}>
         {props.children || (
           <>
             {processing ? <i className="fa fa-spinner fa-spin mr-2" /> : <i className="fa fa-truck mr-2" />}
