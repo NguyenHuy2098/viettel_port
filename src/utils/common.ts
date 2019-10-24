@@ -1,3 +1,5 @@
+import { get, isEmpty, isObject } from 'lodash';
+
 export const cleanAccents = (str: string): string => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
   str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, 'e');
@@ -19,3 +21,24 @@ export const cleanAccents = (str: string): string => {
 
   return str;
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function transformXlsxRowToBangKeItem(row: any): API.ITEM {
+  if (isEmpty(row) || !isObject(row)) return {};
+  return {
+    AMOUNT: get(row, 'Hàng hóa, dịch vụ chưa thuế', ''),
+    DESCR: get(row, 'Hàng hóa, dịch vụ', ''),
+    KHOAN_MUC: get(row, 'Khoản mục chi phí', ''),
+    KIHIEU_HD: get(row, 'Ký hiệu hóa đơn', ''),
+    LINE_ITEM: get(row, '', ''),
+    MAU_HD: get(row, 'Mẫu hóa đơn', ''),
+    MST: get(row, 'Mã số thuế người bán', ''),
+    NGAY_HD: get(row, 'Ngày hóa đơn', ''),
+    NGUOI_BAN: get(row, 'Tên người bán', ''),
+    SO_HD: get(row, 'Số hóa đơn', ''),
+    SUM_AMOUNT: get(row, 'Tổng cộng', ''),
+    TAX: get(row, 'Thuế suất', ''),
+    TAX_AMOUNT: get(row, 'Thuế GTGT', ''),
+    URL: get(row, '', ''),
+  };
+}

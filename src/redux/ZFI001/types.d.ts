@@ -1,3 +1,3 @@
-interface ZFI001Response {
+interface ZFI001StateType {
   response: API.ZFI001Response;
 }

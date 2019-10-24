@@ -15,8 +15,9 @@ import ZTMI236 from './ZTMI236/reducers';
 import ZTMI240 from './ZTMI240/reducers';
 import ZTMI241 from './ZTMI241/reducers';
 import ZTMI213 from './ZTMI213/reducers';
-import ZFI002 from './ZFI002/reducers';
 import ZFI001 from './ZFI001/reducers';
+import ZFI002 from './ZFI002/reducers';
+import ZFI003 from './ZFI003/reducers';
 import ZFI007 from './ZFI007/reducers';
 
 interface RootState {
@@ -35,8 +36,9 @@ interface RootState {
   ZTMI240: MTZTMI240Row[];
   ZTMI241: API.MTZTMI241OUT;
   ZTMI213: ZTMI213StateType;
-  ZFI002: LISKBKStateType;
-  ZFI001: ZFI001Response;
+  ZFI001: ZFI001StateType;
+  ZFI002: ZFI002StateType;
+  ZFI003: ZFI003StateType;
   ZFI007: ZFI007Response;
 }
 
@@ -57,8 +59,9 @@ function createRootReducers(history: History): Reducer<RootState> {
     ZTMI240,
     ZTMI241,
     ZTMI213,
-    ZFI002,
     ZFI001,
+    ZFI002,
+    ZFI003,
     ZFI007,
   });
 }

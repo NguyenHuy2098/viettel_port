@@ -1,11 +1,23 @@
 import { get } from 'lodash';
-import { sapApiMap } from 'utils/apisMap';
-import { sapApi } from 'utils/request';
-import HttpRequestError from 'utils/HttpRequetsError';
 
-export async function post_ZFI003(payload: Partial<API.ZFI003Response>): Promise<API.ZFI003Response> {
+import { sapApiMap } from 'utils/apisMap';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import HttpRequestError from 'utils/HttpRequetsError';
+import { sapApi } from 'utils/request';
+import { select } from 'utils/stateHelpers';
+
+export async function post_ZFI003(payload: Partial<API.ZFI003Request>): Promise<API.ZFI003Response> {
+  const { header, ...rest } = payload;
   const { data } = await sapApi.post(sapApiMap.ZFI003, {
-    ...payload,
+    header: {
+      MA_BUU_CUC: select(makeSelectorMaBP),
+      USER_ID: select(makeSelectorPreferredUsername),
+      BK_MONTH: '',
+      BK_YEAR: '',
+      ...header,
+    },
+    item: [],
+    ...rest,
   });
   if (get(data, 'ErrorCode') === 0) return data;
   throw new HttpRequestError(data.ErrorCode, data.Messages);

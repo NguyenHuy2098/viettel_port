@@ -1,41 +1,44 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
+import ReactDatePicker from 'react-datepicker';
 import { Cell, Row as TableRow } from 'react-table';
+import { Button, Col, Row } from 'reactstrap';
 import XLSX, { WorkBook } from 'xlsx';
-import { get } from 'lodash';
+import { get, isEmpty, map } from 'lodash';
+import moment from 'moment';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
+import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
 import DataTable from 'components/DataTable/Grouped';
-import useLoggedInUser from 'hooks/useLoggedInUser';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
+import useLoggedInUser from 'hooks/useLoggedInUser';
+import { transformXlsxRowToBangKeItem } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
-  const { t } = useTranslation();
-  const [data, setData] = useState([]);
-
   const userLogin = useLoggedInUser();
+  const [data, setData] = useState<API.ITEM[]>([]);
+  const { t } = useTranslation();
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mẫu hợp đồng'),
-        accessor: 'Mẫu hóa đơn',
+        Header: t('Mẫu hoá đơn'),
+        accessor: 'MAU_HD',
       },
       {
         Header: t('Ký hiệu'),
-        accessor: 'Ký hiệu hóa đơn',
+        accessor: 'KIHIEU_HD',
       },
       {
         Header: t('Số'),
-        accessor: 'Số hóa đơn',
+        accessor: 'SO_HD',
       },
       {
         Header: t('Ngày'),
-        accessor: 'Ngày hóa đơn',
+        accessor: 'NGAY_HD',
       },
       {
         Header: t('Trạng thái'),
@@ -43,15 +46,15 @@ const TaoMoiBangKe = (): JSX.Element => {
       },
       {
         Header: t('Người bán'),
-        accessor: 'Tên người bán',
+        accessor: 'NGUOI_BAN',
       },
       {
         Header: t('MST'),
-        accessor: 'Mã số thuế người bán',
+        accessor: 'MST',
       },
       {
         Header: t('Hàng hoá'),
-        accessor: 'Hàng hóa, dịch vụ chưa thuế',
+        accessor: 'DESCR',
       },
       {
         Header: t('Quản trị'),
@@ -71,64 +74,37 @@ const TaoMoiBangKe = (): JSX.Element => {
   );
 
   const handleChangeFile = (workbook: WorkBook): void => {
-    const first_sheet_name = workbook.SheetNames[0];
-    setData(XLSX.utils.sheet_to_json(workbook.Sheets[first_sheet_name], { range: 2 }));
+    const firstSheetName = workbook.SheetNames[0];
+    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName], { range: 2 });
+    setData(map(sheetData, transformXlsxRowToBangKeItem));
   };
 
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <Button color="primary" className="ml-2">
-        <i className="fa fa-save mr-2" />
-        {t('Lưu')}
-      </Button>
-      <Button color="primary" className="ml-2">
+      <ButtonLuuBangKe className="ml-2" date={monthYear} disabled={isEmpty(data)} items={data} />
+      <Button color="primary" disabled={isEmpty(data)} className="ml-2">
         <i className="fa fa-send mr-2" />
         {t('Nộp')}
       </Button>
     </>
   );
 
-  const years = useMemo(() => Array.from(new Array(20), (val, index) => index + new Date().getFullYear()), []);
-
-  const [month, setMonth] = React.useState<string>('1');
-  function handleChangeMonth(e: React.FormEvent<HTMLInputElement>): void {
-    setMonth(e.currentTarget.value);
-  }
-
-  const [year, setYear] = React.useState<string>('2019');
-  function handleChangeYear(e: React.FormEvent<HTMLInputElement>): void {
-    setYear(e.currentTarget.value);
+  const [monthYear, setMonthYear] = React.useState<Date>(new Date());
+  function handleChangeMonthYear(date: Date): void {
+    setMonthYear(date);
   }
 
   const renderFilters = (): JSX.Element => (
     <div className="bg-white p-3 shadow-sm">
       <Row>
         <Col xs={12} md={3} xl={2}>
-          <FormGroup>
-            <Input type="select" name="select" id="exampleSelect" onChange={handleChangeMonth}>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-              <option>11</option>
-              <option>12</option>
-            </Input>
-          </FormGroup>
-        </Col>
-        <Col xs={12} md={3} xl={2}>
-          <FormGroup>
-            <Input type="select" name="select" id="exampleSelect" onChange={handleChangeYear}>
-              {years.map(year => {
-                return <option key={year}>{year}</option>;
-              })}
-            </Input>
-          </FormGroup>
+          <ReactDatePicker
+            className="form-control"
+            dateFormat="MM/yyyy"
+            onChange={handleChangeMonthYear}
+            selected={monthYear}
+            showMonthYearPicker
+          />
         </Col>
       </Row>
     </div>
@@ -143,7 +119,7 @@ const TaoMoiBangKe = (): JSX.Element => {
             {t('Trạng thái')}: {t('Tạo mới')}
           </div>
           <div>
-            {t('Kỳ')}: {`${month}/${year}`}
+            {t('Kỳ')}: {moment(monthYear).format('MM/YYYY')}
           </div>
         </Col>
         <Col>
