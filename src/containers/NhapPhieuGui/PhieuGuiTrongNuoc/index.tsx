@@ -278,9 +278,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
   const [hoTenSender, setHoTenSender] = useState<string>('');
   const [diaChiSender, setDiaChiSender] = useState<string>('');
-  const [provinceSender, setProvinceSender] = useState<string>('');
-  const [districtSender, setDistrictSender] = useState<string>('');
-  const [wardSender, setWardSender] = useState<string>('');
   const [provinceIdSender, setProvinceIdSender] = useState<string>('');
   const [districtIdSender, setDistrictIdSender] = useState<string>('');
   const [wardIdSender, setWardIdSender] = useState<string>('');
@@ -288,9 +285,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [dienThoaiReceiver, setDienThoaiReceiver] = useState<string>('');
   const [hoTenReceiver, setHoTenReceiver] = useState<string>('');
   const [diaChiReceiver, setDiaChiReceiver] = useState<string>('');
-  const [provinceReceiver, setProvinceReceiver] = useState<string>('');
-  const [districtReceiver, setDistrictReceiver] = useState<string>('');
-  const [wardReceiver, setWardReceiver] = useState<string>('');
   const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>('');
   const [districtIdReceiver, setDistrictIdReceiver] = useState<string>('');
   const [wardIdReceiver, setWardIdReceiver] = useState<string>('');
@@ -428,9 +422,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   function handleSenderAddressData(data: AddressPopupData): void {
-    setProvinceSender(data.province);
-    setDistrictSender(data.district);
-    setWardSender(data.ward);
     setProvinceIdSender(data.provinceId);
     setDistrictIdSender(data.districtId);
     setWardIdSender(data.wardId);
@@ -444,9 +435,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     }
   }
   function handleReceiverAddressData(data: AddressPopupData): void {
-    setProvinceReceiver(data.province);
-    setDistrictReceiver(data.district);
-    setWardReceiver(data.ward);
     setProvinceIdReceiver(data.provinceId);
     setDistrictIdReceiver(data.districtId);
     setWardIdReceiver(data.wardId);
@@ -511,9 +499,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceIdSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
       setDistrictIdSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
       setWardIdSender(toString(get(orderInformationInstane, 'WARD_ID_SOURCE', '')));
-      setProvinceSender(provinceSenderEdit);
-      setDistrictSender(districtSenderEdit);
-      setWardSender(wardSenderEdit);
       //__________________________________________________________
 
       setDienThoaiReceiver(get(orderInformationInstane, 'MOBILE_PHONE_DES', ''));
@@ -528,9 +513,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
-      setProvinceReceiver(provinceReceiverEdit);
-      setDistrictReceiver(districtReceiverEdit);
-      setWardReceiver(wardReceiverEdit);
       setTenHang(get(orderInformationInstane, 'ITEM_DESCRIPTION', ''));
       setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(2) : '');
       setGiaTri('');
@@ -1221,16 +1203,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setDienThoaiSender('');
     setHoTenSender('');
     setDiaChiSender('');
-    setProvinceSender('');
-    setDistrictSender('');
-    setWardSender('');
+    setProvinceIdSender('');
+    setDistrictIdSender('');
+    setWardIdSender('');
     setDetailAddressSender('');
     setDienThoaiReceiver('');
     setHoTenReceiver('');
     setDiaChiReceiver('');
-    setProvinceReceiver('');
-    setDistrictReceiver('');
-    setWardReceiver('');
+    setProvinceIdReceiver('');
+    setDistrictIdReceiver('');
+    setWardIdReceiver('');
     setDetailAddressReceiver('');
     setTenHang('');
     setSoLuong('');
@@ -1381,9 +1363,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               visible={modalSender}
               onChoose={handleSenderAddressData}
               onHide={toggleSenderAddress}
-              province={provinceSender}
-              district={districtSender}
-              ward={wardSender}
+              province={provinceIdSender}
+              district={districtIdSender}
+              ward={wardIdSender}
               detailAddress={detailAddressSender}
             />
           </Col>
@@ -1464,9 +1446,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               visible={modalReceiver}
               onChoose={handleReceiverAddressData}
               onHide={toggleReceiverAddress}
-              province={provinceReceiver}
-              district={districtReceiver}
-              ward={wardReceiver}
+              province={provinceIdReceiver}
+              district={districtIdReceiver}
+              ward={wardIdReceiver}
               detailAddress={detailAddressReceiver}
             />
           </Col>
@@ -1915,7 +1897,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <div className="display-block sipTitleRightBlock text-right sipOrderBtnSave">
         <Button className="ml-2" color="primary" onClick={handleClearData}>
-          <img className="mr-2" src={'../../assets/img/icon/iconRefresh.svg'} alt="VTPostek" />
+          <img className="mr-2" src={'../../assets/img/icon/iconRefreshWhite.svg'} alt="VTPostek" />
           {t('Làm mới')}
         </Button>
         <Button className="ml-2" color="primary" onClick={handleValidate}>

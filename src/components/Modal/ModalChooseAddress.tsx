@@ -117,18 +117,26 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     if (!props.province) {
       setProvince('0');
+    } else {
+      setProvince(props.province);
     }
     if (!props.district) {
       setDistrict('0');
+    } else {
+      setDistrict(props.district);
     }
     if (!props.ward) {
       setWard('0');
+    } else {
+      setWard(props.ward);
     }
     if (!props.detailAddress) {
       setDetailAddress('');
+    } else {
+      setDetailAddress(props.detailAddress);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible]);
+  }, [visible, props.province, props.district, props.ward, props.detailAddress]);
 
   useEffect((): void => {
     dispatch(
@@ -158,7 +166,7 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, visible]);
 
   const handleChangeProvince = (event: React.FormEvent<HTMLInputElement>): void => {
     setProvince(event.currentTarget.value);
