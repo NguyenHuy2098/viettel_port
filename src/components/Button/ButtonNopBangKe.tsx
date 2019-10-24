@@ -2,31 +2,37 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonProps } from 'reactstrap';
-import moment from 'moment';
+import { isFunction } from 'lodash';
 
-import { action_ZFI003 } from 'redux/ZFI003/actions';
+import { action_ZFI006 } from 'redux/ZFI006/actions';
+import { toastError } from '../Toast';
 
 interface Props extends ButtonProps {
-  date: Date;
-  items: API.ITEMBK[];
+  idBangKe: string;
+  onFailure?: (error: Error) => void;
+  onSuccess?: (data: API.ZFI006Response) => void;
 }
 
 const ButtonNopBangKe = (props: Props): JSX.Element => {
-  const { date, items, ...rest } = props;
+  const { idBangKe, onFailure, onSuccess, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
+  const handleFailure = (error: Error): void => {
+    toastError(error.message);
+    if (isFunction(onFailure)) onFailure(error);
+  };
+
   const handleNopBangKe = (): void => {
     dispatch(
-      action_ZFI003(
+      action_ZFI006(
         {
-          header: {
-            BK_MONTH: moment(date).format('MM'),
-            BK_YEAR: moment(date).format('YYYY'),
-          },
-          item: items,
+          BK_ID: idBangKe,
         },
-        {},
+        {
+          onFailure: handleFailure,
+          onSuccess,
+        },
         {},
       ),
     );

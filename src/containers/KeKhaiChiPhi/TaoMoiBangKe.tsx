@@ -1,24 +1,31 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
+import { useDispatch } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
 import { Button, Col, Row } from 'reactstrap';
-import XLSX, { WorkBook } from 'xlsx';
-import { get, isEmpty, map } from 'lodash';
+import { goBack } from 'connected-react-router';
+import { delay, get, isEmpty, map, sumBy } from 'lodash';
 import moment from 'moment';
+import numeral from 'numeral';
+import XLSX, { WorkBook } from 'xlsx';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
+import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import DataTable from 'components/DataTable/Grouped';
+import { toastSuccess } from 'components/Toast';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import useLoggedInUser from 'hooks/useLoggedInUser';
 import { transformXlsxRowToBangKeItem } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
+  const dispatch = useDispatch();
   const userLogin = useLoggedInUser();
   const [data, setData] = useState<API.ITEMBK[]>([]);
+  const [idBangKe, setIdBangKe] = useState<string>('');
   const { t } = useTranslation();
 
   const columns = useMemo(
@@ -60,11 +67,9 @@ const TaoMoiBangKe = (): JSX.Element => {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           return (
-            <>
-              <Button className="SipTableFunctionIcon">
-                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
-              </Button>
-            </>
+            <Button className="SipTableFunctionIcon">
+              <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
+            </Button>
           );
         },
       },
@@ -79,17 +84,35 @@ const TaoMoiBangKe = (): JSX.Element => {
     setData(map(sheetData, transformXlsxRowToBangKeItem));
   };
 
+  const handleLuuBangKeSuccess = (data: API.ZFI003Response): void => {
+    toastSuccess(t('Lưu bảng kê thành công. Bạn có thể nộp bảng kê.'));
+    setIdBangKe(get(data, 'MT_CRBK_RECEIVER.BK_ID'));
+  };
+
+  const handleNopBangKeSuccess = (): void => {
+    toastSuccess(t('Nộp bảng kê thành công.'));
+    delay(() => dispatch(goBack()), 2000);
+  };
+
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <ButtonLuuBangKe className="ml-2" date={monthYear} disabled={isEmpty(data)} items={data} />
-      <Button color="primary" disabled={isEmpty(data)} className="ml-2">
-        <i className="fa fa-send mr-2" />
-        {t('Nộp')}
-      </Button>
+      <ButtonLuuBangKe
+        className="ml-2"
+        date={monthYear}
+        disabled={isEmpty(data)}
+        items={data}
+        onSuccess={handleLuuBangKeSuccess}
+      />
+      <ButtonNopBangKe
+        className="ml-2"
+        disabled={isEmpty(idBangKe)}
+        idBangKe={idBangKe}
+        onSuccess={handleNopBangKeSuccess}
+      />
     </>
   );
 
-  const [monthYear, setMonthYear] = React.useState<Date>(new Date());
+  const [monthYear, setMonthYear] = useState<Date>(new Date());
   function handleChangeMonthYear(date: Date): void {
     setMonthYear(date);
   }
@@ -145,10 +168,14 @@ const TaoMoiBangKe = (): JSX.Element => {
     </>
   );
 
-  const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
+  const renderGroupedRow = (rows: TableRow<API.ITEMBK>[], index: string): JSX.Element => {
     return (
       <Row>
-        <Col>{index}</Col>
+        <Col>
+          {t('Chi phí')}&nbsp;
+          {index}&nbsp;({t('Tổng')}:{' '}
+          <span className="text-bold color-primary">{numeral(sumBy(rows, 'original.SUM_AMOUNT')).format('0,0')}</span>)
+        </Col>
         <Col>
           <div className="d-flex justify-content-end">
             <Button color="primary" className=" ml-2" outline>
@@ -191,12 +218,7 @@ const TaoMoiBangKe = (): JSX.Element => {
       <Row>
         <Col>
           <div className="sipTableContainer">
-            <DataTable
-              columns={columns}
-              data={data}
-              groupKey={'Khoản mục chi phí'}
-              renderGroupedRow={renderGroupedRow}
-            />
+            <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
           </div>
         </Col>
       </Row>
