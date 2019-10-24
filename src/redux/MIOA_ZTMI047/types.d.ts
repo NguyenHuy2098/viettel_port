@@ -39,8 +39,6 @@ interface PackageItemInputType {
   COD?: string | undefined;
   SERVICE_TYPE?: string;
   COMMODITY_CODE?: string;
-  COMODITY_CODE?: string;
-  COMODITY_TYPE?: string;
   COMMODITY_TYPE?: string;
 }
 

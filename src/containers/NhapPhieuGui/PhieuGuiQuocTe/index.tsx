@@ -536,8 +536,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     // );
     let newPackageItem011 = {
       COD: '',
-      COMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-      COMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+      COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+      COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
       Currency: '',
       Dimension_UoM: '',
       Goods_value: '',
@@ -556,8 +556,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       forEach(payloadPackageItemArr, (item: PackageItemInputType): void => {
         newPackageItem011 = {
           COD: '',
-          COMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-          COMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
           Currency: '',
           Dimension_UoM: '',
           Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',

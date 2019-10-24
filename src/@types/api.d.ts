@@ -158,8 +158,8 @@ declare namespace API {
     Weight_UoM?: string;
     Dimension_UoM?: string;
     quantity?: string;
-    Comodity_type?: string;
-    Comodity_code?: string;
+    Commodity_type?: string;
+    Commodity_code?: string;
   }
   export interface ItemZTMI012 {
     Flag?: string;
