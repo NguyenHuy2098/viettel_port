@@ -773,7 +773,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               const thisStreet = find(dataComponents, (item: Component): boolean => {
                 return item.type === 'STREET';
               });
-              setDetailAddressSender(get(thisStreet, 'name', ''));
+              const thisOther = find(dataComponents, (item: Component): boolean => {
+                return item.type === 'OTHER';
+              });
+              setDetailAddressSender(`${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`);
             },
             onFailure: (error: HttpRequestErrorType): void => {
               toast(
