@@ -5,6 +5,7 @@ import { Cell, Row as TableRow } from 'react-table';
 import { get, sumBy, toNumber } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import produce from 'immer';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
@@ -12,6 +13,7 @@ import useLoggedInUser from 'hooks/useLoggedInUser';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007, select_MT_DETAIL_RECEIVER_ZFI007 } from 'redux/ZFI007/selectors';
+import ThemMoiChiPhi from './ThemMoiChiPhi';
 
 interface Props {
   match: match;
@@ -21,7 +23,7 @@ interface Props {
 const SuaBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  // const [data, setData] = useState([]);
+  const [data, setData] = React.useState<API.LISTMTDETAILRECEIVER[]>([]);
 
   const userLogin = useLoggedInUser();
 
@@ -37,7 +39,10 @@ const SuaBangKe = (props: Props): JSX.Element => {
     dispatch(action_ZFI007(payloads));
   }, [dispatch, idBangKe]);
 
-  const data = useSelector(select_ZFI007);
+  const list = useSelector(select_ZFI007);
+  React.useEffect((): void => {
+    setData(list);
+  }, [list]);
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -192,20 +197,15 @@ const SuaBangKe = (props: Props): JSX.Element => {
     </>
   );
 
+  function handleSubmit(payload: API.LISTMTDETAILRECEIVER): void {
+    const nextState = produce(data, draftState => {
+      draftState.push(payload);
+    });
+    setData(nextState);
+  }
+
   const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
-    return (
-      <Row>
-        <Col>{index}</Col>
-        <Col>
-          <div className="d-flex justify-content-end">
-            <Button color="primary" className=" ml-2" outline>
-              <i className="fa fa-plus mr-2" />
-              {t('Thêm mới')}
-            </Button>
-          </div>
-        </Col>
-      </Row>
-    );
+    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmit} />;
   };
 
   return (
