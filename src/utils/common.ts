@@ -23,7 +23,7 @@ export const cleanAccents = (str: string): string => {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function transformXlsxRowToBangKeItem(row: any): API.ITEM {
+export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
   if (isEmpty(row) || !isObject(row)) return {};
   return {
     AMOUNT: get(row, 'Hàng hóa, dịch vụ chưa thuế', ''),
@@ -35,6 +35,7 @@ export function transformXlsxRowToBangKeItem(row: any): API.ITEM {
     MST: get(row, 'Mã số thuế người bán', ''),
     NGAY_HD: get(row, 'Ngày hóa đơn', ''),
     NGUOI_BAN: get(row, 'Tên người bán', ''),
+    PHU_PHI: get(row, 'Phụ phí', ''),
     SO_HD: get(row, 'Số hóa đơn', ''),
     SUM_AMOUNT: get(row, 'Tổng cộng', ''),
     TAX: get(row, 'Thuế suất', ''),

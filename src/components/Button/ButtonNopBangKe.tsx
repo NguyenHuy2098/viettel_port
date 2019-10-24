@@ -11,12 +11,12 @@ interface Props extends ButtonProps {
   items: API.ITEMBK[];
 }
 
-const ButtonLuuBangKe = (props: Props): JSX.Element => {
+const ButtonNopBangKe = (props: Props): JSX.Element => {
   const { date, items, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const handleLuuBangKe = (): void => {
+  const handleNopBangKe = (): void => {
     dispatch(
       action_ZFI003(
         {
@@ -33,11 +33,11 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
   };
 
   return (
-    <Button color="primary" onClick={handleLuuBangKe} {...rest}>
-      <i className="fa fa-save mr-2" />
-      {t('Lưu')}
+    <Button color="primary" onClick={handleNopBangKe} {...rest}>
+      <i className="fa fa-send mr-2" />
+      {t('Nộp')}
     </Button>
   );
 };
 
-export default ButtonLuuBangKe;
+export default ButtonNopBangKe;

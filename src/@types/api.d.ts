@@ -62,7 +62,7 @@ declare namespace API {
     CRE_TIME?: string;
     UDP_TIME?: string;
   }
-  export interface ITEM {
+  export interface ITEMBK {
     LINE_ITEM?: string;
     KHOAN_MUC?: string;
     MAU_HD?: string;
@@ -73,6 +73,7 @@ declare namespace API {
     MST?: string;
     DESCR?: string;
     AMOUNT?: string;
+    PHU_PHI?: string;
     TAX?: string;
     TAX_AMOUNT?: string;
     SUM_AMOUNT?: string;
@@ -102,23 +103,6 @@ declare namespace API {
      * Mô tả chi tiết lỗi
      */
     CONTENT?: string;
-  }
-  export interface ITEMUPDATEBK {
-    LINE_ITEM?: string;
-    KHOAN_MUC?: string;
-    MAU_HD?: string;
-    KIHIEU_HD?: string;
-    SO_HD?: string;
-    NGAY_HD?: string;
-    NGUOI_BAN?: string;
-    MST?: string;
-    DESCR?: string;
-    AMOUNT?: string;
-    PHU_PHI?: string;
-    TAX?: string;
-    TAX_AMOUNT?: string;
-    SUM_AMOUNT?: string;
-    URL?: string;
   }
   export interface ITFDELIVERY {
     CODE?: string;
@@ -2849,7 +2833,7 @@ declare namespace API {
   }
   export interface ZFI003Request {
     header?: HEADER;
-    item?: ITEM[];
+    item?: ITEMBK[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -2884,7 +2868,7 @@ declare namespace API {
     BK_ID?: string;
     MA_BUU_CUC?: string;
     USER_ID?: string;
-    item?: ITEMUPDATEBK[];
+    item?: ITEMBK[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -3635,7 +3619,7 @@ declare namespace Paths {
       export type $200 = Definitions.SIOZTMI028Response;
     }
   }
-  namespace LocationSearch {
+  namespace SearchLocation {
     export interface BodyParameters {
       request?: Parameters.Request;
     }

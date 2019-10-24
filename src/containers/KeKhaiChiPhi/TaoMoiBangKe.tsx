@@ -18,7 +18,7 @@ import { transformXlsxRowToBangKeItem } from 'utils/common';
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
   const userLogin = useLoggedInUser();
-  const [data, setData] = useState<API.ITEM[]>([]);
+  const [data, setData] = useState<API.ITEMBK[]>([]);
   const { t } = useTranslation();
 
   const columns = useMemo(
