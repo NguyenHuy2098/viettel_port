@@ -199,6 +199,10 @@ const TaoMoiBangKe = Loadable({
   loader: (): any => import('containers/KeKhaiChiPhi/TaoMoiBangKe'),
   loading: Loading,
 });
+const SuaBangKe = Loadable({
+  loader: (): any => import('containers/KeKhaiChiPhi/SuaBangKe'),
+  loading: Loading,
+});
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function
@@ -206,6 +210,7 @@ const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
   return [
     { path: routesMap.ROOT, exact: true, name: t('Root'), component: RedirectToHome },
     { path: routesMap.HOME, exact: true, name: t('Home'), component: Home },
+    { path: routesMap.SUA_BANG_KE, exact: true, name: t('Sửa bảng kê'), component: SuaBangKe },
     {
       path: routesMap.NHAP_PHIEU_GUI_TRONG_NUOC,
       exact: true,

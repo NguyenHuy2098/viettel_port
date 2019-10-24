@@ -61,6 +61,7 @@ export const TIEP_XUC_KHACH_HANG = `${KHACH_HANG}/tiep-xuc-khach-hang`;
 
 export const KE_KHAI_CHI_PHI = `/ke-khai-chi-phi`;
 export const TAO_MOI_BANG_KE = `${KE_KHAI_CHI_PHI}/tao-moi-bang-ke`;
+export const SUA_BANG_KE = `${KE_KHAI_CHI_PHI}/sua-bang-ke/:idBangKe`;
 
 export default {
   ROOT: '/',
@@ -155,4 +156,5 @@ export default {
    */
   KE_KHAI_CHI_PHI,
   TAO_MOI_BANG_KE,
+  SUA_BANG_KE,
 };

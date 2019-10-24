@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { match } from 'react-router-dom';
+import { match, generatePath } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { get, map, size, toString } from 'lodash';
 import { Button, Col, Input, Row, Label } from 'reactstrap';
@@ -45,9 +45,11 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
 
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
+
   function toggleDeleteConfirmModal(): void {
     setDeleteConfirmModal(!deleteConfirmModal);
   }
+
   function handleDeleteItem(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       event.stopPropagation();
@@ -234,6 +236,14 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     [dataTable],
   );
 
+  const handleRedirectDetail = React.useCallback(
+    (item: API.ListMTBKRECEIVER): void => {
+      dispatch(push(generatePath(routesMap.SUA_BANG_KE, { idBangKe: item.BK_ID })));
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  );
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -289,7 +299,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       </Row>
 
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={dataTable} />
+        <DataTable columns={columns} data={dataTable} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

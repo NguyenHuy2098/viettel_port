@@ -30,6 +30,7 @@ const sapApis = [
   'ZFI002',
   'ZFI004',
   'ZFI001',
+  'ZFI007',
 ];
 
 const crmApis = ['suggest'];

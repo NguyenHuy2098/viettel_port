@@ -17,6 +17,7 @@ import ZTMI241 from './ZTMI241/reducers';
 import ZTMI213 from './ZTMI213/reducers';
 import ZFI002 from './ZFI002/reducers';
 import ZFI001 from './ZFI001/reducers';
+import ZFI007 from './ZFI007/reducers';
 
 interface RootState {
   auth: UserState;
@@ -36,6 +37,7 @@ interface RootState {
   ZTMI213: ZTMI213StateType;
   ZFI002: LISKBKStateType;
   ZFI001: ZFI001Response;
+  ZFI007: ZFI007Response;
 }
 
 function createRootReducers(history: History): Reducer<RootState> {
@@ -57,6 +59,7 @@ function createRootReducers(history: History): Reducer<RootState> {
     ZTMI213,
     ZFI002,
     ZFI001,
+    ZFI007,
   });
 }
 
