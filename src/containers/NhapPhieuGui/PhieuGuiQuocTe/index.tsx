@@ -24,6 +24,7 @@ import {
   toString,
   trim,
 } from 'lodash';
+import numeral from 'numeral';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
@@ -322,10 +323,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
-    GOODS_VALUE: giaTri,
-    GROSS_WEIGHT: trongLuong,
+    GOODS_VALUE: getValueOfNumberFormat(giaTri),
+    GROSS_WEIGHT: getValueOfNumberFormat(trongLuong),
     PACKAGING_MATERIAL: '',
-    QUANTITY_OF_PACKAGE: soLuong,
+    QUANTITY_OF_PACKAGE: getValueOfNumberFormat(soLuong),
     Description: trim(tenHang),
     NET_WEIGHT_OF_UNIT: '',
     Currency: '',
@@ -408,9 +409,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     hoTenReceiver: trim(hoTenReceiver),
     diaChiReceiver: trim(diaChiReceiver),
     tenHang: trim(tenHang),
-    soLuong: trim(soLuong) === '' ? undefined : trim(soLuong),
-    giaTri: trim(giaTri) === '' ? undefined : trim(giaTri),
-    trongLuong: trim(trongLuong) === '' ? undefined : trim(trongLuong),
+    soLuong: trim(soLuong) === '' ? undefined : getValueOfNumberFormat(trim(soLuong)),
+    giaTri: trim(giaTri) === '' ? undefined : getValueOfNumberFormat(trim(giaTri)),
+    trongLuong: trim(trongLuong) === '' ? undefined : getValueOfNumberFormat(trim(trongLuong)),
     //_____non-validated items
     loaiHangHoa: trim(loaiHangHoa),
   };
@@ -1315,6 +1316,20 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  function getValueOfNumberFormat(value: string): string {
+    if (isNaN(parseFloat(value))) {
+      return value;
+    } else {
+      return numeral(value)
+        .value()
+        .toString();
+    }
+  }
+
+  function numberFormat(value: string): string {
+    return value ? numeral(value).format('0,0') : '';
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderPackageInfoDetail(): JSX.Element {
     return (
@@ -1357,7 +1372,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập giá trị (đ)')}
-              value={giaTri}
+              value={numberFormat(giaTri)}
               onChange={handleChangeTextboxValue(setGiaTri)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
@@ -1372,7 +1387,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Số lượng')}
-              value={soLuong}
+              value={numberFormat(soLuong)}
               onChange={handleChangeTextboxValue(setSoLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuong')}</div>
@@ -1387,7 +1402,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              value={trongLuong}
+              value={numberFormat(trongLuong)}
               onChange={handleChangeTextboxValue(setTrongLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
