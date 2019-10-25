@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
-import { Container, Row, Table } from 'reactstrap';
+import { Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
 import { groupBy, isEmpty, isFunction, map, noop, size, toString } from 'lodash';
 
-import noData from './no-data.svg';
+import NoData from './NoData';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface Props extends TableOptions<any> {
@@ -81,16 +81,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
           ))}
         </tbody>
       </Table>
-      {isEmpty(rows) && (
-        <Container fluid>
-          <Row className="align-items-center flex-column mb-3">
-            <img alt="no-data" className="w-auto" src={noData} />
-          </Row>
-          <Row className="align-items-center flex-column">
-            <span className="text-bold text-uppercase">{t('Không tìm thấy dữ liệu')}</span>
-          </Row>
-        </Container>
-      )}
+      {isEmpty(rows) && <NoData />}
     </>
   );
 };
