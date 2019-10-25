@@ -75,7 +75,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Trạng thái'),
         accessor: 'STATUS_ITEM',
-        Cell: ({ row }: Cell<API.Child>): string => {
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           const status = get(row, 'original.STATUS_ITEM', '');
           return formatStatusItem(status);
         },
@@ -118,7 +118,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
           return (
             <>
               <Button className="SipTableFunctionIcon">
