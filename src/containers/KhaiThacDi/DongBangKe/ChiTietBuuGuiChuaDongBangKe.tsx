@@ -6,7 +6,7 @@ import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
 import { Badge, Button, Col, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classNames from 'classnames';
-import { forEach, get, size, toString, trim } from 'lodash';
+import { forEach, get, isEmpty, size, toString, trim } from 'lodash';
 import { Location } from 'history';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -314,40 +314,39 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     setShowPopUpDongBangKe(true);
   };
   const dongBangKeVaoTaiCoSan = (): void => {
-    debugger;
-    dispatch(
-      actionDongBanKeVaoTaiCoSan(
-        { selectedTai, des, forwardingItemListState },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-            reset();
+    if (!isEmpty(selectedTai)) {
+      dispatch(
+        actionDongBanKeVaoTaiCoSan(
+          { selectedTai, des, forwardingItemListState },
+          {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  type: 'success',
+                },
+              );
+              reset();
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  type: 'error',
+                },
+              );
+            },
           },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-          onFinish: (): void => {
-            handleHidePopupDongBangKe();
-          },
-        },
-      ),
-    );
+        ),
+      );
+    }
+    handleHidePopupDongBangKe();
   };
   const dongBangKeVaoTaiMoiTao = (locNo: string, description: string): void => {
     dispatch(
@@ -398,36 +397,38 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   };
 
   const dongTaiVaoChuyenThuCoSan = (): void => {
-    dispatch(
-      actionDongTaiVaoChuyenThuCoSan(
-        { selectedChuyenThu, forwardingItemListState, des },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-            reset();
+    if (!isEmpty(selectedChuyenThu)) {
+      dispatch(
+        actionDongTaiVaoChuyenThuCoSan(
+          { selectedChuyenThu, forwardingItemListState, des },
+          {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                </>,
+                {
+                  type: 'success',
+                },
+              );
+              reset();
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  type: 'error',
+                },
+              );
+            },
           },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
+        ),
+      );
+    }
     handleHidePopupDongTai();
   };
 
@@ -494,8 +495,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           {commLocGroup}
         </h1>
         <div className="sipTitleRightBlock">
-          {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
-          <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2 hide">
+          <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2">
             <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>
