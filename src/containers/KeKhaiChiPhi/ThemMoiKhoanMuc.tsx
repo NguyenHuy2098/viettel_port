@@ -8,8 +8,12 @@ import { select_ZFI001 } from 'redux/ZFI001/selectors';
 import { get } from 'lodash';
 import { cleanAccents } from 'utils/common';
 
+interface Props {
+  handleSubmit?: Function;
+}
+
 // eslint-disable-next-line max-lines-per-function
-function ThemMoiKhoanMuc(): JSX.Element {
+function ThemMoiKhoanMuc(props: Props): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
@@ -47,8 +51,15 @@ function ThemMoiKhoanMuc(): JSX.Element {
             return (
               <div className="pr-0 pl-0 pt-2 pb-2 col-12 border-bottom" key={item.km_id}>
                 <label className="pl-0 pr-0 form-check-label col-12 col-form-label">
-                  <input name="packageType" type="radio" className="form-check-input" value="V3" /> {item.km_id} -{' '}
-                  {item.km_text}
+                  <input
+                    // eslint-disable-next-line react/jsx-no-bind
+                    onClick={(): void => handleSelectKhoanMuc(item)}
+                    name="packageType"
+                    type="radio"
+                    className="form-check-input"
+                    value="V3"
+                  />{' '}
+                  {item.km_id} - {item.km_text}
                 </label>
               </div>
             );
@@ -61,6 +72,16 @@ function ThemMoiKhoanMuc(): JSX.Element {
   const [themKhoanMuc, setThemKhoanMuc] = React.useState<boolean>(false);
   function handleThemKhoanMuc(): void {
     setThemKhoanMuc(!themKhoanMuc);
+  }
+
+  const [itemSelect, setItemSelect] = React.useState<API.LIST | null>(null);
+  function handleSelectKhoanMuc(item: API.LIST): void {
+    setItemSelect(item);
+  }
+
+  function handleSubmit(): void {
+    props.handleSubmit && props.handleSubmit(itemSelect);
+    setThemKhoanMuc(false);
   }
 
   return (
@@ -81,7 +102,7 @@ function ThemMoiKhoanMuc(): JSX.Element {
           <Scrollbars style={{ height: 300 }}>{renderAddNewItem()}</Scrollbars>
         </ModalBody>
         <ModalFooter className="footer-no-boder">
-          <button type="button" className="btn btn-primary btn-lg">
+          <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit}>
             Thêm
           </button>
         </ModalFooter>

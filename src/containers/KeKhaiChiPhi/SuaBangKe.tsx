@@ -44,6 +44,15 @@ const SuaBangKe = (props: Props): JSX.Element => {
     setData(list);
   }, [list]);
 
+  function formatStatusItem(status: number): string {
+    let statusItem = '';
+    if (status === 0) statusItem = 'Tạo mới';
+    if (status === 1) statusItem = 'Chờ phê duyệt';
+    if (status === 2) statusItem = 'Phê duyệt';
+    if (status === 3) statusItem = 'Duyệt 1 phần';
+    return statusItem;
+  }
+
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
@@ -66,6 +75,10 @@ const SuaBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Trạng thái'),
         accessor: 'STATUS_ITEM',
+        Cell: ({ row }: Cell<API.Child>): string => {
+          const status = get(row, 'original.STATUS_ITEM', '');
+          return formatStatusItem(status);
+        },
       },
       {
         Header: t('Người bán'),
@@ -78,6 +91,30 @@ const SuaBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Hàng hoá'),
         accessor: 'DESCR',
+      },
+      {
+        Header: t('Giá chưa thuế'),
+        accessor: 'AMOUNT',
+      },
+      {
+        Header: t('Phụ phí'),
+        accessor: 'PHU_PHI',
+      },
+      {
+        Header: t('TS'),
+        accessor: 'TAX',
+      },
+      {
+        Header: t('Thuế GTGT'),
+        accessor: 'TAX_AMOUNT',
+      },
+      {
+        Header: t('Tổng'),
+        accessor: 'SUM_AMOUNT',
+      },
+      {
+        Header: t('Link URL'),
+        accessor: 'URL',
       },
       {
         Header: t('Quản trị'),
@@ -191,15 +228,18 @@ const SuaBangKe = (props: Props): JSX.Element => {
     </div>
   );
 
-  const renderSecondControllers = (): JSX.Element => (
-    <>
-      <ThemMoiKhoanMuc />
-    </>
-  );
+  function handleSubmitKhoanMuc(item: API.LIST): void {
+    const nextState = produce(data, draftState => {
+      draftState.unshift({ TEN_KM: item.km_text });
+    });
+    setData(nextState);
+  }
+
+  const renderSecondControllers = (): JSX.Element => <ThemMoiKhoanMuc handleSubmit={handleSubmitKhoanMuc} />;
 
   function handleSubmit(payload: API.LISTMTDETAILRECEIVER): void {
     const nextState = produce(data, draftState => {
-      draftState.push(payload);
+      draftState.unshift(payload);
     });
     setData(nextState);
   }

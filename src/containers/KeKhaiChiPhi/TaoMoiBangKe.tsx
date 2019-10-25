@@ -9,6 +9,7 @@ import { delay, get, isEmpty, map, sumBy } from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
 import XLSX, { WorkBook } from 'xlsx';
+import produce from 'immer';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
@@ -62,6 +63,30 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Hàng hoá'),
         accessor: 'DESCR',
+      },
+      {
+        Header: t('Giá chưa thuế'),
+        accessor: 'AMOUNT',
+      },
+      {
+        Header: t('Phụ phí'),
+        accessor: 'PHU_PHI',
+      },
+      {
+        Header: t('TS'),
+        accessor: 'TAX',
+      },
+      {
+        Header: t('Thuế GTGT'),
+        accessor: 'TAX_AMOUNT',
+      },
+      {
+        Header: t('Tổng'),
+        accessor: 'SUM_AMOUNT',
+      },
+      {
+        Header: t('Link URL'),
+        accessor: 'URL',
       },
       {
         Header: t('Quản trị'),
@@ -161,10 +186,17 @@ const TaoMoiBangKe = (): JSX.Element => {
     </div>
   );
 
+  function handleSubmit(item: API.LIST): void {
+    const nextState = produce(data, draftState => {
+      draftState.unshift({ KHOAN_MUC: item.km_text });
+    });
+    setData(nextState);
+  }
+
   const renderSecondControllers = (): JSX.Element => (
     <>
       <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} />
-      <ThemMoiKhoanMuc />
+      <ThemMoiKhoanMuc handleSubmit={handleSubmit} />
     </>
   );
 
