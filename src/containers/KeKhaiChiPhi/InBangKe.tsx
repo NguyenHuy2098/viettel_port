@@ -2,15 +2,34 @@
 import React from 'react';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+// import { Cell } from 'react-table';
+// import { ceil, get, isEmpty } from 'lodash';
+import { action_ZFI007 } from 'redux/ZFI007/actions';
+import { select_ZFI007 } from 'redux/ZFI007/selectors';
+// import DataTable from 'components/DataTable';
+import { useDispatch, useSelector } from 'react-redux';
 
 // eslint-disable-next-line max-lines-per-function
 const InBangKe = (): JSX.Element => {
   const { t } = useTranslation();
   const [modal, setModal] = React.useState(false);
+  const dispatch = useDispatch();
 
   function toggle(): void {
     setModal(!modal);
   }
+
+  React.useEffect(() => {
+    const payload = {
+      MA_BUU_CUC: 'BDH',
+      BK_ID: 'CPTX_2019_0001',
+      IV_PAGENO: '1',
+      IV_NO_PER_PAGE: '10',
+    };
+    dispatch(action_ZFI007(payload));
+  }, [dispatch]);
+
+  const data = useSelector(select_ZFI007);
 
   // eslint-disable-next-line max-lines-per-function
   function renderTable(): JSX.Element {
@@ -72,26 +91,32 @@ const InBangKe = (): JSX.Element => {
           <tr>
             <th colSpan={18}> 0324 - Chi phí bằng tiền khác</th>
           </tr>
-          <tr>
-            <td> 1</td>
-            <td> 31AA / 18P</td>
-            <td> 27 / 04 / 2019</td>
-            <td> 0016341</td>
-            <td> Nguyen Van Lan</td>
-            <td> 0021543584</td>
-            <td> Thanh toán chi phí đổ mực, thay thế linh kiện máy in T4 / 2019</td>
-            <td> 600, 000</td>
-            <td> 0</td>
-            <td> 0 %</td>
-            <td>0</td>
-            <td>600,000</td>
-            <td> 500, 000</td>
-            <td> 0</td>
-            <td> 0</td>
-            <td> 500, 000</td>
-            <td> 100000</td>
-            <td> Quá hạn mức</td>
-          </tr>
+          {data.map(
+            (item: API.LISTMTDETAILRECEIVER, index: number): JSX.Element => {
+              return (
+                <tr key={index}>
+                  <td>{item.LINE_ITEM}</td>
+                  <td>{item.KIHIEU_HD}</td>
+                  <td>{item.NGAY_HD}</td>
+                  <td>{item.SO_HD}</td>
+                  <td>{item.NGUOI_BAN}</td>
+                  <td>{item.MST}</td>
+                  <td>{item.DESCR}</td>
+                  <td>{item.AMOUNT}</td>
+                  <td>{item.PHU_PHI}</td>
+                  <td>{item.TAX}</td>
+                  <td>{item.TAX_AMOUNT}</td>
+                  <td>{item.SUM_AMOUNT}</td>
+                  <td>{item.AMOUNT_INIT}</td>
+                  <td>{item.PHU_PHI_INIT}</td>
+                  <td>{item.TAX_AMOUNT_INIT}</td>
+                  <td>{item.LINE_ITEM}</td>
+                  <td>{item.LINE_ITEM}</td>
+                  <td>{item.LINE_ITEM}</td>
+                </tr>
+              );
+            },
+          )}
           <tr>
             <td></td>
             <td></td>
