@@ -14,8 +14,8 @@ import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
 
 interface Props {
-  disableButtonDongTai: boolean;
-  listUncheckForwardingItem: ForwardingItem[];
+  disabled: boolean;
+  listUncheckForwardingItem: API.TITEM[];
   idBangKe: string;
   callBackAfterRemovePhieuGui: () => void;
   callBackAfterDongTai: () => void;
@@ -25,7 +25,7 @@ interface Props {
 const ButtonDongTai: React.FC<Props> = ({
   callBackAfterRemovePhieuGui,
   callBackAfterDongTai,
-  disableButtonDongTai,
+  disabled,
   listUncheckForwardingItem,
   idBangKe,
 }: Props): JSX.Element => {
@@ -453,7 +453,7 @@ const ButtonDongTai: React.FC<Props> = ({
 
   return (
     <>
-      <Button color="primary" className="ml-2" disabled={disableButtonDongTai} onClick={openModal}>
+      <Button color="primary" className="ml-2" disabled={disabled} onClick={openModal}>
         <img src={'../../assets/img/icon/iconDongTai.svg'} alt="VTPostek" />
         {t('Đóng tải')}
       </Button>

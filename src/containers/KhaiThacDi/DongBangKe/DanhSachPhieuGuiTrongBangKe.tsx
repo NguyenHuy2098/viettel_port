@@ -1,11 +1,11 @@
 /* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
-import { forEach, get, includes, map, noop, size } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { Button, Col, Row } from 'reactstrap';
+import { forEach, get, includes, map, noop, size } from 'lodash';
 import moment from 'moment';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -16,15 +16,13 @@ import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import FadedNoData from 'components/NoData/FadedNodata';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Scan from 'components/Input/Scan';
-import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
+import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
-
-const forwardingItemList: ForwardingItem[] = [];
 
 interface Props {
   match: match;
@@ -34,37 +32,23 @@ interface Props {
 const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
-  const [disableButtonDongBangKe, setDisableButtonDongBangKe] = useState<boolean>(true);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
+  const [checkedBuuGui, setCheckedBuuGui] = useState<API.TITEM[]>([]);
+  const [uncheckedBuuGui, setUncheckedBuuGui] = useState<API.TITEM[]>([]);
+  const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
 
-  const payload046 = {
-    IV_TOR_ID: idBangKe,
-    IV_PAGENO: '1',
-    IV_NO_PER_PAGE: '10',
+  const resetState = (): void => {
+    setCheckedBuuGui([]);
+    setUncheckedBuuGui([]);
+    getListPhieuGui();
   };
 
   const getListPhieuGui = (): void => {
-    dispatch(action_MIOA_ZTMI046(payload046));
-  };
-
-  //_______________________SelectForwardingItemModal
-
-  const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
-  const [listUncheckForwardingItem, setListUncheckForwardingItem] = useState<ForwardingItem[]>([]);
-  const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
-  const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
-    undefined,
-  );
-  const resetState = (): void => {
-    setForwardingItemListState([]);
-    setListUncheckForwardingItem([]);
-    setUncheckAllForwardingItemCheckbox(false);
-    getListPhieuGui();
+    dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idBangKe }));
   };
 
   const getListDiemDen = (): void => {
@@ -101,22 +85,14 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     getListDiemDen();
     getListChuyenThu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
-
-  useEffect((): void => {
-    if (forwardingItemListState.length > 0) {
-      setDisableButtonDongBangKe(false);
-    } else {
-      setDisableButtonDongBangKe(true);
-    }
-  }, [forwardingItemListState]);
+  }, []);
 
   function toggleSelectForwardingItemModal(): void {
     setSelectForwardingItemModal(!selectForwardingItemModal);
   }
 
   function handleChuyenVaoBangKe(): void {
-    if (size(forwardingItemListState) > 0) {
+    if (size(checkedBuuGui) > 0) {
       toggleSelectForwardingItemModal();
     } else {
       alert(t('Vui lòng chọn phiếu gửi!'));
@@ -124,52 +100,9 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   }
 
   function onSuccessSelectedForwardingItem(): void {
-    dispatch(action_MIOA_ZTMI046(payload046));
-    setUncheckAllForwardingItemCheckbox(false);
-    setForwardingItemListState([]);
+    getListPhieuGui();
+    setCheckedBuuGui([]);
   }
-
-  function handleSelectBangKeItem(event: React.FormEvent<HTMLInputElement>): void {
-    event.stopPropagation();
-    const value = event.currentTarget.value;
-    setUncheckAllForwardingItemCheckbox(undefined);
-    if (event.currentTarget.checked) {
-      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: '' });
-    } else {
-      forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
-        if (get(item, 'ITEM_ID') === value) {
-          forwardingItemList.splice(index, 1);
-        }
-      });
-    }
-    setForwardingItemListState([...forwardingItemList]);
-  }
-
-  function isForwardingItemSelected(item: API.Child, listForwardingItemId: string[]): boolean {
-    return includes(listForwardingItemId, item.TOR_ID);
-  }
-
-  useEffect((): void => {
-    const listForwardingItemId = map(forwardingItemListState, item => item.ITEM_ID);
-    const unSelectListForwardingItem: API.Child[] = [];
-    forEach(dataBangKeChild, item => {
-      if (!isForwardingItemSelected(item, listForwardingItemId)) {
-        unSelectListForwardingItem.push(item);
-      }
-    });
-
-    // listUncheckForwardingItem
-    const tempListUncheckForwardingItem: ForwardingItem[] = map(
-      unSelectListForwardingItem,
-      (item: API.Child): ForwardingItem => ({
-        ITEM_ID: item.TOR_ID || '',
-        ITEM_TYPE: '',
-      }),
-    );
-
-    setListUncheckForwardingItem(tempListUncheckForwardingItem);
-  }, [forwardingItemListState, dataBangKeChild]);
-  //_____________________________________________________________________
 
   function toggleDeleteConfirmModal(): void {
     setDeleteConfirmModal(!deleteConfirmModal);
@@ -184,29 +117,28 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   }
 
   const handleDeleteForwardingOrder = (torId: string): void => {
-    const payload = {
-      IV_FLAG: IV_FLAG.XOA,
-      IV_TOR_ID_CU: torId,
-      IV_SLOCATION: '',
-      IV_DLOCATION: '',
-      IV_DESCRIPTION: '',
-      T_ITEM: [
-        {
-          ITEM_ID: '',
-          ITEM_TYPE: '',
-        },
-      ],
-    };
     dispatch(
-      action_MIOA_ZTMI016(payload, {
-        onSuccess: (): void => {
-          alert(t('Xóa thành công!'));
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: IV_FLAG.XOA,
+          IV_TOR_ID_CU: torId,
+          T_ITEM: [
+            {
+              ITEM_ID: '',
+              ITEM_TYPE: '',
+            },
+          ],
         },
-        onFailure: (error: HttpRequestErrorType): void => {
-          alert(error.messages);
+        {
+          onSuccess: (): void => {
+            alert(t('Xóa thành công!'));
+          },
+          onFailure: (error: HttpRequestErrorType): void => {
+            alert(error.messages);
+          },
+          onFinish: (): void => getListPhieuGui(),
         },
-        onFinish: (): void => getListPhieuGui(),
-      }),
+      ),
     );
   };
 
@@ -214,6 +146,22 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     getListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idBangKe]);
+
+  const handleCheckedBuuGuiChange = (values: string[]): void => {
+    const newCheckedBuuGui: API.TITEM[] = [];
+    const newUncheckedBuuGui: API.TITEM[] = [];
+    forEach(dataBangKeChild, (child: API.Child): void => {
+      const childId = get(child, 'TOR_ID');
+      const tItem: API.TITEM = { ITEM_ID: childId, ITEM_TYPE: '' };
+      if (includes(values, childId)) {
+        newCheckedBuuGui.push(tItem);
+      } else {
+        newUncheckedBuuGui.push(tItem);
+      }
+    });
+    setCheckedBuuGui(newCheckedBuuGui);
+    setUncheckedBuuGui(newUncheckedBuuGui);
+  };
 
   // eslint-disable-next-line max-lines-per-function
   function renderTitle(): JSX.Element {
@@ -227,25 +175,24 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
-          {/*________________temporary hide btn Chuyển because of lack of requirement____________*/}
           <Button
             color="primary"
             className="hide ml-2"
             onClick={handleChuyenVaoBangKe}
-            disabled={disableButtonDongBangKe}
+            disabled={size(checkedBuuGui) === 0}
           >
             <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>
           <ButtonDongBangKe
-            disableButtonDongBangKe={disableButtonDongBangKe}
-            listUncheckForwardingItem={listUncheckForwardingItem}
+            disabled={size(checkedBuuGui) === 0}
+            listUncheckForwardingItem={uncheckedBuuGui}
             idBangKe={idBangKe}
             callBackAfterDongBangKe={resetState}
           />
           <ButtonDongTai
-            disableButtonDongTai={disableButtonDongBangKe}
-            listUncheckForwardingItem={listUncheckForwardingItem}
+            disabled={size(checkedBuuGui) === 0}
+            listUncheckForwardingItem={uncheckedBuuGui}
             idBangKe={idBangKe}
             callBackAfterRemovePhieuGui={getListPhieuGui}
             callBackAfterDongTai={resetState}
@@ -326,22 +273,6 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     //eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'TOR_ID',
-        accessor: 'TOR_ID',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          return (
-            <Label check>
-              <Input
-                defaultChecked={uncheckAllForwardingItemCheckbox}
-                type="checkbox"
-                value={get(row, 'values.TOR_ID', '')}
-                onClick={handleSelectBangKeItem}
-              />
-            </Label>
-          );
-        },
-      },
-      {
         Header: t('Mã bưu gửi'),
         accessor: 'PACKAGE_ID',
       },
@@ -366,10 +297,10 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={printTable(row.original)}>
+              <Button className="SipTableFunctionIcon" onClick={printTable(get(row, 'original'))}>
                 <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
               </Button>
-              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
+              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'original.TOR_ID', ''))}>
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>
@@ -378,7 +309,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [uncheckAllForwardingItemCheckbox],
+    [dataBangKeChild],
   );
 
   return dataBangKe ? (
@@ -387,7 +318,13 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={dataTable} />
+        <DataTable
+          columns={columns}
+          data={dataTable}
+          onCheckedValuesChange={handleCheckedBuuGuiChange}
+          renderCheckboxValues="TOR_ID"
+          showCheckboxes
+        />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}
@@ -400,7 +337,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         visible={selectForwardingItemModal}
         onHide={toggleSelectForwardingItemModal}
         modalTitle={t('Chọn bảng kê')}
-        forwardingItemList={forwardingItemListState}
+        forwardingItemList={checkedBuuGui}
         IV_TOR_TYPE={SipDataType.BANG_KE}
         IV_TO_LOC_ID=""
         IV_CUST_STATUS={SipDataState.TAO_MOI}

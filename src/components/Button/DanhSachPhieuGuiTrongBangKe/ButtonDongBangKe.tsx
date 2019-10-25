@@ -14,8 +14,8 @@ import { makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 
 interface Props {
-  disableButtonDongBangKe: boolean;
-  listUncheckForwardingItem: ForwardingItem[];
+  disabled: boolean;
+  listUncheckForwardingItem: API.TITEM[];
   idBangKe: string;
   callBackAfterDongBangKe: () => void;
 }
@@ -23,7 +23,7 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const ButtonDongBangKe: React.FC<Props> = ({
   callBackAfterDongBangKe,
-  disableButtonDongBangKe,
+  disabled,
   listUncheckForwardingItem,
   idBangKe,
 }: Props): JSX.Element => {
@@ -256,7 +256,7 @@ const ButtonDongBangKe: React.FC<Props> = ({
 
   return (
     <>
-      <Button color="primary" className="ml-2" onClick={openPopUpDongBangKeVaoTai} disabled={disableButtonDongBangKe}>
+      <Button color="primary" className="ml-2" onClick={openPopUpDongBangKeVaoTai} disabled={disabled}>
         <img className="mr-2" src={'../../assets/img/icon/iconBangKe.svg'} alt="VTPostek" />
         {t('Đóng bảng kê')}
       </Button>
