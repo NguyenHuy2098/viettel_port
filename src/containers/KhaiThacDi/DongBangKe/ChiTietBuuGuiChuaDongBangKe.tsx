@@ -8,6 +8,7 @@ import { Badge, Button, Col, Input, Label, Nav, NavItem, NavLink, Row, TabConten
 import classNames from 'classnames';
 import { forEach, get, isEmpty, size, toString, trim } from 'lodash';
 import { Location } from 'history';
+import moment from 'moment';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
@@ -184,6 +185,10 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       {
         Header: t('Ngày gửi'),
         accessor: 'CREATED_ON',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          const date = get(row, 'values.CREATED_ON', '');
+          return <>{moment(date, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</>;
+        },
       },
       // {
       //   Header: t('Quản trị'),

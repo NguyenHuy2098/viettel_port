@@ -8,6 +8,7 @@ import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
 import classNames from 'classnames';
 import { Location } from 'history';
+import moment from 'moment';
 import { forEach, get, includes, map, size, toNumber, toString, trim } from 'lodash';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -800,6 +801,10 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
       {
         Header: t('Ngày gửi'),
         accessor: 'CREATED_ON',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          const date = get(row, 'values.CREATED_ON', '');
+          return <>{moment(date, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</>;
+        },
       },
       {
         Header: t('Quản trị'),
