@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
 import { useDispatch } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
-import { Button, Col, Row } from 'reactstrap';
+import { Button, Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { goBack } from 'connected-react-router';
 import { delay, get, isEmpty, map, sumBy } from 'lodash';
 import moment from 'moment';
@@ -89,12 +89,55 @@ const TaoMoiBangKe = (): JSX.Element => {
         accessor: 'URL',
       },
       {
+        Header: t('Giá chưa thuế'),
+        accessor: 'AMOUNT',
+      },
+      {
+        Header: t('Phụ phí'),
+        accessor: 'PHU_PHI',
+      },
+      {
+        Header: t('TS'),
+        accessor: 'TAX',
+      },
+      {
+        Header: t('Thuế GTGT'),
+        accessor: 'TAX_AMOUNT',
+      },
+      {
+        Header: t('Tổng'),
+        accessor: 'SUM_AMOUNT',
+      },
+      {
+        Header: t('Link URL'),
+        accessor: 'URL',
+      },
+      {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
+          const [dropdownOpen, setDropdownOpen] = useState(false);
+          function toggle(): void {
+            setDropdownOpen(prevState => !prevState);
+          }
           return (
-            <Button className="SipTableFunctionIcon">
-              <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
-            </Button>
+            <>
+              <Dropdown className="sipTableAmountListOption" isOpen={dropdownOpen} toggle={toggle}>
+                <DropdownToggle>
+                  <img src={'../../assets/img/icon/iconOption.svg'} alt="VTPostek" />
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem>
+                    <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" /> {t('Xóa')}
+                  </DropdownItem>
+                  <DropdownItem>
+                    <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" /> {t('Chỉnh sửa')}
+                  </DropdownItem>
+                  <DropdownItem>
+                    <img className="ml-1" src={'../../assets/img/icon/iconCopy.svg'} alt="VTPostek" /> {t('Sao chép')}
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </>
           );
         },
       },
@@ -202,21 +245,17 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const renderGroupedRow = (rows: TableRow<API.ITEMBK>[], index: string): JSX.Element => {
     return (
-      <Row>
-        <Col>
+      <div className="sipTableAmountListGroup">
+        <span>
           {t('Chi phí')}&nbsp;
           {index}&nbsp;({t('Tổng')}:{' '}
           <span className="text-bold color-primary">{numeral(sumBy(rows, 'original.SUM_AMOUNT')).format('0,0')}</span>)
-        </Col>
-        <Col>
-          <div className="d-flex justify-content-end">
-            <Button color="primary" className=" ml-2" outline>
-              <i className="fa fa-plus mr-2" />
-              {t('Thêm mới')}
-            </Button>
-          </div>
-        </Col>
-      </Row>
+        </span>
+        <Button color="primary" outline>
+          <i className="fa fa-plus mr-2" />
+          {t('Thêm mới')}
+        </Button>
+      </div>
     );
   };
 
@@ -249,7 +288,7 @@ const TaoMoiBangKe = (): JSX.Element => {
 
       <Row>
         <Col>
-          <div className="sipTableContainer">
+          <div className="sipTableContainer sipTableContainerAmountList">
             <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
           </div>
         </Col>
