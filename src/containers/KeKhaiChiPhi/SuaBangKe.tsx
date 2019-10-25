@@ -193,6 +193,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
   );
 
   const detailRecerver = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
+  const status = get(detailRecerver, 'header.BK_STATUS', 4);
 
   const renderThongTinBangKe = (): JSX.Element => (
     <div className="bg-white p-3 shadow-sm">
@@ -272,13 +273,17 @@ const SuaBangKe = (props: Props): JSX.Element => {
         <Col>
           <h1 className="sipTitle">{t('Danh sách khoản mục chi phí')}</h1>
         </Col>
-        <Col className="d-flex justify-content-end">{renderSecondControllers()}</Col>
+        {!status && <Col className="d-flex justify-content-end">{renderSecondControllers()}</Col>}
       </Row>
 
       <Row>
         <Col>
           <div className="sipTableContainer">
-            <DataTable columns={columns} data={data} groupKey={'TEN_KM'} renderGroupedRow={renderGroupedRow} />
+            {status ? (
+              <DataTable columns={columns} data={data} groupKey={'TEN_KM'} />
+            ) : (
+              <DataTable columns={columns} data={data} groupKey={'TEN_KM'} renderGroupedRow={renderGroupedRow} />
+            )}
           </div>
         </Col>
       </Row>
