@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { match, generatePath } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { get, map, size, toString, trim } from 'lodash';
-import { Button, Col, Input, Row, Label } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { Cell } from 'react-table';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
 import 'bootstrap-daterangepicker/daterangepicker.css';
@@ -168,17 +168,6 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        Header: t(''),
-        accessor: 'BK_YEAR',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã bảng kê'),
         accessor: 'BK_ID',
