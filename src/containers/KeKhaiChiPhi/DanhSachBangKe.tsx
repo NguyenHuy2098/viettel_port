@@ -22,6 +22,7 @@ import { toastError, toastSuccess } from 'components/Toast';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import InBangKe from './InBangKe';
+import ButtonExportExcelBangKe from '../../components/Button/ButtonExportExcelBangKe';
 
 interface Props {
   match: match;
@@ -147,10 +148,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           <img src={'../../assets/img/icon/iconExcelWhite.svg'} alt="VTPostek" />
           {t('Lấy file mẫu')}
         </Button>
-        <Button color="primary" className="ml-2">
-          <img src={'../../assets/img/icon/iconExport.svg'} alt="VTPostek" />
-          {t('Xuất file Excel')}
-        </Button>
+        <ButtonExportExcelBangKe className="ml-2" />
         <InBangKe />
         <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>
           <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
