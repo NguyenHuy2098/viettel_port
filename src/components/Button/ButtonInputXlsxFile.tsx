@@ -35,7 +35,7 @@ const ButtonInputXlsxFile = (props: Props): JSX.Element => {
   return (
     <>
       <Input className="hide" id="xlsx-input" onChange={handleChange} type="file" />
-      <Label className="btn btn-primary ml-2 mb-0" htmlFor="xlsx-input">
+      <Label className="btn btn-primary ml-2 mb-0 cursor-pointer" htmlFor="xlsx-input">
         {defaultTo(leftIcon, <i className="fa fa-upload mr-2" />)}
         {defaultTo(children, t('Tải lên'))}
       </Label>

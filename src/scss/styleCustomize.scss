@@ -1,3 +1,7 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .sipSummaryContent {
   box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
   border-radius: 3px;
@@ -245,7 +249,8 @@
     font-family: Core Sans GS;
   }
   .highcharts-legend {
-    span, text {
+    span,
+    text {
       font-weight: normal !important;
       font-family: Core Sans GS;
     }
@@ -422,7 +427,8 @@
 .bang-ke {
   max-width: 1200px !important;
 }
-#bang-ke td , #bang-ke th {
+#bang-ke td,
+#bang-ke th {
   word-break: normal;
   padding: 3px 3px;
   max-width: 120px;
