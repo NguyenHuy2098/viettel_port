@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { match, generatePath } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { get, map, size, toString } from 'lodash';
+import { get, map, size, toString, trim } from 'lodash';
 import { Button, Col, Input, Row, Label } from 'reactstrap';
 import { Cell } from 'react-table';
 import DateRangePicker from 'react-bootstrap-daterangepicker';
@@ -20,6 +20,7 @@ import Pagination from 'components/Pagination';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { toastError, toastSuccess } from 'components/Toast';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import InBangKe from './InBangKe';
 
 interface Props {
@@ -38,7 +39,9 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
 
   const [tuKy, setTuKy] = useState<string>(moment().format('YYYYMM'));
   const [denKy, setDenKy] = useState<string>(moment().format('YYYYMM'));
-  const [filterTimeValue, setFilterTimeValue] = useState<string>('');
+  const [filterTimeValue, setFilterTimeValue] = useState<string>(
+    `${moment().format('MM/YYYY')} - ${moment().format('MM/YYYY')}`,
+  );
   const [idSearch, setIdSearch] = useState<string>('');
   const [typeSearch, setTypeSearch] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -63,7 +66,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       TU_KY: tuKy,
       DEN_KY: denKy,
       MA_BUU_CUC: userMaBp,
-      BK_ID: idSearch,
+      BK_ID: trim(idSearch),
       BK_STATUS: typeSearch,
       IV_PAGENO: currentPage,
       IV_NO_PER_PAGE: '10',
@@ -73,16 +76,17 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   };
 
   function handleSearchBangKe(): void {
-    if (size(idSearch) > 0 || size(filterTimeValue) > 0 || size(typeSearch) > 0) {
+    const thisIdSearch = trim(idSearch);
+    if (size(thisIdSearch) > 0 || size(filterTimeValue) > 0 || size(typeSearch) > 0) {
       setCurrentPage(1);
-      getListBangKe({ BK_ID: idSearch, TU_KY: tuKy, DEN_KY: denKy, BK_STATUS: typeSearch, IV_PAGENO: '1' });
+      getListBangKe({ BK_ID: thisIdSearch, TU_KY: tuKy, DEN_KY: denKy, BK_STATUS: typeSearch, IV_PAGENO: '1' });
     }
   }
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
     setCurrentPage(selectedItem.selected + 1);
     getListBangKe({
-      BK_ID: idSearch,
+      BK_ID: trim(idSearch),
       TU_KY: tuKy,
       DEN_KY: denKy,
       BK_STATUS: typeSearch,
@@ -140,6 +144,10 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           <img src={'../../assets/img/icon/iconRefresh.svg'} alt="VTPostek" />
         </Button>
         <Button color="primary" className="ml-2">
+          <img src={'../../assets/img/icon/iconExcelWhite.svg'} alt="VTPostek" />
+          {t('Lấy file mẫu')}
+        </Button>
+        <Button color="primary" className="ml-2">
           <img src={'../../assets/img/icon/iconExport.svg'} alt="VTPostek" />
           {t('Xuất file Excel')}
         </Button>
@@ -151,6 +159,13 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       </>
     );
   };
+
+  function handleRedirectDetail(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      event.stopPropagation();
+      dispatch(push(generatePath(routesMap.SUA_BANG_KE, { idBangKe: torId })));
+    };
+  }
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
@@ -200,12 +215,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
         accessor: 'BK_STATUS',
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           const thisStatus = get(row, 'values.BK_STATUS', 0);
-          const statusText = get(stateMap, `[${thisStatus}]`);
-          return (
-            <>
-              <Button className={`sipTableBtnStatus sipTableBtnStatus${thisStatus}`}>{statusText}</Button>
-            </>
-          );
+          return <BadgeFicoBangKeStatus status={thisStatus} />;
         },
       },
       {
@@ -225,7 +235,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
               <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
             </Button>
           ) : (
-            <Button className="SipTableFunctionIcon">
+            <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(get(row, 'values.BK_ID', ''))}>
               <img src={'../../assets/img/icon/iconEyes.svg'} alt="VTPostek" />
             </Button>
           );
@@ -234,14 +244,6 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [dataTable],
-  );
-
-  const handleRedirectDetail = React.useCallback(
-    (item: API.ListMTBKRECEIVER): void => {
-      dispatch(push(generatePath(routesMap.SUA_BANG_KE, { idBangKe: item.BK_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
   );
 
   return (
@@ -264,14 +266,17 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           </div>
         </Col>
         <Col className="sipFilterCol">
-          <DateRangePicker onApply={handleChangeDeliveryTime}>
-            <Input
-              value={filterTimeValue}
-              onChange={handleChangeTextboxValue(setFilterTimeValue)}
-              type="text"
-              placeholder="Nhập khoảng thời gian"
-            />
-          </DateRangePicker>
+          <div className="sipFilterColSearch">
+            <DateRangePicker onApply={handleChangeDeliveryTime}>
+              <Input
+                value={filterTimeValue}
+                onChange={handleChangeTextboxValue(setFilterTimeValue)}
+                type="text"
+                placeholder="Nhập khoảng thời gian"
+              />
+            </DateRangePicker>
+            <img src={'../../assets/img/icon/iconCalendar.svg'} alt="VTPostek" />
+          </div>
         </Col>
         <Col className="sipFilterCol">
           <div className="sipFilterColSearch">
@@ -291,7 +296,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
             <img src={'../../assets/img/icon/iconFilter.svg'} alt="VTPostek" />
           </div>
         </Col>
-        <Col className="sipFilterColBtn">
+        <Col className="sipFilterCol sipFilterColBtn">
           <Button color="primary" onClick={handleSearchBangKe}>
             Tìm kiếm
           </Button>
@@ -300,12 +305,14 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
 
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={dataTable} onRowClick={handleRedirectDetail} />
-        <Pagination
-          pageRangeDisplayed={2}
-          marginPagesDisplayed={2}
-          pageCount={totalPage}
-          onThisPaginationChange={onPaginationChange}
-        />
+        {size(dataTable) > 0 && (
+          <Pagination
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={2}
+            pageCount={totalPage}
+            onThisPaginationChange={onPaginationChange}
+          />
+        )}
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}

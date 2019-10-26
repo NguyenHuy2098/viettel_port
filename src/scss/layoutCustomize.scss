@@ -435,9 +435,12 @@ input.form-control:-moz-placeholder {
 }
 .sipTableContainerAmountList {
   .table {
-    min-width: 1800px;
+    min-width: 2200px;
+    th {
+      white-space: nowrap;
+    }
     td, th {
-      min-width: 110px;
+      min-width: 90px;
       padding: 8px 5px;
       word-break: normal;
       &:nth-child(9) {
@@ -486,7 +489,7 @@ input.form-control:-moz-placeholder {
   }
   .dropdown-menu {
     left: auto !important;
-    right: 40px !important;
+    right: -60px !important;
   }
   .dropdown-item {
     padding: 8px 10px 8px 35px;
@@ -560,6 +563,7 @@ html:not([dir='rtl']) .sidebar {
         background: none;
         border: 1px solid #94979b;
         cursor: auto;
+        color: $primary;
       }
     }
     .sipPaginationNext,
@@ -761,6 +765,9 @@ html:not([dir='rtl']) .sidebar {
     padding: 0 7px;
     .react-bootstrap-daterangepicker-container {
       width: 100%;
+      input.form-control {
+        padding: 0 12px 0 32px;
+      }
     }
     input.form-control, select.form-control {
       box-sizing: border-box;
@@ -768,7 +775,7 @@ html:not([dir='rtl']) .sidebar {
     .sipFilterColSearch {
       position: relative;
       & > input.form-control, & > select.form-control {
-        padding-left: 32px;
+        padding: 0 12px 0 32px;
       }
       & > img {
         position: absolute;
@@ -780,7 +787,7 @@ html:not([dir='rtl']) .sidebar {
       flex: 0 0 13%;
       padding: 0 7px;
       .btn {
-        box-sizing: border-box;
+        width: 100%;
       }
     }
   }
@@ -987,15 +994,10 @@ html:not([dir='rtl']) .sidebar {
 @media screen and (min-width: 1500px) {
 }
 
-/*____________________________________LARGE DESKTOP_______________________________________________________________________*/
-
-@media screen and (min-width: 1200px) {
-}
-
 /*_____________________________________PC____________________________________________________________________*/
 /*___________________________________________________________________________________________________________*/
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: 1200px) {
   .hide-pc {
     display: none !important;
   }
@@ -1004,14 +1006,11 @@ html:not([dir='rtl']) .sidebar {
   }
 }
 
-@media screen and (max-width: 1200px) and (min-width: 992px) {
-}
-
 /*_____________________________________TABLET & MOBILE_______________________________________________________*/
 /*___________________________________________________________________________________________________________*/
 /*___________________________________________________________________________________________________________*/
 
-@media screen and (max-width: 991.98px) {
+@media screen and (max-width: 1200px) {
   .no-margin-mobile {
     margin: 0 !important;
   }
@@ -1039,6 +1038,17 @@ html:not([dir='rtl']) .sidebar {
   }
   .sipTableContainer .table .SipTableFunctionIcon .btn {
     margin: 0 5px;
+  }
+  .sipFilterContainer .sipFilterCol {
+    flex: 0 0 100%;
+    margin-bottom: 10px;
+  }
+  .sipFilterContainer .sipFilterCol.sipFilterColBtn {
+    margin-bottom: 0;
+    flex: 0 0 100%;
+    .btn {
+      width: 120px;
+    }
   }
 }
 
