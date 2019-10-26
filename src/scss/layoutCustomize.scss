@@ -510,7 +510,16 @@ input.form-control:-moz-placeholder {
 .sipLine {
   border-bottom: 1px solid #d6d6d6;
 }
-
+.sipTableBangKeFicoTr {
+  td {
+    &:nth-child(8), &:nth-child(9), &:nth-child(11), &:nth-child(12), &:nth-child(13), &:nth-child(14), &:nth-child(15), &:nth-child(16) {
+      text-align: right;
+    }
+  }
+}
+.bang-ke-header tr th {
+  border-bottom: none;
+}
 .app-header .navbar-brand {
   width: 195px;
 }

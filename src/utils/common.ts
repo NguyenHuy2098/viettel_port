@@ -1,4 +1,5 @@
 import { get, isEmpty, isObject } from 'lodash';
+import numeral from 'numeral';
 
 export const cleanAccents = (str: string): string => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
@@ -42,4 +43,11 @@ export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
     TAX_AMOUNT: get(row, 'Thuế GTGT', ''),
     URL: get(row, '', ''),
   };
+}
+
+export function formatNumber(value: number): string {
+  let str = numeral(value).format('0,0');
+  const newchar = '.';
+  str = str.split(',').join(newchar);
+  return str;
 }
