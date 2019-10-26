@@ -3,11 +3,10 @@ import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
 import { useDispatch } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
-import { Button, Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { goBack } from 'connected-react-router';
-import { delay, get, isEmpty, map, sumBy } from 'lodash';
+import { delay, get, isEmpty, map } from 'lodash';
 import moment from 'moment';
-import numeral from 'numeral';
 import XLSX, { WorkBook } from 'xlsx';
 import produce from 'immer';
 
@@ -20,6 +19,7 @@ import { toastSuccess } from 'components/Toast';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import useLoggedInUser from 'hooks/useLoggedInUser';
 import { transformXlsxRowToBangKeItem } from 'utils/common';
+import ThemMoiChiPhi from './ThemMoiChiPhi';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
@@ -63,30 +63,6 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Hàng hoá'),
         accessor: 'DESCR',
-      },
-      {
-        Header: t('Giá chưa thuế'),
-        accessor: 'AMOUNT',
-      },
-      {
-        Header: t('Phụ phí'),
-        accessor: 'PHU_PHI',
-      },
-      {
-        Header: t('TS'),
-        accessor: 'TAX',
-      },
-      {
-        Header: t('Thuế GTGT'),
-        accessor: 'TAX_AMOUNT',
-      },
-      {
-        Header: t('Tổng'),
-        accessor: 'SUM_AMOUNT',
-      },
-      {
-        Header: t('Link URL'),
-        accessor: 'URL',
       },
       {
         Header: t('Giá chưa thuế'),
@@ -243,20 +219,15 @@ const TaoMoiBangKe = (): JSX.Element => {
     </>
   );
 
-  const renderGroupedRow = (rows: TableRow<API.ITEMBK>[], index: string): JSX.Element => {
-    return (
-      <div className="sipTableAmountListGroup">
-        <span>
-          {t('Chi phí')}&nbsp;
-          {index}&nbsp;({t('Tổng')}:{' '}
-          <span className="text-bold color-primary">{numeral(sumBy(rows, 'original.SUM_AMOUNT')).format('0,0')}</span>)
-        </span>
-        <Button color="primary" outline>
-          <i className="fa fa-plus mr-2" />
-          {t('Thêm mới')}
-        </Button>
-      </div>
-    );
+  function handleSubmitThemMoiChiPhi(payload: API.LISTMTDETAILRECEIVER): void {
+    const nextState = produce(data, draftState => {
+      draftState.unshift(payload);
+    });
+    setData(nextState);
+  }
+
+  const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
+    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} />;
   };
 
   return (

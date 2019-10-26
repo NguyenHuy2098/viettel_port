@@ -91,6 +91,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       MST: maSoThue,
       DESCR: hangHoa,
       TEN_KM: index,
+      KHOAN_MUC: index,
     };
     props.handleSubmit(payload);
   }
