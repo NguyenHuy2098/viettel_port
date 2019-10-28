@@ -337,6 +337,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
               reset();
             },
             onFailure: (error: Error): void => {
+              reset();
               toast(
                 <>
                   <i className="fa fa-window-close-o mr-2" />
@@ -368,7 +369,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                 type: 'success',
               },
             );
-            reset();
           },
           onFailure: (error: Error): void => {
             toast(
@@ -383,6 +383,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           },
           onFinish: (): void => {
             handleHidePopupDongBangKe();
+            reset();
           },
         },
       ),
@@ -420,6 +421,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
               reset();
             },
             onFailure: (error: Error): void => {
+              reset();
               toast(
                 <>
                   <i className="fa fa-window-close-o mr-2" />
@@ -455,6 +457,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             reset();
           },
           onFailure: (error: Error): void => {
+            reset();
             toast(
               <>
                 <i className="fa fa-window-close-o mr-2" />
