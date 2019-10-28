@@ -211,14 +211,19 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
           const thisStatus = get(row, 'values.BK_STATUS', 0);
-          return thisStatus === 0 ? (
-            <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.BK_ID', ''))}>
-              <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
-            </Button>
-          ) : (
-            <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(get(row, 'values.BK_ID', ''))}>
-              <img src={'../../assets/img/icon/iconEyes.svg'} alt="VTPostek" />
-            </Button>
+          return (
+            <>
+              <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(get(row, 'values.BK_ID', ''))}>
+                <img src={'../../assets/img/icon/iconEyes.svg'} alt="VTPostek" />
+              </Button>
+              <Button
+                className="SipTableFunctionIcon"
+                onClick={handleDeleteItem(get(row, 'values.BK_ID', ''))}
+                disabled={thisStatus !== 0}
+              >
+                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
+              </Button>
+            </>
           );
         },
       },
