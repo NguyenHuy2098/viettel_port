@@ -47,6 +47,8 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 
+  const noBangKeChecked = useMemo((): boolean => size(checkedBangKe) === 0, [checkedBangKe]);
+
   function toggleDeleteConfirmModal(): void {
     setDeleteConfirmModal(!deleteConfirmModal);
   }
@@ -142,7 +144,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           <img src={'../../assets/img/icon/iconExcelWhite.svg'} alt="VTPostek" />
           {t('Lấy file mẫu')}
         </Button>
-        <ButtonExportExcelBangKe className="ml-2" ids={checkedBangKe} />
+        <ButtonExportExcelBangKe className="ml-2" disabled={noBangKeChecked} ids={checkedBangKe} />
         <InBangKe />
         <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>
           <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
