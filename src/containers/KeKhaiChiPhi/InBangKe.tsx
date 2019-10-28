@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import React, { useMemo } from 'react';
-import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { get } from 'lodash';
 import { Cell, Row as TableRow } from 'react-table';
@@ -25,7 +25,7 @@ const InBangKe = (): JSX.Element => {
   React.useEffect(() => {
     const payload = {
       MA_BUU_CUC: 'BDH',
-      BK_ID: 'CPTX_2019_0001',
+      BK_ID: 'CP_2019_000113',
       IV_PAGENO: '1',
       IV_NO_PER_PAGE: '10',
     };
@@ -106,9 +106,6 @@ const InBangKe = (): JSX.Element => {
       {
         Header: t('Ký hiệu'),
         accessor: 'KIHIEU_HD',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.KIHIEU_HD', ''));
-        },
       },
       {
         Header: t('Ngày'),
@@ -230,6 +227,7 @@ const InBangKe = (): JSX.Element => {
   }
 
   const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[], index: string): JSX.Element => {
+    if (index === 'null') return <></>;
     return <div>{index}</div>;
   };
 
@@ -243,6 +241,61 @@ const InBangKe = (): JSX.Element => {
     });
   }
 
+  function handleCancel(): void {
+    setModal(false);
+  }
+
+  function renderContent(): JSX.Element {
+    return (
+      <Container id="in-bang-ke">
+        <div className="row">
+          <div className="col-4">
+            <div>Tổng công ty cổ phần Bưu chính Viettel</div>
+            <div className="pl-5">Bưu cục Đống Da </div>
+          </div>
+          <div className="col-4"></div>
+          <div className="col-4 text-right">Số: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}</div>
+        </div>
+        <Row>
+          <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
+            <h5>BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ</h5>
+            <p>
+              Tháng {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} năm{' '}
+              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
+            </p>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm="12" className="info pb-3">
+            <div className="col-6 pl-0">Về việc thanh toán chi phí theo ngân sách T04/2019</div>
+            <div className="col-6 pl-0">Họ và Tên: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}</div>
+            <div className="col-6 pl-0">Chức danh: Nhân viên chăm sóc khách hàng</div>
+            <div className="col-6 pl-0">Đề nghị thanh toán số tiền theo bảng kê như sau:</div>
+          </Col>
+        </Row>
+        <Row>
+          <Col sm="12">
+            <div className="text-right">ĐVT: VNĐ</div>
+          </Col>
+        </Row>
+        <PrintTableBangKe
+          columns={columns}
+          header={renderHeader}
+          data={data}
+          groupKey="TEN_KM"
+          renderGroupedRow={renderGroupedRow}
+        />
+        {renderTotal()}
+        <Row className="text-center pt-5 pb-5">
+          <div className="col-4">KẾ TOÁN CHUYÊN QUẢN</div>
+          <div className="col-4">TRƯỞNG PHÒNG TÀI CHÍNH</div>
+          <div className="col-4">TỔNG GIÁM ĐỐC</div>
+        </Row>
+        <Row className="pagebreak"> </Row>
+      </Container>
+    );
+  }
+
   return (
     <div>
       <Button color="primary" className="ml-2" onClick={toggle}>
@@ -253,58 +306,13 @@ const InBangKe = (): JSX.Element => {
         <ModalHeader toggle={toggle} charCode="x">
           {t('In bảng kê')}
         </ModalHeader>
-
-        <ModalBody id="in-bang-ke">
-          <div className="row">
-            <div className="col-4">
-              <div>Tổng công ty cổ phần Bưu chính Viettel</div>
-              <div className="pl-5">Bưu cục Đống Da </div>
-            </div>
-            <div className="col-4"></div>
-            <div className="col-4 text-right">Số: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}</div>
-          </div>
-          <Row>
-            <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
-              <h5>BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ</h5>
-              <p>
-                Tháng {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} năm{' '}
-                {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
-              </p>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm="12" className="info pb-3">
-              <div className="col-6 pl-0">Về việc thanh toán chi phí theo ngân sách T04/2019</div>
-              <div className="col-6 pl-0">Họ và Tên: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}</div>
-              <div className="col-6 pl-0">Chức danh: Nhân viên chăm sóc khách hàng</div>
-              <div className="col-6 pl-0">Đề nghị thanh toán số tiền theo bảng kê như sau:</div>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm="12">
-              <div className="text-right">ĐVT: VNĐ</div>
-            </Col>
-          </Row>
-          <PrintTableBangKe
-            columns={columns}
-            header={renderHeader}
-            data={data}
-            groupKey="TEN_KM"
-            renderGroupedRow={renderGroupedRow}
-          />
-          {renderTotal()}
-          <Row className="text-center pt-5 pb-5">
-            <div className="col-4">KẾ TOÁN CHUYÊN QUẢN</div>
-            <div className="col-4">TRƯỞNG PHÒNG TÀI CHÍNH</div>
-            <div className="col-4">TỔNG GIÁM ĐỐC</div>
-          </Row>
-        </ModalBody>
+        <ModalBody>{renderContent()}</ModalBody>
         <ModalFooter>
           <button type="button" className="btn btn-primary btn-lg" onClick={handlePrint}>
-            <i className="fa fa-print"></i> In
+            <i className="fa fa-print" /> In
           </button>
-          <button type="button" className="btn btn-secondary btn-lg">
-            <i className="fa fa-remove"></i> Huỷ
+          <button type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>
+            <i className="fa fa-remove" /> Huỷ
           </button>
         </ModalFooter>
       </Modal>
