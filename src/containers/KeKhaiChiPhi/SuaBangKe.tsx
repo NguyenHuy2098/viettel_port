@@ -116,6 +116,9 @@ const SuaBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Link URL'),
         accessor: 'URL',
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
+          return get(row, 'original.URL', '');
+        },
       },
       {
         Header: t('Quản trị'),
@@ -137,14 +140,18 @@ const SuaBangKe = (props: Props): JSX.Element => {
   const renderFirstControllers = (): JSX.Element => (
     <>
       <InBangKe />
-      <Button color="primary" className="ml-2">
-        <i className="fa fa-save mr-2" />
-        {t('Lưu')}
-      </Button>
-      <Button color="primary" className="ml-2">
-        <i className="fa fa-send mr-2" />
-        {t('Nộp')}
-      </Button>
+      {!status && (
+        <>
+          <Button color="primary" className="ml-2">
+            <i className="fa fa-save mr-2" />
+            {t('Lưu')}
+          </Button>
+          <Button color="primary" className="ml-2">
+            <i className="fa fa-send mr-2" />
+            {t('Nộp')}
+          </Button>
+        </>
+      )}
     </>
   );
 

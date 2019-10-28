@@ -3,6 +3,7 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, For
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import { toNumber, toString } from 'lodash';
 
 interface Props {
   index: string;
@@ -74,6 +75,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
 
   function handleChangeThueSuat(e: React.FormEvent<HTMLInputElement>): void {
     setThueSuat(e.currentTarget.value);
+    setThueGTGT(toString((toNumber(e.currentTarget.value) * toNumber(tienHangHoa)) / 100));
   }
 
   function handleChangeNgay(date: Date): void {
@@ -94,6 +96,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       KHOAN_MUC: index,
     };
     props.handleSubmit(payload);
+    setModal(false);
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -193,7 +196,9 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         <ModalBody>{renderBillInfo()}</ModalBody>
         <ModalFooter className="footer-no-boder">
           <div className="text-left col-6">
-            <p className="mb-0">Tổng tiền thanh toán: 0đ</p>
+            <p className="mb-0">
+              Tổng tiền thanh toán: {toNumber(tienHangHoa) + toNumber(phuPhi) + toNumber(thueGTGT)}đ
+            </p>
           </div>
           <div className="text-right col-6">
             <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit}>
