@@ -1,28 +1,27 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { match, generatePath } from 'react-router-dom';
-import { push } from 'connected-react-router';
-import { get, map, size, toString, trim } from 'lodash';
-import { Button, Col, Input, Row } from 'reactstrap';
 import { Cell } from 'react-table';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
+import { Button, Col, Input, Row } from 'reactstrap';
+import { push } from 'connected-react-router';
 import 'bootstrap-daterangepicker/daterangepicker.css';
+import { get, map, size, toString, trim } from 'lodash';
 import moment from 'moment';
 
+import ButtonExportExcelBangKe from 'components/Button/ButtonExportExcelBangKe';
+import DataTable from 'components/DataTable';
+import { toastError, toastSuccess } from 'components/Toast';
+import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import Pagination from 'components/Pagination';
 import { action_ZFI002 } from 'redux/ZFI002/actions';
 import { action_ZFI004 } from 'redux/ZFI004/actions';
 import { select_ZFI002, select_ZFI002Count } from 'redux/ZFI002/selectors';
-import DataTable from 'components/DataTable';
-import routesMap from 'utils/routesMap';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
-import Pagination from 'components/Pagination';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { toastError, toastSuccess } from 'components/Toast';
-import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
+import routesMap from 'utils/routesMap';
 import InBangKe from './InBangKe';
-import ButtonExportExcelBangKe from '../../components/Button/ButtonExportExcelBangKe';
 
 interface Props {
   match: match;
@@ -34,7 +33,6 @@ const stateMap = ['Tạo mới', 'Chờ phê duyệt', 'Phê duyệt', 'Duyệt 
 const DanhSachBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
   const dataTable = useSelector(select_ZFI002);
   const totalPage = useSelector(select_ZFI002Count);
 
@@ -45,8 +43,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
   );
   const [idSearch, setIdSearch] = useState<string>('');
   const [typeSearch, setTypeSearch] = useState<string>('');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-
+  const [checkedBangKe, setCheckedBangKe] = useState<string[]>([]);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 
@@ -62,35 +59,30 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     };
   }
 
-  const getListBangKe = (payload = {}): void => {
-    const payloadListBk = {
-      TU_KY: tuKy,
-      DEN_KY: denKy,
-      MA_BUU_CUC: userMaBp,
-      BK_ID: trim(idSearch),
-      BK_STATUS: typeSearch,
-      IV_PAGENO: currentPage,
-      IV_NO_PER_PAGE: '10',
-      ...payload,
-    };
-    dispatch(action_ZFI002(payloadListBk));
+  const getListBangKe = useCallback(
+    (payload = {}): void => {
+      dispatch(
+        action_ZFI002({
+          TU_KY: tuKy,
+          DEN_KY: denKy,
+          BK_ID: idSearch,
+          BK_STATUS: typeSearch,
+          ...payload,
+        }),
+      );
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tuKy, denKy, idSearch, typeSearch],
+  );
+
+  const handleSearchBangKe = (): void => {
+    if (size(idSearch) > 0 || size(filterTimeValue) > 0 || size(typeSearch) > 0) {
+      getListBangKe();
+    }
   };
 
-  function handleSearchBangKe(): void {
-    const thisIdSearch = trim(idSearch);
-    if (size(thisIdSearch) > 0 || size(filterTimeValue) > 0 || size(typeSearch) > 0) {
-      setCurrentPage(1);
-      getListBangKe({ BK_ID: thisIdSearch, TU_KY: tuKy, DEN_KY: denKy, BK_STATUS: typeSearch, IV_PAGENO: '1' });
-    }
-  }
-
   const onPaginationChange = (selectedItem: { selected: number }): void => {
-    setCurrentPage(selectedItem.selected + 1);
     getListBangKe({
-      BK_ID: trim(idSearch),
-      TU_KY: tuKy,
-      DEN_KY: denKy,
-      BK_STATUS: typeSearch,
       IV_PAGENO: selectedItem.selected + 1,
     });
   };
@@ -114,25 +106,27 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     );
   };
 
-  React.useEffect((): void => {
+  useEffect((): void => {
     getListBangKe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userMaBp]);
+  }, []);
 
-  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
+  const handleChangeTextboxValue = (
+    setValueFunction: Function,
+  ): ((event: React.FormEvent<HTMLInputElement>) => void) => {
     return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(event.currentTarget.value);
+      setValueFunction(trim(event.currentTarget.value));
     };
-  }
+  };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function handleChangeDeliveryTime(event: any, picker: any): void {
+  const handleChangeDeliveryTime = (event: any, picker: any): void => {
     setTuKy(moment(get(picker, 'startDate')).format('YYYYMM'));
     setDenKy(moment(get(picker, 'endDate')).format('YYYYMM'));
     setFilterTimeValue(
       `${moment(get(picker, 'startDate')).format('MM/YYYY')} - ${moment(get(picker, 'endDate')).format('MM/YYYY')}`,
     );
-  }
+  };
 
   const redirectToTaoMoiBangKe = (): void => {
     dispatch(push(routesMap.TAO_MOI_BANG_KE));
@@ -148,7 +142,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           <img src={'../../assets/img/icon/iconExcelWhite.svg'} alt="VTPostek" />
           {t('Lấy file mẫu')}
         </Button>
-        <ButtonExportExcelBangKe className="ml-2" />
+        <ButtonExportExcelBangKe className="ml-2" ids={checkedBangKe} />
         <InBangKe />
         <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>
           <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
@@ -233,6 +227,10 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     [dataTable],
   );
 
+  const handleCheckedValuesChange = (values: string[]): void => {
+    setCheckedBangKe(values);
+  };
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -291,7 +289,15 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       </Row>
 
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={dataTable} onRowClick={handleRedirectDetail} />
+        <DataTable
+          columns={columns}
+          data={dataTable}
+          onCheckedValuesChange={handleCheckedValuesChange}
+          onRowClick={handleRedirectDetail}
+          showCheckAll={false}
+          showCheckboxes
+          renderCheckboxValues="BK_ID"
+        />
         {size(dataTable) > 0 && (
           <Pagination
             pageRangeDisplayed={2}

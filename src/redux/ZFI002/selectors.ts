@@ -6,6 +6,10 @@ export const select_ZFI002 = (state: AppStateType): API.ListMTBKRECEIVER[] => {
   return thisList ? thisList : [];
 };
 
+export const select_ZFI002PageNo = (state: AppStateType): number => {
+  return parseInt(get(state, 'ZFI002.response.MT_BK_RECEIVER.Paging.IV_PAGE_NO', 0));
+};
+
 export const select_ZFI002Count = (state: AppStateType): number => {
   return parseInt(get(state, 'ZFI002.response.MT_BK_RECEIVER.Paging.EV_TOTAL_PAGE', 0));
 };
