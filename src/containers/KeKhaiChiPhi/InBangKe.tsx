@@ -113,9 +113,6 @@ const InBangKe = (): JSX.Element => {
       {
         Header: t('Ngày'),
         accessor: 'NGAY_HD',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.NGAY_HD', ''));
-        },
       },
       {
         Header: t('Số'),
@@ -135,9 +132,6 @@ const InBangKe = (): JSX.Element => {
       {
         Header: t('Hàng hóa dịch vụ'),
         accessor: 'DESCR',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.DESCR', ''));
-        },
       },
       {
         Header: t('Hàng hóa dịch vụ chưa thuế'),
@@ -245,6 +239,7 @@ const InBangKe = (): JSX.Element => {
       printable: 'in-bang-ke',
       scanStyles: false,
       type: 'html',
+      style: '@page { size: Letter landscape; margin: 0 }',
     });
   }
 
