@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
 import { useDispatch } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
-import { Col, Row, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { goBack } from 'connected-react-router';
-import { delay, get, isEmpty, map } from 'lodash';
+import { delay, get, isEmpty, map, reject } from 'lodash';
 import moment from 'moment';
 import XLSX, { WorkBook } from 'xlsx';
 import produce from 'immer';
@@ -20,6 +20,7 @@ import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import useLoggedInUser from 'hooks/useLoggedInUser';
 import { transformXlsxRowToBangKeItem } from 'utils/common';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
+import UtilityDropDown from './Utility';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
@@ -28,6 +29,26 @@ const TaoMoiBangKe = (): JSX.Element => {
   const [data, setData] = useState<API.ITEMBK[]>([]);
   const [idBangKe, setIdBangKe] = useState<string>('');
   const { t } = useTranslation();
+
+  const handleRemoveTableRow = (item: API.ITEMBK): void => {
+    const tempData = reject(data, ['SO_HD', get(item, 'original.SO_HD')]);
+    setData(tempData);
+  };
+
+  const handleEditTableRow = (item: API.ITEMBK): void => {
+    const tempData = [...data];
+    for (let i = 0; i < tempData.length; i++) {
+      if (item.SO_HD === tempData[i].SO_HD) {
+        tempData[i] = item;
+      }
+    }
+    setData(tempData);
+  };
+
+  const handleCopyTableRow = (item: API.ITEMBK): void => {
+    const tempData = [...data, item];
+    setData([...tempData]);
+  };
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -95,25 +116,17 @@ const TaoMoiBangKe = (): JSX.Element => {
           function toggle(): void {
             setDropdownOpen(prevState => !prevState);
           }
-          return (
-            <>
-              <Dropdown className="sipTableAmountListOption" isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggle>
-                  <img src={'../../assets/img/icon/iconOption.svg'} alt="VTPostek" />
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem>
-                    <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" /> {t('Xóa')}
-                  </DropdownItem>
-                  <DropdownItem>
-                    <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" /> {t('Chỉnh sửa')}
-                  </DropdownItem>
-                  <DropdownItem>
-                    <img className="ml-1" src={'../../assets/img/icon/iconCopy.svg'} alt="VTPostek" /> {t('Sao chép')}
-                  </DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            </>
+          return get(row, 'original.SO_HD') ? (
+            <UtilityDropDown
+              dropdownOpen={dropdownOpen}
+              toggle={toggle}
+              removeTableRow={handleRemoveTableRow}
+              editTableRow={handleEditTableRow}
+              copyTableRow={handleCopyTableRow}
+              item={row.original}
+            />
+          ) : (
+            <></>
           );
         },
       },
