@@ -177,7 +177,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   const renderFilters = (): JSX.Element => (
     <div className="bg-white p-3 shadow-sm">
       <Row>
-        <Col xs={12} md={3} xl={2}>
+        <Col xs={12} md={3}>
           <ReactDatePicker
             className="form-control"
             dateFormat="MM/yyyy"
@@ -191,31 +191,46 @@ const TaoMoiBangKe = (): JSX.Element => {
   );
 
   const renderThongTinBangKe = (): JSX.Element => (
-    <div className="bg-white p-3 shadow-sm">
-      <Row>
-        <Col>
+    <Row>
+      <Col xs={12} md={6} xl={4}>
+        <div className="sipFicoBangKeInformation">
           <div>{t('Mã bảng kê')}:</div>
-          <div>
-            {t('Trạng thái')}: {t('Tạo mới')}
-          </div>
-          <div>
-            {t('Kỳ')}: {moment(monthYear).format('MM/YYYY')}
-          </div>
-        </Col>
-        <Col>
-          <div>
-            {t('Người tạo')}: {get(userLogin, 'user.profile.preferred_username', '')}
-          </div>
-          <div>
-            {t('Đơn vị')}: {get(userLogin, 'user.profile.bp_org_unit', '')}
-          </div>
-        </Col>
-        <Col>
-          <div>{t('Tổng giá trị')}:</div>
-          <div>{t('Ngày tạo')}:</div>
-        </Col>
-      </Row>
-    </div>
+          <span></span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Trạng thái')}:</div>
+          <span>{t('Tạo mới')}</span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Kỳ')}:</div>
+          <span>{moment(monthYear).format('MM/YYYY')}</span>
+        </div>
+      </Col>
+      <Col xs={12} md={6} xl={8}>
+        <Row>
+          <Col xs={12} xl={6}>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Người tạo')}:</div>
+              <span>{get(userLogin, 'user.profile.preferred_username', '')}</span>
+            </div>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Đơn vị')}:</div>
+              <span>{get(userLogin, 'user.profile.bp_org_unit', '')}</span>
+            </div>
+          </Col>
+          <Col xs={12} xl={6}>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Tổng giá trị')}:</div>
+              <span></span>
+            </div>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Ngày tạo')}:</div>
+              <span></span>
+            </div>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 
   function handleSubmit(item: API.LIST): void {
@@ -240,7 +255,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   }
 
   const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
-    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} />;
+    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} />;
   };
 
   return (
@@ -260,7 +275,9 @@ const TaoMoiBangKe = (): JSX.Element => {
       </Row>
 
       <Row className="mb-4">
-        <Col>{renderThongTinBangKe()}</Col>
+        <Col>
+          <div className="bg-white p-3 shadow-sm">{renderThongTinBangKe()}</div>
+        </Col>
       </Row>
 
       <Row className="mb-3">
@@ -272,8 +289,10 @@ const TaoMoiBangKe = (): JSX.Element => {
 
       <Row>
         <Col>
-          <div className="sipTableContainer sipTableContainerAmountList">
-            <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
+          <div className="sipTableContainerAmountListContainer">
+            <div className="sipTableContainer sipTableContainerAmountList">
+              <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
+            </div>
           </div>
         </Col>
       </Row>

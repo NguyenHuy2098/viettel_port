@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, FormGroup, Input, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
 import { get, sumBy, toNumber } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
+import moment from 'moment';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
@@ -155,87 +156,51 @@ const SuaBangKe = (props: Props): JSX.Element => {
     </>
   );
 
-  const years = useMemo(() => Array.from(new Array(20), (val, index) => index + new Date().getFullYear()), []);
-
-  const [month, setMonth] = React.useState<string>('1');
-  function handleChangeMonth(e: React.FormEvent<HTMLInputElement>): void {
-    setMonth(e.currentTarget.value);
-  }
-
-  const [year, setYear] = React.useState<string>('2019');
-  function handleChangeYear(e: React.FormEvent<HTMLInputElement>): void {
-    setYear(e.currentTarget.value);
-  }
-
-  const renderFilters = (): JSX.Element => (
-    <div className="bg-white p-3 shadow-sm">
-      <Row>
-        <Col xs={12} md={3} xl={2}>
-          <FormGroup>
-            <Input type="select" name="select" id="exampleSelect" onChange={handleChangeMonth}>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-              <option>7</option>
-              <option>8</option>
-              <option>9</option>
-              <option>10</option>
-              <option>11</option>
-              <option>12</option>
-            </Input>
-          </FormGroup>
-        </Col>
-        <Col xs={12} md={3} xl={2}>
-          <FormGroup>
-            <Input type="select" name="select" id="exampleSelect" onChange={handleChangeYear}>
-              {years.map(year => {
-                return <option key={year}>{year}</option>;
-              })}
-            </Input>
-          </FormGroup>
-        </Col>
-      </Row>
-    </div>
-  );
-
   const detailRecerver = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
   const status = get(detailRecerver, 'header.BK_STATUS', 4);
 
   const renderThongTinBangKe = (): JSX.Element => (
-    <div className="bg-white p-3 shadow-sm">
-      <Row>
-        <Col>
-          <div>
-            {t('Mã bảng kê')}: {idBangKe}
-          </div>
-          <div>
-            {t('Trạng thái')}: {t('Sửa bảng kê')}
-          </div>
-          <div>
-            {t('Kỳ')}: {`${month}/${year}`}
-          </div>
-        </Col>
-        <Col>
-          <div>
-            {t('Người tạo')}: {get(userLogin, 'user.profile.preferred_username', '')}
-          </div>
-          <div>
-            {t('Đơn vị')}: {get(userLogin, 'user.profile.bp_org_unit', '')}
-          </div>
-        </Col>
-        <Col>
-          <div>
-            {t('Tổng giá trị')}: {sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(item.SUM_AMOUNT))}
-          </div>
-          <div>
-            {t('Ngày tạo')}: {get(detailRecerver, 'header.CRE_TIME', '')}
-          </div>
-        </Col>
-      </Row>
-    </div>
+    <Row>
+      <Col xs={12} md={6} xl={4}>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Mã bảng kê')}:</div>
+          <span>{idBangKe}</span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Trạng thái')}:</div>
+          <span>{t('Sửa bảng kê')}</span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Kỳ')}:</div>
+          {/*<span>{`${moment(monthYear, 'MM/yyyy').format('MM')}/${moment(monthYear, 'MM/yyyy').format('YYYY')}`}</span>*/}
+          <span>{`${10}/${2019}`}</span>
+        </div>
+      </Col>
+      <Col xs={12} md={6} xl={8}>
+        <Row>
+          <Col xs={12} xl={6}>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Người tạo')}:</div>
+              <span>{get(userLogin, 'user.profile.preferred_username', '')}</span>
+            </div>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Đơn vị')}:</div>
+              <span>{get(userLogin, 'user.profile.bp_org_unit', '')}</span>
+            </div>
+          </Col>
+          <Col xs={12} xl={6}>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Tổng giá trị')}:</div>
+              <span>{sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(item.SUM_AMOUNT))}</span>
+            </div>
+            <div className="sipFicoBangKeInformation">
+              <div>{t('Ngày tạo')}:</div>
+              <span>{moment(get(detailRecerver, 'header.CRE_TIME', ''), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</span>
+            </div>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 
   function handleSubmitKhoanMuc(item: API.LIST): void {
@@ -255,7 +220,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
   }
 
   const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
-    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmit} />;
+    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmit} rows={rows} />;
   };
 
   return (
@@ -270,12 +235,10 @@ const SuaBangKe = (props: Props): JSX.Element => {
         <Col className="d-flex justify-content-end">{renderFirstControllers()}</Col>
       </Row>
 
-      <Row className="mb-3">
-        <Col>{renderFilters()}</Col>
-      </Row>
-
       <Row className="mb-4">
-        <Col>{renderThongTinBangKe()}</Col>
+        <Col>
+          <div className="bg-white p-3 shadow-sm">{renderThongTinBangKe()}</div>
+        </Col>
       </Row>
 
       <Row className="mb-3">
@@ -287,12 +250,14 @@ const SuaBangKe = (props: Props): JSX.Element => {
 
       <Row>
         <Col>
-          <div className="sipTableContainer">
-            {status ? (
-              <DataTable columns={columns} data={data} groupKey={'TEN_KM'} />
-            ) : (
-              <DataTable columns={columns} data={data} groupKey={'TEN_KM'} renderGroupedRow={renderGroupedRow} />
-            )}
+          <div className="sipTableContainerAmountListContainer">
+            <div className="sipTableContainer sipTableContainerAmountList">
+              {status ? (
+                <DataTable columns={columns} data={data} groupKey={'TEN_KM'} />
+              ) : (
+                <DataTable columns={columns} data={data} groupKey={'TEN_KM'} renderGroupedRow={renderGroupedRow} />
+              )}
+            </div>
           </div>
         </Col>
       </Row>

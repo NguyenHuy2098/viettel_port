@@ -3,11 +3,14 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, For
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { toNumber, toString } from 'lodash';
+import { toNumber, toString, sumBy } from 'lodash';
+import numeral from 'numeral';
+import { Row as TableRow } from 'react-table';
 
 interface Props {
   index: string;
   handleSubmit: Function;
+  rows: TableRow<API.RowMTZTMI047OUT>[];
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -15,6 +18,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
   const [modal, setModal] = React.useState(false);
   const { t } = useTranslation();
   const index = props.index;
+  const rows = props.rows;
 
   function toggle(): void {
     setModal(!modal);
@@ -178,17 +182,17 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
 
   return (
     <div>
-      <Row>
-        <Col>{index}</Col>
-        <Col>
-          <div className="d-flex justify-content-end">
-            <Button color="primary" className=" ml-2" outline onClick={toggle}>
-              <i className="fa fa-plus mr-2" />
-              {t('Thêm mới')}
-            </Button>
-          </div>
-        </Col>
-      </Row>
+      <div className="sipTableAmountListGroup">
+        <span>
+          {t('Chi phí')}&nbsp;
+          {index}&nbsp;({t('Tổng')}:{' '}
+          <span className="text-bold color-primary">{numeral(sumBy(rows, 'original.SUM_AMOUNT')).format('0,0')}</span>)
+        </span>
+        <Button color="primary" outline onClick={toggle}>
+          <i className="fa fa-plus mr-2" />
+          {t('Thêm mới')}
+        </Button>
+      </div>
       <Modal isOpen={modal} toggle={toggle} className="">
         <ModalHeader toggle={toggle} charCode="x">
           Thông tin hóa
