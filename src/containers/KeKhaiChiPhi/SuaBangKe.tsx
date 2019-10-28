@@ -14,7 +14,7 @@ import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007, select_MT_DETAIL_RECEIVER_ZFI007 } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
-import InBangKe from './InBangKe';
+import Index from './DanhSachBangKe/index';
 
 interface Props {
   match: match;
@@ -139,7 +139,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
 
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <InBangKe />
+      <Index ids={[idBangKe]} />
       {!status && (
         <>
           <Button color="primary" className="ml-2">

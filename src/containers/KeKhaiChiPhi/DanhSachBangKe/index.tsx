@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
-import React, { useMemo } from 'react';
-import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container } from 'reactstrap';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, ButtonProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { get } from 'lodash';
+import { get, size } from 'lodash';
 import { Cell, Row as TableRow } from 'react-table';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_MT_DETAIL_RECEIVER_ZFI007, select_ZFI007 } from 'redux/ZFI007/selectors';
@@ -10,58 +10,60 @@ import { select_MT_DETAIL_RECEIVER_ZFI007, select_ZFI007 } from 'redux/ZFI007/se
 import printJS from 'print-js';
 import { useDispatch, useSelector } from 'react-redux';
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
-import { formatNumber } from '../../utils/common';
+import { formatNumber } from '../../../utils/common';
+
+interface Props extends ButtonProps {
+  ids: string[];
+}
 
 // eslint-disable-next-line max-lines-per-function
-const InBangKe = (): JSX.Element => {
-  const { t } = useTranslation();
-  const [modal, setModal] = React.useState(false);
+const Index = (props: Props): JSX.Element => {
+  const { ids, ...rest } = props;
+  const [modal, setModal] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const data = useSelector(select_ZFI007);
+  const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
 
   function toggle(): void {
     setModal(!modal);
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
+    if (!size(ids)) return;
     const payload = {
-      MA_BUU_CUC: 'BDH',
-      BK_ID: 'CP_2019_000113',
-      IV_PAGENO: '1',
-      IV_NO_PER_PAGE: '10',
+      BK_ID: ids[0],
     };
     dispatch(action_ZFI007(payload));
-  }, [dispatch]);
-
-  const data = useSelector(select_ZFI007);
-
-  const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ids]);
 
   // eslint-disable-next-line max-lines-per-function
   function renderHeader(): JSX.Element {
     return (
       <thead className="bang-ke-header">
         <tr className="text-center">
-          <th rowSpan={3}>STT</th>
-          <th colSpan={11}>Bưu cục kê khai</th>
-          <th colSpan={4}>Chờ phê duyệt</th>
-          <th rowSpan={3}>Không duyệt</th>
-          <th rowSpan={3}>Lý do</th>
+          <th rowSpan={3}>{t('STT')}</th>
+          <th colSpan={11}>{t('Bưu cục kê khai')}</th>
+          <th colSpan={4}>{t('Chờ phê duyệt')}</th>
+          <th rowSpan={3}>{t('Không duyệt')}</th>
+          <th rowSpan={3}>{t('Lý do')}</th>
         </tr>
 
         <tr className="text-center">
-          <th colSpan={3}>Hóa đơn mua hàng</th>
-          <th rowSpan={2}>Tên người bán</th>
-          <th rowSpan={2}>Mã số thuế người bán</th>
-          <th rowSpan={2}>Hàng hóa, Dịch vụ</th>
-          <th rowSpan={2}>Hàng hóa dịch vụ chưa thuế</th>
-          <th rowSpan={2}>Phụ phí</th>
-          <th rowSpan={2}>Thuế suất</th>
-          <th rowSpan={2}>thuế GTGT</th>
-          <th rowSpan={2}>Tổng cộng</th>
-          <th rowSpan={2}>hàng hóa dịch vụ chưa thuế</th>
-          <th rowSpan={2}>Phụ phí </th>
-          <th rowSpan={2}>Thuế GTGT</th>
-          <th rowSpan={2}>Cộng </th>
+          <th colSpan={3}>{t('Hóa đơn mua hàng')}</th>
+          <th rowSpan={2}>{t('Tên người bán')}</th>
+          <th rowSpan={2}>{t('Mã số thuế người bán')}</th>
+          <th rowSpan={2}>{t('Hàng hóa, Dịch vụ')}</th>
+          <th rowSpan={2}>{t('Hàng hóa dịch vụ chưa thuế')}</th>
+          <th rowSpan={2}>{t('Phụ phí')}</th>
+          <th rowSpan={2}>{t('Thuế suất')}</th>
+          <th rowSpan={2}>{t('thuế GTGT')}</th>
+          <th rowSpan={2}>{t('Tổng cộng')}</th>
+          <th rowSpan={2}>{t('hàng hóa dịch vụ chưa thuế')}</th>
+          <th rowSpan={2}>{t('Phụ phí')} </th>
+          <th rowSpan={2}>{t('Thuế GTGT')}</th>
+          <th rowSpan={2}>{t('Cộng')} </th>
         </tr>
 
         <tr className="text-center">
@@ -298,7 +300,7 @@ const InBangKe = (): JSX.Element => {
 
   return (
     <div>
-      <Button color="primary" className="ml-2" onClick={toggle}>
+      <Button color="primary" className="ml-2" onClick={toggle} disabled={!size(ids)} {...rest}>
         <img src={'../../assets/img/icon/iconPrintWhite.svg'} alt="VTPostek" />
         {t('In bảng kê')}
       </Button>
@@ -320,4 +322,4 @@ const InBangKe = (): JSX.Element => {
   );
 };
 
-export default InBangKe;
+export default Index;

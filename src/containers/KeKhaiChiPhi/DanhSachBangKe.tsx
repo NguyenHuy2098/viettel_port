@@ -21,7 +21,7 @@ import { select_ZFI002, select_ZFI002Count } from 'redux/ZFI002/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import routesMap from 'utils/routesMap';
-import InBangKe from './InBangKe';
+import InBangKe from './DanhSachBangKe/index';
 
 interface Props {
   match: match;
@@ -145,7 +145,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           {t('Lấy file mẫu')}
         </Button>
         <ButtonExportExcelBangKe className="ml-2" disabled={noBangKeChecked} ids={checkedBangKe} />
-        <InBangKe />
+        <InBangKe ids={checkedBangKe} />
         <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>
           <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
           {t('Thêm mới')}
