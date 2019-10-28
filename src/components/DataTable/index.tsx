@@ -95,11 +95,17 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
         <thead>
           {headerGroups.map((headerGroup, index) => (
             <tr key={index}>
-              {showCheckboxes && showCheckAll && (
+              {showCheckboxes && (
                 <th>
-                  <Label check>
-                    <Input checked={size(data) === size(checkedValues)} type="checkbox" onChange={handleCheckAllRows} />
-                  </Label>
+                  {showCheckAll && (
+                    <Label check>
+                      <Input
+                        checked={size(data) === size(checkedValues)}
+                        type="checkbox"
+                        onChange={handleCheckAllRows}
+                      />
+                    </Label>
+                  )}
                 </th>
               )}
               {headerGroup.headers.map((column, index) => (
