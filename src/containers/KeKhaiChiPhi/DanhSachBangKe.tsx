@@ -154,12 +154,9 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     );
   };
 
-  function handleRedirectDetail(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      event.stopPropagation();
-      dispatch(push(generatePath(routesMap.SUA_BANG_KE, { idBangKe: torId })));
-    };
-  }
+  const handleRedirectDetail = (rowOriginal: API.ListMTBKRECEIVER): void => {
+    dispatch(push(generatePath(routesMap.SUA_BANG_KE, { idBangKe: get(rowOriginal, 'BK_ID', '') })));
+  };
 
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
@@ -175,17 +172,17 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Ngày tạo'),
         accessor: 'CRE_TIME',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const thisDate = moment(get(row, 'values.CRE_TIME'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY');
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisDate = moment(get(row, 'original.CRE_TIME'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY');
           return <>{thisDate}</>;
         },
       },
       {
         Header: t('Kỳ'),
         accessor: 'BK_MONTH',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const thisMonth = get(row, 'values.BK_MONTH');
-          const thisYear = get(row, 'values.BK_YEAR');
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisMonth = get(row, 'original.BK_MONTH');
+          const thisYear = get(row, 'original.BK_YEAR');
           return (
             <>
               {thisMonth}/{thisYear}
@@ -196,35 +193,35 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Trạng thái'),
         accessor: 'BK_STATUS',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const thisStatus = get(row, 'values.BK_STATUS', 0);
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisStatus = get(row, 'original.BK_STATUS', 0);
           return <BadgeFicoBangKeStatus status={thisStatus} />;
         },
       },
       {
         Header: t('Người cập nhật'),
         accessor: 'UPD_BY',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const thisUpdBy = get(row, 'values.UPD_BY');
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisUpdBy = get(row, 'original.UPD_BY');
           return <>{thisUpdBy ? thisUpdBy : ''}</>;
         },
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const thisStatus = get(row, 'values.BK_STATUS', 0);
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisStatus = get(row, 'original.BK_STATUS', 0);
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(get(row, 'values.BK_ID', ''))}>
-                <img src={'../../assets/img/icon/iconEyes.svg'} alt="VTPostek" />
-              </Button>
-              <Button
-                className="SipTableFunctionIcon"
-                onClick={handleDeleteItem(get(row, 'values.BK_ID', ''))}
-                disabled={thisStatus !== 0}
-              >
-                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
-              </Button>
+              {thisStatus !== 0 && (
+                <Button className="SipTableFunctionIcon">
+                  <img src={'../../assets/img/icon/iconEyes.svg'} alt="VTPostek" />
+                </Button>
+              )}
+              {thisStatus === 0 && (
+                <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'original.BK_ID', ''))}>
+                  <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
+                </Button>
+              )}
             </>
           );
         },

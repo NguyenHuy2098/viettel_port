@@ -11,7 +11,7 @@ interface Props extends TableOptions<any> {
   columns: any[];
   onCheckedValuesChange?: (values: string[]) => void;
   onRowCheck?: (value: string, item?: any, row?: TableRow<any>) => void;
-  onRowClick?: (row: any) => void;
+  onRowClick?: (rowData: any, row?: TableRow<any>) => void;
   showCheckAll?: boolean;
   showCheckboxes?: boolean;
   renderCheckboxValues?: string | ((item: any) => string);
@@ -81,8 +81,8 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleClickRow = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (item: any): ((event: React.MouseEvent) => void) => (): void => {
-      onRowClick && onRowClick(item);
+    (rowOriginal: any, row: TableRow<any>) => (): void => {
+      onRowClick && onRowClick(rowOriginal);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
@@ -135,7 +135,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                   )}
                   {row.cells.map((cell, index) => {
                     return (
-                      <td key={index} onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
+                      <td key={index} onClick={handleClickRow(get(row, 'original'), row)} {...cell.getCellProps()}>
                         {cell.render('Cell')}
                       </td>
                     );
