@@ -67,11 +67,13 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const listChuyenThuCoSan = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
 
   const reset = (): void => {
-    setForwardingItemListState([]);
-    setUncheckAllForwardingItemCheckbox(false);
-    setSelectedChuyenThu(undefined);
-    setSelectedTai(undefined);
-    dispatchZTMI241();
+    setTimeout(() => {
+      setForwardingItemListState([]);
+      setUncheckAllForwardingItemCheckbox(false);
+      setSelectedChuyenThu(undefined);
+      setSelectedTai(undefined);
+      dispatchZTMI241();
+    }, 1000);
   };
 
   const getListTaiCoSan = (): void => {
@@ -190,21 +192,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           return <>{moment(date, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</>;
         },
       },
-      // {
-      //   Header: t('Quản trị'),
-      //   Cell: ({ row }: Cell<API.RowMTZTMI241OUT>): JSX.Element => {
-      //     return (
-      //       <>
-      //         <Button className="SipTableFunctionIcon">
-      //           <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
-      //         </Button>
-      //         <Button className="SipTableFunctionIcon">
-      //           <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
-      //         </Button>
-      //       </>
-      //     );
-      //   },
-      // },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [uncheckAllForwardingItemCheckbox],
@@ -274,20 +261,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     );
   }
 
-  // const [createForwardingItemModal, setCreateForwardingItemModal] = useState<boolean>(false);
-
-  // function toggleCreateForwardingItemModal(): void {
-  //   setCreateForwardingItemModal(!createForwardingItemModal);
-  // }
-
-  // const getListBangKe = useCallback(
-  //   function(): void {
-  //     // console.log(1);
-  //   },
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   [],
-  // );
-
   const getListDiemDen = (): void => {
     dispatch(
       action_MIOA_ZTMI045({
@@ -315,9 +288,11 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const saveSelectedTai = (tai: API.RowMTZTMI047OUT | undefined): void => {
     setSelectedTai(tai);
   };
+
   const handleShowPopupDongBangKe = (): void => {
     setShowPopUpDongBangKe(true);
   };
+
   const dongBangKeVaoTaiCoSan = (): void => {
     if (!isEmpty(selectedTai)) {
       dispatch(
@@ -334,10 +309,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                   type: 'success',
                 },
               );
-              reset();
             },
             onFailure: (error: Error): void => {
-              reset();
               toast(
                 <>
                   <i className="fa fa-window-close-o mr-2" />
@@ -348,12 +321,16 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                 },
               );
             },
+            onFinish: (): void => {
+              handleHidePopupDongBangKe();
+              reset();
+            },
           },
         ),
       );
     }
-    handleHidePopupDongBangKe();
   };
+
   const dongBangKeVaoTaiMoiTao = (locNo: string, description: string): void => {
     dispatch(
       actionDongBangKeVaoTaiMoiTao(
@@ -507,18 +484,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>
-          {/* <Button onClick={toggleCreateForwardingItemModal} color="primary" className="ml-2">
-            <i className="fa fa-file-archive-o mr-2" />
-            {t('Tạo bảng kê')}
-            <CreateForwardingItemModal
-              onSuccessCreated={getListBangKe}
-              visible={createForwardingItemModal}
-              onHide={toggleCreateForwardingItemModal}
-              modalTitle={t('Tạo bảng kê')}
-              IV_TOR_TYPE="ZC1"
-            />
-          </Button> */}
-          {/*<DongBangKe forwardingItemListState={forwardingItemListState} des={des} />*/}
           <Button
             onClick={handleShowPopupDongBangKe}
             color="primary"
