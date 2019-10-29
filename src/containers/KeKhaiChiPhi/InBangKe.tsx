@@ -3,14 +3,14 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
-import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, ButtonProps } from 'reactstrap';
+import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, ButtonProps } from 'reactstrap';
 import { get, size } from 'lodash';
-import printJS from 'print-js';
 
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_MT_DETAIL_RECEIVER_ZFI007, select_ZFI007 } from 'redux/ZFI007/selectors';
 import { formatNumber } from 'utils/common';
+import { printHtml } from 'utils/print';
 
 interface Props extends ButtonProps {
   ids: string[];
@@ -234,12 +234,8 @@ const InBangKe = (props: Props): JSX.Element => {
   };
 
   function handlePrint(): void {
-    printJS({
-      css: ['https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'],
+    printHtml({
       printable: 'in-bang-ke',
-      scanStyles: false,
-      type: 'html',
-      style: '@page { size: Letter landscape; margin: 0 }',
     });
   }
 
@@ -250,56 +246,106 @@ const InBangKe = (props: Props): JSX.Element => {
   // eslint-disable-next-line max-lines-per-function
   function renderContent(): JSX.Element {
     return (
-      <Container id="in-bang-ke">
-        <div className="row">
-          <div className="col-4">
-            <div>{t('Tổng công ty cổ phần Bưu chính Viettel')}</div>
-            <div className="pl-5">{t('Bưu cục Đống Da')} </div>
-          </div>
-          <div className="col-4"></div>
-          <div className="col-4 text-right">
-            {t('Số')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}
-          </div>
-        </div>
-        <Row>
-          <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
-            <h5>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</h5>
-            <p>
-              {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} {t('năm')}{' '}
-              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
-            </p>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12" className="info pb-3">
-            <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
-            <div className="col-6 pl-0">
-              {t('Họ và Tên:')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+      <div id="in-bang-ke">
+        <div className="pagebreak">
+          <div className="row">
+            <div className="col-4">
+              <div>{t('Tổng công ty cổ phần Bưu chính Viettel')}</div>
+              <div className="pl-5">{t('Bưu cục Đống Da')} </div>
             </div>
-            <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
-            <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12">
-            <div className="text-right">{t('ĐVT: VNĐ')}</div>
-          </Col>
-        </Row>
-        <PrintTableBangKe
-          columns={columns}
-          header={renderHeader}
-          data={data}
-          groupKey="TEN_KM"
-          renderGroupedRow={renderGroupedRow}
-        />
-        {renderTotal()}
-        <Row className="text-center pt-5 pb-5">
-          <div className="col-4">{t('KẾ TOÁN CHUYÊN QUẢN')}</div>
-          <div className="col-4">{t('TRƯỞNG PHÒNG TÀI CHÍNH')}</div>
-          <div className="col-4">{t('TỔNG GIÁM ĐỐC')}</div>
-        </Row>
-        <Row className="pagebreak"> </Row>
-      </Container>
+            <div className="col-4"></div>
+            <div className="col-4 text-right">
+              {t('Số')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}
+            </div>
+          </div>
+          <Row>
+            <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
+              <h5>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</h5>
+              <p>
+                {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} {t('năm')}{' '}
+                {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
+              </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="12" className="info pb-3">
+              <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
+              <div className="col-6 pl-0">
+                {t('Họ và Tên:')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+              </div>
+              <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
+              <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="12">
+              <div className="text-right">{t('ĐVT: VNĐ')}</div>
+            </Col>
+          </Row>
+          <PrintTableBangKe
+            columns={columns}
+            header={renderHeader}
+            data={data}
+            groupKey="TEN_KM"
+            renderGroupedRow={renderGroupedRow}
+          />
+          {renderTotal()}
+          <Row className="text-center pt-5 pb-5">
+            <div className="col-4">{t('KẾ TOÁN CHUYÊN QUẢN')}</div>
+            <div className="col-4">{t('TRƯỞNG PHÒNG TÀI CHÍNH')}</div>
+            <div className="col-4">{t('TỔNG GIÁM ĐỐC')}</div>
+          </Row>
+        </div>
+        <div className="pagebreak">
+          <div className="row">
+            <div className="col-4">
+              <div>{t('Tổng công ty cổ phần Bưu chính Viettel')}</div>
+              <div className="pl-5">{t('Bưu cục Đống Da')} </div>
+            </div>
+            <div className="col-4"></div>
+            <div className="col-4 text-right">
+              {t('Số')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}
+            </div>
+          </div>
+          <Row>
+            <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
+              <h5>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</h5>
+              <p>
+                {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} {t('năm')}{' '}
+                {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
+              </p>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="12" className="info pb-3">
+              <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
+              <div className="col-6 pl-0">
+                {t('Họ và Tên:')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+              </div>
+              <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
+              <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm="12">
+              <div className="text-right">{t('ĐVT: VNĐ')}</div>
+            </Col>
+          </Row>
+          <PrintTableBangKe
+            columns={columns}
+            header={renderHeader}
+            data={data}
+            groupKey="TEN_KM"
+            renderGroupedRow={renderGroupedRow}
+          />
+          {renderTotal()}
+          <Row className="text-center pt-5 pb-5">
+            <div className="col-4">{t('KẾ TOÁN CHUYÊN QUẢN')}</div>
+            <div className="col-4">{t('TRƯỞNG PHÒNG TÀI CHÍNH')}</div>
+            <div className="col-4">{t('TỔNG GIÁM ĐỐC')}</div>
+          </Row>
+        </div>
+      </div>
     );
   }
 

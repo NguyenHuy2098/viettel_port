@@ -424,19 +424,6 @@
 .sipTableNoBreakWord {
   word-break: normal;
 }
-.bang-ke {
-  max-width: 1200px !important;
-}
-#bang-ke td,
-#bang-ke th {
-  word-break: normal;
-  padding: 3px 3px;
-  max-width: 120px;
-  font-size: 12px;
-}
-.footer-no-boder {
-  border-top: none;
-}
 @media screen and (max-width: 575px) {
   .topDashBroad {
     .itemCol {
