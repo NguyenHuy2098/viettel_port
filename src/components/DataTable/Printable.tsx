@@ -59,7 +59,7 @@ const DataTable: React.FC<Props> = ({ columns, data, onRowClick, renderFooter }:
                 {row.cells.map(cell => {
                   return (
                     <td onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
-                      {cell.render('Cell')}
+                      {cell.value !== null ? cell.render('Cell') : ''}
                     </td>
                   );
                 })}
