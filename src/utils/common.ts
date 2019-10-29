@@ -1,4 +1,4 @@
-import { get, isEmpty, isObject } from 'lodash';
+import { find, get, isEmpty, isObject } from 'lodash';
 import numeral from 'numeral';
 
 export const cleanAccents = (str: string): string => {
@@ -51,3 +51,7 @@ export function formatNumber(value: number): string {
   str = str.split(',').join(newchar);
   return str;
 }
+
+export const getAddressNameById = (id: string, data: VtpAddress[]): string => {
+  return get(find(data, { I: id }), 'N', '');
+};

@@ -18,6 +18,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { action_GET_PROVINCE, action_GET_DISTRICT, action_GET_WARD } from 'redux/LocationSearch/actions';
 import * as yup from 'yup';
+import { getAddressNameById } from 'utils/common';
 
 interface Props {
   onHide: () => void;
@@ -58,10 +59,6 @@ const ChoosingAddressPopup: React.FC<Props> = (props: Props): JSX.Element => {
   const [district, setDistrict] = useState<string>(props.district || '0');
   const [ward, setWard] = useState<string>(props.ward || '0');
   const [detailAddress, setDetailAddress] = useState<string>(props.detailAddress || '');
-
-  const getAddressNameById = (id: string, data: VtpAddress[]): string => {
-    return get(find(data, { I: id }), 'N', '');
-  };
 
   const addressData = {
     province: '',

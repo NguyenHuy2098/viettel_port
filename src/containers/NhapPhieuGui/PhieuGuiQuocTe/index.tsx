@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
@@ -33,12 +33,17 @@ import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
 import { action_LOCATIONSUGGEST } from 'redux/LocationSuggest/actions';
 import { action_LOCATIONSUGGEST_DETAIL } from 'redux/LocationSuggestDetail/actions';
 import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
-import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
+import {
+  action_GET_ADDRESS,
+  action_GET_PROVINCE,
+  action_GET_DISTRICT,
+  action_GET_WARD,
+} from 'redux/LocationSearch/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 // import { makeSelectProfile } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import ChoosingAddressPopup from 'components/Modal/ModalChooseAddress';
+import { getAddressNameById } from 'utils/common';
 import AdditionalPackageTabItemsInternational from 'components/AdditionalPackageTabItemsInternational';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 import { countryList } from './countryList';
@@ -178,6 +183,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       .matches(isVnPhoneMobile, t('Vui lòng nhập đúng định dạng số điện thoại')),
     hoTenSender: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiSender: yup.string().required(t('Vui lòng nhập địa chỉ')),
+    provinceIdSender: yup.string().required(t('Vui lòng nhập tỉnh/thành phố')),
+    districtIdSender: yup.string().required(t('Vui lòng nhập quận/huyện')),
+    wardIdSender: yup.string().required(t('Vui lòng nhập phường/xã')),
+    detailAddressSender: yup.string().required(t('Vui lòng nhập địa chỉ chi tiết')),
     dienThoaiReceiver: yup
       .string()
       .required(t('Vui lòng nhập số điện thoại'))
@@ -282,8 +291,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   //______ Transport method
 
   const [transportMethodArr, setTransportMethodArr] = useState<TransportMethodItem[]>([]);
-  //_______open Address modal
-  const [modalSender, setModalSender] = useState<boolean>(false);
   //______ Package item tab
 
   const [activeTab, setActiveTab] = useState<string>('1');
@@ -379,32 +386,16 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setActiveTab(tab);
   }
 
-  //__________________ address popup events
-
-  function toggleSenderAddress(): void {
-    setModalSender(!modalSender);
-  }
-
-  function handleSenderAddressData(data: AddressPopupData): void {
-    setProvinceIdSender(data.provinceId);
-    setDistrictIdSender(data.districtId);
-    setWardIdSender(data.wardId);
-    setDetailAddressSender(data.detailAddress);
-    setDiaChiSender(data.fullAddress);
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
-  }
-
   const validateData = {
     maPhieuGui: trim(maPhieuGui),
     maKhachHang: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang),
     dienThoaiSender: trim(dienThoaiSender),
     hoTenSender: trim(hoTenSender),
     diaChiSender: trim(diaChiSender),
+    provinceIdSender,
+    districtIdSender,
+    wardIdSender,
+    detailAddressSender: trim(detailAddressSender),
     dienThoaiReceiver: trim(dienThoaiReceiver),
     hoTenReceiver: trim(hoTenReceiver),
     diaChiReceiver: trim(diaChiReceiver),
@@ -747,7 +738,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countLocationSuggestSender]);
 
-  function handleChooseLocationSuggest(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
+  function handleChooseLocationSuggestSender(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
         return item.id === id;
@@ -995,39 +986,170 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   function handleClearData(): void {
-    window.location.reload();
-    // setIsSubmit(false);
-    // setErrors([]);
-    // setMaPhieuGui('');
-    // setMaKhachHang('');
-    // setDienThoaiSender('');
-    // setHoTenSender('');
-    // setDiaChiSender('');
-    // setProvinceIdSender('');
-    // setDistrictIdSender('');
-    // setWardIdSender('');
-    // setDetailAddressSender('');
-    // setDienThoaiReceiver('');
-    // setHoTenReceiver('');
-    // setDiaChiReceiver('');
-    // setDetailAddressReceiver('');
-    // setTenHang('');
-    // setSoLuong('');
-    // setGiaTri('');
-    // setTrongLuong('');
-    // setPhuongThucVanChuyen('VCN');
-    // // setLoaiHangHoa('V3');
-    // // setNguoiThanhToan('PP');
-    // setChoXemHang('');
-    // setGhiChu('');
-    // setActiveTab('1');
-    // setPackageItemArr([]);
-    // setPackageItemErrorsList([]);
-    // tabValid = true;
-    // setCuocChinh('0 đ');
-    // setCuocCongThem('0 đ');
-    // setTongCuoc('0 đ');
+    // window.location.reload();
+    setIsSubmit(false);
+    setErrors([]);
+    setMaPhieuGui('');
+    setMaKhachHang('');
+    setDienThoaiSender('');
+    setHoTenSender('');
+    setDiaChiSender('');
+    setProvinceIdSender('');
+    setDistrictIdSender('');
+    setWardIdSender('');
+    setDetailAddressSender('');
+    setDienThoaiReceiver('');
+    setHoTenReceiver('');
+    setDiaChiReceiver('');
+    setDetailAddressReceiver('');
+    setTenHang('');
+    setSoLuong('');
+    setGiaTri('');
+    setTrongLuong('');
+    setPhuongThucVanChuyen('VCN');
+    // setLoaiHangHoa('V3');
+    // setNguoiThanhToan('PP');
+    setChoXemHang('');
+    setGhiChu('');
+    setActiveTab('1');
+    setPackageItemArr([]);
+    setPackageItemErrorsList([]);
+    tabValid = true;
+    setCuocChinh('0 đ');
+    setCuocCongThem('0 đ');
+    setTongCuoc('0 đ');
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
   }
+
+  //__________________________________________________________________________
+  // _____________________Address choosing event______________________________
+  //__________________________________________________________________________
+
+  const payloadProvinceSender = {
+    TypeLocation: 1,
+    Id: '',
+    ParentId: '',
+    PageIndex: 0,
+    PageSize: 200,
+  };
+  const payloadDistrictSender = {
+    TypeLocation: 2,
+    Id: '',
+    ParentId: '',
+    PageIndex: 0,
+    PageSize: 1000,
+  };
+  const payloadWardSender = {
+    TypeLocation: 3,
+    Id: '',
+    ParentId: districtIdSender !== '0' ? districtIdSender : '',
+    PageIndex: 0,
+    PageSize: 500,
+  };
+
+  const [filteredProvinceSender, setFilteredProvinceSender] = useState<VtpAddress[]>([]);
+  const [fullDistrict, setFullDistrict] = useState<VtpAddress[]>([]);
+  const [filteredDistrictSender, setFilteredDistrictSender] = useState<VtpAddress[]>([]);
+  const [filteredWardSender, setFilteredWardSender] = useState<VtpAddress[]>([]);
+
+  useEffect((): void => {
+    dispatch(
+      action_GET_PROVINCE(payloadProvinceSender, {
+        onSuccess: (data: VtpAddressResponse): void => {
+          setFilteredProvinceSender(get(data, 'LocationModels'));
+        },
+      }),
+    );
+    dispatch(
+      action_GET_DISTRICT(payloadDistrictSender, {
+        onSuccess: (data: VtpAddressResponse): void => {
+          setFullDistrict(get(data, 'LocationModels'));
+          if (provinceIdSender !== '') {
+            setFilteredDistrictSender(filter(get(data, 'LocationModels'), { P: provinceIdSender }));
+          }
+        },
+      }),
+    );
+    if (districtIdSender !== '') {
+      dispatch(
+        action_GET_WARD(payloadWardSender, {
+          onSuccess: (data: VtpAddressResponse): void => {
+            setFilteredWardSender(get(data, 'LocationModels'));
+          },
+        }),
+      );
+    }
+    //_________________set Detail address when choosing location from detail form
+    if (
+      (size(trim(detailAddressSender)) > 0 ||
+        size(provinceIdSender) > 0 ||
+        size(districtIdSender) > 0 ||
+        size(wardIdSender) > 0) &&
+      detailSender
+    ) {
+      const provinceNameSender = getAddressNameById(provinceIdSender, filteredProvinceSender);
+      const districtNameSender = getAddressNameById(districtIdSender, filteredDistrictSender);
+      const wardNameSender = getAddressNameById(wardIdSender, filteredWardSender);
+      setDiaChiSender(
+        `${detailAddressSender}${' '}${wardNameSender}${' '}${districtNameSender}${' '}${provinceNameSender}`,
+      );
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, provinceIdSender, districtIdSender, wardIdSender, detailAddressSender]);
+
+  const handleChangeProvinceSender = (event: React.FormEvent<HTMLInputElement>): void => {
+    setProvinceIdSender(event.currentTarget.value);
+    setDistrictIdSender('');
+    setWardIdSender('');
+    if (event.currentTarget.value !== '') {
+      setFilteredDistrictSender(filter(fullDistrict, { P: event.currentTarget.value }));
+    } else {
+      setFilteredDistrictSender([]);
+    }
+    setFilteredWardSender([]);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  };
+
+  const handleChangeDistrictSender = (event: React.FormEvent<HTMLInputElement>): void => {
+    setDistrictIdSender(event.currentTarget.value);
+    if (event.currentTarget.value !== '') {
+      payloadWardSender.ParentId = event.currentTarget.value;
+      dispatch(
+        action_GET_WARD(payloadWardSender, {
+          onSuccess: (data: VtpAddressResponse): void => {
+            setFilteredWardSender(get(data, 'LocationModels'));
+          },
+        }),
+      );
+    } else {
+      setFilteredWardSender([]);
+    }
+    setWardIdSender('');
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  };
+
+  const handleChangeWardSender = (event: React.FormEvent<HTMLInputElement>): void => {
+    setWardIdSender(event.currentTarget.value);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  };
+
+  //__________________ address popup events
+
+  const [detailSender, setDetailSender] = useState<boolean>(false);
+  function toggleSenderAddress(): void {
+    setDetailSender(!detailSender);
+  }
+
+  // _____________________________________________________________________________
 
   function renderSendingCoupon(): JSX.Element {
     return (
@@ -1061,6 +1183,62 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
           </Row>
         </Row>
+      </Row>
+    );
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  function renderChoosingAddress(): JSX.Element {
+    return (
+      <Row className="sipInputItemGroup">
+        <Col xs="12" md="4" className="mb-2">
+          <Input type="select" id="provinceSelect" value={provinceIdSender} onChange={handleChangeProvinceSender}>
+            <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
+            {map(
+              filteredProvinceSender,
+              (item: VtpAddress, index: number): JSX.Element => {
+                return (
+                  <option key={index} value={item.I || undefined}>
+                    {item.N}
+                  </option>
+                );
+              },
+            )}
+          </Input>
+          <div className="sipInputItemError">{handleErrorMessage(errors, 'provinceIdSender')}</div>
+        </Col>
+        <Col xs="12" md="4" className="mb-2">
+          <Input type="select" id="districtSelect" value={districtIdSender} onChange={handleChangeDistrictSender}>
+            <option value="0">{t('Quận / Huyện')}</option>
+            {map(
+              filteredDistrictSender,
+              (item: VtpAddress, index: number): JSX.Element => {
+                return (
+                  <option key={index} value={item.I || undefined}>
+                    {item.N}
+                  </option>
+                );
+              },
+            )}
+          </Input>
+          <div className="sipInputItemError">{handleErrorMessage(errors, 'districtIdSender')}</div>
+        </Col>
+        <Col xs="12" md="4" className="mb-2">
+          <Input type="select" id="wardSelect" value={wardIdSender} onChange={handleChangeWardSender}>
+            <option value="0">{t('Chọn Phường/ Xã')}</option>
+            {map(
+              filteredWardSender,
+              (item: VtpAddress, index: number): JSX.Element => {
+                return (
+                  <option key={index} value={item.I || undefined}>
+                    {item.N}
+                  </option>
+                );
+              },
+            )}
+          </Input>
+          <div className="sipInputItemError">{handleErrorMessage(errors, 'wardIdSender')}</div>
+        </Col>
       </Row>
     );
   }
@@ -1115,50 +1293,60 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <div className="sipInputItemError">{handleErrorMessage(errors, 'hoTenSender')}</div>
           </Col>
         </Row>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            Địa chỉ
-            <span className="color-red"> *</span>
-          </Label>
-          <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
-              value={diaChiSender}
-              onChange={handleChangeTextboxValue(setDiaChiSender)}
-              onKeyUp={handleKeyPressDiaChiSender}
-            />
-            <ListGroup className="sipInputAddressDropdown">
-              {map(
-                locationSuggestSender,
-                (item: SuggestedItem, index: number): JSX.Element => {
-                  return (
-                    <ListGroupItem tag="button" key={index} onClick={handleChooseLocationSuggest(item.id)}>
-                      {get(item, 'name', '')}
-                    </ListGroupItem>
-                  );
-                },
-              )}
-            </ListGroup>
-            <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
-            <p className="sipInputItemDescription">
-              ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
-              <Button onClick={toggleSenderAddress} className="sipFlatBtn">
-                {t('nhấn vào đây')}
-              </Button>{' '}
-              {t('để tự nhập')})
-            </p>
-            <ChoosingAddressPopup
-              visible={modalSender}
-              onChoose={handleSenderAddressData}
-              onHide={toggleSenderAddress}
-              province={provinceIdSender}
-              district={districtIdSender}
-              ward={wardIdSender}
-              detailAddress={detailAddressSender}
-            />
-          </Col>
-        </Row>
+        {!detailSender ? (
+          <Row className="sipInputItem">
+            <Label xs="12" lg="4">
+              {t('Địa chỉ')}
+              <span className="color-red"> *</span>
+            </Label>
+            <Col lg="8">
+              <Input
+                type="text"
+                placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
+                value={diaChiSender}
+                onChange={handleChangeTextboxValue(setDiaChiSender)}
+                onKeyUp={handleKeyPressDiaChiSender}
+              />
+              <ListGroup className="sipInputAddressDropdown">
+                {map(
+                  locationSuggestSender,
+                  (item: SuggestedItem, index: number): JSX.Element => {
+                    return (
+                      <ListGroupItem tag="button" key={index} onClick={handleChooseLocationSuggestSender(item.id)}>
+                        {get(item, 'name', '')}
+                      </ListGroupItem>
+                    );
+                  },
+                )}
+              </ListGroup>
+              <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
+              <p className="sipInputItemDescription">
+                ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
+                <Button onClick={toggleSenderAddress} className="sipFlatBtn">
+                  {t('nhấn vào đây')}
+                </Button>{' '}
+                {t('để tự nhập')})
+              </p>
+            </Col>
+          </Row>
+        ) : (
+          <Row className="sipInputItem mb-0">
+            <Label xs="12" lg="4">
+              {t('Địa chỉ')}
+              <span className="color-red"> *</span>
+            </Label>
+            <Col lg="8">
+              {renderChoosingAddress()}
+              <Input
+                type="text"
+                placeholder={t('Nhập địa chỉ(tên đường, ngõ hẻm, số nhà)')}
+                value={detailAddressSender}
+                onChange={handleChangeTextboxValue(setDetailAddressSender)}
+              />
+              <div className="sipInputItemError">{handleErrorMessage(errors, 'detailAddressSender')}</div>
+            </Col>
+          </Row>
+        )}
       </div>
     );
   }

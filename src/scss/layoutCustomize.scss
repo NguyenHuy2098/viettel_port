@@ -582,6 +582,7 @@ html:not([dir='rtl']) .sidebar {
   position: relative;
   top: -1px;
   min-height: 0;
+  height: auto;
 }
 .sipPagination {
   background: #fff;
