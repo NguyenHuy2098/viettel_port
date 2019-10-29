@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import DateRangePicker from 'react-bootstrap-daterangepicker';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { match, generatePath } from 'react-router-dom';
+import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
-import 'bootstrap-daterangepicker/daterangepicker.css';
 import { get, map, size, toString, trim } from 'lodash';
 import moment from 'moment';
 
@@ -20,16 +18,13 @@ import { action_ZFI004 } from 'redux/ZFI004/actions';
 import { select_ZFI002, select_ZFI002Count } from 'redux/ZFI002/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
-import TopControllers from './TopControllers';
-
-interface Props {
-  match: match;
-}
+import TopControllers from 'containers/KeKhaiChiPhi/DanhSachBangKe/TopControllers';
+import SelectRangeDate from 'containers/KeKhaiChiPhi/SelectRangeDate';
 
 const stateMap = ['Tạo mới', 'Chờ phê duyệt', 'Phê duyệt', 'Duyệt 1 phần'];
 
 // eslint-disable-next-line max-lines-per-function
-const DanhSachBangKe = (props: Props): JSX.Element => {
+const DanhSachBangKe = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const dataTable = useSelector(select_ZFI002);
@@ -37,9 +32,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
 
   const [tuKy, setTuKy] = useState<string>(moment().format('YYYYMM'));
   const [denKy, setDenKy] = useState<string>(moment().format('YYYYMM'));
-  const [filterTimeValue, setFilterTimeValue] = useState<string>(
-    `${moment().format('MM/YYYY')} - ${moment().format('MM/YYYY')}`,
-  );
+  const [filterTimeValue] = useState<string>(`${moment().format('MM/YYYY')} - ${moment().format('MM/YYYY')}`);
   const [idSearch, setIdSearch] = useState<string>('');
   const [typeSearch, setTypeSearch] = useState<string>('');
   const [checkedBangKe, setCheckedBangKe] = useState<string[]>([]);
@@ -118,15 +111,6 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(trim(event.currentTarget.value));
     };
-  };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleChangeDeliveryTime = (event: any, picker: any): void => {
-    setTuKy(moment(get(picker, 'startDate')).format('YYYYMM'));
-    setDenKy(moment(get(picker, 'endDate')).format('YYYYMM'));
-    setFilterTimeValue(
-      `${moment(get(picker, 'startDate')).format('MM/YYYY')} - ${moment(get(picker, 'endDate')).format('MM/YYYY')}`,
-    );
   };
 
   const handleRedirectDetail = (rowOriginal: API.ListMTBKRECEIVER): void => {
@@ -210,6 +194,14 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     setCheckedBangKe(values);
   };
 
+  function handleSelectStartDate(date: Date): void {
+    setTuKy(moment(date).format('YYYYMM'));
+  }
+
+  function handleSelectEndDate(date: Date): void {
+    setDenKy(moment(date).format('YYYYMM'));
+  }
+
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -232,17 +224,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           </div>
         </Col>
         <Col className="sipFilterCol">
-          <div className="sipFilterColSearch">
-            <DateRangePicker onApply={handleChangeDeliveryTime}>
-              <Input
-                value={filterTimeValue}
-                onChange={handleChangeTextboxValue(setFilterTimeValue)}
-                type="text"
-                placeholder="Nhập khoảng thời gian"
-              />
-            </DateRangePicker>
-            <img src={'../../assets/img/icon/iconCalendar.svg'} alt="VTPostek" />
-          </div>
+          <SelectRangeDate handleSelectEndDate={handleSelectEndDate} handleSelectStartDate={handleSelectStartDate} />
         </Col>
         <Col className="sipFilterCol">
           <div className="sipFilterColSearch">
