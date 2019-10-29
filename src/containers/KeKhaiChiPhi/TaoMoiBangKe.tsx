@@ -34,8 +34,8 @@ const TaoMoiBangKe = (): JSX.Element => {
   const { t } = useTranslation();
 
   const handleRemoveTableRow = (item: API.ITEMBK): void => {
-    const tempData = reject(data, ['SO_HD', get(item, 'original.SO_HD')]);
-    setData(tempData);
+    const tempData = reject(data, ['SO_HD', get(item, 'SO_HD')]);
+    setData([...tempData]);
   };
 
   const handleEditTableRow = (item: API.ITEMBK): void => {
@@ -115,22 +115,17 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const [dropdownOpen, setDropdownOpen] = useState(false);
-          function toggle(): void {
-            setDropdownOpen(prevState => !prevState);
-          }
-          return get(row, 'original.SO_HD') ? (
-            <UtilityDropDown
-              dropdownOpen={dropdownOpen}
-              toggle={toggle}
-              removeTableRow={handleRemoveTableRow}
-              editTableRow={handleEditTableRow}
-              copyTableRow={handleCopyTableRow}
-              item={row.original}
-            />
-          ) : (
-            <></>
-          );
+          // return (
+          //   <UtilityDropDown
+          //     dropdownOpen={dropdownOpen}
+          //     toggle={toggle}
+          //     removeTableRow={handleRemoveTableRow}
+          //     editTableRow={handleEditTableRow}
+          //     copyTableRow={handleCopyTableRow}
+          //     item={row.original}
+          //   />
+          // );
+          return <></>;
         },
       },
     ],
@@ -261,6 +256,17 @@ const TaoMoiBangKe = (): JSX.Element => {
     return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} />;
   };
 
+  const renderUtilityDropDown = (row: TableRow<API.RowMTZTMI047OUT>): JSX.Element => {
+    return (
+      <UtilityDropDown
+        removeTableRow={handleRemoveTableRow}
+        editTableRow={handleEditTableRow}
+        copyTableRow={handleCopyTableRow}
+        item={row.original}
+      />
+    );
+  };
+
   return (
     <>
       <Row className="mb-3">
@@ -294,7 +300,13 @@ const TaoMoiBangKe = (): JSX.Element => {
         <Col>
           <div className="sipTableContainerAmountListContainer">
             <div className="sipTableContainer sipTableContainerAmountList">
-              <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
+              <DataTable
+                columns={columns}
+                data={data}
+                groupKey={'KHOAN_MUC'}
+                renderGroupedRow={renderGroupedRow}
+                renderUtilityDropDown={renderUtilityDropDown}
+              />
             </div>
           </div>
         </Col>

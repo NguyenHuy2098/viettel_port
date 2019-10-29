@@ -322,13 +322,13 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
               );
             },
             onFinish: (): void => {
-              handleHidePopupDongBangKe();
               reset();
             },
           },
         ),
       );
     }
+    handleHidePopupDongBangKe();
   };
 
   const dongBangKeVaoTaiMoiTao = (locNo: string, description: string): void => {
@@ -359,12 +359,12 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             );
           },
           onFinish: (): void => {
-            handleHidePopupDongBangKe();
             reset();
           },
         },
       ),
     );
+    handleHidePopupDongBangKe();
   };
 
   const handleHidePopupDongTai = (): void => {

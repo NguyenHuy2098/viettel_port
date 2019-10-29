@@ -12,12 +12,13 @@ interface Props extends TableOptions<any> {
   groupKey: string;
   onRowClick?: (item: any) => void;
   renderGroupedRow?: (group: TableRow<any>[], index: string) => React.ReactNode;
+  renderUtilityDropDown?: (row: TableRow<any>) => JSX.Element;
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function
 const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
-  const { columns, data, groupKey, onRowClick, renderGroupedRow } = props;
+  const { columns, data, groupKey, onRowClick, renderGroupedRow, renderUtilityDropDown } = props;
   const { t } = useTranslation();
 
   // Use the state and functions returned from useTable to build your UI
@@ -75,6 +76,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                           </td>
                         );
                       })}
+                      {isFunction(renderUtilityDropDown) && <td>{renderUtilityDropDown(row)}</td>}
                     </tr>
                   ),
               )}

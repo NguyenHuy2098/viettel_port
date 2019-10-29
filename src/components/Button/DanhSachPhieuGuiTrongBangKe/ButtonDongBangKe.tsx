@@ -198,6 +198,7 @@ const ButtonDongBangKe: React.FC<Props> = ({
 
   const handleActionDongBangKeVaoTaiCoSan = (): void => {
     handleActionDongBangKe(get(selectedTai, 'TOR_ID', ''));
+    closePopUpDongBangKeVaoTai();
   };
 
   const handleActionDongBangKe = (taiID: string): void => {

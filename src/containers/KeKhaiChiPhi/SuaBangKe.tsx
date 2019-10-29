@@ -128,15 +128,9 @@ const SuaBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          const [dropdownOpen, setDropdownOpen] = useState(false);
-          function toggle(): void {
-            setDropdownOpen(prevState => !prevState);
-          }
           if (status) return <></>;
           return get(row, 'original.LINE_ITEM') ? (
             <UtilityDropDown
-              dropdownOpen={dropdownOpen}
-              toggle={toggle}
               removeTableRow={handleRemoveTableRow}
               editTableRow={handleEditTableRow}
               copyTableRow={handleCopyTableRow}

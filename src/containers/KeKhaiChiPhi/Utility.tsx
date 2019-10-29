@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 import EditCostModal from './EditCostModal';
 
 interface Props {
-  dropdownOpen: boolean;
-  toggle: () => void;
   removeTableRow: (item: API.ITEMBK) => void;
   editTableRow: (item: API.ITEMBK) => void;
   copyTableRow: (item: API.ITEMBK) => void;
@@ -13,15 +11,19 @@ interface Props {
 }
 
 const UtilityDropDown: React.FC<Props> = ({
-  dropdownOpen,
+  // dropdownOpen,
   editTableRow,
   removeTableRow,
   copyTableRow,
-  toggle,
+  // toggle,
   item,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  function toggle(): void {
+    setDropdownOpen(prevState => !prevState);
+  }
 
   const handleRemoveTableRow = (): void => {
     removeTableRow(item);
@@ -37,7 +39,7 @@ const UtilityDropDown: React.FC<Props> = ({
   };
 
   return (
-    <>
+    <div className="sipTableAmountListGroup">
       <Dropdown className="sipTableAmountListOption" isOpen={dropdownOpen} toggle={toggle}>
         <DropdownToggle>
           <img src={'../../assets/img/icon/iconOption.svg'} alt="VTPostek" />
@@ -55,7 +57,7 @@ const UtilityDropDown: React.FC<Props> = ({
         </DropdownMenu>
       </Dropdown>
       <EditCostModal isOpen={showModal} toggle={toggleModal} handleEditItem={editTableRow} item={item} />
-    </>
+    </div>
   );
 };
 
