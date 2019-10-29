@@ -68,7 +68,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                       {map(row.cells, (cell, index) => {
                         return (
                           <td className="min-width-90px" key={index} onClick={handleClickRow(row.original)}>
-                            {cell.render('Cell')}
+                            {cell.value !== null ? cell.render('Cell') : ''}
                           </td>
                         );
                       })}

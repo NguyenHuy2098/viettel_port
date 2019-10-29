@@ -3,7 +3,7 @@ import { Col, Form, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader
 import DatePicker from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
-import { get, isEmpty } from 'lodash';
+import { get, isEmpty, defaultTo } from 'lodash';
 
 interface Props {
   isOpen: boolean;
@@ -77,7 +77,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
         <FormGroup>
           <Input
             type="text"
-            value={get(editItem, 'MST', '')}
+            value={defaultTo(get(editItem, 'MST', ''), '')}
             onChange={handleChangeMaSoThue}
             placeholder="Mã số thuế"
           />
@@ -85,7 +85,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
         <FormGroup>
           <Input
             type="text"
-            value={get(editItem, 'NGUOI_BAN', '')}
+            value={defaultTo(get(editItem, 'NGUOI_BAN', ''), '')}
             onChange={handleChangeTenNguoiBan}
             placeholder="Tên người bán"
           />
@@ -93,7 +93,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
         <FormGroup>
           <Input
             type="text"
-            value={get(editItem, 'MAU_HD', '')}
+            value={defaultTo(get(editItem, 'MAU_HD', ''), '')}
             onChange={handleChangeMauHoaDon}
             placeholder="Mẫu hóa đơn"
           />
@@ -101,7 +101,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
         <FormGroup>
           <Input
             type="text"
-            value={get(editItem, 'KIHIEU_HD', '')}
+            value={defaultTo(get(editItem, 'KIHIEU_HD', ''), '')}
             onChange={handleChangeKyHieu}
             placeholder="Ký hiệu"
           />
@@ -111,9 +111,9 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
             placeholderText={t('Nhập thời gian')}
             className="form-control"
             selected={
-              isEmpty(get(editItem, 'NGAY_HD'))
-                ? moment().toDate()
-                : moment(get(editItem, 'NGAY_HD'), 'YYYYMMDD').toDate()
+              !isEmpty(get(editItem, 'NGAY_HD')) && moment(get(editItem, 'NGAY_HD')).isValid()
+                ? moment(get(editItem, 'NGAY_HD'), 'YYYYMMDD').toDate()
+                : moment().toDate()
             }
             onChange={handleChangeNgay}
             dateFormat="dd/MM/yyyy"
@@ -122,7 +122,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
         <FormGroup>
           <Input
             type="text"
-            value={get(editItem, 'SO_HD', '')}
+            value={defaultTo(get(editItem, 'SO_HD', ''), '')}
             onChange={handleChangeSoHoaDon}
             placeholder="Số hoá đơn"
           />
@@ -130,7 +130,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
         <FormGroup>
           <Input
             type="textarea"
-            value={get(editItem, 'DESCR', '')}
+            value={defaultTo(get(editItem, 'DESCR', ''), '')}
             onChange={handleChangeHangHoa}
             placeholder="Hàng hóa(Tối đa 250 ký tự)"
           />
@@ -140,7 +140,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
             <FormGroup>
               <Input
                 type="text"
-                value={get(editItem, 'AMOUNT', '')}
+                value={defaultTo(get(editItem, 'AMOUNT', ''), '')}
                 onChange={handleChangeTienHangHoa}
                 placeholder="Tiền hàng hóa, dịch vụ"
               />
@@ -150,7 +150,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
             <FormGroup>
               <Input
                 type="text"
-                value={get(editItem, 'PHU_PHI', '')}
+                value={defaultTo(get(editItem, 'PHU_PHI', ''), '')}
                 onChange={handleChangePhuPhi}
                 placeholder="Phụ phí"
               />
@@ -160,7 +160,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
         <Row form>
           <Col md={6}>
             <FormGroup>
-              <Input type="select" value={get(editItem, 'TAX', '')} onChange={handleChangeThueSuat}>
+              <Input type="select" value={defaultTo(get(editItem, 'TAX', ''), '')} onChange={handleChangeThueSuat}>
                 <option>Thuế suất</option>
                 <option value="0">0%</option>
                 <option value="5">5%</option>
@@ -172,7 +172,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
             <FormGroup>
               <Input
                 type="text"
-                value={get(editItem, 'TAX_AMOUNT', '')}
+                value={defaultTo(get(editItem, 'TAX_AMOUNT', ''), '')}
                 onChange={handleChangeThueGTGT}
                 placeholder="Thuế GTGT"
               />
@@ -180,7 +180,12 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
           </Col>
         </Row>
         <FormGroup>
-          <Input type="text" value={get(editItem, 'URL', '')} onChange={handleChangeLinkUrl} placeholder="Link " />
+          <Input
+            type="text"
+            value={defaultTo(get(editItem, 'URL', ''), '')}
+            onChange={handleChangeLinkUrl}
+            placeholder="Link "
+          />
         </FormGroup>
       </Form>
     );
