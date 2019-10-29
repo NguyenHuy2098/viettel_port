@@ -1,29 +1,29 @@
 /* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react';
-import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, ButtonProps } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { get, size } from 'lodash';
+import { useDispatch, useSelector } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
+import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Container, ButtonProps } from 'reactstrap';
+import { get, size } from 'lodash';
+import printJS from 'print-js';
+
+import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_MT_DETAIL_RECEIVER_ZFI007, select_ZFI007 } from 'redux/ZFI007/selectors';
-// import DataTable from 'components/DataTable';
-import printJS from 'print-js';
-import { useDispatch, useSelector } from 'react-redux';
-import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
-import { formatNumber } from '../../../utils/common';
+import { formatNumber } from 'utils/common';
 
 interface Props extends ButtonProps {
   ids: string[];
 }
 
 // eslint-disable-next-line max-lines-per-function
-const Index = (props: Props): JSX.Element => {
+const InBangKe = (props: Props): JSX.Element => {
   const { ids, ...rest } = props;
-  const [modal, setModal] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const { t } = useTranslation();
   const data = useSelector(select_ZFI007);
   const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
+  const [modal, setModal] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   function toggle(): void {
     setModal(!modal);
@@ -322,4 +322,4 @@ const Index = (props: Props): JSX.Element => {
   );
 };
 
-export default Index;
+export default InBangKe;

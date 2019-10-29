@@ -21,7 +21,7 @@ import { select_ZFI002, select_ZFI002Count } from 'redux/ZFI002/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import routesMap from 'utils/routesMap';
-import InBangKe from './DanhSachBangKe/index';
+import InBangKe from './InBangKe';
 
 interface Props {
   match: match;

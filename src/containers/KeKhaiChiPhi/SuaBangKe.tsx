@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Col, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
@@ -15,7 +15,7 @@ import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007, select_MT_DETAIL_RECEIVER_ZFI007 } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
-import Index from './DanhSachBangKe/index';
+import InBangKe from './InBangKe';
 
 interface Props {
   match: match;
@@ -25,24 +25,22 @@ interface Props {
 const SuaBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [data, setData] = React.useState<API.LISTMTDETAILRECEIVER[]>([]);
-
+  const [data, setData] = useState<API.LISTMTDETAILRECEIVER[]>([]);
   const userLogin = useLoggedInUser();
-
   const idBangKe = get(props, 'match.params.idBangKe', '');
+  const detailRecerver = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
+  const status = get(detailRecerver, 'header.BK_STATUS', 4);
+  const list = useSelector(select_ZFI007);
 
-  React.useEffect(() => {
-    const payloads = {
-      MA_BUU_CUC: 'BDH',
-      BK_ID: idBangKe,
-      IV_PAGENO: '1',
-      IV_NO_PER_PAGE: '10',
-    };
-    dispatch(action_ZFI007(payloads));
+  useEffect(() => {
+    dispatch(
+      action_ZFI007({
+        BK_ID: idBangKe,
+      }),
+    );
   }, [dispatch, idBangKe]);
 
-  const list = useSelector(select_ZFI007);
-  React.useEffect((): void => {
+  useEffect((): void => {
     setData(list);
   }, [list]);
 
@@ -138,9 +136,10 @@ const SuaBangKe = (props: Props): JSX.Element => {
     [data],
   );
 
+  const ids = useMemo(() => [idBangKe], [idBangKe]);
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <Index ids={[idBangKe]} />
+      <InBangKe ids={ids} />
       {!status && (
         <>
           <Button color="primary" className="ml-2">
@@ -155,9 +154,6 @@ const SuaBangKe = (props: Props): JSX.Element => {
       )}
     </>
   );
-
-  const detailRecerver = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
-  const status = get(detailRecerver, 'header.BK_STATUS', 4);
 
   const renderThongTinBangKe = (): JSX.Element => (
     <Row>
