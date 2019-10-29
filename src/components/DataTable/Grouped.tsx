@@ -45,9 +45,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
           {map(headerGroups, (headerGroup, index) => (
             <tr key={index}>
               {map(headerGroup.headers, (column, index) => (
-                <th key={index} {...column.getHeaderProps()}>
-                  {column.render('Header')}
-                </th>
+                <th key={index}>{column.render('Header')}</th>
               ))}
             </tr>
           ))}
@@ -66,10 +64,10 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                 groupedData[index],
                 (row, index) =>
                   prepareRow(row) || (
-                    <tr key={`row-${index}`} {...row.getRowProps()}>
+                    <tr key={`row-${index}`}>
                       {map(row.cells, (cell, index) => {
                         return (
-                          <td key={index} onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
+                          <td className="min-width-90px" key={index} onClick={handleClickRow(row.original)}>
                             {cell.render('Cell')}
                           </td>
                         );
