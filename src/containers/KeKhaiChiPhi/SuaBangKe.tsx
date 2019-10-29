@@ -5,9 +5,13 @@ import { Cell, Row as TableRow } from 'react-table';
 import { get, sumBy, toNumber } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { goBack } from 'connected-react-router';
 import produce from 'immer';
+import { delay } from 'lodash';
 import moment from 'moment';
 
+import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
+import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
 import useLoggedInUser from 'hooks/useLoggedInUser';
@@ -136,20 +140,18 @@ const SuaBangKe = (props: Props): JSX.Element => {
     [data],
   );
 
+  const handleNopBangKeSuccess = (): void => {
+    delay(() => dispatch(goBack()), 2000);
+  };
+
   const ids = useMemo(() => [idBangKe], [idBangKe]);
   const renderFirstControllers = (): JSX.Element => (
     <>
       <InBangKe ids={ids} />
       {!status && (
         <>
-          <Button color="primary" className="ml-2">
-            <i className="fa fa-save mr-2" />
-            {t('Lưu')}
-          </Button>
-          <Button color="primary" className="ml-2">
-            <i className="fa fa-send mr-2" />
-            {t('Nộp')}
-          </Button>
+          <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={data} />
+          <ButtonNopBangKe className="ml-2" idBangKe={idBangKe} onSuccess={handleNopBangKeSuccess} />
         </>
       )}
     </>

@@ -5,7 +5,7 @@ import { Button, ButtonProps } from 'reactstrap';
 import { isFunction } from 'lodash';
 
 import { action_ZFI006 } from 'redux/ZFI006/actions';
-import { toastError } from '../Toast';
+import { toastError, toastSuccess } from '../Toast';
 
 interface Props extends ButtonProps {
   idBangKe: string;
@@ -23,6 +23,11 @@ const ButtonNopBangKe = (props: Props): JSX.Element => {
     if (isFunction(onFailure)) onFailure(error);
   };
 
+  const handleSuccess = (data: API.ZFI006Response): void => {
+    toastSuccess(t('Nộp bảng kê thành công.'));
+    if (isFunction(onSuccess)) onSuccess(data);
+  };
+
   const handleNopBangKe = (): void => {
     dispatch(
       action_ZFI006(
@@ -31,7 +36,7 @@ const ButtonNopBangKe = (props: Props): JSX.Element => {
         },
         {
           onFailure: handleFailure,
-          onSuccess,
+          onSuccess: handleSuccess,
         },
         {},
       ),

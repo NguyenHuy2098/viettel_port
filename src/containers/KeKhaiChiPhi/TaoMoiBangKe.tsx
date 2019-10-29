@@ -6,16 +6,15 @@ import { Cell, Row as TableRow } from 'react-table';
 import { Col, Row } from 'reactstrap';
 import { goBack } from 'connected-react-router';
 import { delay, get, isEmpty, map, reject } from 'lodash';
+import produce from 'immer';
 import moment from 'moment';
 import XLSX, { WorkBook } from 'xlsx';
-import produce from 'immer';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
 import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import DataTable from 'components/DataTable/Grouped';
-import { toastSuccess } from 'components/Toast';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import useLoggedInUser from 'hooks/useLoggedInUser';
 import { transformXlsxRowToBangKeItem } from 'utils/common';
@@ -142,12 +141,10 @@ const TaoMoiBangKe = (): JSX.Element => {
   };
 
   const handleLuuBangKeSuccess = (data: API.ZFI003Response): void => {
-    toastSuccess(t('Lưu bảng kê thành công. Bạn có thể nộp bảng kê.'));
     setIdBangKe(get(data, 'MT_CRBK_RECEIVER.BK_ID'));
   };
 
   const handleNopBangKeSuccess = (): void => {
-    toastSuccess(t('Nộp bảng kê thành công.'));
     delay(() => dispatch(goBack()), 2000);
   };
 
@@ -195,7 +192,7 @@ const TaoMoiBangKe = (): JSX.Element => {
       <Col xs={12} md={6} xl={4}>
         <div className="sipFicoBangKeInformation">
           <div>{t('Mã bảng kê')}:</div>
-          <span></span>
+          <span />
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Trạng thái')}:</div>
@@ -221,11 +218,11 @@ const TaoMoiBangKe = (): JSX.Element => {
           <Col xs={12} xl={6}>
             <div className="sipFicoBangKeInformation">
               <div>{t('Tổng giá trị')}:</div>
-              <span></span>
+              <span />
             </div>
             <div className="sipFicoBangKeInformation">
               <div>{t('Ngày tạo')}:</div>
-              <span></span>
+              <span />
             </div>
           </Col>
         </Row>

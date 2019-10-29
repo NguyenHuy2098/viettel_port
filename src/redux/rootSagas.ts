@@ -29,6 +29,7 @@ import watch_ZFI001_SagaAsync from './ZFI001/sagas';
 import watch_ZFI002_SagaAsync from './ZFI002/sagas';
 import watch_ZFI003_SagaAsync from './ZFI003/sagas';
 import watch_ZFI004_SagaAsync from './ZFI004/sagas';
+import watch_ZFI005_SagaAsync from './ZFI005/sagas';
 import watch_ZFI006_SagaAsync from './ZFI006/sagas';
 import watch_LocationSuggest from './LocationSuggest/sagas';
 import watch_LocationSuggestDetail from './LocationSuggestDetail/sagas';
@@ -65,6 +66,7 @@ export default function* rootSagas(): SagaIterator {
     call(watch_ZFI002_SagaAsync),
     call(watch_ZFI003_SagaAsync),
     call(watch_ZFI004_SagaAsync),
+    call(watch_ZFI005_SagaAsync),
     call(watch_ZFI006_SagaAsync),
     call(watch_LocationSuggest),
     call(watch_LocationSuggestDetail),
