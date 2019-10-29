@@ -67,9 +67,9 @@ const InBangKe = (props: Props): JSX.Element => {
         </tr>
 
         <tr className="text-center">
-          <th>Ký hiệu</th>
-          <th>Ngày</th>
-          <th>Số</th>
+          <th>{t('Ký hiệu')}</th>
+          <th>{t('Ngày')}</th>
+          <th>{t('Số')}</th>
         </tr>
         <tr className="text-center">
           <th>1</th>
@@ -215,13 +215,13 @@ const InBangKe = (props: Props): JSX.Element => {
       <Row>
         <Col className="pl-5">
           <div>
-            <i>Số tiền đề nghị thanh toán: Một triệu hai trăm nghìn đồng</i>
+            <i>{t('Số tiền đề nghị thanh toán: Một triệu hai trăm nghìn đồng')}</i>
           </div>
           <div>
-            <i>Số tiền được duyệt: Một triệu một trăm nghìn đồng</i>
+            <i>{t('Số tiền được duyệt: Một triệu một trăm nghìn đồng')}</i>
           </div>
           <div>
-            <i>Số tiền không được duyệt: Một trăm nghìn đồng</i>
+            <i>{t('Số tiền không được duyệt: Một trăm nghìn đồng')}</i>
           </div>
         </Col>
       </Row>
@@ -247,37 +247,42 @@ const InBangKe = (props: Props): JSX.Element => {
     setModal(false);
   }
 
+  // eslint-disable-next-line max-lines-per-function
   function renderContent(): JSX.Element {
     return (
       <Container id="in-bang-ke">
         <div className="row">
           <div className="col-4">
-            <div>Tổng công ty cổ phần Bưu chính Viettel</div>
-            <div className="pl-5">Bưu cục Đống Da </div>
+            <div>{t('Tổng công ty cổ phần Bưu chính Viettel')}</div>
+            <div className="pl-5">{t('Bưu cục Đống Da')} </div>
           </div>
           <div className="col-4"></div>
-          <div className="col-4 text-right">Số: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}</div>
+          <div className="col-4 text-right">
+            {t('Số')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}
+          </div>
         </div>
         <Row>
           <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
-            <h5>BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ</h5>
+            <h5>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</h5>
             <p>
-              Tháng {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} năm{' '}
+              {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} {t('năm')}{' '}
               {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
             </p>
           </Col>
         </Row>
         <Row>
           <Col sm="12" className="info pb-3">
-            <div className="col-6 pl-0">Về việc thanh toán chi phí theo ngân sách T04/2019</div>
-            <div className="col-6 pl-0">Họ và Tên: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}</div>
-            <div className="col-6 pl-0">Chức danh: Nhân viên chăm sóc khách hàng</div>
-            <div className="col-6 pl-0">Đề nghị thanh toán số tiền theo bảng kê như sau:</div>
+            <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
+            <div className="col-6 pl-0">
+              {t('Họ và Tên:')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+            </div>
+            <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
+            <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
           </Col>
         </Row>
         <Row>
           <Col sm="12">
-            <div className="text-right">ĐVT: VNĐ</div>
+            <div className="text-right">{t('ĐVT: VNĐ')}</div>
           </Col>
         </Row>
         <PrintTableBangKe
@@ -289,9 +294,9 @@ const InBangKe = (props: Props): JSX.Element => {
         />
         {renderTotal()}
         <Row className="text-center pt-5 pb-5">
-          <div className="col-4">KẾ TOÁN CHUYÊN QUẢN</div>
-          <div className="col-4">TRƯỞNG PHÒNG TÀI CHÍNH</div>
-          <div className="col-4">TỔNG GIÁM ĐỐC</div>
+          <div className="col-4">{t('KẾ TOÁN CHUYÊN QUẢN')}</div>
+          <div className="col-4">{t('TRƯỞNG PHÒNG TÀI CHÍNH')}</div>
+          <div className="col-4">{t('TỔNG GIÁM ĐỐC')}</div>
         </Row>
         <Row className="pagebreak"> </Row>
       </Container>
@@ -311,10 +316,10 @@ const InBangKe = (props: Props): JSX.Element => {
         <ModalBody>{renderContent()}</ModalBody>
         <ModalFooter>
           <button type="button" className="btn btn-primary btn-lg" onClick={handlePrint}>
-            <i className="fa fa-print" /> In
+            <i className="fa fa-print" /> {t('In')}
           </button>
           <button type="button" className="btn btn-secondary btn-lg" onClick={handleCancel}>
-            <i className="fa fa-remove" /> Huỷ
+            <i className="fa fa-remove" /> {t('Huỷ')}
           </button>
         </ModalFooter>
       </Modal>
