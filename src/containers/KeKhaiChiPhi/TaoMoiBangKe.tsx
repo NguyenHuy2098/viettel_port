@@ -135,7 +135,7 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const handleChangeFile = (workbook: WorkBook): void => {
     const firstSheetName = workbook.SheetNames[0];
-    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName], { range: 2 });
+    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName]);
     setData(map(sheetData, transformXlsxRowToBangKeItem));
   };
 
@@ -151,6 +151,10 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const renderFirstControllers = (): JSX.Element => (
     <>
+      <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX_v0.1.xlsx" download>
+        <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExcelWhite.svg'} />
+        {t('Lấy file mẫu')}
+      </a>
       <ButtonLuuBangKe
         className="ml-2"
         date={monthYear}

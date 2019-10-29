@@ -34,7 +34,13 @@ const ButtonInputXlsxFile = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Input className="hide" id="xlsx-input" onChange={handleChange} type="file" />
+      <Input
+        accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+        className="hide"
+        id="xlsx-input"
+        onChange={handleChange}
+        type="file"
+      />
       <Label className="btn btn-primary ml-2 mb-0 cursor-pointer" htmlFor="xlsx-input">
         {defaultTo(leftIcon, <i className="fa fa-upload mr-2" />)}
         {defaultTo(children, t('Tải lên'))}

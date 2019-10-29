@@ -29,10 +29,6 @@ const TopControllers = (props: Props): JSX.Element => {
       <Button className="sipTitleRightBlockBtnIcon">
         <img src={'../../assets/img/icon/iconRefresh.svg'} alt="VTPostek" />
       </Button>
-      <Button color="primary" className="ml-2">
-        <img src={'../../assets/img/icon/iconExcelWhite.svg'} alt="VTPostek" />
-        {t('Lấy file mẫu')}
-      </Button>
       <ButtonExportExcelBangKe className="ml-2" disabled={noBangKeChecked} ids={checkedBangKe} />
       <ButtonPrintable
         btnProps={{
