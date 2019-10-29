@@ -1,40 +1,40 @@
-.bang-ke {
-  max-width: 1200px !important;
-}
-#bang-ke td,
-#bang-ke th {
-  word-break: normal;
-  padding: 3px 3px;
-  max-width: 120px;
-  font-size: 12px;
-}
-.bang-ke {
-  -webkit-transform: none;
-  transform: none;
-  max-height: 700px;
-}
-.bang-ke .modal-header {
-  position: fixed;
-  width: 1198px;
-  z-index: 999;
-  background: #fff;
-  overflow-x: hidden;
-}
-.bang-ke .modal-body {
-  margin-top: 60px;
-  position: relative;
-  flex: 1 1 auto;
-  padding: 1rem;
-  max-height: 700px;
+//.bang-ke {
+//  max-width: 1200px !important;
+//}
+//#bang-ke td,
+//#bang-ke th {
+//  word-break: normal;
+//  padding: 3px 3px;
+//  max-width: 120px;
+//  font-size: 12px;
+//}
+//.bang-ke {
+//  -webkit-transform: none;
+//  transform: none;
+//  max-height: 700px;
+//}
+//.bang-ke .modal-header {
+//  position: fixed;
+//  width: 1198px;
+//  z-index: 999;
+//  background: #fff;
+//  overflow-x: hidden;
+//}
+//.bang-ke .modal-body {
+//  margin-top: 60px;
+//  position: relative;
+//  flex: 1 1 auto;
+//  padding: 1rem;
+//  max-height: 700px;
+//  overflow-y: scroll;
+//}
+//.footer-no-boder {
+//  border-top: none;
+//}
+//.bang-ke-header tr th {
+//  border-bottom: none;
+//}
+#printableBody{
+  max-height: 500px;
   overflow-y: scroll;
-}
-.footer-no-boder {
-  border-top: none;
-}
-.bang-ke-header tr th {
-  border-bottom: none;
-}
-.pagebreak {
-  display: block;
-  page-break-before: always;
 }

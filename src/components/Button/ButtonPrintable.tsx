@@ -13,7 +13,8 @@ import {
 } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { get } from 'lodash';
-import printJS from 'print-js';
+
+import { printHtml } from 'utils/print';
 
 interface Props {
   btnCancelProps?: ButtonProps;
@@ -41,11 +42,8 @@ const ButtonPrintable = (props: Props): JSX.Element => {
   const [visible, setVisible] = useState<boolean>(false);
 
   const handlePrint = (): void => {
-    printJS({
-      css: ['https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css'],
+    printHtml({
       printable: defaultPrintableId,
-      scanStyles: false,
-      type: 'html',
     });
   };
 

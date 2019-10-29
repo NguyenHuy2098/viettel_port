@@ -10,18 +10,17 @@ import 'bootstrap-daterangepicker/daterangepicker.css';
 import { get, map, size, toString, trim } from 'lodash';
 import moment from 'moment';
 
-import ButtonExportExcelBangKe from 'components/Button/ButtonExportExcelBangKe';
 import DataTable from 'components/DataTable';
-import { toastError, toastSuccess } from 'components/Toast';
+import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Pagination from 'components/Pagination';
+import { toastError, toastSuccess } from 'components/Toast';
 import { action_ZFI002 } from 'redux/ZFI002/actions';
 import { action_ZFI004 } from 'redux/ZFI004/actions';
 import { select_ZFI002, select_ZFI002Count } from 'redux/ZFI002/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import routesMap from 'utils/routesMap';
-import InBangKe from './InBangKe';
+import TopControllers from './TopControllers';
 
 interface Props {
   match: match;
@@ -130,30 +129,6 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     );
   };
 
-  const redirectToTaoMoiBangKe = (): void => {
-    dispatch(push(routesMap.TAO_MOI_BANG_KE));
-  };
-
-  const renderTopController = (): JSX.Element => {
-    return (
-      <>
-        <Button className="sipTitleRightBlockBtnIcon">
-          <img src={'../../assets/img/icon/iconRefresh.svg'} alt="VTPostek" />
-        </Button>
-        <Button color="primary" className="ml-2">
-          <img src={'../../assets/img/icon/iconExcelWhite.svg'} alt="VTPostek" />
-          {t('Lấy file mẫu')}
-        </Button>
-        <ButtonExportExcelBangKe className="ml-2" disabled={noBangKeChecked} ids={checkedBangKe} />
-        <InBangKe ids={checkedBangKe} />
-        <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>
-          <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
-          {t('Thêm mới')}
-        </Button>
-      </>
-    );
-  };
-
   const handleRedirectDetail = (rowOriginal: API.ListMTBKRECEIVER): void => {
     dispatch(push(generatePath(routesMap.SUA_BANG_KE, { idBangKe: get(rowOriginal, 'BK_ID', '') })));
   };
@@ -239,7 +214,9 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Kê khai chi phí thường xuyên')}</h1>
-        <div className="sipTitleRightBlock">{renderTopController()}</div>
+        <div className="sipTitleRightBlock">
+          <TopControllers checkedBangKe={checkedBangKe} noBangKeChecked={noBangKeChecked} />
+        </div>
       </Row>
 
       <Row className="sipBgWhiteContainer sipFilterContainer">

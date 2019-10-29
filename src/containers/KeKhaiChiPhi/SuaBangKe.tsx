@@ -19,7 +19,7 @@ import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007, select_MT_DETAIL_RECEIVER_ZFI007 } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
-import InBangKe from './InBangKe';
+import PrintableBangKe from './PrintableBangKe';
 import UtilityDropDown from './Utility';
 
 interface Props {
@@ -176,7 +176,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
 
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <InBangKe ids={ids} />
+      <PrintableBangKe ids={ids} />
       {!status && (
         <>
           <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={items} />
