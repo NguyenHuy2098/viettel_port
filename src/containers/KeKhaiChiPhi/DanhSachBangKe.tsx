@@ -298,7 +298,7 @@ const DanhSachBangKe = (props: Props): JSX.Element => {
           data={dataTable}
           onCheckedValuesChange={handleCheckedValuesChange}
           onRowClick={handleRedirectDetail}
-          showCheckAll={false}
+          showCheckAll={true}
           showCheckboxes
           renderCheckboxValues="BK_ID"
         />
