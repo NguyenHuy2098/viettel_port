@@ -26,11 +26,15 @@ interface Props {
   match: match;
 }
 
+interface DataType extends API.LISTMTDETAILRECEIVER {
+  IS_GROUP_DATA_TABLE?: boolean;
+}
+
 // eslint-disable-next-line max-lines-per-function
 const SuaBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const [data, setData] = useState<API.LISTMTDETAILRECEIVER[]>([]);
+  const [data, setData] = useState<DataType[]>([]);
   const userLogin = useLoggedInUser();
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const detailRecerver = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
@@ -174,12 +178,14 @@ const SuaBangKe = (props: Props): JSX.Element => {
 
   const ids = useMemo(() => [idBangKe], [idBangKe]);
 
+  const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
+
   const renderFirstControllers = (): JSX.Element => (
     <>
       <InBangKe ids={ids} />
       {!status && (
         <>
-          <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={data} />
+          <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={items} />
           <ButtonNopBangKe className="ml-2" idBangKe={idBangKe} onSuccess={handleNopBangKeSuccess} />
         </>
       )}
@@ -232,7 +238,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
 
   function handleSubmitKhoanMuc(item: API.LIST): void {
     const nextState = produce(data, draftState => {
-      draftState.unshift({ TEN_KM: item.km_text });
+      draftState.unshift({ TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
     });
     setData(nextState);
   }

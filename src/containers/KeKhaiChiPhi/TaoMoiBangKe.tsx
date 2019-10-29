@@ -21,11 +21,15 @@ import { transformXlsxRowToBangKeItem } from 'utils/common';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
 import UtilityDropDown from './Utility';
 
+interface DataType extends API.ITEMBK {
+  IS_GROUP_DATA_TABLE?: boolean;
+}
+
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
   const dispatch = useDispatch();
   const userLogin = useLoggedInUser();
-  const [data, setData] = useState<API.ITEMBK[]>([]);
+  const [data, setData] = useState<DataType[]>([]);
   const [idBangKe, setIdBangKe] = useState<string>('');
   const { t } = useTranslation();
 
@@ -148,13 +152,15 @@ const TaoMoiBangKe = (): JSX.Element => {
     delay(() => dispatch(goBack()), 2000);
   };
 
+  const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
+
   const renderFirstControllers = (): JSX.Element => (
     <>
       <ButtonLuuBangKe
         className="ml-2"
         date={monthYear}
-        disabled={isEmpty(data)}
-        items={data}
+        disabled={isEmpty(items)}
+        items={items}
         onSuccess={handleLuuBangKeSuccess}
       />
       <ButtonNopBangKe
@@ -232,7 +238,7 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   function handleSubmit(item: API.LIST): void {
     const nextState = produce(data, draftState => {
-      draftState.unshift({ KHOAN_MUC: item.km_text });
+      draftState.unshift({ KHOAN_MUC: item.km_text, IS_GROUP_DATA_TABLE: true });
     });
     setData(nextState);
   }

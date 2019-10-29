@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
-import { groupBy, isEmpty, isFunction, map, noop, size, toString } from 'lodash';
+import { groupBy, isEmpty, isFunction, map, noop, size, toString, get } from 'lodash';
 
 import NoData from './NoData';
 
@@ -66,6 +66,9 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                   prepareRow(row) || (
                     <tr key={`row-${index}`}>
                       {map(row.cells, (cell, index) => {
+                        if (get(row, 'original.IS_GROUP_DATA_TABLE', false)) {
+                          return <React.Fragment key={`row-empty-${index}`}></React.Fragment>;
+                        }
                         return (
                           <td className="min-width-90px" key={index} onClick={handleClickRow(row.original)}>
                             {cell.value !== null ? cell.render('Cell') : ''}
