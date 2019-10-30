@@ -31,10 +31,11 @@ import watch_ZFI003_SagaAsync from './ZFI003/sagas';
 import watch_ZFI004_SagaAsync from './ZFI004/sagas';
 import watch_ZFI005_SagaAsync from './ZFI005/sagas';
 import watch_ZFI006_SagaAsync from './ZFI006/sagas';
+import watch_ZFI007_SagaAsync from './ZFI007/sagas';
+import watch_ZFI007M_SagaAsync from './ZFI007M/sagas';
 import watch_LocationSuggest from './LocationSuggest/sagas';
 import watch_LocationSuggestDetail from './LocationSuggestDetail/sagas';
 import watch_CommoditySuggest from './CommoditySuggest/sagas';
-import watch_ZFI007_SagaAsync from './ZFI007/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -69,9 +70,10 @@ export default function* rootSagas(): SagaIterator {
     call(watch_ZFI004_SagaAsync),
     call(watch_ZFI005_SagaAsync),
     call(watch_ZFI006_SagaAsync),
+    call(watch_ZFI007_SagaAsync),
+    call(watch_ZFI007M_SagaAsync),
     call(watch_LocationSuggest),
     call(watch_LocationSuggestDetail),
     call(watch_CommoditySuggest),
-    call(watch_ZFI007_SagaAsync),
   ]);
 }

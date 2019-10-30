@@ -9,7 +9,7 @@ import { get, map, size, toString, trim } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
+import BadgeFicoBangKeStatus, { badgeFicoStateMap } from 'components/Badge/BadgeFicoBangKeStatus';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Pagination from 'components/Pagination';
 import { toastError, toastSuccess } from 'components/Toast';
@@ -20,8 +20,6 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 import TopControllers from 'containers/KeKhaiChiPhi/DanhSachBangKe/TopControllers';
 import SelectRangeDate from 'containers/KeKhaiChiPhi/SelectRangeDate';
-
-const stateMap = ['Tạo mới', 'Chờ phê duyệt', 'Phê duyệt', 'Duyệt 1 phần'];
 
 // eslint-disable-next-line max-lines-per-function
 const DanhSachBangKe = (): JSX.Element => {
@@ -229,9 +227,9 @@ const DanhSachBangKe = (): JSX.Element => {
         <Col className="sipFilterCol">
           <div className="sipFilterColSearch">
             <Input type="select" onChange={handleChangeTextboxValue(setTypeSearch)} value={typeSearch}>
-              <option value="">Tất cả trạng thái</option>
+              <option value="">{t('Tất cả trạng thái')}</option>
               {map(
-                stateMap,
+                badgeFicoStateMap,
                 (item: string, index: number): JSX.Element => {
                   return (
                     <option key={index} value={toString(index)}>
@@ -246,7 +244,7 @@ const DanhSachBangKe = (): JSX.Element => {
         </Col>
         <Col className="sipFilterCol sipFilterColBtn">
           <Button color="primary" onClick={handleSearchBangKe}>
-            Tìm kiếm
+            {t('Tìm kiếm')}
           </Button>
         </Col>
       </Row>
