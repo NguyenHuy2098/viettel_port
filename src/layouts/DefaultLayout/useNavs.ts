@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
+import { TFunction } from 'i18next';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
-const nav = (t: i18next.TFunction): any => {
+const nav = (t: TFunction): any => {
   return {
     items: [
       {
