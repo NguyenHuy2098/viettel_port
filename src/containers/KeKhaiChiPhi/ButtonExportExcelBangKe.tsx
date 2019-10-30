@@ -4,7 +4,7 @@ import { Button, ButtonProps } from 'reactstrap';
 import { forEach, isEmpty } from 'lodash';
 import XLSX from 'xlsx';
 
-import { toastInfo } from '../Toast';
+import { toastInfo } from 'components/Toast';
 
 interface Props extends ButtonProps {
   ids?: string[];
@@ -42,7 +42,7 @@ const ButtonExportExcelBangKe = (props: Props): JSX.Element => {
 
   return (
     <Button color="primary" onClick={handleExport} {...rest}>
-      <img src={'../../assets/img/icon/iconExport.svg'} alt="VTPostek" />
+      <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExport.svg'} />
       {t('Xuất file Excel')}
     </Button>
   );

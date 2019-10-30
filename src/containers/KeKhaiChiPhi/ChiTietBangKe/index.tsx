@@ -5,16 +5,11 @@ import { Cell, Row as TableRow } from 'react-table';
 import { get, sumBy, toNumber, reject } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { goBack } from 'connected-react-router';
 import produce from 'immer';
-import { delay, size } from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
 
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
-import ButtonPrintable from 'components/Button/ButtonPrintable';
-import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
-import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
 import useLoggedInUser from 'hooks/useLoggedInUser';
@@ -22,7 +17,7 @@ import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
-import PrintableBangKe from '../PrintableBangKe';
+import TopControllers from './TopControllers';
 import UtilityDropDown from '../Utility';
 
 interface Props {
@@ -147,10 +142,6 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     [data],
   );
 
-  const handleNopBangKeSuccess = (): void => {
-    delay(() => dispatch(goBack()), 2000);
-  };
-
   const handleRemoveTableRow = (item: API.LISTMTDETAILRECEIVER): void => {
     const tempData = reject(data, ['LINE_ITEM', get(item, 'LINE_ITEM')]);
     setData(tempData);
@@ -171,38 +162,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     setData([...tempData]);
   };
 
-  const ids = useMemo(() => [idBangKe], [idBangKe]);
   const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
-
-  const renderFirstControllers = (): JSX.Element => (
-    <>
-      <ButtonPrintable
-        btnProps={{
-          disabled: !size(ids),
-          color: 'primary',
-          className: 'ml-2',
-          children: (
-            <>
-              <img src={'../../assets/img/icon/iconPrintWhite.svg'} alt="VTPostek" />
-              {t('In bảng kê')}
-            </>
-          ),
-        }}
-        modalBodyProps={{
-          children: <PrintableBangKe ids={ids} />,
-        }}
-        modalHeaderProps={{
-          children: t('In thông tin chuyến thư'),
-        }}
-      />
-      {!status && (
-        <>
-          <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={items} />
-          <ButtonNopBangKe className="ml-2" idBangKe={idBangKe} onSuccess={handleNopBangKeSuccess} />
-        </>
-      )}
-    </>
-  );
 
   const renderThongTinBangKe = (): JSX.Element => (
     <Row>
@@ -275,10 +235,12 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         <Col>
           <div className="d-flex sipTitle">
             <ButtonGoBack />
-            <h4>{t('Chi tiết bảng kê')}</h4>
+            <h4>{status === 0 ? t('Sửa bảng kê') : t('Chi tiết bảng kê')}</h4>
           </div>
         </Col>
-        <Col className="d-flex justify-content-end">{renderFirstControllers()}</Col>
+        <Col className="d-flex justify-content-end">
+          <TopControllers idBangKe={idBangKe} items={items} status={status} />
+        </Col>
       </Row>
 
       <Row className="mb-4">

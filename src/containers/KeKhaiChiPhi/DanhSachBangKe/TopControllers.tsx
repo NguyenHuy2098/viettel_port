@@ -5,9 +5,9 @@ import { Button } from 'reactstrap';
 import { push } from 'connected-react-router';
 import { size } from 'lodash';
 
-import ButtonExportExcelBangKe from 'components/Button/ButtonExportExcelBangKe';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import routesMap from 'utils/routesMap';
+import ButtonExportExcelBangKe from '../ButtonExportExcelBangKe';
 import PrintableBangKe from '../PrintableBangKe';
 
 interface Props {
@@ -46,7 +46,7 @@ const TopControllers = (props: Props): JSX.Element => {
           children: <PrintableBangKe ids={checkedBangKe} />,
         }}
         modalHeaderProps={{
-          children: t('In thông tin chuyến thư'),
+          children: t('In thông tin bảng kê'),
         }}
       />
       <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>

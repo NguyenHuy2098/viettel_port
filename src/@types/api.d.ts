@@ -1,5 +1,8 @@
 /* eslint-disable max-lines, @typescript-eslint/interface-name-prefix, @typescript-eslint/no-explicit-any */
 declare namespace API {
+  export interface BKINPUT {
+    ID?: string;
+  }
   export interface CHILD {
     USER?: string;
     NO_ITEM?: string;
@@ -25,6 +28,11 @@ declare namespace API {
     PACKAGE_ID?: string;
     LIFECYCLE?: string;
     DESCRIPTION?: string;
+  }
+  export interface Collection {
+    header?: HEADERMTDETAILRECEIVERM;
+    list?: LISTMTDETAILRECEIVERM[];
+    Paging?: PagingZTMI054;
   }
   export interface EVTRQIDERROR {
     TRQ_ID?: string;
@@ -54,6 +62,15 @@ declare namespace API {
     BK_YEAR?: string;
   }
   export interface HEADERMTDETAILRECEIVER {
+    BK_ID?: string;
+    BK_YEAR?: string;
+    BK_MONTH?: string;
+    BK_STATUS?: number; // int32
+    CRE_BY?: string;
+    CRE_TIME?: string;
+    UDP_TIME?: string;
+  }
+  export interface HEADERMTDETAILRECEIVERM {
     BK_ID?: string;
     BK_YEAR?: string;
     BK_MONTH?: string;
@@ -195,6 +212,32 @@ declare namespace API {
   }
   export interface LISTMTDETAILRECEIVER {
     LINE_ITEM?: string;
+    KHOAN_MUC?: string;
+    TEN_KM?: string;
+    MAU_HD?: string;
+    KIHIEU_HD?: string;
+    SO_HD?: string;
+    NGAY_HD?: string;
+    NGUOI_BAN?: string;
+    MST?: string;
+    DESCR?: string;
+    URL?: string;
+    STATUS_ITEM?: number; // int32
+    AMOUNT?: string;
+    AMOUNT_INIT?: string;
+    PHU_PHI?: string;
+    PHU_PHI_INIT?: string;
+    TAX?: string;
+    TAX_INIT?: string;
+    TAX_AMOUNT?: string;
+    TAX_AMOUNT_INIT?: string;
+    SUM_AMOUNT?: string;
+    SUM_AMOUNT_INIT?: string;
+    NOTE?: string;
+  }
+  export interface LISTMTDETAILRECEIVERM {
+    LINE_ITEM?: string;
+    KHOAN_MUC?: string;
     TEN_KM?: string;
     MAU_HD?: string;
     KIHIEU_HD?: string;
@@ -1313,6 +1356,11 @@ declare namespace API {
     EV_ERROR?: number; // int32
     EV_MESSAGE?: string;
     Paging?: PagingZTMI054;
+  }
+  export interface MTDETAILRECEIVERM {
+    collection?: Collection[];
+    EV_ERROR?: number; // int32
+    EV_MESSAGE?: string;
   }
   export interface MTKMRECEIVER {
     list?: LIST[];
@@ -2485,7 +2533,8 @@ declare namespace API {
     /**
      * Lấy toàn bộ mã dịch vụ
      */
-    GET?: {};
+    GET?: {
+    };
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -2891,6 +2940,23 @@ declare namespace API {
   }
   export interface ZFI006Response {
     MT_SUBMIT_RECEIVER?: MTSUBMITRECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
+  }
+  export interface ZFI007MRequest {
+    MA_BUU_CUC?: string;
+    BK_INPUT?: BKINPUT[];
+    IV_PAGENO?: string;
+    IV_NO_PER_PAGE?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZFI007MResponse {
+    MT_DETAIL_RECEIVER_M?: MTDETAILRECEIVERM;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -3716,6 +3782,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.ZFI007Response;
+    }
+  }
+  namespace ZFI007M {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZFI007MRequest;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZFI007MResponse;
     }
   }
   namespace ZTMI213 {

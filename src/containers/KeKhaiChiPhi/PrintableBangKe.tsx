@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -229,55 +228,6 @@ const PrintableBangKe = (props: Props): JSX.Element => {
 
   return (
     <div className="in-bang-ke">
-      <div className="page-break">
-        <div className="row">
-          <div className="col-4">
-            <div>{t('Tổng công ty cổ phần Bưu chính Viettel')}</div>
-            <div className="pl-5">{t('Bưu cục Đống Da')} </div>
-          </div>
-          <div className="col-4"></div>
-          <div className="col-4 text-right">
-            {t('Số')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}
-          </div>
-        </div>
-        <Row>
-          <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
-            <h5>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</h5>
-            <p>
-              {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} {t('năm')}{' '}
-              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
-            </p>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12" className="info pb-3">
-            <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
-            <div className="col-6 pl-0">
-              {t('Họ và Tên')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
-            </div>
-            <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
-            <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm="12">
-            <div className="text-right">{t('ĐVT: VNĐ')}</div>
-          </Col>
-        </Row>
-        <PrintTableBangKe
-          columns={columns}
-          header={renderHeader}
-          data={data}
-          groupKey="TEN_KM"
-          renderGroupedRow={renderGroupedRow}
-        />
-        {renderTotal()}
-        <Row className="text-center pt-5 pb-5">
-          <div className="col-4">{t('KẾ TOÁN CHUYÊN QUẢN')}</div>
-          <div className="col-4">{t('TRƯỞNG PHÒNG TÀI CHÍNH')}</div>
-          <div className="col-4">{t('TỔNG GIÁM ĐỐC')}</div>
-        </Row>
-      </div>
       <div className="page-break">
         <div className="row">
           <div className="col-4">
