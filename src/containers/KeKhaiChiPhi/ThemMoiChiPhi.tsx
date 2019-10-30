@@ -3,15 +3,24 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, For
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { toNumber, toString, sumBy } from 'lodash';
+import { toNumber, toString, sumBy, get } from 'lodash';
 import numeral from 'numeral';
 import { Row as TableRow } from 'react-table';
+import * as yup from 'yup';
+import produce from 'immer';
 
 interface Props {
   index: string;
   handleSubmit: Function;
   rows: TableRow<API.RowMTZTMI047OUT>[];
 }
+
+const schema = yup.object().shape({
+  NGUOI_BAN: yup
+    .string()
+    .required('Tên người bán không được để trống')
+    .max(120, 'Tên người bán không được nhập quá 120 ký tự'),
+});
 
 // eslint-disable-next-line max-lines-per-function
 const ThemMoiChiPhi = (props: Props): JSX.Element => {
@@ -21,6 +30,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
   const rows = props.rows;
 
   function toggle(): void {
+    reset();
     setModal(!modal);
   }
 
@@ -86,6 +96,9 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     setNgay(date);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [errors, setErrors] = React.useState<Record<string, any>>({});
+
   function handleSubmit(): void {
     const payload = {
       MAU_HD: mauHoaDon,
@@ -99,8 +112,36 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       TEN_KM: index,
       KHOAN_MUC: index,
     };
-    props.handleSubmit(payload);
-    setModal(false);
+
+    schema
+      .validate(payload)
+      .catch(function(err) {
+        const nextState = produce(errors, draftState => {
+          draftState[err.path] = err.message;
+        });
+        setErrors(nextState);
+      })
+      .then(data => {
+        if (data) {
+          props.handleSubmit(data);
+          setModal(false);
+        }
+      });
+  }
+
+  function reset(): void {
+    setMaSoThue('');
+    setTenNguoiBan('');
+    setMauHoaDon('');
+    setKyHieu('');
+    setNgay(new Date());
+    setSoHoaDon('');
+    setHangHoa('');
+    setTienHangHoa('');
+    setPhuPhi('');
+    setThueSuat('');
+    setLinkUrl('');
+    setErrors({});
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -112,6 +153,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         </FormGroup>
         <FormGroup>
           <Input type="text" value={tenNguoiBan} onChange={handleChangeTenNguoiBan} placeholder="Tên người bán" />
+          <span className="color-red">{get(errors, 'NGUOI_BAN', '')}</span>
         </FormGroup>
         <FormGroup>
           <Input type="text" value={mauHoaDon} onChange={handleChangeMauNguoiBan} placeholder="Mẫu hóa đơn" />
