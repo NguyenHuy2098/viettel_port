@@ -20,7 +20,7 @@ import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import useLoggedInUser from 'hooks/useLoggedInUser';
 import { transformXlsxRowToBangKeItem } from 'utils/common';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
-import UtilityDropDown from './Utility';
+import UtilityDropDown from './UtilityDropDown';
 
 interface DataType extends API.ITEMBK {
   IS_GROUP_DATA_TABLE?: boolean;
@@ -265,13 +265,14 @@ const TaoMoiBangKe = (): JSX.Element => {
     return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} />;
   };
 
-  const renderUtilityDropDown = (row: TableRow<API.RowMTZTMI047OUT>): JSX.Element => {
+  const renderUtilityDropDown = (row: TableRow<API.RowMTZTMI047OUT>, index: number): JSX.Element => {
     return (
       <UtilityDropDown
         removeTableRow={handleRemoveTableRow}
         editTableRow={handleEditTableRow}
         copyTableRow={handleCopyTableRow}
         item={row.original}
+        index={index}
       />
     );
   };

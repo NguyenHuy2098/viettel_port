@@ -2533,8 +2533,7 @@ declare namespace API {
     /**
      * Lấy toàn bộ mã dịch vụ
      */
-    GET?: {
-    };
+    GET?: {};
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;

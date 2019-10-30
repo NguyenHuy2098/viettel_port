@@ -18,7 +18,7 @@ import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import TopControllers from './TopControllers';
-import UtilityDropDown from '../Utility';
+import UtilityDropDown from '../UtilityDropDown';
 
 interface Props {
   match: match;
@@ -131,6 +131,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
               editTableRow={handleEditTableRow}
               copyTableRow={handleCopyTableRow}
               item={row.original}
+              index={row.index}
             />
           ) : (
             <></>

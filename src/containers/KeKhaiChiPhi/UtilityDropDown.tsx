@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import EditCostModal from './EditCostModal';
+import { toString } from 'lodash';
+import ModalThemMoiChiPhi from './ModalThemMoiChiPhi';
 
 interface Props {
   removeTableRow: (item: API.ITEMBK) => void;
   editTableRow: (item: API.ITEMBK) => void;
   copyTableRow: (item: API.ITEMBK) => void;
   item: API.ITEMBK;
+  index: number;
 }
 
+// eslint-disable-next-line max-lines-per-function
 const UtilityDropDown: React.FC<Props> = ({
-  // dropdownOpen,
   editTableRow,
   removeTableRow,
   copyTableRow,
-  // toggle,
+  index,
   item,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
@@ -37,6 +39,9 @@ const UtilityDropDown: React.FC<Props> = ({
   const handleCopyTableRow = (): void => {
     copyTableRow(item);
   };
+  const closeEditModal = (): void => {
+    setShowModal(false);
+  };
 
   return (
     <div className="sipTableAmountListGroup">
@@ -56,7 +61,15 @@ const UtilityDropDown: React.FC<Props> = ({
           </DropdownItem>
         </DropdownMenu>
       </Dropdown>
-      <EditCostModal isOpen={showModal} toggle={toggleModal} handleEditItem={editTableRow} item={item} />
+      <ModalThemMoiChiPhi
+        type="edit"
+        showModal={showModal}
+        toggle={toggleModal}
+        index={toString(index)}
+        submit={editTableRow}
+        closeModal={closeEditModal}
+        editItem={item}
+      />
     </div>
   );
 };

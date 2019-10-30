@@ -12,7 +12,7 @@ interface Props extends TableOptions<any> {
   groupKey: string;
   onRowClick?: (item: any) => void;
   renderGroupedRow?: (group: TableRow<any>[], index: string) => React.ReactNode;
-  renderUtilityDropDown?: (row: TableRow<any>) => JSX.Element;
+  renderUtilityDropDown?: (row: TableRow<any>, index: number) => JSX.Element;
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
@@ -77,7 +77,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                           </td>
                         );
                       })}
-                      {isFunction(renderUtilityDropDown) && <td>{renderUtilityDropDown(row)}</td>}
+                      {isFunction(renderUtilityDropDown) && <td>{renderUtilityDropDown(row, index)}</td>}
                     </tr>
                   )
                 );
