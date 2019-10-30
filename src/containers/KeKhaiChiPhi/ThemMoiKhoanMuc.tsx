@@ -80,7 +80,7 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
   }
 
   function handleSubmit(): void {
-    props.handleSubmit && props.handleSubmit(itemSelect);
+    props.handleSubmit && itemSelect && props.handleSubmit(itemSelect);
     setThemKhoanMuc(false);
   }
 

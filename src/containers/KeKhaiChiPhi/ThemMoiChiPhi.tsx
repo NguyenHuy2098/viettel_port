@@ -184,7 +184,6 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     <div>
       <div className="sipTableAmountListGroup">
         <span>
-          {t('Chi phí')}&nbsp;
           {index !== 'null' ? index : ''}&nbsp;({t('Tổng')}:{' '}
           <span className="text-bold color-primary">{numeral(sumBy(rows, 'original.SUM_AMOUNT')).format('0,0')}</span>)
         </span>
