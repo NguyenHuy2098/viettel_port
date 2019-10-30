@@ -7,7 +7,6 @@ import { toString, sumBy, get, trim } from 'lodash';
 import numeral from 'numeral';
 import { Row as TableRow } from 'react-table';
 import * as yup from 'yup';
-import produce from 'immer';
 
 interface Props {
   index: string;
@@ -22,6 +21,13 @@ const schema = yup.object().shape({
     .max(120, 'Tên người bán không được nhập quá 120 ký tự'),
   SO_HD: yup.string().max(7, 'Số hóa đơn không được nhập quá 7 ký tự'),
   MAU_HD: yup.string().max(11, 'Mẫu hóa đơn không được nhập quá 11 ký tự'),
+  MST: yup.string().max(14, 'MST không được nhập quá 14 kí tự'),
+  KIHIEU_HD: yup.string().max(7, 'Ký hiệu không được nhập quá 7 ký tự'),
+  DESCR: yup.string().max(250, 'Hàng hóa  không được nhập quá 250 ký tự'),
+  URL: yup
+    .string()
+    // eslint-disable-next-line no-useless-escape
+    .matches(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/, ' URL không hợp lệ'),
 });
 
 // eslint-disable-next-line max-lines-per-function
@@ -134,15 +140,15 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       TAX: stringToNumber(thueSuat),
       TAX_AMOUNT: stringToNumber(thueGTGT),
       SUM_AMOUNT: stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT)),
+      URL: trim(linkUrl),
     };
 
     schema
       .validate(payload)
       .catch(function(err) {
-        const nextState = produce(errors, draftState => {
-          draftState[err.path] = err.message;
-        });
-        setErrors(nextState);
+        const errors: Record<string, string> = {};
+        errors[err.path] = err.message;
+        setErrors(errors);
       })
       .then(data => {
         if (data) {
@@ -173,6 +179,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       <Form>
         <FormGroup>
           <Input type="text" value={maSoThue} onChange={handleChangeMaSoThue} placeholder="Mã số thuế" />
+          <span className="color-red">{get(errors, 'MST', '')}</span>
         </FormGroup>
         <FormGroup>
           <Input type="text" value={tenNguoiBan} onChange={handleChangeTenNguoiBan} placeholder="Tên người bán" />
@@ -184,6 +191,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         </FormGroup>
         <FormGroup>
           <Input type="text" value={kyHieu} onChange={handleChangeKyHieu} placeholder="Ký hiệu" />
+          <span className="color-red">{get(errors, 'KIHIEU_HD', '')}</span>
         </FormGroup>
         <FormGroup>
           <DatePicker
@@ -205,6 +213,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
             onChange={handleChangeHangHoa}
             placeholder="Hàng hóa(Tối đa 250 ký tự)"
           />
+          <span className="color-red">{get(errors, 'DESCR', '')}</span>
         </FormGroup>
         <Row form>
           <Col md={6}>
@@ -242,6 +251,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         </Row>
         <FormGroup>
           <Input type="text" value={linkUrl} onChange={handleChangeLinkUrl} placeholder="Link " />
+          <span className="color-red">{get(errors, 'URL', '')}</span>
         </FormGroup>
       </Form>
     );
