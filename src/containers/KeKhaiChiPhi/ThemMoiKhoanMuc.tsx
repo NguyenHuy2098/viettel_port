@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { action_ZFI001 } from 'redux/ZFI001/actions';
 import { select_ZFI001 } from 'redux/ZFI001/selectors';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { cleanAccents } from 'utils/common';
 
 interface Props {
@@ -72,6 +72,7 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
   const [themKhoanMuc, setThemKhoanMuc] = React.useState<boolean>(false);
   function handleThemKhoanMuc(): void {
     setThemKhoanMuc(!themKhoanMuc);
+    setItemSelect(null);
   }
 
   const [itemSelect, setItemSelect] = React.useState<API.LIST | null>(null);
@@ -102,7 +103,12 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
           <Scrollbars style={{ height: 300 }}>{renderAddNewItem()}</Scrollbars>
         </ModalBody>
         <ModalFooter className="footer-no-boder">
-          <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit}>
+          <button
+            type="button"
+            className="btn btn-primary btn-lg"
+            onClick={handleSubmit}
+            disabled={isEmpty(itemSelect)}
+          >
             Thêm
           </button>
         </ModalFooter>

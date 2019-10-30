@@ -49,7 +49,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   };
 
   const handleCopyTableRow = (item: API.ITEMBK): void => {
-    const tempData = [...data, item];
+    const tempData = [item, ...data];
     setData([...tempData]);
   };
 
