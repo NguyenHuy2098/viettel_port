@@ -228,7 +228,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
   };
 
   return (
-    <div id="in-bang-ke">
+    <div className="in-bang-ke">
       <div className="page-break">
         <div className="row">
           <div className="col-4">
@@ -253,7 +253,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
           <Col sm="12" className="info pb-3">
             <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
             <div className="col-6 pl-0">
-              {t('Họ và Tên:')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+              {t('Họ và Tên')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
             </div>
             <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
             <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
@@ -302,7 +302,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
           <Col sm="12" className="info pb-3">
             <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
             <div className="col-6 pl-0">
-              {t('Họ và Tên:')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+              {t('Họ và Tên')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
             </div>
             <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
             <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
