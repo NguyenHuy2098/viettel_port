@@ -2,10 +2,10 @@ import { createActionTypeOnSuccess, UnfoldSagaActionType } from 'redux-unfold-sa
 import produce from 'immer';
 import { ACTION_ZFI007 } from './actions';
 
-export default function(state = {}, action: UnfoldSagaActionType): ZFI007Response {
+export default function(state = {}, action: UnfoldSagaActionType): ZFI007StateType {
   return produce(
     state,
-    (draftState: ZFI007Response): ZFI007Response => {
+    (draftState: ZFI007StateType): ZFI007StateType => {
       switch (action.type) {
         case createActionTypeOnSuccess(ACTION_ZFI007):
           draftState.response = action.payload;

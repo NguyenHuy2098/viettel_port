@@ -41,9 +41,9 @@ interface RootState {
   ZFI001: ZFI001StateType;
   ZFI002: ZFI002StateType;
   ZFI003: ZFI003StateType;
-  ZFI005: ZFI003StateType;
-  ZFI006: ZFI003StateType;
-  ZFI007: ZFI007Response;
+  ZFI005: ZFI005StateType;
+  ZFI006: ZFI006StateType;
+  ZFI007: ZFI007StateType;
 }
 
 function createRootReducers(history: History): Reducer<RootState> {

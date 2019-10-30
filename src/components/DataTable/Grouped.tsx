@@ -63,15 +63,14 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                     : ''}
                 </td>
               </tr>
-              {map(
-                groupedData[index],
-                (row, index) =>
+              {map(groupedData[index], (row, index) => {
+                if (get(row, 'original.IS_GROUP_DATA_TABLE', false)) {
+                  return <React.Fragment key={`row-empty-${index}`} />;
+                }
+                return (
                   prepareRow(row) || (
                     <tr key={`row-${index}`}>
                       {map(row.cells, (cell, index) => {
-                        if (get(row, 'original.IS_GROUP_DATA_TABLE', false)) {
-                          return <React.Fragment key={`row-empty-${index}`}></React.Fragment>;
-                        }
                         return (
                           <td className="min-width-90px" key={index} onClick={handleClickRow(row.original)}>
                             {cell.value !== null ? cell.render('Cell') : ''}
@@ -80,8 +79,9 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                       })}
                       {isFunction(renderUtilityDropDown) && <td>{renderUtilityDropDown(row)}</td>}
                     </tr>
-                  ),
-              )}
+                  )
+                );
+              })}
             </React.Fragment>
           ))}
         </tbody>

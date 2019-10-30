@@ -8,7 +8,7 @@ import { get, size } from 'lodash';
 
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
-import { select_MT_DETAIL_RECEIVER_ZFI007, select_ZFI007 } from 'redux/ZFI007/selectors';
+import { select_ZFI007_MT_DETAIL_RECEIVER, select_ZFI007_list } from 'redux/ZFI007/selectors';
 import { formatNumber } from 'utils/common';
 
 interface Props extends ButtonProps {
@@ -19,8 +19,8 @@ interface Props extends ButtonProps {
 const PrintableBangKe = (props: Props): JSX.Element => {
   const { ids } = props;
   const dispatch = useDispatch();
-  const data = useSelector(select_ZFI007);
-  const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
+  const data = useSelector(select_ZFI007_list);
+  const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_ZFI007_MT_DETAIL_RECEIVER);
   const { t } = useTranslation();
 
   useEffect(() => {

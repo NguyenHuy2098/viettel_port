@@ -9,7 +9,10 @@ import { goBack } from 'connected-react-router';
 import produce from 'immer';
 import { delay, size } from 'lodash';
 import moment from 'moment';
+import numeral from 'numeral';
 
+import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
 import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -17,11 +20,10 @@ import DataTable from 'components/DataTable/Grouped';
 import useLoggedInUser from 'hooks/useLoggedInUser';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
-import { select_ZFI007, select_MT_DETAIL_RECEIVER_ZFI007 } from 'redux/ZFI007/selectors';
+import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
 import PrintableBangKe from './PrintableBangKe';
 import UtilityDropDown from './Utility';
-import ButtonPrintable from '../../components/Button/ButtonPrintable';
 
 interface Props {
   match: match;
@@ -34,13 +36,21 @@ interface DataType extends API.LISTMTDETAILRECEIVER {
 // eslint-disable-next-line max-lines-per-function
 const SuaBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const [data, setData] = useState<DataType[]>([]);
-  const userLogin = useLoggedInUser();
   const idBangKe = get(props, 'match.params.idBangKe', '');
-  const detailRecerver = useSelector(select_MT_DETAIL_RECEIVER_ZFI007);
-  const status = get(detailRecerver, 'header.BK_STATUS', 4);
-  const list = useSelector(select_ZFI007);
+  const dispatch = useDispatch();
+  const userLogin = useLoggedInUser();
+  const bangKeHeader = useSelector(select_ZFI007_header);
+  const list = useSelector(select_ZFI007_list);
+  const [data, setData] = useState<DataType[]>([]);
+
+  const status = useMemo(() => toNumber(get(bangKeHeader, 'BK_STATUS', -1)), [bangKeHeader]);
+  const tongGiaTri = useMemo(
+    () =>
+      numeral(sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(get(item, 'SUM_AMOUNT') || 0))).format(
+        '0,0',
+      ),
+    [data],
+  );
 
   useEffect(() => {
     dispatch(
@@ -53,15 +63,6 @@ const SuaBangKe = (props: Props): JSX.Element => {
   useEffect((): void => {
     setData(list);
   }, [list]);
-
-  function formatStatusItem(status: number): string {
-    let statusItem = '';
-    if (status === 0) statusItem = t('Tạo mới');
-    if (status === 1) statusItem = t('Chờ phê duyệt');
-    if (status === 2) statusItem = t('Phê duyệt');
-    if (status === 3) statusItem = t('Duyệt 1 phần');
-    return statusItem;
-  }
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -85,10 +86,9 @@ const SuaBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Trạng thái'),
         accessor: 'STATUS_ITEM',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          const status = get(row, 'original.STATUS_ITEM', '');
-          return formatStatusItem(status);
-        },
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => (
+          <BadgeFicoBangKeStatus status={toNumber(get(row, 'original.STATUS_ITEM', -1))} />
+        ),
       },
       {
         Header: t('Người bán'),
@@ -172,7 +172,6 @@ const SuaBangKe = (props: Props): JSX.Element => {
   };
 
   const ids = useMemo(() => [idBangKe], [idBangKe]);
-
   const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
 
   const renderFirstControllers = (): JSX.Element => (
@@ -207,44 +206,45 @@ const SuaBangKe = (props: Props): JSX.Element => {
 
   const renderThongTinBangKe = (): JSX.Element => (
     <Row>
-      <Col xs={12} md={6} xl={4}>
+      <Col xs={12} xl={4}>
         <div className="sipFicoBangKeInformation">
           <div>{t('Mã bảng kê')}:</div>
-          <span>{idBangKe}</span>
+          <span className="text-bold">{get(bangKeHeader, 'BK_ID')}</span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Trạng thái')}:</div>
-          <span>{t('Sửa bảng kê')}</span>
+          <span>
+            <BadgeFicoBangKeStatus status={status} />
+          </span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Kỳ')}:</div>
-          {/*<span>{`${moment(monthYear, 'MM/yyyy').format('MM')}/${moment(monthYear, 'MM/yyyy').format('YYYY')}`}</span>*/}
-          <span>{`${10}/${2019}`}</span>
+          <span className="text-bold">
+            {get(bangKeHeader, 'BK_MONTH') || '-'}/{get(bangKeHeader, 'BK_YEAR') || '-'}
+          </span>
         </div>
       </Col>
-      <Col xs={12} md={6} xl={8}>
-        <Row>
-          <Col xs={12} xl={6}>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Người tạo')}:</div>
-              <span>{get(userLogin, 'user.profile.preferred_username', '')}</span>
-            </div>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Đơn vị')}:</div>
-              <span>{get(userLogin, 'user.profile.bp_org_unit', '')}</span>
-            </div>
-          </Col>
-          <Col xs={12} xl={6}>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Tổng giá trị')}:</div>
-              <span>{sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(item.SUM_AMOUNT))}</span>
-            </div>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Ngày tạo')}:</div>
-              <span>{moment(get(detailRecerver, 'header.CRE_TIME', ''), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</span>
-            </div>
-          </Col>
-        </Row>
+      <Col xs={12} xl={4}>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Người tạo')}:</div>
+          <span className="text-bold">{get(bangKeHeader, 'CRE_BY') || '-'}</span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Đơn vị')}:</div>
+          <span className="text-bold">{get(userLogin, 'user.profile.bp_org_unit', '')}</span>
+        </div>
+      </Col>
+      <Col xs={12} xl={4}>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Tổng giá trị')}:</div>
+          <span className="text-bold">{tongGiaTri} đ</span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Ngày tạo')}:</div>
+          <span className="text-bold">
+            {moment(get(bangKeHeader, 'CRE_TIME', ''), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
+          </span>
+        </div>
       </Col>
     </Row>
   );
