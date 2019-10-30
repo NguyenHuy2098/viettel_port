@@ -21,6 +21,7 @@ const schema = yup.object().shape({
     .required('Tên người bán không được để trống')
     .max(120, 'Tên người bán không được nhập quá 120 ký tự'),
   SO_HD: yup.string().max(7, 'Số hóa đơn không được nhập quá 7 ký tự'),
+  MAU_HD: yup.string().max(11, 'Mẫu hóa đơn không được nhập quá 11 ký tự'),
 });
 
 // eslint-disable-next-line max-lines-per-function
@@ -179,6 +180,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         </FormGroup>
         <FormGroup>
           <Input type="text" value={mauHoaDon} onChange={handleChangeMauNguoiBan} placeholder="Mẫu hóa đơn" />
+          <span className="color-red">{get(errors, 'MAU_HD', '')}</span>
         </FormGroup>
         <FormGroup>
           <Input type="text" value={kyHieu} onChange={handleChangeKyHieu} placeholder="Ký hiệu" />
