@@ -3,7 +3,7 @@ import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, For
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import { toNumber, toString, sumBy, get } from 'lodash';
+import { toString, sumBy, get, trim } from 'lodash';
 import numeral from 'numeral';
 import { Row as TableRow } from 'react-table';
 import * as yup from 'yup';
@@ -72,15 +72,16 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
   }
 
   function handleChangeTienHangHoa(e: React.FormEvent<HTMLInputElement>): void {
-    setTienHangHoa(e.currentTarget.value);
+    setTienHangHoa(numberFormat(e.currentTarget.value));
+    setThueGTGT(caculateThueGTGT(e.currentTarget.value, thueSuat));
   }
 
   function handleChangePhuPhi(e: React.FormEvent<HTMLInputElement>): void {
-    setPhuPhi(e.currentTarget.value);
+    setPhuPhi(numberFormat(e.currentTarget.value));
   }
 
   function handleChangeThueGTGT(e: React.FormEvent<HTMLInputElement>): void {
-    setThueGTGT(e.currentTarget.value);
+    setThueGTGT(numberFormat(e.currentTarget.value));
   }
 
   function handleChangeLinkUrl(e: React.FormEvent<HTMLInputElement>): void {
@@ -89,32 +90,48 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
 
   function handleChangeThueSuat(e: React.FormEvent<HTMLInputElement>): void {
     setThueSuat(e.currentTarget.value);
-    setThueGTGT(toString((toNumber(e.currentTarget.value) * toNumber(tienHangHoa)) / 100));
+    setThueGTGT(caculateThueGTGT(tienHangHoa, e.currentTarget.value));
   }
 
   function handleChangeNgay(date: Date): void {
     setNgay(date);
   }
 
+  function caculateThueGTGT(tienHangHoa: string, thueSuat: string): string {
+    return numberFormat(toString((stringToNumber(tienHangHoa) * stringToNumber(thueSuat)) / 100));
+  }
+
+  function caculateSumAmount(tienHangHoa: string, phuPhi: string, thueGTGT: string): string {
+    return numberFormat(toString(stringToNumber(tienHangHoa) + stringToNumber(phuPhi) + stringToNumber(thueGTGT)));
+  }
+
+  function numberFormat(value: string): string {
+    return numeral(value.replace(/[^0-9]/g, '')).format('0,0');
+  }
+
+  function stringToNumber(value: string): number {
+    return numeral(value).value();
+  }
+
   const [errors, setErrors] = React.useState<Record<string, string>>({});
 
   function handleSubmit(): void {
     const payload = {
-      MAU_HD: mauHoaDon,
-      KIHIEU_HD: kyHieu,
+      MAU_HD: trim(mauHoaDon),
+      KIHIEU_HD: trim(kyHieu),
       SO_HD: soHoaDon,
       NGAY_HD: moment(ngay).format('YYYYMMDD'),
       STATUS_ITEM: 0,
-      NGUOI_BAN: tenNguoiBan,
-      MST: maSoThue,
-      DESCR: hangHoa,
-      TEN_KM: index,
-      KHOAN_MUC: index,
+      NGUOI_BAN: trim(tenNguoiBan),
+      MST: trim(maSoThue),
+      DESCR: trim(hangHoa),
+      TEN_KM: trim(index),
+      KHOAN_MUC: trim(index),
       AMOUNT: tienHangHoa,
       PHU_PHI: phuPhi,
-      TAX: thueSuat,
-      TAX_AMOUNT: thueGTGT,
-      SUM_AMOUNT: toNumber(tienHangHoa) + toNumber(phuPhi) + toNumber(thueGTGT),
+      TAX: stringToNumber(thueSuat),
+      TAX_AMOUNT: stringToNumber(thueGTGT),
+      SUM_AMOUNT: stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT)),
     };
 
     schema
@@ -245,9 +262,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         <ModalBody>{renderBillInfo()}</ModalBody>
         <ModalFooter className="footer-no-boder">
           <div className="text-left col-6">
-            <p className="mb-0">
-              Tổng tiền thanh toán: {toNumber(tienHangHoa) + toNumber(phuPhi) + toNumber(thueGTGT)}đ
-            </p>
+            <p className="mb-0">Tổng tiền thanh toán: {caculateSumAmount(tienHangHoa, phuPhi, thueGTGT)}đ</p>
           </div>
           <div className="text-right col-6">
             <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit}>
