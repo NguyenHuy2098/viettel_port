@@ -96,8 +96,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     setNgay(date);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [errors, setErrors] = React.useState<Record<string, any>>({});
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
 
   function handleSubmit(): void {
     const payload = {
@@ -111,6 +110,11 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       DESCR: hangHoa,
       TEN_KM: index,
       KHOAN_MUC: index,
+      AMOUNT: tienHangHoa,
+      PHU_PHI: phuPhi,
+      TAX: thueSuat,
+      TAX_AMOUNT: thueGTGT,
+      SUM_AMOUNT: toNumber(tienHangHoa) + toNumber(phuPhi) + toNumber(thueGTGT),
     };
 
     schema
