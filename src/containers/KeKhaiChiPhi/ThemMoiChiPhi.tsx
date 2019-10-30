@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React from 'react';
 import { Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
@@ -15,19 +16,40 @@ interface Props {
 }
 
 const schema = yup.object().shape({
+  URL: yup
+    .string()
+    .required('URL không được để trống')
+    // eslint-disable-next-line no-useless-escape
+    .matches(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/, 'URL không hợp lệ'),
+  TAX_AMOUNT: yup.string().required('Thuế GTGT không được để trống'),
+  TAX: yup.string().required('Thuế suất không được để trống'),
+  PHU_PHI: yup.string().required('Phụ phí không được để trống'),
+  AMOUNT: yup.string().required('Tiền hàng hóa không được để trống'),
+  DESCR: yup
+    .string()
+    .required('Hàng hóa không được để trống')
+    .max(250, 'Hàng hóa không được nhập quá 250 ký tự'),
+  SO_HD: yup
+    .string()
+    .required('Số hóa đơn không được để trống')
+    .max(7, 'Số hóa đơn không được nhập quá 7 ký tự'),
+  NGAY_HD: yup.string().required('Ngày hợp đồng không được để trống'),
+  KIHIEU_HD: yup
+    .string()
+    .required('Ký hiệu không được để trống')
+    .max(7, 'Ký hiệu không được nhập quá 7 ký tự'),
+  MAU_HD: yup
+    .string()
+    .required('Mẫu hóa đơn không được để trống')
+    .max(11, 'Mẫu hóa đơn không được nhập quá 11 ký tự'),
   NGUOI_BAN: yup
     .string()
     .required('Tên người bán không được để trống')
     .max(120, 'Tên người bán không được nhập quá 120 ký tự'),
-  SO_HD: yup.string().max(7, 'Số hóa đơn không được nhập quá 7 ký tự'),
-  MAU_HD: yup.string().max(11, 'Mẫu hóa đơn không được nhập quá 11 ký tự'),
-  MST: yup.string().max(14, 'MST không được nhập quá 14 kí tự'),
-  KIHIEU_HD: yup.string().max(7, 'Ký hiệu không được nhập quá 7 ký tự'),
-  DESCR: yup.string().max(250, 'Hàng hóa  không được nhập quá 250 ký tự'),
-  URL: yup
+  MST: yup
     .string()
-    // eslint-disable-next-line no-useless-escape
-    .matches(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/, ' URL không hợp lệ'),
+    .required('MST không được để trống')
+    .max(14, 'MST không được nhập quá 14 kí tự'),
 });
 
 // eslint-disable-next-line max-lines-per-function
@@ -54,54 +76,67 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
   const [thueSuat, setThueSuat] = React.useState<string>('');
   const [thueGTGT, setThueGTGT] = React.useState<string>('');
   const [linkUrl, setLinkUrl] = React.useState<string>('');
+  const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
 
   function handleChangeMaSoThue(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setMaSoThue(e.currentTarget.value);
   }
 
   function handleChangeTenNguoiBan(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setTenNguoiBan(e.currentTarget.value);
   }
 
   function handleChangeMauNguoiBan(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setMauHoaDon(e.currentTarget.value);
   }
 
   function handleChangeKyHieu(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setKyHieu(e.currentTarget.value);
   }
 
   function handleChangeSoHoaDon(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setSoHoaDon(e.currentTarget.value.replace(/[^0-9]/g, ''));
   }
 
   function handleChangeHangHoa(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setHangHoa(e.currentTarget.value);
   }
 
   function handleChangeTienHangHoa(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setTienHangHoa(numberFormat(e.currentTarget.value));
     setThueGTGT(caculateThueGTGT(e.currentTarget.value, thueSuat));
   }
 
   function handleChangePhuPhi(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setPhuPhi(numberFormat(e.currentTarget.value));
   }
 
   function handleChangeThueGTGT(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setThueGTGT(numberFormat(e.currentTarget.value));
   }
 
   function handleChangeLinkUrl(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setLinkUrl(e.currentTarget.value);
   }
 
   function handleChangeThueSuat(e: React.FormEvent<HTMLInputElement>): void {
+    setIsSubmit(true);
     setThueSuat(e.currentTarget.value);
     setThueGTGT(caculateThueGTGT(tienHangHoa, e.currentTarget.value));
   }
 
   function handleChangeNgay(date: Date): void {
+    setIsSubmit(true);
     setNgay(date);
   }
 
@@ -137,9 +172,9 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       KHOAN_MUC: trim(index),
       AMOUNT: tienHangHoa,
       PHU_PHI: phuPhi,
-      TAX: stringToNumber(thueSuat),
-      TAX_AMOUNT: stringToNumber(thueGTGT),
-      SUM_AMOUNT: stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT)),
+      TAX: toString(stringToNumber(thueSuat)),
+      TAX_AMOUNT: toString(stringToNumber(thueGTGT)),
+      SUM_AMOUNT: toString(stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT))),
       URL: trim(linkUrl),
     };
 
@@ -171,6 +206,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     setThueSuat('');
     setLinkUrl('');
     setErrors({});
+    setIsSubmit(false);
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -201,6 +237,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
             onChange={handleChangeNgay}
             dateFormat="dd/MM/yyyy"
           />
+          <span className="color-red">{get(errors, 'NGAY_HD', '')}</span>
         </FormGroup>
         <FormGroup>
           <Input type="text" value={soHoaDon} onChange={handleChangeSoHoaDon} placeholder="Số hoá đơn" />
@@ -224,11 +261,13 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
                 onChange={handleChangeTienHangHoa}
                 placeholder="Tiền hàng hóa, dịch vụ"
               />
+              <span className="color-red">{get(errors, 'AMOUNT', '')}</span>
             </FormGroup>
           </Col>
           <Col md={6}>
             <FormGroup>
               <Input type="text" value={phuPhi} onChange={handleChangePhuPhi} placeholder="Phụ phí" />
+              <span className="color-red">{get(errors, 'PHU_PHI', '')}</span>
             </FormGroup>
           </Col>
         </Row>
@@ -241,11 +280,13 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
                 <option value="5">5%</option>
                 <option value="10">10%</option>
               </Input>
+              <span className="color-red">{get(errors, 'TAX', '')}</span>
             </FormGroup>
           </Col>
           <Col md={6}>
             <FormGroup>
               <Input type="text" value={thueGTGT} onChange={handleChangeThueGTGT} placeholder="Thuế GTGT" />
+              <span className="color-red">{get(errors, 'TAX_AMOUNT', '')}</span>
             </FormGroup>
           </Col>
         </Row>
@@ -279,7 +320,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
             <p className="mb-0">Tổng tiền thanh toán: {caculateSumAmount(tienHangHoa, phuPhi, thueGTGT)}đ</p>
           </div>
           <div className="text-right col-6">
-            <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit}>
+            <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit} disabled={!isSubmit}>
               Ghi lại
             </button>
           </div>
