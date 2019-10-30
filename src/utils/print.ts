@@ -6,5 +6,14 @@ export const printHtml = (options: printJS.Configuration): void => {
     scanStyles: false,
     type: 'html',
     ...options,
+    style: `
+    @page {
+      size: A4 landscape;
+    }
+    .page-break {
+      display: block;
+      page-break-before: always;
+    }
+    `,
   });
 };
