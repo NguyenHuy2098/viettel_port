@@ -52,6 +52,20 @@ export function formatNumber(value: number): string {
   return str;
 }
 
+export function getValueOfNumberFormat(value: string): string {
+  if (isNaN(parseFloat(value))) {
+    return value;
+  } else {
+    return numeral(value)
+      .value()
+      .toString();
+  }
+}
+
+export function numberFormat(value: string): string {
+  return value ? numeral(value).format('0,0') : '';
+}
+
 export const getAddressNameById = (id: string, data: VtpAddress[]): string => {
   return get(find(data, { I: id }), 'N', '');
 };

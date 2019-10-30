@@ -24,7 +24,6 @@ import {
   toString,
   trim,
 } from 'lodash';
-import numeral from 'numeral';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
@@ -39,11 +38,12 @@ import {
   action_GET_DISTRICT,
   action_GET_WARD,
 } from 'redux/LocationSearch/actions';
+import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 // import { makeSelectProfile } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { getAddressNameById } from 'utils/common';
+import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/common';
 import AdditionalPackageTabItemsInternational from 'components/AdditionalPackageTabItemsInternational';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 import { countryList } from './countryList';
@@ -361,12 +361,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       set(draftState[index], valueName, value);
     });
     setPackageItemArr(newArr);
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   }
   function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
     const newCommodityCode = value === 'V2' ? 'V04' : 'V99';
@@ -375,12 +370,15 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       set(draftState[index], 'COMMODITY_CODE', newCommodityCode);
     });
     setPackageItemArr(newArr);
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
+  }
+  function adjustPackageItemSuggestCommodity(descriptionValue: string, goodsValue: string, index: number): void {
+    const newArr = produce(packageItemArr, (draftState): void => {
+      set(draftState[index], 'Description', descriptionValue);
+      set(draftState[index], 'GOODS_VALUE', goodsValue);
+    });
+    setPackageItemArr(newArr);
+    triggerValidateAndPriceCalculate();
   }
   function handleActiveTab(tab: string): void {
     setActiveTab(tab);
@@ -552,12 +550,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
           Currency: '',
           Dimension_UoM: '',
-          Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(item.GROSS_WEIGHT)) : '',
+          Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(getValueOfNumberFormat(item.GROSS_WEIGHT))) : '',
           Goods_value: '',
           Service_type: '',
-          Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
-          Height: item.Hight ? toString(parseFloat(item.Hight).toFixed(2)) : '',
-          Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
+          Length: item.Length ? toString(parseFloat(getValueOfNumberFormat(item.Length)).toFixed(2)) : '',
+          Height: item.Hight ? toString(parseFloat(getValueOfNumberFormat(item.Hight)).toFixed(2)) : '',
+          Width: item.Width ? toString(parseFloat(getValueOfNumberFormat(item.Width)).toFixed(2)) : '',
           item_cat: 'PKG',
           quantity: '1',
           Weight_UoM: 'G',
@@ -653,17 +651,22 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           PACKAGING_MATERIAL: '',
           Description: trim(item.Description),
           PACKAGE_TYPE: '',
-          QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
+          QUANTITY_OF_PACKAGE:
+            trim(item.QUANTITY_OF_PACKAGE) === ''
+              ? undefined
+              : getValueOfNumberFormat(trim(get(item, 'QUANTITY_OF_PACKAGE'))),
           QUANTITY_OF_UNIT: '',
-          GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
+          GROSS_WEIGHT:
+            trim(item.GROSS_WEIGHT) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GROSS_WEIGHT'))),
           GROSS_WEIGHT_OF_UNIT: 'G',
           NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: '',
-          Length: item.Length === '' ? undefined : item.Length,
-          Hight: item.Hight === '' ? undefined : item.Hight,
-          Width: item.Width === '' ? undefined : item.Width,
+          Length: trim(item.Length) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Length'))),
+          Hight: trim(item.Hight) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Hight'))),
+          Width: trim(item.Width) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Width'))),
           Note: '',
-          GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
+          GOODS_VALUE:
+            trim(item.GOODS_VALUE) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GOODS_VALUE'))),
           Currency: '',
           COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
@@ -693,15 +696,19 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
+  function triggerValidateAndPriceCalculate(): void {
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  }
+
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
-      //trigger get Summary information dispatch
-      setCountGetSummaryInformation(countGetSummaryInformation + 1);
-      // check validate
-      if (isSubmit) {
-        setCount(count + 1);
-      }
+      triggerValidateAndPriceCalculate();
     };
   }
 
@@ -715,6 +722,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleHideChooseLocationDropdown = (): void => {
     setLocationSuggestSender([]);
+    setCommoditySuggest([]);
   };
 
   React.useEffect((): void => {
@@ -738,6 +746,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countLocationSuggestSender]);
 
+  // eslint-disable-next-line max-lines-per-function
   function handleChooseLocationSuggestSender(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
@@ -768,7 +777,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               const thisOther = find(dataComponents, (item: Component): boolean => {
                 return item.type === 'OTHER';
               });
-              setDetailAddressSender(`${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`);
+              const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
+              setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {
               toast(
@@ -788,6 +799,47 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
+  //_________________COMMODITY suggest event handle__________________________
+
+  const [countCommoditySuggest, setCountCommoditySuggest] = useState<number>(0);
+  const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
+  const handleKeyPressHangHoa = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    setCountCommoditySuggest(countCommoditySuggest + 1);
+  };
+
+  React.useEffect((): void => {
+    if (countCommoditySuggest > 0 && size(tenHang) > 0) {
+      dispatch(
+        action_COMMODITY_SUGGEST(
+          { q: tenHang },
+          {
+            onSuccess: (data: SuggestedCommodity): void => {
+              setCommoditySuggest(get(data, 'items'));
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              setCommoditySuggest([]);
+            },
+          },
+        ),
+      );
+    } else {
+      setCommoditySuggest([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countCommoditySuggest]);
+
+  function handleChooseCommoditySuggest(
+    name: string,
+    price: number,
+  ): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setTenHang(name);
+      setGiaTri(toString(price));
+      setCommoditySuggest([]);
+      triggerValidateAndPriceCalculate();
+    };
+  }
+
   //___________________________________________________________________
 
   function handleChangeReceiverAddress(event: React.FormEvent<HTMLInputElement>): void {
@@ -798,12 +850,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
     // setProvinceIdReceiver(join(slice(thisValue, 110, 150), '')); // temporary hide
     setDescription(join(slice(thisValue, 150, 190), ''));
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -913,15 +960,17 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           PACKAGE_TYPE: '',
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
-          GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
+          GROSS_WEIGHT:
+            trim(item.GROSS_WEIGHT) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GROSS_WEIGHT'))),
           GROSS_WEIGHT_OF_UNIT: 'G',
           NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: '',
-          Length: item.Length === '' ? undefined : item.Length,
-          Hight: item.Hight === '' ? undefined : item.Hight,
-          Width: item.Width === '' ? undefined : item.Width,
+          Length: trim(item.Length) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Length'))),
+          Hight: trim(item.Hight) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Hight'))),
+          Width: trim(item.Width) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Width'))),
           Note: '',
-          GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
+          GOODS_VALUE:
+            trim(item.GOODS_VALUE) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GOODS_VALUE'))),
           Currency: '',
           COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
           COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
@@ -1107,10 +1156,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setFilteredDistrictSender([]);
     }
     setFilteredWardSender([]);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   const handleChangeDistrictSender = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -1128,18 +1174,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setFilteredWardSender([]);
     }
     setWardIdSender('');
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   const handleChangeWardSender = (event: React.FormEvent<HTMLInputElement>): void => {
     setWardIdSender(event.currentTarget.value);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   //__________________ address popup events
@@ -1504,20 +1544,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  function getValueOfNumberFormat(value: string): string {
-    if (isNaN(parseFloat(value))) {
-      return value;
-    } else {
-      return numeral(value)
-        .value()
-        .toString();
-    }
-  }
-
-  function numberFormat(value: string): string {
-    return value ? numeral(value).format('0,0') : '';
-  }
-
   // eslint-disable-next-line max-lines-per-function
   function renderPackageInfoDetail(): JSX.Element {
     return (
@@ -1548,7 +1574,30 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               placeholder={t('Nội dung hàng hoá')}
               value={tenHang}
               onChange={handleChangeTextboxValue(setTenHang)}
+              onKeyUp={handleKeyPressHangHoa}
             />
+            <ListGroup className="sipInputAddressDropdown">
+              {map(
+                commoditySuggest,
+                (item: CommoditySuggestedItem, index: number): JSX.Element => {
+                  return (
+                    <ListGroupItem
+                      tag="button"
+                      key={index}
+                      onClick={handleChooseCommoditySuggest(item.name, item.price)}
+                    >
+                      {get(item, 'name', '')} -{' '}
+                      <NumberFormat
+                        value={get(item, 'price', '')}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        suffix={' đ'}
+                      />
+                    </ListGroupItem>
+                  );
+                },
+              )}
+            </ListGroup>
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tenHang')}</div>
           </Col>
         </Row>
@@ -1657,6 +1706,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             data={packageItemArr}
             onChangeValue={adjustPackageItemValue}
             onChangeCommodityType={adjustPackageItemCommodityType}
+            onChangeSuggestCommodity={adjustPackageItemSuggestCommodity}
             isSubmit={isSubmit}
             packageItemErrorsList={packageItemErrorsList}
             activeTab={activeTab}
@@ -1694,7 +1744,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         toggle={toggleModalApiCreateSuccess}
         idPhieuGuiSuccess={maPhieuGui}
       />
-      {size(locationSuggestSender) > 0 ? (
+      {size(locationSuggestSender) > 0 || size(commoditySuggest) > 0 ? (
         <button className="sipInputAddressDropdownOverlay" onClick={handleHideChooseLocationDropdown}></button>
       ) : (
         <></>

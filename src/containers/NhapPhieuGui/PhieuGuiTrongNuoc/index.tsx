@@ -24,7 +24,6 @@ import {
   toString,
   trim,
 } from 'lodash';
-import numeral from 'numeral';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -42,10 +41,11 @@ import {
   action_GET_DISTRICT,
   action_GET_WARD,
 } from 'redux/LocationSearch/actions';
+import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems';
-import { getAddressNameById } from 'utils/common';
+import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/common';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 
 interface Props {
@@ -397,12 +397,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       set(draftState[index], valueName, value);
     });
     setPackageItemArr(newArr);
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   }
   function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
     const newCommodityCode = value === 'V2' ? 'V04' : 'V99';
@@ -411,12 +406,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       set(draftState[index], 'COMMODITY_CODE', newCommodityCode);
     });
     setPackageItemArr(newArr);
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
+  }
+  function adjustPackageItemSuggestCommodity(descriptionValue: string, goodsValue: string, index: number): void {
+    const newArr = produce(packageItemArr, (draftState): void => {
+      set(draftState[index], 'Description', descriptionValue);
+      set(draftState[index], 'GOODS_VALUE', goodsValue);
+    });
+    setPackageItemArr(newArr);
+    triggerValidateAndPriceCalculate();
   }
   function handleActiveTab(tab: string): void {
     setActiveTab(tab);
@@ -453,16 +451,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     nguoiThanhToan: trim(nguoiThanhToan),
     diemGiaoNhan: trim(diemGiaoNhan),
   };
-
-  function getValueOfNumberFormat(value: string): string {
-    if (isNaN(parseFloat(value))) {
-      return value;
-    } else {
-      return numeral(value)
-        .value()
-        .toString();
-    }
-  }
 
   //______________check if Order Information exist
   //eslint-disable-next-line max-lines-per-function
@@ -713,19 +701,24 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           PACKAGING_MATERIAL: '',
           Description: item.Description,
           PACKAGE_TYPE: '',
-          QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
+          QUANTITY_OF_PACKAGE:
+            trim(item.QUANTITY_OF_PACKAGE) === ''
+              ? undefined
+              : getValueOfNumberFormat(trim(get(item, 'QUANTITY_OF_PACKAGE'))),
           QUANTITY_OF_UNIT: '',
-          GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
+          GROSS_WEIGHT:
+            trim(item.GROSS_WEIGHT) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GROSS_WEIGHT'))),
           GROSS_WEIGHT_OF_UNIT: 'G',
           NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: '',
-          Length: item.Length === '' ? undefined : item.Length,
-          Hight: item.Hight === '' ? undefined : item.Hight,
-          Width: item.Width === '' ? undefined : item.Width,
+          Length: trim(item.Length) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Length'))),
+          Hight: trim(item.Hight) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Hight'))),
+          Width: trim(item.Width) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Width'))),
           Note: '',
-          GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
+          GOODS_VALUE:
+            trim(item.GOODS_VALUE) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GOODS_VALUE'))),
           Currency: '',
-          COD: item.COD === '' ? undefined : item.COD,
+          COD: trim(item.COD) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'COD'))),
         };
         packageTabSchema
           .validate(packageItemValidate, { abortEarly: false })
@@ -752,15 +745,19 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
+  function triggerValidateAndPriceCalculate(): void {
+    //trigger get Summary information dispatch
+    setCountGetSummaryInformation(countGetSummaryInformation + 1);
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+  }
+
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
-      //trigger get Summary information dispatch
-      setCountGetSummaryInformation(countGetSummaryInformation + 1);
-      // check validate
-      if (isSubmit) {
-        setCount(count + 1);
-      }
+      triggerValidateAndPriceCalculate();
     };
   }
 
@@ -790,12 +787,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function handleChangeDeliveryTime(date: Date): void {
     setThoiGianPhat(date);
-    //trigger get Summary information dispatch
-    setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   }
 
   //_________________Location suggest event handle__________________________
@@ -827,6 +819,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countLocationSuggestSender]);
 
+  // eslint-disable-next-line max-lines-per-function
   function handleChooseLocationSuggestSender(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
@@ -857,7 +850,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               const thisOther = find(dataComponents, (item: Component): boolean => {
                 return item.type === 'OTHER';
               });
-              setDetailAddressSender(`${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`);
+              const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
+              setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {
               toast(
@@ -888,6 +883,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const handleHideChooseLocationDropdown = (): void => {
     setLocationSuggestSender([]);
     setLocationSuggestReceiver([]);
+    setCommoditySuggest([]);
   };
 
   React.useEffect((): void => {
@@ -911,6 +907,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countLocationSuggestReceiver]);
 
+  // eslint-disable-next-line max-lines-per-function
   function handleChooseLocationSuggestReceiver(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       const thisItem = find(locationSuggestReceiver, (item: SuggestedItem): boolean => {
@@ -941,7 +938,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               const thisOther = find(dataComponents, (item: Component): boolean => {
                 return item.type === 'OTHER';
               });
-              setDetailAddressReceiver(`${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`);
+              const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
+              setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {
               toast(
@@ -958,6 +957,47 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
       setLocationSuggestReceiver([]);
+    };
+  }
+
+  //_________________COMMODITY suggest event handle__________________________
+
+  const [countCommoditySuggest, setCountCommoditySuggest] = useState<number>(0);
+  const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
+  const handleKeyPressHangHoa = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    setCountCommoditySuggest(countCommoditySuggest + 1);
+  };
+
+  React.useEffect((): void => {
+    if (countCommoditySuggest > 0 && size(tenHang) > 0) {
+      dispatch(
+        action_COMMODITY_SUGGEST(
+          { q: tenHang },
+          {
+            onSuccess: (data: SuggestedCommodity): void => {
+              setCommoditySuggest(get(data, 'items'));
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              setCommoditySuggest([]);
+            },
+          },
+        ),
+      );
+    } else {
+      setCommoditySuggest([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countCommoditySuggest]);
+
+  function handleChooseCommoditySuggest(
+    name: string,
+    price: number,
+  ): (event: React.FormEvent<HTMLInputElement>) => void {
+    return (event: React.FormEvent<HTMLInputElement>): void => {
+      setTenHang(name);
+      setGiaTri(toString(price));
+      setCommoditySuggest([]);
+      triggerValidateAndPriceCalculate();
     };
   }
 
@@ -1112,17 +1152,19 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           PACKAGE_TYPE: '',
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
-          GROSS_WEIGHT: item.GROSS_WEIGHT === '' ? undefined : item.GROSS_WEIGHT,
+          GROSS_WEIGHT:
+            trim(item.GROSS_WEIGHT) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GROSS_WEIGHT'))),
           GROSS_WEIGHT_OF_UNIT: 'G',
           NET_WEIGHT: '',
           NET_WEIGHT_OF_UNIT: '',
-          Length: item.Length === '' ? undefined : item.Length,
-          Hight: item.Hight === '' ? undefined : item.Hight,
-          Width: item.Width === '' ? undefined : item.Width,
+          Length: trim(item.Length) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Length'))),
+          Hight: trim(item.Hight) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Hight'))),
+          Width: trim(item.Width) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'Width'))),
           Note: '',
-          GOODS_VALUE: item.GOODS_VALUE === '' ? undefined : item.GOODS_VALUE,
+          GOODS_VALUE:
+            trim(item.GOODS_VALUE) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GOODS_VALUE'))),
           Currency: '',
-          COD: item.COD === '' ? undefined : item.COD,
+          COD: trim(item.COD) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'COD'))),
         };
         packageTabSchema
           .validate(packageItemValidate, { abortEarly: false })
@@ -1315,10 +1357,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setFilteredDistrictSender([]);
     }
     setFilteredWardSender([]);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   const handleChangeDistrictSender = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -1336,18 +1375,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setFilteredWardSender([]);
     }
     setWardIdSender('');
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   const handleChangeWardSender = (event: React.FormEvent<HTMLInputElement>): void => {
     setWardIdSender(event.currentTarget.value);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   //__________________ address popup events
@@ -1442,10 +1475,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setFilteredDistrictReceiver([]);
     }
     setFilteredWardReceiver([]);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   const handleChangeDistrictReceiver = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -1463,18 +1493,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setFilteredWardReceiver([]);
     }
     setWardIdReceiver('');
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   const handleChangeWardReceiver = (event: React.FormEvent<HTMLInputElement>): void => {
     setWardIdReceiver(event.currentTarget.value);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
+    triggerValidateAndPriceCalculate();
   };
 
   //__________________ address popup events
@@ -1987,10 +2011,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  function numberFormat(value: string): string {
-    return value ? numeral(value).format('0,0') : '';
-  }
-
   // eslint-disable-next-line max-lines-per-function
   function renderPackageInfoDetail(): JSX.Element {
     return (
@@ -2021,7 +2041,30 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               placeholder={t('Nội dung hàng hoá')}
               value={tenHang}
               onChange={handleChangeTextboxValue(setTenHang)}
+              onKeyUp={handleKeyPressHangHoa}
             />
+            <ListGroup className="sipInputAddressDropdown">
+              {map(
+                commoditySuggest,
+                (item: CommoditySuggestedItem, index: number): JSX.Element => {
+                  return (
+                    <ListGroupItem
+                      tag="button"
+                      key={index}
+                      onClick={handleChooseCommoditySuggest(item.name, item.price)}
+                    >
+                      {get(item, 'name', '')} -{' '}
+                      <NumberFormat
+                        value={get(item, 'price', '')}
+                        displayType={'text'}
+                        thousandSeparator={true}
+                        suffix={' đ'}
+                      />
+                    </ListGroupItem>
+                  );
+                },
+              )}
+            </ListGroup>
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tenHang')}</div>
           </Col>
         </Row>
@@ -2250,6 +2293,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             data={packageItemArr}
             onChangeValue={adjustPackageItemValue}
             onChangeCommodityType={adjustPackageItemCommodityType}
+            onChangeSuggestCommodity={adjustPackageItemSuggestCommodity}
             isSubmit={isSubmit}
             packageItemErrorsList={packageItemErrorsList}
             activeTab={activeTab}
@@ -2289,7 +2333,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         toggle={toggleModalApiCreateSuccess}
         idPhieuGuiSuccess={maPhieuGui}
       />
-      {size(locationSuggestSender) > 0 || size(locationSuggestReceiver) > 0 ? (
+      {size(locationSuggestSender) > 0 || size(locationSuggestReceiver) > 0 || size(commoditySuggest) > 0 ? (
         <button className="sipInputAddressDropdownOverlay" onClick={handleHideChooseLocationDropdown}></button>
       ) : (
         <></>

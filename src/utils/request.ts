@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { get, merge } from 'lodash';
 import store from 'redux/store';
-import { REACT_APP_API_ENDPOINT, REACT_APP_LOCATION_API_ENDPOINT } from './env';
+import { REACT_APP_API_ENDPOINT, REACT_APP_LOCATION_API_ENDPOINT, REACT_APP_COMMODITY_API_ENDPOINT } from './env';
 import { throwErrorIfMalformed } from './errorHelpers';
 
 /**
@@ -11,7 +11,6 @@ import { throwErrorIfMalformed } from './errorHelpers';
 export const configure = (requestConfig: AxiosRequestConfig = {}): AxiosRequestConfig => {
   const targetConfig = {
     headers: {
-      'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
     },
     timeout: 30000,
@@ -62,7 +61,21 @@ export const crmApi = axios.create({
   baseURL: REACT_APP_LOCATION_API_ENDPOINT,
 });
 
+export const crmCommodityApi = axios.create({
+  baseURL: REACT_APP_COMMODITY_API_ENDPOINT,
+});
+
+crmCommodityApi.interceptors.request.use(
+  (config: AxiosRequestConfig): AxiosRequestConfig => {
+    return configure(config);
+  },
+  (error): Promise<Error> => {
+    return Promise.reject(error);
+  },
+);
+
 export default {
   sapApi,
   crmApi,
+  crmCommodityApi,
 };
