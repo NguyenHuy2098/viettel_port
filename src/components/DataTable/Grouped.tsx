@@ -58,7 +58,9 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                 <td colSpan={size(columns)}>
                   {isFunction(renderGroupedRow)
                     ? renderGroupedRow(groupedRows, index)
-                    : t('Nhóm') + ' ' + toString(index)}
+                    : toString(index) !== 'null'
+                    ? t('Nhóm') + ' ' + toString(index)
+                    : ''}
                 </td>
               </tr>
               {map(

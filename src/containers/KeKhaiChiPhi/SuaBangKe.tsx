@@ -7,7 +7,7 @@ import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { goBack } from 'connected-react-router';
 import produce from 'immer';
-import { delay } from 'lodash';
+import { delay, size } from 'lodash';
 import moment from 'moment';
 
 import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
@@ -21,6 +21,7 @@ import { select_ZFI007, select_MT_DETAIL_RECEIVER_ZFI007 } from 'redux/ZFI007/se
 import ThemMoiChiPhi from './ThemMoiChiPhi';
 import PrintableBangKe from './PrintableBangKe';
 import UtilityDropDown from './Utility';
+import ButtonPrintable from '../../components/Button/ButtonPrintable';
 
 interface Props {
   match: match;
@@ -176,7 +177,25 @@ const SuaBangKe = (props: Props): JSX.Element => {
 
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <PrintableBangKe ids={ids} />
+      <ButtonPrintable
+        btnProps={{
+          disabled: !size(ids),
+          color: 'primary',
+          className: 'ml-2',
+          children: (
+            <>
+              <img src={'../../assets/img/icon/iconPrintWhite.svg'} alt="VTPostek" />
+              {t('In bảng kê')}
+            </>
+          ),
+        }}
+        modalBodyProps={{
+          children: <PrintableBangKe ids={ids} />,
+        }}
+        modalHeaderProps={{
+          children: t('In thông tin chuyến thư'),
+        }}
+      />
       {!status && (
         <>
           <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={items} />
