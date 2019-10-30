@@ -164,7 +164,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       KIHIEU_HD: trim(kyHieu),
       SO_HD: soHoaDon,
       NGAY_HD: moment(ngay).format('YYYYMMDD'),
-      STATUS_ITEM: 0,
+      ITEM_NO: 0,
       NGUOI_BAN: trim(tenNguoiBan),
       MST: trim(maSoThue),
       DESCR: trim(hangHoa),

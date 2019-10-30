@@ -10,6 +10,7 @@ import produce from 'immer';
 import moment from 'moment';
 import XLSX, { WorkBook } from 'xlsx';
 
+import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
@@ -75,6 +76,10 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Trạng thái'),
         accessor: 'ITEM_NO',
+        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
+          const thisStatus = get(row, 'original.ITEM_NO', 0);
+          return <BadgeFicoBangKeStatus status={thisStatus} />;
+        },
       },
       {
         Header: t('Người bán'),
