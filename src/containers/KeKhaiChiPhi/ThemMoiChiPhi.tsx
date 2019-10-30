@@ -20,6 +20,7 @@ const schema = yup.object().shape({
     .string()
     .required('Tên người bán không được để trống')
     .max(120, 'Tên người bán không được nhập quá 120 ký tự'),
+  SO_HD: yup.string().max(7, 'Số hóa đơn không được nhập quá 7 ký tự'),
 });
 
 // eslint-disable-next-line max-lines-per-function
@@ -64,7 +65,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
   }
 
   function handleChangeSoHoaDon(e: React.FormEvent<HTMLInputElement>): void {
-    setSoHoaDon(e.currentTarget.value);
+    setSoHoaDon(e.currentTarget.value.replace(/[^0-9]/g, ''));
   }
 
   function handleChangeHangHoa(e: React.FormEvent<HTMLInputElement>): void {
@@ -193,6 +194,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         </FormGroup>
         <FormGroup>
           <Input type="text" value={soHoaDon} onChange={handleChangeSoHoaDon} placeholder="Số hoá đơn" />
+          <span className="color-red">{get(errors, 'SO_HD', '')}</span>
         </FormGroup>
         <FormGroup>
           <Input
