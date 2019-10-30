@@ -114,7 +114,7 @@ const DanhSachBangKe = (): JSX.Element => {
   };
 
   const handleRedirectDetail = (rowOriginal: API.ListMTBKRECEIVER): void => {
-    dispatch(push(generatePath(routesMap.SUA_BANG_KE, { idBangKe: get(rowOriginal, 'BK_ID', '') })));
+    dispatch(push(generatePath(routesMap.CHI_TIET_BANG_KE, { idBangKe: get(rowOriginal, 'BK_ID', '') })));
   };
 
   const columns = useMemo(

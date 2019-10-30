@@ -21,9 +21,9 @@ import useLoggedInUser from 'hooks/useLoggedInUser';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
-import ThemMoiChiPhi from './ThemMoiChiPhi';
-import PrintableBangKe from './PrintableBangKe';
-import UtilityDropDown from './Utility';
+import ThemMoiChiPhi from '../ThemMoiChiPhi';
+import PrintableBangKe from '../PrintableBangKe';
+import UtilityDropDown from '../Utility';
 
 interface Props {
   match: match;
@@ -34,7 +34,7 @@ interface DataType extends API.LISTMTDETAILRECEIVER {
 }
 
 // eslint-disable-next-line max-lines-per-function
-const SuaBangKe = (props: Props): JSX.Element => {
+const ChiTietBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dispatch = useDispatch();
@@ -275,7 +275,7 @@ const SuaBangKe = (props: Props): JSX.Element => {
         <Col>
           <div className="d-flex sipTitle">
             <ButtonGoBack />
-            <h4>{t('Sửa bảng kê')}</h4>
+            <h4>{t('Chi tiết bảng kê')}</h4>
           </div>
         </Col>
         <Col className="d-flex justify-content-end">{renderFirstControllers()}</Col>
@@ -311,4 +311,4 @@ const SuaBangKe = (props: Props): JSX.Element => {
   );
 };
 
-export default SuaBangKe;
+export default ChiTietBangKe;
