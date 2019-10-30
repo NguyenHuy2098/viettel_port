@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import Loadable from 'react-loadable';
-import i18next from 'i18next';
+import { TFunction } from 'i18next';
 
 import Loading from 'components/Loading';
 import routesMap from 'utils/routesMap';
@@ -206,7 +206,7 @@ const ChiTietBangKe = Loadable({
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function
-const routes = (t: i18next.TFunction): SIPRoutePropsType[] => {
+const routes = (t: TFunction): SIPRoutePropsType[] => {
   return [
     { path: routesMap.ROOT, exact: true, name: t('Root'), component: RedirectToHome },
     { path: routesMap.HOME, exact: true, name: t('Home'), component: Home },
