@@ -29,7 +29,7 @@
     "font-awesome": "^4.7.0",
     "highcharts": "^7.2.0",
     "highcharts-react-official": "^2.2.2",
-    "i18next": "^19.0.0",
+    "i18next": "^18.0.1",
     "immer": "^4.0.2",
     "jsbarcode": "^3.11.0",
     "lodash": "^4.17.15",
