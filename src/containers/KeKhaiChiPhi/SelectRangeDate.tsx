@@ -41,7 +41,7 @@ function SelectRangeDate(props: Props): JSX.Element {
   }
 
   return (
-    <div className="sipFilterColSearch" ref={wrapperRef}>
+    <div className="sipFilterColSearch sipFilterColDateRangeContainer" ref={wrapperRef}>
       <Input
         value={moment(startDate).format('MM/YYYY') + ' - ' + moment(endDate).format('MM/YYYY')}
         onChange={handleChange}
@@ -59,6 +59,7 @@ function SelectRangeDate(props: Props): JSX.Element {
             endDate={endDate}
             dateFormat="MM/yyyy"
             showMonthYearPicker
+            inline
           />
           <DatePicker
             selected={endDate}
@@ -68,6 +69,7 @@ function SelectRangeDate(props: Props): JSX.Element {
             endDate={endDate}
             dateFormat="MM/yyyy"
             showMonthYearPicker
+            inline
           />
         </>
       )}

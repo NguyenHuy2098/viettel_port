@@ -106,10 +106,10 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
             placeholder="Ký hiệu"
           />
         </FormGroup>
-        <FormGroup>
+        <FormGroup className="sapFicoEditModalDatepickerContainer">
           <DatePicker
             placeholderText={t('Nhập thời gian')}
-            className="form-control"
+            className="form-control w-100"
             selected={
               !isEmpty(get(editItem, 'NGAY_HD')) && moment(get(editItem, 'NGAY_HD')).isValid()
                 ? moment(get(editItem, 'NGAY_HD'), 'YYYYMMDD').toDate()
@@ -184,7 +184,7 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
             type="text"
             value={defaultTo(get(editItem, 'URL', ''), '')}
             onChange={handleChangeLinkUrl}
-            placeholder="Link "
+            placeholder="Link URL"
           />
         </FormGroup>
       </Form>
@@ -197,17 +197,19 @@ const EditCostModal: React.FC<Props> = ({ handleEditItem, isOpen, toggle, item }
 
   return (
     <Modal isOpen={isOpen} toggle={toggle} className="">
-      <ModalHeader toggle={toggle} charCode="x">
-        Thông tin hóa
+      <ModalHeader toggle={toggle} charCode="x" className="no-border pb-2">
+        <strong>{t('Thông tin hóa đơn')}</strong>
       </ModalHeader>
-      <ModalBody>{renderBillInfo()}</ModalBody>
+      <ModalBody className="pt-2">{renderBillInfo()}</ModalBody>
       <ModalFooter className="footer-no-boder">
         <div className="text-left col-6">
-          <p className="mb-0">Tổng tiền thanh toán: 0đ</p>
+          <p className="mb-0">
+            Tổng tiền thanh toán: <span className="total">0đ</span>
+          </p>
         </div>
         <div className="text-right col-6">
           <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit}>
-            Ghi lại
+            {t('GHI LẠI')}
           </button>
         </div>
       </ModalFooter>

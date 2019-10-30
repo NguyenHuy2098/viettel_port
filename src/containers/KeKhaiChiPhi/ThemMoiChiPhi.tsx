@@ -229,10 +229,10 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
           <Input type="text" value={kyHieu} onChange={handleChangeKyHieu} placeholder="Ký hiệu" />
           <span className="color-red">{get(errors, 'KIHIEU_HD', '')}</span>
         </FormGroup>
-        <FormGroup>
+        <FormGroup className="sapFicoEditModalDatepickerContainer">
           <DatePicker
             placeholderText={t('Nhập thời gian')}
-            className="form-control"
+            className="form-control w-100"
             selected={ngay}
             onChange={handleChangeNgay}
             dateFormat="dd/MM/yyyy"
@@ -291,7 +291,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
           </Col>
         </Row>
         <FormGroup>
-          <Input type="text" value={linkUrl} onChange={handleChangeLinkUrl} placeholder="Link " />
+          <Input type="text" value={linkUrl} onChange={handleChangeLinkUrl} placeholder="Link URL" />
           <span className="color-red">{get(errors, 'URL', '')}</span>
         </FormGroup>
       </Form>
@@ -311,17 +311,19 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         </Button>
       </div>
       <Modal isOpen={modal} toggle={toggle} className="">
-        <ModalHeader toggle={toggle} charCode="x">
-          Thông tin hóa
+        <ModalHeader toggle={toggle} className="no-border" charCode="x">
+          <strong>{t('Thông tin hóa đơn')}</strong>
         </ModalHeader>
         <ModalBody>{renderBillInfo()}</ModalBody>
         <ModalFooter className="footer-no-boder">
           <div className="text-left col-6">
-            <p className="mb-0">Tổng tiền thanh toán: {caculateSumAmount(tienHangHoa, phuPhi, thueGTGT)}đ</p>
+            <p className="mb-0">
+              Tổng tiền thanh toán: <span className="total">{caculateSumAmount(tienHangHoa, phuPhi, thueGTGT)}đ</span>
+            </p>
           </div>
           <div className="text-right col-6">
             <button type="button" className="btn btn-primary btn-lg" onClick={handleSubmit} disabled={!isSubmit}>
-              Ghi lại
+              GHI LẠI
             </button>
           </div>
         </ModalFooter>

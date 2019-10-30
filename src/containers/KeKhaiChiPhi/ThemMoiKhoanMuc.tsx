@@ -92,24 +92,31 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
         {t('Thêm khoản mục')}
       </Button>
       <Modal isOpen={themKhoanMuc} toggle={handleThemKhoanMuc} className="">
-        <ModalHeader toggle={handleThemKhoanMuc} charCode="x">
-          Chọn khoản mục
+        <ModalHeader toggle={handleThemKhoanMuc} className="no-border pb-2" charCode="x">
+          <strong>{t('Chọn khoản mục')}</strong>
         </ModalHeader>
         <ModalBody>
           <div className="sipTitleRightBlockInput m-0">
             <i className="fa fa-search" />
-            <input placeholder="Tìm kiếm bảng kê" type="text" className="form-control" onChange={handleSearch} />
+            <input
+              placeholder="Tìm kiếm khoản mục"
+              type="text"
+              className="form-control search-khoan-muc"
+              onChange={handleSearch}
+            />
           </div>
-          <Scrollbars style={{ height: 300 }}>{renderAddNewItem()}</Scrollbars>
+          <Scrollbars className="scrollbar-khoan-muc" style={{ height: 300 }}>
+            {renderAddNewItem()}
+          </Scrollbars>
         </ModalBody>
-        <ModalFooter className="footer-no-boder">
+        <ModalFooter className="no-border pt-2">
           <button
             type="button"
             className="btn btn-primary btn-lg"
             onClick={handleSubmit}
             disabled={isEmpty(itemSelect)}
           >
-            Thêm
+            THÊM
           </button>
         </ModalFooter>
       </Modal>
