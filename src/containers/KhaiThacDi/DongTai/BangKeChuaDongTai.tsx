@@ -2,11 +2,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Row } from 'reactstrap';
 import { generatePath } from 'react-router-dom';
 import { push } from 'connected-react-router';
 import { Cell } from 'react-table';
-import { forEach, get, isEmpty, map, noop, size } from 'lodash';
+import { get, isEmpty, map, noop, size } from 'lodash';
 import moment from 'moment';
 
 import ButtonDongTai from 'components/Button/BangKeChuaDongTai/ButtonDongTai';
@@ -26,8 +26,6 @@ import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 
-let forwardingItemList: ForwardingItem[] = [];
-
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -40,20 +38,14 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [torIdSearch, setTorIdSearch] = useState<string>('');
-  const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
   const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
-  const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
-    undefined,
-  );
-  const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
+  const [checkedBangKe, setCheckedBangKe] = useState<string[]>([]);
 
-  useEffect((): void => {
-    if (forwardingItemListState.length > 0) {
-      setDisableFunctionalButton(false);
-    } else {
-      setDisableFunctionalButton(true);
-    }
-  }, [forwardingItemListState]);
+  const forwardingItemListState = useMemo(
+    () => map(checkedBangKe, (bangeKe: string): API.TITEM => ({ ITEM_ID: bangeKe, ITEM_TYPE: 'ZC1' })),
+    [checkedBangKe],
+  );
+  const disableFunctionalButton = useMemo(() => isEmpty(forwardingItemListState), [forwardingItemListState]);
 
   const getListDiemDen = (): void => {
     dispatch(
@@ -146,9 +138,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
 
   function onSuccessSelectedForwardingItem(): void {
     getListTai();
-    setUncheckAllForwardingItemCheckbox(false);
-    setForwardingItemListState([]);
-    forwardingItemList = [];
   }
 
   useEffect((): void => getListTai(), [getListTai]);
@@ -216,20 +205,8 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
     getListTai(payload);
   };
 
-  const handleSelectBangKeItem = (event: React.FormEvent<HTMLInputElement>): void => {
-    event.stopPropagation();
-    const value = event.currentTarget.value;
-    setUncheckAllForwardingItemCheckbox(undefined);
-    if (event.currentTarget.checked) {
-      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: 'ZC1' });
-    } else {
-      forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
-        if (get(item, 'ITEM_ID', '') === value) {
-          forwardingItemList.splice(index, 1);
-        }
-      });
-    }
-    setForwardingItemListState([...forwardingItemList]);
+  const handleCheckedValuesChange = (values: string[]): void => {
+    setCheckedBangKe(values);
   };
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
@@ -250,21 +227,6 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Label check>
-              <Input
-                defaultChecked={uncheckAllForwardingItemCheckbox}
-                type="checkbox"
-                value={get(row, 'values.TOR_ID', '')}
-                onClick={handleSelectBangKeItem}
-              />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã bảng kê'),
         accessor: 'TOR_ID',
@@ -307,7 +269,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [uncheckAllForwardingItemCheckbox],
+    [listBangKeChuaDongTai],
   );
 
   const data = map(listBangKeChuaDongTai, (item: API.RowMTZTMI047OUT) => {
@@ -359,7 +321,15 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       </Row>
       <div className="mt-3" />
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={data} onRowClick={handleRedirectDetail} />
+        <DataTable
+          columns={columns}
+          data={data}
+          onCheckedValuesChange={handleCheckedValuesChange}
+          onRowClick={handleRedirectDetail}
+          renderCheckboxValues="TOR_ID"
+          showCheckAll
+          showCheckboxes
+        />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

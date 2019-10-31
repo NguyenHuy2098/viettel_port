@@ -13,7 +13,7 @@ import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 
 interface Props {
   disableButtonDongTai: boolean;
-  forwardingItemListState: ForwardingItem[];
+  forwardingItemListState: API.TITEM[];
 }
 
 // eslint-disable-next-line max-lines-per-function
