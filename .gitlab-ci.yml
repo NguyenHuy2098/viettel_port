@@ -91,7 +91,7 @@ build-source:latest:
 build-source:staging:
   <<: *build-source
   only:
-    - master
+    - staging
   script:
     - yarn build:development
   environment:
@@ -146,7 +146,7 @@ semantic-release:
   image: node:lts-stretch
   stage: release
   only:
-    - staging
+    - release
   script:
     - yarn changelog
     - yarn semantic-release --dry-run
