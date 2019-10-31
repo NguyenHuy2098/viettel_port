@@ -82,9 +82,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                   <td>
                     <strong>{formatNumber(sumBy(groupedData[index], item => toNumber(item.original.PHU_PHI)))}</strong>
                   </td>
-                  <td>
-                    <strong>{formatNumber(sumBy(groupedData[index], item => toNumber(item.original.TAX)))}</strong>
-                  </td>
+                  <td></td>
                   <td>
                     <strong>
                       {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.TAX_AMOUNT)))}
@@ -115,8 +113,13 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                       {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)))}
                     </strong>
                   </td>
-                  <td>1</td>
-                  <td>1</td>
+                  <td>
+                    {formatNumber(
+                      sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT)) -
+                        sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)),
+                    )}
+                  </td>
+                  <td />
                 </tr>
               </React.Fragment>
             );
@@ -131,9 +134,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             <td>
               <strong>{formatNumber(sumBy(data, item => toNumber(item.PHU_PHI)))}</strong>
             </td>
-            <td>
-              <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX)))}</strong>
-            </td>
+            <td />
             <td>
               <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX_AMOUNT)))}</strong>
             </td>
@@ -152,8 +153,12 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             <td>
               <strong>{formatNumber(sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)))}</strong>
             </td>
-            <td>1</td>
-            <td>1</td>
+            <td>
+              {formatNumber(
+                sumBy(data, item => toNumber(item.SUM_AMOUNT)) - sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)),
+              )}
+            </td>
+            <td />
           </tr>
         </tbody>
       </Table>

@@ -46,7 +46,7 @@ const TopControllers = (props: Props): JSX.Element => {
           children: <PrintableBangKe ids={checkedBangKe} />,
         }}
         modalHeaderProps={{
-          children: t('In thông tin bảng kê'),
+          children: t('In chi tiết bảng kê'),
         }}
       />
       <Button color="primary" className="ml-2" onClick={redirectToTaoMoiBangKe}>

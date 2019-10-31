@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
 import { Row, Col, ButtonProps } from 'reactstrap';
-import { get, size } from 'lodash';
+import { get, size, sumBy, toNumber } from 'lodash';
 
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_MT_DETAIL_RECEIVER, select_ZFI007_list } from 'redux/ZFI007/selectors';
 import { formatNumber } from 'utils/common';
+import convertMoneyToString from 'utils/convertMoneyToString';
 
 interface Props extends ButtonProps {
   ids: string[];
@@ -21,6 +22,11 @@ const PrintableBangKe = (props: Props): JSX.Element => {
   const data = useSelector(select_ZFI007_list);
   const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_ZFI007_MT_DETAIL_RECEIVER);
   const { t } = useTranslation();
+
+  // const isPheDuyet = React.useMemo(() => {
+  //   const status = get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_STATUS', -1);
+  //   return status === 2 || status === 3;
+  // }, [MT_DETAIL_RECEIVER_ZFI007]);
 
   useEffect(() => {
     if (!size(ids)) return;
@@ -38,7 +44,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         <tr className="text-center">
           <th rowSpan={3}>{t('STT')}</th>
           <th colSpan={11}>{t('Bưu cục kê khai')}</th>
-          <th colSpan={4}>{t('Chờ phê duyệt')}</th>
+          <th colSpan={4}>{t('Công ty phê duyệt')}</th>
           <th rowSpan={3}>{t('Không duyệt')}</th>
           <th rowSpan={3}>{t('Lý do')}</th>
         </tr>
@@ -51,9 +57,9 @@ const PrintableBangKe = (props: Props): JSX.Element => {
           <th rowSpan={2}>{t('Hàng hóa dịch vụ chưa thuế')}</th>
           <th rowSpan={2}>{t('Phụ phí')}</th>
           <th rowSpan={2}>{t('Thuế suất')}</th>
-          <th rowSpan={2}>{t('thuế GTGT')}</th>
+          <th rowSpan={2}>{t('Thuế GTGT')}</th>
           <th rowSpan={2}>{t('Tổng cộng')}</th>
-          <th rowSpan={2}>{t('hàng hóa dịch vụ chưa thuế')}</th>
+          <th rowSpan={2}>{t('Hàng hóa dịch vụ chưa thuế')}</th>
           <th rowSpan={2}>{t('Phụ phí')} </th>
           <th rowSpan={2}>{t('Thuế GTGT')}</th>
           <th rowSpan={2}>{t('Cộng')} </th>
@@ -109,9 +115,6 @@ const PrintableBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Số'),
         accessor: 'SO_HD',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.SO_HD', ''));
-        },
       },
       {
         Header: t('Tên người bán'),
@@ -142,8 +145,8 @@ const PrintableBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Thuế suất'),
         accessor: 'TAX',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.TAX', ''));
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
+          return <div className="text-right">{formatNumber(get(row, 'original.TAX', '')) + '%'}</div>;
         },
       },
       {
@@ -204,17 +207,21 @@ const PrintableBangKe = (props: Props): JSX.Element => {
   );
 
   function renderTotal(): JSX.Element {
+    const SUM_AMOUNT = sumBy(data, item => toNumber(item.SUM_AMOUNT));
+    const SUM_AMOUNT_INIT = sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT));
+    const NOT_SUM_AMOUNT = SUM_AMOUNT - SUM_AMOUNT_INIT;
+
     return (
       <Row>
         <Col className="pl-5">
           <div>
-            <i>{t('Số tiền đề nghị thanh toán: Một triệu hai trăm nghìn đồng')}</i>
+            <i>{t('Số tiền đề nghị thanh toán') + ': ' + convertMoneyToString(SUM_AMOUNT)}</i>
           </div>
           <div>
-            <i>{t('Số tiền được duyệt: Một triệu một trăm nghìn đồng')}</i>
+            <i>{t('Số tiền được duyệt') + ': ' + convertMoneyToString(SUM_AMOUNT_INIT)}</i>
           </div>
           <div>
-            <i>{t('Số tiền không được duyệt: Một trăm nghìn đồng')}</i>
+            <i>{t('Số tiền không được duyệt') + ': ' + convertMoneyToString(NOT_SUM_AMOUNT)}</i>
           </div>
         </Col>
       </Row>
@@ -231,8 +238,12 @@ const PrintableBangKe = (props: Props): JSX.Element => {
       <div className="page-break">
         <div className="row">
           <div className="col-4">
-            <div>{t('Tổng công ty cổ phần Bưu chính Viettel')}</div>
-            <div className="pl-5">{t('Bưu cục Đống Da')} </div>
+            <div>
+              <strong>{t('Tổng công ty cổ phần Bưu chính Viettel')}</strong>
+            </div>
+            <div className="pl-5">
+              <strong>{t('Bưu cục Đống Đa')} </strong>
+            </div>
           </div>
           <div className="col-4"></div>
           <div className="col-4 text-right">
@@ -241,7 +252,9 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         </div>
         <Row>
           <Col sm="12" md={{ size: 6, offset: 3 }} className={'text-center'}>
-            <h5>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</h5>
+            <h5>
+              <strong>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</strong>
+            </h5>
             <p>
               {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} {t('năm')}{' '}
               {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
@@ -250,17 +263,24 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         </Row>
         <Row>
           <Col sm="12" className="info pb-3">
-            <div className="col-6 pl-0">{t('Về việc thanh toán chi phí theo ngân sách T04/2019')}</div>
             <div className="col-6 pl-0">
-              {t('Họ và Tên')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+              {t('Về việc')}: {t('Thanh toán chi phí theo ngân sách ')}
+              {t('T')}
+              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')}/
+              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
             </div>
-            <div className="col-6 pl-0">{t('Chức danh: Nhân viên chăm sóc khách hàng')}</div>
-            <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau:')}</div>
+            <div className="col-6 pl-0">
+              {t('Họ và Tên')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+            </div>
+            <div className="col-6 pl-0">
+              {t('Chức danh')}: {t('Nhân viên chăm sóc khách hàng')}
+            </div>
+            <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau')}:</div>
           </Col>
         </Row>
         <Row>
           <Col sm="12">
-            <div className="text-right">{t('ĐVT: VNĐ')}</div>
+            <div className="text-right">ĐVT: VNĐ</div>
           </Col>
         </Row>
         <PrintTableBangKe
@@ -272,9 +292,15 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         />
         {renderTotal()}
         <Row className="text-center pt-5 pb-5">
-          <div className="col-4">{t('KẾ TOÁN CHUYÊN QUẢN')}</div>
-          <div className="col-4">{t('TRƯỞNG PHÒNG TÀI CHÍNH')}</div>
-          <div className="col-4">{t('TỔNG GIÁM ĐỐC')}</div>
+          <div className="col-4">
+            <strong>{t('KẾ TOÁN CHUYÊN QUẢN')}</strong>
+          </div>
+          <div className="col-4">
+            <strong>{t('TRƯỞNG PHÒNG TÀI CHÍNH')}</strong>
+          </div>
+          <div className="col-4">
+            <strong>{t('TỔNG GIÁM ĐỐC')}</strong>
+          </div>
         </Row>
       </div>
     </div>
