@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,10 +24,10 @@ const PrintableBangKe = (props: Props): JSX.Element => {
   const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_ZFI007_MT_DETAIL_RECEIVER);
   const { t } = useTranslation();
 
-  // const isPheDuyet = React.useMemo(() => {
-  //   const status = get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_STATUS', -1);
-  //   return status === 2 || status === 3;
-  // }, [MT_DETAIL_RECEIVER_ZFI007]);
+  const isPheDuyet = React.useMemo(() => {
+    const status = get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_STATUS', -1);
+    return status === 2 || status === 3;
+  }, [MT_DETAIL_RECEIVER_ZFI007]);
 
   useEffect(() => {
     if (!size(ids)) return;
@@ -39,6 +40,61 @@ const PrintableBangKe = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function renderHeader(): JSX.Element {
+    if (!isPheDuyet) {
+      return (
+        <thead className="bang-ke-header">
+          <tr className="text-center">
+            <th rowSpan={3}>{t('STT')}</th>
+            <th colSpan={11}>{t('Bưu cục kê khai')}</th>
+            {/* <th colSpan={4}>{t('Công ty phê duyệt')}</th>
+            <th rowSpan={3}>{t('Không duyệt')}</th>
+            <th rowSpan={3}>{t('Lý do')}</th> */}
+          </tr>
+
+          <tr className="text-center">
+            <th colSpan={3}>{t('Hóa đơn mua hàng')}</th>
+            <th rowSpan={2}>{t('Tên người bán')}</th>
+            <th rowSpan={2}>{t('Mã số thuế người bán')}</th>
+            <th rowSpan={2}>{t('Hàng hóa, Dịch vụ')}</th>
+            <th rowSpan={2}>{t('Hàng hóa dịch vụ chưa thuế')}</th>
+            <th rowSpan={2}>{t('Phụ phí')}</th>
+            <th rowSpan={2}>{t('Thuế suất')}</th>
+            <th rowSpan={2}>{t('Thuế GTGT')}</th>
+            <th rowSpan={2}>{t('Tổng cộng')}</th>
+            {/* <th rowSpan={2}>{t('Hàng hóa dịch vụ chưa thuế')}</th>
+            <th rowSpan={2}>{t('Phụ phí')} </th>
+            <th rowSpan={2}>{t('Thuế GTGT')}</th>
+            <th rowSpan={2}>{t('Cộng')} </th> */}
+          </tr>
+
+          <tr className="text-center">
+            <th>{t('Ký hiệu')}</th>
+            <th>{t('Ngày')}</th>
+            <th>{t('Số')}</th>
+          </tr>
+          <tr className="text-center">
+            <th>1</th>
+            <th>2</th>
+            <th>3</th>
+            <th>4</th>
+            <th>5</th>
+            <th>6</th>
+            <th>7</th>
+            <th>8</th>
+            <th>9</th>
+            <th>10</th>
+            <th>11</th>
+            <th>12</th>
+            {/* <th>13</th>
+            <th>14</th>
+            <th>15</th>
+            <th>16</th>
+            <th>17</th>
+            <th>18</th> */}
+          </tr>
+        </thead>
+      );
+    }
     return (
       <thead className="bang-ke-header">
         <tr className="text-center">
@@ -169,6 +225,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return formatNumber(get(row, 'original.AMOUNT_INIT', ''));
         },
+        show: isPheDuyet,
       },
       {
         Header: t('Phụ phí (1)'),
@@ -176,6 +233,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return formatNumber(get(row, 'original.PHU_PHI_INIT', ''));
         },
+        show: isPheDuyet,
       },
       {
         Header: t('Thuế giá trị gia tăng (1)'),
@@ -183,6 +241,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return formatNumber(get(row, 'original.TAX_AMOUNT_INIT', ''));
         },
+        show: isPheDuyet,
       },
       {
         Header: t('Tổng cộng(1)'),
@@ -190,9 +249,11 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return formatNumber(get(row, 'original.SUM_AMOUNT_INIT', ''));
         },
+        show: isPheDuyet,
       },
       {
         Header: t('Không duyệt'),
+        show: isPheDuyet,
       },
       {
         Header: t('Lý do'),
@@ -200,6 +261,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.NOTE', '');
         },
+        show: isPheDuyet,
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -208,8 +270,8 @@ const PrintableBangKe = (props: Props): JSX.Element => {
 
   function renderTotal(): JSX.Element {
     const SUM_AMOUNT = sumBy(data, item => toNumber(item.SUM_AMOUNT));
-    const SUM_AMOUNT_INIT = sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT));
-    const NOT_SUM_AMOUNT = SUM_AMOUNT - SUM_AMOUNT_INIT;
+    const SUM_AMOUNT_INIT = !isPheDuyet ? 0 : sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT));
+    const NOT_SUM_AMOUNT = !isPheDuyet ? 0 : SUM_AMOUNT - SUM_AMOUNT_INIT;
 
     return (
       <Row>
@@ -289,6 +351,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
           data={data}
           groupKey="TEN_KM"
           renderGroupedRow={renderGroupedRow}
+          isPheDuyet={isPheDuyet}
         />
         {renderTotal()}
         <Row className="text-center pt-5 pb-5">

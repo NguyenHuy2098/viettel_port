@@ -178,3 +178,4 @@ As of now I am exploring the possibility of working on CoreUI fulltime - if you 
 
 
 git branch | grep -v "master" | xargs git branch -D 
+sudo ss -tulpn | grep :3306

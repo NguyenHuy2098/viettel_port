@@ -14,12 +14,13 @@ interface Props extends TableOptions<any> {
   onRowClick?: (item: any) => void;
   renderGroupedRow?: (group: TableRow<any>[], index: string) => React.ReactNode;
   header?: any;
+  isPheDuyet: boolean;
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function
 const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
-  const { columns, data, groupKey, onRowClick, renderGroupedRow, header } = props;
+  const { columns, data, groupKey, onRowClick, renderGroupedRow, header, isPheDuyet } = props;
   const { t } = useTranslation();
 
   // Use the state and functions returned from useTable to build your UI
@@ -93,33 +94,37 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                       {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT)))}
                     </strong>
                   </td>
-                  <td>
-                    <strong>
-                      {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.AMOUNT_INIT)))}
-                    </strong>
-                  </td>
-                  <td>
-                    <strong>
-                      {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.PHU_PHI_INIT)))}
-                    </strong>
-                  </td>
-                  <td>
-                    <strong>
-                      {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.TAX_AMOUNT_INIT)))}
-                    </strong>
-                  </td>
-                  <td>
-                    <strong>
-                      {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)))}
-                    </strong>
-                  </td>
-                  <td>
-                    {formatNumber(
-                      sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT)) -
-                        sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)),
-                    )}
-                  </td>
-                  <td />
+                  {isPheDuyet && (
+                    <>
+                      <td>
+                        <strong>
+                          {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.AMOUNT_INIT)))}
+                        </strong>
+                      </td>
+                      <td>
+                        <strong>
+                          {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.PHU_PHI_INIT)))}
+                        </strong>
+                      </td>
+                      <td>
+                        <strong>
+                          {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.TAX_AMOUNT_INIT)))}
+                        </strong>
+                      </td>
+                      <td>
+                        <strong>
+                          {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)))}
+                        </strong>
+                      </td>
+                      <td>
+                        {formatNumber(
+                          sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT)) -
+                            sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)),
+                        )}
+                      </td>
+                      <td />
+                    </>
+                  )}
                 </tr>
               </React.Fragment>
             );
@@ -141,24 +146,29 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             <td>
               <strong>{formatNumber(sumBy(data, item => toNumber(item.SUM_AMOUNT)))}</strong>
             </td>
-            <td>
-              <strong>{formatNumber(sumBy(data, item => toNumber(item.AMOUNT_INIT)))}</strong>
-            </td>
-            <td>
-              <strong>{formatNumber(sumBy(data, item => toNumber(item.PHU_PHI_INIT)))}</strong>
-            </td>
-            <td>
-              <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX_AMOUNT_INIT)))}</strong>
-            </td>
-            <td>
-              <strong>{formatNumber(sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)))}</strong>
-            </td>
-            <td>
-              {formatNumber(
-                sumBy(data, item => toNumber(item.SUM_AMOUNT)) - sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)),
-              )}
-            </td>
-            <td />
+            {isPheDuyet && (
+              <>
+                <td>
+                  <strong>{formatNumber(sumBy(data, item => toNumber(item.AMOUNT_INIT)))}</strong>
+                </td>
+                <td>
+                  <strong>{formatNumber(sumBy(data, item => toNumber(item.PHU_PHI_INIT)))}</strong>
+                </td>
+                <td>
+                  <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX_AMOUNT_INIT)))}</strong>
+                </td>
+                <td>
+                  <strong>{formatNumber(sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)))}</strong>
+                </td>
+                <td>
+                  {formatNumber(
+                    sumBy(data, item => toNumber(item.SUM_AMOUNT)) -
+                      sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)),
+                  )}
+                </td>
+                <td />
+              </>
+            )}
           </tr>
         </tbody>
       </Table>
