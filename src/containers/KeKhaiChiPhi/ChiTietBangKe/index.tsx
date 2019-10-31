@@ -1,14 +1,15 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Col, Row } from 'reactstrap';
+import { Col, Input, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
-import { get, sumBy, toNumber, reject } from 'lodash';
+import { get, map, sumBy, toNumber, reject, toString, filter } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
 import moment from 'moment';
 import numeral from 'numeral';
 
+import { badgeFicoStateMap } from 'utils/common';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
@@ -37,6 +38,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   const bangKeHeader = useSelector(select_ZFI007_header);
   const list = useSelector(select_ZFI007_list);
   const [data, setData] = useState<DataType[]>([]);
+  const [dataOriginal, setDataOriginal] = useState<DataType[]>([]);
 
   const status = useMemo(() => toNumber(get(bangKeHeader, 'BK_STATUS', -1)), [bangKeHeader]);
   const tongGiaTri = useMemo(
@@ -57,6 +59,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
 
   useEffect((): void => {
     setData(list);
+    setDataOriginal(list);
   }, [list]);
 
   const columns = useMemo(
@@ -146,6 +149,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   const handleRemoveTableRow = (item: API.LISTMTDETAILRECEIVER): void => {
     const tempData = reject(data, ['LINE_ITEM', get(item, 'LINE_ITEM')]);
     setData(tempData);
+    setDataOriginal(tempData);
   };
 
   const handleEditTableRow = (item: API.LISTMTDETAILRECEIVER): void => {
@@ -156,11 +160,13 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       }
     }
     setData(tempData);
+    setDataOriginal(tempData);
   };
 
   const handleCopyTableRow = (item: API.LISTMTDETAILRECEIVER): void => {
     const tempData = [...data, item];
     setData([...tempData]);
+    setDataOriginal([...tempData]);
   };
 
   const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
@@ -215,6 +221,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       draftState.unshift({ TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
     });
     setData(nextState);
+    setDataOriginal(nextState);
   }
 
   const renderSecondControllers = (): JSX.Element => <ThemMoiKhoanMuc handleSubmit={handleSubmitKhoanMuc} />;
@@ -224,10 +231,23 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       draftState.unshift(payload);
     });
     setData(nextState);
+    setDataOriginal(nextState);
   }
 
   const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
     return <ThemMoiChiPhi index={index} handleSubmit={handleSubmit} rows={rows} />;
+  };
+
+  const handleFilterByStatus = (event: React.FormEvent<HTMLInputElement>): void => {
+    const filteredList = filter(
+      list,
+      (item: API.LISTMTDETAILRECEIVER): boolean => toString(item.STATUS_ITEM) === event.currentTarget.value,
+    );
+    if (event.currentTarget.value === '') {
+      setData(dataOriginal);
+    } else {
+      setData(filteredList);
+    }
   };
 
   return (
@@ -253,6 +273,22 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       <Row className="mb-3">
         <Col>
           <h1 className="sipTitle">{t('Danh sách khoản mục chi phí')}</h1>
+          <div className="sipFilterColSearch w-25 min-width-100px pull-right">
+            <Input type="select" onChange={handleFilterByStatus}>
+              <option value="">{t('Tất cả trạng thái')}</option>
+              {map(
+                badgeFicoStateMap,
+                (item: string, index: number): JSX.Element => {
+                  return (
+                    <option key={index} value={toString(index)}>
+                      {item}
+                    </option>
+                  );
+                },
+              )}
+            </Input>
+            <img src={'../../assets/img/icon/iconFilter.svg'} alt="VTPostek" />
+          </div>
         </Col>
         {!status && <Col className="d-flex justify-content-end">{renderSecondControllers()}</Col>}
       </Row>

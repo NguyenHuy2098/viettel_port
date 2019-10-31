@@ -73,3 +73,5 @@ export const getAddressNameById = (id: string, data: VtpAddress[]): string => {
 export function sleep(ms: number): Promise<unknown> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export const badgeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Phê duyệt', 'Duyệt 1 phần'];

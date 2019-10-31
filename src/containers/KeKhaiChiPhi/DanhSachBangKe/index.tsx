@@ -9,7 +9,8 @@ import { get, map, size, toString, trim } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
-import BadgeFicoBangKeStatus, { badgeFicoStateMap } from 'components/Badge/BadgeFicoBangKeStatus';
+import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
+import { badgeFicoStateMap } from 'utils/common';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Pagination from 'components/Pagination';
 import { toastError, toastSuccess } from 'components/Toast';

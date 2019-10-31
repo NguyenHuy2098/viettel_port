@@ -536,8 +536,7 @@ input.form-control:-moz-placeholder {
     border: none;
   }
   .dropdown-menu {
-    left: auto !important;
-    right: -70px !important;
+
   }
   .dropdown-item {
     padding: 8px 10px 8px 35px;
@@ -827,21 +826,6 @@ html:not([dir='rtl']) .sidebar {
     input.form-control, select.form-control {
       box-sizing: border-box;
     }
-    .sipFilterColSearch {
-      position: relative;
-      min-width: 440px;
-      & > input.form-control, & > select.form-control {
-        padding: 0 12px 0 32px;
-      }
-      & > img {
-        position: absolute;
-        top: 8px;
-        left: 10px;
-      }
-      & > div {
-        display: inline-block;
-      }
-    }
     &.sipFilterColBtn {
       flex: 0 0 11%;
       padding: 0 7px;
@@ -849,6 +833,20 @@ html:not([dir='rtl']) .sidebar {
         width: 100%;
       }
     }
+  }
+}
+.sipFilterColSearch {
+  position: relative;
+  & > input.form-control, & > select.form-control {
+    padding: 0 12px 0 32px;
+  }
+  & > img {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+  }
+  & > div {
+    display: inline-block;
   }
 }
 .sipTableBtnStatus {

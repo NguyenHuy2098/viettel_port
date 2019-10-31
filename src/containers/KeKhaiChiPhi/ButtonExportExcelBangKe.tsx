@@ -6,7 +6,7 @@ import { forEach, get, isEmpty, map, sumBy, toNumber } from 'lodash';
 import moment from 'moment';
 import XLSX from 'xlsx';
 
-import { badgeFicoStateMap } from 'components/Badge/BadgeFicoBangKeStatus';
+import { badgeFicoStateMap } from 'utils/common';
 import { toastError, toastInfo } from 'components/Toast';
 import { action_ZFI007M } from 'redux/ZFI007M/actions';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';

@@ -71,13 +71,15 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                   prepareRow(row) || (
                     <tr key={`row-${index}`}>
                       {map(row.cells, (cell, index) => {
+                        if (index + 1 === size(row.cells) && isFunction(renderUtilityDropDown)) {
+                          return <td>{renderUtilityDropDown(row, index)}</td>;
+                        }
                         return (
                           <td className="min-width-90px" key={index} onClick={handleClickRow(row.original)}>
                             {cell.value !== null ? cell.render('Cell') : ''}
                           </td>
                         );
                       })}
-                      {isFunction(renderUtilityDropDown) && <td>{renderUtilityDropDown(row, index)}</td>}
                     </tr>
                   )
                 );
