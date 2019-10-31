@@ -1,7 +1,7 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Input, Label, Table } from 'reactstrap';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
-import { concat, get, includes, isEmpty, isFunction, isString, map, noop, pull, size } from 'lodash';
+import { concat, difference, get, includes, isEmpty, isFunction, isString, map, noop, pull } from 'lodash';
 import produce from 'immer';
 
 import NoData from './NoData';
@@ -30,11 +30,28 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     showCheckboxes,
     renderCheckboxValues,
   } = props;
-  const [checkedValues, setCheckedValues] = useState<string[]>([]);
 
   if (showCheckboxes === true && !isString(renderCheckboxValues) && !isFunction(renderCheckboxValues)) {
     throw new Error('renderCheckboxValues is required if showCheckboxes is true.');
   }
+
+  // Use the state and functions returned from useTable to build your UI
+  const { getTableProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
+
+  const [checkedValues, setCheckedValues] = useState<string[]>([]);
+
+  const currentPageCheckboxValues = useMemo(() => {
+    if (isString(renderCheckboxValues)) return map(data, renderCheckboxValues);
+    if (isFunction(renderCheckboxValues)) return map(data, renderCheckboxValues);
+    return [];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
+  const currentPageYetCheckedValues = useMemo(() => {
+    return difference(currentPageCheckboxValues, checkedValues);
+  }, [checkedValues, currentPageCheckboxValues]);
+
+  const isPageAllChecked = useMemo(() => isEmpty(currentPageYetCheckedValues), [currentPageYetCheckedValues]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getCheckboxValue = (row: TableRow<any>): string => {
@@ -46,19 +63,15 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     return '';
   };
 
-  // Use the state and functions returned from useTable to build your UI
-  const { getTableProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
-
   const handleCheckAllRows = useCallback(() => {
-    let newCheckedValues = [];
-    if (size(data) > size(checkedValues)) {
-      // @ts-ignore
-      newCheckedValues = map(data, renderCheckboxValues);
+    let newCheckedValues: string[] = [];
+    if (!isPageAllChecked) {
+      newCheckedValues = concat(checkedValues, currentPageYetCheckedValues);
     }
     setCheckedValues(newCheckedValues);
     if (isFunction(onCheckedValuesChange)) onCheckedValuesChange(newCheckedValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkedValues, data]);
+  }, [checkedValues, currentPageYetCheckedValues, isPageAllChecked]);
 
   const handleCheckRow = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,6 +101,33 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     [data],
   );
 
+  const renderCheckAll = (): JSX.Element => (
+    <th>
+      {showCheckAll && (
+        <Label check>
+          <Input checked={isPageAllChecked} type="checkbox" onChange={handleCheckAllRows} />
+        </Label>
+      )}
+    </th>
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderCheckRow = (row: TableRow<any>): JSX.Element => {
+    const value = getCheckboxValue(row);
+    return (
+      <td>
+        <Label check>
+          <Input
+            checked={includes(checkedValues, value)}
+            onChange={handleCheckRow(get(row, 'original'), row)}
+            type="checkbox"
+            value={value}
+          />
+        </Label>
+      </td>
+    );
+  };
+
   // Render the UI for your table
   return (
     <>
@@ -95,19 +135,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
         <thead>
           {headerGroups.map((headerGroup, index) => (
             <tr key={index}>
-              {showCheckboxes && (
-                <th>
-                  {showCheckAll && (
-                    <Label check>
-                      <Input
-                        checked={size(data) === size(checkedValues)}
-                        type="checkbox"
-                        onChange={handleCheckAllRows}
-                      />
-                    </Label>
-                  )}
-                </th>
-              )}
+              {showCheckboxes && renderCheckAll()}
               {headerGroup.headers.map((column, index) => (
                 <th key={index}>{column.render('Header')}</th>
               ))}
@@ -119,18 +147,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             return (
               prepareRow(row) || (
                 <tr className="cursor-pointer" key={index}>
-                  {showCheckboxes && (
-                    <td>
-                      <Label check>
-                        <Input
-                          checked={includes(checkedValues, getCheckboxValue(row))}
-                          type="checkbox"
-                          value={getCheckboxValue(row)}
-                          onChange={handleCheckRow(get(row, 'original'), row)}
-                        />
-                      </Label>
-                    </td>
-                  )}
+                  {showCheckboxes && renderCheckRow(row)}
                   {row.cells.map((cell, index) => {
                     return (
                       <td className="min-width-90px" key={index} onClick={handleClickRow(get(row, 'original'), row)}>
