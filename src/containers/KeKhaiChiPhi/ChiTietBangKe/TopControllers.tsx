@@ -29,12 +29,12 @@ const TopControllers = (props: Props): JSX.Element => {
 
   return (
     <>
+      <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX_v0.1.xlsx" download>
+        <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExcelWhite.svg'} />
+        {t('Lấy file mẫu')}
+      </a>
       {status ? (
         <>
-          <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX_v0.1.xlsx" download>
-            <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExcelWhite.svg'} />
-            {t('Lấy file mẫu')}
-          </a>
           <ButtonExportExcelBangKe className="ml-2" ids={printableBangKe} />
           <ButtonPrintable
             btnProps={{

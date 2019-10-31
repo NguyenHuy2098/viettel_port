@@ -1,13 +1,15 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
 import { Col, Row } from 'reactstrap';
-import { goBack } from 'connected-react-router';
-import { delay, get, isEmpty, map, reject } from 'lodash';
+import { generatePath } from 'react-router';
+import { goBack, replace } from 'connected-react-router';
+import { delay, get, isEmpty, map, reject, sumBy, toNumber } from 'lodash';
 import produce from 'immer';
 import moment from 'moment';
+import numeral from 'numeral';
 import XLSX, { WorkBook } from 'xlsx';
 
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
@@ -17,8 +19,9 @@ import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
 import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import DataTable from 'components/DataTable/Grouped';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
-import useLoggedInUser from 'hooks/useLoggedInUser';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { transformXlsxRowToBangKeItem } from 'utils/common';
+import routesMap from 'utils/routesMap';
 import ThemMoiChiPhi from './ThemMoiChiPhi';
 import UtilityDropDown from './UtilityDropDown';
 
@@ -29,9 +32,9 @@ interface DataType extends API.ITEMBK {
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
   const dispatch = useDispatch();
-  const userLogin = useLoggedInUser();
+  const maBP = useSelector(makeSelectorMaBP);
+  const useId = useSelector(makeSelectorPreferredUsername);
   const [data, setData] = useState<DataType[]>([]);
-  const [idBangKe, setIdBangKe] = useState<string>('');
   const { t } = useTranslation();
 
   const handleRemoveTableRow = (item: API.ITEMBK): void => {
@@ -53,6 +56,14 @@ const TaoMoiBangKe = (): JSX.Element => {
     const tempData = [item, ...data];
     setData([...tempData]);
   };
+
+  const tongGiaTri = useMemo(
+    () =>
+      numeral(sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(get(item, 'SUM_AMOUNT') || 0))).format(
+        '0,0',
+      ),
+    [data],
+  );
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -132,7 +143,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   };
 
   const handleLuuBangKeSuccess = (data: API.ZFI003Response): void => {
-    setIdBangKe(get(data, 'MT_CRBK_RECEIVER.BK_ID'));
+    dispatch(replace(generatePath(routesMap.CHI_TIET_BANG_KE, { idBangKe: get(data, 'MT_CRBK_RECEIVER.BK_ID') })));
   };
 
   const handleNopBangKeSuccess = (): void => {
@@ -154,12 +165,7 @@ const TaoMoiBangKe = (): JSX.Element => {
         items={items}
         onSuccess={handleLuuBangKeSuccess}
       />
-      <ButtonNopBangKe
-        className="ml-2"
-        disabled={isEmpty(idBangKe)}
-        idBangKe={idBangKe}
-        onSuccess={handleNopBangKeSuccess}
-      />
+      <ButtonNopBangKe className="ml-2" disabled={true} idBangKe={''} onSuccess={handleNopBangKeSuccess} />
     </>
   );
 
@@ -186,43 +192,41 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const renderThongTinBangKe = (): JSX.Element => (
     <Row>
-      <Col xs={12} md={6} xl={4}>
+      <Col xs={12} xl={4}>
         <div className="sipFicoBangKeInformation">
           <div>{t('Mã bảng kê')}:</div>
-          <span />
+          <span className="text-bold">-</span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Trạng thái')}:</div>
-          <span className="sipTableBtnStatus sipTableBtnStatus0">{t('Tạo mới')}</span>
+          <span>
+            <BadgeFicoBangKeStatus status={0} />
+          </span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Kỳ')}:</div>
-          <span>{moment(monthYear).format('MM/YYYY')}</span>
+          <span className="text-bold">{moment(monthYear).format('MM/YYYY')}</span>
         </div>
       </Col>
-      <Col xs={12} md={6} xl={8}>
-        <Row>
-          <Col xs={12} xl={6}>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Người tạo')}:</div>
-              <span>{get(userLogin, 'user.profile.preferred_username', '')}</span>
-            </div>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Đơn vị')}:</div>
-              <span>{get(userLogin, 'user.profile.bp_org_unit', '')}</span>
-            </div>
-          </Col>
-          <Col xs={12} xl={6}>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Tổng giá trị')}:</div>
-              <span>0</span>
-            </div>
-            <div className="sipFicoBangKeInformation">
-              <div>{t('Ngày tạo')}:</div>
-              <span>{moment().format('DD-MM-YYYY')}</span>
-            </div>
-          </Col>
-        </Row>
+      <Col xs={12} xl={4}>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Người tạo')}:</div>
+          <span className="text-bold">{useId}</span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Đơn vị')}:</div>
+          <span className="text-bold">{maBP}</span>
+        </div>
+      </Col>
+      <Col xs={12} xl={4}>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Tổng giá trị')}:</div>
+          <span className="text-bold">{tongGiaTri} đ</span>
+        </div>
+        <div className="sipFicoBangKeInformation">
+          <div>{t('Ngày tạo')}:</div>
+          <span className="text-bold">{moment().format('DD-MM-YYYY')}</span>
+        </div>
       </Col>
     </Row>
   );

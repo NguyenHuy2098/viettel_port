@@ -66,7 +66,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        Header: t('Mẫu hợp đồng'),
+        Header: t('Mẫu hoá đơn'),
         accessor: 'MAU_HD',
       },
       {
