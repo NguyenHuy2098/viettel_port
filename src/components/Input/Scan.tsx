@@ -70,7 +70,7 @@ const Scan = (props: Props): JSX.Element => {
           onFinish: handleFinishScanning,
           onSuccess: (data: API.RowResponseZTMI023OUT) => {
             onSuccess && onSuccess(data);
-            toastSuccess('Quét nhận thành công.');
+            toastSuccess(`Bưu gửi ${torId} đã được quét`);
           },
         },
       ),
