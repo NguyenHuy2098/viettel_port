@@ -259,7 +259,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
 
       <Row>
         <Col>
-          <div className="sipTableContainerAmountListContainer">
+          <div className={!status ? 'sipTableContainerAmountListContainer' : ''}>
             <div className="sipTableContainer sipTableContainerAmountList">
               {status ? (
                 <DataTable columns={columns} data={data} groupKey={'TEN_KM'} />
