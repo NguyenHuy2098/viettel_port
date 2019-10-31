@@ -69,3 +69,7 @@ export function numberFormat(value: string): string {
 export const getAddressNameById = (id: string, data: VtpAddress[]): string => {
   return get(find(data, { I: id }), 'N', '');
 };
+
+export function sleep(ms: number): Promise<unknown> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}

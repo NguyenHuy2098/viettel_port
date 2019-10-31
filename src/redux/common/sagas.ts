@@ -7,6 +7,7 @@ import { get, head, includes, split, toString } from 'lodash';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { select } from 'utils/stateHelpers';
+import { sleep } from 'utils/common';
 import {
   DONG_BANG_KE_VAO_TAI_CO_SAN,
   DONG_BANG_KE_VAO_TAI_MOI_TAO,
@@ -37,6 +38,9 @@ function* takeDongChuyenThu(action: UnfoldSagaActionType): SagaIterator {
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           T_ITEM: [],
         });
+
+        await sleep(1000);
+
         const idChuyenThu = get(dataChuyenThuTaoMoi, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         const dataChuyenThuGanKien = await post_MIOA_ZTMI016({
           IV_FLAG: '2',
@@ -45,6 +49,7 @@ function* takeDongChuyenThu(action: UnfoldSagaActionType): SagaIterator {
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           ...action.payload,
         });
+
         await post_MIOA_ZTMI022({
           FU_NO: idChuyenThu,
           STATUS_ID: '1',
@@ -219,6 +224,8 @@ function* takeDongBangKeVaoTaiCoSan(action: UnfoldSagaActionType): SagaIterator 
           ],
         });
 
+        await sleep(1000);
+
         const maBangKeVuaTao = get(data0, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         // add cac buu gui duoc tich chon ben ngoai vao bang ke vua tao voi
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -231,6 +238,8 @@ function* takeDongBangKeVaoTaiCoSan(action: UnfoldSagaActionType): SagaIterator 
           IV_DESCRIPTION: '',
           T_ITEM: forwardingItemListState,
         });
+
+        await sleep(1000);
 
         // gan bang ke vao tai
         const data2 = await post_MIOA_ZTMI016({
@@ -277,6 +286,9 @@ function* takeDongBangKeVaoTaiMoiTao(action: UnfoldSagaActionType): SagaIterator
             },
           ],
         });
+
+        await sleep(1000);
+
         const maBangKeVuaTao = get(data0, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         // add cac buu gui duoc tic chon ben ngoai vao bang ke vua tao
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -289,6 +301,9 @@ function* takeDongBangKeVaoTaiMoiTao(action: UnfoldSagaActionType): SagaIterator
           IV_DESCRIPTION: '',
           T_ITEM: forwardingItemListState,
         });
+
+        await sleep(1000);
+
         // lay thong tin duoc chon bao gom diem den va ghi chu de goi tao tai
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const data2 = await post_MIOA_ZTMI016({
@@ -305,6 +320,9 @@ function* takeDongBangKeVaoTaiMoiTao(action: UnfoldSagaActionType): SagaIterator
             },
           ],
         });
+
+        await sleep(1000);
+
         const maTaiVuaTao = get(data2, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         // add bang ke vua tao vao tai vua tao
         const data3 = await post_MIOA_ZTMI016({
@@ -353,6 +371,9 @@ function* takeActionDongTaiVaoChuyenThuCoSan(action: UnfoldSagaActionType): Saga
             },
           ],
         });
+
+        await sleep(1000);
+
         const maBangKeVuaTao = get(data0, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         // add cac buu gui duoc tich chon ben ngoai vao bang ke vua tao
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -365,6 +386,8 @@ function* takeActionDongTaiVaoChuyenThuCoSan(action: UnfoldSagaActionType): Saga
           IV_DESCRIPTION: '',
           T_ITEM: forwardingItemListState,
         });
+
+        await sleep(1000);
 
         // tao 1 tai voi diem den la diem den cua bang ke hien tai
         const data2 = await post_MIOA_ZTMI016({
@@ -381,6 +404,9 @@ function* takeActionDongTaiVaoChuyenThuCoSan(action: UnfoldSagaActionType): Saga
             },
           ],
         });
+
+        await sleep(1000);
+
         const maTaiVuaTao = get(data2, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         // add bang ke vua tao vao tai moi tao
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -398,6 +424,8 @@ function* takeActionDongTaiVaoChuyenThuCoSan(action: UnfoldSagaActionType): Saga
             },
           ],
         });
+
+        await sleep(1000);
 
         // add tai vua tao vao chuyen thu duoc chon
         const data4 = await post_MIOA_ZTMI016({
@@ -446,6 +474,9 @@ function* takeActionDongTaiVaoChuyenThuTaoMoi(action: UnfoldSagaActionType): Sag
             },
           ],
         });
+
+        await sleep(1000);
+
         const maBangKeVuaTao = get(data0, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         // add cac buu gui dc tich chon ben ngoai vao bang ke vua tao
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -458,6 +489,9 @@ function* takeActionDongTaiVaoChuyenThuTaoMoi(action: UnfoldSagaActionType): Sag
           IV_DESCRIPTION: '',
           T_ITEM: forwardingItemListState,
         });
+
+        await sleep(1000);
+
         // tao tai voi diem den la diem den cua bang ke hien tai
         const data2 = await post_MIOA_ZTMI016({
           IV_FLAG: toString(IV_FLAG.TAO),
@@ -473,6 +507,9 @@ function* takeActionDongTaiVaoChuyenThuTaoMoi(action: UnfoldSagaActionType): Sag
             },
           ],
         });
+
+        await sleep(1000);
+
         const maTaiVuaTao = get(data2, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         //add bang ke vua tao vao tai moi tao
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -491,6 +528,8 @@ function* takeActionDongTaiVaoChuyenThuTaoMoi(action: UnfoldSagaActionType): Sag
           ],
         });
 
+        await sleep(1000);
+
         // tao chuyen thu theo thong tin vua chon tu popup
         const data4 = await post_MIOA_ZTMI016({
           IV_FLAG: toString(IV_FLAG.TAO),
@@ -506,6 +545,8 @@ function* takeActionDongTaiVaoChuyenThuTaoMoi(action: UnfoldSagaActionType): Sag
             },
           ],
         });
+
+        await sleep(1000);
 
         const maChuyenThuVuaTao = get(data4, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
         // add tai vua tao vao chuyen thu vua tao
