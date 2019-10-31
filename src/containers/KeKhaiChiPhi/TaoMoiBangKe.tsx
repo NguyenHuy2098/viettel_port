@@ -119,19 +119,6 @@ const TaoMoiBangKe = (): JSX.Element => {
       },
       {
         Header: t('Quản trị'),
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          // return (
-          //   <UtilityDropDown
-          //     dropdownOpen={dropdownOpen}
-          //     toggle={toggle}
-          //     removeTableRow={handleRemoveTableRow}
-          //     editTableRow={handleEditTableRow}
-          //     copyTableRow={handleCopyTableRow}
-          //     item={row.original}
-          //   />
-          // );
-          return <></>;
-        },
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -206,7 +193,7 @@ const TaoMoiBangKe = (): JSX.Element => {
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Trạng thái')}:</div>
-          <span>{t('Tạo mới')}</span>
+          <span className="sipTableBtnStatus sipTableBtnStatus0">{t('Tạo mới')}</span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Kỳ')}:</div>
@@ -228,11 +215,11 @@ const TaoMoiBangKe = (): JSX.Element => {
           <Col xs={12} xl={6}>
             <div className="sipFicoBangKeInformation">
               <div>{t('Tổng giá trị')}:</div>
-              <span />
+              <span>0</span>
             </div>
             <div className="sipFicoBangKeInformation">
               <div>{t('Ngày tạo')}:</div>
-              <span />
+              <span>{moment().format('DD-MM-YYYY')}</span>
             </div>
           </Col>
         </Row>
