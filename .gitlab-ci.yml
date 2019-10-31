@@ -88,6 +88,15 @@ build-source:latest:
   environment:
     name: development
 
+build-source:staging:
+  <<: *build-source
+  only:
+    - master
+  script:
+    - yarn build:development
+  environment:
+    name: staging
+
 build-source:production:
   <<: *build-source
   only:
@@ -95,19 +104,29 @@ build-source:production:
   script:
     - yarn build:production
   environment:
-    name: staging
+    name: production
 
 # Stage: build-docker-image
 # Put bundles into docker images
 
 build-docker-image:latest:
   <<: *build-docker-image
-  #  only:
-  #    - master
+  only:
+    - master
   dependencies:
     - build-source:latest
   environment:
     name: development
+    url: $PORTAL_URL
+
+build-docker-image:staging:
+  <<: *build-docker-image
+  only:
+    - staging
+  dependencies:
+    - build-source:staging
+  environment:
+    name: staging
     url: $PORTAL_URL
 
 build-docker-image:production:
@@ -117,7 +136,7 @@ build-docker-image:production:
   dependencies:
     - build-source:production
   environment:
-    name: staging
+    name: production
     url: $PORTAL_URL
 
 # Stage: release
