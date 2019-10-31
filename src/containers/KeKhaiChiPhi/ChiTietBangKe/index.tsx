@@ -124,7 +124,6 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          if (status) return <></>;
           return get(row, 'original.LINE_ITEM') ? (
             <UtilityDropDown
               removeTableRow={handleRemoveTableRow}
@@ -137,10 +136,11 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
             <></>
           );
         },
+        show: status === 0,
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data],
+    [data, status],
   );
 
   const handleRemoveTableRow = (item: API.LISTMTDETAILRECEIVER): void => {
