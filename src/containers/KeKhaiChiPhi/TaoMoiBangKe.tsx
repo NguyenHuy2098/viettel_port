@@ -185,7 +185,7 @@ const TaoMoiBangKe = (): JSX.Element => {
         items={items}
         onSuccess={handleLuuBangKeSuccess}
       />
-      <ButtonNopBangKe className="ml-2" disabled={true} idBangKe={''} onSuccess={handleNopBangKeSuccess} />
+      <ButtonNopBangKe className="ml-2" date={monthYear} items={items} onSuccess={handleNopBangKeSuccess} />
     </>
   );
 

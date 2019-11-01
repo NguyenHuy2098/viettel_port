@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonProps } from 'reactstrap';
@@ -22,6 +22,7 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
   const { date, idBangKe, items, onFailure, onSuccess, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const [loading, setLoading] = useState<boolean>(false);
 
   if (!isNil(date) && !isDate(date)) {
     throw new TypeError('"date" is wrong type');
@@ -30,6 +31,10 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
   const handleFailure = (error: Error): void => {
     toastError(error.message);
     if (isFunction(onFailure)) onFailure(error);
+  };
+
+  const handleFinish = (): void => {
+    setLoading(false);
   };
 
   const handleTaoMoiSuccess = (data: API.ZFI003Response): void => {
@@ -54,6 +59,7 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
         },
         {
           onFailure: handleFailure,
+          onFinish: handleFinish,
           onSuccess: handleTaoMoiSuccess,
         },
         {},
@@ -70,6 +76,7 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
         },
         {
           onFailure: handleFailure,
+          onFinish: handleFinish,
           onSuccess: handleCapNhatSuccess,
         },
         {},
@@ -78,6 +85,8 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
   };
 
   const handleLuuBangKe = (): void => {
+    setLoading(true);
+
     if (isNil(idBangKe) && isDate(date)) {
       taoMoiBangKe();
     }
@@ -89,7 +98,7 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
 
   return (
     <Button color="primary" onClick={handleLuuBangKe} {...rest}>
-      <i className="fa fa-save mr-2" />
+      {loading ? <i className="fa fa-spinner fa-spin mr-2" /> : <i className="fa fa-save mr-2" />}
       {t('Lưu')}
     </Button>
   );
