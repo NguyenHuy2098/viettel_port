@@ -107,22 +107,42 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Giá chưa thuế'),
         accessor: 'AMOUNT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.AMOUNT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('Phụ phí'),
         accessor: 'PHU_PHI',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.PHU_PHI', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('TS'),
         accessor: 'TAX',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.TAX', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('Thuế GTGT'),
         accessor: 'TAX_AMOUNT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.TAX_AMOUNT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('Tổng'),
         accessor: 'SUM_AMOUNT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.SUM_AMOUNT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('Link URL'),
@@ -225,7 +245,7 @@ const TaoMoiBangKe = (): JSX.Element => {
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Ngày tạo')}:</div>
-          <span className="text-bold">{moment().format('DD-MM-YYYY')}</span>
+          <span className="text-bold">{moment().format('DD/MM/YYYY')}</span>
         </div>
       </Col>
     </Row>
@@ -271,12 +291,10 @@ const TaoMoiBangKe = (): JSX.Element => {
   return (
     <>
       <Row className="mb-3">
-        <Col>
-          <div className="d-flex sipTitle">
-            <ButtonGoBack />
-            <h4>{t('Tạo mới bảng kê')}</h4>
-          </div>
-        </Col>
+        <div className="d-flex sipTitle">
+          <ButtonGoBack />
+          <h4>{t('Tạo mới bảng kê')}</h4>
+        </div>
         <Col className="d-flex justify-content-end">{renderFirstControllers()}</Col>
       </Row>
 
@@ -284,11 +302,7 @@ const TaoMoiBangKe = (): JSX.Element => {
         <Col>{renderFilters()}</Col>
       </Row>
 
-      <Row className="mb-4">
-        <Col>
-          <div className="bg-white p-3 shadow-sm">{renderThongTinBangKe()}</div>
-        </Col>
-      </Row>
+      <div className="bg-white p-3 shadow-sm mb-4">{renderThongTinBangKe()}</div>
 
       <Row className="mb-3">
         <Col>
@@ -297,21 +311,17 @@ const TaoMoiBangKe = (): JSX.Element => {
         <Col className="d-flex justify-content-end">{renderSecondControllers()}</Col>
       </Row>
 
-      <Row>
-        <Col>
-          <div className="sipTableContainerAmountListContainer">
-            <div className="sipTableContainer sipTableContainerAmountList">
-              <DataTable
-                columns={columns}
-                data={data}
-                groupKey={'KHOAN_MUC'}
-                renderGroupedRow={renderGroupedRow}
-                renderUtilityDropDown={renderUtilityDropDown}
-              />
-            </div>
-          </div>
-        </Col>
-      </Row>
+      <div className="sipTableContainerAmountListContainer">
+        <div className="sipTableContainer sipTableContainerAmountList">
+          <DataTable
+            columns={columns}
+            data={data}
+            groupKey={'KHOAN_MUC'}
+            renderGroupedRow={renderGroupedRow}
+            renderUtilityDropDown={renderUtilityDropDown}
+          />
+        </div>
+      </div>
     </>
   );
 };

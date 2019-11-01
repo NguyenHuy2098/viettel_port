@@ -454,17 +454,11 @@ input.form-control:-moz-placeholder {
     //  }
     //}
     td, th {
-      min-width: 90px;
       padding: 8px 5px;
       word-break: normal;
       height: 50px;
-      &:nth-child(9) {
-        min-width: 80px;
-        text-align: left;
-        padding-right: 12px;
-      }
       &:nth-child(14) {
-        max-width: 800px;
+        max-width: 600px;
         word-break: break-word;
       }
       &:nth-child(15) {
@@ -524,6 +518,30 @@ input.form-control:-moz-placeholder {
         position: absolute;
         right: 40px;
         padding: 0 8px;
+      }
+    }
+  }
+}
+.sipTableContainerAmountListNoFix {
+  .table {
+    min-width: 2600px;
+    td, th {
+      &:nth-child(15) {
+        position: relative;
+        width: auto;
+        justify-content: start;
+        &:after {
+          display: none;
+        }
+      }
+    }
+    td {
+      &:nth-child(15) {
+        background: none !important;
+      }
+      &:nth-child(18) {
+        max-width: 600px;
+        word-break: break-word;
       }
     }
   }
@@ -842,7 +860,7 @@ html:not([dir='rtl']) .sidebar {
   }
   & > img {
     position: absolute;
-    top: 8px;
+    top: 9px;
     left: 10px;
   }
   & > div {

@@ -2,23 +2,24 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
-import { get, map, sumBy, toNumber, reject, toString, filter } from 'lodash';
+import { get, map, toNumber, reject, toString, filter } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
 import moment from 'moment';
 import numeral from 'numeral';
+import classnames from 'classnames';
 
-import { badgeFicoStateMap } from 'utils/common';
+import { detailBangkeFicoStateMap } from 'utils/common';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
-import useLoggedInUser from 'hooks/useLoggedInUser';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import TopControllers from './TopControllers';
+import TopThongTinBangKe from './TopThongTinBangKe';
 import UtilityDropDown from '../UtilityDropDown';
 
 interface Props {
@@ -34,20 +35,12 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dispatch = useDispatch();
-  const userLogin = useLoggedInUser();
   const bangKeHeader = useSelector(select_ZFI007_header);
   const list = useSelector(select_ZFI007_list);
   const [data, setData] = useState<DataType[]>([]);
   const [dataOriginal, setDataOriginal] = useState<DataType[]>([]);
 
   const status = useMemo(() => toNumber(get(bangKeHeader, 'BK_STATUS', -1)), [bangKeHeader]);
-  const tongGiaTri = useMemo(
-    () =>
-      numeral(sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(get(item, 'SUM_AMOUNT') || 0))).format(
-        '0,0',
-      ),
-    [data],
-  );
 
   useEffect(() => {
     dispatch(
@@ -80,6 +73,10 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Ngày'),
         accessor: 'NGAY_HD',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisDate = moment(get(row, 'original.NGAY_HD'), 'YYYYMMDD').format('DD/MM/YYYY');
+          return <>{thisDate}</>;
+        },
       },
       {
         Header: t('Trạng thái'),
@@ -101,31 +98,89 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         accessor: 'DESCR',
       },
       {
-        Header: t('Giá chưa thuế '),
+        Header: t('Giá chưa thuế'),
         accessor: 'AMOUNT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.AMOUNT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('Phụ phí'),
         accessor: 'PHU_PHI',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.PHU_PHI', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('TS'),
         accessor: 'TAX',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <div>{get(row, 'original.TAX', '') + '%'}</div>;
-        },
       },
       {
         Header: t('Thuế GTGT'),
         accessor: 'TAX_AMOUNT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.TAX_AMOUNT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
       },
       {
         Header: t('Tổng'),
         accessor: 'SUM_AMOUNT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.SUM_AMOUNT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
+      },
+      {
+        Header: t('Giá trị HH, DV duyệt'),
+        accessor: 'AMOUNT_INIT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.AMOUNT_INIT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
+        show: status === 1 || status === 2,
+      },
+      {
+        Header: t('Phụ phí duyệt'),
+        accessor: 'PHU_PHI_INIT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.PHU_PHI_INIT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
+        show: status === 1 || status === 2,
+      },
+      {
+        Header: t('Thuế GTGT duyệt'),
+        accessor: 'TAX_AMOUNT_INIT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.TAX_AMOUNT_INIT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
+        show: status === 1 || status === 2,
+      },
+      {
+        Header: t('Tổng cộng duyệt'),
+        accessor: 'SUM_AMOUNT_INIT',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisValue = numeral(get(row, 'original.SUM_AMOUNT_INIT', '0')).format('0,0');
+          return <>{thisValue}</>;
+        },
+        show: status === 1 || status === 2,
       },
       {
         Header: t('Link URL'),
         accessor: 'URL',
+      },
+      {
+        Header: t('Lý do'),
+        accessor: 'NOTE',
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
+          const thisNote = get(row, 'original.NOTE');
+          return <>{thisNote ? thisNote : ''}</>;
+        },
+        show: status === 1 || status === 2,
       },
       {
         Header: t('Quản trị'),
@@ -174,51 +229,6 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
 
   const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
 
-  const renderThongTinBangKe = (): JSX.Element => (
-    <Row>
-      <Col xs={12} xl={4}>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Mã bảng kê')}:</div>
-          <span className="text-bold">{get(bangKeHeader, 'BK_ID')}</span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Trạng thái')}:</div>
-          <span>
-            <BadgeFicoBangKeStatus status={status} />
-          </span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Kỳ')}:</div>
-          <span className="text-bold">
-            {get(bangKeHeader, 'BK_MONTH') || '-'}/{get(bangKeHeader, 'BK_YEAR') || '-'}
-          </span>
-        </div>
-      </Col>
-      <Col xs={12} xl={4}>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Người tạo')}:</div>
-          <span className="text-bold">{get(bangKeHeader, 'CRE_BY') || '-'}</span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Đơn vị')}:</div>
-          <span className="text-bold">{get(userLogin, 'user.profile.bp_org_unit', '')}</span>
-        </div>
-      </Col>
-      <Col xs={12} xl={4}>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Tổng giá trị')}:</div>
-          <span className="text-bold">{tongGiaTri} đ</span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Ngày tạo')}:</div>
-          <span className="text-bold">
-            {moment(get(bangKeHeader, 'CRE_TIME', ''), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
-          </span>
-        </div>
-      </Col>
-    </Row>
-  );
-
   function handleSubmitKhoanMuc(item: API.LIST): void {
     const nextState = produce(data, draftState => {
       draftState.unshift({ TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
@@ -246,11 +256,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       list,
       (item: API.LISTMTDETAILRECEIVER): boolean => toString(item.STATUS_ITEM) === event.currentTarget.value,
     );
-    if (event.currentTarget.value === '') {
-      setData(dataOriginal);
-    } else {
-      setData(filteredList);
-    }
+    setData(event.currentTarget.value === '' ? dataOriginal : filteredList);
   };
 
   return (
@@ -266,49 +272,44 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
           <TopControllers idBangKe={idBangKe} items={items} status={status} />
         </Col>
       </Row>
-
-      <Row className="mb-4">
-        <Col>
-          <div className="bg-white p-3 shadow-sm">{renderThongTinBangKe()}</div>
-        </Col>
-      </Row>
-
-      <Row className="mb-3">
-        <Col>
-          <h1 className="sipTitle">{t('Danh sách khoản mục chi phí')}</h1>
-          <div className="sipFilterColSearch w-25 min-width-100px pull-right">
+      <div className="bg-white p-3 shadow-sm mb-4">
+        <TopThongTinBangKe data={data} />
+      </div>
+      <Row className="mb-3 pl-3 pr-3">
+        <h1 className="sipTitle">{t('Danh sách khoản mục chi phí')}</h1>
+        {(status === 1 || status === 2) && (
+          <div className="sipFilterColSearch min-width-100px pull-right ml-2">
             <Input type="select" onChange={handleFilterByStatus}>
               <option value="">{t('Tất cả trạng thái')}</option>
               {map(
-                badgeFicoStateMap,
-                (item: string, index: number): JSX.Element => {
-                  return (
-                    <option key={index} value={toString(index)}>
-                      {item}
-                    </option>
-                  );
-                },
+                detailBangkeFicoStateMap,
+                (item: string, index: number): JSX.Element => (
+                  <option key={index} value={toString(index)}>
+                    {item}
+                  </option>
+                ),
               )}
             </Input>
             <img src={'../../assets/img/icon/iconFilter.svg'} alt="VTPostek" />
           </div>
-        </Col>
-        {!status && <Col className="d-flex justify-content-end">{renderSecondControllers()}</Col>}
+        )}
+        {!status && <div className="pull-right">{renderSecondControllers()}</div>}
       </Row>
-
-      <Row>
-        <Col>
-          <div className={!status ? 'sipTableContainerAmountListContainer' : ''}>
-            <div className="sipTableContainer sipTableContainerAmountList">
-              {status ? (
-                <DataTable columns={columns} data={data} groupKey={'TEN_KM'} />
-              ) : (
-                <DataTable columns={columns} data={data} groupKey={'TEN_KM'} renderGroupedRow={renderGroupedRow} />
-              )}
-            </div>
-          </div>
-        </Col>
-      </Row>
+      <div className={!status ? 'sipTableContainerAmountListContainer' : ''}>
+        <div
+          className={classnames({
+            sipTableContainer: true,
+            sipTableContainerAmountList: true,
+            sipTableContainerAmountListNoFix: status === 1 || status === 2,
+          })}
+        >
+          {status ? (
+            <DataTable columns={columns} data={data} groupKey={'TEN_KM'} />
+          ) : (
+            <DataTable columns={columns} data={data} groupKey={'TEN_KM'} renderGroupedRow={renderGroupedRow} />
+          )}
+        </div>
+      </div>
     </>
   );
 };
