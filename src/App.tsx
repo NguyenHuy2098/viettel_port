@@ -5,6 +5,9 @@ import { Provider } from 'react-redux';
 import { Router, Route, Switch } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { ConnectedRouter } from 'connected-react-router';
+import numeral from 'numeral';
+import 'numeral/locales/vi';
+import 'moment/locale/vi';
 
 import Loading from 'components/Loading';
 import PrivateRoute from 'components/PrivateRoute';
@@ -13,6 +16,11 @@ import routesMap from 'utils/routesMap';
 import store from 'redux/store';
 import userManager from 'utils/userManager';
 import './App.scss';
+
+/**
+ * Config locale
+ */
+numeral.locale('vi');
 
 /**
  * Layouts

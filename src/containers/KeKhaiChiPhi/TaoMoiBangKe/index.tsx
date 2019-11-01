@@ -1,14 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
 import { Col, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { goBack, replace } from 'connected-react-router';
-import { delay, get, isEmpty, map, reject, sumBy, toNumber } from 'lodash';
+import { delay, get, isEmpty, map, reject } from 'lodash';
 import produce from 'immer';
-import moment from 'moment';
 import numeral from 'numeral';
 import XLSX, { WorkBook } from 'xlsx';
 
@@ -19,11 +18,11 @@ import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
 import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import DataTable from 'components/DataTable/Grouped';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { transformXlsxRowToBangKeItem } from 'utils/common';
 import routesMap from 'utils/routesMap';
-import ThemMoiChiPhi from './ThemMoiChiPhi';
-import UtilityDropDown from './UtilityDropDown';
+import ThemMoiChiPhi from '../ThemMoiChiPhi';
+import UtilityDropDown from '../UtilityDropDown';
+import ThongTinBangKe from './ThongTinBangKe';
 
 interface DataType extends API.ITEMBK {
   IS_GROUP_DATA_TABLE?: boolean;
@@ -32,8 +31,6 @@ interface DataType extends API.ITEMBK {
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
   const dispatch = useDispatch();
-  const maBP = useSelector(makeSelectorMaBP);
-  const useId = useSelector(makeSelectorPreferredUsername);
   const [data, setData] = useState<DataType[]>([]);
   const { t } = useTranslation();
 
@@ -56,14 +53,6 @@ const TaoMoiBangKe = (): JSX.Element => {
     const tempData = [item, ...data];
     setData([...tempData]);
   };
-
-  const tongGiaTri = useMemo(
-    () =>
-      numeral(sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(get(item, 'SUM_AMOUNT') || 0))).format(
-        '0,0',
-      ),
-    [data],
-  );
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -174,7 +163,7 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX_v0.1.xlsx" download>
+      <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX.xlsx" download>
         <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExcelWhite.svg'} />
         {t('Lấy file mẫu')}
       </a>
@@ -214,47 +203,6 @@ const TaoMoiBangKe = (): JSX.Element => {
         </Col>
       </Row>
     </div>
-  );
-
-  const renderThongTinBangKe = (): JSX.Element => (
-    <Row>
-      <Col xs={12} xl={4}>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Mã bảng kê')}:</div>
-          <span className="text-bold">-</span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Trạng thái')}:</div>
-          <span>
-            <BadgeFicoBangKeStatus status={0} />
-          </span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Kỳ')}:</div>
-          <span className="text-bold">{moment(monthYear).format('MM/YYYY')}</span>
-        </div>
-      </Col>
-      <Col xs={12} xl={4}>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Người tạo')}:</div>
-          <span className="text-bold">{useId}</span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Đơn vị')}:</div>
-          <span className="text-bold">{maBP}</span>
-        </div>
-      </Col>
-      <Col xs={12} xl={4}>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Tổng giá trị')}:</div>
-          <span className="text-bold">{tongGiaTri} đ</span>
-        </div>
-        <div className="sipFicoBangKeInformation">
-          <div>{t('Ngày tạo')}:</div>
-          <span className="text-bold">{moment().format('DD/MM/YYYY')}</span>
-        </div>
-      </Col>
-    </Row>
   );
 
   function handleSubmit(item: API.LIST): void {
@@ -308,7 +256,9 @@ const TaoMoiBangKe = (): JSX.Element => {
         <Col>{renderFilters()}</Col>
       </Row>
 
-      <div className="bg-white p-3 shadow-sm mb-4">{renderThongTinBangKe()}</div>
+      <div className="bg-white p-3 shadow-sm mb-4">
+        <ThongTinBangKe items={data} date={monthYear} />
+      </div>
 
       <Row className="mb-3">
         <Col>

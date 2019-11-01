@@ -29,7 +29,7 @@ const TopControllers = (props: Props): JSX.Element => {
 
   return (
     <>
-      <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX_v0.1.xlsx" download>
+      <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX.xlsx" download>
         <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExcelWhite.svg'} />
         {t('Lấy file mẫu')}
       </a>
