@@ -1,10 +1,10 @@
-/* eslint-disable max-lines */
 import React from 'react';
-import { Button } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { sumBy } from 'lodash';
-import numeral from 'numeral';
 import { Row as TableRow } from 'react-table';
+import { Button } from 'reactstrap';
+import { get, sumBy, toNumber } from 'lodash';
+import numeral from 'numeral';
+
 import ModalThemMoiChiPhi from './ModalThemMoiChiPhi';
 
 interface Props {
@@ -33,7 +33,10 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       <div className="sipTableAmountListGroup">
         <span>
           {index !== 'null' ? index : ''}&nbsp;({t('Tổng')}:{' '}
-          <span className="text-bold color-primary">{numeral(sumBy(rows, 'original.SUM_AMOUNT')).format('0,0')}</span>)
+          <span className="text-bold color-primary">
+            {numeral(sumBy(rows, row => toNumber(get(row, 'original.SUM_AMOUNT')))).format('0,0')}
+          </span>
+          )
         </span>
         <Button color="primary" outline onClick={toggle}>
           <i className="fa fa-plus mr-2" />
