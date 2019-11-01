@@ -231,7 +231,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
 
   function handleSubmitKhoanMuc(item: API.LIST): void {
     const nextState = produce(data, draftState => {
-      draftState.unshift({ TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
+      draftState.unshift({ KHOAN_MUC: item.km_id, TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
     });
     setData(nextState);
     setDataOriginal(nextState);

@@ -202,8 +202,9 @@ const TaoMoiBangKe = (): JSX.Element => {
   );
 
   function handleSubmit(item: API.LIST): void {
+    debugger;
     const nextState = produce(data, draftState => {
-      draftState.unshift({ KHOAN_MUC: item.km_text, IS_GROUP_DATA_TABLE: true });
+      draftState.unshift({ KHOAN_MUC: item.km_id, TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
     });
     setData(nextState);
   }
