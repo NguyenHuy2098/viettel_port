@@ -101,7 +101,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         accessor: 'DESCR',
       },
       {
-        Header: t('Giá chưa thuế'),
+        Header: t('Giá chưa thuế '),
         accessor: 'AMOUNT',
       },
       {
@@ -111,6 +111,9 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('TS'),
         accessor: 'TAX',
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
+          return <div>{get(row, 'original.TAX', '') + '%'}</div>;
+        },
       },
       {
         Header: t('Thuế GTGT'),
