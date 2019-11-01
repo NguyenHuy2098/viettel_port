@@ -7,10 +7,9 @@ import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
 import moment from 'moment';
-import numeral from 'numeral';
 import classnames from 'classnames';
 
-import { detailBangkeFicoStateMap } from 'utils/common';
+import { detailBangkeFicoStateMap, numberFormat } from 'utils/common';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
@@ -100,17 +99,15 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Giá chưa thuế'),
         accessor: 'AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.AMOUNT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.AMOUNT'));
         },
       },
       {
         Header: t('Phụ phí'),
         accessor: 'PHU_PHI',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.PHU_PHI', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.PHU_PHI'));
         },
       },
       {
@@ -120,52 +117,46 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Thuế GTGT'),
         accessor: 'TAX_AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.TAX_AMOUNT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
       },
       {
         Header: t('Tổng'),
         accessor: 'SUM_AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.SUM_AMOUNT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.SUM_AMOUNT'));
         },
       },
       {
         Header: t('Giá trị HH, DV duyệt'),
         accessor: 'AMOUNT_INIT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.AMOUNT_INIT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.AMOUNT_INIT'));
         },
         show: status === 1 || status === 2,
       },
       {
         Header: t('Phụ phí duyệt'),
         accessor: 'PHU_PHI_INIT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.PHU_PHI_INIT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
         },
         show: status === 1 || status === 2,
       },
       {
         Header: t('Thuế GTGT duyệt'),
         accessor: 'TAX_AMOUNT_INIT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.TAX_AMOUNT_INIT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
         },
         show: status === 1 || status === 2,
       },
       {
         Header: t('Tổng cộng duyệt'),
         accessor: 'SUM_AMOUNT_INIT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.SUM_AMOUNT_INIT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
         },
         show: status === 1 || status === 2,
       },
@@ -176,9 +167,8 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Lý do'),
         accessor: 'NOTE',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          const thisNote = get(row, 'original.NOTE');
-          return <>{thisNote ? thisNote : ''}</>;
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
+          return get(row, 'original.NOTE') || '';
         },
         show: status === 1 || status === 2,
       },

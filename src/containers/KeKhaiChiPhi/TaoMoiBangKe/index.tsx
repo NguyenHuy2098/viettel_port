@@ -8,7 +8,6 @@ import { generatePath } from 'react-router';
 import { goBack, replace } from 'connected-react-router';
 import { delay, get, isEmpty, map, reject } from 'lodash';
 import produce from 'immer';
-import numeral from 'numeral';
 import XLSX, { WorkBook } from 'xlsx';
 
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
@@ -18,7 +17,7 @@ import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
 import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import DataTable from 'components/DataTable/Grouped';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
-import { transformXlsxRowToBangKeItem } from 'utils/common';
+import { numberFormat, transformXlsxRowToBangKeItem } from 'utils/common';
 import routesMap from 'utils/routesMap';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import UtilityDropDown from '../UtilityDropDown';
@@ -96,17 +95,15 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Giá chưa thuế'),
         accessor: 'AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.AMOUNT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.AMOUNT'));
         },
       },
       {
         Header: t('Phụ phí'),
         accessor: 'PHU_PHI',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.PHU_PHI', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.PHU_PHI'));
         },
       },
       {
@@ -116,17 +113,15 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Thuế GTGT'),
         accessor: 'TAX_AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.TAX_AMOUNT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
       },
       {
         Header: t('Tổng'),
         accessor: 'SUM_AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.SUM_AMOUNT', '0')).format('0,0');
-          return <>{thisValue}</>;
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
+          return numberFormat(get(row, 'original.SUM_AMOUNT'));
         },
       },
       {

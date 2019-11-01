@@ -66,7 +66,7 @@ export function getValueOfNumberFormat(value: string): string {
 }
 
 export function numberFormat(value: string): string {
-  return value ? numeral(value).format('0,0') : '';
+  return numeral(toNumber(value)).format('0,0');
 }
 
 export const getAddressNameById = (id: string, data: VtpAddress[]): string => {
