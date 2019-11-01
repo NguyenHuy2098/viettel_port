@@ -6,8 +6,9 @@ import { Cell, Row as TableRow } from 'react-table';
 import { Col, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { goBack, replace } from 'connected-react-router';
-import { delay, get, isEmpty, map, reject, toString } from 'lodash';
+import { delay, get, isEmpty, map, reject, size, slice, join, toString } from 'lodash';
 import produce from 'immer';
+import moment from 'moment';
 import XLSX, { WorkBook } from 'xlsx';
 
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
@@ -21,7 +22,7 @@ import { numberFormat, transformXlsxRowToBangKeItem } from 'utils/common';
 import routesMap from 'utils/routesMap';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import UtilityDropDown from '../UtilityDropDown';
-import ThongTinBangKe from './ThongTinBangKe';
+import TopThongTinBangKe from '../TopThongTinBangKe';
 
 interface DataType extends API.ITEMBK {
   IS_GROUP_DATA_TABLE?: boolean;
@@ -91,6 +92,11 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Hàng hoá'),
         accessor: 'DESCR',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisDescr = get(row, 'original.DESCR', '0');
+          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
+          return <span title={thisDescr}>{thisText}</span>;
+        },
       },
       {
         Header: t('Giá chưa thuế'),
@@ -127,6 +133,11 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('Link URL'),
         accessor: 'URL',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisDescr = get(row, 'original.URL', '0');
+          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
+          return <span title={thisDescr}>{thisText}</span>;
+        },
       },
       {
         Header: t('Quản trị'),
@@ -248,7 +259,7 @@ const TaoMoiBangKe = (): JSX.Element => {
       </Row>
 
       <div className="bg-white p-3 shadow-sm mb-4">
-        <ThongTinBangKe items={data} date={monthYear} />
+        <TopThongTinBangKe isCreateNew={true} data={data} period={moment(monthYear).format('MM/YYYY')} />
       </div>
 
       <Row className="mb-3">

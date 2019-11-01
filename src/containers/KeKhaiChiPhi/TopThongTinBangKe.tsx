@@ -9,6 +9,7 @@ import useLoggedInUser from 'hooks/useLoggedInUser';
 import moment from 'moment';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import numeral from 'numeral';
+import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 
 interface DataType extends API.LISTMTDETAILRECEIVER {
   IS_GROUP_DATA_TABLE?: boolean;
@@ -16,15 +17,19 @@ interface DataType extends API.LISTMTDETAILRECEIVER {
 
 interface Props {
   data: DataType[];
+  isCreateNew: boolean;
+  period?: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const TopThongTinBangKe = (props: Props): JSX.Element => {
-  const { data } = props;
+  const { data, isCreateNew, period } = props;
+  const maBP = useSelector(makeSelectorMaBP);
+  const useId = useSelector(makeSelectorPreferredUsername);
   const { t } = useTranslation();
   const userLogin = useLoggedInUser();
   const bangKeHeader = useSelector(select_ZFI007_header);
-  const status = useMemo(() => toNumber(get(bangKeHeader, 'BK_STATUS', -1)), [bangKeHeader]);
+  const status = isCreateNew ? 0 : toNumber(get(bangKeHeader, 'BK_STATUS', -1));
   const tongGiaTri = useMemo(
     () =>
       numeral(sumBy(data, (item: API.LISTMTDETAILRECEIVER): number => toNumber(get(item, 'SUM_AMOUNT') || 0))).format(
@@ -38,7 +43,7 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
       <Col xs={12} xl={4}>
         <div className="sipFicoBangKeInformation">
           <div>{t('Mã bảng kê')}:</div>
-          <span className="text-bold">{get(bangKeHeader, 'BK_ID')}</span>
+          <span className="text-bold">{isCreateNew ? '' : get(bangKeHeader, 'BK_ID')}</span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Trạng thái')}:</div>
@@ -49,18 +54,18 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
         <div className="sipFicoBangKeInformation">
           <div>{t('Kỳ')}:</div>
           <span className="text-bold">
-            {get(bangKeHeader, 'BK_MONTH') || '-'}/{get(bangKeHeader, 'BK_YEAR') || '-'}
+            {isCreateNew ? period : `${get(bangKeHeader, 'BK_MONTH') || '-'}/${get(bangKeHeader, 'BK_YEAR') || '-'}`}
           </span>
         </div>
       </Col>
       <Col xs={12} xl={4}>
         <div className="sipFicoBangKeInformation">
           <div>{t('Người tạo')}:</div>
-          <span className="text-bold">{get(bangKeHeader, 'CRE_BY') || '-'}</span>
+          <span className="text-bold">{isCreateNew ? useId : get(bangKeHeader, 'CRE_BY') || '-'}</span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Đơn vị')}:</div>
-          <span className="text-bold">{get(userLogin, 'user.profile.bp_org_unit', '')}</span>
+          <span className="text-bold">{isCreateNew ? maBP : get(userLogin, 'user.profile.bp_org_unit', '')}</span>
         </div>
       </Col>
       <Col xs={12} xl={4}>
@@ -71,7 +76,9 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
         <div className="sipFicoBangKeInformation">
           <div>{t('Ngày tạo')}:</div>
           <span className="text-bold">
-            {moment(get(bangKeHeader, 'CRE_TIME', ''), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
+            {isCreateNew
+              ? moment().format('DD/MM/YYYY')
+              : moment(get(bangKeHeader, 'CRE_TIME', ''), 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
           </span>
         </div>
       </Col>

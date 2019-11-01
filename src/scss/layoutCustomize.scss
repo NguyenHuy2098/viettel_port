@@ -446,7 +446,7 @@ input.form-control:-moz-placeholder {
 }
 .sipTableContainerAmountList {
   .table {
-    min-width: 2200px;
+    table-layout: fixed;
     //tbody tr:nth-of-type(odd) {
     //  background: none;
     //  td {
@@ -454,11 +454,18 @@ input.form-control:-moz-placeholder {
     //  }
     //}
     td, th {
-      padding: 8px 5px;
+      padding: 5px;
       word-break: normal;
-      height: 50px;
-      &:nth-child(14) {
-        max-width: 600px;
+      height: 55px;
+      width: 100px;
+      &:first-child {
+        width: 120px;
+      }
+      &:nth-child(5) {
+        width: 150px;
+      }
+      &:nth-child(8), &:nth-child(14) {
+        width: 400px;
         word-break: break-word;
       }
       &:nth-child(15) {
@@ -528,11 +535,22 @@ input.form-control:-moz-placeholder {
     td, th {
       &:nth-child(15) {
         position: relative;
-        width: auto;
-        justify-content: start;
+        width: 120px;
+        display: table-cell;
+        padding-bottom: 2px;
+        text-align: left;
         &:after {
           display: none;
         }
+      }
+      &:nth-child(14), &:nth-child(16), &:nth-child(17) {
+        width: 150px;
+      }
+      &:nth-child(18) {
+        width: 400px;
+      }
+      &:nth-child(19) {
+        width: 200px;
       }
     }
     td {

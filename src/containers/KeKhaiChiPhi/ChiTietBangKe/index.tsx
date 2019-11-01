@@ -1,8 +1,9 @@
+/* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
-import { get, map, toNumber, reject, toString, filter } from 'lodash';
+import { get, map, toNumber, reject, toString, filter, slice, size, join } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
@@ -18,7 +19,7 @@ import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import TopControllers from './TopControllers';
-import TopThongTinBangKe from './TopThongTinBangKe';
+import TopThongTinBangKe from '../TopThongTinBangKe';
 import UtilityDropDown from '../UtilityDropDown';
 
 interface Props {
@@ -95,6 +96,11 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Hàng hoá'),
         accessor: 'DESCR',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisDescr = get(row, 'original.DESCR', '0');
+          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
+          return <span title={thisDescr}>{thisText}</span>;
+        },
       },
       {
         Header: t('Giá chưa thuế'),
@@ -134,7 +140,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.AMOUNT_INIT'));
         },
-        show: status === 1 || status === 2,
+        show: status === 3 || status === 2,
       },
       {
         Header: t('Phụ phí duyệt'),
@@ -142,7 +148,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.PHU_PHI_INIT'));
         },
-        show: status === 1 || status === 2,
+        show: status === 3 || status === 2,
       },
       {
         Header: t('Thuế GTGT duyệt'),
@@ -150,7 +156,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
         },
-        show: status === 1 || status === 2,
+        show: status === 3 || status === 2,
       },
       {
         Header: t('Tổng cộng duyệt'),
@@ -158,11 +164,16 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
         },
-        show: status === 1 || status === 2,
+        show: status === 3 || status === 2,
       },
       {
         Header: t('Link URL'),
         accessor: 'URL',
+        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
+          const thisDescr = get(row, 'original.URL', '0');
+          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
+          return <span title={thisDescr}>{thisText}</span>;
+        },
       },
       {
         Header: t('Lý do'),
@@ -170,7 +181,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.NOTE') || '';
         },
-        show: status === 1 || status === 2,
+        show: status === 3 || status === 2,
       },
       {
         Header: t('Quản trị'),
@@ -263,11 +274,11 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         </Col>
       </Row>
       <div className="bg-white p-3 shadow-sm mb-4">
-        <TopThongTinBangKe data={data} />
+        <TopThongTinBangKe data={data} isCreateNew={false} />
       </div>
       <Row className="mb-3 pl-3 pr-3">
         <h1 className="sipTitle">{t('Danh sách khoản mục chi phí')}</h1>
-        {(status === 1 || status === 2) && (
+        {(status === 3 || status === 2) && (
           <div className="sipFilterColSearch min-width-100px pull-right ml-2">
             <Input type="select" onChange={handleFilterByStatus}>
               <option value="">{t('Tất cả trạng thái')}</option>
@@ -290,7 +301,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
           className={classnames({
             sipTableContainer: true,
             sipTableContainerAmountList: true,
-            sipTableContainerAmountListNoFix: status === 1 || status === 2,
+            sipTableContainerAmountListNoFix: status === 3 || status === 2,
           })}
         >
           <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
