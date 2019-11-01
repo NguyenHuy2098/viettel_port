@@ -8,17 +8,17 @@ import numeral from 'numeral';
 import ModalThemMoiChiPhi from './ModalThemMoiChiPhi';
 
 interface Props {
-  index: string;
   handleSubmit: Function;
+  index: string;
   rows: TableRow<API.RowMTZTMI047OUT>[];
+  status: number;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const ThemMoiChiPhi = (props: Props): JSX.Element => {
+  const { handleSubmit, index, rows, status } = props;
   const [modal, setModal] = React.useState(false);
   const { t } = useTranslation();
-  const index = props.index;
-  const rows = props.rows;
 
   function toggle(): void {
     setModal(!modal);
@@ -38,17 +38,19 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
           </span>
           )
         </span>
-        <Button color="primary" outline onClick={toggle}>
-          <i className="fa fa-plus mr-2" />
-          {t('Thêm mới')}
-        </Button>
+        {status === 0 && (
+          <Button color="primary" outline onClick={toggle}>
+            <i className="fa fa-plus mr-2" />
+            {t('Thêm mới')}
+          </Button>
+        )}
       </div>
       <ModalThemMoiChiPhi
         type="new"
         showModal={modal}
         toggle={toggle}
         index={index}
-        submit={props.handleSubmit}
+        submit={handleSubmit}
         closeModal={closeModal}
       />
     </div>

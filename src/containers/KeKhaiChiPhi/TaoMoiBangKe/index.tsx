@@ -219,7 +219,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   }
 
   const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
-    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} />;
+    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} status={0} />;
   };
 
   const renderUtilityDropDown = (row: TableRow<API.RowMTZTMI047OUT>, index: number): JSX.Element => {
