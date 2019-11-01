@@ -83,6 +83,10 @@ unit-test:
 
 build-source:latest:
   <<: *build-source
+  except:
+    - production
+    - staging
+    - release
   script:
     - yarn build:development
   environment:
@@ -93,7 +97,7 @@ build-source:staging:
   only:
     - staging
   script:
-    - yarn build:development
+    - yarn build:production
   environment:
     name: staging
 
