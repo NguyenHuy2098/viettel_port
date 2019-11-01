@@ -185,7 +185,13 @@ const TaoMoiBangKe = (): JSX.Element => {
         items={items}
         onSuccess={handleLuuBangKeSuccess}
       />
-      <ButtonNopBangKe className="ml-2" date={monthYear} items={items} onSuccess={handleNopBangKeSuccess} />
+      <ButtonNopBangKe
+        className="ml-2"
+        date={monthYear}
+        disabled={isEmpty(items)}
+        items={items}
+        onSuccess={handleNopBangKeSuccess}
+      />
     </>
   );
 
@@ -316,7 +322,7 @@ const TaoMoiBangKe = (): JSX.Element => {
           <DataTable
             columns={columns}
             data={data}
-            groupKey={'KHOAN_MUC'}
+            groupKey={'TEN_KM'}
             renderGroupedRow={renderGroupedRow}
             renderUtilityDropDown={renderUtilityDropDown}
           />

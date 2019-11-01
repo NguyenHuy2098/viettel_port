@@ -1,4 +1,5 @@
-import { find, get, isEmpty, isObject } from 'lodash';
+import { find, get, isEmpty, isObject, split, toNumber } from 'lodash';
+import moment from 'moment';
 import numeral from 'numeral';
 
 export const cleanAccents = (str: string): string => {
@@ -26,22 +27,24 @@ export const cleanAccents = (str: string): string => {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
   if (isEmpty(row) || !isObject(row)) return {};
+  const km = split(get(row, 'Khoản mục chi phí') || '', '-');
   return {
     AMOUNT: get(row, 'Hàng hóa, dịch vụ chưa thuế', ''),
     DESCR: get(row, 'Hàng hóa, dịch vụ', ''),
-    KHOAN_MUC: get(row, 'Khoản mục chi phí', ''),
+    KHOAN_MUC: get(km, '[0]', ''),
     KIHIEU_HD: get(row, 'Ký hiệu hóa đơn', ''),
     LINE_ITEM: get(row, '', ''),
     MAU_HD: get(row, 'Mẫu hóa đơn', ''),
     MST: get(row, 'Mã số thuế người bán', ''),
-    NGAY_HD: get(row, 'Ngày hóa đơn', ''),
+    NGAY_HD: moment(get(row, 'Ngày hóa đơn'), 'DD/MM/YYYY').format('YYYYMMDD'),
     NGUOI_BAN: get(row, 'Tên người bán', ''),
     PHU_PHI: get(row, 'Phụ phí', ''),
     SO_HD: get(row, 'Số hóa đơn', ''),
     SUM_AMOUNT: get(row, 'Tổng cộng', ''),
-    TAX: get(row, 'Thuế suất', ''),
+    TAX: `${toNumber(get(row, 'Thuế suất', '')) * 100}%`,
     TAX_AMOUNT: get(row, 'Thuế GTGT', ''),
-    URL: get(row, '', ''),
+    TEN_KM: get(km, '[1]', ''),
+    URL: get(row, 'Link URL', ''),
   };
 }
 

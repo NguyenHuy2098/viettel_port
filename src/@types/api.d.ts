@@ -82,6 +82,7 @@ declare namespace API {
   export interface ITEMBK {
     LINE_ITEM?: string;
     KHOAN_MUC?: string;
+    TEN_KM?: string;
     MAU_HD?: string;
     KIHIEU_HD?: string;
     SO_HD?: string;
@@ -95,6 +96,13 @@ declare namespace API {
     TAX_AMOUNT?: string;
     SUM_AMOUNT?: string;
     URL?: string;
+    STATUS_ITEM?: number; // int32
+    AMOUNT_INIT?: string;
+    PHU_PHI_INIT?: string;
+    TAX_INIT?: string;
+    TAX_AMOUNT_INIT?: string;
+    SUM_AMOUNT_INIT?: string;
+    NOTE?: string;
   }
   export interface ITEMDELBK {
     LINE?: string;
@@ -197,8 +205,8 @@ declare namespace API {
     Currency?: string;
     COD?: string;
     Service_type?: string;
-    commodity_type?: string;
-    commodity_code?: string;
+    Commodity_type?: string;
+    Commodity_code?: string;
   }
   export interface ItemZTMI094 {
     /**
@@ -1500,11 +1508,11 @@ declare namespace API {
     /**
      *
      */
-    paging?: Paging;
+    paging?: Paging[];
     /**
      *
      */
-    T_DATA?: TDATAResponseZTMI036[];
+    row?: TDATAResponseZTMI036[];
   }
   export interface MTZTMI038OUT {
     EV_ERROR?: number; // int32
@@ -1518,7 +1526,7 @@ declare namespace API {
     /**
      *
      */
-    row?: RowResponseZTMI039;
+    row?: RowResponseZTMI039[];
   }
   export interface MTZTMI040OUT {
     /**
