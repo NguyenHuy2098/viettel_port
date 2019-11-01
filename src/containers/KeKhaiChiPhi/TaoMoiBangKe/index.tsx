@@ -112,10 +112,6 @@ const TaoMoiBangKe = (): JSX.Element => {
       {
         Header: t('TS'),
         accessor: 'TAX',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisValue = numeral(get(row, 'original.TAX', '0')).format('0,0');
-          return <>{thisValue}</>;
-        },
       },
       {
         Header: t('Thuế GTGT'),
