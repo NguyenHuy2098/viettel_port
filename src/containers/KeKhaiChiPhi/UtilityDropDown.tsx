@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { toString } from 'lodash';
 import ModalThemMoiChiPhi from './ModalThemMoiChiPhi';
 
 interface Props {
@@ -9,7 +8,7 @@ interface Props {
   editTableRow: (item: API.ITEMBK) => void;
   copyTableRow: (item: API.ITEMBK) => void;
   item: API.ITEMBK;
-  index: number;
+  khoanMuc: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -17,7 +16,7 @@ const UtilityDropDown: React.FC<Props> = ({
   editTableRow,
   removeTableRow,
   copyTableRow,
-  index,
+  khoanMuc,
   item,
 }: Props): JSX.Element => {
   const { t } = useTranslation();
@@ -65,7 +64,8 @@ const UtilityDropDown: React.FC<Props> = ({
         type="edit"
         showModal={showModal}
         toggle={toggleModal}
-        index={toString(index)}
+        khoanMuc={khoanMuc}
+        tenKhoanMuc={''}
         submit={editTableRow}
         closeModal={closeEditModal}
         editItem={item}

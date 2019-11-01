@@ -5,13 +5,16 @@ import DatePicker from 'react-datepicker';
 import numeral from 'numeral';
 import moment from 'moment';
 import { get, trim, toString, isEmpty } from 'lodash';
+// import { numberFormat } from 'utils/common';
+
 import { schema } from './ThemMoiChiPhiValidator';
 
 interface Props {
   type: string;
   showModal: boolean;
   toggle: () => void;
-  index: string;
+  khoanMuc: string;
+  tenKhoanMuc: string;
   submit: Function;
   closeModal: () => void;
   editItem?: API.ITEMBK;
@@ -23,7 +26,8 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
   editItem,
   showModal,
   toggle,
-  index,
+  khoanMuc,
+  tenKhoanMuc,
   submit,
   type,
 }: Props): JSX.Element => {
@@ -127,7 +131,7 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
   }
 
   function caculateThueGTGT(tienHangHoa: string, thueSuat: string): string {
-    return numberFormat(toString((stringToNumber(tienHangHoa) * stringToNumber(thueSuat)) / 100));
+    return numeral((stringToNumber(tienHangHoa) * stringToNumber(thueSuat)) / 100).format('0,0');
   }
 
   function caculateSumAmount(tienHangHoa: string, phuPhi: string, thueGTGT: string): string {
@@ -154,14 +158,15 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
       NGUOI_BAN: trim(tenNguoiBan),
       MST: trim(maSoThue),
       DESCR: trim(hangHoa),
-      TEN_KM: trim(index),
-      KHOAN_MUC: trim(index),
+      TEN_KM: trim(tenKhoanMuc),
+      KHOAN_MUC: trim(khoanMuc),
       AMOUNT: tienHangHoa,
       PHU_PHI: phuPhi,
       TAX: toString(stringToNumber(thueSuat)),
       TAX_AMOUNT: toString(stringToNumber(thueGTGT)),
       SUM_AMOUNT: toString(stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT))),
       URL: trim(linkUrl),
+      STATUS_ITEM: '0',
     };
 
     schema

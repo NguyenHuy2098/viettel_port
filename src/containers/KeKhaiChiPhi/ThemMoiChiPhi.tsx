@@ -1,24 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row as TableRow } from 'react-table';
 import { Button } from 'reactstrap';
-import { get, sumBy, toNumber } from 'lodash';
+import { get, head, sumBy, toNumber } from 'lodash';
 import numeral from 'numeral';
 
 import ModalThemMoiChiPhi from './ModalThemMoiChiPhi';
 
 interface Props {
   handleSubmit: Function;
-  index: string;
-  rows: TableRow<API.RowMTZTMI047OUT>[];
+  rows: TableRow<API.LISTMTDETAILRECEIVER>[];
   status: number;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const ThemMoiChiPhi = (props: Props): JSX.Element => {
-  const { handleSubmit, index, rows, status } = props;
+  const { handleSubmit, rows, status } = props;
   const [modal, setModal] = React.useState(false);
   const { t } = useTranslation();
+
+  const { KHOAN_MUC: khoanMuc, TEN_KM: tenKhoanMuc } = useMemo(() => get(head(rows), 'original'), [rows]);
 
   function toggle(): void {
     setModal(!modal);
@@ -32,7 +33,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     <div>
       <div className="sipTableAmountListGroup">
         <span>
-          {index !== 'null' ? index : ''}&nbsp;({t('Tổng')}:{' '}
+          {`${khoanMuc}-${tenKhoanMuc}`}&nbsp;({t('Tổng')}:{' '}
           <span className="text-bold color-primary">
             {numeral(sumBy(rows, row => toNumber(get(row, 'original.SUM_AMOUNT')))).format('0,0')}
           </span>
@@ -49,7 +50,8 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         type="new"
         showModal={modal}
         toggle={toggle}
-        index={index}
+        khoanMuc={khoanMuc}
+        tenKhoanMuc={tenKhoanMuc}
         submit={handleSubmit}
         closeModal={closeModal}
       />

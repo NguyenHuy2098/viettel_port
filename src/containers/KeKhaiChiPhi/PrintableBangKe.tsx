@@ -349,7 +349,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
           columns={columns}
           header={renderHeader}
           data={data}
-          groupKey="TEN_KM"
+          groupKey="KHOAN_MUC"
           renderGroupedRow={renderGroupedRow}
           isPheDuyet={isPheDuyet}
         />

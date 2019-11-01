@@ -6,7 +6,7 @@ import { Cell, Row as TableRow } from 'react-table';
 import { Col, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { goBack, replace } from 'connected-react-router';
-import { delay, get, isEmpty, map, reject } from 'lodash';
+import { delay, get, isEmpty, map, reject, toString } from 'lodash';
 import produce from 'immer';
 import XLSX, { WorkBook } from 'xlsx';
 
@@ -197,7 +197,6 @@ const TaoMoiBangKe = (): JSX.Element => {
   );
 
   function handleSubmit(item: API.LIST): void {
-    debugger;
     const nextState = produce(data, draftState => {
       draftState.unshift({ KHOAN_MUC: item.km_id, TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
     });
@@ -218,8 +217,8 @@ const TaoMoiBangKe = (): JSX.Element => {
     setData(nextState);
   }
 
-  const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
-    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} status={0} />;
+  const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[]): JSX.Element => {
+    return <ThemMoiChiPhi handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} status={0} />;
   };
 
   const renderUtilityDropDown = (row: TableRow<API.RowMTZTMI047OUT>, index: number): JSX.Element => {
@@ -229,7 +228,7 @@ const TaoMoiBangKe = (): JSX.Element => {
         editTableRow={handleEditTableRow}
         copyTableRow={handleCopyTableRow}
         item={row.original}
-        index={index}
+        khoanMuc={toString(index)}
       />
     );
   };
@@ -264,7 +263,7 @@ const TaoMoiBangKe = (): JSX.Element => {
           <DataTable
             columns={columns}
             data={data}
-            groupKey={'TEN_KM'}
+            groupKey={'KHOAN_MUC'}
             renderGroupedRow={renderGroupedRow}
             renderUtilityDropDown={renderUtilityDropDown}
           />

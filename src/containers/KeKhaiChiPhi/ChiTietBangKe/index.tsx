@@ -181,7 +181,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
               editTableRow={handleEditTableRow}
               copyTableRow={handleCopyTableRow}
               item={row.original}
-              index={row.index}
+              khoanMuc={toString(row.index)}
             />
           ) : (
             <></>
@@ -237,8 +237,8 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     setDataOriginal(nextState);
   }
 
-  const renderGroupedRow = (rows: TableRow<API.RowMTZTMI047OUT>[], index: string): JSX.Element => {
-    return <ThemMoiChiPhi index={index} handleSubmit={handleSubmit} rows={rows} status={status} />;
+  const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[]): JSX.Element => {
+    return <ThemMoiChiPhi handleSubmit={handleSubmit} rows={rows} status={status} />;
   };
 
   const handleFilterByStatus = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -293,7 +293,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
             sipTableContainerAmountListNoFix: status === 1 || status === 2,
           })}
         >
-          <DataTable columns={columns} data={data} groupKey={'TEN_KM'} renderGroupedRow={renderGroupedRow} />
+          <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
         </div>
       </div>
     </>

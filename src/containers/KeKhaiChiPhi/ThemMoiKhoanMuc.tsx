@@ -45,7 +45,7 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
   // eslint-disable-next-line max-lines-per-function
   function renderAddNewItem(): JSX.Element {
     return (
-      <div className="p-0 col-12 col-lg-8 col-xl-12 khoan-muc">
+      <div className="p-0 col-12 khoan-muc">
         {list.map(
           (item: API.LIST): JSX.Element => {
             return (
