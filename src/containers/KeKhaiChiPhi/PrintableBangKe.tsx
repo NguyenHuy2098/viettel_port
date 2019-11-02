@@ -9,7 +9,7 @@ import { get, size, sumBy, toNumber } from 'lodash';
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_MT_DETAIL_RECEIVER, select_ZFI007_list } from 'redux/ZFI007/selectors';
-import { formatNumber } from 'utils/common';
+import { numberFormat } from 'utils/common';
 import convertMoneyToString from 'utils/convertMoneyToString';
 
 interface Props extends ButtonProps {
@@ -157,7 +157,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Header: t('STT'),
         accessor: 'LINE_ITEM',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.LINE_ITEM', ''));
+          return get(row, 'original.LINE_ITEM', '');
         },
       },
       {
@@ -188,42 +188,42 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Header: t('Hàng hóa dịch vụ chưa thuế'),
         accessor: 'AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.AMOUNT', ''));
+          return numberFormat(get(row, 'original.AMOUNT'));
         },
       },
       {
         Header: t('Phụ phí'),
         accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.PHU_PHI', ''));
+          return numberFormat(get(row, 'original.PHU_PHI'));
         },
       },
       {
         Header: t('Thuế suất'),
         accessor: 'TAX',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <div className="text-right">{formatNumber(get(row, 'original.TAX', '')) + '%'}</div>;
+          return <div className="text-right">{numberFormat(get(row, 'original.TAX')) + '%'}</div>;
         },
       },
       {
         Header: t('Thuế giá trị gia tăng'),
         accessor: 'TAX_AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.TAX_AMOUNT', ''));
+          return numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
       },
       {
         Header: t('Tổng cộng'),
         accessor: 'SUM_AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.SUM_AMOUNT', ''));
+          return numberFormat(get(row, 'original.SUM_AMOUNT'));
         },
       },
       {
         Header: t('Hàng hóa dịch vụ chưa thuế (1)'),
         accessor: 'AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.AMOUNT_INIT', ''));
+          return numberFormat(get(row, 'original.AMOUNT_INIT'));
         },
         show: isPheDuyet,
       },
@@ -231,7 +231,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Header: t('Phụ phí (1)'),
         accessor: 'PHU_PHI_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.PHU_PHI_INIT', ''));
+          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
         },
         show: isPheDuyet,
       },
@@ -239,7 +239,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Header: t('Thuế giá trị gia tăng (1)'),
         accessor: 'TAX_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.TAX_AMOUNT_INIT', ''));
+          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
         },
         show: isPheDuyet,
       },
@@ -247,7 +247,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Header: t('Tổng cộng(1)'),
         accessor: 'SUM_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return formatNumber(get(row, 'original.SUM_AMOUNT_INIT', ''));
+          return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
         },
         show: isPheDuyet,
       },

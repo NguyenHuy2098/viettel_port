@@ -51,11 +51,12 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
               <React.Fragment key={`group-${index}`}>
                 <tr key={`group-${index}`}>
                   <td colSpan={size(columns)}>
-                    <b>
+                    <strong>
                       {isFunction(renderGroupedRow)
                         ? renderGroupedRow(groupedRows, index)
                         : t('Nhóm') + ' ' + toString(index)}
-                    </b>
+                    </strong>
+                    <strong></strong>
                   </td>
                 </tr>
                 {map(groupedData[index], (row, index) => {
