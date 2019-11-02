@@ -199,6 +199,7 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
     setLinkUrl('');
     setErrors({});
     setIsSubmit(false);
+    setThueGTGT('');
   }
 
   function handleToggle(): void {
