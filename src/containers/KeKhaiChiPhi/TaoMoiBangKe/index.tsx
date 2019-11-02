@@ -194,7 +194,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   const renderFilters = (): JSX.Element => (
     <div className="bg-white p-3 shadow-sm">
       <Row>
-        <Col xs={12} md={3}>
+        <Col xs={12} md={6}>
           <ReactDatePicker
             className="form-control"
             dateFormat="MM/yyyy"
@@ -202,6 +202,9 @@ const TaoMoiBangKe = (): JSX.Element => {
             selected={monthYear}
             showMonthYearPicker
           />
+        </Col>
+        <Col xs={12} md={6} className="text-right">
+          <span>Tổng cộng: {size(items)}</span>
         </Col>
       </Row>
     </div>

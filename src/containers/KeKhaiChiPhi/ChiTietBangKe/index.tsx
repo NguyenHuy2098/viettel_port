@@ -119,6 +119,9 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('TS'),
         accessor: 'TAX',
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
+          return <div>{get(row, 'original.TAX', '')}</div>;
+        },
       },
       {
         Header: t('Thuế GTGT'),
