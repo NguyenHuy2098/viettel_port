@@ -5,8 +5,6 @@ import DatePicker from 'react-datepicker';
 import numeral from 'numeral';
 import moment from 'moment';
 import { get, trim, toString, isEmpty } from 'lodash';
-// import { numberFormat } from 'utils/common';
-
 import { schema } from './ThemMoiChiPhiValidator';
 
 interface Props {

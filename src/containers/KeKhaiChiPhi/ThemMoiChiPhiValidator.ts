@@ -34,5 +34,9 @@ export const schema = yup.object().shape({
   MST: yup
     .string()
     .required('MST không được để trống')
+    .when(['SO_HD', 'KIHIEU_HD'], {
+      is: true,
+      then: yup.string().required(),
+    })
     .max(14, 'MST không được nhập quá 14 kí tự'),
 });
