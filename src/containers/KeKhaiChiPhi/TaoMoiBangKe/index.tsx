@@ -17,8 +17,9 @@ import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
 import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import DataTable from 'components/DataTable/Grouped';
+import { toastError } from 'components/Toast';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
-import { numberFormat, transformXlsxRowToBangKeItem } from 'utils/common';
+import { numberFormat, transformXlsxRowToBangKeItem, validateXlsxBangKe } from 'utils/common';
 import routesMap from 'utils/routesMap';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import UtilityDropDown from '../UtilityDropDown';
@@ -149,8 +150,14 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const handleChangeFile = (workbook: WorkBook): void => {
     const firstSheetName = workbook.SheetNames[0];
-    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName]);
-    setData(map(sheetData, transformXlsxRowToBangKeItem));
+    const workSheet = workbook.Sheets[firstSheetName];
+
+    if (validateXlsxBangKe(workSheet)) {
+      const sheetData = XLSX.utils.sheet_to_json(workSheet);
+      setData(map(sheetData, transformXlsxRowToBangKeItem));
+    } else {
+      toastError(t('File tải lên không đúng format. Vui lòng tải file mẫu.'));
+    }
   };
 
   const handleLuuBangKeSuccess = (data: API.ZFI003Response): void => {

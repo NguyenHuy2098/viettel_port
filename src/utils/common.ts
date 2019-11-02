@@ -1,6 +1,7 @@
 import { find, get, isEmpty, isObject, split, toNumber } from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
+import { WorkSheet } from 'xlsx';
 
 export const cleanAccents = (str: string): string => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
@@ -23,6 +24,25 @@ export const cleanAccents = (str: string): string => {
 
   return str;
 };
+
+export function validateXlsxBangKe(workSheet: WorkSheet): boolean {
+  return (
+    get(workSheet, 'A1.v') === 'Khoản mục chi phí' &&
+    get(workSheet, 'B1.v') === 'Mẫu hóa đơn' &&
+    get(workSheet, 'C1.v') === 'Ký hiệu hóa đơn' &&
+    get(workSheet, 'D1.v') === 'Ngày hóa đơn' &&
+    get(workSheet, 'E1.v') === 'Số hóa đơn' &&
+    get(workSheet, 'F1.v') === 'Tên người bán' &&
+    get(workSheet, 'G1.v') === 'Mã số thuế người bán' &&
+    get(workSheet, 'H1.v') === 'Hàng hóa, dịch vụ' &&
+    get(workSheet, 'I1.v') === 'Hàng hóa, dịch vụ chưa thuế' &&
+    get(workSheet, 'J1.v') === 'Phụ phí' &&
+    get(workSheet, 'K1.v') === 'Thuế suất' &&
+    get(workSheet, 'L1.v') === 'Thuế GTGT' &&
+    get(workSheet, 'M1.v') === 'Tổng cộng' &&
+    get(workSheet, 'N1.v') === 'Link URL'
+  );
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
