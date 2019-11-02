@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
-import { get, map, toNumber, reject, toString, filter, slice, size, join } from 'lodash';
+import { get, map, toNumber, reject, toString, filter, slice, size, join, includes } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
@@ -189,17 +189,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return get(row, 'original.LINE_ITEM') ? (
-            <UtilityDropDown
-              removeTableRow={handleRemoveTableRow}
-              editTableRow={handleEditTableRow}
-              copyTableRow={handleCopyTableRow}
-              item={row.original}
-              khoanMuc={toString(row.index)}
-            />
-          ) : (
-            <></>
-          );
+          return <></>;
         },
         show: status === 0,
       },
@@ -208,7 +198,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     [data, status],
   );
 
-  const handleRemoveTableRow = (item: API.LISTMTDETAILRECEIVER): void => {
+  const handleRemoveTableRow = (item: API.LISTMTDETAILRECEIVER, index: number): void => {
     const tempData = reject(data, ['LINE_ITEM', get(item, 'LINE_ITEM')]);
     setData(tempData);
     setDataOriginal(tempData);
@@ -218,7 +208,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     const tempData = [...data];
     for (let i = 0; i < tempData.length; i++) {
       if (item.LINE_ITEM === tempData[i].LINE_ITEM) {
-        tempData[i] = item;
+        tempData[i] = { ...item };
       }
     }
     setData(tempData);
@@ -231,7 +221,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     setDataOriginal([...tempData]);
   };
 
-  const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
+  const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE && includes), [data]);
 
   function handleSubmitKhoanMuc(item: API.LIST): void {
     const nextState = produce(data, draftState => {
@@ -253,6 +243,18 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
 
   const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[]): JSX.Element => {
     return <ThemMoiChiPhi handleSubmit={handleSubmit} rows={rows} status={status} />;
+  };
+
+  const renderUtilityDropDown = (row: TableRow<API.LISTMTDETAILRECEIVER>, index: number): JSX.Element => {
+    return (
+      <UtilityDropDown
+        removeTableRow={handleRemoveTableRow}
+        editTableRow={handleEditTableRow}
+        copyTableRow={handleCopyTableRow}
+        item={row.original}
+        khoanMuc={toString(index)}
+      />
+    );
   };
 
   const handleFilterByStatus = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -307,7 +309,13 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
             sipTableContainerAmountListNoFix: status === 3 || status === 2,
           })}
         >
-          <DataTable columns={columns} data={data} groupKey={'KHOAN_MUC'} renderGroupedRow={renderGroupedRow} />
+          <DataTable
+            columns={columns}
+            data={data}
+            groupKey={'KHOAN_MUC'}
+            renderGroupedRow={renderGroupedRow}
+            renderUtilityDropDown={renderUtilityDropDown}
+          />
         </div>
       </div>
     </>

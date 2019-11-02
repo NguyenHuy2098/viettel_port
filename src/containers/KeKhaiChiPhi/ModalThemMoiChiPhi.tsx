@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { useEffect } from 'react';
 import { Col, Form, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,7 @@ import { get, trim, toString, isEmpty } from 'lodash';
 import { schema } from './ThemMoiChiPhiValidator';
 
 interface Props {
-  type: string;
+  type: ModalThemMoiChiPhiType;
   showModal: boolean;
   toggle: () => void;
   khoanMuc: string;
@@ -16,6 +17,10 @@ interface Props {
   submit: Function;
   closeModal: () => void;
   editItem?: API.ITEMBK;
+}
+export enum ModalThemMoiChiPhiType {
+  NEW = 0,
+  EDIT = 1,
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -44,6 +49,7 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
   const [thueGTGT, setThueGTGT] = React.useState<string>('');
   const [linkUrl, setLinkUrl] = React.useState<string>('');
   const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
+  const [errors, setErrors] = React.useState<Record<string, string>>({});
 
   useEffect((): void => {
     if (!isEmpty(editItem)) {
@@ -144,28 +150,49 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
     return numeral(value).value();
   }
 
-  const [errors, setErrors] = React.useState<Record<string, string>>({});
-
+  // eslint-disable-next-line max-lines-per-function
   function handleSubmit(): void {
-    const payload = {
-      MAU_HD: trim(mauHoaDon),
-      KIHIEU_HD: trim(kyHieu),
-      SO_HD: soHoaDon,
-      NGAY_HD: moment(ngay).format('YYYYMMDD'),
-      ITEM_NO: 0,
-      NGUOI_BAN: trim(tenNguoiBan),
-      MST: trim(maSoThue),
-      DESCR: trim(hangHoa),
-      TEN_KM: trim(tenKhoanMuc),
-      KHOAN_MUC: trim(khoanMuc),
-      AMOUNT: toString(stringToNumber(tienHangHoa)),
-      PHU_PHI: toString(stringToNumber(phuPhi)),
-      TAX: `${toString(stringToNumber(thueSuat))}%`,
-      TAX_AMOUNT: toString(stringToNumber(thueGTGT)),
-      SUM_AMOUNT: toString(stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT))),
-      URL: trim(linkUrl),
-      STATUS_ITEM: '0',
-    };
+    const payload =
+      type === ModalThemMoiChiPhiType.NEW
+        ? {
+            MAU_HD: trim(mauHoaDon),
+            KIHIEU_HD: trim(kyHieu),
+            SO_HD: soHoaDon,
+            NGAY_HD: moment(ngay).format('YYYYMMDD'),
+            ITEM_NO: 0,
+            NGUOI_BAN: trim(tenNguoiBan),
+            MST: trim(maSoThue),
+            DESCR: trim(hangHoa),
+            TEN_KM: trim(tenKhoanMuc),
+            KHOAN_MUC: trim(khoanMuc),
+            AMOUNT: toString(stringToNumber(tienHangHoa)),
+            PHU_PHI: toString(stringToNumber(phuPhi)),
+            TAX: `${toString(stringToNumber(thueSuat))}%`,
+            TAX_AMOUNT: toString(stringToNumber(thueGTGT)),
+            SUM_AMOUNT: toString(stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT))),
+            URL: trim(linkUrl),
+            STATUS_ITEM: '0',
+            LINE_ITEM: 'CG',
+          }
+        : {
+            ...editItem,
+            MAU_HD: trim(mauHoaDon),
+            KIHIEU_HD: trim(kyHieu),
+            SO_HD: soHoaDon,
+            NGAY_HD: moment(ngay).format('YYYYMMDD'),
+            ITEM_NO: 0,
+            NGUOI_BAN: trim(tenNguoiBan),
+            MST: trim(maSoThue),
+            DESCR: trim(hangHoa),
+            TEN_KM: trim(tenKhoanMuc),
+            AMOUNT: toString(stringToNumber(tienHangHoa)),
+            PHU_PHI: toString(stringToNumber(phuPhi)),
+            TAX: `${toString(stringToNumber(thueSuat))}%`,
+            TAX_AMOUNT: toString(stringToNumber(thueGTGT)),
+            SUM_AMOUNT: toString(stringToNumber(caculateSumAmount(tienHangHoa, phuPhi, thueGTGT))),
+            URL: trim(linkUrl),
+            STATUS_ITEM: '0',
+          };
 
     schema
       .validate(payload)
@@ -202,7 +229,7 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
 
   function handleToggle(): void {
     toggle();
-    if (type === 'new') reset();
+    if (type === ModalThemMoiChiPhiType.NEW) reset();
   }
 
   // eslint-disable-next-line max-lines-per-function

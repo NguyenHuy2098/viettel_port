@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
+import { toNumber } from 'lodash';
+import moment from 'moment';
+
 import SimpleConfirmModal from 'components/Modal/SimpleConfirmModal';
-import ModalThemMoiChiPhi from './ModalThemMoiChiPhi';
+import ModalThemMoiChiPhi, { ModalThemMoiChiPhiType } from './ModalThemMoiChiPhi';
 
 interface Props {
-  removeTableRow: (item: API.ITEMBK) => void;
-  editTableRow: (item: API.ITEMBK) => void;
-  copyTableRow: (item: API.ITEMBK) => void;
-  item: API.ITEMBK;
+  removeTableRow: (item: API.LISTMTDETAILRECEIVER, index: number) => void;
+  editTableRow: (item: API.LISTMTDETAILRECEIVER) => void;
+  copyTableRow: (item: API.LISTMTDETAILRECEIVER) => void;
+  item: API.LISTMTDETAILRECEIVER;
   khoanMuc: string;
 }
 
@@ -29,7 +32,7 @@ const UtilityDropDown: React.FC<Props> = ({
   }
 
   const handleRemoveTableRow = (): void => {
-    removeTableRow(item);
+    removeTableRow(item, toNumber(khoanMuc));
   };
   const toggleModalThemMoiChiPhi = (): void => {
     setShowModalThemMoiChiPhi(!showModalThemMoiChiPhi);
@@ -38,7 +41,7 @@ const UtilityDropDown: React.FC<Props> = ({
     setShowModalThemMoiChiPhi(true);
   };
   const handleCopyTableRow = (): void => {
-    copyTableRow(item);
+    copyTableRow({ ...item, LINE_ITEM: `CG-${moment().unix()}` });
   };
   const closeEditModal = (): void => {
     setShowModalThemMoiChiPhi(false);
@@ -75,7 +78,7 @@ const UtilityDropDown: React.FC<Props> = ({
         </DropdownMenu>
       </Dropdown>
       <ModalThemMoiChiPhi
-        type="edit"
+        type={ModalThemMoiChiPhiType.EDIT}
         showModal={showModalThemMoiChiPhi}
         toggle={toggleModalThemMoiChiPhi}
         khoanMuc={khoanMuc}

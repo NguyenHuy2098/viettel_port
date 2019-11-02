@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonProps } from 'reactstrap';
 import moment from 'moment';
-import { isFunction, isNil, isDate } from 'lodash';
+import { map, isFunction, isNil, isDate, includes } from 'lodash';
 
 import { action_ZFI003 } from 'redux/ZFI003/actions';
 import { action_ZFI005 } from 'redux/ZFI005/actions';
@@ -67,12 +67,19 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
     );
   };
 
+  const preProcessingItem = (elements: API.ITEMBK[]): API.ITEMBK[] => {
+    return map(elements, el => {
+      return includes(el.LINE_ITEM, 'CG') ? { ...el, LINE_ITEM: '' } : el;
+    });
+  };
+
   const capNhatBangKe = (): void => {
+    const newItems = preProcessingItem(items);
     dispatch(
       action_ZFI005(
         {
           BK_ID: idBangKe,
-          item: items,
+          item: newItems,
         },
         {
           onFailure: handleFailure,

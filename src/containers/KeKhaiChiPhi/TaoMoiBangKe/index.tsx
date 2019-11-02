@@ -34,8 +34,8 @@ const TaoMoiBangKe = (): JSX.Element => {
   const [data, setData] = useState<DataType[]>([]);
   const { t } = useTranslation();
 
-  const handleRemoveTableRow = (item: API.ITEMBK): void => {
-    const tempData = reject(data, ['SO_HD', get(item, 'SO_HD')]);
+  const handleRemoveTableRow = (item: API.ITEMBK, index: number): void => {
+    const tempData = reject(data, ['LINE_ITEM', get(item, 'LINE_ITEM')]);
     setData([...tempData]);
   };
 
@@ -235,7 +235,7 @@ const TaoMoiBangKe = (): JSX.Element => {
     return <ThemMoiChiPhi handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} status={0} />;
   };
 
-  const renderUtilityDropDown = (row: TableRow<API.RowMTZTMI047OUT>, index: number): JSX.Element => {
+  const renderUtilityDropDown = (row: TableRow<API.LISTMTDETAILRECEIVER>, index: number): JSX.Element => {
     return (
       <UtilityDropDown
         removeTableRow={handleRemoveTableRow}

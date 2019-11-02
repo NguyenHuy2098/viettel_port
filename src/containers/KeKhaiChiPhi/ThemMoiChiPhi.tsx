@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { get, head, sumBy, toNumber } from 'lodash';
 import numeral from 'numeral';
 
-import ModalThemMoiChiPhi from './ModalThemMoiChiPhi';
+import ModalThemMoiChiPhi, { ModalThemMoiChiPhiType } from './ModalThemMoiChiPhi';
 
 interface Props {
   handleSubmit: Function;
@@ -47,7 +47,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         )}
       </div>
       <ModalThemMoiChiPhi
-        type="new"
+        type={ModalThemMoiChiPhiType.NEW}
         showModal={modal}
         toggle={toggle}
         khoanMuc={khoanMuc}
