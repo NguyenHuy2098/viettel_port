@@ -285,7 +285,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              value={get(item, 'GROSS_WEIGHT') == '' ? '' : numberFormat(get(item, 'GROSS_WEIGHT', ''))}
+              value={get(item, 'GROSS_WEIGHT') === '' ? '' : numberFormat(get(item, 'GROSS_WEIGHT', ''))}
               onChange={handleChangeTextboxValue('GROSS_WEIGHT', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GROSS_WEIGHT')}</div>
