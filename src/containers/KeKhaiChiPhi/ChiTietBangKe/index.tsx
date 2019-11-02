@@ -246,7 +246,9 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   };
 
   const renderUtilityDropDown = (row: TableRow<API.LISTMTDETAILRECEIVER>, index: number): JSX.Element => {
-    return (
+    return status !== 0 ? (
+      <></>
+    ) : (
       <UtilityDropDown
         removeTableRow={handleRemoveTableRow}
         editTableRow={handleEditTableRow}
