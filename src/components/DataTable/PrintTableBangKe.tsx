@@ -56,7 +56,6 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                         ? renderGroupedRow(groupedRows, index)
                         : t('Nhóm') + ' ' + toString(index)}
                     </strong>
-                    <strong></strong>
                   </td>
                 </tr>
                 {map(groupedData[index], (row, index) => {
