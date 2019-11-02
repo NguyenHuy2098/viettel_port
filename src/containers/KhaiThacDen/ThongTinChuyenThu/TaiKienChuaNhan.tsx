@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo } from 'react';
-import { Col, Input, Label, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { Col, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
@@ -72,16 +72,6 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã tải/kiện'),
         accessor: 'TOR_ID',

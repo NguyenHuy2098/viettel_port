@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
-import { Button, Input, Label, Row } from 'reactstrap';
+import { Button, Input, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
@@ -41,16 +41,6 @@ const FreightOrderReceive: React.FC = (): JSX.Element => {
 
   const columns = useMemo(
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã chuyến thư'),
         accessor: 'TOR_ID',

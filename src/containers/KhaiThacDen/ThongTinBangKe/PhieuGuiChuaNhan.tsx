@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Col, Input, Label, Row } from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Cell } from 'react-table';
@@ -54,16 +54,6 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã bưu gửi'),
         accessor: 'PACKAGE_ID',

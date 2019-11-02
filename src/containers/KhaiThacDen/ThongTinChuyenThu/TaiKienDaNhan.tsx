@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useCallback, useMemo, useState } from 'react';
-import { Input, Label, Row } from 'reactstrap';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, withRouter } from 'react-router-dom';
@@ -61,16 +61,6 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          );
-        },
-      },
-      {
         Header: t('Mã tải/kiện'),
         accessor: 'TOR_ID',
       },
@@ -118,7 +108,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
-  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(event.target.value);
   };
 

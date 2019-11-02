@@ -1,9 +1,9 @@
-import React, { ChangeEvent, useMemo, useState } from 'react';
-import { Row, Input, Label } from 'reactstrap';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
+import { Row } from 'reactstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { ceil, filter, get, includes } from 'lodash';
 import moment from 'moment';
@@ -47,16 +47,6 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" />
-            </Label>
-          );
-        },
-      },
-      {
         Header: t('Mã bưu gửi'),
         accessor: 'PACKAGE_ID',
       },
@@ -95,7 +85,7 @@ const PhieuGuiDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
-  const handleChangeSearchText = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setSearchText(event.target.value);
   };
 

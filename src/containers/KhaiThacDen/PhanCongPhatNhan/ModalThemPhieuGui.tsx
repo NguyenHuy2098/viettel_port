@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Row, Input, Label, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Cell } from 'react-table';
+import { Button, Row, Input, Col, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+
 import DataTable from 'components/DataTable';
 
 interface Props {
@@ -32,18 +33,6 @@ const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
   ];
   const columnsModal = useMemo(
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <>
-              <Label check>
-                <Input type="checkbox" />
-              </Label>
-            </>
-          );
-        },
-      },
       {
         Header: t('Mã bưu gửi'),
         accessor: 'TOR_ID_M',
