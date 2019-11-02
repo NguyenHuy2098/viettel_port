@@ -291,8 +291,10 @@ const PrintableBangKe = (props: Props): JSX.Element => {
   }
 
   const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[], index: string): JSX.Element => {
+    const row = rows.filter(item => get(item, 'original.KHOAN_MUC', '') === index)[0];
+    const ten_km = get(row, 'original.TEN_KM', '');
     if (index === 'null') return <></>;
-    return <div>{index}</div>;
+    return <div>{`${index} - ${ten_km}`}</div>;
   };
 
   return (
