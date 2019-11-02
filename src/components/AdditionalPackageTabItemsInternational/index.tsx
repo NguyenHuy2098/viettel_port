@@ -255,7 +255,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             <Input
               type="text"
               placeholder={t('Nhập giá trị (đ)')}
-              value={numberFormat(get(item, 'GOODS_VALUE', ''))}
+              value={get(item, 'GOODS_VALUE') === '' ? '' : numberFormat(get(item, 'GOODS_VALUE', ''))}
               onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
@@ -270,7 +270,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             <Input
               type="text"
               placeholder={t('Số lượng')}
-              value={numberFormat(get(item, 'QUANTITY_OF_PACKAGE', ''))}
+              value={get(item, 'QUANTITY_OF_PACKAGE') === '' ? '' : numberFormat(get(item, 'QUANTITY_OF_PACKAGE', ''))}
               onChange={handleChangeTextboxValue('QUANTITY_OF_PACKAGE', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'QUANTITY_OF_PACKAGE')}</div>
@@ -285,7 +285,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              value={numberFormat(get(item, 'GROSS_WEIGHT', ''))}
+              value={get(item, 'GROSS_WEIGHT') == '' ? '' : numberFormat(get(item, 'GROSS_WEIGHT', ''))}
               onChange={handleChangeTextboxValue('GROSS_WEIGHT', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GROSS_WEIGHT')}</div>
