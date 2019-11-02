@@ -216,7 +216,7 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const renderSecondControllers = (): JSX.Element => (
     <>
-      <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} />
+      <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} isConfirm={size(data) > 0} />
       <ThemMoiKhoanMuc handleSubmit={handleSubmit} />
     </>
   );
