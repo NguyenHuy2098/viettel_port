@@ -1992,7 +1992,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               defaultChecked
               onChange={handleChangeTextboxValue(setLoaiHangHoa)}
             />{' '}
-            {t('Hàng hóa')}
+            {t('Bưu gửi nhỏ')}
           </Label>
         </Col>
         <Col lg="3" xs="12" className="pr-0">
