@@ -14,10 +14,11 @@ interface Props {
   idBangKe: string;
   status: number;
   items: API.ITEMBK[];
+  deleteData: API.ITEMBK[];
 }
 
 const TopControllers = (props: Props): JSX.Element => {
-  const { idBangKe, items, status } = props;
+  const { idBangKe, items, status, deleteData } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -58,7 +59,7 @@ const TopControllers = (props: Props): JSX.Element => {
         </>
       ) : (
         <>
-          <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={items} />
+          <ButtonLuuBangKe className="ml-2" idBangKe={idBangKe} items={items} deleteItems={deleteData} />
           <ButtonNopBangKe className="ml-2" idBangKe={idBangKe} onSuccess={handleNopBangKeSuccess} />
         </>
       )}

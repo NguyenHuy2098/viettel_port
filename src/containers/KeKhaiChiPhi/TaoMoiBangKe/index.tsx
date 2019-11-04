@@ -6,7 +6,7 @@ import { Cell, Row as TableRow } from 'react-table';
 import { Col, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { goBack, replace } from 'connected-react-router';
-import { delay, get, isEmpty, map, reject, size, slice, join, toString } from 'lodash';
+import { delay, get, isEmpty, map, reject, size, slice, join, toString, includes } from 'lodash';
 import produce from 'immer';
 import moment from 'moment';
 import XLSX, { WorkBook } from 'xlsx';
@@ -33,10 +33,15 @@ interface DataType extends API.ITEMBK {
 const TaoMoiBangKe = (): JSX.Element => {
   const dispatch = useDispatch();
   const [data, setData] = useState<DataType[]>([]);
+  const [deleteData, setDeleteData] = useState<DataType[]>([]);
+
   const { t } = useTranslation();
 
   const handleRemoveTableRow = (item: API.ITEMBK, index: number): void => {
     const tempData = reject(data, ['LINE_ITEM', get(item, 'LINE_ITEM')]);
+    if (!includes(item.LINE_ITEM, 'CG')) {
+      setDeleteData([...deleteData, item]);
+    }
     setData([...tempData]);
   };
 
@@ -182,6 +187,7 @@ const TaoMoiBangKe = (): JSX.Element => {
         disabled={isEmpty(items)}
         items={items}
         onSuccess={handleLuuBangKeSuccess}
+        deleteItems={deleteData}
       />
       <ButtonNopBangKe
         className="ml-2"

@@ -39,6 +39,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   const list = useSelector(select_ZFI007_list);
   const [data, setData] = useState<DataType[]>([]);
   const [dataOriginal, setDataOriginal] = useState<DataType[]>([]);
+  const [deleteData, setDeleteData] = useState<DataType[]>([]);
 
   const status = useMemo(() => toNumber(get(bangKeHeader, 'BK_STATUS', -1)), [bangKeHeader]);
 
@@ -200,6 +201,9 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
 
   const handleRemoveTableRow = (item: API.LISTMTDETAILRECEIVER, index: number): void => {
     const tempData = reject(data, ['LINE_ITEM', get(item, 'LINE_ITEM')]);
+    if (!includes(item.LINE_ITEM, 'CG')) {
+      setDeleteData([...deleteData, item]);
+    }
     setData(tempData);
     setDataOriginal(tempData);
   };
@@ -277,7 +281,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
           </div>
         </Col>
         <Col className="d-flex justify-content-end">
-          <TopControllers idBangKe={idBangKe} items={items} status={status} />
+          <TopControllers idBangKe={idBangKe} items={items} status={status} deleteData={deleteData} />
         </Col>
       </Row>
       <div className="bg-white p-3 shadow-sm mb-4">

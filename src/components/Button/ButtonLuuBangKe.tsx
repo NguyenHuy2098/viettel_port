@@ -3,23 +3,25 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { Button, ButtonProps } from 'reactstrap';
 import moment from 'moment';
-import { map, isFunction, isNil, isDate, includes } from 'lodash';
+import { map, isFunction, isNil, isDate, includes, size } from 'lodash';
 
 import { action_ZFI003 } from 'redux/ZFI003/actions';
 import { action_ZFI005 } from 'redux/ZFI005/actions';
 import { toastError, toastSuccess } from '../Toast';
+import { action_ZFI004 } from '../../redux/ZFI004/actions';
 
 interface Props extends ButtonProps {
   date?: Date;
   idBangKe?: string;
   items: API.ITEMBK[];
+  deleteItems: API.ITEMBK[];
   onFailure?: (error: Error) => void;
   onSuccess?: (data: API.ZFI003Response | API.ZFI005Response) => void;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const ButtonLuuBangKe = (props: Props): JSX.Element => {
-  const { date, idBangKe, items, onFailure, onSuccess, ...rest } = props;
+  const { date, idBangKe, items, deleteItems, onFailure, onSuccess, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [loading, setLoading] = useState<boolean>(false);
@@ -43,6 +45,9 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
   };
 
   const handleCapNhatSuccess = (data: API.ZFI005Response): void => {
+    if (size(deleteItems) > 0) {
+      xoaItemTrongBangKe();
+    }
     toastSuccess(t('Lưu bảng kê thành công. Bạn có thể nộp bảng kê.'));
     if (isFunction(onSuccess)) onSuccess(data);
   };
@@ -86,6 +91,20 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
           onFinish: handleFinish,
           onSuccess: handleCapNhatSuccess,
         },
+        {},
+      ),
+    );
+  };
+
+  const xoaItemTrongBangKe = (): void => {
+    const transformParam = map(deleteItems, item => ({ LINE: item.LINE_ITEM }));
+    dispatch(
+      action_ZFI004(
+        {
+          ITEM: transformParam,
+          BK_ID: idBangKe,
+        },
+        { onFailure: handleFailure },
         {},
       ),
     );
