@@ -16,12 +16,12 @@ export const schema = yup.object().shape({
     .max(250, 'Hàng hóa không được nhập quá 250 ký tự'),
   SO_HD: yup
     .string()
-    .required('Số hóa đơn không được để trống')
+    // .required('Số hóa đơn không được để trống')
     .max(7, 'Số hóa đơn không được nhập quá 7 ký tự'),
   NGAY_HD: yup.string().required('Ngày hợp đồng không được để trống'),
   KIHIEU_HD: yup
     .string()
-    .required('Ký hiệu không được để trống')
+    // .required('Ký hiệu không được để trống')
     .max(7, 'Ký hiệu không được nhập quá 7 ký tự'),
   MAU_HD: yup
     .string()
@@ -33,10 +33,13 @@ export const schema = yup.object().shape({
     .max(120, 'Tên người bán không được nhập quá 120 ký tự'),
   MST: yup
     .string()
-    .required('MST không được để trống')
-    .when(['SO_HD', 'KIHIEU_HD'], {
-      is: true,
-      then: yup.string().required(),
+    .when('SO_HD', {
+      is: val => val !== '',
+      then: yup.string().required('MST không được để trống'),
+    })
+    .when('KIHIEU_HD', {
+      is: val => val !== '',
+      then: yup.string().required('MST không được để trống'),
     })
     .max(14, 'MST không được nhập quá 14 kí tự'),
 });
