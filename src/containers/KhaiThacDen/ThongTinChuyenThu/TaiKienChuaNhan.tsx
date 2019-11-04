@@ -15,7 +15,7 @@ import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import Scan from 'components/Input/Scan';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState, SipFlowType } from 'utils/enums';
+import { SipDataState, SipDataTorType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -103,6 +103,11 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Loại'),
         accessor: 'TOR_TYPE',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
+        },
       },
       {
         Header: t('Quản trị'),
@@ -117,7 +122,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [listTaiKienChuaNhan],
   );
 
   function renderToolbar(): JSX.Element {

@@ -11,7 +11,7 @@ export enum SipDataTorType {
   ZC2 = 'Tải',
   ZC3 = 'Chuyến thư',
   ZBIG = 'Kiện',
-  ZSML = 'Bưu gửi',
+  ZSML = 'Phiếu gửi',
 }
 
 export enum SipDataState {

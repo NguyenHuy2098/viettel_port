@@ -12,7 +12,7 @@ import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState, SipFlowType } from 'utils/enums';
+import { SipDataState, SipDataTorType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
@@ -88,6 +88,11 @@ const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Loại'),
         accessor: 'TOR_TYPE',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
+        },
       },
       {
         Header: t('Quản trị'),

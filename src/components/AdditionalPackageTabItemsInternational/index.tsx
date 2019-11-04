@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { default as NumberFormat } from 'react-number-format';
 
-import { numberFormat } from 'utils/common';
+import { getValueOfNumberFormat, numberFormat } from 'utils/common';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
@@ -255,7 +255,11 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             <Input
               type="text"
               placeholder={t('Nhập giá trị (đ)')}
-              value={get(item, 'GOODS_VALUE') === '' ? '' : numberFormat(get(item, 'GOODS_VALUE', ''))}
+              value={
+                get(item, 'GOODS_VALUE') === ''
+                  ? ''
+                  : numberFormat(getValueOfNumberFormat(get(item, 'GOODS_VALUE', '')))
+              }
               onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
@@ -270,7 +274,11 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             <Input
               type="text"
               placeholder={t('Số lượng')}
-              value={get(item, 'QUANTITY_OF_PACKAGE') === '' ? '' : numberFormat(get(item, 'QUANTITY_OF_PACKAGE', ''))}
+              value={
+                get(item, 'QUANTITY_OF_PACKAGE') === ''
+                  ? ''
+                  : numberFormat(getValueOfNumberFormat(get(item, 'QUANTITY_OF_PACKAGE', '')))
+              }
               onChange={handleChangeTextboxValue('QUANTITY_OF_PACKAGE', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'QUANTITY_OF_PACKAGE')}</div>
@@ -285,7 +293,11 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              value={get(item, 'GROSS_WEIGHT') === '' ? '' : numberFormat(get(item, 'GROSS_WEIGHT', ''))}
+              value={
+                get(item, 'GROSS_WEIGHT') === ''
+                  ? ''
+                  : numberFormat(getValueOfNumberFormat(get(item, 'GROSS_WEIGHT', '')))
+              }
               onChange={handleChangeTextboxValue('GROSS_WEIGHT', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GROSS_WEIGHT')}</div>

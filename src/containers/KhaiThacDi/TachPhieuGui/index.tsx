@@ -462,6 +462,12 @@ const SplitCoupon: React.FC = (): JSX.Element => {
     setSearchkey(event.currentTarget.value);
   }, []);
 
+  const handleKeyPressSearchKeyValue = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.charCode === 13) {
+      dispatchActionAPI_ZTMI031();
+    }
+  };
+
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
@@ -523,7 +529,12 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           <div className="btn-toolbar col-10">
             <div className="sipTitleRightBlockInput col-4 p-0 m-0">
               <i className="fa fa-search" />
-              <Input type="text" placeholder={t('Tìm kiếm phiếu gửi')} onChange={changeSearchKeyValue} />
+              <Input
+                type="text"
+                placeholder={t('Tìm kiếm phiếu gửi')}
+                onChange={changeSearchKeyValue}
+                onKeyPress={handleKeyPressSearchKeyValue}
+              />
             </div>
             <Button className="ml-2" color="primary" onClick={dispatchActionAPI_ZTMI031}>
               {t('Tìm kiếm')}

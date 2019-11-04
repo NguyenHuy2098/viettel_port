@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { default as NumberFormat } from 'react-number-format';
 
-import { numberFormat } from 'utils/common';
+import { getValueOfNumberFormat, numberFormat } from 'utils/common';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
@@ -173,7 +173,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
           <Input
             type="text"
             placeholder={t('Dài (cm)')}
-            value={get(item, 'Length') === '' ? '' : numberFormat(get(item, 'Length', ''))}
+            value={get(item, 'Length') === '' ? '' : numberFormat(getValueOfNumberFormat(get(item, 'Length', '')))}
             onChange={handleChangeTextboxValue('Length', index)}
           />
           <div className="sipInputItemError">{handleErrorMessage(index, 'Length')}</div>
@@ -182,7 +182,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
           <Input
             type="text"
             placeholder={t('Rộng (cm)')}
-            value={get(item, 'Width') === '' ? '' : numberFormat(get(item, 'Width', ''))}
+            value={get(item, 'Width') === '' ? '' : numberFormat(getValueOfNumberFormat(get(item, 'Width', '')))}
             onChange={handleChangeTextboxValue('Width', index)}
           />
           <div className="sipInputItemError">{handleErrorMessage(index, 'Width')}</div>
@@ -191,7 +191,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
           <Input
             type="text"
             placeholder={t('Cao (cm)')}
-            value={get(item, 'Hight') === '' ? '' : numberFormat(get(item, 'Hight', ''))}
+            value={get(item, 'Hight') === '' ? '' : numberFormat(getValueOfNumberFormat(get(item, 'Hight', '')))}
             onChange={handleChangeTextboxValue('Hight', index)}
           />
           <div className="sipInputItemError">{handleErrorMessage(index, 'Hight')}</div>
@@ -300,7 +300,11 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
             <Input
               type="text"
               placeholder={t('Số lượng')}
-              value={get(item, 'QUANTITY_OF_PACKAGE') === '' ? '' : numberFormat(get(item, 'QUANTITY_OF_PACKAGE', ''))}
+              value={
+                get(item, 'QUANTITY_OF_PACKAGE') === ''
+                  ? ''
+                  : numberFormat(getValueOfNumberFormat(get(item, 'QUANTITY_OF_PACKAGE', '')))
+              }
               onChange={handleChangeTextboxValue('QUANTITY_OF_PACKAGE', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'QUANTITY_OF_PACKAGE')}</div>
@@ -316,7 +320,11 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
                 <Input
                   type="text"
                   placeholder={t('Nhập giá trị (đ)')}
-                  value={get(item, 'GOODS_VALUE') === '' ? '' : numberFormat(get(item, 'GOODS_VALUE', ''))}
+                  value={
+                    get(item, 'GOODS_VALUE') === ''
+                      ? ''
+                      : numberFormat(getValueOfNumberFormat(get(item, 'GOODS_VALUE', '')))
+                  }
                   onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
@@ -325,7 +333,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
                 <Input
                   type="text"
                   placeholder={t('Nhập tiền thu hộ (đ)')}
-                  value={get(item, 'COD') === '' ? '' : numberFormat(get(item, 'COD', ''))}
+                  value={get(item, 'COD') === '' ? '' : numberFormat(getValueOfNumberFormat(get(item, 'COD', '')))}
                   onChange={handleChangeTextboxValue('COD', index)}
                 />
                 <div className="sipInputItemError">{handleErrorMessage(index, 'COD')}</div>
@@ -342,7 +350,11 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              value={get(item, 'GROSS_WEIGHT') === '' ? '' : numberFormat(get(item, 'GROSS_WEIGHT', ''))}
+              value={
+                get(item, 'GROSS_WEIGHT') === ''
+                  ? ''
+                  : numberFormat(getValueOfNumberFormat(get(item, 'GROSS_WEIGHT', '')))
+              }
               onChange={handleChangeTextboxValue('GROSS_WEIGHT', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GROSS_WEIGHT')}</div>

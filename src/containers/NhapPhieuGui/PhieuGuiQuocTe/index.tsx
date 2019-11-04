@@ -1609,7 +1609,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập giá trị (đ)')}
-              value={giaTri === '' ? giaTri : numberFormat(giaTri)}
+              value={giaTri === '' ? giaTri : numberFormat(getValueOfNumberFormat(giaTri))}
               onChange={handleChangeTextboxValue(setGiaTri)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
@@ -1624,7 +1624,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Số lượng')}
-              value={soLuong === '' ? soLuong : numberFormat(soLuong)}
+              value={soLuong === '' ? soLuong : numberFormat(getValueOfNumberFormat(soLuong))}
               onChange={handleChangeTextboxValue(setSoLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuong')}</div>
@@ -1639,7 +1639,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập  trọng lượng (g)')}
-              value={trongLuong === '' ? trongLuong : numberFormat(trongLuong)}
+              value={trongLuong === '' ? trongLuong : numberFormat(getValueOfNumberFormat(trongLuong))}
               onChange={handleChangeTextboxValue(setTrongLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
