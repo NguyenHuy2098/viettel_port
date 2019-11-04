@@ -35,7 +35,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
         <span>
           {`${khoanMuc}-${tenKhoanMuc}`}&nbsp;({t('Tổng')}:{' '}
           <span className="text-bold color-primary">
-            {numeral(sumBy(rows, row => toNumber(get(row, 'original.SUM_AMOUNT')))).format('0,0')}
+            {numeral(sumBy(rows, row => toNumber(get(row, 'original.SUM_AMOUNT') || 0))).format('0,0')}
           </span>
           )
         </span>
