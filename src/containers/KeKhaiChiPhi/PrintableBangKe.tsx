@@ -202,7 +202,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
         Header: t('Thuế suất'),
         accessor: 'TAX',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <div className="text-right">{numberFormat(get(row, 'original.TAX')) + '%'}</div>;
+          return <div className="text-right">{get(row, 'original.TAX')}</div>;
         },
       },
       {
@@ -334,7 +334,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
               {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
             </div>
             <div className="col-6 pl-0">
-              {t('Họ và Tên')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+              {t('Họ và tên')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
             </div>
             <div className="col-6 pl-0">
               {t('Chức danh')}: {t('Nhân viên chăm sóc khách hàng')}

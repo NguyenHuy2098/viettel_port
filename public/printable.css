@@ -6,3 +6,32 @@
   display: block;
   page-break-before: always;
 }
+.in-bang-ke td,
+.in-bang-ke th {
+  word-break: normal;
+  padding: 3px 3px;
+  max-width: 120px;
+  font-size: 12px;
+  border: 1px solid #000000 !important;
+}
+.in-bang-ke tr th {
+  border-bottom: none;
+}
+.bang-ke-header tr th:first-child {
+  vertical-align: middle !important;
+}
+.bang-ke-header tr th {
+  vertical-align: top !important;
+}
+.sipTableBangKeFicoTr td:nth-child(8),
+.sipTableBangKeFicoTr td:nth-child(9),
+.sipTableBangKeFicoTr td:nth-child(11),
+.sipTableBangKeFicoTr td:nth-child(12),
+.sipTableBangKeFicoTr td:nth-child(13),
+.sipTableBangKeFicoTr td:nth-child(14),
+.sipTableBangKeFicoTr td:nth-child(15),
+.sipTableBangKeFicoTr td:nth-child(16){
+  text-align: right;
+}
+
+

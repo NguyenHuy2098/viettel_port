@@ -38,3 +38,9 @@
   max-height: 600px;
   overflow-y: scroll;
 }
+.bang-ke-header tr th:first-child {
+  vertical-align: middle !important;
+}
+.bang-ke-header tr th {
+  vertical-align: top !important;
+}
