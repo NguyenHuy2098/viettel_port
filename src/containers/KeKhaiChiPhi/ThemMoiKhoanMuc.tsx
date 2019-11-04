@@ -35,9 +35,9 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
   React.useEffect((): void => {
     const list = data.filter(
       item =>
-        cleanAccents(get(item, 'km_text', '').toLowerCase()).includes(search.toLowerCase()) ||
+        cleanAccents(get(item, 'km_text', '').toLowerCase()).includes(cleanAccents(search).toLowerCase()) ||
         !search ||
-        get(item, 'km_id', '').includes(search.toLowerCase()),
+        get(item, 'km_id', '').includes(cleanAccents(search).toLowerCase()),
     );
     setList(list);
   }, [search, data]);
