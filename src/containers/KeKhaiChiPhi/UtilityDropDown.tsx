@@ -85,7 +85,7 @@ const UtilityDropDown: React.FC<Props> = ({
         tenKhoanMuc={''}
         submit={editTableRow}
         closeModal={closeEditModal}
-        editItem={item}
+        editItem={{ ...item }}
       />
       <SimpleConfirmModal
         isOpen={showModalConfirmDelete}
