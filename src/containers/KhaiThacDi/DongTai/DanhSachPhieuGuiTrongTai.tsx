@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
-import { forEach, get, includes, map, size } from 'lodash';
+import { forEach, get, includes, map, size, isEmpty } from 'lodash';
 import moment from 'moment';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -362,51 +362,57 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     );
   };
 
+  // eslint-disable-next-line max-lines-per-function
   const dongTaiVaoChuyenThuCoSan = (): void => {
-    //Remove các bảng kê không được tích chọn ra khỏi tải hiện tại
-    if (size(listUncheckForwardingItem) > 0) {
-      const a = {
-        IV_FLAG: IV_FLAG.REMOVE,
-        IV_TOR_TYPE: SipDataType.TAI,
-        IV_TOR_ID_CU: idTai,
-        IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''),
-        IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''),
-        IV_DESCRIPTION: '',
-        T_ITEM: forwardingItemListState,
-      };
-      dispatch(
-        action_MIOA_ZTMI016(a, {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE', 'Remove các bảng kê không được tích thành công')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-            // Add tai hien tai vao chuyen thu duoc chon
-            addTaiHienTaiVaoChuyenThuDuocChon();
-            getListBangKePhieuGui();
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        }),
-      );
-    } else {
-      addTaiHienTaiVaoChuyenThuDuocChon();
+    if (!isEmpty(selectedChuyenThu)) {
+      //Remove các bảng kê không được tích chọn ra khỏi tải hiện tại
+      if (size(listUncheckForwardingItem) > 0) {
+        const a = {
+          IV_FLAG: IV_FLAG.REMOVE,
+          IV_TOR_TYPE: SipDataType.TAI,
+          IV_TOR_ID_CU: idTai,
+          IV_SLOCATION: get(dataTai, 'LOG_LOCID_SRC', ''),
+          IV_DLOCATION: get(dataTai, 'LOG_LOCID_DES', ''),
+          IV_DESCRIPTION: '',
+          T_ITEM: forwardingItemListState,
+        };
+        dispatch(
+          action_MIOA_ZTMI016(a, {
+            onSuccess: (data: API.MIOAZTMI016Response): void => {
+              toast(
+                <>
+                  <i className="fa check mr-2" />
+                  {get(
+                    data,
+                    'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE',
+                    'Remove các bảng kê không được tích thành công',
+                  )}
+                </>,
+                {
+                  type: 'success',
+                },
+              );
+              // Add tai hien tai vao chuyen thu duoc chon
+              addTaiHienTaiVaoChuyenThuDuocChon();
+              getListBangKePhieuGui();
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  type: 'error',
+                },
+              );
+            },
+          }),
+        );
+      } else {
+        addTaiHienTaiVaoChuyenThuDuocChon();
+      }
     }
-
     handleHidePopupDongTai();
   };
 

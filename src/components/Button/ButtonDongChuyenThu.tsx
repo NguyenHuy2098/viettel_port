@@ -162,7 +162,9 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
     });
   };
   const dongTaiKienVaoChuyenThuCoSan = (): void => {
-    handleDongChuyenThuById(get(selectedChuyenThu, 'TOR_ID', ''));
+    if (!isEmpty(selectedChuyenThu)) {
+      handleDongChuyenThuById(get(selectedChuyenThu, 'TOR_ID', ''));
+    }
     toggleModal();
   };
   const handleDongChuyenThuById = async (torId: string): Promise<void> => {

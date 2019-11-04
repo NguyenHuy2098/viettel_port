@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { find, get, size } from 'lodash';
+import { find, get, size, isEmpty } from 'lodash';
 
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import { actionDongTaiVaoChuyenThuCoSan, actionDongTaiVaoChuyenThuTaoMoi } from 'redux/common/secondaryActions';
@@ -60,7 +60,7 @@ const ButtonDongTai: React.FC<Props> = ({ disableButtonDongTai, forwardingItemLi
 
   //eslint-disable-next-line max-lines-per-function
   const handleDongTaiVaoChuyenThuCoSan = (): void => {
-    if (size(forwardingItemListState) > 0) {
+    if (size(forwardingItemListState) > 0 && !isEmpty(selectedChuyenThu)) {
       const firstSelectedBangKe = find(listBangKeChuaDongTai, ['TOR_ID', forwardingItemListState[0].ITEM_ID]);
       dispatch(
         actionDongTaiVaoChuyenThuCoSan(
