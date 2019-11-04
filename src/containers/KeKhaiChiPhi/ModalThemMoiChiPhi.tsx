@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import numeral from 'numeral';
 import moment from 'moment';
-import { get, trim, toString, isEmpty } from 'lodash';
+import { get, trim, toString, isEmpty, replace } from 'lodash';
 import { schema } from './ThemMoiChiPhiValidator';
 
 interface Props {
@@ -135,7 +135,7 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
   }
 
   function caculateThueGTGT(tienHangHoa: string, thueSuat: string): string {
-    return numeral((stringToNumber(tienHangHoa) * stringToNumber(thueSuat)) / 100).format('0,0');
+    return numeral((stringToNumber(tienHangHoa) * stringToNumber(replace(thueSuat, '%', ''))) / 100).format('0,0');
   }
 
   function caculateSumAmount(tienHangHoa: string, phuPhi: string, thueGTGT: string): string {
@@ -299,9 +299,9 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
             <FormGroup>
               <Input type="select" value={thueSuat} onChange={handleChangeThueSuat}>
                 <option>Thuế suất</option>
-                <option value="0">0%</option>
-                <option value="5">5%</option>
-                <option value="10">10%</option>
+                <option value="0%">0%</option>
+                <option value="5%">5%</option>
+                <option value="10%">10%</option>
               </Input>
               <span className="color-red">{get(errors, 'TAX', '')}</span>
             </FormGroup>
