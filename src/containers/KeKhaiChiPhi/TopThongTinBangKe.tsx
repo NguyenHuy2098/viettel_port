@@ -71,7 +71,9 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
       <Col xs={12} xl={4}>
         <div className="sipFicoBangKeInformation">
           <div>{t('Tổng giá trị')}:</div>
-          <span className="text-bold">{tongGiaTri} đ</span>
+          <span className="text-bold">
+            {tongGiaTri} {t('VND')}
+          </span>
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Ngày tạo')}:</div>

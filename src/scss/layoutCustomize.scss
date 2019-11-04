@@ -461,7 +461,7 @@ input.form-control:-moz-placeholder {
       &:first-child {
         width: 120px;
       }
-      &:nth-child(5) {
+      &:nth-child(5), &:nth-child(9), &:nth-child(12) {
         width: 150px;
       }
       &:nth-child(8), &:nth-child(14) {

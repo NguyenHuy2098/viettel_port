@@ -50,7 +50,7 @@
     "react-i18next": "^11.0.1",
     "react-loadable": "^5.5.0",
     "react-number-format": "^4.3.1",
-    "react-paginate": "^6.3.0",
+    "react-paginate": "^6.3.2",
     "react-redux": "^7.1.1",
     "react-router-config": "^5.1.1",
     "react-router-dom": "^5.1.2",
@@ -61,7 +61,7 @@
     "redux": "^4.0.4",
     "redux-oidc": "^3.1.5",
     "redux-saga": "^1.1.1",
-    "redux-starter-kit": "^1.0.0",
+    "redux-starter-kit": "^1.0.1",
     "redux-unfold-saga": "^1.5.1",
     "simple-line-icons": "^2.4.1",
     "typescript": "^3.6.4",
@@ -107,7 +107,7 @@
     "lint-staged": "^9.4.2",
     "prettier": "^1.18.2",
     "react-scripts": "^3.2.0",
-    "semantic-release": "^15.13.29",
+    "semantic-release": "^15.13.30",
     "standard-changelog": "^2.0.15"
   },
   "scripts": {

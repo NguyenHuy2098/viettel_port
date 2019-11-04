@@ -104,14 +104,14 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Giá chưa thuế'),
+        Header: t('Giá chưa thuế (VND)'),
         accessor: 'AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.AMOUNT'));
         },
       },
       {
-        Header: t('Phụ phí'),
+        Header: t('Phụ phí (VND)'),
         accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.PHU_PHI'));
@@ -125,21 +125,21 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         },
       },
       {
-        Header: t('Thuế GTGT'),
+        Header: t('Thuế GTGT (VND)'),
         accessor: 'TAX_AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
       },
       {
-        Header: t('Tổng'),
+        Header: t('Tổng (VND)'),
         accessor: 'SUM_AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.SUM_AMOUNT'));
         },
       },
       {
-        Header: t('Giá trị HH, DV duyệt'),
+        Header: t('Giá trị HH, DV duyệt (VND)'),
         accessor: 'AMOUNT_INIT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.AMOUNT_INIT'));
@@ -147,7 +147,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         show: status === 3 || status === 2,
       },
       {
-        Header: t('Phụ phí duyệt'),
+        Header: t('Phụ phí duyệt (VND)'),
         accessor: 'PHU_PHI_INIT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.PHU_PHI_INIT'));
@@ -163,7 +163,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         show: status === 3 || status === 2,
       },
       {
-        Header: t('Tổng cộng duyệt'),
+        Header: t('Tổng cộng duyệt (VND)'),
         accessor: 'SUM_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));

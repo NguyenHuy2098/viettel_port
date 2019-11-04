@@ -137,7 +137,9 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             <tr key={index}>
               {showCheckboxes && renderCheckAll()}
               {headerGroup.headers.map((column, index) => (
-                <th key={index}>{column.render('Header')}</th>
+                <th key={index} {...column.getHeaderProps()}>
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
           ))}
@@ -146,11 +148,11 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
           {rows.map((row, index) => {
             return (
               prepareRow(row) || (
-                <tr className="cursor-pointer" key={index}>
+                <tr className="cursor-pointer" key={index} {...row.getRowProps()}>
                   {showCheckboxes && renderCheckRow(row)}
                   {row.cells.map((cell, index) => {
                     return (
-                      <td className="min-width-90px" key={index} onClick={handleClickRow(get(row, 'original'), row)}>
+                      <td key={index} onClick={handleClickRow(get(row, 'original'), row)} {...cell.getCellProps()}>
                         {cell.value !== null ? cell.render('Cell') : ''}
                       </td>
                     );

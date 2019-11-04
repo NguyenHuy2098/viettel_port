@@ -43,13 +43,17 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <Table striped hover {...getTableProps()}>
         <thead>
-          {map(headerGroups, (headerGroup, index) => (
-            <tr key={index}>
-              {map(headerGroup.headers, (column, index) => (
-                <th key={index}>{column.render('Header')}</th>
-              ))}
-            </tr>
-          ))}
+          {map(headerGroups, (headerGroup, index) => {
+            return (
+              <tr key={`header-group-${index}`}>
+                {map(headerGroup.headers, (column, index) => (
+                  <th key={index} {...column.getHeaderProps()}>
+                    {column.render('Header')}
+                  </th>
+                ))}
+              </tr>
+            );
+          })}
         </thead>
         <tbody>
           {map(groupedData, (groupedRows, index) => (
@@ -69,13 +73,13 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                 }
                 return (
                   prepareRow(row) || (
-                    <tr key={`row-${index}`}>
+                    <tr {...row.getRowProps()}>
                       {map(row.cells, (cell, index) => {
                         if (index + 1 === size(row.cells) && isFunction(renderUtilityDropDown)) {
-                          return <td key={`controllers-${index}`}>{renderUtilityDropDown(row, index)}</td>;
+                          return <td {...cell.getCellProps()}>{renderUtilityDropDown(row, index)}</td>;
                         }
                         return (
-                          <td className="min-width-90px" key={index} onClick={handleClickRow(row.original)}>
+                          <td onClick={handleClickRow(row.original)} {...cell.getCellProps()}>
                             {cell.value !== null ? cell.render('Cell') : ''}
                           </td>
                         );

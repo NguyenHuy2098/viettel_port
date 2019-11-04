@@ -20,6 +20,10 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
   const { KHOAN_MUC: khoanMuc, TEN_KM: tenKhoanMuc } = useMemo(() => get(head(rows), 'original'), [rows]);
+  const tongGiaTri = useMemo(
+    () => numeral(sumBy(rows, row => toNumber(get(row, 'original.SUM_AMOUNT') || 0))).format('0,0'),
+    [rows],
+  );
 
   function toggle(): void {
     setModal(!modal);
@@ -34,10 +38,7 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       <div className="sipTableAmountListGroup">
         <span>
           {`${khoanMuc}-${tenKhoanMuc}`}&nbsp;({t('Tổng')}:{' '}
-          <span className="text-bold color-primary">
-            {numeral(sumBy(rows, row => toNumber(get(row, 'original.SUM_AMOUNT') || 0))).format('0,0')}
-          </span>
-          )
+          <span className="text-bold color-primary">{tongGiaTri}</span> <span>{t('VND')}</span>)
         </span>
         {status === 0 && (
           <Button color="primary" outline onClick={toggle}>

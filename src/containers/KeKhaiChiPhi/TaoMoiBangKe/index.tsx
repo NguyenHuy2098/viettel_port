@@ -105,14 +105,14 @@ const TaoMoiBangKe = (): JSX.Element => {
         },
       },
       {
-        Header: t('Giá chưa thuế'),
+        Header: t('Giá chưa thuế (VND)'),
         accessor: 'AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.AMOUNT'));
         },
       },
       {
-        Header: t('Phụ phí'),
+        Header: t('Phụ phí (VND)'),
         accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.PHU_PHI'));
@@ -123,14 +123,14 @@ const TaoMoiBangKe = (): JSX.Element => {
         accessor: 'TAX',
       },
       {
-        Header: t('Thuế GTGT'),
+        Header: t('Thuế GTGT (VND)'),
         accessor: 'TAX_AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
       },
       {
-        Header: t('Tổng'),
+        Header: t('Tổng (VND)'),
         accessor: 'SUM_AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
           return numberFormat(get(row, 'original.SUM_AMOUNT'));
