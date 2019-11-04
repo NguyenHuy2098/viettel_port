@@ -43,8 +43,8 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
-  const listTaiCoSan = useSelector(
-    (state: AppStateType) => get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', []),
+  const listChuyenThuCoSan = useSelector(
+    (state: AppStateType) => get(state, 'MIOA_ZTMI047.ZC3.101.MT_ZTMI047_OUT.Row', []),
     shallowEqual,
   );
 
@@ -75,6 +75,38 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleAddTaiKienVaoChuyenThuVuaTao = (maChuyenThuVuaTao: string, locNo: string): void => {
+    dispatch(
+      action_MIOA_ZTMI016(
+        {
+          IV_FLAG: IV_FLAG.SUA,
+          IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+          IV_TOR_ID_CU: maChuyenThuVuaTao,
+          IV_SLOCATION: userMaBp,
+          IV_DLOCATION: locNo,
+          IV_DESCRIPTION: '',
+          T_ITEM: listTaiKienCanGan,
+        },
+        {
+          onSuccess: (): void => {
+            handleDongChuyenThuById(toString(maChuyenThuVuaTao));
+          },
+          onFailure: (error: Error): void => {
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          },
+        },
+      ),
+    );
+  };
+
   const dongTaiKienVaoChuyenThuTaoMoi = (locNo: string, description: string): void => {
     dispatch(
       action_MIOA_ZTMI016(
@@ -95,7 +127,8 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
             const maChuyenThuVuaTao = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-            handleDongChuyenThuById(toString(maChuyenThuVuaTao));
+            //add tai, kien vua chon vao chuyen thu vua tao
+            handleAddTaiKienVaoChuyenThuVuaTao(maChuyenThuVuaTao, locNo);
           },
           onFailure: (error: Error): void => {
             toast(
@@ -172,6 +205,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
     setProcessing(true);
     try {
       await removeTaiKien();
+      // await ganTaiVaoChuyenThu(torId);
       await dongChuyenThu(torId);
       // issue: đóng CT xong gọi lại api047 listTải chưa lên ngay, phải delay lại 1s thì lên
       setTimeout(function() {
@@ -209,16 +243,6 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
           </>
         )}
       </Button>
-      {/*<SelectForwardingItemModal*/}
-      {/*  onSuccessSelected={handleDongChuyenThuById}*/}
-      {/*  visible={showModal}*/}
-      {/*  onHide={toggleModal}*/}
-      {/*  modalTitle={t('Chọn chuyến thư')}*/}
-      {/*  forwardingItemList={listTaiKienCanGan || []}*/}
-      {/*  IV_TOR_TYPE={SipDataType.CHUYEN_THU}*/}
-      {/*  IV_TO_LOC_ID={diemDen}*/}
-      {/*  IV_CUST_STATUS={SipDataState.TAO_MOI}*/}
-      {/*/>*/}
       <ModalTwoTab
         onHide={toggleModal}
         visible={showModal}
@@ -227,7 +251,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
         secondTabTitle={t('Tạo mới chuyến thư')}
         onSubmitButton1={dongTaiKienVaoChuyenThuCoSan}
         onSubmitButton2={dongTaiKienVaoChuyenThuTaoMoi}
-        tab1Contents={listTaiCoSan}
+        tab1Contents={listChuyenThuCoSan}
         onChooseItemInFirstTab={saveSelectedChuyenThu}
         selectedChildInTab1={selectedChuyenThu}
       />
