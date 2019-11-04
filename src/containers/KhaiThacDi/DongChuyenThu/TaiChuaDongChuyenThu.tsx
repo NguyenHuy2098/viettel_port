@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import produce from 'immer';
-import { concat, find, get, includes, map, pull } from 'lodash';
+import { find, get, map } from 'lodash';
 import moment from 'moment';
 
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
@@ -16,13 +15,13 @@ import DataTable from 'components/DataTable';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Pagination from 'components/Pagination';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
+import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import Search from 'components/Input/Search';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
-import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
 interface Props {
   getListTaiChuaDongChuyenThu: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
@@ -125,14 +124,8 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     [listTaiChuaDongChuyenThu],
   );
 
-  const handleSelectKien = (event: React.MouseEvent<HTMLInputElement>): void => {
-    event.stopPropagation();
-    const selectedKienId = event.currentTarget.value;
-    if (includes(selectedTaiIds, selectedKienId)) {
-      setSelectedTaiIds(produce(selectedTaiIds, draftState => pull(draftState, selectedKienId)));
-    } else {
-      setSelectedTaiIds(produce(selectedTaiIds, draftState => concat(draftState, selectedKienId)));
-    }
+  const handleSelectTai = (selectedIds: string[]): void => {
+    setSelectedTaiIds(selectedIds);
   };
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
@@ -170,22 +163,6 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const columns = useMemo(
     //eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          const torId = get(row, 'original.TOR_ID', '');
-          return (
-            <Label check>
-              <Input
-                defaultChecked={includes(selectedTaiIds, torId)}
-                onClick={handleSelectKien}
-                type="checkbox"
-                value={torId}
-              />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã tải'),
         accessor: 'TOR_ID',
@@ -279,7 +256,14 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={listTaiChuaDongChuyenThu} onRowClick={handleRedirectDetail} />
+        <DataTable
+          columns={columns}
+          data={listTaiChuaDongChuyenThu}
+          onCheckedValuesChange={handleSelectTai}
+          onRowClick={handleRedirectDetail}
+          showCheckboxes
+          renderCheckboxValues="TOR_ID"
+        />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

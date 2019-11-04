@@ -1,14 +1,14 @@
 import React, { useMemo, useState } from 'react';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
-import produce from 'immer';
-import { concat, find, get, includes, map, pull } from 'lodash';
+import { find, get, map } from 'lodash';
 import moment from 'moment';
+
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import DataTable from 'components/DataTable';
@@ -61,14 +61,8 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     };
   };
 
-  const handleSelectKien = (event: React.MouseEvent<HTMLInputElement>): void => {
-    event.stopPropagation();
-    const selectedKienId = event.currentTarget.value;
-    if (includes(selectedKienIds, selectedKienId)) {
-      setSelectedKienIds(produce(selectedKienIds, draftState => pull(draftState, selectedKienId)));
-    } else {
-      setSelectedKienIds(produce(selectedKienIds, draftState => concat(draftState, selectedKienId)));
-    }
+  const handleSelectKien = (selectedIds: string[]): void => {
+    setSelectedKienIds(selectedIds);
   };
 
   const handleSuccessChuyenThuAction = (): void => {
@@ -104,22 +98,6 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          const freightUnit = get(row, 'original.FREIGHT_UNIT', '');
-          return (
-            <Label check>
-              <Input
-                defaultChecked={includes(selectedKienIds, freightUnit)}
-                onClick={handleSelectKien}
-                type="checkbox"
-                value={freightUnit}
-              />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã kiện'),
         accessor: 'PACKAGE_ID',
@@ -195,7 +173,13 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={listKienChuaDongChuyenThu} />
+        <DataTable
+          columns={columns}
+          data={listKienChuaDongChuyenThu}
+          onCheckedValuesChange={handleSelectKien}
+          showCheckboxes
+          renderCheckboxValues="PACKAGE_ID"
+        />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
