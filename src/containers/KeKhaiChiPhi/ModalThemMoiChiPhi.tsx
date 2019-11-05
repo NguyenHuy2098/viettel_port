@@ -64,10 +64,10 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
       setNgay(ngay);
       setSoHoaDon(get(editItem, 'SO_HD', ''));
       setHangHoa(get(editItem, 'DESCR', ''));
-      setTienHangHoa(get(editItem, 'AMOUNT', ''));
-      setPhuPhi(get(editItem, 'PHU_PHI', ''));
+      setTienHangHoa(numberFormat(get(editItem, 'AMOUNT', '')));
+      setPhuPhi(numberFormat(get(editItem, 'PHU_PHI', '')));
       setThueSuat(get(editItem, 'TAX', ''));
-      setThueGTGT(get(editItem, 'TAX_AMOUNT', ''));
+      setThueGTGT(numberFormat(get(editItem, 'TAX_AMOUNT', '')));
       setLinkUrl(get(editItem, 'URL', ''));
     }
   }, [editItem]);
