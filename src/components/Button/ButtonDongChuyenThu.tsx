@@ -88,8 +88,22 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
           T_ITEM: listTaiKienCanGan,
         },
         {
-          onSuccess: (): void => {
-            handleDongChuyenThuById(toString(maChuyenThuVuaTao));
+          onSuccess: async (): Promise<void> => {
+            // handleDongChuyenThuById(toString(maChuyenThuVuaTao));
+            try {
+              await dongChuyenThu(toString(maChuyenThuVuaTao));
+              setTimeout(function() {
+                toastSuccess(t('Đóng chuyến thư thành công.'));
+                onSuccess && onSuccess();
+              }, 1000);
+            } catch (error) {
+              if (error) {
+                toastError(join(error.messages, ' '));
+              } else {
+                toastError(t('Lỗi không xác định khi đóng chuyến thư.'));
+              }
+              onFailure && onFailure(error);
+            }
           },
           onFailure: (error: Error): void => {
             toast(
@@ -144,6 +158,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
         },
       ),
     );
+    toggleModal();
   };
 
   const removeTaiKien = (): Promise<API.MIOAZTMI016Response> => {
@@ -200,12 +215,40 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
     }
     toggleModal();
   };
+
+  const addTaiKienVaoChuyenThu = (maChuyenThuDuocChon: string): Promise<API.MIOAZTMI016Response> => {
+    return new Promise((resolve, reject): void => {
+      dispatch(
+        action_MIOA_ZTMI016(
+          {
+            IV_FLAG: IV_FLAG.SUA,
+            IV_TOR_TYPE: SipDataType.CHUYEN_THU,
+            IV_TOR_ID_CU: maChuyenThuDuocChon,
+            IV_SLOCATION: get(selectedChuyenThu, 'LOG_LOCID_FR'),
+            IV_DLOCATION: get(selectedChuyenThu, 'LOG_LOCID_TO'),
+            IV_DESCRIPTION: '',
+            T_ITEM: listTaiKienCanGan,
+          },
+          {
+            onSuccess: (data: API.MIOAZTMI022Response) => {
+              resolve(data);
+            },
+            onFailure: (error: Error) => {
+              reject(error);
+            },
+          },
+        ),
+      );
+    });
+  };
+
   const handleDongChuyenThuById = async (torId: string): Promise<void> => {
     if (!isString(torId) || isEmpty(torId)) return;
     setProcessing(true);
     try {
       await removeTaiKien();
       // await ganTaiVaoChuyenThu(torId);
+      await addTaiKienVaoChuyenThu(torId);
       await dongChuyenThu(torId);
       // issue: đóng CT xong gọi lại api047 listTải chưa lên ngay, phải delay lại 1s thì lên
       setTimeout(function() {

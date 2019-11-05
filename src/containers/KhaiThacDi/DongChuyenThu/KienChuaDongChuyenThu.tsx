@@ -6,7 +6,7 @@ import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
 import { push } from 'connected-react-router';
-import { find, get, map } from 'lodash';
+import { find, get, map, toString } from 'lodash';
 import moment from 'moment';
 
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
@@ -46,6 +46,18 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     return map(selectedKienIds, (id: string): API.TITEM => ({ ITEM_ID: id }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedKienIds]);
+
+  const selectedKienObject = useMemo((): { ITEM_ID: string; ITEM_TYPE: string }[] => {
+    const selectedItems = [];
+    for (let i = 0; i < selectedKienIds.length; i++) {
+      for (let j = 0; j < listKienChuaDongChuyenThu.length; j++) {
+        if (toString(selectedKienIds[i]) === get(listKienChuaDongChuyenThu[j], 'PACKAGE_ID', '0')) {
+          selectedItems.push({ ITEM_ID: get(listKienChuaDongChuyenThu[j], 'FREIGHT_UNIT', ''), ITEM_TYPE: '' });
+        }
+      }
+    }
+    return selectedItems;
+  }, [selectedKienIds, listKienChuaDongChuyenThu]);
 
   const onPaginationChange = ({ selected }: { selected: number }): void => {
     getListKienChuaDongChuyenThu(selected + 1);
@@ -162,7 +174,8 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         <ButtonDongChuyenThu
           className="ml-2"
           diemDen={diemDen}
-          listTaiKienCanGan={selectedKienItems}
+          listTaiKienCanGan={selectedKienObject}
+          selectedKienObject
           onSuccess={handleSuccessChuyenThuAction}
         />
       </Col>
