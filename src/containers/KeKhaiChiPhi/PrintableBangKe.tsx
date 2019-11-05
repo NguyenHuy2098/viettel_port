@@ -4,39 +4,57 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
 import { Row, Col, ButtonProps } from 'reactstrap';
-import { get, size, sumBy, toNumber } from 'lodash';
+import { get, size, sumBy, toNumber, map } from 'lodash';
 
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
-import { action_ZFI007 } from 'redux/ZFI007/actions';
-import { select_ZFI007_MT_DETAIL_RECEIVER, select_ZFI007_list } from 'redux/ZFI007/selectors';
 import { numberFormat } from 'utils/common';
 import convertMoneyToString from 'utils/convertMoneyToString';
+import { action_ZFI007M } from 'redux/ZFI007M/actions';
+import { select_ZFI007M_collection } from 'redux/ZFI007M/selectors';
 
 interface Props extends ButtonProps {
   ids: string[];
 }
 
-// eslint-disable-next-line max-lines-per-function
 const PrintableBangKe = (props: Props): JSX.Element => {
   const { ids } = props;
   const dispatch = useDispatch();
-  const data = useSelector(select_ZFI007_list);
-  const MT_DETAIL_RECEIVER_ZFI007 = useSelector(select_ZFI007_MT_DETAIL_RECEIVER);
-  const { t } = useTranslation();
-
-  const isPheDuyet = React.useMemo(() => {
-    const status = get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_STATUS', -1);
-    return status === 2 || status === 3;
-  }, [MT_DETAIL_RECEIVER_ZFI007]);
-
   useEffect(() => {
     if (!size(ids)) return;
     const payload = {
-      BK_ID: ids[0],
+      BK_INPUT: map(ids, (id: string) => ({ ID: id })),
     };
-    dispatch(action_ZFI007(payload));
+    dispatch(action_ZFI007M(payload));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ids]);
+
+  const lists = useSelector(select_ZFI007M_collection);
+
+  return (
+    <div>
+      {lists.map(
+        (item: API.Collection, index: number): JSX.Element => {
+          return <Item key={index} MT_DETAIL_RECEIVER_ZFI007={item.header} data={item.list} />;
+        },
+      )}
+    </div>
+  );
+};
+
+interface PropsPrintTableBangKe extends ButtonProps {
+  data: API.LISTMTDETAILRECEIVERM[] | undefined;
+  MT_DETAIL_RECEIVER_ZFI007: API.HEADERMTDETAILRECEIVERM | undefined;
+}
+
+// eslint-disable-next-line max-lines-per-function
+const Item = (props: PropsPrintTableBangKe): JSX.Element => {
+  const { data, MT_DETAIL_RECEIVER_ZFI007 } = props;
+  const { t } = useTranslation();
+
+  const isPheDuyet = React.useMemo(() => {
+    const status = get(MT_DETAIL_RECEIVER_ZFI007, 'BK_STATUS', -1);
+    return status === 2 || status === 3;
+  }, [MT_DETAIL_RECEIVER_ZFI007]);
 
   // eslint-disable-next-line max-lines-per-function
   function renderHeader(): JSX.Element {
@@ -297,6 +315,8 @@ const PrintableBangKe = (props: Props): JSX.Element => {
     return <div>{`${index} - ${ten_km}`}</div>;
   };
 
+  if (!data || !MT_DETAIL_RECEIVER_ZFI007) return <div></div>;
+
   return (
     <div className="in-bang-ke">
       <div className="page-break">
@@ -311,7 +331,7 @@ const PrintableBangKe = (props: Props): JSX.Element => {
           </div>
           <div className="col-4"></div>
           <div className="col-4 text-right">
-            {t('Số')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_ID', '')}
+            {t('Số')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'BK_ID', '')}
           </div>
         </div>
         <Row>
@@ -320,8 +340,8 @@ const PrintableBangKe = (props: Props): JSX.Element => {
               <strong>{t('BẢNG KÊ DUYỆT CHỨNG TỪ GỐC THANH TOÁN CHI PHÍ')}</strong>
             </h5>
             <p>
-              {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')} {t('năm')}{' '}
-              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
+              {t('Tháng')} {get(MT_DETAIL_RECEIVER_ZFI007, 'BK_MONTH', '')} {t('năm')}{' '}
+              {get(MT_DETAIL_RECEIVER_ZFI007, 'BK_YEAR', '')}
             </p>
           </Col>
         </Row>
@@ -330,11 +350,10 @@ const PrintableBangKe = (props: Props): JSX.Element => {
             <div className="col-6 pl-0">
               {t('Về việc')}: {t('Thanh toán chi phí theo ngân sách ')}
               {t('T')}
-              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_MONTH', '')}/
-              {get(MT_DETAIL_RECEIVER_ZFI007, 'header.BK_YEAR', '')}
+              {get(MT_DETAIL_RECEIVER_ZFI007, 'BK_MONTH', '')}/{get(MT_DETAIL_RECEIVER_ZFI007, 'BK_YEAR', '')}
             </div>
             <div className="col-6 pl-0">
-              {t('Họ và tên')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'header.CRE_BY', '')}
+              {t('Họ và tên')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'CRE_BY', '')}
             </div>
             <div className="col-6 pl-0">
               {t('Chức danh')}: {t('Nhân viên chăm sóc khách hàng')}

@@ -39,7 +39,6 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data],
   );
-
   // Render the UI for your table
   return (
     <>

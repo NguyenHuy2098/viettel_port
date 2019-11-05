@@ -562,7 +562,7 @@ declare namespace API {
     /**
      * Thông tin mã chuyến thư (Đối với tạo lệnh điều xe thì bỏ trống)
      */
-    T_ITEM?: TITEMRequestZTMI017;
+    IT_ITEM?: TITEMRequestZTMI017;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -1306,7 +1306,9 @@ declare namespace API {
     Version?: number; // int32
   }
   export interface MIOAZTMI067Request {
-    row?: RowRequestZTMI067;
+    IV_DEPART_DATE?: string;
+    IV_SCH_TYPE?: string;
+    IV_LOCATION_ID?: string;
     IV_PAGENO?: string;
     IV_NO_PER_PAGE?: string;
   }
@@ -1445,7 +1447,7 @@ declare namespace API {
     /**
      *
      */
-    RETURN_MESSAGE?: RETURNMESSAGE;
+    RETURN_MESSAGE?: RETURNMESSAGE[];
   }
   export interface MTZTMI022OUT {
     /**
@@ -1566,9 +1568,12 @@ declare namespace API {
   export interface MTZTMI048OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI048OUT[];
+    Paging?: PagingZTMI054[];
   }
   export interface MTZTMI049OUT {
+    Ev_error?: number; // int32
     Row?: RowMTZTMI049OUT[];
+    Paging?: PagingZTMI054[];
   }
   export interface MTZTMI051OUT {
     EV_ERROR?: number; // int32
@@ -2117,11 +2122,6 @@ declare namespace API {
      *
      */
     TOR_ID?: string;
-  }
-  export interface RowRequestZTMI067 {
-    IV_DEPART_DATE?: string;
-    IV_SCH_TYPE?: string;
-    IV_LOCATION_ID?: string;
   }
   export interface RowResponseZTMI018OUT {
     /**
@@ -2907,7 +2907,7 @@ declare namespace API {
   }
   export interface ZFI004Request {
     BK_ID?: string;
-    ITEM?: ITEMDELBK;
+    ITEM?: ITEMDELBK[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -2993,8 +2993,9 @@ declare namespace API {
   }
   export interface ZTMI067OUT {
     EV_ERROR?: number; // int32
-    Row?: RowMTZTMI067OUT[];
-    RETURN_MESSAGE?: RETURNMESSAGE;
+    row?: RowMTZTMI067OUT[];
+    RETURN_MESSAGE?: RETURNMESSAGE[];
+    Paging?: Paging[];
   }
   export interface ZTMI213Request {
     /**
