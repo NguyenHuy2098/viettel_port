@@ -21,7 +21,7 @@ import {
   makeSelector046TotalPage,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { SipDataType } from 'utils/enums';
+import { SipDataTorType, SipDataType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -253,6 +253,11 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
       {
         Header: t('Loại'),
         accessor: 'TOR_TYPE',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
+        },
       },
       {
         Header: t('Quản trị'),

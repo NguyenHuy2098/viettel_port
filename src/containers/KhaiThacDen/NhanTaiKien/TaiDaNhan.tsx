@@ -13,7 +13,7 @@ import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType } from 'utils/enums';
+import { SipDataState, SipDataTorType, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
@@ -94,6 +94,11 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
       {
         Header: t('Loại'),
         accessor: 'TOR_TYPE',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
+        },
       },
       {
         Header: t('Quản trị'),

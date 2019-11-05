@@ -15,7 +15,7 @@ import Pagination from 'components/Pagination';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { SipDataState, SipDataTorType, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -100,6 +100,11 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Loại'),
         accessor: 'TOR_TYPE',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
+          if (value) return value;
+          return '';
+        },
       },
       {
         Header: t('Quản trị'),
