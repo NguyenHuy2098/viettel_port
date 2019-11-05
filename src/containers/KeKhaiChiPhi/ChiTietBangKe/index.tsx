@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
@@ -73,7 +72,6 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Ngày'),
-        accessor: 'NGAY_HD',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
           const thisDate = moment(get(row, 'original.NGAY_HD'), 'YYYYMMDD').format('DD/MM/YYYY');
           return <>{thisDate}</>;
@@ -81,7 +79,6 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Trạng thái'),
-        accessor: 'STATUS_ITEM',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => (
           <BadgeFicoBangKeStatus status={toNumber(get(row, 'original.STATUS_ITEM', -1))} />
         ),
@@ -96,7 +93,6 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Hàng hoá'),
-        accessor: 'DESCR',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
           const thisDescr = get(row, 'original.DESCR', '0');
           const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
@@ -105,74 +101,64 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Giá chưa thuế (VND)'),
-        accessor: 'AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.AMOUNT'));
+          return numberFormat(get(row, 'original.AMOUNT_INIT'));
         },
       },
       {
         Header: t('Phụ phí (VND)'),
-        accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI'));
+          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
         },
       },
       {
         Header: t('TS'),
-        accessor: 'TAX',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
           return <div>{get(row, 'original.TAX', '')}</div>;
         },
       },
       {
         Header: t('Thuế GTGT (VND)'),
-        accessor: 'TAX_AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT'));
+          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
         },
       },
       {
         Header: t('Tổng (VND)'),
-        accessor: 'SUM_AMOUNT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.SUM_AMOUNT'));
+          return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
         },
       },
       {
         Header: t('Giá trị HH, DV duyệt (VND)'),
-        accessor: 'AMOUNT_INIT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.AMOUNT_INIT'));
+          return numberFormat(get(row, 'original.AMOUNT'));
         },
         show: status === 3 || status === 2,
       },
       {
         Header: t('Phụ phí duyệt (VND)'),
-        accessor: 'PHU_PHI_INIT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
+          return numberFormat(get(row, 'original.PHU_PHI'));
         },
         show: status === 3 || status === 2,
       },
       {
         Header: t('Thuế GTGT duyệt'),
-        accessor: 'TAX_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
+          return numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
         show: status === 3 || status === 2,
       },
       {
         Header: t('Tổng cộng duyệt (VND)'),
-        accessor: 'SUM_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
+          return numberFormat(get(row, 'original.SUM_AMOUNT'));
         },
         show: status === 3 || status === 2,
       },
       {
         Header: t('Link URL'),
-        accessor: 'URL',
         Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
           const thisDescr = get(row, 'original.URL', '0');
           const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
@@ -181,7 +167,6 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Lý do'),
-        accessor: 'NOTE',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.NOTE') || '';
         },

@@ -320,7 +320,8 @@ input.form-control:-moz-placeholder {
       box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
       padding: 0 10px;
       height: 32px;
-      img, i {
+      img,
+      i {
         color: #a1a6ab;
         margin: 0;
         font-size: 16px;
@@ -453,7 +454,8 @@ input.form-control:-moz-placeholder {
     //    background-color: #f4f4f4;
     //  }
     //}
-    td, th {
+    td,
+    th {
       padding: 5px;
       word-break: normal;
       height: 55px;
@@ -461,10 +463,13 @@ input.form-control:-moz-placeholder {
       &:first-child {
         width: 120px;
       }
-      &:nth-child(5), &:nth-child(9), &:nth-child(12) {
+      &:nth-child(5),
+      &:nth-child(9),
+      &:nth-child(12) {
         width: 150px;
       }
-      &:nth-child(8), &:nth-child(14) {
+      &:nth-child(8),
+      &:nth-child(14) {
         width: 400px;
         word-break: break-word;
       }
@@ -534,7 +539,8 @@ input.form-control:-moz-placeholder {
 .sipTableContainerAmountListNoFix {
   .table {
     min-width: 2600px;
-    td, th {
+    td,
+    th {
       &:nth-child(15) {
         position: relative;
         width: 120px;
@@ -545,7 +551,13 @@ input.form-control:-moz-placeholder {
           display: none;
         }
       }
-      &:nth-child(14), &:nth-child(16), &:nth-child(17) {
+      &:nth-child(14),
+      &:nth-child(16),
+      &:nth-child(17) {
+        width: 200px;
+      }
+      &:nth-child(15),
+      &:nth-child(16) {
         width: 150px;
       }
       &:nth-child(18) {
@@ -574,7 +586,6 @@ input.form-control:-moz-placeholder {
     border: none;
   }
   .dropdown-menu {
-
   }
   .dropdown-item {
     padding: 8px 10px 8px 35px;
@@ -597,7 +608,14 @@ input.form-control:-moz-placeholder {
 }
 .sipTableBangKeFicoTr {
   td {
-    &:nth-child(8), &:nth-child(9), &:nth-child(11), &:nth-child(12), &:nth-child(13), &:nth-child(14), &:nth-child(15), &:nth-child(16) {
+    &:nth-child(8),
+    &:nth-child(9),
+    &:nth-child(11),
+    &:nth-child(12),
+    &:nth-child(13),
+    &:nth-child(14),
+    &:nth-child(15),
+    &:nth-child(16) {
       text-align: right;
     }
   }
@@ -826,7 +844,7 @@ html:not([dir='rtl']) .sidebar {
     margin: 0;
     width: calc(100% - 32px);
     &.temporaryP {
-      width:  calc(100% - 42px);
+      width: calc(100% - 42px);
     }
     span {
       display: block;
@@ -861,7 +879,8 @@ html:not([dir='rtl']) .sidebar {
         padding: 0 12px 0 32px;
       }
     }
-    input.form-control, select.form-control {
+    input.form-control,
+    select.form-control {
       box-sizing: border-box;
     }
     &.sipFilterColBtn {
@@ -875,7 +894,8 @@ html:not([dir='rtl']) .sidebar {
 }
 .sipFilterColSearch {
   position: relative;
-  & > input.form-control, & > select.form-control {
+  & > input.form-control,
+  & > select.form-control {
     padding: 0 12px 0 32px;
   }
   & > img {
@@ -899,16 +919,16 @@ html:not([dir='rtl']) .sidebar {
   border: none;
 }
 .sipTableBtnStatus0 {
-  background: #02B875 !important;
+  background: #02b875 !important;
 }
 .sipTableBtnStatus1 {
-  background: #F5A623 !important;
+  background: #f5a623 !important;
 }
 .sipTableBtnStatus2 {
-  background: #3D88E1 !important;
+  background: #3d88e1 !important;
 }
 .sipTableBtnStatus3 {
-  background: #ED436C !important;
+  background: #ed436c !important;
 }
 
 /*_______________________________skeleton component_____________________________*/
