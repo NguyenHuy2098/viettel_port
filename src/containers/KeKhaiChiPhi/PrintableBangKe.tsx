@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Cell, Row as TableRow } from 'react-table';
 import { Row, Col, ButtonProps } from 'reactstrap';
 import { get, size, sumBy, toNumber, map } from 'lodash';
+import moment from 'moment';
 
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
 import { numberFormat } from 'utils/common';
@@ -185,6 +186,9 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
       {
         Header: t('Ngày'),
         accessor: 'NGAY_HD',
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
+          return moment(get(row, 'original.NGAY_HD')).format('DD/MM/YYYY');
+        },
       },
       {
         Header: t('Số'),

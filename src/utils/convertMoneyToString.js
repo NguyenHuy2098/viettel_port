@@ -53,8 +53,8 @@ function convertMoneyToString(SoTien) {
   let KetQua = '';
   let tmp = '';
   const ViTri = [];
-  if (SoTien < 0) return 'Số tiền âm !';
-  if (SoTien === 0) return 'Không đồng !';
+  if (SoTien < 0) return 'Số tiền âm.';
+  if (SoTien === 0) return 'Không đồng.';
   if (SoTien > 0) {
     so = SoTien;
   } else {
