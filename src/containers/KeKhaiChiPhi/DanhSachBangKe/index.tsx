@@ -250,7 +250,7 @@ const DanhSachBangKe = (): JSX.Element => {
         </Col>
       </Row>
 
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable
           columns={columns}
           data={dataTable}

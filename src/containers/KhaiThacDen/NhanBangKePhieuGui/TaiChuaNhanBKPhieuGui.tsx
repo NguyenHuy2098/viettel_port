@@ -98,7 +98,7 @@ const TaiChuaNhanBKPhieuGui: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={filteredListTaiChuaNhanBangKePhieuGui} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}

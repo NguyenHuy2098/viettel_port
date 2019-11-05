@@ -330,7 +330,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       {renderTitle()}
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
-      <Row className="sipTableContainer sipTableRowClickable">
+      <Row className="sipTableContainer">
         <DataTable columns={columns} data={dataChuyenThuChildren} />
       </Row>
       <DeleteConfirmModal

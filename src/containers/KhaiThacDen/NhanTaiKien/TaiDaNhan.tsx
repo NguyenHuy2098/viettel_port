@@ -122,7 +122,7 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
   return (
     <>
       <div className="shadow-sm mb-3 bg-white" />
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={listTaiDaNhan || []} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}

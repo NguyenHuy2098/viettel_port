@@ -138,7 +138,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
           </Col>
         </Row>
       </div>
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={listTaiKienChuaNhan || []} onRowClick={handleRedirectDetail} />
         <Pagination
           pageRangeDisplayed={2}

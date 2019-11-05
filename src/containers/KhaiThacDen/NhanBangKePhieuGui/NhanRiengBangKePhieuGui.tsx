@@ -95,7 +95,7 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
   return (
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
-      <Row className="sipTableContainer">
+      <Row className="sipTableContainer sipTableRowClickable">
         <DataTable columns={columns} data={listBangKePhieuGuiDaQuet} onRowClick={handleRedirectDetail} />
       </Row>
     </>
