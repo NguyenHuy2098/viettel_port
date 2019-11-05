@@ -202,6 +202,10 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
         setErrors(errors);
       })
       .then(data => {
+        if (!ngay) {
+          setErrors({ NGAY_HD: 'Ngày hợp đồng không hợp lệ' });
+          return;
+        }
         if (data) {
           submit(data);
           closeModal();

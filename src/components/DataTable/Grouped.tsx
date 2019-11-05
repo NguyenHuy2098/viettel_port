@@ -1,8 +1,9 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { Table } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
-import { groupBy, isEmpty, isFunction, map, noop, size, toString, get } from 'lodash';
+import { groupBy, isEmpty, isFunction, map, noop, size, toString, get, toNumber } from 'lodash';
+import produce from 'immer';
 
 import NoData from './NoData';
 
@@ -38,6 +39,23 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     [data],
   );
 
+  const [dataDisable, setDataDisable] = useState<number[]>([]);
+  const handleClickGroupRow = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (item: any): ((event: React.MouseEvent) => void) => (): void => {
+      const nextState = produce(dataDisable, draftState => {
+        if (size(dataDisable.filter(id => id === item))) {
+          draftState.splice(draftState.findIndex(id => id === item), 1);
+        } else {
+          draftState.push(item);
+        }
+      });
+      setDataDisable(nextState);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [data, dataDisable],
+  );
+
   // Render the UI for your table
   return (
     <>
@@ -56,18 +74,21 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
           })}
         </thead>
         <tbody>
-          {map(groupedData, (groupedRows, index) => (
-            <React.Fragment key={`group-${index}`}>
-              <tr key={`group-${index}`}>
+          {map(groupedData, (groupedRows, indexGroup) => (
+            <React.Fragment key={`group-${indexGroup}`}>
+              <tr key={`group-${indexGroup}`} onClick={handleClickGroupRow(indexGroup)}>
                 <td colSpan={size(columns)}>
                   {isFunction(renderGroupedRow)
-                    ? renderGroupedRow(groupedRows, index)
-                    : toString(index) !== 'null'
-                    ? t('Nhóm') + ' ' + toString(index)
+                    ? renderGroupedRow(groupedRows, indexGroup)
+                    : toString(indexGroup) !== 'null'
+                    ? t('Nhóm') + ' ' + toString(indexGroup)
                     : ''}
                 </td>
               </tr>
-              {map(groupedData[index], (row, index) => {
+              {map(groupedData[indexGroup], (row, index) => {
+                if (size(dataDisable.filter(item => toNumber(item) === toNumber(indexGroup)))) {
+                  return <React.Fragment key={`row-empty-${index}`} />;
+                }
                 if (get(row, 'original.IS_GROUP_DATA_TABLE', false)) {
                   return <React.Fragment key={`row-empty-${index}`} />;
                 }

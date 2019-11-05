@@ -512,6 +512,8 @@ input.form-control:-moz-placeholder {
     }
     .sipTableAmountListGroup {
       height: 32px;
+      font-weight: 700;
+      cursor: pointer;
       & > span {
         position: absolute;
         left: 15px;
