@@ -25,8 +25,9 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     [rows],
   );
 
-  function toggle(): void {
+  function toggle(e: React.MouseEvent): void {
     setModal(!modal);
+    e.stopPropagation();
   }
 
   const closeModal = (): void => {
@@ -50,7 +51,8 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       <ModalThemMoiChiPhi
         type={ModalThemMoiChiPhiType.NEW}
         showModal={modal}
-        toggle={toggle}
+        // eslint-disable-next-line react/jsx-no-bind
+        toggle={(): void => setModal(!modal)}
         khoanMuc={khoanMuc}
         tenKhoanMuc={tenKhoanMuc}
         submit={handleSubmit}
