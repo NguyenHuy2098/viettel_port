@@ -173,11 +173,11 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
         show: status === 3 || status === 2,
       },
       {
-        Header: t('Quản trị'),
+        Header: status === 0 ? t('Quản trị ') : t(' '),
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
           return <></>;
         },
-        show: status === 0,
+        // show: status === 0,
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
