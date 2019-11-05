@@ -4,6 +4,7 @@ import React from 'react';
 import XlsxPopulate from 'xlsx-populate';
 // @ts-ignore
 import { saveAs } from 'file-saver';
+import { Button } from 'reactstrap';
 
 interface Props {
   children: JSX.Element;
@@ -33,7 +34,11 @@ function ExportExcelWithTemplate(props: Props): JSX.Element {
     req.send();
   }
 
-  return <div onClick={handleExport}>{props.children}</div>;
+  return (
+    <Button color="primary" onClick={handleExport} className="ml-2">
+      {props.children}
+    </Button>
+  );
 }
 
 export default ExportExcelWithTemplate;

@@ -39,7 +39,6 @@ const DanhSachBangKe = (): JSX.Element => {
   const [deleteTorId, setDeleteTorId] = useState<string>('');
 
   const noBangKeChecked = useMemo((): boolean => size(checkedBangKe) === 0, [checkedBangKe]);
-
   function toggleDeleteConfirmModal(): void {
     setDeleteConfirmModal(!deleteConfirmModal);
   }

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
 import { Cell, Row as TableRow } from 'react-table';
-import { get, map, toNumber, reject, toString, filter, slice, size, join, includes } from 'lodash';
+import { get, map, toNumber, reject, toString, filter, slice, size, join, includes, isEmpty } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
@@ -51,7 +51,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   }, [dispatch, idBangKe]);
 
   useEffect((): void => {
-    setData(list);
+    setData(filter(data, item => !isEmpty(item)));
     setDataOriginal(list);
   }, [list]);
 
@@ -210,7 +210,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     setDataOriginal([...tempData]);
   };
 
-  const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE && includes), [data]);
+  const items = useMemo(() => data.filter(item => !get(item, 'IS_GROUP_DATA_TABLE')), [data]);
 
   function handleSubmitKhoanMuc(item: API.LIST): void {
     const nextState = produce(data, draftState => {

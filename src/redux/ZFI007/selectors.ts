@@ -1,7 +1,7 @@
 import { AppStateType } from 'redux/store';
 import { get } from 'lodash';
 
-export const select_ZFI007 = (state: AppStateType): ZFI007StateType => {
+export const select_ZFI007 = (state: AppStateType): API.ZFI007Response => {
   return get(state, 'ZFI007.response');
 };
 

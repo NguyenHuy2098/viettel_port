@@ -12,5 +12,9 @@ export const makeSelectorProfile = (state: AppStateType): any => get(makeSelecto
 
 export const makeSelectorMaBP = (state: AppStateType): string => get(makeSelectorProfile(state), 'bp_org_unit');
 
+export const makeSelectorBPRoleId = (state: AppStateType): string => {
+  return get(makeSelectorProfile(state), 'bp_role_id');
+};
+
 export const makeSelectorPreferredUsername = (state: AppStateType): string =>
   get(makeSelectorProfile(state), 'preferred_username');
