@@ -260,7 +260,7 @@ const QuetMa: React.FC = (): JSX.Element => {
         accessor: 'CREATED_ON',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           const date = get(row, 'values.CREATED_ON', '');
-          return <>{moment(date, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}</>;
+          return <>{moment(date, 'YYYYMMDDHHmmss').format('HH:mm - DD/MM/YYYY')}</>;
         },
       },
       {

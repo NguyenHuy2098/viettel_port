@@ -8,6 +8,7 @@ import { Button, Col, Row } from 'reactstrap';
 import { forEach, get, includes, map, noop, size } from 'lodash';
 import moment from 'moment';
 
+import Pagination from 'components/Pagination';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonDongBangKe from 'components/Button/DanhSachPhieuGuiTrongBangKe/ButtonDongBangKe';
 import ButtonDongTai from 'components/Button/DanhSachPhieuGuiTrongBangKe/ButtonDongTai';
@@ -19,7 +20,11 @@ import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
+import {
+  makeSelector046ListChildren,
+  makeSelector046RowFirstChild,
+  makeSelector046TotalPage,
+} from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
@@ -35,6 +40,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
+  const totalPage046 = useSelector(makeSelector046TotalPage);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [checkedBuuGui, setCheckedBuuGui] = useState<API.TITEM[]>([]);
@@ -47,8 +53,20 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     getListPhieuGui();
   };
 
-  const getListPhieuGui = (): void => {
-    dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idBangKe }));
+  const getListPhieuGui = (payload = {}): void => {
+    const payload046 = {
+      IV_TOR_ID: idBangKe,
+      ...payload,
+    };
+    dispatch(action_MIOA_ZTMI046(payload046));
+  };
+
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: idBangKe,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListPhieuGui(payload);
   };
 
   const getListDiemDen = (): void => {
@@ -324,6 +342,12 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           onCheckedValuesChange={handleCheckedBuuGuiChange}
           renderCheckboxValues="TOR_ID"
           showCheckboxes
+        />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage046}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
       <DeleteConfirmModal

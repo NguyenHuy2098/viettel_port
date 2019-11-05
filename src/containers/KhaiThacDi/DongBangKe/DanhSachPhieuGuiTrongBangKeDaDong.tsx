@@ -8,13 +8,18 @@ import { useMemo } from 'react';
 import { Cell } from 'react-table';
 import moment from 'moment';
 
+import Pagination from 'components/Pagination';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
 import FadedNoData from 'components/NoData/FadedNodata';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
-import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
+import {
+  makeSelector046RowFirstChild,
+  makeSelector046ListChildren,
+  makeSelector046TotalPage,
+} from 'redux/MIOA_ZTMI046/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { SipDataType } from 'utils/enums';
 
@@ -30,6 +35,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
+  const totalPage046 = useSelector(makeSelector046TotalPage);
 
   const dataTableOrigin = map(
     dataBangKeChild,
@@ -98,8 +104,20 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     };
   }
 
-  const getListPhieuGui = (): void => {
-    dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idBangKe }));
+  const getListPhieuGui = (payload = {}): void => {
+    const payload046 = {
+      IV_TOR_ID: idBangKe,
+      ...payload,
+    };
+    dispatch(action_MIOA_ZTMI046(payload046));
+  };
+
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: idBangKe,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListPhieuGui(payload);
   };
 
   const handleDeleteForwardingOrder = (torId: string): void => {
@@ -260,6 +278,12 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
       {renderShippingInformationAndScanCode()}
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={dataTable} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage046}
+          onThisPaginationChange={onPaginationChange}
+        />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}

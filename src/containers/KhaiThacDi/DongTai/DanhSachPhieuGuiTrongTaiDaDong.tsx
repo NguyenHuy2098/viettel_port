@@ -7,12 +7,17 @@ import { Button, Col, Fade, Input, Row } from 'reactstrap';
 import { find, get, map, size, toNumber } from 'lodash';
 import moment from 'moment';
 
+import Pagination from 'components/Pagination';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelector046RowFirstChild, makeSelector046ListChildren } from 'redux/MIOA_ZTMI046/selectors';
+import {
+  makeSelector046RowFirstChild,
+  makeSelector046ListChildren,
+  makeSelector046TotalPage,
+} from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataTorType } from 'utils/enums';
 
 interface Props {
@@ -27,6 +32,7 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
   const idTai = get(props, 'match.params.idTai', '');
   const dataTai = useSelector(makeSelector046RowFirstChild);
   const dataTaiChild = useSelector(makeSelector046ListChildren);
+  const totalPage046 = useSelector(makeSelector046TotalPage);
 
   const dataTableOrigin = map(
     dataTaiChild,
@@ -78,14 +84,20 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
     }
   }
 
-  const payload046 = {
-    IV_TOR_ID: idTai,
-    IV_PAGENO: '1',
-    IV_NO_PER_PAGE: '10',
+  const getListPhieuGui = (payload = {}): void => {
+    const payload046 = {
+      IV_TOR_ID: idTai,
+      ...payload,
+    };
+    dispatch(action_MIOA_ZTMI046(payload046));
   };
 
-  const getListPhieuGui = (): void => {
-    dispatch(action_MIOA_ZTMI046(payload046));
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: idTai,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListPhieuGui(payload);
   };
 
   useEffect((): void => {
@@ -232,6 +244,12 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
       {renderShippingInformationAndScanCode()}
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={dataTable} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage046}
+          onThisPaginationChange={onPaginationChange}
+        />
       </Row>
     </>
   ) : (

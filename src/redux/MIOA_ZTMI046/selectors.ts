@@ -1,4 +1,4 @@
-import { filter, get, includes, isArray, isNumber, size } from 'lodash';
+import { filter, get, includes, isArray, isNumber, size, toNumber } from 'lodash';
 
 import { AppStateType } from 'redux/store';
 
@@ -32,6 +32,14 @@ export function makeSelector046ListChildren(state: AppStateType): API.Child[] {
  */
 export function makeSelector046CountChildren(state: AppStateType): number {
   return size(makeSelector046ListChildren(state));
+}
+
+/**
+ * Count total page
+ * @param state
+ */
+export function makeSelector046TotalPage(state: AppStateType): number {
+  return toNumber(get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Paging.EV_TOTAL_PAGE', 1));
 }
 
 /**

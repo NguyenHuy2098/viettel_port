@@ -9,6 +9,7 @@ import produce from 'immer';
 import { ceil, concat, filter, get, includes, isEmpty, map, pull, size } from 'lodash';
 import moment from 'moment';
 
+import Pagination from 'components/Pagination';
 import ButtonChuyenVaoChuyenThu from 'components/Button/ButtonChuyenVaoChuyenThu';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
@@ -16,12 +17,19 @@ import DataTable from 'components/DataTable';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Scan from 'components/Input/Scan';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
+import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+import {
+  makeSelector046ListChildren,
+  makeSelector046RowFirstChild,
+  makeSelector046TotalPage,
+} from 'redux/MIOA_ZTMI046/selectors';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
-import { SipDataType, SipFlowType, SipDataTorType } from 'utils/enums';
+import { SipDataType, SipFlowType, SipDataTorType, IV_FLAG } from 'utils/enums';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
+import { toast } from 'react-toastify';
+import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 
 interface Props {
   match: match;
@@ -34,6 +42,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const idChuyenThu = get(props, 'match.params.idChuyenThu', '');
   const dataChuyenThu = useSelector(makeSelector046RowFirstChild);
   const dataChuyenThuChildren = useSelector(makeSelector046ListChildren);
+  const totalPage046 = useSelector(makeSelector046TotalPage);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [selectedTaiKienIds, setSelectedTaiKienIds] = useState<string[]>([]);
@@ -61,8 +70,20 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu]);
 
-  const getListTaiKien = (): void => {
-    dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idChuyenThu }));
+  const getListTaiKien = (payload = {}): void => {
+    const payload046 = {
+      IV_TOR_ID: idChuyenThu,
+      ...payload,
+    };
+    dispatch(action_MIOA_ZTMI046(payload046));
+  };
+
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: idChuyenThu,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListTaiKien(payload);
   };
 
   const handleSelectTaiKien = (event: React.MouseEvent<HTMLInputElement>): void => {
@@ -87,7 +108,33 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     };
   };
 
-  const handleDeleteForwardingOrder = (): void => {};
+  const handleDeleteForwardingOrder = (torId: string): void => {
+    const payload = {
+      IV_FLAG: IV_FLAG.XOA,
+      IV_TOR_ID_CU: torId,
+      T_ITEM: [
+        {
+          ITEM_ID: '',
+          ITEM_TYPE: '',
+        },
+      ],
+    };
+    dispatch(
+      action_MIOA_ZTMI016(payload, {
+        onSuccess: (): void => {
+          toast(t('Xóa thành công!'), {
+            type: 'info',
+          });
+        },
+        onFailure: (error: HttpRequestErrorType): void => {
+          toast(get(error, 'messages[0]'), {
+            type: 'error',
+          });
+        },
+        onFinish: (): void => getListTaiKien(),
+      }),
+    );
+  };
 
   const handleSuccessDongChuyenThu = (): void => {
     getListTaiKien();
@@ -332,6 +379,12 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       {renderShippingInformationAndScanCode()}
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={dataChuyenThuChildren} />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage046}
+          onThisPaginationChange={onPaginationChange}
+        />
       </Row>
       <DeleteConfirmModal
         visible={deleteConfirmModal}

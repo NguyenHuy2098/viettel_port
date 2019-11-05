@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import { forEach, get, includes, map, size, isEmpty } from 'lodash';
 import moment from 'moment';
 
+import Pagination from 'components/Pagination';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
@@ -21,7 +22,11 @@ import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { makeSelector046ListChildren, makeSelector046RowFirstChild } from 'redux/MIOA_ZTMI046/selectors';
+import {
+  makeSelector046ListChildren,
+  makeSelector046RowFirstChild,
+  makeSelector046TotalPage,
+} from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType, SipDataTorType } from 'utils/enums';
@@ -42,6 +47,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const idTai = get(props, 'match.params.idTai', '');
   const dataTai = useSelector(makeSelector046RowFirstChild);
   const dataTaiChild = useSelector(makeSelector046ListChildren);
+  const totalPage046 = useSelector(makeSelector046TotalPage);
   const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -142,14 +148,20 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     };
   }
 
-  const payload046 = {
-    IV_TOR_ID: idTai,
-    IV_PAGENO: '1',
-    IV_NO_PER_PAGE: '10',
+  const getListBangKePhieuGui = (payload = {}): void => {
+    const payload046 = {
+      IV_TOR_ID: idTai,
+      ...payload,
+    };
+    dispatch(action_MIOA_ZTMI046(payload046));
   };
 
-  const getListBangKePhieuGui = (): void => {
-    dispatch(action_MIOA_ZTMI046(payload046));
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_TOR_ID: idTai,
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    getListBangKePhieuGui(payload);
   };
 
   function onSuccessSelectedForwardingItem(): void {
@@ -657,6 +669,12 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           columns={columns}
           data={dataTable}
           // onRowClick={handleRedirectDetail}
+        />
+        <Pagination
+          pageRangeDisplayed={2}
+          marginPagesDisplayed={2}
+          pageCount={totalPage046}
+          onThisPaginationChange={onPaginationChange}
         />
       </Row>
       <DeleteConfirmModal
