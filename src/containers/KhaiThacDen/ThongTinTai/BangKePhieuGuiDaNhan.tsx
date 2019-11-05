@@ -12,7 +12,8 @@ import DataTable from 'components/DataTable';
 import Filter from 'components/Input/Filter';
 import Pagination from 'components/Pagination';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState, SipDataTorType } from 'utils/enums';
+import { useSipDataType } from 'hooks/useTranslations';
+import { SipDataState } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function
@@ -55,11 +56,8 @@ const BangKePhieuGuiDaNhan: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Loại'),
-        accessor: 'TOR_TYPE',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
-          if (value) return value;
-          return '';
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>{useSipDataType(get(row, 'original.TOR_TYPE'))}</>;
         },
       },
       {

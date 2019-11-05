@@ -13,6 +13,7 @@ import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
 import FadedNoData from 'components/NoData/FadedNodata';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import { useSipDataType } from 'hooks/useTranslations';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import {
@@ -21,7 +22,7 @@ import {
   makeSelector046TotalPage,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { SipDataTorType, SipDataType } from 'utils/enums';
+import { SipDataType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -252,11 +253,8 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
       },
       {
         Header: t('Loại'),
-        accessor: 'TOR_TYPE',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
-          if (value) return value;
-          return '';
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>{useSipDataType(get(row, 'original.TOR_TYPE'))}</>;
         },
       },
       {
@@ -264,7 +262,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
+              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'original.TOR_ID', ''))}>
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>

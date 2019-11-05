@@ -12,13 +12,13 @@ import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
+import { useSipDataType } from 'hooks/useTranslations';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelector046RowFirstChild,
   makeSelector046ListChildren,
   makeSelector046TotalPage,
 } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataTorType } from 'utils/enums';
 
 interface Props {
   match: match;
@@ -220,10 +220,8 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
       },
       {
         Header: t('Loại'),
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
-          if (value) return value;
-          return '';
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>{useSipDataType(get(row, 'original.TOR_TYPE'))}</>;
         },
       },
       {

@@ -10,8 +10,9 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
+import { useSipDataType } from 'hooks/useTranslations';
 import routesMap from 'utils/routesMap';
-import { SipDataTorType, SipFlowType } from 'utils/enums';
+import { SipFlowType } from 'utils/enums';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
@@ -59,11 +60,8 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
       },
       {
         Header: t('Loại'),
-        accessor: 'TOR_TYPE',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
-          if (value) return value;
-          return '';
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>{useSipDataType(get(row, 'original.TOR_TYPE'))}</>;
         },
       },
       {

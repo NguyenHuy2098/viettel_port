@@ -16,6 +16,7 @@ import ButtonDongChuyenThu from 'components/Button/ButtonDongChuyenThu';
 import DataTable from 'components/DataTable';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Scan from 'components/Input/Scan';
+import { useSipDataType } from 'hooks/useTranslations';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import {
@@ -26,7 +27,7 @@ import {
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
-import { SipDataType, SipFlowType, SipDataTorType, IV_FLAG } from 'utils/enums';
+import { SipDataType, SipFlowType, IV_FLAG } from 'utils/enums';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import { toast } from 'react-toastify';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
@@ -348,11 +349,8 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       },
       {
         Header: t('Loại'),
-        // accessor: 'TOR_TYPE',
-        Cell: ({ row }: Cell<API.Child>): string => {
-          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
-          if (value) return value;
-          return '';
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>{useSipDataType(get(row, 'original.TOR_TYPE'))}</>;
         },
       },
       {

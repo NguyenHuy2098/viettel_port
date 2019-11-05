@@ -12,10 +12,11 @@ import ButtonPrintable from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
-import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataTorType, SipDataType } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
+import { useSipDataType } from 'hooks/useTranslations';
+import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
+import { SipDataState, SipDataType } from 'utils/enums';
+import routesMap from 'utils/routesMap';
 
 interface Props {
   getTaiDaNhan: (IV_PAGENO: number) => void;
@@ -94,10 +95,8 @@ const TaiDaNhan: React.FC<Props> = ({ getTaiDaNhan }: Props): JSX.Element => {
       {
         Header: t('Loại'),
         accessor: 'TOR_TYPE',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          const value = get(SipDataTorType, get(row, 'original.TOR_TYPE', ''), '');
-          if (value) return value;
-          return '';
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>{useSipDataType(get(row, 'original.TOR_TYPE'))}</>;
         },
       },
       {
