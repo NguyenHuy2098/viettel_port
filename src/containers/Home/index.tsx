@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-console */
 import React from 'react';
-import { Row, Col, Button } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import ExportExcelWithTemplate from 'components/Button/ExportExcelWithTemplate';
 
 import Chart1 from './chart1';
 import Chart2 from './chart2';
@@ -12,24 +9,9 @@ import Chart2 from './chart2';
 const Home: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
 
-  function handleData(workbook: any): void {
-    workbook
-      .sheet(0)
-      .cell('A1')
-      .value('This was created in the browser!')
-      .style('fontColor', 'ff0000');
-  }
-
   const renderTopDashBoard = (): JSX.Element => {
     return (
       <Row className="topDashBroad mb-4">
-        <ExportExcelWithTemplate
-          handleData={handleData}
-          urlTemplate={`${window.location.origin}/mau.xlsx`}
-          fileName="out.xlsx"
-        >
-          <Button>Export excel</Button>
-        </ExportExcelWithTemplate>
         <Col xs="12" className="col-sm itemCol pt-3">
           <span className="font-lg">
             <img src={'../../assets/img/icon/iconBangKe1.svg'} alt="VTPostek" />
