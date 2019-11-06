@@ -10,7 +10,7 @@ import moment from 'moment';
 import classnames from 'classnames';
 
 import { detailBangkeFicoStateMap, numberFormat } from 'utils/common';
-import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
+import BadgeFicoChiPhiStatus from 'components/Badge/BadgeFicoChiPhiStatus';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
@@ -80,7 +80,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       {
         Header: t('Trạng thái'),
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <BadgeFicoBangKeStatus status={toNumber(get(row, 'original.STATUS_ITEM', -1))} />;
+          return <BadgeFicoChiPhiStatus status={toNumber(get(row, 'original.STATUS_ITEM', -1))} />;
         },
       },
       {
