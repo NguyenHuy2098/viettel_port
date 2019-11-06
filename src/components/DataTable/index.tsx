@@ -105,7 +105,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     <th>
       {showCheckAll && (
         <Label check>
-          <Input type="checkbox" onChange={handleCheckAllRows} />
+          <Input checked={isPageAllChecked} type="checkbox" onChange={handleCheckAllRows} />
         </Label>
       )}
     </th>

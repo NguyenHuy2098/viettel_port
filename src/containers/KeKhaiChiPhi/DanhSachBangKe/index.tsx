@@ -5,7 +5,7 @@ import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { push } from 'connected-react-router';
-import { get, map, size, toString, trim } from 'lodash';
+import { get, map, size, toString, trim, toUpper } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -58,7 +58,7 @@ const DanhSachBangKe = (): JSX.Element => {
         action_ZFI002({
           TU_KY: tuKy,
           DEN_KY: denKy,
-          BK_ID: idSearch.toUpperCase(),
+          BK_ID: toUpper(trim(idSearch)),
           BK_STATUS: typeSearch,
           ...payload,
         }),
@@ -110,7 +110,7 @@ const DanhSachBangKe = (): JSX.Element => {
     setValueFunction: Function,
   ): ((event: React.FormEvent<HTMLInputElement>) => void) => {
     return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(trim(event.currentTarget.value));
+      setValueFunction(event.currentTarget.value);
     };
   };
 
@@ -188,7 +188,7 @@ const DanhSachBangKe = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dataTable],
+    [dataTable, tuKy, denKy, idSearch, typeSearch],
   );
 
   const handleCheckedValuesChange = (values: string[]): void => {
