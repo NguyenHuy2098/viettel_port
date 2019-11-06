@@ -34,6 +34,7 @@ const UtilityDropDown: React.FC<Props> = ({
 
   const handleRemoveTableRow = (): void => {
     removeTableRow(item, toNumber(khoanMuc));
+    setShowModalConfirmDelete(false);
   };
   const toggleModalThemMoiChiPhi = (): void => {
     setShowModalThemMoiChiPhi(!showModalThemMoiChiPhi);

@@ -79,9 +79,9 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
       },
       {
         Header: t('Trạng thái'),
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => (
-          <BadgeFicoBangKeStatus status={toNumber(get(row, 'original.STATUS_ITEM', -1))} />
-        ),
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
+          return <BadgeFicoBangKeStatus status={toNumber(get(row, 'original.STATUS_ITEM', -1))} />;
+        },
       },
       {
         Header: t('Người bán'),
