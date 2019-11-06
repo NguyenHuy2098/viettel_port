@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { toNumber } from 'lodash';
-import moment from 'moment';
+import uuid from 'uuid';
 
 import SimpleConfirmModal from 'components/Modal/SimpleConfirmModal';
+
 import ModalThemMoiChiPhi, { ModalThemMoiChiPhiType } from './ModalThemMoiChiPhi';
 
 interface Props {
@@ -41,7 +42,7 @@ const UtilityDropDown: React.FC<Props> = ({
     setShowModalThemMoiChiPhi(true);
   };
   const handleCopyTableRow = (): void => {
-    copyTableRow({ ...item, LINE_ITEM: `CG-${moment().unix()}` });
+    copyTableRow({ ...item, LINE_ITEM: `CG-${uuid()}` });
   };
   const closeEditModal = (): void => {
     setShowModalThemMoiChiPhi(false);

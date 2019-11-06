@@ -2,6 +2,7 @@ import { find, get, isEmpty, isObject, split, toNumber } from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
 import { WorkSheet } from 'xlsx';
+import uuid from 'uuid';
 
 export const cleanAccents = (str: string): string => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
@@ -53,7 +54,7 @@ export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
     DESCR: get(row, 'Hàng hóa, dịch vụ', ''),
     KHOAN_MUC: get(km, '[0]', ''),
     KIHIEU_HD: get(row, 'Ký hiệu hóa đơn', ''),
-    LINE_ITEM: get(row, '', ''),
+    LINE_ITEM: get(row, '', `CG-${uuid()}`),
     MAU_HD: get(row, 'Mẫu hóa đơn', ''),
     MST: get(row, 'Mã số thuế người bán', ''),
     NGAY_HD: moment(get(row, 'Ngày hóa đơn'), 'DD/MM/YYYY').format('YYYYMMDD'),
