@@ -73,6 +73,7 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
   function handleThemKhoanMuc(): void {
     setThemKhoanMuc(!themKhoanMuc);
     setItemSelect(null);
+    setList(data);
   }
 
   const [itemSelect, setItemSelect] = React.useState<API.LIST | null>(null);
