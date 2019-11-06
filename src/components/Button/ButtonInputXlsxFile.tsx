@@ -3,36 +3,44 @@ import { Button, Input, Label, Modal, ModalBody, ModalFooter, ModalHeader } from
 import { useTranslation } from 'react-i18next';
 import { defaultTo, get, isFunction, isNil } from 'lodash';
 import XLSX, { WorkBook } from 'xlsx';
+import { toastError } from '../Toast';
 
 interface Props {
   children?: React.ReactNode;
   extension: 'xlsx';
   leftIcon?: React.ReactNode;
   onChange?: (data: WorkBook) => void;
-  isConfirm: boolean;
+  shouldConfirm: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const ButtonInputXlsxFile = (props: Props): JSX.Element => {
-  const { children, extension, leftIcon, onChange, isConfirm } = props;
+  const { children, extension, leftIcon, onChange, shouldConfirm } = props;
   const { t } = useTranslation();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     setOverrideConfirmModal(false);
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent<FileReader>): void => {
-      const data = new Uint8Array(get(event, 'target.result'));
-      let workbook;
+    try {
+      const reader = new FileReader();
+      reader.onload = (event: ProgressEvent<FileReader>): void => {
+        const data = new Uint8Array(get(event, 'target.result'));
+        let workbook;
 
-      if (extension === 'xlsx') {
-        workbook = XLSX.read(data, { type: 'array' });
-      }
+        if (extension === 'xlsx') {
+          workbook = XLSX.read(data, { type: 'array' });
+        }
 
-      if (isFunction(onChange) && !isNil(workbook)) {
-        onChange(workbook);
-      }
-    };
-    reader.readAsArrayBuffer(get(event, 'target.files[0]'));
+        if (isFunction(onChange) && !isNil(workbook)) {
+          onChange(workbook);
+        }
+      };
+      reader.readAsArrayBuffer(get(event, 'target.files[0]'));
+    } catch (error) {
+      toastError(error.message);
+    } finally {
+      // Allow continuously upload a same file
+      event.target.value = '';
+    }
   };
 
   const [overrideConfirmModal, setOverrideConfirmModal] = useState<boolean>(false);
@@ -41,8 +49,11 @@ const ButtonInputXlsxFile = (props: Props): JSX.Element => {
     setOverrideConfirmModal(!overrideConfirmModal);
   }
 
-  function handleConfirmOverride(e: FormEvent): void {
-    toggleOverrideConfirmModal();
+  function handleConfirmOverride(event: FormEvent): void {
+    if (shouldConfirm) {
+      event.preventDefault();
+      toggleOverrideConfirmModal();
+    }
   }
 
   return (
@@ -54,17 +65,10 @@ const ButtonInputXlsxFile = (props: Props): JSX.Element => {
         onChange={handleChange}
         type="file"
       />
-      {isConfirm ? (
-        <button className="btn btn-primary ml-2 mb-0 cursor-pointer" onClick={handleConfirmOverride}>
-          {defaultTo(leftIcon, <i className="fa fa-upload mr-2" />)}
-          {defaultTo(children, t('Tải lên'))}
-        </button>
-      ) : (
-        <Label htmlFor="xlsx-input" className="btn btn-primary ml-2 mb-0 cursor-pointer">
-          {defaultTo(leftIcon, <i className="fa fa-upload mr-2" />)}
-          {defaultTo(children, t('Tải lên'))}
-        </Label>
-      )}
+      <Label htmlFor="xlsx-input" className="btn btn-primary ml-2 mb-0 cursor-pointer" onClick={handleConfirmOverride}>
+        {defaultTo(leftIcon, <i className="fa fa-upload mr-2" />)}
+        {defaultTo(children, t('Tải lên'))}
+      </Label>
 
       <Modal isOpen={overrideConfirmModal} className="sipTitleModalCreateNew">
         <ModalHeader toggle={toggleOverrideConfirmModal}>{t('Xác nhận')}</ModalHeader>
@@ -72,7 +76,7 @@ const ButtonInputXlsxFile = (props: Props): JSX.Element => {
           <p>{t('Dữ liệu hiện tại sẽ bị mất, bạn có muốn tiếp tục?')}</p>
         </ModalBody>
         <ModalFooter className="justify-content-end">
-          <Label htmlFor="xlsx-input" className="mb-0 btn btn-primary">
+          <Label htmlFor="xlsx-input" className="mb-0 btn btn-primary" onClick={toggleOverrideConfirmModal}>
             {t('Tải lên')}
           </Label>
           <Button onClick={toggleOverrideConfirmModal}>{t('Hủy')}</Button>
