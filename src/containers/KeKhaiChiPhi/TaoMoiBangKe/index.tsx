@@ -48,7 +48,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   const handleEditTableRow = (item: API.ITEMBK): void => {
     const tempData = [...data];
     for (let i = 0; i < tempData.length; i++) {
-      if (item.SO_HD === tempData[i].SO_HD) {
+      if (item.LINE_ITEM === tempData[i].LINE_ITEM) {
         tempData[i] = item;
       }
     }

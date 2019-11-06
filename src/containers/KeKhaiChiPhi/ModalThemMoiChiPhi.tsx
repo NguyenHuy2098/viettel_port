@@ -143,7 +143,7 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
   }
 
   function numberFormat(value: string): string {
-    return numeral(value.replace(/[^0-9]/g, '')).format('0,0');
+    return numeral(replace(value, /[^0-9]/g, '')).format('0,0');
   }
 
   function stringToNumber(value: string): number {
