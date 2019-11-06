@@ -9,7 +9,7 @@ import produce from 'immer';
 import moment from 'moment';
 import classnames from 'classnames';
 
-import { badgeFicoStateMap, numberFormat } from 'utils/common';
+import { detailBangkeFicoStateMap, numberFormat } from 'utils/common';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
@@ -279,7 +279,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
             <Input type="select" onChange={handleFilterByStatus}>
               <option value="">{t('Tất cả trạng thái')}</option>
               {map(
-                badgeFicoStateMap,
+                detailBangkeFicoStateMap,
                 (item: string, index: number): JSX.Element => (
                   <option key={index} value={toString(index)}>
                     {item}
