@@ -58,7 +58,7 @@ const DanhSachBangKe = (): JSX.Element => {
         action_ZFI002({
           TU_KY: tuKy,
           DEN_KY: denKy,
-          BK_ID: idSearch,
+          BK_ID: idSearch.toUpperCase(),
           BK_STATUS: typeSearch,
           ...payload,
         }),

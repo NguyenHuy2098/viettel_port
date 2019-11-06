@@ -25,7 +25,7 @@ export const schema = yup.object().shape({
     .max(7, 'Ký hiệu không được nhập quá 7 ký tự'),
   MAU_HD: yup
     .string()
-    .required('Mẫu hóa đơn không được để trống')
+    // .required('Mẫu hóa đơn không được để trống')
     .max(11, 'Mẫu hóa đơn không được nhập quá 11 ký tự'),
   NGUOI_BAN: yup
     .string()
