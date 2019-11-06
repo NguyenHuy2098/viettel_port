@@ -4,11 +4,16 @@ import { useTranslation } from 'react-i18next';
 
 interface Props extends ReactPaginateProps {
   onThisPaginationChange?: (selectedItem: { selected: number }) => void;
+  resetCurrentPage?: boolean;
 }
 
 function Pagination(props: Props): JSX.Element {
   const { t } = useTranslation();
   const [pageCurrent, setPageCurrent] = useState<number>(1);
+
+  React.useEffect(() => {
+    setPageCurrent(1);
+  }, [props.resetCurrentPage]);
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
     setPageCurrent(selectedItem.selected + 1);

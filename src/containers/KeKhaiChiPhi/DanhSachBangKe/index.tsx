@@ -68,7 +68,9 @@ const DanhSachBangKe = (): JSX.Element => {
     [tuKy, denKy, idSearch, typeSearch],
   );
 
+  const [resetCurrentPage, setResetCurrentPage] = useState<boolean>(true);
   const handleSearchBangKe = (): void => {
+    setResetCurrentPage(!resetCurrentPage);
     if (size(idSearch) > 0 || size(filterTimeValue) > 0 || size(typeSearch) > 0) {
       getListBangKe();
     }
@@ -266,6 +268,7 @@ const DanhSachBangKe = (): JSX.Element => {
             marginPagesDisplayed={2}
             pageCount={totalPage}
             onThisPaginationChange={onPaginationChange}
+            resetCurrentPage={resetCurrentPage}
           />
         )}
       </Row>
