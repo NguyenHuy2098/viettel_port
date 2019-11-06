@@ -79,21 +79,27 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
   };
 
   const capNhatBangKe = (): void => {
-    const newItems = preProcessingItem(items);
-    dispatch(
-      action_ZFI005(
-        {
-          BK_ID: idBangKe,
-          item: newItems,
-        },
-        {
-          onFailure: handleFailure,
-          onFinish: handleFinish,
-          onSuccess: handleCapNhatSuccess,
-        },
-        {},
-      ),
-    );
+    if (size(items) > 0) {
+      const newItems = preProcessingItem(items);
+      dispatch(
+        action_ZFI005(
+          {
+            BK_ID: idBangKe,
+            item: newItems,
+          },
+          {
+            onFailure: handleFailure,
+            onFinish: handleFinish,
+            onSuccess: handleCapNhatSuccess,
+          },
+          {},
+        ),
+      );
+    } else {
+      if (size(deleteItems) > 0) {
+        xoaItemTrongBangKe();
+      }
+    }
   };
 
   const xoaItemTrongBangKe = (): void => {
