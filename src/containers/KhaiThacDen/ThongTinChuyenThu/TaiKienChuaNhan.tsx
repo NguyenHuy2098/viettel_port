@@ -1,10 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { generatePath } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Cell } from 'react-table';
 import { Col, Row } from 'reactstrap';
-import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
 
@@ -17,7 +15,6 @@ import Scan from 'components/Input/Scan';
 import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState, SipFlowType } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 
 interface Props {
   getThongTinChuyenThu: () => void;
@@ -26,17 +23,9 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { getThongTinChuyenThu } = props;
-  const dispatch = useDispatch();
   const { t } = useTranslation();
   const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
-  const redirectToThongTinTai = useCallback(
-    (item: API.Child) => {
-      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
-  );
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
     <ButtonPrintable
       btnProps={{
@@ -155,7 +144,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={listTaiKienChuaNhan} onRowClick={redirectToThongTinTai} />
+        <DataTable columns={columns} data={listTaiKienChuaNhan} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
