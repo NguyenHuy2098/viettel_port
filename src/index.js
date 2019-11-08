@@ -20,3 +20,14 @@ if (process.env.REACT_APP_ENV === 'production') {
 } else {
   serviceWorker.unregister();
 }
+
+if (process.env.REACT_APP_ENV === 'production') {
+  if (!window.console) window.console = {};
+  const methods = ['log', 'debug', 'warn', 'info'];
+  for (let i = 0; i < methods.length; i++) {
+    // eslint-disable-next-line no-console
+    console[methods[i]] = function() {
+      //
+    };
+  }
+}
