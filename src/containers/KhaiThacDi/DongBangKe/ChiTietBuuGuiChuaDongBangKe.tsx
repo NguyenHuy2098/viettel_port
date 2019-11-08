@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
-import { Badge, Button, Col, Input, Label, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
+import { Badge, Button, Col, Input, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
 import classNames from 'classnames';
-import { forEach, get, isEmpty, size, toString, trim } from 'lodash';
+import { map, get, isEmpty, size, toString, trim } from 'lodash';
 import { Location } from 'history';
 import moment from 'moment';
 
@@ -39,8 +39,6 @@ interface ChildType {
   USER: string;
 }
 
-const forwardingItemList: ForwardingItem[] = [];
-
 // eslint-disable-next-line max-lines-per-function
 function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const { t } = useTranslation();
@@ -48,7 +46,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const [tab, setTab] = useState(0);
   const childs = get(props, 'location.state.child', []);
   const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
-  const [forwardingItemListState, setForwardingItemListState] = useState<ForwardingItem[]>([]);
+  const [checkedBuuGui, setCheckedBuuGui] = useState<string[]>([]);
+
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
@@ -68,7 +67,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
 
   const reset = (): void => {
     setTimeout(() => {
-      setForwardingItemListState([]);
+      // setForwardingItemListState([]);
+      setCheckedBuuGui([]);
       setUncheckAllForwardingItemCheckbox(false);
       setSelectedChuyenThu(undefined);
       setSelectedTai(undefined);
@@ -133,41 +133,13 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
 
   const dataRow = get(data, 'Row', []);
 
-  function handleSelectBangKeItem(event: React.FormEvent<HTMLInputElement>): void {
-    event.stopPropagation();
-    const value = event.currentTarget.value;
-    setUncheckAllForwardingItemCheckbox(undefined);
-    if (event.currentTarget.checked) {
-      forwardingItemList.push({ ITEM_ID: value, ITEM_TYPE: '' });
-    } else {
-      forEach(forwardingItemList, (item: ForwardingItem, index: number): void => {
-        if (get(item, 'ITEM_ID') === value) {
-          forwardingItemList.splice(index, 1);
-        }
-      });
-    }
-    setForwardingItemListState([...forwardingItemList]);
+  function handleSelectBangKeItem(values: string[]): void {
+    setCheckedBuuGui(values);
   }
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'FREIGHT_UNIT',
-        accessor: 'FREIGHT_UNIT',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          return (
-            <Label check>
-              <Input
-                defaultChecked={uncheckAllForwardingItemCheckbox}
-                type="checkbox"
-                value={get(row, 'values.FREIGHT_UNIT', '')}
-                onClick={handleSelectBangKeItem}
-              />
-            </Label>
-          );
-        },
-      },
       {
         Header: t('Mã bưu gửi'),
         accessor: 'PACKAGE_ID',
@@ -202,7 +174,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   }
 
   function handleChuyenVaoBangKe(): void {
-    if (size(forwardingItemListState) > 0) {
+    if (size(checkedBuuGui) > 0) {
       toggleSelectForwardingItemModal();
     } else {
       alert(t('Vui lòng chọn phiếu gửi!'));
@@ -212,7 +184,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   function onSuccessSelectedForwardingItem(): void {
     dispatchZTMI241();
     setUncheckAllForwardingItemCheckbox(false);
-    setForwardingItemListState([]);
+    setCheckedBuuGui([]);
   }
 
   const [search, setSearch] = useState<string>('');
@@ -253,7 +225,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           <p className="text-right mt-2 mb-0">
             {t('Đã chọn')}:{' '}
             <span className="color-primary">
-              {size(forwardingItemListState)}/{size(dataRow)}
+              {size(checkedBuuGui)}/{size(dataRow)}
             </span>
           </p>
         </Col>
@@ -297,7 +269,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     if (!isEmpty(selectedTai)) {
       dispatch(
         actionDongBanKeVaoTaiCoSan(
-          { selectedTai, des, forwardingItemListState },
+          { selectedTai, des, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList },
           {
             onSuccess: (data: API.MIOAZTMI016Response): void => {
               toast(
@@ -334,7 +306,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const dongBangKeVaoTaiMoiTao = (locNo: string, description: string): void => {
     dispatch(
       actionDongBangKeVaoTaiMoiTao(
-        { locNo, description, forwardingItemListState, des },
+        { locNo, description, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList, des },
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
             toast(
@@ -383,7 +355,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     if (!isEmpty(selectedChuyenThu)) {
       dispatch(
         actionDongTaiVaoChuyenThuCoSan(
-          { selectedChuyenThu, forwardingItemListState, des },
+          { selectedChuyenThu, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList, des },
           {
             onSuccess: (data: API.MIOAZTMI016Response): void => {
               toast(
@@ -419,7 +391,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const dongTaiVaoChuyenThuTaoMoi = (locNo: string, description: string): void => {
     dispatch(
       actionDongTaiVaoChuyenThuTaoMoi(
-        { locNo, description, forwardingItemListState, des },
+        { locNo, description, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList, des },
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
             toast(
@@ -472,6 +444,11 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     } catch (error) {}
   }, [tab, childs, search, userMaBp, commLocGroup, dispatch]);
 
+  const transformCheckedBuuGuiToForwardingItemList = useMemo((): ForwardingItem[] => {
+    return map(checkedBuuGui, bg => {
+      return { ITEM_ID: bg, ITEM_TYPE: '' };
+    });
+  }, [checkedBuuGui]);
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
@@ -488,17 +465,12 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             onClick={handleShowPopupDongBangKe}
             color="primary"
             className="ml-2"
-            disabled={size(forwardingItemListState) <= 0}
+            disabled={size(checkedBuuGui) <= 0}
           >
             <i className="fa fa-download mr-2" />
             {t('Đóng bảng kê')}
           </Button>
-          <Button
-            onClick={handleShowPopupDongTai}
-            color="primary"
-            className="ml-2"
-            disabled={size(forwardingItemListState) <= 0}
-          >
+          <Button onClick={handleShowPopupDongTai} color="primary" className="ml-2" disabled={size(checkedBuuGui) <= 0}>
             <i className="fa fa-download mr-2" />
             {t('Đóng tải')}
           </Button>
@@ -523,7 +495,14 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           <TabPane>
             {renderSearch()}
             <Row className="sipTableContainer">
-              <DataTable columns={columns} data={dataRow ? dataRow : []} />
+              <DataTable
+                columns={columns}
+                data={dataRow ? dataRow : []}
+                onCheckedValuesChange={handleSelectBangKeItem}
+                showCheckAll={true}
+                showCheckboxes
+                renderCheckboxValues="FREIGHT_UNIT"
+              />
             </Row>
           </TabPane>
         </TabContent>
@@ -532,7 +511,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           visible={selectForwardingItemModal}
           onHide={toggleSelectForwardingItemModal}
           modalTitle={t('Chọn bảng kê')}
-          forwardingItemList={forwardingItemListState}
+          forwardingItemList={transformCheckedBuuGuiToForwardingItemList}
           IV_TOR_TYPE={SipDataType.BANG_KE}
           IV_TO_LOC_ID=""
           IV_CUST_STATUS={SipDataState.TAO_MOI}
