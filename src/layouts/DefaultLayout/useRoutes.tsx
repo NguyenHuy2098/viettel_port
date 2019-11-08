@@ -1,9 +1,7 @@
 import { lazy } from 'react';
 import { useTranslation } from 'react-i18next';
-// import Loadable from 'react-loadable';
 import { TFunction } from 'i18next';
 
-// import Loading from 'components/Loading';
 import routesMap from 'utils/routesMap';
 import { SIPRoutePropsType } from '../types';
 
@@ -21,43 +19,6 @@ const KhieuNaiKhachHang = lazy(() => import('containers/DieuHanh/KhieuNaiKhachHa
 const ChiTietKhieuNai = lazy(() => import('containers/DieuHanh/KhieuNaiKhachHang/ChiTiet'));
 const BaoCao = lazy(() => import('containers/BaoCao'));
 
-// const TiepXucKhachHang = Loadable({
-//   loader: (): any => import('containers/DieuHanh/TiepXucKhachHang'),
-//   loading: Loading,
-// });
-// const BienBanNoiBo = Loadable({
-//   loader: (): any => import('containers/DieuHanh/BienBanNoiBo'),
-//   loading: Loading,
-// });
-// const LapBienBan = Loadable({
-//   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/LapBienBan'),
-//   loading: Loading,
-// });
-// const TraCuuBienBan = Loadable({
-//   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/TraCuuBienBan'),
-//   loading: Loading,
-// });
-// const SuaBienBan = Loadable({
-//   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/SuaBienBan'),
-//   loading: Loading,
-// });
-// const XacMinhBienBan = Loadable({
-//   loader: (): any => import('containers/DieuHanh/BienBanNoiBo/XacMinhBienBan'),
-//   loading: Loading,
-// });
-// const KhieuNaiKhachHang = Loadable({
-//   loader: (): any => import('containers/DieuHanh/KhieuNaiKhachHang'),
-//   loading: Loading,
-// });
-// const ChiTietKhieuNai = Loadable({
-//   loader: (): any => import('containers/DieuHanh/KhieuNaiKhachHang/ChiTiet'),
-//   loading: Loading,
-// });
-// const BaoCao = Loadable({
-//   loader: (): any => import('containers/BaoCao'),
-//   loading: Loading,
-// });
-
 // =============== NhapPhieuGui =====================
 
 const PhieuGuiTrongNuoc = lazy(() => import('containers/NhapPhieuGui/PhieuGuiTrongNuoc'));
@@ -65,27 +26,6 @@ const PhieuGuiQuocTe = lazy(() => import('containers/NhapPhieuGui/PhieuGuiQuocTe
 const NhapTuFileExcel = lazy(() => import('containers/NhapPhieuGui/NhapTuFileExcel'));
 const NhanTaiBuuCucGoc = lazy(() => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc'));
 const ChiTietNhomHangHoa = lazy(() => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc/ChiTietNhomHangHoa'));
-
-// const PhieuGuiTrongNuoc = Loadable({
-//   loader: (): any => import('containers/NhapPhieuGui/PhieuGuiTrongNuoc'),
-//   loading: Loading,
-// });
-// const PhieuGuiQuocTe = Loadable({
-//   loader: (): any => import('containers/NhapPhieuGui/PhieuGuiQuocTe'),
-//   loading: Loading,
-// });
-// const NhapTuFileExcel = Loadable({
-//   loader: (): any => import('containers/NhapPhieuGui/NhapTuFileExcel'),
-//   loading: Loading,
-// });
-// const NhanTaiBuuCucGoc = Loadable({
-//   loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc'),
-//   loading: Loading,
-// });
-// const ChiTietNhomHangHoa = Loadable({
-//   loader: (): any => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc/ChiTietNhomHangHoa'),
-//   loading: Loading,
-// });
 
 // =============== KhaiThacDi =====================
 
@@ -111,59 +51,6 @@ const DanhSachTaiKienTrongChuyenThuDaDong = lazy(() =>
 const TachPhieuGui = lazy(() => import('containers/KhaiThacDi/TachPhieuGui'));
 const ChiTietBuuGuiChuaDongBangKe = lazy(() => import('containers/KhaiThacDi/DongBangKe/ChiTietBuuGuiChuaDongBangKe'));
 
-// const DongBangKe = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongBangKe/index'),
-//   loading: Loading,
-// });
-// const DongBangKeNoiTinh = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/BangKe/DongBangKeNoiTinh'),
-//   loading: Loading,
-// });
-// const ThongTinBangKe = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/BangKe/ThongTinBangKe'),
-//   loading: Loading,
-// });
-// const DanhSachPhieuGuiTrongBangKe = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongBangKe/DanhSachPhieuGuiTrongBangKe'),
-//   loading: Loading,
-// });
-// const DanhSachPhieuGuiTrongBangKeDaDong = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongBangKe/DanhSachPhieuGuiTrongBangKeDaDong'),
-//   loading: Loading,
-// });
-// const DongTai = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongTai'),
-//   loading: Loading,
-// });
-// const DanhSachPhieuGuiTrongTai = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachPhieuGuiTrongTai'),
-//   loading: Loading,
-// });
-// const DanhSachPhieuGuiTrongTaiDaDong = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongTai/DanhSachPhieuGuiTrongTaiDaDong'),
-//   loading: Loading,
-// });
-// const DongChuyenThu = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongChuyenThu'),
-//   loading: Loading,
-// });
-// const DanhSachTaiKienTrongChuyenThu = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongChuyenThu/DanhSachTaiKienTrongChuyenThu'),
-//   loading: Loading,
-// });
-// const DanhSachTaiKienTrongChuyenThuDaDong = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongChuyenThu/DanhSachTaiKienTrongChuyenThuDaDong'),
-//   loading: Loading,
-// });
-// const TachPhieuGui = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/TachPhieuGui'),
-//   loading: Loading,
-// });
-// const ChiTietBuuGuiChuaDongBangKe = Loadable({
-//   loader: (): any => import('containers/KhaiThacDi/DongBangKe/ChiTietBuuGuiChuaDongBangKe'),
-//   loading: Loading,
-// });
-
 // =============== KhaiThacDen =====================
 
 const NhanChuyenThu = lazy(() => import('containers/KhaiThacDen/NhanChuyenThu'));
@@ -175,43 +62,6 @@ const ThongTinBangKePhieuGui = lazy(() => import('containers/KhaiThacDen/ThongTi
 const KhaiThacTai = lazy(() => import('containers/KhaiThacDen/KhaiThacTai'));
 const NhanBangKePhieuGui = lazy(() => import('containers/KhaiThacDen/NhanBangKePhieuGui'));
 const PhanCongPhatNhan = lazy(() => import('containers/KhaiThacDen/PhanCongPhatNhan'));
-
-// const NhanChuyenThu = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/NhanChuyenThu'),
-//   loading: Loading,
-// });
-// const NhanTaiKien = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/NhanTaiKien'),
-//   loading: Loading,
-// });
-// const KhaiThacChuyenThuDen = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/KhaiThacChuyenThuDen'),
-//   loading: Loading,
-// });
-// const ThongTinChuyenThu = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/ThongTinChuyenThu'),
-//   loading: Loading,
-// });
-// const ThongTinTai = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/ThongTinTai'),
-//   loading: Loading,
-// });
-// const ThongTinBangKePhieuGui = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/ThongTinBangKe'),
-//   loading: Loading,
-// });
-// const KhaiThacTai = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/KhaiThacTai'),
-//   loading: Loading,
-// });
-// const NhanBangKePhieuGui = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/NhanBangKePhieuGui'),
-//   loading: Loading,
-// });
-// const PhanCongPhatNhan = Loadable({
-//   loader: (): any => import('containers/KhaiThacDen/PhanCongPhatNhan'),
-//   loading: Loading,
-// });
 
 // =========== unsorted components ==========
 
@@ -226,43 +76,6 @@ const KeKhaiChiPhi = lazy(() => import('containers/KeKhaiChiPhi/DanhSachBangKe')
 const TaoMoiBangKe = lazy(() => import('containers/KeKhaiChiPhi/TaoMoiBangKe'));
 const ChiTietBangKe = lazy(() => import('containers/KeKhaiChiPhi/ChiTietBangKe'));
 
-// const ThongTinKienHang = Loadable({
-//   loader: (): any => import('containers/ThongTinKienHang'),
-//   loading: Loading,
-// });
-// const ThongTinDonHang = Loadable({
-//   loader: (): any => import('containers/ThongTinDonHang'),
-//   loading: Loading,
-// });
-// const ThongTinDonHangNew = Loadable({
-//   loader: (): any => import('containers/ThongTinDonHangNew'),
-//   loading: Loading,
-// });
-// const PageNoData = Loadable({
-//   loader: (): any => import('containers/PageNoData'),
-//   loading: Loading,
-// });
-// const Home = Loadable({
-//   loader: (): any => import('containers/Home'),
-//   loading: Loading,
-// });
-// const RedirectToHome = Loadable({
-//   loader: (): any => import('./RedirectToHome'),
-//   loading: Loading,
-// });
-
-// const KeKhaiChiPhi = Loadable({
-//   loader: (): any => import('containers/KeKhaiChiPhi/DanhSachBangKe'),
-//   loading: Loading,
-// });
-// const TaoMoiBangKe = Loadable({
-//   loader: (): any => import('containers/KeKhaiChiPhi/TaoMoiBangKe'),
-//   loading: Loading,
-// });
-// const ChiTietBangKe = Loadable({
-//   loader: (): any => import('containers/KeKhaiChiPhi/ChiTietBangKe'),
-//   loading: Loading,
-// });
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
 // eslint-disable-next-line max-lines-per-function

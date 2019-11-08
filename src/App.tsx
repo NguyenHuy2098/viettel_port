@@ -28,25 +28,6 @@ const AuthLayout = React.lazy(() => import('layouts/AuthLayout'));
 const DefaultLayout = React.lazy(() => import('layouts/DefaultLayout'));
 const ErrorLayout = React.lazy(() => import('layouts/ErrorLayout'));
 
-/**
- * Layouts
- */
-// const AuthLayout = Loadable({
-//   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-//   loader: () => import('layouts/AuthLayout'),
-//   loading: Loading,
-// });
-// const DefaultLayout = Loadable({
-//   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-//   loader: () => import('layouts/DefaultLayout'),
-//   loading: Loading,
-// });
-// const ErrorLayout = Loadable({
-//   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-//   loader: () => import('layouts/ErrorLayout'),
-//   loading: Loading,
-// });
-
 const App: React.FC = (): JSX.Element => {
   useEffect(() => {
     toast.configure();
