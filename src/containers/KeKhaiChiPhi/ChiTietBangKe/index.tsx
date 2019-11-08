@@ -51,7 +51,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   }, [dispatch, idBangKe]);
 
   useEffect((): void => {
-    setData(filter(data, item => !isEmpty(item)));
+    setData(filter(list, item => !isEmpty(item)));
     setDataOriginal(list);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
