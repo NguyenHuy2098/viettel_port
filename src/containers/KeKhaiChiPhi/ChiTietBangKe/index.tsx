@@ -53,6 +53,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   useEffect((): void => {
     setData(filter(data, item => !isEmpty(item)));
     setDataOriginal(list);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
   const columns = useMemo(

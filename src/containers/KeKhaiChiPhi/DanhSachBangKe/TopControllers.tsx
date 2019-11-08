@@ -43,6 +43,7 @@ const TopControllers = (props: Props): JSX.Element => {
           BK_ID: checkedBangKe[0],
         }),
       );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedBangKe]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,6 +89,7 @@ const TopControllers = (props: Props): JSX.Element => {
         }),
     }));
     return newGropList;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
