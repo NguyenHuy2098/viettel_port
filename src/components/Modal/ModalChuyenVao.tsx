@@ -73,34 +73,36 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
   }, [visible]);
 
   const handleChuyenVaoForwardingItem = (): void => {
-    const payload = {
-      IV_FLAG: '2',
-      IV_TOR_TYPE: TorTypeChuyenVao ? TorTypeChuyenVao : IV_TOR_TYPE,
-      IV_TOR_ID_CU: radioTorId,
-      IV_SLOCATION: userMaBp,
-      IV_DLOCATION: IV_TO_LOC_ID,
-      IV_DESCRIPTION: '',
-      T_ITEM: forwardingItemList,
-    };
-    dispatch(
-      action_MIOA_ZTMI016(payload, {
-        onSuccess: (): void => {
-          toastSuccess(t('Chuyển vào thành công.'));
-          onSuccessSelected && onSuccessSelected(radioTorId);
-        },
-        onFailure: (error: HttpRequestError): void => {
-          if (error) {
-            toastError(join(error.messages, ' '));
-          } else {
-            toastError(t('Lỗi không xác định khi chuyển vào.'));
-          }
-        },
-        onFinish: (): void => {
-          getListItems();
-          onHide && onHide();
-        },
-      }),
-    );
+    if (radioTorId) {
+      const payload = {
+        IV_FLAG: '2',
+        IV_TOR_TYPE: TorTypeChuyenVao ? TorTypeChuyenVao : IV_TOR_TYPE,
+        IV_TOR_ID_CU: radioTorId,
+        IV_SLOCATION: userMaBp,
+        IV_DLOCATION: IV_TO_LOC_ID,
+        IV_DESCRIPTION: '',
+        T_ITEM: forwardingItemList,
+      };
+      dispatch(
+        action_MIOA_ZTMI016(payload, {
+          onSuccess: (): void => {
+            toastSuccess(t('Chuyển vào thành công.'));
+            onSuccessSelected && onSuccessSelected(radioTorId);
+          },
+          onFailure: (error: HttpRequestError): void => {
+            if (error) {
+              toastError(join(error.messages, ' '));
+            } else {
+              toastError(t('Lỗi không xác định khi chuyển vào.'));
+            }
+          },
+          onFinish: (): void => {
+            getListItems();
+            onHide && onHide();
+          },
+        }),
+      );
+    }
   };
 
   const handleChangeForwardingItem = (event: React.FormEvent<HTMLInputElement>): void => {
