@@ -137,20 +137,20 @@ const TopControllers = (props: Props): JSX.Element => {
     renderHeader();
 
     let flagIndex = 16;
-    let countKhoanMuc = 0;
     for (const itemKey in tempList) {
       workbook
         .sheet(0)
         .range(`A${flagIndex}:R${flagIndex}`)
         .merged(true)
-        .value(
-          `${get(tempList[itemKey].items[countKhoanMuc], 'KHOAN_MUC', '')}-${get(
-            tempList[itemKey].items[countKhoanMuc],
-            'TEN_KM',
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', horizontalAlignment: 'left' });
-      countKhoanMuc++;
+        .value(`${get(tempList[itemKey].items[0], 'KHOAN_MUC', '')}-${get(tempList[itemKey].items[0], 'TEN_KM')}`)
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          horizontalAlignment: 'left',
+          fontFamily: 'Times New Roman',
+          bold: true,
+          fontSize: 11,
+        });
       flagIndex++;
       for (let i = 0; i < size(tempList[itemKey].items); i++) {
         workbook
@@ -259,27 +259,33 @@ const TopControllers = (props: Props): JSX.Element => {
         .range(`A${flagIndex + size(tempList[itemKey].items)}:G${flagIndex + size(tempList[itemKey].items)}`)
         .merged(true)
         .value('Tổng nhóm')
-        .style({ borderStyle: 'thin', borderColor: '#000000', horizontalAlignment: 'center' });
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          horizontalAlignment: 'center',
+          fontFamily: 'Times New Roman',
+          bold: true,
+        });
       workbook
         .sheet(0)
         .cell(`H${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_AMOUNT', '')}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(0)
         .cell(`I${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_PHU_PHI', '')}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(0)
         .cell(`J${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_TAX', '')}%`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(0)
         .cell(`K${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', '')}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(0)
         .cell(`L${flagIndex + size(tempList[itemKey].items)}`)
@@ -289,7 +295,7 @@ const TopControllers = (props: Props): JSX.Element => {
         .sheet(0)
         .cell(`M${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_PHU_PHI_INIT', '')}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(0)
         .cell(`N${flagIndex + size(tempList[itemKey].items)}`)
@@ -299,17 +305,17 @@ const TopControllers = (props: Props): JSX.Element => {
         .sheet(0)
         .cell(`O${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', '')}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(0)
         .cell(`P${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_SUM_AMOUNT_INIT', '')}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(0)
         .cell(`Q${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${get(tempList[itemKey], 'TOTAL_KHONG_DUYET', '')}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000' });
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       flagIndex = flagIndex + size(tempList[itemKey].items) + 1;
     }
     // tong tat cac nhom
@@ -318,7 +324,13 @@ const TopControllers = (props: Props): JSX.Element => {
       .range(`A${flagIndex}:G${flagIndex}`)
       .merged(true)
       .value('Tổng cộng')
-      .style({ borderStyle: 'thin', borderColor: '#000000', horizontalAlignment: 'center' });
+      .style({
+        borderStyle: 'thin',
+        borderColor: '#000000',
+        horizontalAlignment: 'center',
+        fontFamily: 'Times New Roman',
+        bold: true,
+      });
     workbook
       .sheet(0)
       .cell(`H${flagIndex}`)
@@ -327,7 +339,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`I${flagIndex}`)
@@ -336,7 +348,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`J${flagIndex}`)
@@ -345,7 +357,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_TAX', '0'));
         })}%`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`K${flagIndex}`)
@@ -354,7 +366,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`L${flagIndex}`)
@@ -363,7 +375,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_AMOUNT_INIT', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`M${flagIndex}`)
@@ -372,7 +384,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_PHU_PHI_INIT', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`N${flagIndex}`)
@@ -381,7 +393,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`O${flagIndex}`)
@@ -390,7 +402,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`P${flagIndex}`)
@@ -399,7 +411,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
       .sheet(0)
       .cell(`Q${flagIndex}`)
@@ -408,7 +420,7 @@ const TopControllers = (props: Props): JSX.Element => {
           return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
         })}`,
       )
-      .style({ borderStyle: 'thin', borderColor: '#000000' });
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     flagIndex = flagIndex + 1;
 
     // render footer
@@ -458,6 +470,11 @@ const TopControllers = (props: Props): JSX.Element => {
       .sheet(0)
       .cell(`O${flagIndex}`)
       .value(`TỔNG GIÁM ĐỐC`);
+
+    workbook
+      .sheet(0)
+      .range(`A1:R${flagIndex}`)
+      .style({ wrapText: false, fontFamily: 'Times New Roman' });
   }
   return (
     <>
