@@ -1,12 +1,11 @@
 /* eslint-disable max-lines */
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Col, Fade, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Fade, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
-import produce from 'immer';
-import { ceil, concat, filter, get, includes, isEmpty, map, pull, size } from 'lodash';
+import { ceil, filter, get, includes, map, size } from 'lodash';
 import moment from 'moment';
 
 import Pagination from 'components/Pagination';
@@ -48,13 +47,6 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [selectedTaiKienIds, setSelectedTaiKienIds] = useState<string[]>([]);
 
-  useEffect((): void => {
-    if (!isEmpty(dataChuyenThuChildren)) {
-      setSelectedTaiKienIds(map(dataChuyenThuChildren, (child: API.Child) => get(child, 'TOR_ID', '')));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataChuyenThuChildren]);
-
   const deselectedTaiKienItems = useMemo(() => {
     return map(
       filter(dataChuyenThuChildren, (child: API.Child) => !includes(selectedTaiKienIds, get(child, 'TOR_ID'))),
@@ -87,14 +79,8 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     getListTaiKien(payload);
   };
 
-  const handleSelectTaiKien = (event: React.MouseEvent<HTMLInputElement>): void => {
-    event.stopPropagation();
-    const selectedTaiKienId = event.currentTarget.value;
-    if (includes(selectedTaiKienIds, selectedTaiKienId)) {
-      setSelectedTaiKienIds(produce(selectedTaiKienIds, draftState => pull(draftState, selectedTaiKienId)));
-    } else {
-      setSelectedTaiKienIds(produce(selectedTaiKienIds, draftState => concat(draftState, selectedTaiKienId)));
-    }
+  const handleSelectTaiKien = (selectedIds: string[]): void => {
+    setSelectedTaiKienIds(selectedIds);
   };
 
   const toggleDeleteConfirmModal = (): void => {
@@ -301,24 +287,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     //eslint-disable-next-line max-lines-per-function
     () => [
       {
-        id: 'select',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const torId = get(row, 'original.TOR_ID');
-          return (
-            <Label check>
-              <Input
-                defaultChecked={includes(selectedTaiKienIds, torId)}
-                onClick={handleSelectTaiKien}
-                type="checkbox"
-                value={torId}
-              />
-            </Label>
-          );
-        },
-      },
-      {
         Header: t('Mã tải/kiện'),
-        accessor: 'TOR_ID',
         Cell: ({ row }: Cell<API.Child>): string => {
           const torType = get(row, 'original.TOR_TYPE', '');
           if (torType === SipDataType.BUU_GUI || torType === SipDataType.KIEN) {
@@ -376,7 +345,13 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
       {renderDescriptionServiceShipping()}
       {renderShippingInformationAndScanCode()}
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={dataChuyenThuChildren} />
+        <DataTable
+          columns={columns}
+          data={dataChuyenThuChildren}
+          onCheckedValuesChange={handleSelectTaiKien}
+          renderCheckboxValues="TOR_ID"
+          showCheckboxes
+        />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}
