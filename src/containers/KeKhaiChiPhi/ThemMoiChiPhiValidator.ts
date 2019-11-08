@@ -8,7 +8,7 @@ export const schema = yup.object().shape({
     .matches(/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/, 'URL không hợp lệ'),
   TAX_AMOUNT: yup.string().required('Thuế GTGT không được để trống'),
   TAX: yup.string().required('Thuế suất không được để trống'),
-  PHU_PHI: yup.string().required('Phụ phí không được để trống'),
+  // PHU_PHI: yup.string().required('Phụ phí không được để trống'), // bỏ require cho phụ phí, không nhập thì mặc định = 0
   AMOUNT: yup.string().required('Tiền hàng hóa không được để trống'),
   DESCR: yup
     .string()

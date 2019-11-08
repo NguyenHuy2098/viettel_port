@@ -210,14 +210,14 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         Header: t('Hàng hóa dịch vụ chưa thuế'),
         accessor: 'AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.AMOUNT'));
+          return numberFormat(get(row, 'original.AMOUNT_INIT'));
         },
       },
       {
         Header: t('Phụ phí'),
         accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI'));
+          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
         },
       },
       {
@@ -231,21 +231,21 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         Header: t('Thuế giá trị gia tăng'),
         accessor: 'TAX_AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT'));
+          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
         },
       },
       {
         Header: t('Tổng cộng'),
         accessor: 'SUM_AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.SUM_AMOUNT'));
+          return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
         },
       },
       {
         Header: t('Hàng hóa dịch vụ chưa thuế (1)'),
         accessor: 'AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.AMOUNT_INIT'));
+          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.AMOUNT'));
         },
         show: isPheDuyet,
       },
@@ -253,7 +253,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         Header: t('Phụ phí (1)'),
         accessor: 'PHU_PHI_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
+          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.PHU_PHI'));
         },
         show: isPheDuyet,
       },
@@ -261,7 +261,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         Header: t('Thuế giá trị gia tăng (1)'),
         accessor: 'TAX_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
+          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
         show: isPheDuyet,
       },
@@ -269,7 +269,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         Header: t('Tổng cộng(1)'),
         accessor: 'SUM_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
+          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.SUM_AMOUNT'));
         },
         show: isPheDuyet,
       },
@@ -301,12 +301,16 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
           <div>
             <i>{t('Số tiền đề nghị thanh toán') + ': ' + convertMoneyToString(SUM_AMOUNT)}</i>
           </div>
-          <div>
-            <i>{t('Số tiền được duyệt') + ': ' + convertMoneyToString(SUM_AMOUNT_INIT)}</i>
-          </div>
-          <div>
-            <i>{t('Số tiền không được duyệt') + ': ' + convertMoneyToString(NOT_SUM_AMOUNT)}</i>
-          </div>
+          {isPheDuyet && (
+            <>
+              <div>
+                <i>{t('Số tiền được duyệt') + ': ' + convertMoneyToString(SUM_AMOUNT_INIT)}</i>
+              </div>
+              <div>
+                <i>{t('Số tiền không được duyệt') + ': ' + convertMoneyToString(NOT_SUM_AMOUNT)}</i>
+              </div>
+            </>
+          )}
         </Col>
       </Row>
     );
