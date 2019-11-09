@@ -872,6 +872,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               });
               const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
               setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              toggleSenderAddress();
               triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {
@@ -965,6 +966,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               });
               const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
               setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              toggleSenderAddress();
               triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {

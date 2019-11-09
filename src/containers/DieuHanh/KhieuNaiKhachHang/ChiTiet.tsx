@@ -59,7 +59,11 @@ const ComplainDetail: React.FC = (): JSX.Element => {
   }
 
   function handleErrorMessage(errors: yup.ValidationError[], errorName: string): string {
-    return get(find(errors, (item: yup.ValidationError): boolean => item.path === errorName), 'message', '');
+    return get(
+      find(errors, (item: yup.ValidationError): boolean => item.path === errorName),
+      'message',
+      '',
+    );
   }
 
   function handleChangeName(e: ChangeEvent<HTMLInputElement>): void {

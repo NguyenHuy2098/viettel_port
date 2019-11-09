@@ -45,7 +45,10 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     (item: any): ((event: React.MouseEvent) => void) => (): void => {
       const nextState = produce(dataDisable, draftState => {
         if (size(dataDisable.filter(id => id === item))) {
-          draftState.splice(draftState.findIndex(id => id === item), 1);
+          draftState.splice(
+            draftState.findIndex(id => id === item),
+            1,
+          );
         } else {
           draftState.push(item);
         }

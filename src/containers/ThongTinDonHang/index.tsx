@@ -310,8 +310,9 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7" md={8} xl={9}>
                 {orderInformationInstane &&
-                  `${orderInformationInstane.HOUSE_NO_DES ? orderInformationInstane.HOUSE_NO_DES : ''}${' '}
-                  ${orderInformationInstane.STREET_ID_DES ? orderInformationInstane.STREET_ID_DES : ''}${' '}
+                  `${orderInformationInstane.HOUSE_NO_DES ? orderInformationInstane.HOUSE_NO_DES : ''}${
+                    orderInformationInstane.STREET_ID_DES ? orderInformationInstane.STREET_ID_DES : ''
+                  }${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}

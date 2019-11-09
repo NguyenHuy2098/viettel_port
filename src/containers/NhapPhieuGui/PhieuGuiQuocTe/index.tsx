@@ -794,6 +794,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               });
               const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
               setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              toggleSenderAddress();
               triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {
