@@ -1,42 +1,29 @@
 /* eslint-disable max-lines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Cell } from 'react-table';
-import { toast } from 'react-toastify';
-import { Badge, Button, Col, Input, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
-import classNames from 'classnames';
-import { map, get, isEmpty, size, toString, trim } from 'lodash';
+import { Button, Col, Input, Nav, Row, TabContent, TabPane } from 'reactstrap';
+import { map, get, size, toString, trim } from 'lodash';
 import { Location } from 'history';
 import moment from 'moment';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
-import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
+import ButtonDongBangKe from 'components/Button/ChiTietBuuGuiChuaDongBangKe/ButtonDongBangKe';
+import ButtonDongTai from 'components/Button/ChiTietBuuGuiChuaDongBangKe/ButtonDongTai';
 import DataTable from 'components/DataTable';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
-import {
-  actionDongBangKeVaoTaiMoiTao,
-  actionDongBanKeVaoTaiCoSan,
-  actionDongTaiVaoChuyenThuCoSan,
-  actionDongTaiVaoChuyenThuTaoMoi,
-} from 'redux/common/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
-import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
 import { select_ZTMI241 } from 'redux/ZTMI241/selectors';
-import { AppStateType } from 'redux/store';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { today } from 'utils/timeHelper';
+import Item from './Item';
 
 interface Props {
   location: Location;
-}
-
-interface ChildType {
-  NO_ITEM: string;
-  USER: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -51,27 +38,15 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
   );
-  const [showPopUpDongBangKe, setShowPopUpDongBangKe] = useState<boolean>(false);
-  const [showPopUpDongTai, setShowPopupDongTai] = useState<boolean>(false);
-  const [selectedTai, setSelectedTai] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
-  const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
+
   const userMaBp = useSelector(makeSelectorMaBP);
   const des = get(props, 'location.state.des', '');
   const commLocGroup = get(props, 'location.state.COMM_LOC_GROUP', '');
 
-  const listTaiCoSan = useSelector(
-    (state: AppStateType) => get(state, 'MIOA_ZTMI047.ZC2.101.MT_ZTMI047_OUT.Row', []),
-    shallowEqual,
-  );
-  const listChuyenThuCoSan = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
-
   const reset = (): void => {
     setTimeout(() => {
-      // setForwardingItemListState([]);
       setCheckedBuuGui([]);
       setUncheckAllForwardingItemCheckbox(false);
-      setSelectedChuyenThu(undefined);
-      setSelectedTai(undefined);
       dispatchZTMI241();
     }, 1000);
   };
@@ -253,176 +228,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleHidePopupDongBangKe = (): void => {
-    setShowPopUpDongBangKe(false);
-  };
-
-  const saveSelectedTai = (tai: API.RowMTZTMI047OUT | undefined): void => {
-    setSelectedTai(tai);
-  };
-
-  const handleShowPopupDongBangKe = (): void => {
-    setShowPopUpDongBangKe(true);
-  };
-
-  const dongBangKeVaoTaiCoSan = (): void => {
-    if (!isEmpty(selectedTai)) {
-      dispatch(
-        actionDongBanKeVaoTaiCoSan(
-          { selectedTai, des, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList },
-          {
-            onSuccess: (data: API.MIOAZTMI016Response): void => {
-              toast(
-                <>
-                  <i className="fa check mr-2" />
-                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                </>,
-                {
-                  type: 'success',
-                },
-              );
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-            onFinish: (): void => {
-              reset();
-            },
-          },
-        ),
-      );
-    }
-    handleHidePopupDongBangKe();
-  };
-
-  const dongBangKeVaoTaiMoiTao = (locNo: string, description: string): void => {
-    dispatch(
-      actionDongBangKeVaoTaiMoiTao(
-        { locNo, description, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList, des },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-          },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-          onFinish: (): void => {
-            reset();
-          },
-        },
-      ),
-    );
-    handleHidePopupDongBangKe();
-  };
-
-  const handleHidePopupDongTai = (): void => {
-    setShowPopupDongTai(false);
-  };
-
-  const handleShowPopupDongTai = (): void => {
-    setShowPopupDongTai(true);
-  };
-
-  const saveSelectedChuyenThu = (chuyenThu: API.RowMTZTMI047OUT | undefined): void => {
-    setSelectedChuyenThu(chuyenThu);
-  };
-
-  const dongTaiVaoChuyenThuCoSan = (): void => {
-    if (!isEmpty(selectedChuyenThu)) {
-      dispatch(
-        actionDongTaiVaoChuyenThuCoSan(
-          { selectedChuyenThu, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList, des },
-          {
-            onSuccess: (data: API.MIOAZTMI016Response): void => {
-              toast(
-                <>
-                  <i className="fa check mr-2" />
-                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-                </>,
-                {
-                  type: 'success',
-                },
-              );
-              reset();
-            },
-            onFailure: (error: Error): void => {
-              reset();
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-            },
-          },
-        ),
-      );
-    }
-    handleHidePopupDongTai();
-  };
-
-  const dongTaiVaoChuyenThuTaoMoi = (locNo: string, description: string): void => {
-    dispatch(
-      actionDongTaiVaoChuyenThuTaoMoi(
-        { locNo, description, forwardingItemListState: transformCheckedBuuGuiToForwardingItemList, des },
-        {
-          onSuccess: (data: API.MIOAZTMI016Response): void => {
-            toast(
-              <>
-                <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
-              </>,
-              {
-                type: 'success',
-              },
-            );
-            reset();
-          },
-          onFailure: (error: Error): void => {
-            reset();
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-          },
-        },
-      ),
-    );
-    handleHidePopupDongTai();
-  };
-
   function handleChangeTab(index: number): void {
     setTab(index);
   }
@@ -451,6 +256,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   }, [checkedBuuGui]);
   return (
     <>
+      <h1>Chi tiết bưu gửi chưa đống bảng kê </h1>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <ButtonGoBack />
@@ -461,19 +267,19 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>
-          <Button
-            onClick={handleShowPopupDongBangKe}
-            color="primary"
-            className="ml-2"
+          <ButtonDongBangKe
             disabled={size(checkedBuuGui) <= 0}
-          >
-            <i className="fa fa-download mr-2" />
-            {t('Đóng bảng kê')}
-          </Button>
-          <Button onClick={handleShowPopupDongTai} color="primary" className="ml-2" disabled={size(checkedBuuGui) <= 0}>
-            <i className="fa fa-download mr-2" />
-            {t('Đóng tải')}
-          </Button>
+            des={des}
+            forwardingItemListState={transformCheckedBuuGuiToForwardingItemList}
+            callbackWhenDone={reset}
+          />
+
+          <ButtonDongTai
+            disabled={size(checkedBuuGui) <= 0}
+            des={des}
+            forwardingItemListState={transformCheckedBuuGuiToForwardingItemList}
+            callbackWhenDone={reset}
+          />
         </div>
       </Row>
       <div className="sipTabContainer sipFlatContainer">
@@ -517,91 +323,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           IV_CUST_STATUS={SipDataState.TAO_MOI}
           isFrom2
         />
-        <ModalTwoTab
-          onHide={handleHidePopupDongBangKe}
-          visible={showPopUpDongBangKe}
-          modalTitle={'Gán bảng kê vào tải'}
-          firstTabTitle={'CHỌN TẢI'}
-          secondTabTitle={'TẠO TẢI MỚI'}
-          onSubmitButton1={dongBangKeVaoTaiCoSan}
-          onSubmitButton2={dongBangKeVaoTaiMoiTao}
-          tab1Contents={listTaiCoSan}
-          onChooseItemInFirstTab={saveSelectedTai}
-          selectedChildInTab1={selectedTai}
-        />
-        <ModalTwoTab
-          onHide={handleHidePopupDongTai}
-          visible={showPopUpDongTai}
-          modalTitle={'Gán tải vào chuyến thư'}
-          firstTabTitle={'CHỌN CHUYẾN THƯ'}
-          secondTabTitle={'TẠO CHUYẾN THƯ MỚI'}
-          onSubmitButton1={dongTaiVaoChuyenThuCoSan}
-          onSubmitButton2={dongTaiVaoChuyenThuTaoMoi}
-          tab1Contents={listChuyenThuCoSan}
-          onChooseItemInFirstTab={saveSelectedChuyenThu}
-          selectedChildInTab1={selectedChuyenThu}
-        />
       </div>
     </>
-  );
-}
-
-interface ItemProps {
-  child: API.RowMTZTMI241OUT;
-  tab: number;
-  handleChangeTab: Function;
-  index: number;
-  userMaBp: string;
-  commLocGroup: string;
-}
-
-function Item(props: ItemProps): JSX.Element {
-  const child = props.child;
-  const tab = props.tab;
-  const handleChangeTab = props.handleChangeTab;
-  const index = props.index;
-  const userMaBp = props.userMaBp;
-  const commLocGroup = props.commLocGroup;
-  const dispatch = useDispatch();
-
-  const [count, setCount] = React.useState<number>(0);
-  React.useEffect(() => {
-    try {
-      const payload = {
-        IV_PACKAGE_ID: '',
-        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
-        IV_LOC_ID: userMaBp,
-        IV_COMMODITY_GROUP: commLocGroup,
-        IV_DATE: today,
-        IV_USER: child.USER,
-        IV_PAGE_NO: '1',
-        IV_NO_PER_PAGE: '10',
-      };
-      dispatch(
-        action_ZTMI241(
-          payload,
-          {
-            onSuccess: (res: API.MTZTMI241OUT): void => {
-              setCount(size(res.Row));
-            },
-          },
-          { stateless: true },
-        ),
-      );
-    } catch (error) {}
-  }, [tab, userMaBp, commLocGroup, dispatch, child]);
-
-  return (
-    <NavItem key={child.USER}>
-      <NavLink
-        className={classNames({ active: tab === index })}
-        // eslint-disable-next-line react/jsx-no-bind
-        onClick={(): void => handleChangeTab(index)}
-      >
-        {child.USER}
-        <Badge color="primary">{count}</Badge>
-      </NavLink>
-    </NavItem>
   );
 }
 
