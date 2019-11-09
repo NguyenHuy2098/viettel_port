@@ -24,6 +24,7 @@ import {
   toString,
   trim,
 } from 'lodash';
+import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
@@ -57,7 +58,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const userMaBp = useSelector(makeSelectorMaBP);
-
+  const isMounted = useIsMounted();
   const sortedCountryList = sortBy(countryList, ['NATIONAL_NAME']);
 
   const idDonHang = get(props, 'match.params.idDonHang', '');
@@ -97,6 +98,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { Id: orderInformationInstane.PROVINCE_ID_SOURCE },
           {
             onSuccess: (data: VtpAddressResponse): void => {
+              if (!isMounted()) return;
               setProvinceSenderEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -109,6 +111,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { Id: orderInformationInstane.DISTRICT_ID_SOURCE },
           {
             onSuccess: (data: VtpAddressResponse): void => {
+              if (!isMounted()) return;
               setDistrictSenderEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -121,6 +124,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { Id: orderInformationInstane.WARD_ID_SOURCE },
           {
             onSuccess: (data: VtpAddressResponse): void => {
+              if (!isMounted()) return;
               setWardSenderEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -133,6 +137,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { Id: orderInformationInstane.PROVINCE_ID_DES },
           {
             onSuccess: (data: VtpAddressResponse): void => {
+              if (!isMounted()) return;
               setProvinceReceiverEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -145,6 +150,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { Id: orderInformationInstane.DISTRICT_ID_DES },
           {
             onSuccess: (data: VtpAddressResponse): void => {
+              if (!isMounted()) return;
               setDistrictReceiverEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -157,6 +163,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { Id: orderInformationInstane.WARD_ID_DES },
           {
             onSuccess: (data: VtpAddressResponse): void => {
+              if (!isMounted()) return;
               setWardReceiverEdit(get(data, 'LocationModels[0].N'));
             },
           },
@@ -582,6 +589,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI011(api011Payload, {
         onSuccess: (data: API.ItemMTZTMI011OUT[]): void => {
+          if (!isMounted()) return;
           const cuocChinhAmount = reduce(
             data,
             (total: number, item: API.ItemMTZTMI011OUT): number => {
@@ -623,6 +631,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             // alert(error.messages);
           },
           onSuccess: (data: API.SIOAZTMI068Response): void => {
+            if (!isMounted()) return;
             const thisTransportMethodArr = filter(
               get(data, 'MT_ZTMI068_OUT.Row', []),
               (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V05',
@@ -674,6 +683,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         packageTabSchema
           .validate(packageItemValidate, { abortEarly: false })
           .then((): void => {
+            if (!isMounted()) return;
             packageItemErrors[index] = {
               index,
               errors: [],
@@ -683,6 +693,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             }
           })
           .catch((error: yup.ValidationError): void => {
+            if (!isMounted()) return;
             packageItemErrors[index] = {
               index,
               errors: error.inner,
@@ -732,9 +743,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { q: diaChiSender },
           {
             onSuccess: (data: SuggestedLocation): void => {
+              if (!isMounted()) return;
               setLocationSuggestSender(get(data, 'items'));
             },
             onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
               setLocationSuggestSender([]);
             },
           },
@@ -748,6 +761,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function handleChooseLocationSuggestSender(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
+    // eslint-disable-next-line max-lines-per-function
     return (event: React.FormEvent<HTMLInputElement>): void => {
       const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
         return item.id === id;
@@ -758,6 +772,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { id: get(thisItem, 'id', '') },
           {
             onSuccess: (data: DetailSuggestedLocation): void => {
+              if (!isMounted()) return;
               const dataComponents = get(data, 'components');
               const thisProvince = find(dataComponents, (item: Component): boolean => {
                 return item.type === 'PROVINCE';
@@ -782,6 +797,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
               toast(
                 <>
                   <i className="fa fa-window-close-o mr-2" />
@@ -814,9 +830,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           { q: tenHang },
           {
             onSuccess: (data: SuggestedCommodity): void => {
+              if (!isMounted()) return;
               setCommoditySuggest(get(data, 'items'));
             },
             onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
               setCommoditySuggest([]);
             },
           },
@@ -922,6 +940,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_MIOA_ZTMI012(payload, {
         onSuccess: (data: API.MIOAZTMI012Response): void => {
+          if (!isMounted()) return;
           if (get(data, 'MT_ZTMI012_OUT.EV_ERROR') === '00') {
             toast(
               <>
@@ -1008,12 +1027,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               schema
                 .validate(validateData, { abortEarly: false })
                 .then((): void => {
+                  if (!isMounted()) return;
                   setErrors([]);
                   if (tabValid) {
                     handleSaveForwardingOrder();
                   }
                 })
                 .catch((error: yup.ValidationError): void => {
+                  if (!isMounted()) return;
                   setErrors(error.inner);
                 });
             }
@@ -1023,12 +1044,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       schema
         .validate(validateData, { abortEarly: false })
         .then((): void => {
+          if (!isMounted()) return;
           setErrors([]);
           if (tabValid) {
             handleSaveForwardingOrder();
           }
         })
         .catch((error: yup.ValidationError): void => {
+          if (!isMounted()) return;
           setErrors(error.inner);
         });
     }
@@ -1105,6 +1128,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_GET_PROVINCE(payloadProvinceSender, {
         onSuccess: (data: VtpAddressResponse): void => {
+          if (!isMounted()) return;
           setFilteredProvinceSender(get(data, 'LocationModels'));
         },
       }),
@@ -1112,6 +1136,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       action_GET_DISTRICT(payloadDistrictSender, {
         onSuccess: (data: VtpAddressResponse): void => {
+          if (!isMounted()) return;
           setFullDistrict(get(data, 'LocationModels'));
           if (provinceIdSender !== '') {
             setFilteredDistrictSender(filter(get(data, 'LocationModels'), { P: provinceIdSender }));
@@ -1123,6 +1148,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       dispatch(
         action_GET_WARD(payloadWardSender, {
           onSuccess: (data: VtpAddressResponse): void => {
+            if (!isMounted()) return;
             setFilteredWardSender(get(data, 'LocationModels'));
           },
         }),
@@ -1166,6 +1192,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       dispatch(
         action_GET_WARD(payloadWardSender, {
           onSuccess: (data: VtpAddressResponse): void => {
+            if (!isMounted()) return;
             setFilteredWardSender(get(data, 'LocationModels'));
           },
         }),

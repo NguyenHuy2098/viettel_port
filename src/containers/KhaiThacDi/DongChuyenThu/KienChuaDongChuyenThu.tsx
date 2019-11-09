@@ -175,7 +175,6 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           className="ml-2"
           diemDen={diemDen}
           listTaiKienCanGan={selectedKienObject}
-          selectedKienObject
           onSuccess={handleSuccessChuyenThuAction}
         />
       </Col>
