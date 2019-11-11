@@ -6,6 +6,7 @@ import { Cell } from 'react-table';
 import { Button, Col, Input, Nav, Row, TabContent, TabPane } from 'reactstrap';
 import { map, get, size, toString, trim } from 'lodash';
 import { Location } from 'history';
+import uuid from 'uuid';
 import moment from 'moment';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -34,6 +35,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   const childs = get(props, 'location.state.child', []);
   const [selectForwardingItemModal, setSelectForwardingItemModal] = useState<boolean>(false);
   const [checkedBuuGui, setCheckedBuuGui] = useState<string[]>([]);
+  const [updateNavTab, setUpdateNavTab] = useState<string>('');
 
   const [uncheckAllForwardingItemCheckbox, setUncheckAllForwardingItemCheckbox] = useState<boolean | undefined>(
     undefined,
@@ -48,6 +50,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       setCheckedBuuGui([]);
       setUncheckAllForwardingItemCheckbox(false);
       dispatchZTMI241();
+      setUpdateNavTab(uuid());
     }, 1000);
   };
 
@@ -293,6 +296,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
                 handleChangeTab={handleChangeTab}
                 userMaBp={userMaBp}
                 commLocGroup={commLocGroup}
+                updateNavTab={updateNavTab}
               />
             ))}
         </Nav>

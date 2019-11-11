@@ -1,8 +1,11 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import classNames from 'classnames';
 import { Badge, NavItem, NavLink } from 'reactstrap';
-import { select_ZTMI241TotalItem } from 'redux/ZTMI241/selectors';
+import { toString, size } from 'lodash';
+import { SipDataState } from 'utils/enums';
+import { today } from 'utils/timeHelper';
+import { action_ZTMI241 } from 'redux/ZTMI241/actions';
 
 interface ChildType {
   NO_ITEM: string;
@@ -15,6 +18,7 @@ interface ItemProps {
   index: number;
   userMaBp: string;
   commLocGroup: string;
+  updateNavTab: string;
 }
 
 function Item(props: ItemProps): JSX.Element {
@@ -22,7 +26,37 @@ function Item(props: ItemProps): JSX.Element {
   const tab = props.tab;
   const handleChangeTab = props.handleChangeTab;
   const index = props.index;
-  const totalItem = useSelector(select_ZTMI241TotalItem);
+  const userMaBp = props.userMaBp;
+  const commLocGroup = props.commLocGroup;
+  const { updateNavTab } = props;
+  const dispatch = useDispatch();
+
+  const [count, setCount] = React.useState<number>(0);
+  React.useEffect(() => {
+    try {
+      const payload = {
+        IV_PACKAGE_ID: '',
+        IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+        IV_LOC_ID: userMaBp,
+        IV_COMMODITY_GROUP: commLocGroup,
+        IV_DATE: today,
+        IV_USER: child.USER,
+        IV_PAGE_NO: '1',
+        IV_NO_PER_PAGE: '10',
+      };
+      dispatch(
+        action_ZTMI241(
+          payload,
+          {
+            onSuccess: (res: API.MTZTMI241OUT): void => {
+              setCount(size(res.Row));
+            },
+          },
+          { stateless: true },
+        ),
+      );
+    } catch (error) {}
+  }, [updateNavTab, tab, userMaBp, commLocGroup, dispatch, child]);
 
   return (
     <NavItem key={child.USER}>
@@ -32,7 +66,7 @@ function Item(props: ItemProps): JSX.Element {
         onClick={(): void => handleChangeTab(index)}
       >
         {child.USER}
-        <Badge color="primary">{totalItem}</Badge>
+        <Badge color="primary">{count}</Badge>
       </NavLink>
     </NavItem>
   );
