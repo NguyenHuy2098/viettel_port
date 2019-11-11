@@ -85,21 +85,21 @@ build-source:latest:
   <<: *build-source
   except:
     - production
-    - staging
+    - qas
     - release
   script:
     - yarn build:development
   environment:
     name: development
 
-build-source:staging:
+build-source:qas:
   <<: *build-source
   only:
-    - staging
+    - qas
   script:
-    - yarn build:production
+    - yarn build:qas
   environment:
-    name: staging
+    name: qas
 
 build-source:production:
   <<: *build-source
@@ -123,14 +123,14 @@ build-docker-image:latest:
     name: development
     url: $PORTAL_URL
 
-build-docker-image:staging:
+build-docker-image:qas:
   <<: *build-docker-image
   only:
-    - staging
+    - qas
   dependencies:
-    - build-source:staging
+    - build-source:qas
   environment:
-    name: staging
+    name: qas
     url: $PORTAL_URL
 
 build-docker-image:production:

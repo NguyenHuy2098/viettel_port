@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, ButtonDropdown } from 'reactstrap';
+import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, ButtonDropdown } from 'reactstrap';
 // @ts-ignore
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
 import { get } from 'lodash';
+
 import logo from 'assets/img/logo.png';
 import HeaderSearch from 'components/HeaderSearch';
 import { logout } from 'redux/auth/actions';
 import { makeSelectorProfile } from 'redux/auth/selectors';
 import routesMap from 'utils/routesMap';
+import ModalAbout from '../../components/Modal/ModalAbout';
 
 interface Props {
   url: string;
@@ -19,8 +22,10 @@ interface Props {
 const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const profile = useSelector(makeSelectorProfile);
+  const [showModalAbout, setShowModalAbout] = useState<boolean>(false);
   const [dropdownOpenMenu, setDropdownOpenMenu] = useState<boolean>(false);
   const [dropdownOpenNotifications, setDropdownOpenNotifications] = useState<boolean>(false);
+  const { t } = useTranslation();
 
   const handleLogout = (): void => {
     dispatch(logout({}));
@@ -32,6 +37,10 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
 
   const toggleDropdownOpenMenu = (): void => {
     setDropdownOpenMenu(!dropdownOpenMenu);
+  };
+
+  const toggleModalAbout = (): void => {
+    setShowModalAbout(!showModalAbout);
   };
 
   const renderHeaderNotifications = (): JSX.Element => {
@@ -79,6 +88,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
     );
   };
 
+  // eslint-disable-next-line max-lines-per-function
   const renderHeaderUser = (): JSX.Element => (
     <ButtonDropdown isOpen={dropdownOpenMenu} toggle={toggleDropdownOpenMenu} className="sipHeaderUser">
       <DropdownToggle nav>
@@ -86,9 +96,9 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
         <i className="fa fa-caret-down fa-lg hide-xs" />
         <i className="fa fa-user-o fa-lg show-xs" />
       </DropdownToggle>
-      <DropdownMenu right>
+      <DropdownMenu>
         <DropdownItem header tag="div" className="text-center">
-          <strong>Account</strong>
+          <strong>{t('Account')}</strong>
         </DropdownItem>
         {/*<DropdownItem>*/}
         {/*  <i className="fa fa-bell-o" /> Updates<Badge color="info">42</Badge>*/}
@@ -121,8 +131,11 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
         {/*<DropdownItem>*/}
         {/*  <i className="fa fa-shield" /> Lock Account*/}
         {/*</DropdownItem>*/}
+        <DropdownItem onClick={toggleModalAbout}>
+          <i className="fa fa-info-circle" /> {t('Giới thiệu')}
+        </DropdownItem>
         <DropdownItem onClick={handleLogout}>
-          <i className="fa fa-lock" /> Logout
+          <i className="fa fa-lock" /> {t('Đăng xuất')}
         </DropdownItem>
       </DropdownMenu>
     </ButtonDropdown>
@@ -154,6 +167,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
         href={routesMap.HOME}
       />
       <AppSidebarToggler className="d-md-down-none" display="lg" />
+      <ModalAbout toggle={toggleModalAbout} visible={showModalAbout} />
 
       <HeaderSearch url={props.url} />
       {renderNav()}
