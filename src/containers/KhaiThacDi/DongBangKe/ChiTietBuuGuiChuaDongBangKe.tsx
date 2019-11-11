@@ -262,7 +262,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
           {commLocGroup}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2">
+          <Button onClick={handleChuyenVaoBangKe} color="primary" className="ml-2 hide">
             <img src={'../../assets/img/icon/iconChuyenVaoTai.svg'} alt="VTPostek" />
             {t('Chuyển bảng kê')}
           </Button>
