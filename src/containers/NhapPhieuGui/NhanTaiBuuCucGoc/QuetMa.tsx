@@ -110,7 +110,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                                                 IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
                                               }),
                                             );
-                                          }, 1000);
+                                          }, 2000);
                                         },
                                         onFailure: (error: HttpRequestErrorType): void => {
                                           toast(
