@@ -43,6 +43,7 @@ const ButtonDongTai = ({ callbackWhenDone, des, disabled, forwardingItemListStat
 
   useEffect((): void => {
     getListChuyenThuCoSan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleShowPopupDongTai = (): void => {

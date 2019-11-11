@@ -256,7 +256,6 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
   }, [checkedBuuGui]);
   return (
     <>
-      <h1>Chi tiết bưu gửi chưa đống bảng kê </h1>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
           <ButtonGoBack />
