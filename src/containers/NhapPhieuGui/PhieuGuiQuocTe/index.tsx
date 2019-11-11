@@ -292,7 +292,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
-  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
+  const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
+  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V1');
   const [choXemHang, setChoXemHang] = useState<string>('1');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
@@ -314,8 +315,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   const newPackageItem: PackageItemInputType = {
     Width: '',
-    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: 'V01', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_TYPE: 'V1', // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: '',
@@ -333,8 +334,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     NET_WEIGHT: '',
   };
   const firstPackageItem = {
-    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiKienHang === 'V2' ? 'V04' : loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_TYPE: loaiKienHang, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: getValueOfNumberFormat(giaTri),
@@ -371,10 +372,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   }
   function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
-    const newCommodityCode = value === 'V2' ? 'V04' : 'V99';
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], 'COMMODITY_TYPE', value);
-      set(draftState[index], 'COMMODITY_CODE', newCommodityCode);
+      if (value === 'V2') {
+        set(draftState[index], 'COMMODITY_CODE', 'V04');
+      }
     });
     setPackageItemArr(newArr);
     triggerValidateAndPriceCalculate();
@@ -408,8 +410,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     soLuong: trim(soLuong) === '' ? undefined : getValueOfNumberFormat(trim(soLuong)),
     giaTri: trim(giaTri) === '' ? undefined : getValueOfNumberFormat(trim(giaTri)),
     trongLuong: trim(trongLuong) === '' ? undefined : getValueOfNumberFormat(trim(trongLuong)),
-    //_____non-validated items
-    loaiHangHoa: trim(loaiHangHoa),
   };
 
   //______________check if Order Information exist
@@ -462,8 +462,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setPhuongThucVanChuyen(join(thisTransportServiceType, ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
-        COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-        COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_CODE: 'V01', // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
         GOODS_VALUE: '',
@@ -484,8 +484,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
-            COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-            COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_CODE: 'V01', // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
             GOODS_VALUE: '',
@@ -531,21 +531,19 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     //   transportMethodArr,
     //   (item: TransportMethodItem): boolean => item.SERVICE_TYPE === phuongThucVanChuyen,
     // );
-    let newPackageItem011 = {
+    let newPackageItem011: PackageItemInputType = {
       COD: '',
-      COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-      COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+      COMMODITY_CODE: 'V01', // Nhóm hàng hóa (tham chiếu trong bảng)
+      COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
       Currency: '',
-      Dimension_UoM: '',
-      Goods_value: '',
-      Gross_weight: '200',
+      GOODS_VALUE: '',
+      GROSS_WEIGHT: '200',
       item_cat: 'PKG',
-      Service_type: '',
-      Weight_UoM: 'G',
+      SERVICE_TYPE: '',
       Length: '',
-      Height: '',
+      Hight: '',
       Width: '',
-      quantity: '1',
+      Weight_UoM: 'G',
     };
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const newArr011: any = [];
@@ -553,18 +551,16 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       forEach(payloadPackageItemArr, (item: PackageItemInputType): void => {
         newPackageItem011 = {
           COD: '',
-          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_CODE: item.COMMODITY_TYPE === 'V2' ? 'V04' : item.COMMODITY_CODE, // Nhóm hàng hóa (tham chiếu trong bảng)
+          COMMODITY_TYPE: item.COMMODITY_TYPE, // Nhóm hàng hóa (tham chiếu trong bảng)
           Currency: '',
-          Dimension_UoM: '',
-          Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(getValueOfNumberFormat(item.GROSS_WEIGHT))) : '',
-          Goods_value: '',
-          Service_type: '',
+          GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseInt(getValueOfNumberFormat(item.GROSS_WEIGHT))) : '',
+          GOODS_VALUE: '',
+          SERVICE_TYPE: '',
           Length: item.Length ? toString(parseFloat(getValueOfNumberFormat(item.Length)).toFixed(2)) : '',
-          Height: item.Hight ? toString(parseFloat(getValueOfNumberFormat(item.Hight)).toFixed(2)) : '',
+          Hight: item.Hight ? toString(parseFloat(getValueOfNumberFormat(item.Hight)).toFixed(2)) : '',
           Width: item.Width ? toString(parseFloat(getValueOfNumberFormat(item.Width)).toFixed(2)) : '',
           item_cat: 'PKG',
-          quantity: '1',
           Weight_UoM: 'G',
         };
         newArr011.push(newPackageItem011);
@@ -677,8 +673,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           GOODS_VALUE:
             trim(item.GOODS_VALUE) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GOODS_VALUE'))),
           Currency: '',
-          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
           .validate(packageItemValidate, { abortEarly: false })
@@ -992,8 +986,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           GOODS_VALUE:
             trim(item.GOODS_VALUE) === '' ? undefined : getValueOfNumberFormat(trim(get(item, 'GOODS_VALUE'))),
           Currency: '',
-          COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-          COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
         };
         packageTabSchema
           .validate(packageItemValidate, { abortEarly: false })
@@ -1080,7 +1072,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setGiaTri('');
     setTrongLuong('');
     setPhuongThucVanChuyen('VCN');
-    // setLoaiHangHoa('V3');
+    // setLoaiKienHang('V3');
     // setNguoiThanhToan('PP');
     setChoXemHang('');
     setGhiChu('');
@@ -1557,14 +1549,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               value="V3"
               name="packageType"
               defaultChecked
-              onChange={handleChangeTextboxValue(setLoaiHangHoa)}
+              onChange={handleChangeTextboxValue(setLoaiKienHang)}
             />{' '}
-            {t('Hàng hóa')}
+            {t('Bưu gửi nhỏ')}
           </Label>
         </Col>
         <Col lg="3" xs="12" className="pr-0">
           <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
+            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setLoaiKienHang)} />{' '}
             {t('Thư')}
           </Label>
         </Col>
@@ -1585,10 +1577,33 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         </h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Loại hàng')}
+            {t('Loại kiện hàng')}
           </Label>
           <Col lg={8} xs={12}>
             {renderPackageType()}
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Loại hàng')}
+          </Label>
+          <Col lg={8} xs={12}>
+            <Input type="select" value={loaiHangHoa} onChange={handleChangeTextboxValue(setLoaiHangHoa)}>
+              {loaiKienHang === 'V2' ? (
+                <option value="V04">{t('Thư/ Tài liệu')}</option>
+              ) : (
+                <>
+                  <option value="V01">{t('Thực phẩm')}</option>
+                  <option value="V02">{t('Đồ uống')}</option>
+                  <option value="V03">{t('Thiết bị điện tử')}</option>
+                  <option value="V04">{t('Thư/ Tài liệu')}</option>
+                  <option value="V05">{t('Vải, quần áo')}</option>
+                  <option value="V06">{t('Vắc xin')}</option>
+                  <option value="V07">{t('Hàng đông lạnh')}</option>
+                  <option value="V99">{t('Khác')}</option>
+                </>
+              )}
+            </Input>
           </Col>
         </Row>
         <Row className="sipInputItem">

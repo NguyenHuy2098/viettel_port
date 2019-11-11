@@ -322,7 +322,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
-  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V3');
+  const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
+  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V1');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
   const [choXemHang, setChoXemHang] = useState<string>('1');
   const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZPP');
@@ -348,8 +349,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   const newPackageItem: PackageItemInputType = {
     Width: '',
-    COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: 'V01', // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_TYPE: 'V1', // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: '',
@@ -368,8 +369,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   };
   const firstPackageItem = {
     Width: kichThuocRong,
-    COMMODITY_CODE: loaiHangHoa === 'V2' ? 'V04' : 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
-    COMMODITY_TYPE: loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: loaiKienHang === 'V2' ? 'V04' : loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_TYPE: loaiKienHang, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: giaTri,
@@ -408,10 +409,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   }
   function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
-    const newCommodityCode = value === 'V2' ? 'V04' : 'V99';
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], 'COMMODITY_TYPE', value);
-      set(draftState[index], 'COMMODITY_CODE', newCommodityCode);
+      if (value === 'V2') {
+        set(draftState[index], 'COMMODITY_CODE', 'V04');
+      }
     });
     setPackageItemArr(newArr);
     triggerValidateAndPriceCalculate();
@@ -455,7 +457,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // maKhuyenMai,
     thoiGianPhat,
     //_____non-validated items
-    loaiHangHoa: trim(loaiHangHoa),
     nguoiThanhToan: trim(nguoiThanhToan),
     diemGiaoNhan: trim(diemGiaoNhan),
   };
@@ -521,7 +522,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       // setChoXemHang(get(orderInformationInstane, 'FWO', ''));
       let newPackageItemEdit: PackageItemInputType = {
         Width: '',
-        COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+        COMMODITY_CODE: 'V01', // Nhóm hàng hóa (tham chiếu trong bảng)
         COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
         PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
         QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -543,7 +544,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         const newArrEdit: API.RowMTZTMI031OUT[] = [];
         forEach(drop(orderInformation), (item: API.RowMTZTMI031OUT): void => {
           newPackageItemEdit = {
-            COMMODITY_CODE: 'V99', // Nhóm hàng hóa (tham chiếu trong bảng)
+            COMMODITY_CODE: 'V01', // Nhóm hàng hóa (tham chiếu trong bảng)
             COMMODITY_TYPE: 'V3', // Nhóm hàng hóa (tham chiếu trong bảng)
             PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
             QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
@@ -589,7 +590,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     let newPackageItem011 = {
       COD: '',
       Currency: '',
-      Dimension_UoM: '',
       Goods_value: '',
       Gross_weight: '200',
       item_cat: 'PKG',
@@ -603,7 +603,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         newPackageItem011 = {
           COD: item.COD ? toString(parseInt(getValueOfNumberFormat(item.COD))) : '',
           Currency: '',
-          Dimension_UoM: '',
           Gross_weight: item.GROSS_WEIGHT ? toString(parseInt(getValueOfNumberFormat(item.GROSS_WEIGHT))) : '',
           Goods_value: '',
           Service_type: '',
@@ -966,7 +965,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               });
               const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
               setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '.');
-              toggleSenderAddress();
+              toggleReceiverAddress();
               triggerValidateAndPriceCalculate();
             },
             onFailure: (error: HttpRequestErrorType): void => {
@@ -1291,7 +1290,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPhuongThucVanChuyen(get(loaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
-    // setLoaiHangHoa('V3');
+    // setLoaiKienHang('V3');
     // setNguoiThanhToan('PP');
     setChoXemHang('');
     setDiemGiaoNhan('ZPP');
@@ -2033,20 +2032,20 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               value="V3"
               name="packageType"
               defaultChecked
-              onChange={handleChangeTextboxValue(setLoaiHangHoa)}
+              onChange={handleChangeTextboxValue(setLoaiKienHang)}
             />{' '}
             {t('Bưu gửi nhỏ')}
           </Label>
         </Col>
         <Col lg="3" xs="12" className="pr-0">
           <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
+            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setLoaiKienHang)} />{' '}
             {t('Thư')}
           </Label>
         </Col>
         <Col lg="4" xs="12" className="pr-0">
           <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V1" name="packageType" onChange={handleChangeTextboxValue(setLoaiHangHoa)} />{' '}
+            <Input type="radio" value="V1" name="packageType" onChange={handleChangeTextboxValue(setLoaiKienHang)} />{' '}
             {t('Kiện')}
           </Label>
         </Col>
@@ -2067,10 +2066,33 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         </h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Loại hàng')}
+            {t('Loại kiện hàng')}
           </Label>
           <Col lg={8} xs={12}>
             {renderPackageType()}
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Loại hàng')}
+          </Label>
+          <Col lg={8} xs={12}>
+            <Input type="select" value={loaiHangHoa} onChange={handleChangeTextboxValue(setLoaiHangHoa)}>
+              {loaiKienHang === 'V2' ? (
+                <option value="V04">{t('Thư/ Tài liệu')}</option>
+              ) : (
+                <>
+                  <option value="V01">{t('Thực phẩm')}</option>
+                  <option value="V02">{t('Đồ uống')}</option>
+                  <option value="V03">{t('Thiết bị điện tử')}</option>
+                  <option value="V04">{t('Thư/ Tài liệu')}</option>
+                  <option value="V05">{t('Vải, quần áo')}</option>
+                  <option value="V06">{t('Vắc xin')}</option>
+                  <option value="V07">{t('Hàng đông lạnh')}</option>
+                  <option value="V99">{t('Khác')}</option>
+                </>
+              )}
+            </Input>
           </Col>
         </Row>
         <Row className="sipInputItem">

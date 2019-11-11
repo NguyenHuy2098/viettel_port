@@ -40,6 +40,8 @@ interface PackageItemInputType {
   SERVICE_TYPE?: string;
   COMMODITY_CODE?: string;
   COMMODITY_TYPE?: string;
+  item_cat?: string;
+  Weight_UoM?: string;
 }
 
 interface NationType {

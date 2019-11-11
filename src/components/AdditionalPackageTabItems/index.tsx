@@ -204,7 +204,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
     return (
       <Row className="sipInputItem">
         <Label xs="12" lg="4">
-          {t('Loại hàng')}
+          {t('Loại kiện hàng')}
         </Label>
         <Col lg={8} xs={12}>
           <Row>
@@ -217,7 +217,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
                   defaultChecked
                   onChange={handleChangeCommodityType(index)}
                 />{' '}
-                {t('Hàng hóa')}
+                {t('Bưu gửi nhỏ')}
               </Label>
             </Col>
             <Col lg="3" xs="12" className="pr-0">
@@ -253,6 +253,33 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
     return (
       <div className="sipInputBlock">
         {renderPackageType(index)}
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Loại hàng')}
+          </Label>
+          <Col lg={8} xs={12}>
+            <Input
+              type="select"
+              value={item.COMMODITY_CODE}
+              onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
+            >
+              {item.COMMODITY_TYPE === 'V2' ? (
+                <option value="V04">{t('Thư/ Tài liệu')}</option>
+              ) : (
+                <>
+                  <option value="V01">{t('Thực phẩm')}</option>
+                  <option value="V02">{t('Đồ uống')}</option>
+                  <option value="V03">{t('Thiết bị điện tử')}</option>
+                  <option value="V04">{t('Thư/ Tài liệu')}</option>
+                  <option value="V05">{t('Vải, quần áo')}</option>
+                  <option value="V06">{t('Vắc xin')}</option>
+                  <option value="V07">{t('Hàng đông lạnh')}</option>
+                  <option value="V99">{t('Khác')}</option>
+                </>
+              )}
+            </Input>
+          </Col>
+        </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             Tên hàng
