@@ -19,6 +19,7 @@ import {
   makeSelector046RowFirstChild,
   makeSelector046ListChildren,
   makeSelector046TotalPage,
+  makeSelector046EVTotalItem,
 } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataType } from 'utils/enums';
 
@@ -35,6 +36,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
   const dataChuyenThu = useSelector(makeSelector046RowFirstChild);
   const dataChuyenThuChild = useSelector(makeSelector046ListChildren);
   const totalPage046 = useSelector(makeSelector046TotalPage);
+  const totalItem046 = useSelector(makeSelector046EVTotalItem);
 
   const dataTableOrigin = map(
     dataChuyenThuChild,
@@ -55,11 +57,9 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
 
   const [torIdSearch, setTorIdSearch] = useState<string>('');
   const [dataTable, setDataTable] = useState<API.Child[]>([]);
-  const [dataTableCount, setDataTableCount] = useState<number>(0);
 
   useEffect((): void => {
     setDataTable(dataTableOrigin);
-    setDataTableCount(size(dataTableOrigin));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataChuyenThuChild]);
 
@@ -74,14 +74,11 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
       const result = find(dataTableOrigin, (item: API.Child) => item.TOR_ID === torIdSearch);
       if (result) {
         setDataTable([result]);
-        setDataTableCount(1);
       } else {
         setDataTable([]);
-        setDataTableCount(0);
       }
     } else {
       setDataTable(dataTableOrigin);
-      setDataTableCount(size(dataTableOrigin));
     }
   }
 
@@ -164,7 +161,7 @@ const DanhSachPhieuGuiTrongChuyenThuDaDong: React.FC<Props> = (props: Props): JS
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
-          {t('Tổng số')}: {dataTableCount}
+          {t('Tổng số')}: {totalItem046}
         </Col>
       </Row>
     );

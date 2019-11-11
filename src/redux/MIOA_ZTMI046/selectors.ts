@@ -41,6 +41,13 @@ export function makeSelector046CountChildren(state: AppStateType): number {
 export function makeSelector046TotalPage(state: AppStateType): number {
   return toNumber(get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Paging.EV_TOTAL_PAGE', 1));
 }
+/**
+ * totalItem
+ * @param state
+ */
+export function makeSelector046EVTotalItem(state: AppStateType): number {
+  return toNumber(get(state, 'MIOA_ZTMI046.response.MT_ZTMI046_OUT.Paging.EV_TOTAL_ITEM', 1));
+}
 
 /**
  * List Child theo trạng thái

@@ -24,6 +24,7 @@ import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
+  makeSelector046EVTotalItem,
   makeSelector046ListChildren,
   makeSelector046RowFirstChild,
   makeSelector046TotalPage,
@@ -49,6 +50,8 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const dataTai = useSelector(makeSelector046RowFirstChild);
   const dataTaiChild = useSelector(makeSelector046ListChildren);
   const totalPage046 = useSelector(makeSelector046TotalPage);
+  const totalItem046 = useSelector(makeSelector046EVTotalItem);
+
   const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -304,7 +307,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
-          {t('Tổng số')}: {size(dataTaiChild)}
+          {t('Tổng số')}: {totalItem046}
         </Col>
       </Row>
     );

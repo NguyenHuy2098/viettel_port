@@ -21,6 +21,7 @@ import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
+  makeSelector046EVTotalItem,
   makeSelector046ListChildren,
   makeSelector046RowFirstChild,
   makeSelector046TotalPage,
@@ -41,6 +42,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
   const dataBangKeChild = useSelector(makeSelector046ListChildren);
   const totalPage046 = useSelector(makeSelector046TotalPage);
+  const totalItem046 = useSelector(makeSelector046EVTotalItem);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [checkedBuuGui, setCheckedBuuGui] = useState<API.TITEM[]>([]);
@@ -246,7 +248,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
-          {t('Tổng số')}: {size(dataBangKeChild)}
+          {t('Tổng số')}: {totalItem046}
         </Col>
       </Row>
     );

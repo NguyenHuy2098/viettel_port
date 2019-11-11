@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { ceil, filter, get, includes, map, size } from 'lodash';
+import { ceil, filter, get, includes, map } from 'lodash';
 import moment from 'moment';
 
 import Pagination from 'components/Pagination';
@@ -19,6 +19,7 @@ import { useSipDataType } from 'hooks/useTranslations';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import {
+  makeSelector046EVTotalItem,
   makeSelector046ListChildren,
   makeSelector046RowFirstChild,
   makeSelector046TotalPage,
@@ -43,6 +44,8 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const dataChuyenThu = useSelector(makeSelector046RowFirstChild);
   const dataChuyenThuChildren = useSelector(makeSelector046ListChildren);
   const totalPage046 = useSelector(makeSelector046TotalPage);
+  const totalItem046 = useSelector(makeSelector046EVTotalItem);
+
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [selectedTaiKienIds, setSelectedTaiKienIds] = useState<string[]>([]);
@@ -197,7 +200,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
         </Row>
       </Col>
       <Col lg="2" xl={3} xs="12" className="text-right">
-        {t('Tổng số')}: {size(dataChuyenThuChildren)}
+        {t('Tổng số')}: {totalItem046}
       </Col>
     </Row>
   );
