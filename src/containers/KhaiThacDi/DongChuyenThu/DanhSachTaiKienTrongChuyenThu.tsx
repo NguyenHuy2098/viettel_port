@@ -31,6 +31,7 @@ import { SipDataType, SipFlowType, IV_FLAG } from 'utils/enums';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import { toast } from 'react-toastify';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { goBack } from 'connected-react-router';
 
 interface Props {
   match: match;
@@ -129,6 +130,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
   const handleSuccessDongChuyenThu = (): void => {
     getListTaiKien();
     setSelectedTaiKienIds([]);
+    dispatch(goBack());
   };
 
   const renderPrintButtonPhieuGiaoNhanChuyenThu = (): JSX.Element => (
