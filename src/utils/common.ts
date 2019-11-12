@@ -98,6 +98,6 @@ export function sleep(ms: number): Promise<unknown> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export const badgeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Đã phê duyệt', 'Duyệt 1 phần', 'Từ chối'];
+export const badgeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Đã phê duyệt', 'Duyệt 1 phần'];
 
 export const detailBangkeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối phê duyệt'];
