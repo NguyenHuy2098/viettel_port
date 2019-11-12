@@ -211,7 +211,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
   };
   const dongTaiKienVaoChuyenThuCoSan = (): void => {
     if (!isEmpty(selectedChuyenThu)) {
-      handleDongChuyenThuById(get(selectedChuyenThu, 'TOR_ID', ''));
+      handleDongChuyenThuById(get(selectedChuyenThu, 'TOR_ID', ''), addTaiKienVaoChuyenThu);
     }
     toggleModal();
   };
@@ -242,13 +242,12 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
     });
   };
 
-  const handleDongChuyenThuById = async (torId: string): Promise<void> => {
+  const handleDongChuyenThuById = async (torId: string, addTaiKienVaoChuyenThu?: Function): Promise<void> => {
     if (!isString(torId) || isEmpty(torId)) return;
     setProcessing(true);
     try {
       await removeTaiKien();
-      // await ganTaiVaoChuyenThu(torId);
-      await addTaiKienVaoChuyenThu(torId);
+      addTaiKienVaoChuyenThu && (await addTaiKienVaoChuyenThu(torId));
       await dongChuyenThu(torId);
       // issue: đóng CT xong gọi lại api047 listTải chưa lên ngay, phải delay lại 1s thì lên
       setTimeout(function() {
