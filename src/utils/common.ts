@@ -1,9 +1,11 @@
-import { find, get, isEmpty, isObject, split, toNumber } from 'lodash';
 import moment from 'moment';
 import numeral from 'numeral';
 import { WorkSheet } from 'xlsx';
 import uuid from 'uuid';
+import * as yup from 'yup';
+import { find, get, isEmpty, isObject, split, toNumber } from 'lodash';
 import parse_query_string from './parse_query_string';
+import { toastError } from '../components/Toast';
 
 export const cleanAccents = (str: string): string => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
@@ -45,6 +47,37 @@ export function validateXlsxBangKe(workSheet: WorkSheet): boolean {
     get(workSheet, 'N1.v') === 'Link URL'
   );
 }
+
+const BKRowSchema = yup.object().shape({
+  'Hàng hóa, dịch vụ': yup.string().required(`Trường "Hàng hóa, dịch vụ" không được để trống`),
+  'Hàng hóa, dịch vụ chưa thuế': yup.number().required(`Trường "Hàng hóa, dịch vụ chưa thuế" chưa đúng định dạng`),
+  'Khoản mục chi phí': yup.string().required(`Trường "Khoản mục chi phí" không được để trống`),
+  'Ký hiệu hóa đơn': yup.string().required(`Trường "Ký hiệu hóa đơn" không được để trống`),
+  'Link URL': yup
+    .string()
+    .required(`Trường "Link URL" không được để trống`)
+    .matches(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/, 'link URL không hợp lệ'),
+  'Mã số thuế người bán': yup.string().required(`Trường "Mã số thuế người bán" không được để trống`),
+  'Mẫu hóa đơn': yup.string().required(`Trường "Mẫu hóa đơn" không được để trống`),
+  'Ngày hóa đơn': yup.string().required(`Trường "Ngày hóa đơn" không được để trống`),
+  'Phụ phí': yup.number().required(`Trường "Phụ phí" không đúng định dạng`),
+  'Số hóa đơn': yup.string().required(`Trường "Số hóa đơn" không được để trống`),
+  'Thuế GTGT': yup.number().required(`Trường "Thuế GTGT" không được để trống`),
+  'Thuế suất': yup.number().required(`Trường "Thuế suất" không được để trống`),
+  'Tên người bán': yup.string().required(`Trường "Tên người bán" không được để trống`),
+  'Tổng cộng': yup.number().required(`Trường "Tổng cộng" không được để trống`),
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const validateBKRow = (row: any): boolean => {
+  try {
+    BKRowSchema.validateSync(row);
+  } catch (error) {
+    toastError(error.message);
+    return false;
+  }
+  return true;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
