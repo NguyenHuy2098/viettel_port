@@ -22,7 +22,7 @@ function Pagination(props: Props): JSX.Element {
     props.onThisPaginationChange && props.onThisPaginationChange(selectedItem);
   };
 
-  function rederPaginationInfo(): JSX.Element {
+  function renderPaginationInfo(): JSX.Element {
     return (
       <Row className="pl-3">
         <Label className="mt-2"> {t('Hiển thị')}</Label>
@@ -47,7 +47,7 @@ function Pagination(props: Props): JSX.Element {
 
   return (
     <nav className="sipPagination">
-      <div className="sipPaginationTotal">{rederPaginationInfo()}</div>
+      <div className="sipPaginationTotal">{renderPaginationInfo()}</div>
       <ReactPaginate
         containerClassName="pagination"
         previousClassName="sipPaginationPrev page-item"
