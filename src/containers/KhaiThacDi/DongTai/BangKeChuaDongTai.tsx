@@ -25,6 +25,7 @@ import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaDongTai: React.FC = (): JSX.Element => {
@@ -62,8 +63,15 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
       }),
     );
   };
+
+  const pageItems = getPageItems();
+
   useEffect((): void => {
     getListChuyenThu();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageItems]);
+
+  useEffect((): void => {
     getListDiemDen();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -104,7 +112,7 @@ const BangKeChuaDongTai: React.FC = (): JSX.Element => {
         {
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_CUST_STATUS: SipDataState.TAO_MOI,
-          IV_NO_PER_PAGE: '5000',
+          IV_NO_PER_PAGE: pageItems,
         },
         {},
         { flow: SipFlowType.KHAI_THAC_DI },

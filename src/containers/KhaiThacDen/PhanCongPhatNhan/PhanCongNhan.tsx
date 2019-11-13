@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { get, isEmpty, map, find, reject } from 'lodash';
+import { getPageItems } from 'utils/common';
 
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
@@ -68,6 +69,8 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const pageItems = getPageItems();
+
   const dispatchAPI035 = useCallback(() => {
     dispatch(
       action_MIOA_ZTMI035(
@@ -77,7 +80,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           },
 
           IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '11',
+          IV_NO_PER_PAGE: pageItems,
         },
 
         {
@@ -112,7 +115,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     }
     dispatchAPI035();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected]);
+  }, [userIdSelected, pageItems]);
 
   const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const value = event.target.value;

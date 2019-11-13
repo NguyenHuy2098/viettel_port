@@ -19,6 +19,7 @@ import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'r
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 interface Props {
   getListChuyenThuTaoMoi: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
@@ -49,10 +50,12 @@ const ChuyenThuChuaHoanThanh: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
+  const pageItems = getPageItems();
+
   useEffect((): void => {
     getListChuyenThuTaoMoi();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   const handleSearchChuyenThu = (searchText: string): void => {
     getListChuyenThuTaoMoi(1, searchText);

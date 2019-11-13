@@ -16,6 +16,7 @@ import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieu
 import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 interface Props {
   getListChuyenThuDaDong: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
@@ -32,10 +33,12 @@ const ChuyenThuDaDong: React.FC<Props> = (props: Props): JSX.Element => {
   );
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.CHUYEN_THU, SipDataState.HOAN_THANH_CHUYEN_THU));
 
+  const pageItems = getPageItems();
+
   useEffect((): void => {
     getListChuyenThuDaDong();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   const handleSearchChuyenThu = (searchText: string): void => {
     getListChuyenThuDaDong(1, searchText);

@@ -17,6 +17,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeDaDong: React.FC = (): JSX.Element => {
@@ -26,7 +27,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
   const listBangKeDaDong = useSelector(makeSelectorRow(SipDataType.BANG_KE, SipDataState.DA_DONG));
   const countBangKeDaDong = useSelector(makeSelectorTotalItem(SipDataType.BANG_KE, SipDataState.DA_DONG));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.BANG_KE, SipDataState.DA_DONG));
-
+  const pageItems = getPageItems();
   const [torIdSearch, setTorIdSearch] = useState<string>('');
 
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
@@ -42,6 +43,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
           {
             IV_TOR_TYPE: SipDataType.BANG_KE,
             IV_CUST_STATUS: SipDataState.GAN_BANG_KE_VAO_TAI,
+            IV_NO_PER_PAGE: pageItems,
             ...payload,
           },
           {
@@ -54,7 +56,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [pageItems],
   );
 
   useEffect((): void => {

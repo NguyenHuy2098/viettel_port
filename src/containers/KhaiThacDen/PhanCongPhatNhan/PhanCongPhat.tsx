@@ -6,6 +6,7 @@ import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { get, map, find, reject } from 'lodash';
 import moment from 'moment';
+import { getPageItems } from 'utils/common';
 
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
@@ -121,6 +122,8 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const pageItems = getPageItems();
+
   const dispatchGetListPhieuGui = useCallback(() => {
     dispatch(
       action_MIOA_ZTMI040(
@@ -128,7 +131,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
           FU_STATUS: '605,806',
           Delivery_postman: userIdSelected,
           IV_PAGENO: '1',
-          IV_NO_PER_PAGE: '50',
+          IV_NO_PER_PAGE: pageItems,
           Vourcher: 'N',
           Return: 'N',
         },
@@ -145,7 +148,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect(() => {
     dispatchGetListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected]);
+  }, [userIdSelected, pageItems]);
 
   const handleSelectUserChange = useCallback(event => {
     if (event.target.value === '') setUserIdSelected(undefined);

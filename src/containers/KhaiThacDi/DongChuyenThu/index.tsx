@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import { isEmpty, toString } from 'lodash';
+import { getPageItems } from 'utils/common';
 
 import TabView from 'components/Tab/TabView';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
@@ -43,6 +44,8 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     }
   };
 
+  const pageItems = getPageItems();
+
   const getListChuyenThuTaoMoi = (IV_PAGENO = 1, IV_TOR_ID = ''): void => {
     dispatch(
       action_MIOA_ZTMI047(
@@ -51,6 +54,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_CUST_STATUS: SipDataState.TAO_MOI,
           IV_PAGENO,
+          IV_NO_PER_PAGE: pageItems,
         },
         {
           onFailure: (error: Error) => {
@@ -72,6 +76,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           IV_TOR_TYPE: SipDataType.TAI,
           IV_CUST_STATUS: SipDataState.TAO_MOI,
           IV_PAGENO,
+          IV_NO_PER_PAGE: pageItems,
         },
         {
           onFailure: (error: Error) => {
@@ -93,6 +98,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           IV_FREIGHT_UNIT_TYPE: SipDataType.KIEN,
           IV_FREIGHT_UNIT_STATUS: ['306', '402'],
           IV_PAGE_NO: toString(IV_PAGE_NO),
+          IV_NO_PER_PAGE: pageItems,
         },
         {
           onFailure: (error: Error) => {
@@ -111,6 +117,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_CUST_STATUS: SipDataState.HOAN_THANH_CHUYEN_THU,
           IV_PAGENO,
+          IV_NO_PER_PAGE: pageItems,
         },
         {
           onFailure: (error: Error) => {
@@ -140,7 +147,7 @@ const DongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
       }),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   const toggleCreateForwardingItemModal = (): void => {
     setCreateForwardingItemModal(!createForwardingItemModal);

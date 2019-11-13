@@ -22,6 +22,7 @@ import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selec
 import { SipDataState, SipDataType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 interface Props {
   getListTaiChuaDongChuyenThu: (IV_PAGENO?: number, IV_TOR_ID?: string) => void;
@@ -61,10 +62,12 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
+  const pageItems = getPageItems();
+
   useEffect((): void => {
     getListTaiChuaDongChuyenThu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
 

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Row, Col, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { getPageItems } from 'utils/common';
 
 import TabView from 'components/Tab/TabView';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -20,6 +21,7 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const countTaiChuaNhanBangKePhieuGui = useSelector(makeSelectorCountTaiChuaNhanBangKePhieuGui);
   const countBangKeChuaNhanPhieuGui = useSelector(makeSelectorCountBangKeChuaNhanPhieuGui);
+  const pageItems = getPageItems();
 
   const getTaiKienDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
@@ -28,7 +30,7 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: SipDataType.TAI,
           IV_CUST_STATUS: SipDataState.TAI_KIEN_DA_QUET_NHAN,
           IV_PAGENO,
-          IV_NO_PER_PAGE: '5000',
+          IV_NO_PER_PAGE: pageItems,
         },
         {},
         { flow: SipFlowType.KHAI_THAC_DEN },
@@ -43,7 +45,7 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: SipDataType.BANG_KE,
           IV_CUST_STATUS: SipDataState.BANG_KE_DA_QUET_NHAN,
           IV_PAGENO,
-          IV_NO_PER_PAGE: '5000',
+          IV_NO_PER_PAGE: pageItems,
         },
         {},
         { flow: SipFlowType.KHAI_THAC_DEN },
@@ -53,9 +55,13 @@ const NhanBangKePhieuGui: React.FC = (): JSX.Element => {
 
   useEffect((): void => {
     getTaiKienDaQuetNhan();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageItems]);
+
+  useEffect((): void => {
     getBangKeDaQuetNhan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   return (
     <>

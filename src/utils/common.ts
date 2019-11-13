@@ -3,6 +3,7 @@ import moment from 'moment';
 import numeral from 'numeral';
 import { WorkSheet } from 'xlsx';
 import uuid from 'uuid';
+import parse_query_string from './parse_query_string';
 
 export const cleanAccents = (str: string): string => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
@@ -101,3 +102,9 @@ export function sleep(ms: number): Promise<unknown> {
 export const badgeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Đã phê duyệt', 'Duyệt 1 phần', 'Từ chối'];
 
 export const detailBangkeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối phê duyệt'];
+
+export const pageItemsDefault = '10';
+
+export function getPageItems(): string {
+  return parse_query_string('pageitems', pageItemsDefault);
+}

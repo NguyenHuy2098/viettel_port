@@ -21,6 +21,7 @@ import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'r
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -52,12 +53,15 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
     };
   }
 
+  const pageItems = getPageItems();
+
   const getListTai = (payload = {}): void => {
     dispatch(
       action_MIOA_ZTMI047(
         {
           IV_TOR_TYPE: SipDataType.TAI,
           IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: pageItems,
           ...payload,
         },
         {
@@ -75,7 +79,7 @@ const TaiChuaHoanThanh: React.FC = (): JSX.Element => {
   useEffect((): void => {
     getListTai();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   const toastErrorOnSearch = (error: Error, torId: string): void => {
     if (!isEmpty(torId)) {

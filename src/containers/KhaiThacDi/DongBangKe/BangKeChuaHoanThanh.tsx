@@ -20,6 +20,7 @@ import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'r
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
@@ -59,12 +60,15 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
     }
   };
 
+  const pageItems = getPageItems();
+
   const getListBangKe = (payload = {}): void => {
     dispatch(
       action_MIOA_ZTMI047(
         {
           IV_TOR_TYPE: SipDataType.BANG_KE,
           IV_CUST_STATUS: SipDataState.TAO_MOI,
+          IV_NO_PER_PAGE: pageItems,
           ...payload,
         },
         {
@@ -82,7 +86,7 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
   useEffect((): void => {
     getListBangKe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   function handleSearchBangKe(): void {
     getListBangKe({ IV_TOR_ID: torIdSearch });

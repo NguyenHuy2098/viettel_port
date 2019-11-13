@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Col, Row, Badge } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
+import { getPageItems } from 'utils/common';
 
 import TabView from 'components/Tab/TabView';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -18,6 +19,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
   const countChuyenThuChuaNhanTaiKien = useSelector(makeSelectorCountChuyenThuChuaNhanTaiKien);
   const countTaiDaNhan = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.TAI_KIEN_DA_QUET_NHAN));
   const countNhanRiengTaiKien = useSelector(makeSelectorRowSize(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const pageItems = getPageItems();
 
   const getChuyenThuChuaNhanTaiKien = (IV_PAGENO = 1): void => {
     dispatch(
@@ -26,7 +28,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
           IV_PAGENO: IV_PAGENO,
-          IV_NO_PER_PAGE: '5000',
+          IV_NO_PER_PAGE: pageItems,
         },
         {},
         { flow: SipFlowType.KHAI_THAC_DEN },
@@ -41,6 +43,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: SipDataType.TAI,
           IV_CUST_STATUS: SipDataState.TAI_KIEN_DA_QUET_NHAN,
           IV_PAGENO: IV_PAGENO,
+          IV_NO_PER_PAGE: pageItems,
         },
         {},
         { flow: SipFlowType.KHAI_THAC_DEN },
@@ -55,6 +58,7 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: SipDataType.TAI,
           IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
           IV_PAGENO: IV_PAGENO,
+          IV_NO_PER_PAGE: pageItems,
         },
         {},
         { flow: SipFlowType.KHAI_THAC_DEN },
@@ -64,10 +68,18 @@ const NhanTaiKien: React.FC = (): JSX.Element => {
 
   useEffect((): void => {
     getChuyenThuChuaNhanTaiKien(1);
-    getTaiDaNhan(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageItems]);
+
+  useEffect((): void => {
     getTaiKienChuaNhan(1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
+
+  useEffect((): void => {
+    getTaiDaNhan(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageItems]);
 
   return (
     <>

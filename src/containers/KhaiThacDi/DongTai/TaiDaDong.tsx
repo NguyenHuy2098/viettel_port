@@ -19,6 +19,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow, makeSelectorTotalItem, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const TaiDaDong: React.FC = (): JSX.Element => {
@@ -43,6 +44,8 @@ const TaiDaDong: React.FC = (): JSX.Element => {
     }
   };
 
+  const pageItems = getPageItems();
+
   const getListTai = useCallback(
     function(payload = {}): void {
       dispatch(
@@ -50,6 +53,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
           {
             IV_TOR_TYPE: SipDataType.TAI,
             IV_CUST_STATUS: SipDataState.GAN_TAI_KIEN_VAO_CHUYEN_THU,
+            IV_NO_PER_PAGE: pageItems,
             ...payload,
           },
           {
@@ -64,7 +68,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dispatch, userMaBp],
+    [dispatch, userMaBp, pageItems],
   );
 
   useEffect((): void => getListTai(), [getListTai]);

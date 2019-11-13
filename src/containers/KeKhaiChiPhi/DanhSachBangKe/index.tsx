@@ -10,7 +10,7 @@ import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
-import { badgeFicoStateMap } from 'utils/common';
+import { badgeFicoStateMap, getPageItems } from 'utils/common';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import Pagination from 'components/Pagination';
 import { toastError, toastSuccess } from 'components/Toast';
@@ -37,6 +37,7 @@ const DanhSachBangKe = (): JSX.Element => {
   const [checkedBangKe, setCheckedBangKe] = useState<string[]>([]);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
+  const pageItems = getPageItems();
 
   const noBangKeChecked = useMemo((): boolean => size(checkedBangKe) === 0, [checkedBangKe]);
   function toggleDeleteConfirmModal(): void {
@@ -59,12 +60,13 @@ const DanhSachBangKe = (): JSX.Element => {
           DEN_KY: denKy,
           BK_ID: toUpper(trim(idSearch)),
           BK_STATUS: typeSearch,
+          IV_NO_PER_PAGE: pageItems,
           ...payload,
         }),
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tuKy, denKy, idSearch, typeSearch],
+    [tuKy, denKy, idSearch, typeSearch, pageItems],
   );
 
   const [resetCurrentPage, setResetCurrentPage] = useState<boolean>(true);
@@ -103,7 +105,7 @@ const DanhSachBangKe = (): JSX.Element => {
   useEffect((): void => {
     getListBangKe();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   const handleChangeTextboxValue = (
     setValueFunction: Function,

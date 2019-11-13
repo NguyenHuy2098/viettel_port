@@ -15,6 +15,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorPagingCount, makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
+import { getPageItems } from 'utils/common';
 
 // eslint-disable-next-line max-lines-per-function
 const ShippingInformation: React.FC = (): JSX.Element => {
@@ -27,6 +28,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   const countChuyenThuDaQuetNhan = useSelector(
     makeSelectorPagingCount(SipDataType.CHUYEN_THU, SipDataState.CHUYEN_THU_DA_QUET_NHAN),
   );
+  const pageItems = getPageItems();
 
   const getListChuyenThuDaQuetNhan = (IV_PAGENO = 1): void => {
     dispatch(
@@ -35,6 +37,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
           IV_TOR_TYPE: SipDataType.CHUYEN_THU,
           IV_CUST_STATUS: SipDataState.CHUYEN_THU_DA_QUET_NHAN,
           IV_PAGENO: IV_PAGENO,
+          IV_NO_PER_PAGE: pageItems,
         },
         {},
         { flow: SipFlowType.KHAI_THAC_DEN },
@@ -45,7 +48,7 @@ const ShippingInformation: React.FC = (): JSX.Element => {
   useEffect(() => {
     getListChuyenThuDaQuetNhan();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [pageItems]);
 
   const handlePageChange = ({ selected }: { selected: number }): void => {
     getListChuyenThuDaQuetNhan(selected + 1);
