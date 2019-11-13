@@ -1,32 +1,28 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
-import { Cell, Row as TableRow } from 'react-table';
-import { get, map, toNumber, reject, toString, filter, slice, size, join, includes, isEmpty } from 'lodash';
+import { Row as TableRow } from 'react-table';
+import { concat, get, find, map, toNumber, reject, toString, filter, includes, isEmpty, uniq } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
-import moment from 'moment';
 import classnames from 'classnames';
 
-import { detailBangkeFicoStateMap, numberFormat } from 'utils/common';
-import BadgeFicoChiPhiStatus from 'components/Badge/BadgeFicoChiPhiStatus';
+import { detailBangkeFicoStateMap } from 'utils/common';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
+import { select_ZFI001_list } from 'redux/ZFI001/selectors';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
 import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import TopControllers from './TopControllers';
 import TopThongTinBangKe from '../TopThongTinBangKe';
 import UtilityDropDown from '../UtilityDropDown';
+import useColumns from './useColumns';
 
 interface Props {
   match: match;
-}
-
-interface DataType extends API.LISTMTDETAILRECEIVER {
-  IS_GROUP_DATA_TABLE?: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -34,13 +30,31 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const idBangKe = get(props, 'match.params.idBangKe', '');
   const dispatch = useDispatch();
-  const bangKeHeader = useSelector(select_ZFI007_header);
   const list = useSelector(select_ZFI007_list);
-  const [data, setData] = useState<DataType[]>([]);
-  const [dataOriginal, setDataOriginal] = useState<DataType[]>([]);
-  const [deleteData, setDeleteData] = useState<DataType[]>([]);
+  const listKhoanMuc = useSelector(select_ZFI001_list);
+  const bangKeHeader = useSelector(select_ZFI007_header);
+  const [data, setData] = useState<API.LISTMTDETAILRECEIVER[]>([]);
+  const [dataOriginal, setDataOriginal] = useState<API.LISTMTDETAILRECEIVER[]>([]);
+  const [deleteData, setDeleteData] = useState<API.LISTMTDETAILRECEIVER[]>([]);
+  const [manualGroupedKeys, setManualGroupedKeys] = useState<string[]>([]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const groupedKeys = useMemo(() => uniq(concat(manualGroupedKeys, map(data, 'KHOAN_MUC'))), [manualGroupedKeys, data]);
+
+  const groupedKhoanMuc = useMemo(() => {
+    if (isEmpty(listKhoanMuc)) return [];
+    return map(groupedKeys, key => {
+      const currentKhoanMuc = find(listKhoanMuc, { km_id: key });
+      return {
+        id: get(currentKhoanMuc, 'km_id') || '',
+        name: get(currentKhoanMuc, 'km_text') || '',
+      };
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groupedKeys, listKhoanMuc]);
 
   const status = useMemo(() => toNumber(get(bangKeHeader, 'BK_STATUS', -1)), [bangKeHeader]);
+  const cols = useColumns({ status });
 
   useEffect(() => {
     dispatch(
@@ -56,134 +70,8 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
 
-  const columns = useMemo(
-    // eslint-disable-next-line max-lines-per-function
-    () => [
-      {
-        Header: t('Mẫu hoá đơn'),
-        accessor: 'MAU_HD',
-      },
-      {
-        Header: t('Ký hiệu'),
-        accessor: 'KIHIEU_HD',
-      },
-      {
-        Header: t('Số'),
-        accessor: 'SO_HD',
-      },
-      {
-        Header: t('Ngày'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisDate = moment(get(row, 'original.NGAY_HD'), 'YYYYMMDD').format('DD/MM/YYYY');
-          return <>{thisDate}</>;
-        },
-      },
-      {
-        Header: t('Trạng thái'),
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <BadgeFicoChiPhiStatus status={toNumber(get(row, 'original.STATUS_ITEM', -1))} />;
-        },
-      },
-      {
-        Header: t('Người bán'),
-        accessor: 'NGUOI_BAN',
-      },
-      {
-        Header: t('MST'),
-        accessor: 'MST',
-      },
-      {
-        Header: t('Hàng hoá'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisDescr = get(row, 'original.DESCR', '0');
-          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
-          return <span title={thisDescr}>{thisText}</span>;
-        },
-      },
-      {
-        Header: t('Giá chưa thuế (VND)'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.AMOUNT_INIT'));
-        },
-      },
-      {
-        Header: t('Phụ phí (VND)'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
-        },
-      },
-      {
-        Header: t('TS'),
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <div>{get(row, 'original.TAX', '')}</div>;
-        },
-      },
-      {
-        Header: t('Thuế GTGT (VND)'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
-        },
-      },
-      {
-        Header: t('Tổng (VND)'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
-        },
-      },
-      {
-        Header: t('Giá trị HH, DV duyệt (VND)'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.AMOUNT'));
-        },
-        show: status === 3 || status === 2,
-      },
-      {
-        Header: t('Phụ phí duyệt (VND)'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI'));
-        },
-        show: status === 3 || status === 2,
-      },
-      {
-        Header: t('Thuế GTGT duyệt'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT'));
-        },
-        show: status === 3 || status === 2,
-      },
-      {
-        Header: t('Tổng cộng duyệt (VND)'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.SUM_AMOUNT'));
-        },
-        show: status === 3 || status === 2,
-      },
-      {
-        Header: t('Link URL'),
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisDescr = get(row, 'original.URL', '0');
-          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
-          return <span title={thisDescr}>{thisText}</span>;
-        },
-      },
-      {
-        Header: t('Lý do'),
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return get(row, 'original.NOTE') || '';
-        },
-        show: status === 3 || status === 2,
-      },
-      {
-        Header: status === 0 ? t('Quản trị ') : t(' '),
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <></>;
-        },
-        // show: status === 0,
-      },
-    ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data, status],
-  );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const columns = useMemo(() => cols, [data, status]);
 
   const handleRemoveTableRow = (item: API.LISTMTDETAILRECEIVER, index: number): void => {
     const tempData = reject(data, ['LINE_ITEM', get(item, 'LINE_ITEM')]);
@@ -211,14 +99,12 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     setDataOriginal([...tempData]);
   };
 
-  const items = useMemo(() => data.filter(item => !get(item, 'IS_GROUP_DATA_TABLE')), [data]);
-
   function handleSubmitKhoanMuc(item: API.LIST): void {
-    const nextState = produce(data, draftState => {
-      draftState.unshift({ KHOAN_MUC: item.km_id, TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
-    });
-    setData(nextState);
-    setDataOriginal(nextState);
+    setManualGroupedKeys(
+      produce(manualGroupedKeys, draftState => {
+        draftState.unshift(get(item, 'km_id', ''));
+      }),
+    );
   }
 
   const renderSecondControllers = (): JSX.Element => <ThemMoiKhoanMuc handleSubmit={handleSubmitKhoanMuc} />;
@@ -231,8 +117,15 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     setDataOriginal(nextState);
   }
 
-  const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[]): JSX.Element => {
-    return <ThemMoiChiPhi handleSubmit={handleSubmit} rows={rows} status={status} />;
+  const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[], groupId: string): JSX.Element => {
+    return (
+      <ThemMoiChiPhi
+        handleSubmit={handleSubmit}
+        khoanMuc={find(groupedKhoanMuc, { id: groupId }) || { id: '', name: '' }}
+        rows={rows}
+        status={status}
+      />
+    );
   };
 
   const renderUtilityDropDown = (row: TableRow<API.LISTMTDETAILRECEIVER>, index: number): JSX.Element => {
@@ -267,7 +160,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
           </div>
         </Col>
         <Col className="d-flex justify-content-end">
-          <TopControllers idBangKe={idBangKe} items={items} status={status} deleteData={deleteData} />
+          <TopControllers idBangKe={idBangKe} items={data} status={status} deleteData={deleteData} />
         </Col>
       </Row>
       <div className="bg-white p-3 shadow-sm mb-4">
@@ -305,6 +198,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
             columns={columns}
             data={data}
             groupKey={'KHOAN_MUC'}
+            preGroups={groupedKhoanMuc}
             renderGroupedRow={renderGroupedRow}
             renderUtilityDropDown={renderUtilityDropDown}
           />

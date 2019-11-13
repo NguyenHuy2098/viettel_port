@@ -1,11 +1,12 @@
-import React from 'react';
-import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
+import React, { useEffect } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { action_ZFI001 } from 'redux/ZFI001/actions';
-import { select_ZFI001 } from 'redux/ZFI001/selectors';
+import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { get, isEmpty } from 'lodash';
+
+import { action_ZFI001 } from 'redux/ZFI001/actions';
+import { select_ZFI001_list } from 'redux/ZFI001/selectors';
 import { cleanAccents } from 'utils/common';
 
 interface Props {
@@ -17,14 +18,14 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
+  useEffect(() => {
     const payloads = {
       KM_FLAG: 'X',
     };
     dispatch(action_ZFI001(payloads));
   }, [dispatch]);
 
-  const data = useSelector(select_ZFI001);
+  const data = useSelector(select_ZFI001_list);
 
   const [search, setSearch] = React.useState<string>('');
   function handleSearch(e: React.FormEvent<HTMLInputElement>): void {
@@ -32,7 +33,7 @@ function ThemMoiKhoanMuc(props: Props): JSX.Element {
   }
 
   const [list, setList] = React.useState<API.LIST[]>([]);
-  React.useEffect((): void => {
+  useEffect((): void => {
     const list = data.filter(
       item =>
         cleanAccents(get(item, 'km_text', '').toLowerCase()).includes(cleanAccents(search).toLowerCase()) ||

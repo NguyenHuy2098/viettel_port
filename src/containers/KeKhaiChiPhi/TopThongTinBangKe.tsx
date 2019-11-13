@@ -11,12 +11,8 @@ import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import numeral from 'numeral';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 
-interface DataType extends API.LISTMTDETAILRECEIVER {
-  IS_GROUP_DATA_TABLE?: boolean;
-}
-
 interface Props {
-  data: DataType[];
+  data: API.LISTMTDETAILRECEIVER[];
   isCreateNew: boolean;
   period?: string;
 }

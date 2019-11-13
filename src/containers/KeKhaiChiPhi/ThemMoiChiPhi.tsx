@@ -2,32 +2,33 @@ import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Row as TableRow } from 'react-table';
 import { Button } from 'reactstrap';
-import { get, head, sumBy, toNumber } from 'lodash';
+import { get, sumBy, toNumber } from 'lodash';
 import numeral from 'numeral';
 
 import ModalThemMoiChiPhi, { ModalThemMoiChiPhiType } from './ModalThemMoiChiPhi';
 
 interface Props {
   handleSubmit: Function;
+  khoanMuc: { id: string; name: string };
   rows: TableRow<API.LISTMTDETAILRECEIVER>[];
   status: number;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const ThemMoiChiPhi = (props: Props): JSX.Element => {
-  const { handleSubmit, rows, status } = props;
+  const { handleSubmit, khoanMuc, rows, status } = props;
   const [modal, setModal] = React.useState(false);
   const { t } = useTranslation();
 
-  const { KHOAN_MUC: khoanMuc, TEN_KM: tenKhoanMuc } = useMemo(() => get(head(rows), 'original'), [rows]);
+  const { id, name } = khoanMuc;
   const tongGiaTri = useMemo(
     () => numeral(sumBy(rows, row => toNumber(get(row, 'original.SUM_AMOUNT') || 0))).format('0,0'),
     [rows],
   );
 
-  function toggle(e: React.MouseEvent): void {
+  function toggle(event?: React.MouseEvent): void {
+    event && event.stopPropagation();
     setModal(!modal);
-    e.stopPropagation();
   }
 
   const closeModal = (): void => {
@@ -38,8 +39,8 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     <div>
       <div className="sipTableAmountListGroup">
         <span className="nhom-khoan-muc nav-link nav-dropdown-toggle">
-          {`${khoanMuc}-${tenKhoanMuc}`}
-          <i className="fa fa-caret-down fa-lg pl-4 pr-4 nav-icon"></i>({t('Tổng')}:{' '}
+          {`${id}-${name}`}
+          <i className="fa fa-caret-down fa-lg pl-4 pr-4 nav-icon" />({t('Tổng')}:{' '}
           <span className="text-bold color-primary">{tongGiaTri}</span> <span>{t('VND')}</span>)
         </span>
         {status === 0 && (
@@ -52,10 +53,9 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
       <ModalThemMoiChiPhi
         type={ModalThemMoiChiPhiType.NEW}
         showModal={modal}
-        // eslint-disable-next-line react/jsx-no-bind
-        toggle={(): void => setModal(!modal)}
-        khoanMuc={khoanMuc}
-        tenKhoanMuc={tenKhoanMuc}
+        toggle={toggle}
+        khoanMuc={id}
+        tenKhoanMuc={name}
         submit={handleSubmit}
         closeModal={closeModal}
       />

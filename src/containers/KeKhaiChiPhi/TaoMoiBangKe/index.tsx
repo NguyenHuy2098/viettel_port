@@ -1,17 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ReactDatePicker from 'react-datepicker';
-import { useDispatch } from 'react-redux';
-import { Cell, Row as TableRow } from 'react-table';
+import { useDispatch, useSelector } from 'react-redux';
+import { Row as TableRow } from 'react-table';
 import { Col, Row } from 'reactstrap';
 import { generatePath } from 'react-router';
 import { goBack, replace } from 'connected-react-router';
-import { delay, get, isEmpty, map, reject, size, slice, join, toString, includes } from 'lodash';
+import { concat, delay, find, get, includes, isEmpty, map, reject, size, toString, uniq } from 'lodash';
 import produce from 'immer';
 import moment from 'moment';
 import XLSX, { WorkBook } from 'xlsx';
 
-import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
 import ButtonLuuBangKe from 'components/Button/ButtonLuuBangKe';
@@ -19,22 +18,21 @@ import ButtonNopBangKe from 'components/Button/ButtonNopBangKe';
 import DataTable from 'components/DataTable/Grouped';
 import { toastError } from 'components/Toast';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
-import { numberFormat, transformXlsxRowToBangKeItem, validateBKRow, validateXlsxBangKe } from 'utils/common';
+import { select_ZFI001_list } from 'redux/ZFI001/selectors';
+import { transformXlsxRowToBangKeItem, validateBKRow, validateXlsxBangKe } from 'utils/common';
 import routesMap from 'utils/routesMap';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
-import UtilityDropDown from '../UtilityDropDown';
 import TopThongTinBangKe from '../TopThongTinBangKe';
-
-interface DataType extends API.ITEMBK {
-  IS_GROUP_DATA_TABLE?: boolean;
-}
+import useColumns from './useColumns';
+import UtilityDropDown from '../UtilityDropDown';
 
 // eslint-disable-next-line max-lines-per-function
 const TaoMoiBangKe = (): JSX.Element => {
+  const cols = useColumns();
   const dispatch = useDispatch();
-  const [data, setData] = useState<DataType[]>([]);
-  const [deleteData, setDeleteData] = useState<DataType[]>([]);
-
+  const listKhoanMuc = useSelector(select_ZFI001_list);
+  const [data, setData] = useState<API.ITEMBK[]>([]);
+  const [deleteData, setDeleteData] = useState<API.ITEMBK[]>([]);
   const { t } = useTranslation();
 
   const handleRemoveTableRow = (item: API.ITEMBK, index: number): void => {
@@ -60,98 +58,25 @@ const TaoMoiBangKe = (): JSX.Element => {
     setData([...tempData]);
   };
 
-  const columns = useMemo(
-    // eslint-disable-next-line max-lines-per-function
-    () => [
-      {
-        Header: t('Mẫu hoá đơn'),
-        accessor: 'MAU_HD',
-      },
-      {
-        Header: t('Ký hiệu'),
-        accessor: 'KIHIEU_HD',
-      },
-      {
-        Header: t('Số'),
-        accessor: 'SO_HD',
-      },
-      {
-        Header: t('Ngày'),
-        accessor: 'NGAY_HD',
-      },
-      {
-        Header: t('Trạng thái'),
-        accessor: 'ITEM_NO',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          const thisStatus = get(row, 'original.ITEM_NO', 0);
-          return <BadgeFicoBangKeStatus status={thisStatus} />;
-        },
-      },
-      {
-        Header: t('Người bán'),
-        accessor: 'NGUOI_BAN',
-      },
-      {
-        Header: t('MST'),
-        accessor: 'MST',
-      },
-      {
-        Header: t('Hàng hoá'),
-        accessor: 'DESCR',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisDescr = get(row, 'original.DESCR', '0');
-          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
-          return <span title={thisDescr}>{thisText}</span>;
-        },
-      },
-      {
-        Header: t('Giá chưa thuế (VND)'),
-        accessor: 'AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.AMOUNT'));
-        },
-      },
-      {
-        Header: t('Phụ phí (VND)'),
-        accessor: 'PHU_PHI',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI'));
-        },
-      },
-      {
-        Header: t('TS'),
-        accessor: 'TAX',
-      },
-      {
-        Header: t('Thuế GTGT (VND)'),
-        accessor: 'TAX_AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT'));
-        },
-      },
-      {
-        Header: t('Tổng (VND)'),
-        accessor: 'SUM_AMOUNT',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): string => {
-          return numberFormat(get(row, 'original.SUM_AMOUNT'));
-        },
-      },
-      {
-        Header: t('Link URL'),
-        accessor: 'URL',
-        Cell: ({ row }: Cell<API.ListMTBKRECEIVER>): JSX.Element => {
-          const thisDescr = get(row, 'original.URL', '0');
-          const thisText = size(thisDescr) < 80 ? thisDescr : `${join(slice(thisDescr, 0, 85), '')}...`;
-          return <span title={thisDescr}>{thisText}</span>;
-        },
-      },
-      {
-        Header: t('Quản trị'),
-      },
-    ],
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const columns = useMemo(() => cols, [data]);
+
+  const [manualGroupedKeys, setManualGroupedKeys] = useState<string[]>([]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const groupedKeys = useMemo(() => uniq(concat(manualGroupedKeys, map(data, 'KHOAN_MUC'))), [manualGroupedKeys, data]);
+
+  const groupedKhoanMuc = useMemo(() => {
+    if (isEmpty(listKhoanMuc)) return [];
+    return map(groupedKeys, key => {
+      const currentKhoanMuc = find(listKhoanMuc, { km_id: key });
+      return {
+        id: get(currentKhoanMuc, 'km_id') || '',
+        name: get(currentKhoanMuc, 'km_text') || '',
+      };
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [data],
-  );
+  }, [groupedKeys, listKhoanMuc]);
 
   const handleChangeFile = (workbook: WorkBook): void => {
     const firstSheetName = workbook.SheetNames[0];
@@ -181,8 +106,6 @@ const TaoMoiBangKe = (): JSX.Element => {
     delay(() => dispatch(goBack()), 2000);
   };
 
-  const items = useMemo(() => data.filter(item => !item.IS_GROUP_DATA_TABLE), [data]);
-
   const renderFirstControllers = (): JSX.Element => (
     <>
       <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX.xlsx" download>
@@ -192,16 +115,16 @@ const TaoMoiBangKe = (): JSX.Element => {
       <ButtonLuuBangKe
         className="ml-2"
         date={monthYear}
-        disabled={isEmpty(items)}
-        items={items}
+        disabled={isEmpty(data)}
+        items={data}
         onSuccess={handleLuuBangKeSuccess}
         deleteItems={deleteData}
       />
       <ButtonNopBangKe
         className="ml-2"
         date={monthYear}
-        disabled={isEmpty(items)}
-        items={items}
+        disabled={isEmpty(data)}
+        items={data}
         onSuccess={handleNopBangKeSuccess}
       />
     </>
@@ -225,23 +148,26 @@ const TaoMoiBangKe = (): JSX.Element => {
           />
         </Col>
         <Col xs={12} md={6} className="text-right">
-          <span>Tổng cộng: {size(items)}</span>
+          <span>
+            {t('Tổng cộng')}: {size(data)}
+          </span>
         </Col>
       </Row>
     </div>
   );
 
-  function handleSubmit(item: API.LIST): void {
-    const nextState = produce(data, draftState => {
-      draftState.unshift({ KHOAN_MUC: item.km_id, TEN_KM: item.km_text, IS_GROUP_DATA_TABLE: true });
-    });
-    setData(nextState);
+  function handleSubmitKhoanMuc(item: API.LIST): void {
+    setManualGroupedKeys(
+      produce(manualGroupedKeys, draftState => {
+        draftState.unshift(get(item, 'km_id', ''));
+      }),
+    );
   }
 
   const renderSecondControllers = (): JSX.Element => (
     <>
       <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} shouldConfirm={size(data) > 0} />
-      <ThemMoiKhoanMuc handleSubmit={handleSubmit} />
+      <ThemMoiKhoanMuc handleSubmit={handleSubmitKhoanMuc} />
     </>
   );
 
@@ -252,9 +178,14 @@ const TaoMoiBangKe = (): JSX.Element => {
     setData(nextState);
   }
 
-  const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[]): JSX.Element => {
-    return <ThemMoiChiPhi handleSubmit={handleSubmitThemMoiChiPhi} rows={rows} status={0} />;
-  };
+  const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[], groupId: string): JSX.Element => (
+    <ThemMoiChiPhi
+      handleSubmit={handleSubmitThemMoiChiPhi}
+      khoanMuc={find(groupedKhoanMuc, { id: groupId }) || { id: '', name: '' }}
+      rows={rows}
+      status={0}
+    />
+  );
 
   const renderUtilityDropDown = (row: TableRow<API.LISTMTDETAILRECEIVER>, index: number): JSX.Element => {
     return (
@@ -299,6 +230,7 @@ const TaoMoiBangKe = (): JSX.Element => {
             columns={columns}
             data={data}
             groupKey={'KHOAN_MUC'}
+            preGroups={groupedKhoanMuc}
             renderGroupedRow={renderGroupedRow}
             renderUtilityDropDown={renderUtilityDropDown}
           />
