@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import ReactPaginate, { ReactPaginateProps } from 'react-paginate';
 import { useTranslation } from 'react-i18next';
+import { FormGroup, CustomInput, Label, Col, Row } from 'reactstrap';
 
 interface Props extends ReactPaginateProps {
   onThisPaginationChange?: (selectedItem: { selected: number }) => void;
   resetCurrentPage?: boolean;
 }
 
+// eslint-disable-next-line max-lines-per-function
 function Pagination(props: Props): JSX.Element {
   const { t } = useTranslation();
   const [pageCurrent, setPageCurrent] = useState<number>(1);
@@ -20,14 +22,32 @@ function Pagination(props: Props): JSX.Element {
     props.onThisPaginationChange && props.onThisPaginationChange(selectedItem);
   };
 
+  function rederPaginationInfo(): JSX.Element {
+    return (
+      <Row className="pl-3">
+        <Label className="mt-2"> {t('Hiển thị')}</Label>
+        <Col>
+          <FormGroup>
+            <CustomInput type="select">
+              <option>Value 1</option>
+              <option>Value 2</option>
+              <option>Value 3</option>
+              <option>Value 4</option>
+              <option>Value 5</option>
+            </CustomInput>
+          </FormGroup>
+        </Col>
+        <Label className="mt-2">
+          {' '}
+          {t('Tổng cộng')}: {pageCurrent}/{props.pageCount}
+        </Label>
+      </Row>
+    );
+  }
+
   return (
     <nav className="sipPagination">
-      <div className="sipPaginationTotal">
-        {t('Hiển thị')}
-        <span>
-          {pageCurrent}/{props.pageCount}
-        </span>
-      </div>
+      <div className="sipPaginationTotal">{rederPaginationInfo()}</div>
       <ReactPaginate
         containerClassName="pagination"
         previousClassName="sipPaginationPrev page-item"
