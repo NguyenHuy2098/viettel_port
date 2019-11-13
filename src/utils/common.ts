@@ -56,6 +56,7 @@ const BKRowSchema = yup.object().shape({
   'Link URL': yup
     .string()
     .required(`Trường "Link URL" không được để trống`)
+    // eslint-disable-next-line no-useless-escape
     .matches(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/, 'link URL không hợp lệ'),
   'Mã số thuế người bán': yup.string().required(`Trường "Mã số thuế người bán" không được để trống`),
   'Mẫu hóa đơn': yup.string().required(`Trường "Mẫu hóa đơn" không được để trống`),
