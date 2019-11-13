@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
@@ -8,6 +8,8 @@ import useClickOutSide from 'hooks/useClickOutSide';
 interface Props {
   handleSelectEndDate: Function;
   handleSelectStartDate: Function;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -16,6 +18,11 @@ function SelectRangeDate(props: Props): JSX.Element {
   const [startDate, setStartDate] = useState(() => new Date());
   const [endDate, setEndDate] = useState(() => new Date());
   const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    props.startDate && setStartDate(props.startDate);
+    props.endDate && setEndDate(props.endDate);
+  }, [props.startDate, props.endDate]);
 
   function handleClickSelectDate(): void {
     setShowSelectDate(!showSelectDate);

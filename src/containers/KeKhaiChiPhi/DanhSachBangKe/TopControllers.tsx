@@ -478,9 +478,6 @@ const TopControllers = (props: Props): JSX.Element => {
   }
   return (
     <>
-      <Button className="sipTitleRightBlockBtnIcon">
-        <img src={'../../assets/img/icon/iconRefresh.svg'} alt="VTPostek" />
-      </Button>
       {/*<ButtonExportExcelBangKe className="ml-2" disabled={noBangKeChecked} ids={checkedBangKe} />*/}
       <ExportExcelWithTemplate
         handleData={handleData}

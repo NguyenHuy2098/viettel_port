@@ -1,12 +1,16 @@
+/* eslint-disable max-lines */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { Button, Col, Input, Row } from 'reactstrap';
-import { push } from 'connected-react-router';
-import { get, map, size, toString, trim, toUpper } from 'lodash';
+import { push, replace } from 'connected-react-router';
+import { get, map, size, toString, trim, toUpper, isNull } from 'lodash';
 import moment from 'moment';
+import url from 'url';
+import { parse, ParsedQuery, stringify } from 'query-string';
+import { History } from 'history';
 
 import DataTable from 'components/DataTable';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
@@ -22,22 +26,98 @@ import routesMap from 'utils/routesMap';
 import TopControllers from 'containers/KeKhaiChiPhi/DanhSachBangKe/TopControllers';
 import SelectRangeDate from 'containers/KeKhaiChiPhi/SelectRangeDate';
 
+interface Props {
+  history: History;
+}
+
 // eslint-disable-next-line max-lines-per-function
-const DanhSachBangKe = (): JSX.Element => {
+const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
+  const { history } = props;
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const dataTable = useSelector(select_ZFI002);
   const totalPage = useSelector(select_ZFI002Count);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const queryString = useMemo((): ParsedQuery => parse(get(history, 'location.search')), [history]);
 
   const [tuKy, setTuKy] = useState<string>(moment().format('YYYYMM'));
   const [denKy, setDenKy] = useState<string>(moment().format('YYYYMM'));
-  const [filterTimeValue] = useState<string>(`${moment().format('MM/YYYY')} - ${moment().format('MM/YYYY')}`);
   const [idSearch, setIdSearch] = useState<string>('');
   const [typeSearch, setTypeSearch] = useState<string>('');
   const [checkedBangKe, setCheckedBangKe] = useState<string[]>([]);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const pageItems = getPageItems();
+
+  const pushSearchConditionToUrl = (tuKy: string, denKy: string, status: string, search?: string): void => {
+    if (search === '') {
+      dispatch(
+        replace(
+          generatePath(
+            url.format({
+              ...get(history, 'location', {}),
+              search: stringify({ ...queryString, start: tuKy, end: denKy, status: status === '' ? '-1' : status }),
+            }),
+          ),
+        ),
+      );
+    } else {
+      dispatch(
+        replace(
+          generatePath(
+            url.format({
+              ...get(history, 'location', {}),
+              search: stringify({
+                ...queryString,
+                start: tuKy,
+                end: denKy,
+                status: status === '' ? '-1' : status,
+                search,
+              }),
+            }),
+          ),
+        ),
+      );
+    }
+  };
+
+  const handleClearFilter = (): void => {
+    const defaultKy = moment().format('YYYYMM');
+    pushSearchConditionToUrl(defaultKy, defaultKy, '-1');
+    getListBangKe({
+      TU_KY: defaultKy,
+      DEN_KY: defaultKy,
+      BK_ID: '',
+      BK_STATUS: '',
+    });
+    setTuKy(defaultKy);
+    setDenKy(defaultKy);
+    setIdSearch('');
+    setTypeSearch('');
+  };
+
+  useEffect(() => {
+    const thisTuKy = isNull(get(queryString, 'start', '')) ? '' : toString(get(queryString, 'start', ''));
+    const thisDenKy = isNull(get(queryString, 'end', '')) ? '' : toString(get(queryString, 'end', ''));
+    const thisTypeSearch = isNull(get(queryString, 'status', '')) ? '' : toString(get(queryString, 'status', ''));
+    const thisKeySearch = isNull(get(queryString, 'search', '')) ? '' : toString(get(queryString, 'search', ''));
+    if (thisTuKy === '' || thisDenKy === '' || thisTypeSearch === '') {
+      pushSearchConditionToUrl(tuKy, denKy, '-1');
+      getListBangKe();
+    } else {
+      setTuKy(thisTuKy);
+      setDenKy(thisDenKy);
+      setTypeSearch(thisTypeSearch === '-1' ? '' : thisTypeSearch);
+      setIdSearch(thisKeySearch);
+      getListBangKe({
+        TU_KY: thisTuKy,
+        DEN_KY: thisDenKy,
+        BK_ID: toUpper(trim(thisKeySearch)),
+        BK_STATUS: thisTypeSearch === '-1' ? '' : thisTypeSearch,
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history, pageItems]);
 
   const noBangKeChecked = useMemo((): boolean => size(checkedBangKe) === 0, [checkedBangKe]);
   function toggleDeleteConfirmModal(): void {
@@ -72,15 +152,15 @@ const DanhSachBangKe = (): JSX.Element => {
   const [resetCurrentPage, setResetCurrentPage] = useState<boolean>(true);
   const handleSearchBangKe = (): void => {
     setResetCurrentPage(!resetCurrentPage);
-    if (size(idSearch) > 0 || size(filterTimeValue) > 0 || size(typeSearch) > 0) {
-      getListBangKe();
-    }
+    getListBangKe();
+    pushSearchConditionToUrl(tuKy, denKy, typeSearch, toUpper(trim(idSearch)));
   };
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
     getListBangKe({
       IV_PAGENO: selectedItem.selected + 1,
     });
+    pushSearchConditionToUrl(tuKy, denKy, typeSearch, toUpper(trim(idSearch)));
   };
 
   const handleDeleteManifest = (torId: string): void => {
@@ -101,11 +181,6 @@ const DanhSachBangKe = (): JSX.Element => {
       ),
     );
   };
-
-  useEffect((): void => {
-    getListBangKe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageItems]);
 
   const handleChangeTextboxValue = (
     setValueFunction: Function,
@@ -226,7 +301,12 @@ const DanhSachBangKe = (): JSX.Element => {
           </div>
         </Col>
         <Col className="sipFilterCol">
-          <SelectRangeDate handleSelectEndDate={handleSelectEndDate} handleSelectStartDate={handleSelectStartDate} />
+          <SelectRangeDate
+            startDate={moment(tuKy, 'YYYYMM').toDate()}
+            endDate={moment(denKy, 'YYYYMM').toDate()}
+            handleSelectEndDate={handleSelectEndDate}
+            handleSelectStartDate={handleSelectStartDate}
+          />
         </Col>
         <Col className="sipFilterCol">
           <div className="sipFilterColSearch">
@@ -249,6 +329,9 @@ const DanhSachBangKe = (): JSX.Element => {
         <Col className="sipFilterCol sipFilterColBtn">
           <Button color="primary" onClick={handleSearchBangKe}>
             {t('Tìm kiếm')}
+          </Button>
+          <Button className="sipTitleRightBlockBtnIcon m-0" onClick={handleClearFilter}>
+            <img src={'../../assets/img/icon/iconRefresh.svg'} alt="VTPostek" />
           </Button>
         </Col>
       </Row>

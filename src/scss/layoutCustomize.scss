@@ -329,6 +329,18 @@ input.form-control:-moz-placeholder {
     }
   }
 }
+.sipTitleRightBlockBtnIcon {
+  background: #ffffff !important;
+  border: 1px solid #e4e8eb;
+  padding: 0 10px;
+  height: 32px;
+  img,
+  i {
+    color: #a1a6ab;
+    margin: 0;
+    font-size: 16px;
+  }
+}
 .sipTitleModalCreateNew {
   width: 568px;
   margin: 100px auto;
@@ -871,7 +883,7 @@ html:not([dir='rtl']) .sidebar {
   display: flex;
   padding: 15px 8px;
   .sipFilterCol {
-    flex: 0 0 29%;
+    flex: 0 0 26%;
     padding: 0 7px;
     .react-bootstrap-daterangepicker-container {
       width: 100%;
@@ -884,10 +896,10 @@ html:not([dir='rtl']) .sidebar {
       box-sizing: border-box;
     }
     &.sipFilterColBtn {
-      flex: 0 0 11%;
+      flex: 0 0 22%;
       padding: 0 7px;
       .btn {
-        width: 100%;
+        margin-right: 15px;
       }
     }
   }
