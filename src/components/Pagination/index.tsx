@@ -34,7 +34,9 @@ function Pagination(props: Props): JSX.Element {
   const [pageItems, setPageItems] = useState<number>(() => toNumber(getPageItems()));
   function handleChangePageItems(e: React.ChangeEvent<HTMLInputElement>): void {
     setPageItems(toNumber(e.currentTarget.value));
-    const url = replaceUrlParam(window.location.pathname + window.location.search, 'pageitems', e.currentTarget.value);
+    const url = replaceUrlParam(window.location.pathname + window.location.search, {
+      pageitems: e.currentTarget.value,
+    });
     dispatch(replace(generatePath(url)));
   }
 

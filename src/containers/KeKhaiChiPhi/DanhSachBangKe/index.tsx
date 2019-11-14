@@ -6,10 +6,8 @@ import { generatePath } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { Button, Col, Input, Row } from 'reactstrap';
 import { push, replace } from 'connected-react-router';
-import { get, map, size, toString, trim, toUpper, isNull } from 'lodash';
+import { get, map, size, toString, trim, toUpper } from 'lodash';
 import moment from 'moment';
-import url from 'url';
-import { parse, ParsedQuery, stringify } from 'query-string';
 import { History } from 'history';
 
 import DataTable from 'components/DataTable';
@@ -25,6 +23,8 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import routesMap from 'utils/routesMap';
 import TopControllers from 'containers/KeKhaiChiPhi/DanhSachBangKe/TopControllers';
 import SelectRangeDate from 'containers/KeKhaiChiPhi/SelectRangeDate';
+import replaceUrlParam from 'utils/replaceUrlParam';
+import parse_query_string from 'utils/parse_query_string';
 
 interface Props {
   history: History;
@@ -37,9 +37,6 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const dataTable = useSelector(select_ZFI002);
   const totalPage = useSelector(select_ZFI002Count);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const queryString = useMemo((): ParsedQuery => parse(get(history, 'location.search')), [history]);
-
   const [tuKy, setTuKy] = useState<string>(moment().format('YYYYMM'));
   const [denKy, setDenKy] = useState<string>(moment().format('YYYYMM'));
   const [idSearch, setIdSearch] = useState<string>('');
@@ -49,36 +46,14 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const pageItems = getPageItems();
 
-  const pushSearchConditionToUrl = (tuKy: string, denKy: string, status: string, search?: string): void => {
-    if (search === '') {
-      dispatch(
-        replace(
-          generatePath(
-            url.format({
-              ...get(history, 'location', {}),
-              search: stringify({ ...queryString, start: tuKy, end: denKy, status: status === '' ? '-1' : status }),
-            }),
-          ),
-        ),
-      );
-    } else {
-      dispatch(
-        replace(
-          generatePath(
-            url.format({
-              ...get(history, 'location', {}),
-              search: stringify({
-                ...queryString,
-                start: tuKy,
-                end: denKy,
-                status: status === '' ? '-1' : status,
-                search,
-              }),
-            }),
-          ),
-        ),
-      );
-    }
+  const pushSearchConditionToUrl = (tuKy: string, denKy: string, status: string, searchs?: string): void => {
+    const url = replaceUrlParam(window.location.pathname + window.location.search, {
+      start: tuKy,
+      end: denKy,
+      status: status === '' ? '-1' : status,
+      searchs,
+    });
+    dispatch(replace(generatePath(url)));
   };
 
   const handleClearFilter = (): void => {
@@ -97,25 +72,25 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   useEffect(() => {
-    const thisTuKy = isNull(get(queryString, 'start', '')) ? '' : toString(get(queryString, 'start', ''));
-    const thisDenKy = isNull(get(queryString, 'end', '')) ? '' : toString(get(queryString, 'end', ''));
-    const thisTypeSearch = isNull(get(queryString, 'status', '')) ? '' : toString(get(queryString, 'status', ''));
-    const thisKeySearch = isNull(get(queryString, 'search', '')) ? '' : toString(get(queryString, 'search', ''));
+    const thisTuKy = parse_query_string('start', '');
+    const thisDenKy = parse_query_string('end', '');
+    const thisTypeSearch = parse_query_string('status', '');
+    const thisKeySearch = parse_query_string('searchs', '');
     if (thisTuKy === '' || thisDenKy === '' || thisTypeSearch === '') {
       pushSearchConditionToUrl(tuKy, denKy, '-1');
       getListBangKe();
-    } else {
-      setTuKy(thisTuKy);
-      setDenKy(thisDenKy);
-      setTypeSearch(thisTypeSearch === '-1' ? '' : thisTypeSearch);
-      setIdSearch(thisKeySearch);
-      getListBangKe({
-        TU_KY: thisTuKy,
-        DEN_KY: thisDenKy,
-        BK_ID: toUpper(trim(thisKeySearch)),
-        BK_STATUS: thisTypeSearch === '-1' ? '' : thisTypeSearch,
-      });
+      return;
     }
+    setTuKy(thisTuKy);
+    setDenKy(thisDenKy);
+    setTypeSearch(thisTypeSearch === '-1' ? '' : thisTypeSearch);
+    setIdSearch(thisKeySearch);
+    getListBangKe({
+      TU_KY: thisTuKy,
+      DEN_KY: thisDenKy,
+      BK_ID: toUpper(trim(thisKeySearch)),
+      BK_STATUS: thisTypeSearch === '-1' ? '' : thisTypeSearch,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history, pageItems]);
 
