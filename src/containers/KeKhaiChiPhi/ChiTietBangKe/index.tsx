@@ -7,7 +7,9 @@ import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
 import classnames from 'classnames';
+import { THEM_MOI_CHI_PHI_SUCCESS } from 'utils/types';
 
+import emitter from 'utils/emitter';
 import { detailBangkeFicoStateMap } from 'utils/common';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable/Grouped';
@@ -115,6 +117,7 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     });
     setData(nextState);
     setDataOriginal(nextState);
+    emitter.emit(THEM_MOI_CHI_PHI_SUCCESS, payload.KHOAN_MUC);
   }
 
   const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[], groupId: string): JSX.Element => {

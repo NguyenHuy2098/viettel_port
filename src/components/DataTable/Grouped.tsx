@@ -4,8 +4,10 @@ import { useTranslation } from 'react-i18next';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
 import { groupBy, isEmpty, isFunction, isNil, map, noop, size, toString, get, toNumber } from 'lodash';
 import produce from 'immer';
+import { THEM_MOI_CHI_PHI_SUCCESS } from 'utils/types';
 
 import NoData from './NoData';
+import useEvent from '../../hooks/useEvent';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 interface Props extends TableOptions<any> {
@@ -59,6 +61,18 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [data, dataDisable],
   );
+
+  useEvent(THEM_MOI_CHI_PHI_SUCCESS, (item: string) => {
+    const nextState = produce(dataDisable, draftState => {
+      if (size(dataDisable.filter(id => toNumber(id) === toNumber(item)))) {
+        draftState.splice(
+          draftState.findIndex(id => toNumber(id) === toNumber(item)),
+          1,
+        );
+      }
+    });
+    setDataDisable(nextState);
+  });
 
   const renderGroupItems = (indexGroup: string): JSX.Element[] =>
     map(groupedData[indexGroup], (row, index) => {

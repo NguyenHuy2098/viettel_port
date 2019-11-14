@@ -38,9 +38,9 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
   return (
     <div>
       <div className="sipTableAmountListGroup">
-        <span className="nhom-khoan-muc nav-link nav-dropdown-toggle">
+        <span className="nhom-khoan-muc">
           {`${id}-${name}`}
-          <i className="fa fa-caret-down fa-lg pl-4 pr-4 nav-icon" />({t('Tổng')}:{' '}
+          <i className="fa fa-caret-down fa-lg pl-4 pr-4" />({t('Tổng')}:{' '}
           <span className="text-bold color-primary">{tongGiaTri}</span> <span>{t('VND')}</span>)
         </span>
         {status === 0 && (
