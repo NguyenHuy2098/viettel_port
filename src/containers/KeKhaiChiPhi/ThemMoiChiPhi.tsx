@@ -12,11 +12,12 @@ interface Props {
   khoanMuc: { id: string; name: string };
   rows: TableRow<API.LISTMTDETAILRECEIVER>[];
   status: number;
+  isShow?: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const ThemMoiChiPhi = (props: Props): JSX.Element => {
-  const { handleSubmit, khoanMuc, rows, status } = props;
+  const { handleSubmit, khoanMuc, rows, status, isShow } = props;
   const [modal, setModal] = React.useState(false);
   const { t } = useTranslation();
 
@@ -35,12 +36,14 @@ const ThemMoiChiPhi = (props: Props): JSX.Element => {
     setModal(false);
   };
 
+  const rotate = isShow ? 'rotate' : '';
+
   return (
     <div>
       <div className="sipTableAmountListGroup">
         <span className="nhom-khoan-muc">
           {`${id}-${name}`}
-          <i className="fa fa-caret-down fa-lg pl-4 pr-4" />({t('Tổng')}:{' '}
+          <i className={`fa fa-caret-down fa-lg pl-4 pr-4 fa-transition ${rotate}`} />({t('Tổng')}:{' '}
           <span className="text-bold color-primary">{tongGiaTri}</span> <span>{t('VND')}</span>)
         </span>
         {status === 0 && (

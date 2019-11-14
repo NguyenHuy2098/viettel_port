@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
 import { Row as TableRow } from 'react-table';
-import { concat, get, find, map, toNumber, reject, toString, filter, includes, isEmpty, uniq } from 'lodash';
+import { concat, get, find, map, toNumber, reject, toString, filter, includes, isEmpty, uniq, size } from 'lodash';
 import { match } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import produce from 'immer';
@@ -120,13 +120,19 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
     emitter.emit(THEM_MOI_CHI_PHI_SUCCESS, payload.KHOAN_MUC);
   }
 
-  const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[], groupId: string): JSX.Element => {
+  const renderGroupedRow = (
+    rows: TableRow<API.LISTMTDETAILRECEIVER>[],
+    groupId: string,
+    dataDisable: string[],
+  ): JSX.Element => {
+    const isShow = size(dataDisable.filter(id => toString(id) === toString(groupId))) ? true : false;
     return (
       <ThemMoiChiPhi
         handleSubmit={handleSubmit}
         khoanMuc={find(groupedKhoanMuc, { id: groupId }) || { id: '', name: '' }}
         rows={rows}
         status={status}
+        isShow={isShow}
       />
     );
   };

@@ -15,7 +15,7 @@ interface Props extends TableOptions<any> {
   groupKey: string;
   onRowClick?: (item: any) => void;
   preGroups?: PreGroup[];
-  renderGroupedRow?: (group: TableRow<any>[], index: string) => React.ReactNode;
+  renderGroupedRow?: (group: TableRow<any>[], index: string, dataDisable: string[]) => React.ReactNode;
   renderUtilityDropDown?: (row: TableRow<any>, index: number) => JSX.Element;
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
@@ -42,7 +42,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     [data],
   );
 
-  const [dataDisable, setDataDisable] = useState<number[]>([]);
+  const [dataDisable, setDataDisable] = useState<string[]>([]);
   const handleClickGroupRow = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (item: any): ((event: React.MouseEvent) => void) => (): void => {
@@ -123,7 +123,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                     <tr key={`group-${groupId}`} onClick={handleClickGroupRow(groupId)}>
                       <td colSpan={size(columns)}>
                         {isFunction(renderGroupedRow)
-                          ? renderGroupedRow(groupedData[groupId], groupId)
+                          ? renderGroupedRow(groupedData[groupId], groupId, dataDisable)
                           : toString(groupId) !== 'null'
                           ? t('Nhóm') + ' ' + toString(groupId)
                           : ''}
@@ -138,7 +138,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                   <tr key={`group-${indexGroup}`} onClick={handleClickGroupRow(indexGroup)}>
                     <td colSpan={size(columns)}>
                       {isFunction(renderGroupedRow)
-                        ? renderGroupedRow(groupedRows, indexGroup)
+                        ? renderGroupedRow(groupedRows, indexGroup, dataDisable)
                         : toString(indexGroup) !== 'null'
                         ? t('Nhóm') + ' ' + toString(indexGroup)
                         : ''}
