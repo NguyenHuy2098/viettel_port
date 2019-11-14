@@ -46,12 +46,12 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const [deleteTorId, setDeleteTorId] = useState<string>('');
   const pageItems = getPageItems();
 
-  const pushSearchConditionToUrl = (tuKy: string, denKy: string, status: string, searchs?: string): void => {
+  const pushSearchConditionToUrl = (tuKy: string, denKy: string, status: string, searchKey?: string): void => {
     const url = replaceUrlParam(window.location.pathname + window.location.search, {
       start: tuKy,
       end: denKy,
       status: status === '' ? '-1' : status,
-      searchs,
+      searchKey,
     });
     dispatch(replace(generatePath(url)));
   };
@@ -75,7 +75,7 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
     const thisTuKy = parse_query_string('start', '');
     const thisDenKy = parse_query_string('end', '');
     const thisTypeSearch = parse_query_string('status', '');
-    const thisKeySearch = parse_query_string('searchs', '');
+    const thisKeySearch = parse_query_string('searchKey', '');
     if (thisTuKy === '' || thisDenKy === '' || thisTypeSearch === '') {
       pushSearchConditionToUrl(tuKy, denKy, '-1');
       getListBangKe();

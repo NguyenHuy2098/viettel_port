@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { ceil, filter, get, includes, map } from 'lodash';
+import { ceil, filter, get, includes, map, size } from 'lodash';
 import moment from 'moment';
 
 import Pagination from 'components/Pagination';
@@ -166,6 +166,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
             idChuyenThu={idChuyenThu}
           />
           <ButtonDongChuyenThu
+            disableButton={size(deselectedTaiKienItems) === size(dataChuyenThuChildren)}
             className="ml-2"
             diemDen={get(dataChuyenThu, 'LOG_LOCID_DES', '')}
             idChuyenThu={idChuyenThu}

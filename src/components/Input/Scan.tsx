@@ -51,7 +51,7 @@ const Scan = (props: Props): JSX.Element => {
           onFinish: handleFinishScanning,
           onSuccess: (data: API.RowResponseZTMI023OUT) => {
             onSuccess && onSuccess(data);
-            toastSuccess('Quét thành công.');
+            toastSuccess(`Bưu gửi ${torId} đã được quét`);
           },
         },
       ),
@@ -70,7 +70,7 @@ const Scan = (props: Props): JSX.Element => {
           onFinish: handleFinishScanning,
           onSuccess: (data: API.RowResponseZTMI023OUT) => {
             onSuccess && onSuccess(data);
-            toastSuccess(`Bưu gửi ${torId} đã được quét`);
+            toastSuccess('Quét nhận thành công.');
           },
         },
       ),
