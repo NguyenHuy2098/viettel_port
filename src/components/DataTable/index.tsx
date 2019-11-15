@@ -67,11 +67,13 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     let newCheckedValues: string[] = [];
     if (!isPageAllChecked) {
       newCheckedValues = concat(checkedValues, currentPageYetCheckedValues);
+    } else {
+      newCheckedValues = difference(checkedValues, currentPageCheckboxValues);
     }
     setCheckedValues(newCheckedValues);
     if (isFunction(onCheckedValuesChange)) onCheckedValuesChange(newCheckedValues);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [checkedValues, currentPageYetCheckedValues, isPageAllChecked]);
+  }, [checkedValues, currentPageYetCheckedValues, isPageAllChecked, currentPageCheckboxValues]);
 
   const handleCheckRow = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
