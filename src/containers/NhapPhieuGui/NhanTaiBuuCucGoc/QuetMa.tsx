@@ -244,7 +244,7 @@ const QuetMa: React.FC = (): JSX.Element => {
         Header: t('Số lượng'),
         accessor: '',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Thiếu Api</>;
+          return get(row, 'original.CHILD_COUNT', '');
         },
       },
       {
