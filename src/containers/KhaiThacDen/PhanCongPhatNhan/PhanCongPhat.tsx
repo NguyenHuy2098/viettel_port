@@ -4,14 +4,15 @@ import { Button, Row, Input, Label, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { get, map, find, reject } from 'lodash';
+import { get, map, find, reject, size } from 'lodash';
 import moment from 'moment';
 import { getPageItems } from 'utils/common';
 
+import Pagination from 'components/Pagination';
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
 import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
-import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
+import { selectPhanCongPhat, selectPhanCongPhatCount } from 'redux/MIOA_ZTMI040/selectors';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { action_MIOA_ZTMI054 } from '../../../redux/MIOA_ZTMI054/actions';
@@ -37,6 +38,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   const [dataSelected, setDataSelected] = useState<string[]>([]);
   const [userIdSelected, setUserIdSelected] = useState<string | undefined>(undefined);
   const listPhanCongPhat = useSelector(selectPhanCongPhat);
+  const totalPage = useSelector(selectPhanCongPhatCount);
   const convertData = map(listPhanCongPhat, item => {
     return {
       ...item,
@@ -124,13 +126,15 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
 
   const pageItems = getPageItems();
 
+  const [page, setPage] = useState<number>(1);
+
   const dispatchGetListPhieuGui = useCallback(() => {
     dispatch(
       action_MIOA_ZTMI040(
         {
           FU_STATUS: '605,806',
           Delivery_postman: userIdSelected,
-          IV_PAGENO: '1',
+          IV_PAGENO: page,
           IV_NO_PER_PAGE: pageItems,
           Vourcher: 'N',
           Return: 'N',
@@ -143,12 +147,16 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       ),
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected]);
+  }, [userIdSelected, page, pageItems]);
+
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    setPage(selectedItem.selected + 1);
+  };
 
   useEffect(() => {
     dispatchGetListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected, pageItems]);
+  }, [userIdSelected, pageItems, page]);
 
   const handleSelectUserChange = useCallback(event => {
     if (event.target.value === '') setUserIdSelected(undefined);
@@ -239,6 +247,14 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={convertData} />
+        {size(convertData) > 0 && (
+          <Pagination
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={2}
+            pageCount={totalPage}
+            onThisPaginationChange={onPaginationChange}
+          />
+        )}
       </Row>
     </>
   );
