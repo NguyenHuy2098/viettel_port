@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +13,7 @@ import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
 import { action_MIOA_ZTMI235 } from 'redux/ZTMI235/actions';
 import { action_ZTMI239 } from 'redux/ZTMI239/actions';
-import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
+// import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
@@ -22,10 +23,10 @@ import { SipDataState, SipDataType } from 'utils/enums';
 const QuetMa: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
+  // const _dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
   const userMaBp = useSelector(makeSelectorMaBP);
   const userId = useSelector(makeSelectorPreferredUsername);
-
+  const [dataNhanChuyenThu, setDataNhanChuyenThu] = useState<API.RowResponseZTMI023OUT[]>([]);
   const [codeChuyenThu, setCodeChuyenThu] = useState<string>('');
 
   // eslint-disable-next-line max-lines-per-function
@@ -38,6 +39,7 @@ const QuetMa: React.FC = (): JSX.Element => {
         {
           // eslint-disable-next-line max-lines-per-function
           onSuccess: (data: API.MIOAZTMI023Response): void => {
+            const dataChuyenThu = data;
             if (data.Status) {
               if (data.ErrorCode === 1) {
                 toast(
@@ -91,6 +93,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                                     dispatch(
                                       action_ZTMI239(payload239, {
                                         onSuccess: (data: API.ZTMI239Response): void => {
+                                          setDataNhanChuyenThu(get(dataChuyenThu, 'MT_ZTMI023_OUT.row', []));
                                           setTimeout(function() {
                                             toast(
                                               <>
@@ -159,6 +162,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                       ),
                     );
                   } else {
+                    setCodeChuyenThu('');
                     toast(
                       <>
                         <i className="fa fa-window-close-o mr-2" />
