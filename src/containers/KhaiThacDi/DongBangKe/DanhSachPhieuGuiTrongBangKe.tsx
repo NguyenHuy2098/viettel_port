@@ -29,6 +29,7 @@ import {
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { goBack } from 'connected-react-router';
 
 interface Props {
   match: match;
@@ -183,6 +184,11 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
     setUncheckedBuuGui(newUncheckedBuuGui);
   };
 
+  const callbackAfterDongSuccess = (): void => {
+    resetState();
+    dispatch(goBack());
+  };
+
   // eslint-disable-next-line max-lines-per-function
   function renderTitle(): JSX.Element {
     return (
@@ -208,14 +214,14 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             disabled={size(checkedBuuGui) === 0}
             listUncheckForwardingItem={uncheckedBuuGui}
             idBangKe={idBangKe}
-            callBackAfterDongBangKe={resetState}
+            callBackAfterDongBangKe={callbackAfterDongSuccess}
           />
           <ButtonDongTai
             disabled={size(checkedBuuGui) === 0}
             listUncheckForwardingItem={uncheckedBuuGui}
             idBangKe={idBangKe}
             callBackAfterRemovePhieuGui={getListPhieuGui}
-            callBackAfterDongTai={resetState}
+            callBackAfterDongTai={callbackAfterDongSuccess}
           />
         </div>
       </Row>

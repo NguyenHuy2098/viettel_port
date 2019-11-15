@@ -33,6 +33,7 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import { goBack } from 'connected-react-router';
 
 interface Props {
   match: match;
@@ -361,6 +362,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
               },
             );
             reset();
+            dispatch(goBack());
           },
           onFailure: (error: Error): void => {
             toast(
@@ -461,6 +463,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
               },
             );
             reset();
+            dispatch(goBack());
           },
           onFailure: (error: Error): void => {
             toast(
