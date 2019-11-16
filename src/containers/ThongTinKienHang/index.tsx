@@ -431,8 +431,9 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_DES ? packageInformation.HOUSE_NO_DES : ''}${' '}
-                  ${packageInformation.STREET_ID_DES ? packageInformation.STREET_ID_DES : ''}${' '}
+                  `${packageInformation.HOUSE_NO_DES ? packageInformation.HOUSE_NO_DES : ''}${
+                    packageInformation.STREET_ID_DES ? packageInformation.STREET_ID_DES : ''
+                  }${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}

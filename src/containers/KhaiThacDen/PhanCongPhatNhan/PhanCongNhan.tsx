@@ -4,9 +4,9 @@ import { Button, Row, Input, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { get, isEmpty, map, find } from 'lodash';
+import { get, map, find, size } from 'lodash';
 import { getPageItems } from 'utils/common';
-import moment from 'moment';
+// import moment from 'moment';
 
 import DataTable from 'components/DataTable';
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
@@ -43,13 +43,24 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       statusDisplay: getStatusDisplay(item.STATUS || ''),
     };
   });
-  const [userIdSelected, setUserIdSelected] = useState<string | undefined>(undefined);
+  const [userIdSelected, setUserIdSelected] = useState<string>('');
 
   const handleSelectUserChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.currentTarget.value === '') setUserIdSelected(undefined);
-    else setUserIdSelected(event.currentTarget.value);
+    setUserIdSelected(event.currentTarget.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const pageItems = getPageItems();
+
+  useEffect((): void => {
+    dispatchAPI035();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageItems]);
+
+  const handleSearchUser = useCallback(() => {
+    dispatchAPI035();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userIdSelected]);
 
   const dispatchApi054 = (): void => {
     dispatch(
@@ -71,53 +82,45 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const pageItems = getPageItems();
-
   const dispatchAPI035 = useCallback(() => {
-    dispatch(
-      action_MIOA_ZTMI035(
-        {
-          row: {
-            USER_ID: userIdSelected,
+    if (userIdSelected) {
+      dispatch(
+        action_MIOA_ZTMI035(
+          {
+            row: {
+              USER_ID: userIdSelected,
+            },
+
+            IV_PAGENO: '1',
+            IV_NO_PER_PAGE: pageItems,
           },
 
-          IV_PAGENO: '1',
-          IV_NO_PER_PAGE: pageItems,
-        },
-
-        {
-          onSuccess: (data: API.MIOAZTMI035Response): void => {
-            setListPhanCongNhan(get(data, 'data.MT_ZTMI035_OUT.row', []));
+          {
+            onSuccess: (data: API.MIOAZTMI035Response): void => {
+              setListPhanCongNhan(get(data, 'data.MT_ZTMI035_OUT.row', []));
+            },
+            onFailure: (error: Error): void => {
+              toast(
+                <>
+                  <i className="fa fa-window-close-o mr-2" />
+                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                </>,
+                {
+                  type: 'error',
+                },
+              );
+              setListPhanCongNhan([]);
+            },
+            onFinish: (): void => {
+              setDataSelected([]);
+            },
           },
-          onFailure: (error: Error): void => {
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-              </>,
-              {
-                type: 'error',
-              },
-            );
-            setListPhanCongNhan([]);
-          },
-          onFinish: (): void => {
-            setDataSelected([]);
-          },
-        },
-        { stateless: true },
-      ),
-    );
+          { stateless: true },
+        ),
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userIdSelected]);
-
-  useEffect((): void => {
-    if (isEmpty(userIdSelected)) {
-      return;
-    }
-    dispatchAPI035();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected, pageItems]);
 
   // const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
   //   const value = event.target.value;
@@ -125,27 +128,8 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   //   if (!insideArray) setDataSelected([...dataSelected, value]);
   //   else setDataSelected(reject(dataSelected, item => item === value));
   // };
-
   const columns = useMemo(
     () => [
-      // {
-      //   id: 'select',
-      //   Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-      //     console.log(row);
-      //     return (
-      //       <>
-      //         <Label check>
-      //           <Input
-      //             type="checkbox"
-      //             value={row.original.TRQ_ID || ''}
-      //             checked={dataSelected.includes(row.original.TRQ_ID)}
-      //             onChange={handleCheckBoxItemData}
-      //           />
-      //         </Label>
-      //       </>
-      //     );
-      //   },
-      // },
       {
         Header: t('Mã bưu gửi'),
         accessor: 'PACKET_ID',
@@ -164,12 +148,16 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Tiền phải thu'),
         accessor: 'Total_Charge',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return `${get(row, 'original.Total_Charge')} đ`;
+        },
       },
       {
         Header: t('Ngày gửi bưu phẩm'),
         accessor: 'Created_on',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return moment(get(row, 'original.CREATED_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY');
+          // return moment(get(row, 'original.CREATED_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY');
+          return 'Thiếu Api';
         },
       },
       {
@@ -214,7 +202,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     [userIdSelected, dataSelected],
   );
 
-  const disableButton = !listPhanCongNhan || listPhanCongNhan.length === 0;
+  const disableButton = size(listPhanCongNhan) === 0;
 
   return (
     <>
@@ -223,7 +211,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           <div className="d-flex">
             <div className="sipTitleRightBlockInput m-0">
               <i className="fa fa-search mr-2" />
-              <Input type="select" className="pl-4" onChange={handleSelectUserChange}>
+              <Input type="select" className="pl-4" value={userIdSelected} onChange={handleSelectUserChange}>
                 {/* eslint-disable-next-line react/jsx-max-depth */}
                 <option value={''}>{t('Chọn nhân viên')}</option>
                 {map(listStaff, item => (
@@ -231,20 +219,16 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
                     {item.NAME_TEXT}
                   </option>
                 ))}
-                {/* eslint-disable-next-line react/jsx-max-depth */}
-                {/*<option value={'PM02'} key={'PM02'}>*/}
-                {/*  User test (need remove)*/}
-                {/*</option>*/}
               </Input>
             </div>
-            <Button color="primary" className="ml-2">
+            <Button color="primary" className="ml-2" onClick={handleSearchUser} disabled={userIdSelected === ''}>
               {t('Tìm kiếm')}
             </Button>
           </div>
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{listPhanCongNhan && listPhanCongNhan.length}</span>
+            {t('Tổng số')}: <span>{size(listPhanCongNhan)}</span>
           </p>
         </Col>
       </Row>

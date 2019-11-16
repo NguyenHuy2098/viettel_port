@@ -323,7 +323,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
-  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V1');
+  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V01');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
   const [choXemHang, setChoXemHang] = useState<string>('1');
   const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZPP');

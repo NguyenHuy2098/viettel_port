@@ -293,7 +293,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
   const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
-  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V1');
+  const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V01');
   const [choXemHang, setChoXemHang] = useState<string>('1');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method

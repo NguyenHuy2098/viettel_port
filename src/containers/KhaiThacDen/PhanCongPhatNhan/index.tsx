@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import TabView from 'components/Tab/TabView';
 import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
-import { selectPhanCongNhan } from 'redux/MIOA_ZTMI035/selectors';
-import { selectPhanCongPhat } from 'redux/MIOA_ZTMI040/selectors';
+import { selectPhanCongNhanListCount } from 'redux/MIOA_ZTMI035/selectors';
+import { selectPhanCongPhatListCount } from 'redux/MIOA_ZTMI040/selectors';
 import PhanCongNhan from './PhanCongNhan';
 import PhanCongPhat from './PhanCongPhat';
 
@@ -14,8 +14,8 @@ import PhanCongPhat from './PhanCongPhat';
 const PhanCongPhatNhan: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const listPhanCongNhan = useSelector(selectPhanCongNhan);
-  const listPhanCongPhat = useSelector(selectPhanCongPhat);
+  const listPhanCongNhan = useSelector(selectPhanCongNhanListCount);
+  const listPhanCongPhat = useSelector(selectPhanCongPhatListCount);
 
   useEffect((): void => {
     dispatch(
@@ -42,7 +42,7 @@ const PhanCongPhatNhan: React.FC = (): JSX.Element => {
             children: (
               <>
                 {t('Phân công phát')}
-                <Badge color="primary">{listPhanCongPhat.length}</Badge>
+                <Badge color="primary">{listPhanCongPhat}</Badge>
               </>
             ),
           },
@@ -50,7 +50,7 @@ const PhanCongPhatNhan: React.FC = (): JSX.Element => {
             children: (
               <>
                 {t('Phân công nhận')}
-                <Badge color="primary">{listPhanCongNhan && listPhanCongNhan.length}</Badge>
+                <Badge color="primary">{listPhanCongNhan}</Badge>
               </>
             ),
           },
