@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { Input, Label, Table } from 'reactstrap';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
-import { concat, difference, get, includes, isEmpty, isFunction, isString, map, noop, pull } from 'lodash';
+import { concat, difference, get, includes, isEmpty, isFunction, isString, map, noop, pull, size } from 'lodash';
 import produce from 'immer';
 
 import NoData from './NoData';
@@ -107,7 +107,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     <th>
       {showCheckAll && (
         <Label check>
-          <Input checked={isPageAllChecked} type="checkbox" onChange={handleCheckAllRows} />
+          <Input checked={isPageAllChecked && !!size(data)} type="checkbox" onChange={handleCheckAllRows} />
         </Label>
       )}
     </th>

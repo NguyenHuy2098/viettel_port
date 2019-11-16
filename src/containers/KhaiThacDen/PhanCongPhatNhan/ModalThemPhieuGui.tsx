@@ -67,8 +67,8 @@ const ModalThemPhieugui: React.FC<Props> = (props: Props): JSX.Element => {
   );
   return (
     <>
-      <Button onClick={toggle} disabled={props.disabled}>
-        <i className="fa fa-plus" />
+      <Button color="primary" className="ml-2" onClick={toggle} disabled={props.disabled}>
+        <i className="fa fa-plus mr-2" />
         Thêm phiếu gửi
       </Button>
       <Modal isOpen={modalCreateNew} toggle={toggle} className="sipModalAddPG">

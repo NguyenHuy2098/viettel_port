@@ -1,20 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Row, Input, Label, Col } from 'reactstrap';
+import { Button, Row, Input, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { get, isEmpty, map, find, reject } from 'lodash';
+import { get, isEmpty, map, find } from 'lodash';
 import { getPageItems } from 'utils/common';
+import moment from 'moment';
 
-import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import DataTable from 'components/DataTable';
+import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { toast } from 'react-toastify';
-import { action_MIOA_ZTMI054 } from '../../../redux/MIOA_ZTMI054/actions';
-import { makeSelectorMaBP } from '../../../redux/auth/selectors';
+import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
+import ModalThemPhieugui from './ModalThemPhieuGui';
 
 interface Props {
   match: match;
@@ -117,31 +119,33 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userIdSelected, pageItems]);
 
-  const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = event.target.value;
-    const insideArray = find(dataSelected, item => item === value);
-    if (!insideArray) setDataSelected([...dataSelected, value]);
-    else setDataSelected(reject(dataSelected, item => item === value));
-  };
+  // const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  //   const value = event.target.value;
+  //   const insideArray = find(dataSelected, item => item === value);
+  //   if (!insideArray) setDataSelected([...dataSelected, value]);
+  //   else setDataSelected(reject(dataSelected, item => item === value));
+  // };
+
   const columns = useMemo(
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <>
-              <Label check>
-                <Input
-                  type="checkbox"
-                  value={row.original.TRQ_ID || ''}
-                  checked={dataSelected.includes(row.original.TRQ_ID)}
-                  onChange={handleCheckBoxItemData}
-                />
-              </Label>
-            </>
-          );
-        },
-      },
+      // {
+      //   id: 'select',
+      //   Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+      //     console.log(row);
+      //     return (
+      //       <>
+      //         <Label check>
+      //           <Input
+      //             type="checkbox"
+      //             value={row.original.TRQ_ID || ''}
+      //             checked={dataSelected.includes(row.original.TRQ_ID)}
+      //             onChange={handleCheckBoxItemData}
+      //           />
+      //         </Label>
+      //       </>
+      //     );
+      //   },
+      // },
       {
         Header: t('Mã bưu gửi'),
         accessor: 'PACKET_ID',
@@ -149,12 +153,12 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Bưu cục đến'),
         accessor: 'TO_LOG_ID',
-        // Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-        //   return <>Thiếu Api</>;
-        // },
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return <>Thiếu Api</>;
+        },
       },
       {
-        Header: t('Địa chỉ phát'),
+        Header: t('Địa chỉ nhận'),
         accessor: 'ADD_SHIPPER',
       },
       {
@@ -164,9 +168,9 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ngày gửi bưu phẩm'),
         accessor: 'Created_on',
-        // Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-        //   return <>Thiếu Api</>;
-        // },
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return moment(get(row, 'original.CREATED_ON'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY');
+        },
       },
       {
         Header: t('Trạng thái'),
@@ -258,11 +262,11 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
             currentUserId={userIdSelected}
             disabled={disableButton || dataSelected.length === 0}
           />
-          {/*<ModalThemPhieuGui disabled={disableButton} />*/}
+          <ModalThemPhieugui disabled={disableButton} />
         </div>
       </Row>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={convertData} />
+        <DataTable columns={columns} data={convertData} showCheckboxes renderCheckboxValues={'LOC_ID'} />
       </Row>
     </>
   );
