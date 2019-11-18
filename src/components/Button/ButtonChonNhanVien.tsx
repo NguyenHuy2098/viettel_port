@@ -80,9 +80,9 @@ const ButtonChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
                   onChange={handleChangeSelectUser(item.UNAME)}
                 />{' '}
                 {item.NAME_TEXT}
-                <div className="pl-4">
+                <span className="pl-4-5 display-block">
                   {t('Tuyến')}: {''}
-                </div>
+                </span>
               </Label>
             );
           })}

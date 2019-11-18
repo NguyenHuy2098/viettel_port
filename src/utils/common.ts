@@ -137,7 +137,7 @@ export const badgeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Đã ph�
 
 export const detailBangkeFicoStateMap = ['Tạo mới', 'Chờ phê duyệt', 'Đã phê duyệt', 'Từ chối phê duyệt'];
 
-export const pageItemsDefault = '10';
+export const pageItemsDefault = '20';
 
 export function getPageItems(): string {
   return parse_query_string('pageitems', pageItemsDefault);

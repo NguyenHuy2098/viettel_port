@@ -17,6 +17,8 @@ import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { toast } from 'react-toastify';
 import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import HttpRequestError from 'utils/HttpRequetsError';
+import { toastError, toastSuccess } from 'components/Toast';
 import ModalThemPhieugui from './ModalThemPhieuGui';
 
 interface Props {
@@ -53,12 +55,11 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const pageItems = getPageItems();
-  const [page, setPage] = useState<number>(1);
 
   useEffect((): void => {
     dispatchAPI035();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageItems, page]);
+  }, [pageItems]);
 
   const handleSearchUser = useCallback(() => {
     dispatchAPI035();
@@ -85,53 +86,58 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const dispatchAPI035 = useCallback(() => {
-    if (userIdSelected) {
-      dispatch(
-        action_MIOA_ZTMI035(
-          {
-            row: {
-              USER_ID: userIdSelected,
+  const dispatchAPI035 = useCallback(
+    (payload = {}) => {
+      if (userIdSelected) {
+        dispatch(
+          action_MIOA_ZTMI035(
+            {
+              row: {
+                USER_ID: userIdSelected,
+              },
+
+              IV_PAGENO: '1',
+              IV_NO_PER_PAGE: pageItems,
+              ...payload,
             },
 
-            IV_PAGENO: '1',
-            IV_NO_PER_PAGE: pageItems,
-          },
+            {
+              onSuccess: (data: API.MIOAZTMI035Response): void => {
+                setListPhanCongNhan(get(data, 'data.MT_ZTMI035_OUT.row', []));
+                setTotalPage(toNumber(get(data, 'data.MT_ZTMI035_OUT.PAGING[0].EV_TOTAL_PAGE', 0)));
+              },
+              onFailure: (error: Error): void => {
+                toast(
+                  <>
+                    <i className="fa fa-window-close-o mr-2" />
+                    {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
+                  </>,
+                  {
+                    type: 'error',
+                  },
+                );
+                setListPhanCongNhan([]);
+              },
+              onFinish: (): void => {
+                // setDataSelected([]);
+              },
+            },
+            { stateless: true },
+          ),
+        );
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [userIdSelected, totalPage, pageItems],
+  );
 
-          {
-            onSuccess: (data: API.MIOAZTMI035Response): void => {
-              setListPhanCongNhan(get(data, 'data.MT_ZTMI035_OUT.row', []));
-              setTotalPage(toNumber(get(data, 'data.MT_ZTMI035_OUT.PAGING[0].EV_TOTAL_PAGE', 0)));
-            },
-            onFailure: (error: Error): void => {
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {get(error, 'messages[0]', 'Đã có lỗi xảy ra')}
-                </>,
-                {
-                  type: 'error',
-                },
-              );
-              setListPhanCongNhan([]);
-            },
-            onFinish: (): void => {
-              setDataSelected([]);
-            },
-          },
-          { stateless: true },
-        ),
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected, totalPage]);
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    const payload = {
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    dispatchAPI035(payload);
+  };
 
-  // const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
-  //   const value = event.target.value;
-  //   const insideArray = find(dataSelected, item => item === value);
-  //   if (!insideArray) setDataSelected([...dataSelected, value]);
-  //   else setDataSelected(reject(dataSelected, item => item === value));
-  // };
   const columns = useMemo(
     () => [
       {
@@ -174,9 +180,6 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
 
   const listStaff = useSelector(makeSelectorGet_MT_ZTMI054_OUT);
-  const onPaginationChange = (selectedItem: { selected: number }): void => {
-    setPage(selectedItem.selected + 1);
-  };
 
   const findBPFromUser = (userName: string): string | undefined => {
     const user = find(listStaff, { UNAME: userName });
@@ -185,24 +188,36 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   };
   const handleSelectStaffChange = useCallback(
     (IV_PARTY_ID: string): void => {
+      const payload055 = {
+        IV_PARTY_RCO: 'ZTM001',
+        IV_TRQ_ID: map(dataSelected, item => {
+          return {
+            TRQ_ID: item,
+          };
+        }),
+        IV_PARTY_ID: findBPFromUser(IV_PARTY_ID),
+        IV_UNAME: userIdSelected,
+      };
       dispatch(
-        action_MIOA_ZTMI055(
-          {
-            IV_PARTY_RCO: 'ZTM001',
-            IV_TRQ_ID: map(dataSelected, item => {
-              return {
-                TRQ_ID: item,
-              };
-            }),
-            IV_PARTY_ID: findBPFromUser(IV_PARTY_ID),
-            IV_UNAME: userIdSelected,
+        action_MIOA_ZTMI055(payload055, {
+          onSuccess: (data: API.MIOAZTMI055Response): void => {
+            if (get(data, 'MT_ZTMI055_OUT.EV_ERROR') === 0) {
+              toastError(get(data, 'MT_ZTMI055_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+            } else {
+              toastSuccess(get(data, 'MT_ZTMI055_OUT.RETURN_MESSAGE[0].MESSAGE', 'Thành công'));
+            }
           },
-          {
-            onFinish: (): void => {
-              dispatchAPI035();
-            },
+          onFailure: (error: HttpRequestError): void => {
+            if (error) {
+              toastError(error.messages);
+            } else {
+              toastError(t('Lỗi không xác định khi chuyển vào.'));
+            }
           },
-        ),
+          onFinish: (): void => {
+            dispatchAPI035();
+          },
+        }),
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -210,6 +225,10 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
 
   const disableButton = size(listPhanCongNhan) === 0;
+
+  const handleSelectTableItem = (selectedIds: string[]): void => {
+    setDataSelected(selectedIds);
+  };
 
   return (
     <>
@@ -257,7 +276,13 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
         </div>
       </Row>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={convertData} showCheckboxes renderCheckboxValues={'LOC_ID'} />
+        <DataTable
+          columns={columns}
+          data={convertData}
+          showCheckboxes
+          onCheckedValuesChange={handleSelectTableItem}
+          renderCheckboxValues={'LOC_ID'}
+        />
         {size(convertData) > 0 && (
           <Pagination
             pageRangeDisplayed={2}
