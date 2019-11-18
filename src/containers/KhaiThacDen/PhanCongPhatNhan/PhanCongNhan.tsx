@@ -4,11 +4,12 @@ import { Button, Row, Input, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { get, map, find, size } from 'lodash';
+import { get, map, find, size, toNumber } from 'lodash';
 import { getPageItems } from 'utils/common';
 // import moment from 'moment';
 
 import DataTable from 'components/DataTable';
+import Pagination from 'components/Pagination';
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
@@ -35,6 +36,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const [dataSelected, setDataSelected] = useState<string[]>([]);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const [listPhanCongNhan, setListPhanCongNhan] = useState<API.RowResponseZTMI035[]>([]);
   const convertData = map(listPhanCongNhan, item => {
     return {
@@ -51,11 +53,12 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const pageItems = getPageItems();
+  const [page, setPage] = useState<number>(1);
 
   useEffect((): void => {
     dispatchAPI035();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageItems]);
+  }, [pageItems, page]);
 
   const handleSearchUser = useCallback(() => {
     dispatchAPI035();
@@ -98,6 +101,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           {
             onSuccess: (data: API.MIOAZTMI035Response): void => {
               setListPhanCongNhan(get(data, 'data.MT_ZTMI035_OUT.row', []));
+              setTotalPage(toNumber(get(data, 'data.MT_ZTMI035_OUT.PAGING[0].EV_TOTAL_PAGE', 0)));
             },
             onFailure: (error: Error): void => {
               toast(
@@ -120,7 +124,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected]);
+  }, [userIdSelected, totalPage]);
 
   // const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
   //   const value = event.target.value;
@@ -170,6 +174,9 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
 
   const listStaff = useSelector(makeSelectorGet_MT_ZTMI054_OUT);
+  const onPaginationChange = (selectedItem: { selected: number }): void => {
+    setPage(selectedItem.selected + 1);
+  };
 
   const findBPFromUser = (userName: string): string | undefined => {
     const user = find(listStaff, { UNAME: userName });
@@ -251,6 +258,14 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <Row className="sipTableContainer">
         <DataTable columns={columns} data={convertData} showCheckboxes renderCheckboxValues={'LOC_ID'} />
+        {size(convertData) > 0 && (
+          <Pagination
+            pageRangeDisplayed={2}
+            marginPagesDisplayed={2}
+            pageCount={totalPage}
+            onThisPaginationChange={onPaginationChange}
+          />
+        )}
       </Row>
     </>
   );
