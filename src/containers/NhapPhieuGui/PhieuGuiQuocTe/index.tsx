@@ -441,10 +441,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         get(orderInformationInstane, 'HOUSE_NO_DES', '') + ' ' + get(orderInformationInstane, 'STREET_ID_DES', ''),
       );
       setTenHang(get(orderInformationInstane, 'ITEM_DESCRIPTION', ''));
-      setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(2) : '');
+      setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(0) : '');
       setGiaTri('');
       setTrongLuong(
-        orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(2) : '',
+        orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(0) : '',
       );
       const thisServiceType: string[] = drop(get(orderInformationInstane, 'SERVICE_TYPE', ''), 1);
       const thisTransportServiceType =
@@ -497,10 +497,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
             NET_WEIGHT: '',
             QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
-            GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(2)) : '',
-            Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
-            Hight: item.Height ? toString(parseFloat(item.Height).toFixed(2)) : '',
-            Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
+            GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(0)) : '',
+            Length: item.Length ? toString(parseFloat(item.Length).toFixed(0)) : '',
+            Hight: item.Height ? toString(parseFloat(item.Height).toFixed(0)) : '',
+            Width: item.Width ? toString(parseFloat(item.Width).toFixed(0)) : '',
             COD: '',
           };
           newArrEdit.push(newPackageItemEdit);
@@ -557,9 +557,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseInt(getValueOfNumberFormat(item.GROSS_WEIGHT))) : '',
           GOODS_VALUE: '',
           SERVICE_TYPE: '',
-          Length: item.Length ? toString(parseFloat(getValueOfNumberFormat(item.Length)).toFixed(2)) : '',
-          Hight: item.Hight ? toString(parseFloat(getValueOfNumberFormat(item.Hight)).toFixed(2)) : '',
-          Width: item.Width ? toString(parseFloat(getValueOfNumberFormat(item.Width)).toFixed(2)) : '',
+          Length: item.Length ? toString(parseFloat(getValueOfNumberFormat(item.Length)).toFixed(0)) : '',
+          Hight: item.Hight ? toString(parseFloat(getValueOfNumberFormat(item.Hight)).toFixed(0)) : '',
+          Width: item.Width ? toString(parseFloat(getValueOfNumberFormat(item.Width)).toFixed(0)) : '',
           item_cat: 'PKG',
           Weight_UoM: 'G',
         };

@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { get, isEmpty } from 'lodash';
 
-import { action_ZFI001 } from 'redux/ZFI001/actions';
 import { select_ZFI001_list } from 'redux/ZFI001/selectors';
 import { cleanAccents } from 'utils/common';
 
@@ -16,14 +15,6 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 function ThemMoiKhoanMuc(props: Props): JSX.Element {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const payloads = {
-      KM_FLAG: 'X',
-    };
-    dispatch(action_ZFI001(payloads));
-  }, [dispatch]);
 
   const data = useSelector(select_ZFI001_list);
 

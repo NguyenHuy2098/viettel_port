@@ -493,15 +493,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
       setTenHang(get(orderInformationInstane, 'ITEM_DESCRIPTION', ''));
-      setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(2) : '');
+      setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(0) : '');
       setGiaTri('');
       setTienThuHo(orderInformationInstane.COD ? toString(parseInt(orderInformationInstane.COD)) : '');
       setTrongLuong(
-        orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(2) : '',
+        orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(0) : '',
       );
-      setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(2) : '');
-      setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(2) : '');
-      setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(2) : '');
+      setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(0) : '');
+      setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(0) : '');
+      setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(0) : '');
       const thisServiceType: string[] = drop(get(orderInformationInstane, 'SERVICE_TYPE', ''), 1);
       const thisTransportServiceType =
         findIndex(thisServiceType, (item: string): boolean => {
@@ -557,10 +557,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             Flag: '', // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
             NET_WEIGHT: '',
             QUANTITY_OF_PACKAGE: item.Quantity ? toString(parseInt(item.Quantity)) : '',
-            GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(2)) : '',
-            Length: item.Length ? toString(parseFloat(item.Length).toFixed(2)) : '',
-            Hight: item.Height ? toString(parseFloat(item.Height).toFixed(2)) : '',
-            Width: item.Width ? toString(parseFloat(item.Width).toFixed(2)) : '',
+            GROSS_WEIGHT: item.GROSS_WEIGHT ? toString(parseFloat(item.GROSS_WEIGHT).toFixed(0)) : '',
+            Length: item.Length ? toString(parseFloat(item.Length).toFixed(0)) : '',
+            Hight: item.Height ? toString(parseFloat(item.Height).toFixed(0)) : '',
+            Width: item.Width ? toString(parseFloat(item.Width).toFixed(0)) : '',
             COD: item.COD ? toString(parseInt(item.COD)) : '',
           };
           newArrEdit.push(newPackageItemEdit);
@@ -1063,7 +1063,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           GOODS_VALUE: item.GOODS_VALUE ? trim(getValueOfNumberFormat(item.GOODS_VALUE)) : '',
           GROSS_WEIGHT: item.GROSS_WEIGHT ? trim(getValueOfNumberFormat(item.GROSS_WEIGHT)) : '',
           Length: item.Length ? trim(getValueOfNumberFormat(item.Length)) : '',
-          Hight: item.Length ? trim(getValueOfNumberFormat(item.Length)) : '',
+          Hight: item.Hight ? trim(getValueOfNumberFormat(item.Hight)) : '',
           PACKAGING_MATERIAL: item.PACKAGING_MATERIAL,
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE ? trim(getValueOfNumberFormat(item.QUANTITY_OF_PACKAGE)) : '',
           Description: item.Description,

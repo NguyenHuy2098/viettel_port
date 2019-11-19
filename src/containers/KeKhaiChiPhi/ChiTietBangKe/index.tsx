@@ -16,6 +16,7 @@ import DataTable from 'components/DataTable/Grouped';
 import ThemMoiKhoanMuc from 'containers/KeKhaiChiPhi/ThemMoiKhoanMuc';
 import { select_ZFI001_list } from 'redux/ZFI001/selectors';
 import { action_ZFI007 } from 'redux/ZFI007/actions';
+import { action_ZFI001 } from 'redux/ZFI001/actions';
 import { select_ZFI007_list, select_ZFI007_header } from 'redux/ZFI007/selectors';
 import ThemMoiChiPhi from '../ThemMoiChiPhi';
 import TopControllers from './TopControllers';
@@ -39,6 +40,13 @@ const ChiTietBangKe = (props: Props): JSX.Element => {
   const [dataOriginal, setDataOriginal] = useState<API.LISTMTDETAILRECEIVER[]>([]);
   const [deleteData, setDeleteData] = useState<API.LISTMTDETAILRECEIVER[]>([]);
   const [manualGroupedKeys, setManualGroupedKeys] = useState<string[]>([]);
+
+  useEffect(() => {
+    const payloads = {
+      KM_FLAG: 'X',
+    };
+    dispatch(action_ZFI001(payloads));
+  }, [dispatch]);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const groupedKeys = useMemo(() => uniq(concat(manualGroupedKeys, map(data, 'KHOAN_MUC'))), [manualGroupedKeys, data]);
