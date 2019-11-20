@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { History } from 'history';
 import { toString } from 'lodash';
+import { default as NumberFormat } from 'react-number-format';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
 import { select_CountZTMI0240 } from 'redux/ZTMI240/selectors';
 import TabView from 'components/Tab/TabView';
@@ -116,7 +117,14 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
               children: (
                 <>
                   {t('Bảng kê chưa hoàn thành')}
-                  <Badge color="primary">{countBangKeChuaHoanThanh}</Badge>
+                  <Badge color="primary">
+                    <NumberFormat
+                      value={countBangKeChuaHoanThanh}
+                      displayType={'text'}
+                      thousandSeparator=","
+                      decimalSeparator="."
+                    />
+                  </Badge>
                 </>
               ),
             },
@@ -124,7 +132,14 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
               children: (
                 <>
                   {t('Bưu gửi chưa đóng BK')}
-                  <Badge color="primary">{countBuuGuiChuaDongBangKe}</Badge>
+                  <Badge color="primary">
+                    <NumberFormat
+                      value={countBuuGuiChuaDongBangKe}
+                      displayType={'text'}
+                      thousandSeparator=","
+                      decimalSeparator="."
+                    />
+                  </Badge>
                 </>
               ),
             },
@@ -132,7 +147,14 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
               children: (
                 <>
                   {t('Bảng Kê đã đóng')}
-                  <Badge color="primary">{countBangKeDaDong}</Badge>
+                  <Badge color="primary">
+                    <NumberFormat
+                      value={countBangKeDaDong}
+                      displayType={'text'}
+                      thousandSeparator=","
+                      decimalSeparator="."
+                    />
+                  </Badge>
                 </>
               ),
             },

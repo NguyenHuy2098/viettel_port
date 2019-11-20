@@ -121,6 +121,10 @@ export function getValueOfNumberFormat(value: string): string {
   }
 }
 
+export function numberFormatDecimal(value: string): string {
+  return numeral(toNumber(value)).format('0.0,0');
+}
+
 export function numberFormat(value: string): string {
   return numeral(toNumber(value)).format('0,0');
 }

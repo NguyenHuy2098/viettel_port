@@ -7,6 +7,7 @@ import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import moment from 'moment';
 import { get, isEmpty, map } from 'lodash';
+import { default as NumberFormat } from 'react-number-format';
 
 import DataTable from 'components/DataTable';
 import Pagination from 'components/Pagination';
@@ -121,6 +122,16 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
       {
         Header: t('Số lượng'),
         accessor: 'countChuyenThu',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return (
+            <NumberFormat
+              value={get(row, 'original.countChuyenThu', '')}
+              displayType={'text'}
+              thousandSeparator=","
+              decimalSeparator="."
+            />
+          );
+        },
       },
       {
         Header: t('Người nhập'),
@@ -181,7 +192,10 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countBangKeDaDong}</span>
+            {t('Tổng số')}:{' '}
+            <span>
+              <NumberFormat value={countBangKeDaDong} displayType={'text'} thousandSeparator="," decimalSeparator="." />
+            </span>
           </p>
         </Col>
       </Row>

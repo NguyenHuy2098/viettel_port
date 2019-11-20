@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { toString } from 'lodash';
 import { generatePath } from 'react-router';
 import { Cell } from 'react-table';
+import { default as NumberFormat } from 'react-number-format';
+
 import { SipDataState } from 'utils/enums';
 import { push } from 'connected-react-router';
 import { findIndex, get, join, size, slice } from 'lodash';
@@ -45,8 +47,15 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
       {
         Header: t('Số lượng'),
         accessor: 'TOTAL_ITEM',
-        Cell: ({ row }: Cell<API.Child>): string => {
-          return get(row, 'original.TOTAL_ITEM', '');
+        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
+          return (
+            <NumberFormat
+              value={get(row, 'original.TOTAL_ITEM', '')}
+              displayType={'text'}
+              thousandSeparator=","
+              decimalSeparator="."
+            />
+          );
         },
       },
       {

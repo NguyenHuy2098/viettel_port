@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useMemo } from 'react';
 import { Cell } from 'react-table';
 import moment from 'moment';
+import { default as NumberFormat } from 'react-number-format';
 
 import Pagination from 'components/Pagination';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -50,6 +51,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
         GRO_WEI_UNI: item.GRO_WEI_UNI ? item.GRO_WEI_UNI : '',
         TOR_TYPE: item.TOR_TYPE ? item.TOR_TYPE : '',
         DATETIME_CHLC: moment(get(item, 'DATETIME_CHLC', ''), 'YYYYMMDDhhmmss').format('DD/MM/YYYY'),
+        child_count: item.child_count,
       };
     },
   );
@@ -195,7 +197,8 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
-          {t('Tổng số')}: {dataTableCount}
+          {t('Tổng số')}:{' '}
+          <NumberFormat value={dataTableCount} displayType={'text'} thousandSeparator="," decimalSeparator="." />
         </Col>
       </Row>
     );
@@ -223,6 +226,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
   }
 
   const columns = useMemo(
+    //eslint-disable-next-line max-lines-per-function
     () => [
       {
         Header: t('Mã bưu gửi'),
@@ -238,9 +242,16 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
       },
       {
         Header: t('Số lượng'),
-        accessor: '',
+        accessor: 'child_count',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Chưa có API</>;
+          return (
+            <NumberFormat
+              value={get(row, 'original.child_count', '')}
+              displayType={'text'}
+              thousandSeparator=","
+              decimalSeparator="."
+            />
+          );
         },
       },
       {

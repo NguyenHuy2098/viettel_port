@@ -7,6 +7,7 @@ import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import { get, isEmpty, map } from 'lodash';
 import moment from 'moment';
+import { default as NumberFormat } from 'react-number-format';
 
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import DataTable from 'components/DataTable';
@@ -165,6 +166,16 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
       {
         Header: t('Số lượng'),
         accessor: 'countChuyenThu',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return (
+            <NumberFormat
+              value={get(row, 'original.countChuyenThu', '')}
+              displayType={'text'}
+              thousandSeparator=","
+              decimalSeparator="."
+            />
+          );
+        },
       },
       {
         Header: t('Người nhập'),
@@ -235,7 +246,15 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
         </Col>
         <Col>
           <p className="text-right mt-2 mb-0">
-            {t('Tổng số')}: <span>{countBangKeChuaHoanThanh}</span>
+            {t('Tổng số')}:{' '}
+            <span>
+              <NumberFormat
+                value={countBangKeChuaHoanThanh}
+                displayType={'text'}
+                thousandSeparator=","
+                decimalSeparator="."
+              />
+            </span>
           </p>
         </Col>
       </Row>

@@ -8,6 +8,7 @@ import { map, get, size, toString, trim } from 'lodash';
 import { Location } from 'history';
 import uuid from 'uuid';
 import moment from 'moment';
+import { default as NumberFormat } from 'react-number-format';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import ButtonDongBangKe from 'components/Button/ChiTietBuuGuiChuaDongBangKe/ButtonDongBangKe';
@@ -129,6 +130,16 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
       {
         Header: t('Số lượng'),
         accessor: 'QUANTITY',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return (
+            <NumberFormat
+              value={get(row, 'original.QUANTITY', '')}
+              displayType={'text'}
+              thousandSeparator=","
+              decimalSeparator="."
+            />
+          );
+        },
       },
       {
         Header: t('Trọng lượng'),

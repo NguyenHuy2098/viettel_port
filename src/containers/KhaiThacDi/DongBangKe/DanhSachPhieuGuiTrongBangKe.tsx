@@ -7,6 +7,7 @@ import { Cell } from 'react-table';
 import { Button, Col, Row } from 'reactstrap';
 import { forEach, get, includes, map, noop, size } from 'lodash';
 import moment from 'moment';
+import { default as NumberFormat } from 'react-number-format';
 
 import Pagination from 'components/Pagination';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
@@ -254,7 +255,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           </Row>
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
-          {t('Tổng số')}: {totalItem046}
+          {t('Tổng số')}:{' '}
+          <NumberFormat value={totalItem046} displayType={'text'} thousandSeparator="," decimalSeparator="." />
         </Col>
       </Row>
     );
@@ -309,6 +311,16 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       {
         Header: t('Số lượng'),
         accessor: 'child_count',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
+          return (
+            <NumberFormat
+              value={get(row, 'original.child_count', '')}
+              displayType={'text'}
+              thousandSeparator=","
+              decimalSeparator="."
+            />
+          );
+        },
       },
       {
         Header: t('Trọng lượng'),
