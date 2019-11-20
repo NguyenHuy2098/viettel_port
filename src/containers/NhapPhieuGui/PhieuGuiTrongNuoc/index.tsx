@@ -324,7 +324,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
   const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V01');
-  const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('PP');
+  const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('F1');
   const [choXemHang, setChoXemHang] = useState<string>('1');
   const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZPP');
   const [ghiChu, setGhiChu] = useState<string>('');
@@ -457,7 +457,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // maKhuyenMai,
     thoiGianPhat,
     //_____non-validated items
-    nguoiThanhToan: trim(nguoiThanhToan),
     diemGiaoNhan: trim(diemGiaoNhan),
   };
 
@@ -1095,8 +1094,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       EMAIL_CONSIG: '',
       EMAIL_OP: '',
       EMAIL_SHIPPER: '',
-      FREIGH_TERM: '', // bên CMC đang sửa, tạm thời bỏ trống
-      // FREIGH_TERM: trim(nguoiThanhToan), // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận
+      FREIGH_TERM: trim(nguoiThanhToan), // Điều khoàn gửi hàng  F1 : Trả bời người gửi, F2: trả bởi người nhận
       HOUSE_ID_SRC: '',
       HOUSE_ID_DES: '',
       ITEM: payloadPackageItemArr,
@@ -1291,7 +1289,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
     // setLoaiKienHang('V3');
-    // setNguoiThanhToan('PP');
+    setNguoiThanhToan('F1');
     setChoXemHang('');
     setDiemGiaoNhan('ZPP');
     setGhiChu('');
@@ -1552,6 +1550,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // _____________________________________________________________________________
 
+  // eslint-disable-next-line max-lines-per-function
   function renderSendingCoupon(): JSX.Element {
     return (
       <Row className="sipSendingCoupon sipContentContainer no-padding">
@@ -1562,7 +1561,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               {t('HYPHEN', ':')}
             </Col>
             <Col xs="7" className="text-semibold">
-              <NumberFormat value={cuocChinh} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              <NumberFormat
+                value={cuocChinh}
+                displayType={'text'}
+                thousandSeparator=","
+                decimalSeparator="."
+                suffix={' đ'}
+              />
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
@@ -1571,7 +1576,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               {t('HYPHEN', ':')}
             </Col>
             <Col xs="7" xl={5} className="text-semibold">
-              <NumberFormat value={cuocCongThem} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              <NumberFormat
+                value={cuocCongThem}
+                displayType={'text'}
+                thousandSeparator=","
+                decimalSeparator="."
+                suffix={' đ'}
+              />
             </Col>
           </Row>
         </Row>
@@ -1580,7 +1591,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Row className="sipSendingCouponItem mb-3">
             <Col xs="5">{t('Tổng cước')}</Col>
             <Col xs="7" className="color-orange text-semibold">
-              <NumberFormat value={tongCuoc} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              <NumberFormat
+                value={tongCuoc}
+                displayType={'text'}
+                thousandSeparator=","
+                decimalSeparator="."
+                suffix={' đ'}
+              />
             </Col>
           </Row>
         </Row>
@@ -2232,7 +2249,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Label check xs="12" className="pl-0 pr-0">
               <Input
                 type="radio"
-                value="PP"
+                value="F1"
                 name="payer"
                 defaultChecked
                 onChange={handleChangeTextboxValue(setNguoiThanhToan)}
@@ -2242,7 +2259,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           </Col>
           <Col lg="4" xs="6">
             <Label check xs="12" className="pl-0 pr-0">
-              <Input type="radio" value="CC" name="payer" onChange={handleChangeTextboxValue(setNguoiThanhToan)} />{' '}
+              <Input type="radio" value="F2" name="payer" onChange={handleChangeTextboxValue(setNguoiThanhToan)} />{' '}
               {t('Người nhận')}
             </Label>
           </Col>

@@ -900,7 +900,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       EMAIL_CONSIG: '',
       EMAIL_OP: '',
       EMAIL_SHIPPER: '',
-      FREIGH_TERM: '', // Điều khoàn gửi hàng  PP : Trả bời người gửi, CC: trả bởi người nhận, Vinh bảo tạm thời để trống
+      FREIGH_TERM: 'F1', // Điều khoàn gửi hàng  F1 : Trả bời người gửi, F2: trả bởi người nhận
       HOUSE_ID_SRC: '',
       HOUSE_ID_DES: trim(detailAddressReceiver),
       ITEM: payloadPackageItemArr,
@@ -1211,6 +1211,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   // _____________________________________________________________________________
 
+  // eslint-disable-next-line max-lines-per-function
   function renderSendingCoupon(): JSX.Element {
     return (
       <Row className="sipSendingCoupon sipContentContainer no-padding">
@@ -1221,7 +1222,13 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               {t('HYPHEN', ':')}
             </Col>
             <Col xs="7" className="text-semibold">
-              <NumberFormat value={cuocChinh} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              <NumberFormat
+                value={cuocChinh}
+                displayType={'text'}
+                thousandSeparator=","
+                decimalSeparator="."
+                suffix={' đ'}
+              />
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
@@ -1230,7 +1237,13 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               {t('HYPHEN', ':')}
             </Col>
             <Col xs="7" xl={5} className="text-semibold">
-              <NumberFormat value={cuocCongThem} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              <NumberFormat
+                value={cuocCongThem}
+                displayType={'text'}
+                thousandSeparator=","
+                decimalSeparator="."
+                suffix={' đ'}
+              />
             </Col>
           </Row>
         </Row>
@@ -1239,7 +1252,13 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           <Row className="sipSendingCouponItem mb-3">
             <Col xs="5">{t('Tổng cước')}</Col>
             <Col xs="7" className="color-orange text-semibold">
-              <NumberFormat value={tongCuoc} displayType={'text'} thousandSeparator={true} suffix={' đ'} />
+              <NumberFormat
+                value={tongCuoc}
+                displayType={'text'}
+                thousandSeparator=","
+                decimalSeparator="."
+                suffix={' đ'}
+              />
             </Col>
           </Row>
         </Row>
