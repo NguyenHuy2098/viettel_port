@@ -17,7 +17,7 @@ const userManager = createUserManager({
   prompt: 'login',
   redirect_uri: url.resolve(window.location.href, routesMap.AUTH_LOGIN_CALLBACK),
   response_type: 'id_token token',
-  scope: 'openid profile public-api sso-api se-public-api',
+  scope: 'offline_access openid profile public-api sso-api se-public-api',
   silent_redirect_uri: url.resolve(window.location.href, routesMap.AUTH_SILENT_CALLBACK),
   userStore: new WebStorageStateStore({ store: window.localStorage }),
 });
