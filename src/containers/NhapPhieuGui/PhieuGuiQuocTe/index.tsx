@@ -780,13 +780,21 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
                 return item.type === 'WARD';
               });
               setWardIdSender(get(thisWard, 'code', ''));
-              const thisStreet = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'STREET';
-              });
-              const thisOther = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'OTHER';
-              });
-              const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
+              const thisDetailAddress = join(
+                map(
+                  filter(dataComponents, (item: Component): boolean => {
+                    return (
+                      item.type !== 'PROVINCE' &&
+                      item.type !== 'DISTRICT' &&
+                      item.type !== 'WARD' &&
+                      item.type !== 'COUNTRY'
+                    );
+                  }),
+                  (item: Component): string => {
+                    return item.name;
+                  },
+                ),
+              );
               setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
               toggleSenderAddress();
               triggerValidateAndPriceCalculate();

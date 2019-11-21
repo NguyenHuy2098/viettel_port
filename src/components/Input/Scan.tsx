@@ -6,20 +6,21 @@ import classNames from 'classnames';
 import { get, has, isEmpty, join, noop, size } from 'lodash';
 
 import { actionQuetDi, actionQuetNhan } from 'redux/common/actions';
-import { SipFlowType } from 'utils/enums';
+import { SipFlowType, SipDataTypeName } from 'utils/enums';
 import { toastError, toastInfo, toastSuccess } from '../Toast';
 
 interface Props extends InputProps {
   buttonProps?: ButtonProps;
   containerProps?: RowProps;
   flow: SipFlowType;
+  dataTypeName: SipDataTypeName;
   onSuccess?: (data: API.RowResponseZTMI023OUT) => void;
   targetItemId?: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const Scan = (props: Props): JSX.Element => {
-  const { buttonProps, containerProps, flow, onSuccess, targetItemId, ...rest } = props;
+  const { buttonProps, containerProps, flow, dataTypeName, onSuccess, targetItemId, ...rest } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const [scanning, setScanning] = useState<boolean>(false);
@@ -33,6 +34,7 @@ const Scan = (props: Props): JSX.Element => {
   const handleFinishScanning = (): void => {
     setShouldClear(true);
     setScanning(false);
+    setTorId('');
   };
 
   const quetDi = (): void => {
@@ -51,7 +53,7 @@ const Scan = (props: Props): JSX.Element => {
           onFinish: handleFinishScanning,
           onSuccess: (data: API.RowResponseZTMI023OUT) => {
             onSuccess && onSuccess(data);
-            toastSuccess(`Bưu gửi ${torId} đã được quét`);
+            toastSuccess(`${dataTypeName} ${torId} đã được quét`);
           },
         },
       ),

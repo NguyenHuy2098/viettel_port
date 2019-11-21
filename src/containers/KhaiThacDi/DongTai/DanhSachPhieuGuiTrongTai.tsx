@@ -31,7 +31,7 @@ import {
 } from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
-import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType, SipDataTypeName, SipFlowType } from 'utils/enums';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { goBack } from 'connected-react-router';
 
@@ -318,6 +318,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
     <Row className="sipBgWhiteContainer">
       <Col md={6}>
         <Scan
+          dataTypeName={SipDataTypeName.BANG_KE}
           flow={SipFlowType.KHAI_THAC_DI}
           onSuccess={getListBangKePhieuGui}
           placeholder={t('Quét mã bảng kê')}

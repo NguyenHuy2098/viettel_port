@@ -620,7 +620,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       Destination_Ward: wardIdReceiver,
       loc_id: '',
       Movement_type: diemGiaoNhan,
-      Ordering_party: '9999999999',
+      Ordering_party: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang),
       Item: newArr011,
       Sales_org: '',
       // Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
@@ -849,7 +849,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           {
             onSuccess: (data: DetailSuggestedLocation): void => {
               if (!isMounted()) return;
-              const dataComponents = get(data, 'components');
+              const dataComponents = get(data, 'components', []);
               const thisProvince = find(dataComponents, (item: Component): boolean => {
                 return item.type === 'PROVINCE';
               });
@@ -862,13 +862,21 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 return item.type === 'WARD';
               });
               setWardIdSender(get(thisWard, 'code', ''));
-              const thisStreet = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'STREET';
-              });
-              const thisOther = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'OTHER';
-              });
-              const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
+              const thisDetailAddress = join(
+                map(
+                  filter(dataComponents, (item: Component): boolean => {
+                    return (
+                      item.type !== 'PROVINCE' &&
+                      item.type !== 'DISTRICT' &&
+                      item.type !== 'WARD' &&
+                      item.type !== 'COUNTRY'
+                    );
+                  }),
+                  (item: Component): string => {
+                    return item.name;
+                  },
+                ),
+              );
               setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
               toggleSenderAddress();
               triggerValidateAndPriceCalculate();
@@ -956,13 +964,21 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 return item.type === 'WARD';
               });
               setWardIdReceiver(get(thisWard, 'code', ''));
-              const thisStreet = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'STREET';
-              });
-              const thisOther = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'OTHER';
-              });
-              const thisDetailAddress = `${get(thisOther, 'name', '')} ${get(thisStreet, 'name', '')}`;
+              const thisDetailAddress = join(
+                map(
+                  filter(dataComponents, (item: Component): boolean => {
+                    return (
+                      item.type !== 'PROVINCE' &&
+                      item.type !== 'DISTRICT' &&
+                      item.type !== 'WARD' &&
+                      item.type !== 'COUNTRY'
+                    );
+                  }),
+                  (item: Component): string => {
+                    return item.name;
+                  },
+                ),
+              );
               setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '.');
               toggleReceiverAddress();
               triggerValidateAndPriceCalculate();

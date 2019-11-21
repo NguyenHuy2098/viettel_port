@@ -14,7 +14,7 @@ import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTui
 import Scan from 'components/Input/Scan';
 import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState, SipFlowType } from 'utils/enums';
+import { SipDataState, SipDataTypeName, SipFlowType } from 'utils/enums';
 
 interface Props {
   getThongTinChuyenThu: () => void;
@@ -117,6 +117,7 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       <Row>
         <Col className="btn-toolbar" md={6}>
           <Scan
+            dataTypeName={SipDataTypeName.TAIKIEN}
             flow={SipFlowType.KHAI_THAC_DEN}
             onSuccess={handleSuccessQuetNhan}
             placeholder={t('Quét mã tải/kiện')}

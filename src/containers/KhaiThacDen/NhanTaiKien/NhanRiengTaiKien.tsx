@@ -16,7 +16,7 @@ import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { SipDataState, SipDataType, SipDataTypeName, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -134,6 +134,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
         <Row>
           <Col className="btn-toolbar" md={6}>
             <Scan
+              dataTypeName={SipDataTypeName.TAIKIEN}
               flow={SipFlowType.KHAI_THAC_DEN}
               onSuccess={handleSuccessQuetNhan}
               placeholder={t('Quét mã tải/kiện')}

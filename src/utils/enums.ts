@@ -6,6 +6,15 @@ export enum SipDataType {
   TAI = 'ZC2',
 }
 
+export enum SipDataTypeName {
+  BANG_KE = 'Bảng kê',
+  BUU_GUI = 'Bưu gửi',
+  CHUYEN_THU = 'Chuyến thư',
+  KIEN = 'Kiện',
+  TAI = 'Tải',
+  TAIKIEN = 'Tải/kiện',
+}
+
 export enum SipDataState {
   /**
    * Tai/Bang ke/Chuyen thu - 1xx

@@ -15,7 +15,7 @@ import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState, SipFlowType } from 'utils/enums';
+import { SipDataState, SipDataTypeName, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 
 interface Props {
@@ -107,7 +107,12 @@ const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <Col className="btn-toolbar" md={6}>
-          <Scan flow={SipFlowType.KHAI_THAC_DEN} onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê')} />
+          <Scan
+            flow={SipFlowType.KHAI_THAC_DEN}
+            dataTypeName={SipDataTypeName.BANG_KE}
+            onSuccess={handleSuccessQuetNhan}
+            placeholder={t('Quét mã bảng kê')}
+          />
         </Col>
         {/*<Col className="btn-toolbar col-2 align-items-end flex-column">*/}
         {/*  <Button color="primary">*/}

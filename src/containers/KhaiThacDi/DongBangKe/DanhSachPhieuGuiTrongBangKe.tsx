@@ -29,7 +29,7 @@ import {
 } from 'redux/MIOA_ZTMI046/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
+import { IV_FLAG, SipDataState, SipDataType, SipFlowType, SipDataTypeName } from 'utils/enums';
 import { goBack } from 'connected-react-router';
 
 interface Props {
@@ -267,6 +267,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
       <Col md={6}>
         <Scan
           flow={SipFlowType.KHAI_THAC_DI}
+          dataTypeName={SipDataTypeName.BUU_GUI}
           onSuccess={getListPhieuGui}
           placeholder={t('Quét mã bưu gửi')}
           targetItemId={idBangKe}

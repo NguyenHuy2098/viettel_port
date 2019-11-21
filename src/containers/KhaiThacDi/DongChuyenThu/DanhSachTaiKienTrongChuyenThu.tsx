@@ -27,7 +27,7 @@ import {
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import PrintablePhieuGiaoNhanChuyenThu from 'components/Printable/PrintablePhieuGiaoNhanChuyenThu';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
-import { SipDataType, SipFlowType, IV_FLAG } from 'utils/enums';
+import { SipDataType, SipFlowType, IV_FLAG, SipDataTypeName } from 'utils/enums';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import { toast } from 'react-toastify';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
@@ -212,6 +212,7 @@ const DanhSachPhieuGuiTrongChuyenThu: React.FC<Props> = (props: Props): JSX.Elem
     <Row className="sipBgWhiteContainer justify-content-between">
       <Col md={6}>
         <Scan
+          dataTypeName={SipDataTypeName.TAIKIEN}
           flow={SipFlowType.KHAI_THAC_DI}
           onSuccess={getListTaiKien}
           placeholder={t('Quét mã tải/kiện')}

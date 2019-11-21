@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,6 +36,16 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const maBP = useSelector(makeSelectorMaBP);
   const totalPage = useSelector(makeSelectorZTMI236OUTPagingTotalPage);
   const listKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRow);
+
+  const [disableFunctionalButton, setDisableFunctionalButton] = useState<boolean>(true);
+
+  useEffect((): void => {
+    if (selectedKienIds.length > 0) {
+      setDisableFunctionalButton(false);
+    } else {
+      setDisableFunctionalButton(true);
+    }
+  }, [selectedKienIds]);
 
   const diemDen = useMemo(() => {
     return get(find(listKienChuaDongChuyenThu, ['FREIGHT_UNIT', selectedKienIds[0]]), 'NEXT_LOC', '');
@@ -172,6 +182,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
           onSuccess={handleSuccessChuyenThuAction}
         />
         <ButtonDongChuyenThu
+          disableButton={disableFunctionalButton}
           className="ml-2"
           diemDen={diemDen}
           listTaiKienCanGan={selectedKienObject}
