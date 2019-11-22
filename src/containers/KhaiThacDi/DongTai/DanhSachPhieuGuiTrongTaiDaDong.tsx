@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { match } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { Button, Col, Fade, Input, Row } from 'reactstrap';
-import { find, get, map, size, toNumber } from 'lodash';
+import { find, get, map, size, toNumber, slice, findIndex, join } from 'lodash';
 import moment from 'moment';
 
 import Pagination from 'components/Pagination';
@@ -70,7 +70,29 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
 
   function handleSearchPhieuGui(): void {
     if (size(torIdSearch) > 0) {
-      const result = find(dataTableOrigin, (item: API.Child) => item.TOR_ID === torIdSearch);
+      const result = find(dataTableOrigin, (item: API.Child) => {
+        const thisTorId = join(
+          slice(
+            item.TOR_ID,
+            findIndex(item.TOR_ID, (item: string): boolean => {
+              return item !== '0';
+            }),
+            size(item.TOR_ID),
+          ),
+          '',
+        );
+        const thisTorIdSearch = join(
+          slice(
+            torIdSearch,
+            findIndex(torIdSearch, (item: string): boolean => {
+              return item !== '0';
+            }),
+            size(torIdSearch),
+          ),
+          '',
+        );
+        return thisTorId === thisTorIdSearch;
+      });
       if (result) {
         setDataTable([result]);
         setDataTableCount(1);

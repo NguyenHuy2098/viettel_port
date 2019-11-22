@@ -32,7 +32,7 @@ function NhanTaiBuuCucGoc(): JSX.Element {
             {
               children: (
                 <>
-                  {t('Phiếu gửi chưa đóng bảng kê')}
+                  {t('Bưu gửi chưa đóng bảng kê')}
                   <Badge color="primary">{listPhieuGuiChuaDongBangKeCount}</Badge>
                 </>
               ),
