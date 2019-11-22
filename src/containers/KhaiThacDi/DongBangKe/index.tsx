@@ -121,8 +121,8 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
                     <NumberFormat
                       value={countBangKeChuaHoanThanh}
                       displayType={'text'}
-                      thousandSeparator=","
-                      decimalSeparator="."
+                      thousandSeparator="."
+                      decimalSeparator=","
                     />
                   </Badge>
                 </>
@@ -136,8 +136,8 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
                     <NumberFormat
                       value={countBuuGuiChuaDongBangKe}
                       displayType={'text'}
-                      thousandSeparator=","
-                      decimalSeparator="."
+                      thousandSeparator="."
+                      decimalSeparator=","
                     />
                   </Badge>
                 </>
@@ -151,8 +151,8 @@ const DongBangKe: React.FC<Props> = (props: Props): JSX.Element => {
                     <NumberFormat
                       value={countBangKeDaDong}
                       displayType={'text'}
-                      thousandSeparator=","
-                      decimalSeparator="."
+                      thousandSeparator="."
+                      decimalSeparator=","
                     />
                   </Badge>
                 </>

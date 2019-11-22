@@ -1233,8 +1233,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               <NumberFormat
                 value={cuocChinh}
                 displayType={'text'}
-                thousandSeparator=","
-                decimalSeparator="."
+                thousandSeparator="."
+                decimalSeparator=","
                 suffix={' đ'}
               />
             </Col>
@@ -1248,8 +1248,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               <NumberFormat
                 value={cuocCongThem}
                 displayType={'text'}
-                thousandSeparator=","
-                decimalSeparator="."
+                thousandSeparator="."
+                decimalSeparator=","
                 suffix={' đ'}
               />
             </Col>
@@ -1263,8 +1263,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               <NumberFormat
                 value={tongCuoc}
                 displayType={'text'}
-                thousandSeparator=","
-                decimalSeparator="."
+                thousandSeparator="."
+                decimalSeparator=","
                 suffix={' đ'}
               />
             </Col>

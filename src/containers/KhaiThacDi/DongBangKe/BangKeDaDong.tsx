@@ -127,8 +127,8 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
             <NumberFormat
               value={get(row, 'original.countChuyenThu', '')}
               displayType={'text'}
-              thousandSeparator=","
-              decimalSeparator="."
+              thousandSeparator="."
+              decimalSeparator=","
             />
           );
         },
@@ -194,7 +194,7 @@ const BangKeDaDong: React.FC = (): JSX.Element => {
           <p className="text-right mt-2 mb-0">
             {t('Tổng số')}:{' '}
             <span>
-              <NumberFormat value={countBangKeDaDong} displayType={'text'} thousandSeparator="," decimalSeparator="." />
+              <NumberFormat value={countBangKeDaDong} displayType={'text'} thousandSeparator="." decimalSeparator="," />
             </span>
           </p>
         </Col>

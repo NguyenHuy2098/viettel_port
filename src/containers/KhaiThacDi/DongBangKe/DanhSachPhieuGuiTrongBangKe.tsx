@@ -256,7 +256,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         </Col>
         <Col lg="2" xl={3} xs="12" className="text-right">
           {t('Tổng số')}:{' '}
-          <NumberFormat value={totalItem046} displayType={'text'} thousandSeparator="," decimalSeparator="." />
+          <NumberFormat value={totalItem046} displayType={'text'} thousandSeparator="." decimalSeparator="," />
         </Col>
       </Row>
     );
@@ -317,8 +317,8 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
             <NumberFormat
               value={get(row, 'original.child_count', '')}
               displayType={'text'}
-              thousandSeparator=","
-              decimalSeparator="."
+              thousandSeparator="."
+              decimalSeparator=","
             />
           );
         },

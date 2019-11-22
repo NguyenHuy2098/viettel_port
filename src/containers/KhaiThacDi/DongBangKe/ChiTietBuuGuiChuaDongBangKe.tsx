@@ -135,8 +135,8 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
             <NumberFormat
               value={get(row, 'original.QUANTITY', '')}
               displayType={'text'}
-              thousandSeparator=","
-              decimalSeparator="."
+              thousandSeparator="."
+              decimalSeparator=","
             />
           );
         },

@@ -171,8 +171,8 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
             <NumberFormat
               value={get(row, 'original.countChuyenThu', '')}
               displayType={'text'}
-              thousandSeparator=","
-              decimalSeparator="."
+              thousandSeparator="."
+              decimalSeparator=","
             />
           );
         },
@@ -251,8 +251,8 @@ const BangKeChuaHoanThanh: React.FC = (): JSX.Element => {
               <NumberFormat
                 value={countBangKeChuaHoanThanh}
                 displayType={'text'}
-                thousandSeparator=","
-                decimalSeparator="."
+                thousandSeparator="."
+                decimalSeparator=","
               />
             </span>
           </p>

@@ -68,72 +68,89 @@ const QuetMa: React.FC = (): JSX.Element => {
                           // eslint-disable-next-line max-lines-per-function
                           onSuccess: (data: API.MIOAZTMI063Response): void => {
                             if (data.Status) {
-                              const payload235 = {
-                                MaBuuPham: get(data023, 'PACKAGE_ID', ''),
-                                GTC: get(data023, 'DEFINE_GTC', ''),
-                                COMTYPE: get(data023, 'CCODE_TYPE', ''),
-                                NHOMDICHVU: get(data023, 'SERVGROUP', ''),
-                                LOAIDICHVU: get(data023, 'TRANSSRVREQ_CODE', ''),
-                                DIEMDI: get(data023, 'RECENT_LOC', ''),
-                                TINHDEN: get(data023, 'DEST_LOC', ''),
-                              };
-                              dispatch(
-                                action_MIOA_ZTMI235(payload235, {
-                                  // eslint-disable-next-line max-lines-per-function
-                                  onSuccess: (data: ZTMI235Response): void => {
-                                    const payload239 = {
-                                      IV_PACKAGE_ID: codeChuyenThu,
-                                      IV_FLAG: '1',
-                                      IV_USER: userId,
-                                      IV_COMMODITY: get(data, 'loaiHangHoa', ''),
-                                      IV_SERVICE: get(data, 'loaiDichVu', ''),
-                                      IV_LINE: get(data, 'line', ''),
-                                      IV_MANIFEST_LOC: get(data, 'dongBangKe', ''),
-                                    };
-                                    dispatch(
-                                      action_ZTMI239(payload239, {
-                                        onSuccess: (data: API.ZTMI239Response): void => {
-                                          setDataNhanChuyenThu(get(dataChuyenThu, 'MT_ZTMI023_OUT.row', []));
-                                          setTimeout(function() {
+                              if (get(dataChuyenThu, 'MT_ZTMI023_OUT.row[0].TOR_TYPE', '') === 'ZBIG') {
+                                toast(
+                                  <>
+                                    <i className="fa fa-window-close-o mr-2" />
+                                    {t('Thành công!')}
+                                  </>,
+                                  {
+                                    type: 'success',
+                                  },
+                                );
+                                dispatch(
+                                  action_ZTMI240({
+                                    IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+                                  }),
+                                );
+                              } else {
+                                const payload235 = {
+                                  MaBuuPham: get(data023, 'PACKAGE_ID', ''),
+                                  GTC: get(data023, 'DEFINE_GTC', ''),
+                                  COMTYPE: get(data023, 'CCODE_TYPE', ''),
+                                  NHOMDICHVU: get(data023, 'SERVGROUP', ''),
+                                  LOAIDICHVU: get(data023, 'TRANSSRVREQ_CODE', ''),
+                                  DIEMDI: get(data023, 'RECENT_LOC', ''),
+                                  TINHDEN: get(data023, 'DEST_LOC', ''),
+                                };
+                                dispatch(
+                                  action_MIOA_ZTMI235(payload235, {
+                                    // eslint-disable-next-line max-lines-per-function
+                                    onSuccess: (data: ZTMI235Response): void => {
+                                      const payload239 = {
+                                        IV_PACKAGE_ID: codeChuyenThu,
+                                        IV_FLAG: '1',
+                                        IV_USER: userId,
+                                        IV_COMMODITY: get(data, 'loaiHangHoa', ''),
+                                        IV_SERVICE: get(data, 'loaiDichVu', ''),
+                                        IV_LINE: get(data, 'line', ''),
+                                        IV_MANIFEST_LOC: get(data, 'dongBangKe', ''),
+                                      };
+                                      dispatch(
+                                        action_ZTMI239(payload239, {
+                                          onSuccess: (data: API.ZTMI239Response): void => {
+                                            setDataNhanChuyenThu(get(dataChuyenThu, 'MT_ZTMI023_OUT.row', []));
+                                            setTimeout(function() {
+                                              toast(
+                                                <>
+                                                  <i className="fa fa-window-close-o mr-2" />
+                                                  {get(
+                                                    data,
+                                                    'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE',
+                                                    t('Thành công!'),
+                                                  )}
+                                                </>,
+                                                {
+                                                  type: 'success',
+                                                },
+                                              );
+                                              dispatch(
+                                                action_ZTMI240({
+                                                  IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
+                                                }),
+                                              );
+                                            }, 2000);
+                                          },
+                                          onFailure: (error: HttpRequestErrorType): void => {
                                             toast(
                                               <>
                                                 <i className="fa fa-window-close-o mr-2" />
-                                                {get(
-                                                  data,
-                                                  'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE',
-                                                  t('Thành công!'),
-                                                )}
+                                                {get(error, 'messages', t('Đã có lỗi xảy ra '))}
                                               </>,
                                               {
-                                                type: 'success',
+                                                type: 'error',
                                               },
                                             );
-                                            dispatch(
-                                              action_ZTMI240({
-                                                IV_FREIGHT_UNIT_STATUS: [toString(SipDataState.NHAN_TAI_BUU_CUC_GOC)],
-                                              }),
-                                            );
-                                          }, 2000);
-                                        },
-                                        onFailure: (error: HttpRequestErrorType): void => {
-                                          toast(
-                                            <>
-                                              <i className="fa fa-window-close-o mr-2" />
-                                              {get(error, 'messages', t('Đã có lỗi xảy ra '))}
-                                            </>,
-                                            {
-                                              type: 'error',
-                                            },
-                                          );
-                                        },
-                                        onFinish: (): void => {
-                                          setCodeChuyenThu('');
-                                        },
-                                      }),
-                                    );
-                                  },
-                                }),
-                              );
+                                          },
+                                          onFinish: (): void => {
+                                            setCodeChuyenThu('');
+                                          },
+                                        }),
+                                      );
+                                    },
+                                  }),
+                                );
+                              }
                             } else {
                               toast(
                                 <>

@@ -52,8 +52,8 @@ const BuuGuiChuaDongBangKe: React.FC = (): JSX.Element => {
             <NumberFormat
               value={get(row, 'original.TOTAL_ITEM', '')}
               displayType={'text'}
-              thousandSeparator=","
-              decimalSeparator="."
+              thousandSeparator="."
+              decimalSeparator=","
             />
           );
         },
