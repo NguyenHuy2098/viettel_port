@@ -13,8 +13,8 @@ import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import Scan from 'components/Input/Scan';
 import { useSipDataType } from 'hooks/useTranslations';
-import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState, SipDataTypeName, SipFlowType } from 'utils/enums';
+import { makeSelector046ChildrenTaiKienChuaNhan } from 'redux/MIOA_ZTMI046/selectors';
+import { SipFlowType } from 'utils/enums';
 
 interface Props {
   getThongTinChuyenThu: () => void;
@@ -24,7 +24,7 @@ interface Props {
 const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { getThongTinChuyenThu } = props;
   const { t } = useTranslation();
-  const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
+  const listTaiKienChuaNhan = useSelector(makeSelector046ChildrenTaiKienChuaNhan);
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
     <ButtonPrintable
@@ -117,7 +117,6 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
       <Row>
         <Col className="btn-toolbar" md={6}>
           <Scan
-            dataTypeName={SipDataTypeName.TAIKIEN}
             flow={SipFlowType.KHAI_THAC_DEN}
             onSuccess={handleSuccessQuetNhan}
             placeholder={t('Quét mã tải/kiện')}

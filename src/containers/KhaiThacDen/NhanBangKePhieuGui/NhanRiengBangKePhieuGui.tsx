@@ -12,7 +12,7 @@ import DataTable from 'components/DataTable';
 import Scan from 'components/Input/Scan';
 import { useSipDataType } from 'hooks/useTranslations';
 import routesMap from 'utils/routesMap';
-import { SipDataTypeName, SipFlowType } from 'utils/enums';
+import { SipFlowType } from 'utils/enums';
 
 // eslint-disable-next-line max-lines-per-function
 const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
@@ -90,12 +90,7 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
   const renderToolbar = (): JSX.Element => (
     <Row>
       <Col className="btn-toolbar" md={6}>
-        <Scan
-          dataTypeName={SipDataTypeName.BANG_KE}
-          flow={SipFlowType.KHAI_THAC_DEN}
-          onSuccess={handleSuccessQuetNhan}
-          placeholder={t('Quét mã bảng kê')}
-        />
+        <Scan flow={SipFlowType.KHAI_THAC_DEN} onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bảng kê')} />
       </Col>
     </Row>
   );

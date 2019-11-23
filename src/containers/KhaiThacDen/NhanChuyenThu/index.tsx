@@ -13,7 +13,7 @@ import Scan from 'components/Input/Scan';
 import Pagination from 'components/Pagination';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorPagingCount, makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
-import { SipDataState, SipDataType, SipDataTypeName, SipFlowType } from 'utils/enums';
+import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
 import routesMap from 'utils/routesMap';
 import { getPageItems } from 'utils/common';
 
@@ -113,7 +113,6 @@ const ShippingInformation: React.FC = (): JSX.Element => {
     <Row className="sipBgWhiteContainer d-flex justify-content-between">
       <Col md={6}>
         <Scan
-          dataTypeName={SipDataTypeName.CHUYEN_THU}
           flow={SipFlowType.KHAI_THAC_DEN}
           onSuccess={handleSuccessQuetNhan}
           placeholder={t('Quét mã chuyến thư')}

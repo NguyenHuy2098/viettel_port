@@ -1,5 +1,6 @@
 import { filter, get, includes, isArray, isNumber, size, toNumber } from 'lodash';
 
+import { SipDataState, SipDataType } from 'utils/enums';
 import { AppStateType } from 'redux/store';
 
 /**
@@ -62,6 +63,28 @@ export function makeSelector046ChildrenByLifecycle(LIFECYCLE: number | number[])
   } else {
     return (state: AppStateType): [] => [];
   }
+}
+
+export function makeSelector046ChildrenTaiKienChuaNhan(state: AppStateType): API.Child[] {
+  const thisData = filter(makeSelector046ListChildren(state), (item: API.Child): boolean => {
+    return (
+      (item.TOR_TYPE === SipDataType.TAI && item.LIFECYCLE === SipDataState.CHUYEN_THU_DA_QUET_NHAN) ||
+      (item.TOR_TYPE === SipDataType.KIEN &&
+        (item.LIFECYCLE === SipDataState.KIEN_CHUA_QUET_NHAN_THUOC_CHUYEN_THU_DA_NHAN_TAI_BUU_CUC ||
+          item.LIFECYCLE === SipDataState.KIEN_CHUA_QUET_NHAN_THUOC_CHUYEN_THU_DA_NHAN_TAI_TTKT))
+    );
+  });
+  return thisData;
+}
+
+export function makeSelector046ChildrenTaiKienDaNhan(state: AppStateType): API.Child[] {
+  const thisData = filter(makeSelector046ListChildren(state), (item: API.Child): boolean => {
+    return (
+      (item.TOR_TYPE === SipDataType.TAI && item.LIFECYCLE === SipDataState.TAI_KIEN_DA_QUET_NHAN) ||
+      (item.TOR_TYPE === SipDataType.KIEN && (item.LIFECYCLE === 602 || item.LIFECYCLE === 402))
+    );
+  });
+  return thisData;
 }
 
 /**

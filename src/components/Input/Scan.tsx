@@ -13,7 +13,7 @@ interface Props extends InputProps {
   buttonProps?: ButtonProps;
   containerProps?: RowProps;
   flow: SipFlowType;
-  dataTypeName: SipDataTypeName;
+  dataTypeName?: SipDataTypeName;
   onSuccess?: (data: API.RowResponseZTMI023OUT) => void;
   targetItemId?: string;
 }

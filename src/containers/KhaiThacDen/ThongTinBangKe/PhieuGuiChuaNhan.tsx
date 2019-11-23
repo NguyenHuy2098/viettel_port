@@ -12,7 +12,7 @@ import Pagination from 'components/Pagination';
 import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 import Scan from 'components/Input/Scan';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState, SipDataTypeName, SipFlowType } from 'utils/enums';
+import { SipDataState, SipFlowType } from 'utils/enums';
 
 interface Props {
   getThongTinBangKe: () => void;
@@ -97,12 +97,7 @@ const PhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Row>
         <Col className="btn-toolbar" md={6}>
-          <Scan
-            dataTypeName={SipDataTypeName.BUU_GUI}
-            flow={SipFlowType.KHAI_THAC_DEN}
-            onSuccess={handleSuccessQuetNhan}
-            placeholder={t('Quét mã bưu gửi')}
-          />
+          <Scan flow={SipFlowType.KHAI_THAC_DEN} onSuccess={handleSuccessQuetNhan} placeholder={t('Quét mã bưu gửi')} />
           {/*<button className="btn btn-outline-primary mr-2">*/}
           {/*  {t('Tải')}&nbsp;({'05'})*/}
           {/*</button>*/}

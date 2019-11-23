@@ -15,8 +15,7 @@ import Filter from 'components/Input/Filter';
 import Pagination from 'components/Pagination';
 import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTuiThu';
 import { useSipDataType } from 'hooks/useTranslations';
-import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState } from 'utils/enums';
+import { makeSelector046ChildrenTaiKienDaNhan } from 'redux/MIOA_ZTMI046/selectors';
 import routesMap from 'utils/routesMap';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
 
@@ -26,7 +25,7 @@ type Props = RouteComponentProps;
 const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const listTaiKienDaNhan = useSelector(makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
+  const listTaiKienDaNhan = useSelector(makeSelector046ChildrenTaiKienDaNhan);
   const [searchText, setSearchText] = useState<string>('');
 
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
