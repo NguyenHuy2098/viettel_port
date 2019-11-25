@@ -13,10 +13,10 @@ import TabView from 'components/Tab/TabView';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
 import {
   makeSelector046RowFirstChild,
-  makeSelector046CountChildrenByLifecycle,
-  makeSelector046CountChildren,
+  makeSelector046ChildrenTaiKienCount,
+  makeSelector046ChildrenTaiKienDaNhanCount,
+  makeSelector046ChildrenTaiKienChuaNhanCount,
 } from 'redux/MIOA_ZTMI046/selectors';
-import { SipDataState } from 'utils/enums';
 import TaiKienDaNhan from './TaiKienDaNhan';
 import TaiKienChuaNhan from './TaiKienChuaNhan';
 
@@ -28,9 +28,9 @@ const ThongTinChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const idChuyenThu = get(props, 'match.params.idChuyenThu');
   const chuyenThu = useSelector(makeSelector046RowFirstChild);
-  const countTaiKien = useSelector(makeSelector046CountChildren);
-  const countKienChuaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.CHUYEN_THU_DA_QUET_NHAN));
-  const countKienDaNhan = useSelector(makeSelector046CountChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN));
+  const countTaiKien = useSelector(makeSelector046ChildrenTaiKienCount);
+  const countKienChuaNhan = useSelector(makeSelector046ChildrenTaiKienChuaNhanCount);
+  const countKienDaNhan = useSelector(makeSelector046ChildrenTaiKienDaNhanCount);
 
   const getThongTinChuyenThu = (): void => {
     dispatch(action_MIOA_ZTMI046({ IV_TOR_ID: idChuyenThu }));

@@ -1,10 +1,8 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { generatePath } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Cell } from 'react-table';
-import { push } from 'connected-react-router';
 import { ceil, get } from 'lodash';
 import moment from 'moment';
 
@@ -16,7 +14,6 @@ import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelector046ChildrenByLifecycle } from 'redux/MIOA_ZTMI046/selectors';
 import { SipDataState, SipFlowType } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 
 interface Props {
   getThongTinTai: () => void;
@@ -25,16 +22,16 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { getThongTinTai } = props;
-  const dispatch = useDispatch();
   const { t } = useTranslation();
   const listBangKePhieuGuiChuaNhan = useSelector(
     makeSelector046ChildrenByLifecycle(SipDataState.TAI_KIEN_DA_QUET_NHAN),
   );
 
-  const redirectToThongTinBangKe = useCallback((item: API.Child): void => {
-    dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //___________________bug SP-52: remove action direct to ChiTietBangKe
+  // const redirectToThongTinBangKe = useCallback((item: API.Child): void => {
+  //   dispatch(push(generatePath(routesMap.THONG_TIN_BANG_KE_PHIEU_GUI, { idBangKe: item.TOR_ID })));
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const handleSuccessQuetNhan = (): void => {
     getThongTinTai();
@@ -122,8 +119,8 @@ const BangKePhieuGuiChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <>
       <div className="shadow-sm p-3 mb-3 bg-white">{renderToolbar()}</div>
-      <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={listBangKePhieuGuiChuaNhan} onRowClick={redirectToThongTinBangKe} />
+      <Row className="sipTableContainer">
+        <DataTable columns={columns} data={listBangKePhieuGuiChuaNhan} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

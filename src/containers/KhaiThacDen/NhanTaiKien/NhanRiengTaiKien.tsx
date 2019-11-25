@@ -1,13 +1,11 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Col, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import DataTable from 'components/DataTable';
-import { useDispatch, useSelector } from 'react-redux';
-import { generatePath } from 'react-router';
+import { useSelector } from 'react-redux';
 import { Cell } from 'react-table';
 import moment from 'moment';
 import { ceil, get } from 'lodash';
-import { push } from 'connected-react-router';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import Scan from 'components/Input/Scan';
@@ -17,7 +15,6 @@ import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTui
 import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelectorRow, makeSelectorTotalPage } from 'redux/MIOA_ZTMI047/selectors';
 import { SipDataState, SipDataType, SipFlowType } from 'utils/enums';
-import routesMap from 'utils/routesMap';
 
 interface Props {
   getTaiKienChuaNhan: (IV_PAGENO?: number) => void;
@@ -27,7 +24,6 @@ interface Props {
 const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
   const { getTaiKienChuaNhan } = props;
   const { t } = useTranslation();
-  const dispatch = useDispatch();
   const listTaiKienChuaNhan = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
   const totalPage = useSelector(makeSelectorTotalPage(SipDataType.TAI, SipDataState.CHUYEN_THU_DA_QUET_NHAN));
 
@@ -120,13 +116,13 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
     [],
   );
 
-  const handleRedirectDetail = useCallback(
-    (item: API.RowResponseZTMI023OUT): void => {
-      dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [listTaiKienChuaNhan],
-  );
+  // const handleRedirectDetail = useCallback(
+  //   (item: API.RowResponseZTMI023OUT): void => {
+  //     dispatch(push(generatePath(routesMap.THONG_TIN_TAI, { idTaiKien: item.TOR_ID })));
+  //   },
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [listTaiKienChuaNhan],
+  // );
 
   return (
     <>
@@ -142,7 +138,7 @@ const NhanRiengTaiKien: React.FC<Props> = (props: Props): JSX.Element => {
         </Row>
       </div>
       <Row className="sipTableContainer sipTableRowClickable">
-        <DataTable columns={columns} data={listTaiKienChuaNhan || []} onRowClick={handleRedirectDetail} />
+        <DataTable columns={columns} data={listTaiKienChuaNhan || []} />
         <Pagination
           pageRangeDisplayed={2}
           marginPagesDisplayed={2}

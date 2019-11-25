@@ -2313,7 +2313,7 @@ declare namespace API {
     PICK_UP_PM_ASSIGNED_ON?: string;
     PIC_EAR_REQ?: string;
     TOR_ID?: string;
-    PACKET_ID?: string;
+    PACKAGE_ID?: string;
     ITEM_DESCR?: string;
     GRO_WEI_VAL?: string;
     GRO_WEI_UNI?: string;

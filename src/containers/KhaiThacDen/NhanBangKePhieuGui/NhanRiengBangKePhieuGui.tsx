@@ -32,7 +32,7 @@ const NhanRiengBangKePhieuGui: React.FC = (): JSX.Element => {
     () => [
       {
         Header: t('Mã bảng kê / Phiếu gửi'),
-        accessor: 'TOR_ID',
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Điểm đi'),

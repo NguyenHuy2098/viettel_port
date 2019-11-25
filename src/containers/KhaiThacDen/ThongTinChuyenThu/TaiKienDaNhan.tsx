@@ -125,7 +125,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const filteredListTaiKienDaNhan = useMemo(
     () => filter(listTaiKienDaNhan, (child: API.Child) => includes(JSON.stringify(child), searchText)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [listTaiKienDaNhan],
+    [listTaiKienDaNhan, searchText],
   );
 
   function renderToolbar(): JSX.Element {

@@ -14,7 +14,7 @@ interface Props extends InputProps {
 }
 
 const Filter = (props: Props): JSX.Element => {
-  const { buttonProps, containerProps, leftIcon, searchResult, ...rest } = props;
+  const { buttonProps, containerProps, leftIcon, searchResult, onClick, ...rest } = props;
   const { t } = useTranslation();
 
   const handleClickButton = useCallback(() => {

@@ -87,6 +87,18 @@ export function makeSelector046ChildrenTaiKienDaNhan(state: AppStateType): API.C
   return thisData;
 }
 
+export function makeSelector046ChildrenTaiKienDaNhanCount(state: AppStateType): number {
+  return size(makeSelector046ChildrenTaiKienDaNhan(state));
+}
+
+export function makeSelector046ChildrenTaiKienChuaNhanCount(state: AppStateType): number {
+  return size(makeSelector046ChildrenTaiKienChuaNhan(state));
+}
+
+export function makeSelector046ChildrenTaiKienCount(state: AppStateType): number {
+  return size(makeSelector046ChildrenTaiKienDaNhan(state)) + size(makeSelector046ChildrenTaiKienChuaNhan(state));
+}
+
 /**
  * Count list Child theo trạng thái
  * @param LIFECYCLE

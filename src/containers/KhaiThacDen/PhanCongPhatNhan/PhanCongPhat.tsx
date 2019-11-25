@@ -77,7 +77,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Mã bưu gửi'),
-        accessor: 'PACKAGE_ID',
+        accessor: 'Package_ID',
       },
       {
         Header: t('Bưu cục đến'),
