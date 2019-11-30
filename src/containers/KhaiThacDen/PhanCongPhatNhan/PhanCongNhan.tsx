@@ -59,7 +59,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     dispatchAPI035();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageItems]);
+  }, [pageItems, userIdSelected]);
 
   const handleSearchUser = useCallback(() => {
     dispatchAPI035();
@@ -95,7 +95,6 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
               row: {
                 USER_ID: userIdSelected,
               },
-
               IV_PAGENO: '1',
               IV_NO_PER_PAGE: pageItems,
               ...payload,

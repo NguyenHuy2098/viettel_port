@@ -36,7 +36,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const [dataSelected, setDataSelected] = useState<string[]>([]);
-  const [userIdSelected, setUserIdSelected] = useState<string | undefined>(undefined);
+  const [userIdSelected, setUserIdSelected] = useState<string>('');
   const listPhanCongPhat = useSelector(selectPhanCongPhat);
   const totalPage = useSelector(selectPhanCongPhatCount);
   const convertData = map(listPhanCongPhat, item => {
@@ -126,41 +126,50 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
 
   const pageItems = getPageItems();
 
-  const [page, setPage] = useState<number>(1);
-
-  const dispatchGetListPhieuGui = useCallback(() => {
-    dispatch(
-      action_MIOA_ZTMI040(
-        {
-          FU_STATUS: '605,806',
-          Delivery_postman: userIdSelected,
-          IV_PAGENO: page,
-          IV_NO_PER_PAGE: pageItems,
-          Vourcher: 'N',
-          Return: 'N',
-        },
-        {
-          onFinish: () => {
-            setDataSelected([]);
+  const dispatchGetListPhieuGui = useCallback(
+    (payload = {}) => {
+      dispatch(
+        action_MIOA_ZTMI040(
+          {
+            FU_STATUS: '605,806',
+            Delivery_postman: userIdSelected,
+            IV_PAGENO: '1',
+            IV_NO_PER_PAGE: pageItems,
+            Vourcher: 'N',
+            Return: 'N',
+            ...payload,
           },
-        },
-      ),
-    );
+          {
+            onFinish: () => {
+              setDataSelected([]);
+            },
+          },
+        ),
+      );
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [userIdSelected, totalPage, pageItems],
+  );
+
+  const handleSearchUser = useCallback(() => {
+    dispatchGetListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected, page, pageItems]);
+  }, [userIdSelected]);
 
   const onPaginationChange = (selectedItem: { selected: number }): void => {
-    setPage(selectedItem.selected + 1);
+    const payload = {
+      IV_PAGENO: selectedItem.selected + 1,
+    };
+    dispatchGetListPhieuGui(payload);
   };
 
   useEffect(() => {
     dispatchGetListPhieuGui();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userIdSelected, pageItems, page]);
+  }, [userIdSelected, pageItems]);
 
   const handleSelectUserChange = useCallback(event => {
-    if (event.target.value === '') setUserIdSelected(undefined);
-    setUserIdSelected(event.target.value);
+    setUserIdSelected(event.currentTarget.value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -211,13 +220,9 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
                     {item.NAME_TEXT}
                   </option>
                 ))}
-                {/*eslint-disable-next-line react/jsx-max-depth*/}
-                {/*<option value={'PM02'} key={'PM02'}>*/}
-                {/*  User test (need remove)*/}
-                {/*</option>*/}
               </Input>
             </div>
-            <Button color="primary" className="ml-2">
+            <Button color="primary" className="ml-2" onClick={handleSearchUser} disabled={userIdSelected === ''}>
               {t('Tìm kiếm')}
             </Button>
           </div>

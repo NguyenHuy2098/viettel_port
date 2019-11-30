@@ -62,7 +62,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     () => [
       {
         Header: t('Mã tải/kiện'),
-        accessor: 'TOR_ID',
+        accessor: 'PACKAGE_ID',
       },
       {
         Header: t('Điểm đi'),
