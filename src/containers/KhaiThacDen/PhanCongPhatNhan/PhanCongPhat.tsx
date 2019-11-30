@@ -146,8 +146,8 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
           },
         ),
       );
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [userIdSelected, totalPage, pageItems],
   );
 
