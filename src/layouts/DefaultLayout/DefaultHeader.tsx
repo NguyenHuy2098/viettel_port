@@ -25,7 +25,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const [showModalAbout, setShowModalAbout] = useState<boolean>(false);
   const [dropdownOpenMenu, setDropdownOpenMenu] = useState<boolean>(false);
   const [dropdownOpenNotifications, setDropdownOpenNotifications] = useState<boolean>(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const handleLogout = (): void => {
     dispatch(logout({}));
@@ -141,6 +141,12 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
     </ButtonDropdown>
   );
 
+  function handleChangeLanguage(lang: string): void {
+    i18n.changeLanguage(lang);
+  }
+
+  const lang = i18n.language === 'vi' ? 'en' : 'vi';
+
   const renderNav = (): JSX.Element => (
     <Nav className="ml-auto" navbar>
       <NavItem className="d-md-down-none hide">
@@ -154,6 +160,10 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
         </NavLink>
       </NavItem>
       <NavItem className="sipHeaderNoti hide">{renderHeaderNotifications()}</NavItem>
+      {/* eslint-disable-next-line react/jsx-no-bind */}
+      <NavItem style={{ cursor: 'pointer' }} onClick={(): void => handleChangeLanguage(lang)}>
+        {lang === 'vi' ? 'EN' : 'VI'}
+      </NavItem>
       <NavItem>{renderHeaderUser()}</NavItem>
     </Nav>
   );
