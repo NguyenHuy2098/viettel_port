@@ -86,7 +86,12 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                       {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.PHU_PHI_INIT)))}
                     </strong>
                   </td>
-                  <td></td>
+                  <td>
+                    <strong>
+                      {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.TAX.replace('%', '')))) +
+                        '%'}
+                    </strong>
+                  </td>
                   <td>
                     <strong>
                       {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.TAX_AMOUNT_INIT)))}
@@ -103,7 +108,11 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                         <strong>
                           {formatNumber(
                             sumBy(groupedData[index], item =>
-                              toNumber(item.original.STATUS_ITEM === 2 ? 0 : item.original.AMOUNT),
+                              toNumber(
+                                item.original.STATUS_ITEM === 2 || item.original.STATUS_ITEM === 3
+                                  ? item.original.AMOUNT
+                                  : 0,
+                              ),
                             ),
                           )}
                         </strong>
@@ -112,7 +121,11 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                         <strong>
                           {formatNumber(
                             sumBy(groupedData[index], item =>
-                              toNumber(item.original.STATUS_ITEM === 2 ? 0 : item.original.PHU_PHI),
+                              toNumber(
+                                item.original.STATUS_ITEM === 2 || item.original.STATUS_ITEM === 3
+                                  ? item.original.PHU_PHI
+                                  : 0,
+                              ),
                             ),
                           )}
                         </strong>
@@ -121,7 +134,11 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                         <strong>
                           {formatNumber(
                             sumBy(groupedData[index], item =>
-                              toNumber(item.original.STATUS_ITEM === 2 ? 0 : item.original.TAX_AMOUNT),
+                              toNumber(
+                                item.original.STATUS_ITEM === 2 || item.original.STATUS_ITEM === 3
+                                  ? item.original.TAX_AMOUNT
+                                  : 0,
+                              ),
                             ),
                           )}
                         </strong>
@@ -130,18 +147,28 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                         <strong>
                           {formatNumber(
                             sumBy(groupedData[index], item =>
-                              toNumber(item.original.STATUS_ITEM === 2 ? 0 : item.original.SUM_AMOUNT),
+                              toNumber(
+                                item.original.STATUS_ITEM === 2 || item.original.STATUS_ITEM === 2
+                                  ? item.original.SUM_AMOUNT
+                                  : 0,
+                              ),
                             ),
                           )}
                         </strong>
                       </td>
                       <td>
-                        {formatNumber(
-                          sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)) -
-                            sumBy(groupedData[index], item =>
-                              toNumber(item.original.STATUS_ITEM === 2 ? 0 : item.original.SUM_AMOUNT),
-                            ),
-                        )}
+                        <strong>
+                          {formatNumber(
+                            sumBy(groupedData[index], item => toNumber(item.original.SUM_AMOUNT_INIT)) -
+                              sumBy(groupedData[index], item =>
+                                toNumber(
+                                  item.original.STATUS_ITEM === 2 || item.original.STATUS_ITEM === 3
+                                    ? item.original.SUM_AMOUNT
+                                    : 0,
+                                ),
+                              ),
+                          )}
+                        </strong>
                       </td>
                       <td />
                     </>
@@ -160,7 +187,9 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             <td>
               <strong>{formatNumber(sumBy(data, item => toNumber(item.PHU_PHI_INIT)))}</strong>
             </td>
-            <td />
+            <td>
+              <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX.replace('%', '')))) + '%'}</strong>
+            </td>
             <td>
               <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX_AMOUNT_INIT)))}</strong>
             </td>
@@ -171,29 +200,47 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
               <>
                 <td>
                   <strong>
-                    {formatNumber(sumBy(data, item => toNumber(item.STATUS_ITEM === 2 ? 0 : item.AMOUNT)))}
+                    {formatNumber(
+                      sumBy(data, item => toNumber(item.STATUS_ITEM === 2 || item.STATUS_ITEM === 3 ? item.AMOUNT : 0)),
+                    )}
                   </strong>
                 </td>
                 <td>
                   <strong>
-                    {formatNumber(sumBy(data, item => toNumber(item.STATUS_ITEM === 2 ? 0 : item.PHU_PHI)))}
+                    {formatNumber(
+                      sumBy(data, item =>
+                        toNumber(item.STATUS_ITEM === 2 || item.STATUS_ITEM === 3 ? item.PHU_PHI : 0),
+                      ),
+                    )}
                   </strong>
                 </td>
                 <td>
                   <strong>
-                    {formatNumber(sumBy(data, item => toNumber(item.STATUS_ITEM === 2 ? 0 : item.TAX_AMOUNT)))}
+                    {formatNumber(
+                      sumBy(data, item =>
+                        toNumber(item.STATUS_ITEM === 2 || item.STATUS_ITEM === 3 ? item.TAX_AMOUNT : 0),
+                      ),
+                    )}
                   </strong>
                 </td>
                 <td>
                   <strong>
-                    {formatNumber(sumBy(data, item => toNumber(item.STATUS_ITEM === 2 ? 0 : item.SUM_AMOUNT)))}
+                    {formatNumber(
+                      sumBy(data, item =>
+                        toNumber(item.STATUS_ITEM === 2 || item.STATUS_ITEM === 3 ? item.SUM_AMOUNT : 0),
+                      ),
+                    )}
                   </strong>
                 </td>
                 <td>
-                  {formatNumber(
-                    sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)) -
-                      sumBy(data, item => toNumber(item.STATUS_ITEM === 2 ? 0 : item.SUM_AMOUNT)),
-                  )}
+                  <strong>
+                    {formatNumber(
+                      sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT)) -
+                        sumBy(data, item =>
+                          toNumber(item.STATUS_ITEM === 2 || item.STATUS_ITEM === 3 ? item.SUM_AMOUNT : 0),
+                        ),
+                    )}
+                  </strong>
                 </td>
                 <td />
               </>

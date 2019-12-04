@@ -8,10 +8,11 @@ import { get, size, sumBy, toNumber, map } from 'lodash';
 import moment from 'moment';
 
 import PrintTableBangKe from 'components/DataTable/PrintTableBangKe';
-import { numberFormat } from 'utils/common';
+import { numberFormat, getValueOfNumberFormat } from 'utils/common';
 import convertMoneyToString from 'utils/convertMoneyToString';
 import { action_ZFI007M } from 'redux/ZFI007M/actions';
 import { select_ZFI007M_collection } from 'redux/ZFI007M/selectors';
+import useLoggedInUser from 'hooks/useLoggedInUser';
 
 interface Props extends ButtonProps {
   ids: string[];
@@ -208,78 +209,97 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
       },
       {
         Header: t('Hàng hóa dịch vụ chưa thuế'),
-        accessor: 'AMOUNT',
+        // accessor: 'AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return numberFormat(get(row, 'original.AMOUNT_INIT'));
         },
       },
       {
         Header: t('Phụ phí'),
-        accessor: 'PHU_PHI',
+        // accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
+          return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
+            ? numberFormat(get(row, 'original.PHU_PHI'))
+            : '0';
         },
       },
       {
         Header: t('Thuế suất'),
-        accessor: 'TAX',
+        // accessor: 'TAX',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
           return <div className="text-right">{get(row, 'original.TAX')}</div>;
         },
       },
       {
         Header: t('Thuế giá trị gia tăng'),
-        accessor: 'TAX_AMOUNT',
+        // accessor: 'TAX_AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
+          return numberFormat(get(row, 'original.TAX_AMOUNT'));
         },
       },
       {
         Header: t('Tổng cộng'),
-        accessor: 'SUM_AMOUNT',
+        // accessor: 'SUM_AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return numberFormat(get(row, 'original.SUM_AMOUNT_INIT'));
         },
       },
       {
         Header: t('Hàng hóa dịch vụ chưa thuế (1)'),
-        accessor: 'AMOUNT_INIT',
+        // accessor: 'AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.AMOUNT'));
+          return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
+            ? numberFormat(get(row, 'original.AMOUNT_INIT'))
+            : '0';
         },
         show: isPheDuyet,
       },
       {
         Header: t('Phụ phí (1)'),
-        accessor: 'PHU_PHI_INIT',
+        // accessor: 'PHU_PHI_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.PHU_PHI'));
+          return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
+            ? numberFormat(get(row, 'original.PHU_PHI_INIT'))
+            : '0';
         },
         show: isPheDuyet,
       },
       {
         Header: t('Thuế giá trị gia tăng (1)'),
-        accessor: 'TAX_AMOUNT_INIT',
+        // accessor: 'TAX_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.TAX_AMOUNT'));
+          return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
+            ? numberFormat(get(row, 'original.TAX_AMOUNT_INIT'))
+            : '0';
         },
         show: isPheDuyet,
       },
       {
         Header: t('Tổng cộng(1)'),
-        accessor: 'SUM_AMOUNT_INIT',
+        // accessor: 'SUM_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return get(row, 'original.STATUS_ITEM') === 2 ? '0' : numberFormat(get(row, 'original.SUM_AMOUNT'));
+          return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
+            ? numberFormat(get(row, 'original.SUM_AMOUNT'))
+            : '';
         },
         show: isPheDuyet,
       },
       {
         Header: t('Không duyệt'),
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
+          let value =
+            toNumber(getValueOfNumberFormat(get(row, 'original.SUM_AMOUNT_INIT'))) -
+            toNumber(getValueOfNumberFormat(get(row, 'original.SUM_AMOUNT')));
+          if (value < 0) {
+            value = 0;
+          }
+          return numberFormat(value.toString());
+        },
         show: isPheDuyet,
       },
       {
         Header: t('Lý do'),
-        accessor: 'NOTE',
+        // accessor: 'NOTE',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.NOTE', '');
         },
@@ -316,6 +336,8 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
     );
   }
 
+  const userLogin = useLoggedInUser();
+
   const renderGroupedRow = (rows: TableRow<API.LISTMTDETAILRECEIVER>[], index: string): JSX.Element => {
     const row = rows.filter(item => get(item, 'original.KHOAN_MUC') === index)[0];
     const ten_km = get(row, 'original.TEN_KM', '');
@@ -334,7 +356,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
               <strong>{t('Tổng công ty cổ phần Bưu chính Viettel')}</strong>
             </div>
             <div className="pl-5">
-              <strong>{t('Bưu cục Đống Đa')} </strong>
+              <strong>{get(userLogin, 'user.profile.bp_org_unit', '')} </strong>
             </div>
           </div>
           <div className="col-4"></div>
