@@ -219,7 +219,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         // accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
-            ? numberFormat(get(row, 'original.PHU_PHI'))
+            ? numberFormat(get(row, 'original.PHU_PHI_INIT'))
             : '0';
         },
       },
@@ -227,14 +227,14 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         Header: t('Thuế suất'),
         // accessor: 'TAX',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
-          return <div className="text-right">{get(row, 'original.TAX')}</div>;
+          return <div className="text-right">{get(row, 'original.TAX_INIT')}</div>;
         },
       },
       {
         Header: t('Thuế giá trị gia tăng'),
         // accessor: 'TAX_AMOUNT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT'));
+          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
         },
       },
       {
@@ -249,7 +249,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         // accessor: 'AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
-            ? numberFormat(get(row, 'original.AMOUNT_INIT'))
+            ? numberFormat(get(row, 'original.AMOUNT'))
             : '0';
         },
         show: isPheDuyet,
@@ -259,7 +259,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         // accessor: 'PHU_PHI_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
-            ? numberFormat(get(row, 'original.PHU_PHI_INIT'))
+            ? numberFormat(get(row, 'original.PHU_PHI'))
             : '0';
         },
         show: isPheDuyet,
@@ -269,7 +269,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         // accessor: 'TAX_AMOUNT_INIT',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
           return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
-            ? numberFormat(get(row, 'original.TAX_AMOUNT_INIT'))
+            ? numberFormat(get(row, 'original.TAX_AMOUNT'))
             : '0';
         },
         show: isPheDuyet,
@@ -295,6 +295,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
           }
           return numberFormat(value.toString());
         },
+        className: 'khong-duyet',
         show: isPheDuyet,
       },
       {
