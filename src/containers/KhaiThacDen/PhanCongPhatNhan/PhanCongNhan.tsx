@@ -287,7 +287,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           data={convertData}
           showCheckboxes
           onCheckedValuesChange={handleSelectTableItem}
-          renderCheckboxValues={'PACKAGE_ID'}
+          renderCheckboxValues={'TRQ_ID'}
         />
         {size(convertData) > 0 && (
           <Pagination

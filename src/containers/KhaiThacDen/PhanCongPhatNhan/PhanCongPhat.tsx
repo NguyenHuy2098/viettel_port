@@ -17,6 +17,8 @@ import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
 import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { toastError, toastSuccess } from 'components/Toast';
+import HttpRequestError from 'utils/HttpRequetsError';
 
 interface Props {
   match: match;
@@ -179,6 +181,20 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       };
       dispatch(
         action_MIOA_ZTMI055(a, {
+          onSuccess: (data: API.MIOAZTMI055Response): void => {
+            if (get(data, 'MT_ZTMI055_OUT.EV_ERROR') === 0) {
+              toastError(get(data, 'MT_ZTMI055_OUT.RETURN_MESSAGE[0].MESSAGE', 'Có lỗi xảy ra'));
+            } else {
+              toastSuccess(get(data, 'MT_ZTMI055_OUT.RETURN_MESSAGE[0].MESSAGE', 'Thành công'));
+            }
+          },
+          onFailure: (error: HttpRequestError): void => {
+            if (error) {
+              toastError(error.messages);
+            } else {
+              toastError(t('Lỗi không xác định khi chuyển vào.'));
+            }
+          },
           onFinish: () => {
             dispatchGetListPhieuGui();
           },
