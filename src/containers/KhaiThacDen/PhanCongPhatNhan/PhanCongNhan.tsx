@@ -8,7 +8,7 @@ import { get, map, find, size, toNumber } from 'lodash';
 import { getPageItems } from 'utils/common';
 // import moment from 'moment';
 
-import DataTable from 'components/DataTable';
+import DataTable from 'components/DataTable/IndependentDataTable';
 import Pagination from 'components/Pagination';
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
 import { action_MIOA_ZTMI035 } from 'redux/MIOA_ZTMI035/actions';
@@ -40,13 +40,17 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const [dataSelected, setDataSelected] = useState<string[]>([]);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [listPhanCongNhan, setListPhanCongNhan] = useState<API.RowResponseZTMI035[]>([]);
-  const convertData = map(listPhanCongNhan, item => {
-    return {
-      ...item,
-      Total_Charge: (parseFloat(item.COD || '0') + parseFloat(item.TOTAL_AMOUNT || '0')).toFixed(3),
-      statusDisplay: getStatusDisplay(item.STATUS || ''),
-    };
-  });
+  const convertData = useMemo(
+    () =>
+      map(listPhanCongNhan, item => {
+        return {
+          ...item,
+          Total_Charge: (parseFloat(item.COD || '0') + parseFloat(item.TOTAL_AMOUNT || '0')).toFixed(3),
+          statusDisplay: getStatusDisplay(item.STATUS || ''),
+        };
+      }),
+    [listPhanCongNhan],
+  );
   const [userIdSelected, setUserIdSelected] = useState<string>('');
 
   const handleSelectUserChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -280,7 +284,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           data={convertData}
           showCheckboxes
           onCheckedValuesChange={handleSelectTableItem}
-          renderCheckboxValues={'LOC_ID'}
+          renderCheckboxValues={'PACKAGE_ID'}
         />
         {size(convertData) > 0 && (
           <Pagination

@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Row, Input, Label, Col } from 'reactstrap';
+import { Button, Row, Input, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { get, map, find, reject, size } from 'lodash';
+import { get, map, find, size } from 'lodash';
 import moment from 'moment';
 import { getPageItems } from 'utils/common';
 
 import Pagination from 'components/Pagination';
 import ButtonChonNhanVien from 'components/Button/ButtonChonNhanVien';
-import DataTable from 'components/DataTable';
+import DataTable from 'components/DataTable/IndependentDataTable';
 import { action_MIOA_ZTMI040 } from 'redux/MIOA_ZTMI040/actions';
 import { selectPhanCongPhat, selectPhanCongPhatCount } from 'redux/MIOA_ZTMI040/selectors';
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
-import { action_MIOA_ZTMI054 } from '../../../redux/MIOA_ZTMI054/actions';
-import { makeSelectorMaBP } from '../../../redux/auth/selectors';
+import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
+import { makeSelectorMaBP } from 'redux/auth/selectors';
 
 interface Props {
   match: match;
@@ -39,42 +39,26 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   const [userIdSelected, setUserIdSelected] = useState<string>('');
   const listPhanCongPhat = useSelector(selectPhanCongPhat);
   const totalPage = useSelector(selectPhanCongPhatCount);
-  const convertData = map(listPhanCongPhat, item => {
-    return {
-      ...item,
-      Total_Charge: (parseFloat(item.COD || '0') + parseFloat(item.Freight_charge || '0')).toFixed(3),
-      statusDisplay: getStatusDisplay(item.Status || ''),
-    };
-  });
+  const convertData = useMemo(
+    () =>
+      map(listPhanCongPhat, item => {
+        return {
+          ...item,
+          Total_Charge: (parseFloat(item.COD || '0') + parseFloat(item.Freight_charge || '0')).toFixed(3),
+          statusDisplay: getStatusDisplay(item.Status || ''),
+        };
+      }),
+    [listPhanCongPhat],
+  );
 
   const listStaff = useSelector(makeSelectorGet_MT_ZTMI054_OUT);
 
-  const handleCheckBoxItemData = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    const value = event.target.value;
-    const insideArray = find(dataSelected, item => item === value);
-    if (!insideArray) setDataSelected([...dataSelected, value]);
-    else setDataSelected(reject(dataSelected, item => item === value));
+  const handleSelectTableItem = (selectedIds: string[]): void => {
+    setDataSelected(selectedIds);
   };
 
   const columns = useMemo(
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <>
-              <Label check>
-                <Input
-                  type="checkbox"
-                  value={row.original.Package_ID}
-                  checked={dataSelected.includes(row.original.Package_ID)}
-                  onChange={handleCheckBoxItemData}
-                />
-              </Label>
-            </>
-          );
-        },
-      },
       {
         Header: t('Mã bưu gửi'),
         accessor: 'Package_ID',
@@ -251,7 +235,13 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
         </div>
       </Row>
       <Row className="sipTableContainer">
-        <DataTable columns={columns} data={convertData} />
+        <DataTable
+          columns={columns}
+          data={convertData}
+          showCheckboxes
+          onCheckedValuesChange={handleSelectTableItem}
+          renderCheckboxValues={'Package_ID'}
+        />
         {size(convertData) > 0 && (
           <Pagination
             pageRangeDisplayed={2}
