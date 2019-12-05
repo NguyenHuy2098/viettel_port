@@ -14,7 +14,7 @@ import PrintablePhieuGiaoTuiThu from 'components/Printable/PrintablePhieuGiaoTui
 import Scan from 'components/Input/Scan';
 import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelector046ChildrenTaiKienChuaNhan } from 'redux/MIOA_ZTMI046/selectors';
-import { SipFlowType } from 'utils/enums';
+import { SipDataType, SipFlowType } from 'utils/enums';
 
 interface Props {
   getThongTinChuyenThu: () => void;
@@ -64,7 +64,13 @@ const TaiKienChuaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     () => [
       {
         Header: t('Mã tải/kiện'),
-        accessor: 'PACKAGE_ID',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return `${
+            get(row, 'original.TOR_TYPE') === SipDataType.TAI
+              ? get(row, 'original.TOR_ID')
+              : get(row, 'original.PACKAGE_ID')
+          }`;
+        },
       },
       {
         Header: t('Điểm đi'),

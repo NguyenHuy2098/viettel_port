@@ -81,7 +81,7 @@ export function makeSelector046ChildrenTaiKienDaNhan(state: AppStateType): API.C
   const thisData = filter(makeSelector046ListChildren(state), (item: API.Child): boolean => {
     return (
       (item.TOR_TYPE === SipDataType.TAI && item.LIFECYCLE === SipDataState.TAI_KIEN_DA_QUET_NHAN) ||
-      (item.TOR_TYPE === SipDataType.KIEN && (item.LIFECYCLE === 602 || item.LIFECYCLE === 402))
+      (item.TOR_TYPE === SipDataType.KIEN && (item.LIFECYCLE === 604 || item.LIFECYCLE === 404))
     );
   });
   return thisData;

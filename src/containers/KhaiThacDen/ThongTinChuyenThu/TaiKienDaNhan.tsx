@@ -18,6 +18,7 @@ import { useSipDataType } from 'hooks/useTranslations';
 import { makeSelector046ChildrenTaiKienDaNhan } from 'redux/MIOA_ZTMI046/selectors';
 import routesMap from 'utils/routesMap';
 import PrintableMaCoTai from 'components/Printable/PrintableMaCoTai';
+import { SipDataType } from '../../../utils/enums';
 
 type Props = RouteComponentProps;
 
@@ -62,7 +63,13 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
     () => [
       {
         Header: t('Mã tải/kiện'),
-        accessor: 'PACKAGE_ID',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return `${
+            get(row, 'original.TOR_TYPE') === SipDataType.TAI
+              ? get(row, 'original.TOR_ID')
+              : get(row, 'original.PACKAGE_ID')
+          }`;
+        },
       },
       {
         Header: t('Điểm đi'),
