@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'reactstrap';
 import { get, isEmpty } from 'lodash';
 
 import { select_ZFI001_list } from 'redux/ZFI001/selectors';
 import { cleanAccents } from 'utils/common';
+import { action_ZFI001 } from 'redux/ZFI001/actions';
 
 interface Props {
   handleSubmit?: Function;
@@ -15,8 +16,16 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 function ThemMoiKhoanMuc(props: Props): JSX.Element {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
 
   const data = useSelector(select_ZFI001_list);
+
+  useEffect(() => {
+    const payloads = {
+      KM_FLAG: 'X',
+    };
+    dispatch(action_ZFI001(payloads));
+  }, [dispatch]);
 
   const [search, setSearch] = React.useState<string>('');
   function handleSearch(e: React.FormEvent<HTMLInputElement>): void {
