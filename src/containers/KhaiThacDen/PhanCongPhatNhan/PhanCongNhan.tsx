@@ -38,6 +38,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const [dataSelected, setDataSelected] = useState<string[]>([]);
+  const [resetCheckbox, setResetCheckbox] = useState<boolean>(false);
   const [totalPage, setTotalPage] = useState<number>(0);
   const [listPhanCongNhan, setListPhanCongNhan] = useState<API.RowResponseZTMI035[]>([]);
   const convertData = useMemo(
@@ -219,6 +220,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
             }
           },
           onFinish: (): void => {
+            setResetCheckbox(!resetCheckbox);
             dispatchAPI035();
           },
         }),

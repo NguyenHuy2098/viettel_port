@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { Input, Label, Table } from 'reactstrap';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
 import { concat, difference, get, includes, isEmpty, isFunction, isString, map, noop, pull, size } from 'lodash';
@@ -15,6 +15,7 @@ interface Props extends TableOptions<any> {
   showCheckAll?: boolean;
   showCheckboxes?: boolean;
   renderCheckboxValues?: string | ((item: any) => string);
+  resetCheckbox?: boolean;
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
@@ -29,6 +30,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     showCheckAll,
     showCheckboxes,
     renderCheckboxValues,
+    resetCheckbox,
   } = props;
 
   if (showCheckboxes === true && !isString(renderCheckboxValues) && !isFunction(renderCheckboxValues)) {
@@ -39,6 +41,10 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
   const { getTableProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   const [checkedValues, setCheckedValues] = useState<string[]>([]);
+
+  useEffect(() => {
+    setCheckedValues([]);
+  }, [resetCheckbox]);
 
   const currentPageCheckboxValues = useMemo(() => {
     if (isString(renderCheckboxValues)) return map(data, renderCheckboxValues);
