@@ -49,6 +49,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
           statusDisplay: getStatusDisplay(item.STATUS || ''),
         };
       }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [listPhanCongNhan],
   );
   const [userIdSelected, setUserIdSelected] = useState<string>('');

@@ -48,6 +48,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
           statusDisplay: getStatusDisplay(item.Status || ''),
         };
       }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [listPhanCongPhat],
   );
 
