@@ -64,7 +64,7 @@ const nav = (t: TFunction): any => {
             url: routesMap.NHAP_TU_FILE_EXCEL,
           },
           {
-            name: t('Quét mã phiếu gửi'),
+            name: t('Quét mã bưu gửi'),
             url: routesMap.NHAN_TAI_BUU_CUC_GOC,
           },
         ],
