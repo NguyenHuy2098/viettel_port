@@ -218,9 +218,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
         Header: t('Phụ phí'),
         // accessor: 'PHU_PHI',
         Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return get(row, 'original.STATUS_ITEM') === 2 || get(row, 'original.STATUS_ITEM') === 3
-            ? numberFormat(get(row, 'original.PHU_PHI_INIT'))
-            : '0';
+          return numberFormat(get(row, 'original.PHU_PHI_INIT'));
         },
       },
       {
