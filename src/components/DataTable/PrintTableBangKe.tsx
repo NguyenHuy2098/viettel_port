@@ -87,10 +87,10 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
                     </strong>
                   </td>
                   <td>
-                    <strong>
+                    {/* <strong>
                       {formatNumber(sumBy(groupedData[index], item => toNumber(item.original.TAX.replace('%', '')))) +
                         '%'}
-                    </strong>
+                    </strong> */}
                   </td>
                   <td>
                     <strong>
@@ -188,7 +188,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
               <strong>{formatNumber(sumBy(data, item => toNumber(item.PHU_PHI_INIT)))}</strong>
             </td>
             <td>
-              <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX.replace('%', '')))) + '%'}</strong>
+              {/* <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX.replace('%', '')))) + '%'}</strong> */}
             </td>
             <td>
               <strong>{formatNumber(sumBy(data, item => toNumber(item.TAX_AMOUNT_INIT)))}</strong>
