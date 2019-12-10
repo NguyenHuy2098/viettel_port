@@ -11,6 +11,7 @@ interface Props {
   handleData: Function;
   urlTemplate: string;
   fileName: string;
+  disabled: boolean;
 }
 
 function ExportExcelWithTemplate(props: Props): JSX.Element {
@@ -35,7 +36,7 @@ function ExportExcelWithTemplate(props: Props): JSX.Element {
   }
 
   return (
-    <Button color="primary" onClick={handleExport} className="ml-2">
+    <Button color="primary" onClick={handleExport} className="ml-2" disabled={props.disabled}>
       {props.children}
     </Button>
   );
