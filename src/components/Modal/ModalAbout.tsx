@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Col, Modal, ModalBody, ModalFooter, ModalHeader, Row } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import { REACT_APP_BUILD_TIME, REACT_APP_ENV, REACT_APP_VERSION } from 'utils/env';
 
 interface Props {
   toggle: () => void;
@@ -19,19 +20,19 @@ const ModalAbout = (props: Props): JSX.Element => {
         <Row className="mb-2">
           <Col xs={3}>{t('Môi trường')}</Col>
           <Col xs={9} className="text-bold">
-            {process.env.REACT_APP_ENV}
+            {REACT_APP_ENV}
           </Col>
         </Row>
         <Row className="mb-2">
           <Col xs={3}>{t('Phiên bản')}</Col>
           <Col xs={9} className="text-bold">
-            {process.env.REACT_APP_VERSION}
+            {REACT_APP_VERSION}
           </Col>
         </Row>
         <Row className="mb-2">
           <Col xs={3}>{t('Phát hành')}</Col>
           <Col xs={9} className="text-bold">
-            {moment(process.env.REACT_APP_BUILD_TIME).format('LLL')}
+            {moment(REACT_APP_BUILD_TIME).format('LLL')}
           </Col>
         </Row>
       </ModalBody>

@@ -1,5 +1,7 @@
 import { useTranslation } from 'react-i18next';
+import classNames from 'classnames';
 import { TFunction } from 'i18next';
+import { IS_PRODUCTION_ENV, IS_QAS_ENV } from 'utils/env';
 import routesMap from 'utils/routesMap';
 
 // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
@@ -15,6 +17,9 @@ const nav = (t: TFunction): any => {
         name: t('Điều hành'),
         icon: 'sipIcon-dieuhanh',
         url: routesMap.DIEU_HANH,
+        class: classNames({
+          hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+        }),
         children: [
           {
             name: t('Biên bản nội bộ'),
@@ -50,6 +55,9 @@ const nav = (t: TFunction): any => {
         name: t('Nhận tại bưu cục gốc'),
         icon: 'sipIcon-edit',
         url: routesMap.NHAP_PHIEU_GUI,
+        class: classNames({
+          hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+        }),
         children: [
           {
             name: t('Phiếu gửi trong nước'),
@@ -73,6 +81,9 @@ const nav = (t: TFunction): any => {
         name: t('Khai thác đi'),
         icon: 'sipIcon-truck',
         url: routesMap.KHAI_THAC_DI,
+        class: classNames({
+          hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+        }),
         children: [
           {
             name: t('Đóng bảng kê'),
@@ -104,6 +115,9 @@ const nav = (t: TFunction): any => {
         name: t('Khai thác đến'),
         icon: 'sipIcon-package',
         url: routesMap.KHAI_THAC_DEN,
+        class: classNames({
+          hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+        }),
         children: [
           {
             name: t('Nhận chuyến thư'),
