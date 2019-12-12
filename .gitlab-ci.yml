@@ -145,7 +145,6 @@ build-docker-image:production:
 
 # Stage: release
 # Automatically bump version, update changelog and readme
-# Remove `--dry-run` when v1.0.0 release
 semantic-release:
   image: node:lts-stretch
   stage: release
@@ -153,4 +152,4 @@ semantic-release:
     - release
   script:
     - yarn changelog
-    - yarn semantic-release --dry-run
+    - yarn semantic-release
