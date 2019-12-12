@@ -38,7 +38,4 @@ export const renderHeader = (workbook: any, data: API.ZFI007Response, maBP: stri
         .cell('A9')
         .value()} ${BPRoleId}`,
     );
-
-
-
 };
