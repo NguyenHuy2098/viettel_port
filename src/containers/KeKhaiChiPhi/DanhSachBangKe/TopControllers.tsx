@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
@@ -31,18 +31,32 @@ const TopControllers = (props: Props): JSX.Element => {
   const maBP = useSelector(makeSelectorMaBP);
   const data = useSelector(select_ZFI007);
   const BPRoleId = useSelector(makeSelectorBPRoleId);
+  const [bangkeData, setBangKeData] = useState<(API.MTDETAILRECEIVER | undefined)[]>([]);
 
   const redirectToTaoMoiBangKe = (): void => {
     dispatch(push(routesMap.TAO_MOI_BANG_KE));
   };
 
+  console.log('checkedBangKe', checkedBangKe);
+  console.log('bangkeData', bangkeData);
+
   useEffect(() => {
     if (size(checkedBangKe) > 0)
-      dispatch(
-        action_ZFI007({
-          BK_ID: checkedBangKe[0],
-        }),
-      );
+      for (let i = 0; i < size(checkedBangKe); i++) {
+        dispatch(
+          action_ZFI007(
+            {
+              BK_ID: checkedBangKe[i],
+            },
+            {
+              onSuccess: (data: API.ZFI007Response): void => {
+                const newBangKeData = [...bangkeData, data.MT_DETAIL_RECEIVER];
+                setBangKeData(newBangKeData);
+              },
+            },
+          ),
+        );
+      }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedBangKe]);
 
@@ -387,6 +401,10 @@ const TopControllers = (props: Props): JSX.Element => {
           })}`,
         )
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(0)
+        .range(`A12:R${flagIndex}`)
+        .style({ wrapText: true, verticalAlignment: 'center' });
       flagIndex = flagIndex + 1;
 
       // render footer
@@ -440,7 +458,7 @@ const TopControllers = (props: Props): JSX.Element => {
       workbook
         .sheet(0)
         .range(`A1:R${flagIndex}`)
-        .style({ wrapText: false, fontFamily: 'Times New Roman' });
+        .style({ fontFamily: 'Times New Roman' });
     }
     if (status === 0 || status === 1) {
       //sheet 2
@@ -617,6 +635,10 @@ const TopControllers = (props: Props): JSX.Element => {
           })}`,
         )
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(1)
+        .range(`A12:R${flagIndex1}`)
+        .style({ wrapText: true, verticalAlignment: 'center' });
       flagIndex1 = flagIndex1 + 1;
 
       // render footer
@@ -670,7 +692,7 @@ const TopControllers = (props: Props): JSX.Element => {
       workbook
         .sheet(1)
         .range(`A1:R${flagIndex1}`)
-        .style({ wrapText: false, fontFamily: 'Times New Roman' });
+        .style({ fontFamily: 'Times New Roman' });
     }
 
     if (status === 2 || status === 3) {
