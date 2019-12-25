@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'reactstrap';
@@ -9,19 +9,22 @@ import { filter, map, get, groupBy, toNumber, toString, isEmpty, replace, size, 
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ExportExcelWithTemplate from 'components/Button/ExportExcelWithTemplate';
-import { action_ZFI007 } from 'redux/ZFI007/actions';
-import { select_ZFI007 } from 'redux/ZFI007/selectors';
 import { makeSelectorBPRoleId, makeSelectorMaBP } from 'redux/auth/selectors';
 import convertMoneyToString from 'utils/convertMoneyToString';
 import { numberFormat } from 'utils/common';
 import { renderHeader } from 'utils/exportExcelHelper';
 import routesMap from 'utils/routesMap';
+import { action_ZFI007M } from 'redux/ZFI007M/actions';
+import { select_ZFI007M_collection } from 'redux/ZFI007M/selectors';
 import PrintableBangKe from '../PrintableBangKe';
 
 interface Props {
   noBangKeChecked?: boolean;
   checkedBangKe: string[];
 }
+
+const SHEET_0 = 'Status 2,3';
+const SHEET_1 = 'status 0,1';
 
 // eslint-disable-next-line max-lines-per-function
 const TopControllers = (props: Props): JSX.Element => {
@@ -30,9 +33,8 @@ const TopControllers = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const maBP = useSelector(makeSelectorMaBP);
-  const data = useSelector(select_ZFI007);
   const BPRoleId = useSelector(makeSelectorBPRoleId);
-  const [bangkeData, setBangKeData] = useState<(API.MTDETAILRECEIVER | undefined)[]>([]);
+  const lists = useSelector(select_ZFI007M_collection);
 
   const redirectToTaoMoiBangKe = (): void => {
     dispatch(push(routesMap.TAO_MOI_BANG_KE));
@@ -40,27 +42,18 @@ const TopControllers = (props: Props): JSX.Element => {
 
   useEffect(() => {
     if (size(checkedBangKe) > 0)
-      for (let i = 0; i < size(checkedBangKe); i++) {
-        dispatch(
-          action_ZFI007(
-            {
-              BK_ID: checkedBangKe[i],
-            },
-            {
-              onSuccess: (data: API.ZFI007Response): void => {
-                const newBangKeData = [...bangkeData, data.MT_DETAIL_RECEIVER];
-                setBangKeData(newBangKeData);
-              },
-            },
-          ),
-        );
-      }
+      dispatch(
+        action_ZFI007M({
+          BK_INPUT: map(checkedBangKe, (id: string) => ({ ID: id })),
+        }),
+      );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkedBangKe]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const tempList = useMemo((): any => {
-    const rawMtDetailReceiverList = get(data, 'MT_DETAIL_RECEIVER.list', []);
+  // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
+  const aggregateOrder = (list: any): any => {
+    const rawMtDetailReceiverList = list;
     const mtDetailReceiverList = filter(rawMtDetailReceiverList, item => !isEmpty(item));
     const groupList = groupBy(mtDetailReceiverList, 'KHOAN_MUC');
     const newGropList = map(groupList, (groupItem: API.LISTMTDETAILRECEIVER[]) => ({
@@ -96,698 +89,717 @@ const TopControllers = (props: Props): JSX.Element => {
         sumBy(groupItem, subItem => {
           return toNumber(subItem.SUM_AMOUNT);
         }) -
-        sumBy(groupItem, subItem => {
-          return toNumber(subItem.SUM_AMOUNT_INIT);
-        }),
+          sumBy(groupItem, subItem => {
+            return toNumber(subItem.SUM_AMOUNT_INIT);
+          }) >
+        0
+          ? sumBy(groupItem, subItem => {
+              return toNumber(subItem.SUM_AMOUNT);
+            }) -
+            sumBy(groupItem, subItem => {
+              return toNumber(subItem.SUM_AMOUNT_INIT);
+            })
+          : 0,
     }));
     return newGropList;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  };
+
+  // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
+  const renderTemplate1 = (workbook: any, tempList: any, index: number, headerInfo: any): void => {
+    workbook.cloneSheet(workbook.sheet(0), `bang_ke_cptx - ${index}`);
+    renderHeader(workbook.sheet(`bang_ke_cptx - ${index}`), headerInfo, maBP, BPRoleId);
+
+    // sheet 1
+    let flagIndex = 16;
+    for (const itemKey in tempList) {
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .range(`A${flagIndex}:R${flagIndex}`)
+        .merged(true)
+        .value(`${get(tempList[itemKey].items[0], 'KHOAN_MUC', '')}-${get(tempList[itemKey].items[0], 'TEN_KM')}`)
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          horizontalAlignment: 'left',
+          fontFamily: 'Times New Roman',
+          bold: true,
+          fontSize: 11,
+        });
+      flagIndex++;
+      for (let i = 0; i < size(tempList[itemKey].items); i++) {
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`A${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'LINE_ITEM', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`B${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'KIHIEU_HD', '') || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        // moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`C${flagIndex + i}`)
+          .value(`${moment(get(tempList[itemKey].items[i], 'NGAY_HD', ''), 'YYYYMMDD').format('DD/MM/YYYY')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`D${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'SO_HD', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`E${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`F${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'MST', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`G${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'DESCR', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000', wrapText: true });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`H${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`I${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`J${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'TAX', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`K${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`L${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`M${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT_INIT', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`N${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI_INIT', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`O${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`P${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`Q${flagIndex + i}`)
+          .value(
+            `${
+              toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')) -
+                toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')) >
+              0
+                ? numberFormat(
+                    toString(
+                      toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')) -
+                        toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')),
+                    ),
+                  )
+                : 0
+            }`,
+          )
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`R${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'NOTE', '') || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+      }
+      //// tong nhom
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .range(`A${flagIndex + size(tempList[itemKey].items)}:G${flagIndex + size(tempList[itemKey].items)}`)
+        .merged(true)
+        .value('Tổng nhóm')
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          horizontalAlignment: 'center',
+          fontFamily: 'Times New Roman',
+          bold: true,
+        });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`H${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`I${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          fontFamily: 'Times New Roman',
+          bold: true,
+          shrinkToFit: true,
+        });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`J${flagIndex + size(tempList[itemKey].items)}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`K${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`L${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT_INIT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000' });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`M${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI_INIT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`N${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000' });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`O${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`P${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_SUM_AMOUNT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`Q${flagIndex + size(tempList[itemKey].items)}`)
+        .value(`${get(tempList[itemKey], 'TOTAL_KHONG_DUYET', '')}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`R${flagIndex + size(tempList[itemKey].items)}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      flagIndex = flagIndex + size(tempList[itemKey].items) + 1;
+    }
+    // tong tat cac nhom
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`A${flagIndex}:G${flagIndex}`)
+      .merged(true)
+      .value('Tổng cộng')
+      .style({
+        borderStyle: 'thin',
+        borderColor: '#000000',
+        horizontalAlignment: 'center',
+        fontFamily: 'Times New Roman',
+        bold: true,
+      });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`H${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`I${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({
+        borderStyle: 'thin',
+        borderColor: '#000000',
+        fontFamily: 'Times New Roman',
+        bold: true,
+        shrinkToFit: true,
+      });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`J${flagIndex}`)
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`K${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`L${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_AMOUNT_INIT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`M${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_PHU_PHI_INIT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`N${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`O${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`P${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`R${flagIndex}`)
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`Q${flagIndex}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`A12:R${flagIndex}`)
+      .style({ wrapText: true, verticalAlignment: 'center', fontSize: 8 });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`H17:Q${flagIndex}`)
+      .style({ horizontalAlignment: 'right' });
+    flagIndex = flagIndex + 1;
+
+    // render footer
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex}`)
+      .value(
+        `Số tiền đề nghị thanh toán: ${convertMoneyToString(
+          sumBy(tempList, subItem => {
+            return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
+          }),
+        )}`,
+      );
+    flagIndex++;
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex}`)
+      .value(
+        `Số tiền được duyệt: ${convertMoneyToString(
+          sumBy(tempList, subItem => {
+            return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
+          }),
+        )}`,
+      );
+    flagIndex++;
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex}`)
+      .value(
+        `Số tiền không được duyệt: ${convertMoneyToString(
+          sumBy(tempList, subItem => {
+            return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
+          }),
+        )}`,
+      );
+    flagIndex += 2;
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex}`)
+      .value(`KẾ TOÁN CHUYÊN QUẢN`);
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`H${flagIndex}`)
+      .value(`TRƯỞNG PHÒNG TÀI CHÍNH`);
+    // .style({ wrapText: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`O${flagIndex}`)
+      .value(`TỔNG GIÁM ĐỐC`);
+
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`A1:R${flagIndex}`)
+      .style({ fontFamily: 'Times New Roman' });
+  };
+
+  // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
+  const renderTemplate2 = (workbook: any, tempList: any, index: number, headerInfo: any): void => {
+    workbook.cloneSheet(workbook.sheet(1), `bang_ke_cptx - ${index}`);
+    renderHeader(workbook.sheet(`bang_ke_cptx - ${index}`), headerInfo, maBP, BPRoleId);
+
+    let flagIndex1 = 16;
+    for (const itemKey in tempList) {
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .range(`A${flagIndex1}:L${flagIndex1}`)
+        .merged(true)
+        .value(`${get(tempList[itemKey].items[0], 'KHOAN_MUC', '')}-${get(tempList[itemKey].items[0], 'TEN_KM')}`)
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          horizontalAlignment: 'left',
+          fontFamily: 'Times New Roman',
+          bold: true,
+          fontSize: 11,
+        });
+      flagIndex1++;
+      for (let i = 0; i < size(tempList[itemKey].items); i++) {
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`A${flagIndex1 + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'LINE_ITEM', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`B${flagIndex1 + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'KIHIEU_HD', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`C${flagIndex1 + i}`)
+          .value(`${moment(get(tempList[itemKey].items[i], 'NGAY_HD', ''), 'YYYYMMDD').format('DD/MM/YYYY')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`D${flagIndex1 + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'SO_HD', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`E${flagIndex1 + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`F${flagIndex1 + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'MST', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`G${flagIndex1 + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'DESCR', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000', wrapText: true });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`H${flagIndex1 + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`I${flagIndex1 + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`J${flagIndex1 + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'TAX', '')}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`K${flagIndex1 + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`bang_ke_cptx - ${index}`)
+          .cell(`L${flagIndex1 + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', ''))}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+      }
+      //// tong nhom
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .range(`A${flagIndex1 + size(tempList[itemKey].items)}:G${flagIndex1 + size(tempList[itemKey].items)}`)
+        .merged(true)
+        .value('Tổng nhóm')
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          horizontalAlignment: 'center',
+          fontFamily: 'Times New Roman',
+          bold: true,
+        });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`H${flagIndex1 + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`I${flagIndex1 + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
+        .style({
+          borderStyle: 'thin',
+          borderColor: '#000000',
+          fontFamily: 'Times New Roman',
+          bold: true,
+          shrinkToFit: true,
+        });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`J${flagIndex1 + size(tempList[itemKey].items)}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`K${flagIndex1 + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+      workbook
+        .sheet(`bang_ke_cptx - ${index}`)
+        .cell(`L${flagIndex1 + size(tempList[itemKey].items)}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_SUM_AMOUNT_INIT', ''))}`)
+        .style({ borderStyle: 'thin', borderColor: '#000000' });
+      flagIndex1 = flagIndex1 + size(tempList[itemKey].items) + 1;
+    }
+    // tong tat cac nhom
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`A${flagIndex1}:G${flagIndex1}`)
+      .merged(true)
+      .value('Tổng cộng')
+      .style({
+        borderStyle: 'thin',
+        borderColor: '#000000',
+        horizontalAlignment: 'center',
+        fontFamily: 'Times New Roman',
+        bold: true,
+      });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`H${flagIndex1}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`I${flagIndex1}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({
+        borderStyle: 'thin',
+        borderColor: '#000000',
+        fontFamily: 'Times New Roman',
+        bold: true,
+        shrinkToFit: true,
+      });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`J${flagIndex1}`)
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`K${flagIndex1}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`L${flagIndex1}`)
+      .value(
+        `${numberFormat(
+          toString(
+            sumBy(tempList, subItem => {
+              return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
+            }),
+          ),
+        )}`,
+      )
+      .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`A12:R${flagIndex1}`)
+      .style({ wrapText: true, verticalAlignment: 'center' });
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`H17:L${flagIndex1}`)
+      .style({ horizontalAlignment: 'right' });
+    flagIndex1 = flagIndex1 + 1;
+
+    // render footer
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex1}`)
+      .value(
+        `Số tiền đề nghị thanh toán: ${convertMoneyToString(
+          sumBy(tempList, subItem => {
+            return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
+          }),
+        )}`,
+      );
+    flagIndex1++;
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex1}`)
+      .value(
+        `Số tiền được duyệt: ${convertMoneyToString(
+          sumBy(tempList, subItem => {
+            return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
+          }),
+        )}`,
+      );
+    flagIndex1++;
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex1}`)
+      .value(
+        `Số tiền không được duyệt: ${convertMoneyToString(
+          sumBy(tempList, subItem => {
+            return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
+          }),
+        )}`,
+      );
+    flagIndex1 += 2;
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`B${flagIndex1}`)
+      .value(`KẾ TOÁN CHUYÊN QUẢN`);
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`G${flagIndex1}`)
+      .value(`TRƯỞNG PHÒNG TÀI CHÍNH`);
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .cell(`K${flagIndex1}`)
+      .value(`TỔNG GIÁM ĐỐC`);
+
+    workbook
+      .sheet(`bang_ke_cptx - ${index}`)
+      .range(`A1:R${flagIndex1}`)
+      .style({ fontFamily: 'Times New Roman' });
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handlePrintBangKe = (data: any, workbook: any, index: number): void => {
+    const status = get(data, 'header.BK_STATUS');
+    const headerInfo = get(data, 'header');
+    if (status === 2 || status === 3) {
+      renderTemplate1(workbook, aggregateOrder(data.list), index, headerInfo);
+    }
+    if (status === 0 || status === 1) {
+      renderTemplate2(workbook, aggregateOrder(data.list), index, headerInfo);
+    }
+  };
 
   // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
   function handleData(workbook: any): void {
-    const status = get(data, 'MT_DETAIL_RECEIVER.header.BK_STATUS');
-    if (status === 2 || status === 3) {
-      workbook.sheet(0).name('bang_ke_cptx');
-      renderHeader(workbook, data, maBP, BPRoleId);
-
-      // sheet 1
-      let flagIndex = 16;
-      for (const itemKey in tempList) {
-        workbook
-          .sheet(0)
-          .range(`A${flagIndex}:R${flagIndex}`)
-          .merged(true)
-          .value(`${get(tempList[itemKey].items[0], 'KHOAN_MUC', '')}-${get(tempList[itemKey].items[0], 'TEN_KM')}`)
-          .style({
-            borderStyle: 'thin',
-            borderColor: '#000000',
-            horizontalAlignment: 'left',
-            fontFamily: 'Times New Roman',
-            bold: true,
-            fontSize: 11,
-          });
-        flagIndex++;
-        for (let i = 0; i < size(tempList[itemKey].items); i++) {
-          workbook
-            .sheet(0)
-            .cell(`A${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'LINE_ITEM', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`B${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'KIHIEU_HD', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          // moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')
-          workbook
-            .sheet(0)
-            .cell(`C${flagIndex + i}`)
-            .value(`${moment(get(tempList[itemKey].items[i], 'NGAY_HD', ''), 'YYYYMMDD').format('DD/MM/YYYY')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`D${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'SO_HD', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`E${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`F${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'MST', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`G${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'DESCR', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000', wrapText: true });
-          workbook
-            .sheet(0)
-            .cell(`H${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', '')) || ''}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`I${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', '')) || ''}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
-          workbook
-            .sheet(0)
-            .cell(`J${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'TAX', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`K${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', '')) || ''}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`L${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', '')) || ''}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`M${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT_INIT', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`N${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI_INIT', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`O${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT_INIT', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`P${flagIndex + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`Q${flagIndex + i}`)
-            .value(
-              `${
-                toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')) -
-                  toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')) >
-                0
-                  ? numberFormat(
-                      toString(
-                        toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')) -
-                          toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')),
-                      ),
-                    )
-                  : 0
-              }`,
-            )
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(0)
-            .cell(`R${flagIndex + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'NOTE', '') || ''}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-        }
-        //// tong nhom
-        workbook
-          .sheet(0)
-          .range(`A${flagIndex + size(tempList[itemKey].items)}:G${flagIndex + size(tempList[itemKey].items)}`)
-          .merged(true)
-          .value('Tổng nhóm')
-          .style({
-            borderStyle: 'thin',
-            borderColor: '#000000',
-            horizontalAlignment: 'center',
-            fontFamily: 'Times New Roman',
-            bold: true,
-          });
-        workbook
-          .sheet(0)
-          .cell(`H${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(0)
-          .cell(`I${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
-          .style({
-            borderStyle: 'thin',
-            borderColor: '#000000',
-            fontFamily: 'Times New Roman',
-            bold: true,
-            shrinkToFit: true,
-          });
-        workbook
-          .sheet(0)
-          .cell(`J${flagIndex + size(tempList[itemKey].items)}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(0)
-          .cell(`K${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(0)
-          .cell(`L${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT_INIT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000' });
-        workbook
-          .sheet(0)
-          .cell(`M${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI_INIT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(0)
-          .cell(`N${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000' });
-        workbook
-          .sheet(0)
-          .cell(`O${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(0)
-          .cell(`P${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_SUM_AMOUNT_INIT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(0)
-          .cell(`Q${flagIndex + size(tempList[itemKey].items)}`)
-          .value(`${get(tempList[itemKey], 'TOTAL_KHONG_DUYET', '')}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(0)
-          .cell(`R${flagIndex + size(tempList[itemKey].items)}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        flagIndex = flagIndex + size(tempList[itemKey].items) + 1;
-      }
-      // tong tat cac nhom
-      workbook
-        .sheet(0)
-        .range(`A${flagIndex}:G${flagIndex}`)
-        .merged(true)
-        .value('Tổng cộng')
-        .style({
-          borderStyle: 'thin',
-          borderColor: '#000000',
-          horizontalAlignment: 'center',
-          fontFamily: 'Times New Roman',
-          bold: true,
-        });
-      workbook
-        .sheet(0)
-        .cell(`H${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`I${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({
-          borderStyle: 'thin',
-          borderColor: '#000000',
-          fontFamily: 'Times New Roman',
-          bold: true,
-          shrinkToFit: true,
-        });
-      workbook
-        .sheet(0)
-        .cell(`J${flagIndex}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`K${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`L${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_AMOUNT_INIT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`M${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_PHU_PHI_INIT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`N${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`O${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`P${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`R${flagIndex}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .cell(`Q${flagIndex}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(0)
-        .range(`A12:R${flagIndex}`)
-        .style({ wrapText: true, verticalAlignment: 'center', fontSize: 8 });
-      workbook
-        .sheet(0)
-        .range(`H17:L${flagIndex}`)
-        .style({ horizontalAlignment: 'right' });
-      flagIndex = flagIndex + 1;
-
-      // render footer
-      workbook
-        .sheet(0)
-        .cell(`B${flagIndex}`)
-        .value(
-          `Số tiền đề nghị thanh toán: ${convertMoneyToString(
-            sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
-            }),
-          )}`,
-        );
-      flagIndex++;
-      workbook
-        .sheet(0)
-        .cell(`B${flagIndex}`)
-        .value(
-          `Số tiền được duyệt: ${convertMoneyToString(
-            sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
-            }),
-          )}`,
-        );
-      flagIndex++;
-      workbook
-        .sheet(0)
-        .cell(`B${flagIndex}`)
-        .value(
-          `Số tiền không được duyệt: ${convertMoneyToString(
-            sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
-            }),
-          )}`,
-        );
-      flagIndex += 2;
-      workbook
-        .sheet(0)
-        .cell(`B${flagIndex}`)
-        .value(`KẾ TOÁN CHUYÊN QUẢN`);
-      workbook
-        .sheet(0)
-        .cell(`H${flagIndex}`)
-        .value(`TRƯỞNG PHÒNG TÀI CHÍNH`);
-      // .style({ wrapText: true });
-      workbook
-        .sheet(0)
-        .cell(`O${flagIndex}`)
-        .value(`TỔNG GIÁM ĐỐC`);
-
-      workbook
-        .sheet(0)
-        .range(`A1:R${flagIndex}`)
-        .style({ fontFamily: 'Times New Roman' });
+    for (let i = size(lists) - 1, j = 0; i >= 0; i--, j++) {
+      handlePrintBangKe(lists[i], workbook, j);
     }
-    if (status === 0 || status === 1) {
-      //sheet 2
-      workbook.sheet(1).name('bang_ke_cptx');
-      renderHeader(workbook, data, maBP, BPRoleId);
-
-      let flagIndex1 = 16;
-      for (const itemKey in tempList) {
-        workbook
-          .sheet(1)
-          .range(`A${flagIndex1}:L${flagIndex1}`)
-          .merged(true)
-          .value(`${get(tempList[itemKey].items[0], 'KHOAN_MUC', '')}-${get(tempList[itemKey].items[0], 'TEN_KM')}`)
-          .style({
-            borderStyle: 'thin',
-            borderColor: '#000000',
-            horizontalAlignment: 'left',
-            fontFamily: 'Times New Roman',
-            bold: true,
-            fontSize: 11,
-          });
-        flagIndex1++;
-        for (let i = 0; i < size(tempList[itemKey].items); i++) {
-          workbook
-            .sheet(1)
-            .cell(`A${flagIndex1 + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'LINE_ITEM', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`B${flagIndex1 + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'KIHIEU_HD', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-
-          workbook
-            .sheet(1)
-            .cell(`C${flagIndex1 + i}`)
-            .value(`${moment(get(tempList[itemKey].items[i], 'NGAY_HD', ''), 'YYYYMMDD').format('DD/MM/YYYY')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`D${flagIndex1 + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'SO_HD', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`E${flagIndex1 + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`F${flagIndex1 + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'MST', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`G${flagIndex1 + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'DESCR', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000', wrapText: true });
-          workbook
-            .sheet(1)
-            .cell(`H${flagIndex1 + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`I${flagIndex1 + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
-          workbook
-            .sheet(1)
-            .cell(`J${flagIndex1 + i}`)
-            .value(`${get(tempList[itemKey].items[i], 'TAX', '')}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`K${flagIndex1 + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-          workbook
-            .sheet(1)
-            .cell(`L${flagIndex1 + i}`)
-            .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', ''))}`)
-            .style({ borderStyle: 'thin', borderColor: '#000000' });
-        }
-        //// tong nhom
-        workbook
-          .sheet(1)
-          .range(`A${flagIndex1 + size(tempList[itemKey].items)}:G${flagIndex1 + size(tempList[itemKey].items)}`)
-          .merged(true)
-          .value('Tổng nhóm')
-          .style({
-            borderStyle: 'thin',
-            borderColor: '#000000',
-            horizontalAlignment: 'center',
-            fontFamily: 'Times New Roman',
-            bold: true,
-          });
-        workbook
-          .sheet(1)
-          .cell(`H${flagIndex1 + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(1)
-          .cell(`I${flagIndex1 + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
-          .style({
-            borderStyle: 'thin',
-            borderColor: '#000000',
-            fontFamily: 'Times New Roman',
-            bold: true,
-            shrinkToFit: true,
-          });
-        workbook
-          .sheet(1)
-          .cell(`J${flagIndex1 + size(tempList[itemKey].items)}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(1)
-          .cell(`K${flagIndex1 + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-        workbook
-          .sheet(1)
-          .cell(`L${flagIndex1 + size(tempList[itemKey].items)}`)
-          .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_SUM_AMOUNT_INIT', ''))}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000' });
-        flagIndex1 = flagIndex1 + size(tempList[itemKey].items) + 1;
-      }
-      // tong tat cac nhom
-      workbook
-        .sheet(1)
-        .range(`A${flagIndex1}:G${flagIndex1}`)
-        .merged(true)
-        .value('Tổng cộng')
-        .style({
-          borderStyle: 'thin',
-          borderColor: '#000000',
-          horizontalAlignment: 'center',
-          fontFamily: 'Times New Roman',
-          bold: true,
-        });
-      workbook
-        .sheet(1)
-        .cell(`H${flagIndex1}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(1)
-        .cell(`I${flagIndex1}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({
-          borderStyle: 'thin',
-          borderColor: '#000000',
-          fontFamily: 'Times New Roman',
-          bold: true,
-          shrinkToFit: true,
-        });
-      workbook
-        .sheet(1)
-        .cell(`J${flagIndex1}`)
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(1)
-        .cell(`K${flagIndex1}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(1)
-        .cell(`L${flagIndex1}`)
-        .value(
-          `${numberFormat(
-            toString(
-              sumBy(tempList, subItem => {
-                return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
-              }),
-            ),
-          )}`,
-        )
-        .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
-      workbook
-        .sheet(1)
-        .range(`A12:R${flagIndex1}`)
-        .style({ wrapText: true, verticalAlignment: 'center' });
-      workbook
-        .sheet(1)
-        .range(`H17:L${flagIndex1}`)
-        .style({ horizontalAlignment: 'right' });
-      flagIndex1 = flagIndex1 + 1;
-
-      // render footer
-      workbook
-        .sheet(1)
-        .cell(`B${flagIndex1}`)
-        .value(
-          `Số tiền đề nghị thanh toán: ${convertMoneyToString(
-            sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
-            }),
-          )}`,
-        );
-      flagIndex1++;
-      workbook
-        .sheet(1)
-        .cell(`B${flagIndex1}`)
-        .value(
-          `Số tiền được duyệt: ${convertMoneyToString(
-            sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
-            }),
-          )}`,
-        );
-      flagIndex1++;
-      workbook
-        .sheet(1)
-        .cell(`B${flagIndex1}`)
-        .value(
-          `Số tiền không được duyệt: ${convertMoneyToString(
-            sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
-            }),
-          )}`,
-        );
-      flagIndex1 += 2;
-      workbook
-        .sheet(1)
-        .cell(`B${flagIndex1}`)
-        .value(`KẾ TOÁN CHUYÊN QUẢN`);
-      workbook
-        .sheet(1)
-        .cell(`G${flagIndex1}`)
-        .value(`TRƯỞNG PHÒNG TÀI CHÍNH`);
-      workbook
-        .sheet(1)
-        .cell(`K${flagIndex1}`)
-        .value(`TỔNG GIÁM ĐỐC`);
-
-      workbook
-        .sheet(1)
-        .range(`A1:R${flagIndex1}`)
-        .style({ fontFamily: 'Times New Roman' });
-    }
-
-    if (status === 2 || status === 3) {
-      workbook.deleteSheet(1);
-    }
-    if (status === 0 || status === 1) {
-      workbook.deleteSheet(0);
-    }
+    workbook.deleteSheet(SHEET_0);
+    workbook.deleteSheet(SHEET_1);
   }
   return (
     <>
