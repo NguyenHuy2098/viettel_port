@@ -145,6 +145,15 @@ build-docker-image:production:
 
 # Stage: release
 # Automatically bump version, update changelog and readme
+semantic-release:qas:
+  image: node:lts-stretch
+  stage: release
+  only:
+    - qas
+  script:
+    - yarn changelog
+    - yarn semantic-release --branch=qas --dry-run
+
 semantic-release:
   image: node:lts-stretch
   stage: release
