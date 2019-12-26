@@ -1,4 +1,9 @@
 # Job templates
+.job-test-source: &test-source
+  stage: test
+  except:
+    - tags
+
 .job-build-source: &build-source
   stage: build-source
   artifacts:
@@ -36,8 +41,8 @@
     - docker info
     - docker login -u ${DOCKER_REGISTRY_USER} -p ${DOCKER_REGISTRY_TOKEN} ${DOCKER_REGISTRY}
   script:
-    - docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME} .
-    - docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}
+    - docker build -t ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${CI_COMMIT_REF_NAME} .
+    - docker push ${DOCKER_REGISTRY}/${DOCKER_IMAGE_NAME}:${CI_COMMIT_REF_NAME}
 
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
@@ -64,17 +69,17 @@ stages:
 # Run all the jobs to make sure new source code is following team's convention
 
 type-checking:
-  stage: test
+  <<: *test-source
   script:
     - yarn tsc
 
 lint-source:
-  stage: test
+  <<: *test-source
   script:
     - yarn lint
 
 unit-test:
-  stage: test
+  <<: *test-source
   script:
     - yarn test:cov
 
@@ -87,6 +92,7 @@ build-source:latest:
     - production
     - qas
     - release
+    - tags
   script:
     - yarn build:development
   environment:
