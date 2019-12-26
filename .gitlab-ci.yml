@@ -152,4 +152,4 @@ semantic-release:
     - release
   script:
     - yarn changelog
-    - yarn semantic-release
+    - yarn semantic-release --branch=release
