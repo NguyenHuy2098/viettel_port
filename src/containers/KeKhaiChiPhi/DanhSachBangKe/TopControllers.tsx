@@ -493,6 +493,7 @@ const TopControllers = (props: Props): JSX.Element => {
           }),
         )}`,
       );
+
     flagIndex += 2;
     workbook
       .sheet(`${BK_ID}`)
@@ -740,28 +741,28 @@ const TopControllers = (props: Props): JSX.Element => {
           }),
         )}`,
       );
-    flagIndex1++;
-    workbook
-      .sheet(`${BK_ID}`)
-      .cell(`B${flagIndex1}`)
-      .value(
-        `Số tiền được duyệt: ${convertMoneyToString(
-          sumBy(tempList, subItem => {
-            return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
-          }),
-        )}`,
-      );
-    flagIndex1++;
-    workbook
-      .sheet(`${BK_ID}`)
-      .cell(`B${flagIndex1}`)
-      .value(
-        `Số tiền không được duyệt: ${convertMoneyToString(
-          sumBy(tempList, subItem => {
-            return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
-          }),
-        )}`,
-      );
+    // flagIndex1++;
+    // workbook
+    //   .sheet(`${BK_ID}`)
+    //   .cell(`B${flagIndex1}`)
+    //   .value(
+    //     `Số tiền được duyệt: ${convertMoneyToString(
+    //       sumBy(tempList, subItem => {
+    //         return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
+    //       }),
+    //     )}`,
+    //   );
+    // flagIndex1++;
+    // workbook
+    //   .sheet(`${BK_ID}`)
+    //   .cell(`B${flagIndex1}`)
+    //   .value(
+    //     `Số tiền không được duyệt: ${convertMoneyToString(
+    //       sumBy(tempList, subItem => {
+    //         return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
+    //       }),
+    //     )}`,
+    //   );
     flagIndex1 += 2;
     workbook
       .sheet(`${BK_ID}`)
@@ -786,7 +787,7 @@ const TopControllers = (props: Props): JSX.Element => {
   const handlePrintBangKe = (data: any, workbook: any, index: number): void => {
     const status = get(data, 'header.BK_STATUS');
     const headerInfo = get(data, 'header');
-    if (status === 2 || status === 3) {
+    if (status === 2 || status === 3 || status === 4) {
       renderTemplate1(workbook, aggregateOrder(data.list), index, headerInfo);
     }
     if (status === 0 || status === 1) {
