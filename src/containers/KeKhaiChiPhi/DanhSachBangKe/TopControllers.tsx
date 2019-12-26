@@ -87,17 +87,17 @@ const TopControllers = (props: Props): JSX.Element => {
       }),
       TOTAL_KHONG_DUYET:
         sumBy(groupItem, subItem => {
-          return toNumber(subItem.SUM_AMOUNT);
+          return toNumber(subItem.SUM_AMOUNT_INIT);
         }) -
           sumBy(groupItem, subItem => {
-            return toNumber(subItem.SUM_AMOUNT_INIT);
+            return toNumber(subItem.SUM_AMOUNT);
           }) >
         0
           ? sumBy(groupItem, subItem => {
-              return toNumber(subItem.SUM_AMOUNT);
+              return toNumber(subItem.SUM_AMOUNT_INIT);
             }) -
             sumBy(groupItem, subItem => {
-              return toNumber(subItem.SUM_AMOUNT_INIT);
+              return toNumber(subItem.SUM_AMOUNT);
             })
           : 0,
     }));
@@ -166,37 +166,37 @@ const TopControllers = (props: Props): JSX.Element => {
         workbook
           .sheet(`${BK_ID}`)
           .cell(`H${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', '')) || ''}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000' });
-        workbook
-          .sheet(`${BK_ID}`)
-          .cell(`I${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', '')) || ''}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
-        workbook
-          .sheet(`${BK_ID}`)
-          .cell(`J${flagIndex + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'TAX', '') || ''}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000' });
-        workbook
-          .sheet(`${BK_ID}`)
-          .cell(`K${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', '')) || ''}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000' });
-        workbook
-          .sheet(`${BK_ID}`)
-          .cell(`L${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', '')) || ''}`)
-          .style({ borderStyle: 'thin', borderColor: '#000000' });
-        workbook
-          .sheet(`${BK_ID}`)
-          .cell(`M${flagIndex + i}`)
           .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT_INIT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
           .sheet(`${BK_ID}`)
-          .cell(`N${flagIndex + i}`)
+          .cell(`I${flagIndex + i}`)
           .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI_INIT', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
+        workbook
+          .sheet(`${BK_ID}`)
+          .cell(`J${flagIndex + i}`)
+          .value(`${get(tempList[itemKey].items[i], 'TAX_INIT', '') || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`${BK_ID}`)
+          .cell(`K${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT_INIT', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`${BK_ID}`)
+          .cell(`L${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`${BK_ID}`)
+          .cell(`M${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', '')) || ''}`)
+          .style({ borderStyle: 'thin', borderColor: '#000000' });
+        workbook
+          .sheet(`${BK_ID}`)
+          .cell(`N${flagIndex + i}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
           .sheet(`${BK_ID}`)
@@ -213,13 +213,13 @@ const TopControllers = (props: Props): JSX.Element => {
           .cell(`Q${flagIndex + i}`)
           .value(
             `${
-              toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')) -
-                toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')) >
+              toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')) -
+                toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')) >
               0
                 ? numberFormat(
                     toString(
-                      toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')) -
-                        toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')),
+                      toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT')) -
+                        toNumber(get(tempList[itemKey].items[i], 'SUM_AMOUNT')),
                     ),
                   )
                 : 0
@@ -248,12 +248,12 @@ const TopControllers = (props: Props): JSX.Element => {
       workbook
         .sheet(`${BK_ID}`)
         .cell(`H${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(`${BK_ID}`)
         .cell(`I${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI_INIT', ''))}`)
         .style({
           borderStyle: 'thin',
           borderColor: '#000000',
@@ -268,27 +268,27 @@ const TopControllers = (props: Props): JSX.Element => {
       workbook
         .sheet(`${BK_ID}`)
         .cell(`K${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(`${BK_ID}`)
         .cell(`L${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT_INIT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_SUM_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000' });
       workbook
         .sheet(`${BK_ID}`)
         .cell(`M${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI_INIT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(`${BK_ID}`)
         .cell(`N${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000' });
       workbook
         .sheet(`${BK_ID}`)
         .cell(`O${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(`${BK_ID}`)
@@ -326,7 +326,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
+              return toNumber(get(subItem, 'TOTAL_AMOUNT_INIT', '0'));
             }),
           ),
         )}`,
@@ -339,7 +339,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
+              return toNumber(get(subItem, 'TOTAL_PHU_PHI_INIT', '0'));
             }),
           ),
         )}`,
@@ -362,7 +362,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
+              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
             }),
           ),
         )}`,
@@ -375,7 +375,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_AMOUNT_INIT', '0'));
+              return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
             }),
           ),
         )}`,
@@ -388,7 +388,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_PHU_PHI_INIT', '0'));
+              return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
             }),
           ),
         )}`,
@@ -401,7 +401,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
+              return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
             }),
           ),
         )}`,
@@ -414,7 +414,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
+              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
             }),
           ),
         )}`,
@@ -577,27 +577,27 @@ const TopControllers = (props: Props): JSX.Element => {
         workbook
           .sheet(`${BK_ID}`)
           .cell(`H${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', '')) || ''}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT_INIT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
           .sheet(`${BK_ID}`)
           .cell(`I${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', '')) || ''}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI_INIT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
         workbook
           .sheet(`${BK_ID}`)
           .cell(`J${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'TAX', '') || ''}`)
+          .value(`${get(tempList[itemKey].items[i], 'TAX_INIT', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
           .sheet(`${BK_ID}`)
           .cell(`K${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', '')) || ''}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT_INIT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
           .sheet(`${BK_ID}`)
           .cell(`L${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', '')) || ''}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT_INIT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
       }
       //// tong nhom
@@ -616,12 +616,12 @@ const TopControllers = (props: Props): JSX.Element => {
       workbook
         .sheet(`${BK_ID}`)
         .cell(`H${flagIndex1 + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(`${BK_ID}`)
         .cell(`I${flagIndex1 + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI_INIT', ''))}`)
         .style({
           borderStyle: 'thin',
           borderColor: '#000000',
@@ -636,7 +636,7 @@ const TopControllers = (props: Props): JSX.Element => {
       workbook
         .sheet(`${BK_ID}`)
         .cell(`K${flagIndex1 + size(tempList[itemKey].items)}`)
-        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
         .sheet(`${BK_ID}`)
@@ -665,7 +665,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
+              return toNumber(get(subItem, 'TOTAL_AMOUNT_INIT', '0'));
             }),
           ),
         )}`,
@@ -678,7 +678,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_PHU_PHI', '0'));
+              return toNumber(get(subItem, 'TOTAL_PHU_PHI_INIT', '0'));
             }),
           ),
         )}`,
@@ -701,7 +701,7 @@ const TopControllers = (props: Props): JSX.Element => {
         `${numberFormat(
           toString(
             sumBy(tempList, subItem => {
-              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT', '0'));
+              return toNumber(get(subItem, 'TOTAL_TAX_AMOUNT_INIT', '0'));
             }),
           ),
         )}`,
@@ -741,28 +741,6 @@ const TopControllers = (props: Props): JSX.Element => {
           }),
         )}`,
       );
-    // flagIndex1++;
-    // workbook
-    //   .sheet(`${BK_ID}`)
-    //   .cell(`B${flagIndex1}`)
-    //   .value(
-    //     `Số tiền được duyệt: ${convertMoneyToString(
-    //       sumBy(tempList, subItem => {
-    //         return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
-    //       }),
-    //     )}`,
-    //   );
-    // flagIndex1++;
-    // workbook
-    //   .sheet(`${BK_ID}`)
-    //   .cell(`B${flagIndex1}`)
-    //   .value(
-    //     `Số tiền không được duyệt: ${convertMoneyToString(
-    //       sumBy(tempList, subItem => {
-    //         return toNumber(get(subItem, 'TOTAL_KHONG_DUYET', '0'));
-    //       }),
-    //     )}`,
-    //   );
     flagIndex1 += 2;
     workbook
       .sheet(`${BK_ID}`)
