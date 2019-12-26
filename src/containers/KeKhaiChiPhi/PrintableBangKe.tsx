@@ -231,8 +231,8 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
       {
         Header: t('Thuế giá trị gia tăng'),
         // accessor: 'TAX_AMOUNT',
-        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): string => {
-          return numberFormat(get(row, 'original.TAX_AMOUNT_INIT'));
+        Cell: ({ row }: Cell<API.LISTMTDETAILRECEIVER>): JSX.Element => {
+          return <div className="column-11">{numberFormat(get(row, 'original.TAX_AMOUNT_INIT'))}</div>;
         },
       },
       {
@@ -312,18 +312,18 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
   function renderTotal(): JSX.Element {
     const SUM_AMOUNT = sumBy(data, item => toNumber(item.SUM_AMOUNT));
     const SUM_AMOUNT_INIT = !isPheDuyet ? 0 : sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT));
-    const NOT_SUM_AMOUNT = !isPheDuyet ? 0 : SUM_AMOUNT - SUM_AMOUNT_INIT;
+    const NOT_SUM_AMOUNT = !isPheDuyet ? 0 : SUM_AMOUNT_INIT - SUM_AMOUNT;
 
     return (
       <Row>
         <Col className="pl-5">
           <div>
-            <i>{t('Số tiền đề nghị thanh toán') + ': ' + convertMoneyToString(SUM_AMOUNT)}</i>
+            <i>{t('Số tiền đề nghị thanh toán') + ': ' + convertMoneyToString(SUM_AMOUNT_INIT)}</i>
           </div>
           {isPheDuyet && (
             <>
               <div>
-                <i>{t('Số tiền được duyệt') + ': ' + convertMoneyToString(SUM_AMOUNT_INIT)}</i>
+                <i>{t('Số tiền được duyệt') + ': ' + convertMoneyToString(SUM_AMOUNT)}</i>
               </div>
               <div>
                 <i>{t('Số tiền không được duyệt') + ': ' + convertMoneyToString(NOT_SUM_AMOUNT)}</i>
@@ -375,7 +375,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
           </Col>
         </Row>
         <Row>
-          <Col sm="12" className="info pb-3">
+          <Col sm="12" className="info pb-3 c-font">
             <div className="col-6 pl-0">
               {t('Về việc')}: {t('Thanh toán chi phí theo ngân sách ')}
               {t('T')}
@@ -385,7 +385,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
               {t('Họ và tên')}: {get(MT_DETAIL_RECEIVER_ZFI007, 'CRE_BY', '')}
             </div>
             <div className="col-6 pl-0">
-              {t('Chức danh')}: {t('Nhân viên chăm sóc khách hàng')}
+              {t('Chức danh')}: {get(userLogin, 'user.profile.bp_role_id', '')}
             </div>
             <div className="col-6 pl-0">{t('Đề nghị thanh toán số tiền theo bảng kê như sau')}:</div>
           </Col>
