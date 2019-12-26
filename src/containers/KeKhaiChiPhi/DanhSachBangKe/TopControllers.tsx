@@ -106,14 +106,15 @@ const TopControllers = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
   const renderTemplate1 = (workbook: any, tempList: any, index: number, headerInfo: any): void => {
-    workbook.cloneSheet(workbook.sheet(0), `bang_ke_cptx - ${index}`);
-    renderHeader(workbook.sheet(`bang_ke_cptx - ${index}`), headerInfo, maBP, BPRoleId);
+    const BK_ID = get(headerInfo, 'BK_ID', '');
+    workbook.cloneSheet(workbook.sheet(0), `${BK_ID}`);
+    renderHeader(workbook.sheet(`${BK_ID}`), headerInfo, maBP, BPRoleId);
 
     // sheet 1
     let flagIndex = 16;
     for (const itemKey in tempList) {
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .range(`A${flagIndex}:R${flagIndex}`)
         .merged(true)
         .value(`${get(tempList[itemKey].items[0], 'KHOAN_MUC', '')}-${get(tempList[itemKey].items[0], 'TEN_KM')}`)
@@ -128,88 +129,87 @@ const TopControllers = (props: Props): JSX.Element => {
       flagIndex++;
       for (let i = 0; i < size(tempList[itemKey].items); i++) {
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`A${flagIndex + i}`)
           .value(`${get(tempList[itemKey].items[i], 'LINE_ITEM', '')}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`B${flagIndex + i}`)
           .value(`${get(tempList[itemKey].items[i], 'KIHIEU_HD', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
-        // moment(item.DATETIME_CHLC, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`C${flagIndex + i}`)
           .value(`${moment(get(tempList[itemKey].items[i], 'NGAY_HD', ''), 'YYYYMMDD').format('DD/MM/YYYY')}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`D${flagIndex + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'SO_HD', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'SO_HD', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`E${flagIndex + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`F${flagIndex + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'MST', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'MST', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`G${flagIndex + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'DESCR', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'DESCR', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000', wrapText: true });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`H${flagIndex + i}`)
           .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`I${flagIndex + i}`)
           .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`J${flagIndex + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'TAX', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'TAX', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`K${flagIndex + i}`)
           .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`L${flagIndex + i}`)
           .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`M${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT_INIT', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT_INIT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`N${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI_INIT', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI_INIT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`O${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`P${flagIndex + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`Q${flagIndex + i}`)
           .value(
             `${
@@ -227,14 +227,14 @@ const TopControllers = (props: Props): JSX.Element => {
           )
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`R${flagIndex + i}`)
           .value(`${get(tempList[itemKey].items[i], 'NOTE', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
       }
       //// tong nhom
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .range(`A${flagIndex + size(tempList[itemKey].items)}:G${flagIndex + size(tempList[itemKey].items)}`)
         .merged(true)
         .value('Tổng nhóm')
@@ -246,12 +246,12 @@ const TopControllers = (props: Props): JSX.Element => {
           bold: true,
         });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`H${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`I${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
         .style({
@@ -262,53 +262,53 @@ const TopControllers = (props: Props): JSX.Element => {
           shrinkToFit: true,
         });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`J${flagIndex + size(tempList[itemKey].items)}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`K${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`L${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000' });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`M${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`N${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000' });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`O${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`P${flagIndex + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_SUM_AMOUNT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`Q${flagIndex + size(tempList[itemKey].items)}`)
-        .value(`${get(tempList[itemKey], 'TOTAL_KHONG_DUYET', '')}`)
+        .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_KHONG_DUYET', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`R${flagIndex + size(tempList[itemKey].items)}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       flagIndex = flagIndex + size(tempList[itemKey].items) + 1;
     }
     // tong tat cac nhom
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`A${flagIndex}:G${flagIndex}`)
       .merged(true)
       .value('Tổng cộng')
@@ -320,7 +320,7 @@ const TopControllers = (props: Props): JSX.Element => {
         bold: true,
       });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`H${flagIndex}`)
       .value(
         `${numberFormat(
@@ -333,7 +333,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`I${flagIndex}`)
       .value(
         `${numberFormat(
@@ -352,11 +352,11 @@ const TopControllers = (props: Props): JSX.Element => {
         shrinkToFit: true,
       });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`J${flagIndex}`)
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`K${flagIndex}`)
       .value(
         `${numberFormat(
@@ -369,7 +369,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`L${flagIndex}`)
       .value(
         `${numberFormat(
@@ -382,7 +382,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`M${flagIndex}`)
       .value(
         `${numberFormat(
@@ -395,7 +395,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`N${flagIndex}`)
       .value(
         `${numberFormat(
@@ -408,7 +408,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`O${flagIndex}`)
       .value(
         `${numberFormat(
@@ -421,7 +421,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`P${flagIndex}`)
       .value(
         `${numberFormat(
@@ -434,11 +434,11 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`R${flagIndex}`)
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`Q${flagIndex}`)
       .value(
         `${numberFormat(
@@ -451,18 +451,18 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`A12:R${flagIndex}`)
       .style({ wrapText: true, verticalAlignment: 'center', fontSize: 8 });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`H17:Q${flagIndex}`)
       .style({ horizontalAlignment: 'right' });
     flagIndex = flagIndex + 1;
 
     // render footer
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex}`)
       .value(
         `Số tiền đề nghị thanh toán: ${convertMoneyToString(
@@ -473,7 +473,7 @@ const TopControllers = (props: Props): JSX.Element => {
       );
     flagIndex++;
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex}`)
       .value(
         `Số tiền được duyệt: ${convertMoneyToString(
@@ -484,7 +484,7 @@ const TopControllers = (props: Props): JSX.Element => {
       );
     flagIndex++;
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex}`)
       .value(
         `Số tiền không được duyệt: ${convertMoneyToString(
@@ -495,34 +495,35 @@ const TopControllers = (props: Props): JSX.Element => {
       );
     flagIndex += 2;
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex}`)
       .value(`KẾ TOÁN CHUYÊN QUẢN`);
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`H${flagIndex}`)
       .value(`TRƯỞNG PHÒNG TÀI CHÍNH`);
     // .style({ wrapText: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`O${flagIndex}`)
       .value(`TỔNG GIÁM ĐỐC`);
 
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`A1:R${flagIndex}`)
       .style({ fontFamily: 'Times New Roman' });
   };
 
   // eslint-disable-next-line max-lines-per-function,@typescript-eslint/no-explicit-any
   const renderTemplate2 = (workbook: any, tempList: any, index: number, headerInfo: any): void => {
-    workbook.cloneSheet(workbook.sheet(1), `bang_ke_cptx - ${index}`);
-    renderHeader(workbook.sheet(`bang_ke_cptx - ${index}`), headerInfo, maBP, BPRoleId);
+    const BK_ID = get(headerInfo, 'BK_ID', '');
+    workbook.cloneSheet(workbook.sheet(1), `${BK_ID}`);
+    renderHeader(workbook.sheet(`${BK_ID}`), headerInfo, maBP, BPRoleId);
 
     let flagIndex1 = 16;
     for (const itemKey in tempList) {
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .range(`A${flagIndex1}:L${flagIndex1}`)
         .merged(true)
         .value(`${get(tempList[itemKey].items[0], 'KHOAN_MUC', '')}-${get(tempList[itemKey].items[0], 'TEN_KM')}`)
@@ -537,70 +538,70 @@ const TopControllers = (props: Props): JSX.Element => {
       flagIndex1++;
       for (let i = 0; i < size(tempList[itemKey].items); i++) {
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`A${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'LINE_ITEM', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'LINE_ITEM', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`B${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'KIHIEU_HD', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'KIHIEU_HD', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
 
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`C${flagIndex1 + i}`)
           .value(`${moment(get(tempList[itemKey].items[i], 'NGAY_HD', ''), 'YYYYMMDD').format('DD/MM/YYYY')}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`D${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'SO_HD', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'SO_HD', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`E${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'NGUOI_BAN', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`F${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'MST', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'MST', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`G${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'DESCR', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'DESCR', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000', wrapText: true });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`H${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`I${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'PHU_PHI', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000', shrinkToFit: true });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`J${flagIndex1 + i}`)
-          .value(`${get(tempList[itemKey].items[i], 'TAX', '')}`)
+          .value(`${get(tempList[itemKey].items[i], 'TAX', '') || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`K${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'TAX_AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
         workbook
-          .sheet(`bang_ke_cptx - ${index}`)
+          .sheet(`${BK_ID}`)
           .cell(`L${flagIndex1 + i}`)
-          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', ''))}`)
+          .value(`${numberFormat(get(tempList[itemKey].items[i], 'SUM_AMOUNT', '')) || ''}`)
           .style({ borderStyle: 'thin', borderColor: '#000000' });
       }
       //// tong nhom
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .range(`A${flagIndex1 + size(tempList[itemKey].items)}:G${flagIndex1 + size(tempList[itemKey].items)}`)
         .merged(true)
         .value('Tổng nhóm')
@@ -612,12 +613,12 @@ const TopControllers = (props: Props): JSX.Element => {
           bold: true,
         });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`H${flagIndex1 + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_AMOUNT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`I${flagIndex1 + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_PHU_PHI', ''))}`)
         .style({
@@ -628,16 +629,16 @@ const TopControllers = (props: Props): JSX.Element => {
           shrinkToFit: true,
         });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`J${flagIndex1 + size(tempList[itemKey].items)}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`K${flagIndex1 + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_TAX_AMOUNT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
       workbook
-        .sheet(`bang_ke_cptx - ${index}`)
+        .sheet(`${BK_ID}`)
         .cell(`L${flagIndex1 + size(tempList[itemKey].items)}`)
         .value(`${numberFormat(get(tempList[itemKey], 'TOTAL_SUM_AMOUNT_INIT', ''))}`)
         .style({ borderStyle: 'thin', borderColor: '#000000' });
@@ -645,7 +646,7 @@ const TopControllers = (props: Props): JSX.Element => {
     }
     // tong tat cac nhom
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`A${flagIndex1}:G${flagIndex1}`)
       .merged(true)
       .value('Tổng cộng')
@@ -657,7 +658,7 @@ const TopControllers = (props: Props): JSX.Element => {
         bold: true,
       });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`H${flagIndex1}`)
       .value(
         `${numberFormat(
@@ -670,7 +671,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`I${flagIndex1}`)
       .value(
         `${numberFormat(
@@ -689,11 +690,11 @@ const TopControllers = (props: Props): JSX.Element => {
         shrinkToFit: true,
       });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`J${flagIndex1}`)
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`K${flagIndex1}`)
       .value(
         `${numberFormat(
@@ -706,7 +707,7 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`L${flagIndex1}`)
       .value(
         `${numberFormat(
@@ -719,18 +720,18 @@ const TopControllers = (props: Props): JSX.Element => {
       )
       .style({ borderStyle: 'thin', borderColor: '#000000', fontFamily: 'Times New Roman', bold: true });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`A12:R${flagIndex1}`)
       .style({ wrapText: true, verticalAlignment: 'center' });
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`H17:L${flagIndex1}`)
       .style({ horizontalAlignment: 'right' });
     flagIndex1 = flagIndex1 + 1;
 
     // render footer
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex1}`)
       .value(
         `Số tiền đề nghị thanh toán: ${convertMoneyToString(
@@ -741,7 +742,7 @@ const TopControllers = (props: Props): JSX.Element => {
       );
     flagIndex1++;
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex1}`)
       .value(
         `Số tiền được duyệt: ${convertMoneyToString(
@@ -752,7 +753,7 @@ const TopControllers = (props: Props): JSX.Element => {
       );
     flagIndex1++;
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex1}`)
       .value(
         `Số tiền không được duyệt: ${convertMoneyToString(
@@ -763,20 +764,20 @@ const TopControllers = (props: Props): JSX.Element => {
       );
     flagIndex1 += 2;
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`B${flagIndex1}`)
       .value(`KẾ TOÁN CHUYÊN QUẢN`);
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`G${flagIndex1}`)
       .value(`TRƯỞNG PHÒNG TÀI CHÍNH`);
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .cell(`K${flagIndex1}`)
       .value(`TỔNG GIÁM ĐỐC`);
 
     workbook
-      .sheet(`bang_ke_cptx - ${index}`)
+      .sheet(`${BK_ID}`)
       .range(`A1:R${flagIndex1}`)
       .style({ fontFamily: 'Times New Roman' });
   };
