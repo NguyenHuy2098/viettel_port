@@ -467,7 +467,7 @@ const TopControllers = (props: Props): JSX.Element => {
       .value(
         `Số tiền đề nghị thanh toán: ${convertMoneyToString(
           sumBy(tempList, subItem => {
-            return toNumber(get(subItem, 'TOTAL_AMOUNT', '0'));
+            return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
           }),
         )}`,
       );
@@ -478,7 +478,7 @@ const TopControllers = (props: Props): JSX.Element => {
       .value(
         `Số tiền được duyệt: ${convertMoneyToString(
           sumBy(tempList, subItem => {
-            return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT_INIT', '0'));
+            return toNumber(get(subItem, 'TOTAL_SUM_AMOUNT', '0'));
           }),
         )}`,
       );
