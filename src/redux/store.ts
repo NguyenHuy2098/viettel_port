@@ -1,5 +1,5 @@
 import { loadUser } from 'redux-oidc';
-import { configureStore } from 'redux-starter-kit';
+import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import { routerMiddleware } from 'connected-react-router';
 import history from 'utils/history';
