@@ -311,7 +311,7 @@ const Item = (props: PropsPrintTableBangKe): JSX.Element => {
 
   function renderTotal(): JSX.Element {
     const SUM_AMOUNT = sumBy(data, item => toNumber(item.SUM_AMOUNT));
-    const SUM_AMOUNT_INIT = sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT));
+    const SUM_AMOUNT_INIT = !isPheDuyet ? 0 : sumBy(data, item => toNumber(item.SUM_AMOUNT_INIT));
     const NOT_SUM_AMOUNT = !isPheDuyet ? 0 : SUM_AMOUNT_INIT - SUM_AMOUNT;
 
     return (
