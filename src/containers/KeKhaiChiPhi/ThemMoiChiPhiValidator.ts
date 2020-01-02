@@ -5,7 +5,7 @@ export const schema = yup.object().shape({
     .string()
     // eslint-disable-next-line no-useless-escape
     .matches(
-      /^(|https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?)$/,
+      /^(|https?:\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-.,@?^=%&amp;:/~+#]*[\w\-@?^=%&amp;/~+#])?)$/,
       'URL không hợp lệ',
     ),
   TAX_AMOUNT: yup.string().required('Thuế GTGT không được để trống'),
