@@ -346,7 +346,13 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
           <div className="input-group">
             <Input type="text" value={linkUrl} onChange={handleChangeLinkUrl} placeholder="Link URL" />
             <div className="input-group-append">
-              <a color="primary" className="ml-2 uploadFile info" target="_blank" href={REACT_APP_DRIVE_URL}>
+              <a
+                color="primary"
+                className="ml-2 uploadFile info"
+                target="_blank"
+                rel="noopener noreferrer"
+                href={REACT_APP_DRIVE_URL}
+              >
                 <i className="fa fa-cloud-upload"></i>
               </a>
             </div>

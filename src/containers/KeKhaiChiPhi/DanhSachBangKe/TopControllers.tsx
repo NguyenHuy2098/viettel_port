@@ -837,8 +837,14 @@ const TopControllers = (props: Props): JSX.Element => {
           );
         })}
       </Input>
-      <a color="primary" className="ml-2 uploadFile" target="_blank" href={REACT_APP_DRIVE_URL}>
-        <i className="fa fa-cloud-upload"></i>
+      <a
+        color="primary"
+        className="ml-2 uploadFile"
+        target="_blank"
+        rel="noopener noreferrer"
+        href={REACT_APP_DRIVE_URL}
+      >
+        <i className="fa fa-cloud-upload" />
         {t('Tải file lên')}
       </a>
       <ExportExcelWithTemplate
