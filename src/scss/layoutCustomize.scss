@@ -311,6 +311,7 @@ input.form-control:-moz-placeholder {
 }
 .sipTitleRightBlock {
   display: flex;
+  white-space: nowrap;
   & > .btn {
     img {
       margin-right: 5px;

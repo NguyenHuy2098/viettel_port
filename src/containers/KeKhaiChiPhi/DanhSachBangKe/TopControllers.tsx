@@ -1,12 +1,13 @@
 /* eslint-disable max-lines */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button } from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import { push } from 'connected-react-router';
 import moment from 'moment';
 import { filter, map, get, groupBy, toNumber, toString, isEmpty, replace, size, sumBy } from 'lodash';
 
+import useGetListPostOffice from 'hooks/useGetListPostOffice';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ExportExcelWithTemplate from 'components/Button/ExportExcelWithTemplate';
 import { makeSelectorBPRoleId, makeSelectorMaBP } from 'redux/auth/selectors';
@@ -17,6 +18,23 @@ import routesMap from 'utils/routesMap';
 import { action_ZFI007M } from 'redux/ZFI007M/actions';
 import { select_ZFI007M_collection } from 'redux/ZFI007M/selectors';
 import PrintableBangKe from '../PrintableBangKe';
+
+interface PostOfficeType {
+  PostOfficeCode: string;
+  PostOfficeName: string;
+}
+
+interface ProfileUserType {
+  BPCode: string;
+  BPOrg: string;
+  Roles: string[];
+  PostOffices: PostOfficeType[];
+}
+
+interface PostOfficeType {
+  PostOfficeCode: string;
+  PostOfficeName: string;
+}
 
 interface Props {
   noBangKeChecked?: boolean;
@@ -781,9 +799,42 @@ const TopControllers = (props: Props): JSX.Element => {
     workbook.deleteSheet(SHEET_0);
     workbook.deleteSheet(SHEET_1);
   }
+
+  const userLogin = useSelector(state => get(state, 'auth.user', null));
+  const [data, setData] = useState({ Username: '', BPOrg: '' });
+
+  useEffect(() => {
+    const data = {
+      Username: get(userLogin, 'profile.preferred_username', ''),
+      BPOrg: get(userLogin, 'profile.bporg', ''),
+    };
+    setData(data);
+  }, [userLogin]);
+
+  const { profileUser } = useGetListPostOffice(data);
+
+  function handleChangeBuuCuc(e: { target: { value: string } }): void {
+    const data = {
+      Username: get(userLogin, 'profile.preferred_username', ''),
+      BPOrg: e.target.value,
+    };
+    setData(data);
+  }
+
+  const postOffices = profileUser && profileUser.PostOffices ? profileUser.PostOffices : [];
+
   return (
     <>
       {/*<ButtonExportExcelBangKe className="ml-2" disabled={noBangKeChecked} ids={checkedBangKe} />*/}
+      <Input type="select" onChange={handleChangeBuuCuc}>
+        {postOffices.map((item: PostOfficeType) => {
+          return (
+            <option key={item.PostOfficeCode} value={item.PostOfficeCode}>
+              {item.PostOfficeName + ' - ' + item.PostOfficeCode}
+            </option>
+          );
+        })}
+      </Input>
       <ExportExcelWithTemplate
         handleData={handleData}
         urlTemplate={`${window.location.origin}/CPTX-template.xlsx`}
