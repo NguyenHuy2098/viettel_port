@@ -1,13 +1,12 @@
 import { get } from 'lodash';
 import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
-import { select } from 'utils/stateHelpers';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { getCurrentPostOfficeCode } from 'utils/common';
 
 export async function post_ZFI007M(payload: Partial<API.ZFI007MRequest>): Promise<API.ZFI007MResponse> {
   const { data } = await sapApi.post(sapApiMap.ZFI007M, {
     BK_INPUT: [],
-    MA_BUU_CUC: select(makeSelectorMaBP),
+    MA_BUU_CUC: getCurrentPostOfficeCode(),
     IV_PAGENO: '1',
     IV_NO_PER_PAGE: '10000',
     ...payload,

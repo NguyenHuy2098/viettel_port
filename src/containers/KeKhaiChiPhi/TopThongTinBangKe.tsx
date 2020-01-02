@@ -5,11 +5,10 @@ import { get, toNumber, sumBy } from 'lodash';
 import { useSelector } from 'react-redux';
 
 import { select_ZFI007_header } from 'redux/ZFI007/selectors';
-import useLoggedInUser from 'hooks/useLoggedInUser';
 import moment from 'moment';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import numeral from 'numeral';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
 
 interface Props {
   data: API.LISTMTDETAILRECEIVER[];
@@ -20,10 +19,8 @@ interface Props {
 // eslint-disable-next-line max-lines-per-function
 const TopThongTinBangKe = (props: Props): JSX.Element => {
   const { data, isCreateNew, period } = props;
-  const maBP = useSelector(makeSelectorMaBP);
   const useId = useSelector(makeSelectorPreferredUsername);
   const { t } = useTranslation();
-  const userLogin = useLoggedInUser();
   const bangKeHeader = useSelector(select_ZFI007_header);
   const status = isCreateNew ? 0 : toNumber(get(bangKeHeader, 'BK_STATUS', -1));
   const tongGiaTri = useMemo(
@@ -33,6 +30,8 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
       ),
     [data],
   );
+
+  const currentPostOffice = JSON.parse(localStorage.getItem('currentPostOffice') || '');
 
   return (
     <Row>
@@ -61,7 +60,7 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Đơn vị')}:</div>
-          <span className="text-bold">{isCreateNew ? maBP : get(userLogin, 'user.profile.bp_org_unit', '')}</span>
+          <span className="text-bold">{get(currentPostOffice, 'PostOfficeCode', '')}</span>
         </div>
       </Col>
       <Col xs={12} xl={4}>

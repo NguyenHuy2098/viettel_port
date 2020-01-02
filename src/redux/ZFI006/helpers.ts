@@ -1,15 +1,16 @@
 import { get } from 'lodash';
 
 import { sapApiMap } from 'utils/apisMap';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import HttpRequestError from 'utils/HttpRequetsError';
 import { sapApi } from 'utils/request';
 import { select } from 'utils/stateHelpers';
+import { getCurrentPostOfficeCode } from 'utils/common';
 
 export async function post_ZFI006(payload: Partial<API.ZFI006Request>): Promise<API.ZFI006Response> {
   const { data } = await sapApi.post(sapApiMap.ZFI006, {
     BK_ID: '',
-    MA_BUU_CUC: select(makeSelectorMaBP),
+    MA_BUU_CUC: getCurrentPostOfficeCode(),
     USER_ID: select(makeSelectorPreferredUsername),
     ...payload,
   });

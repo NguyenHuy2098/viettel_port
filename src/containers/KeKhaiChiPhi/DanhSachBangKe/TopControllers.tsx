@@ -7,12 +7,13 @@ import { push } from 'connected-react-router';
 import moment from 'moment';
 import { filter, map, get, groupBy, toNumber, toString, isEmpty, replace, size, sumBy } from 'lodash';
 
+import { action_ZFI002 } from 'redux/ZFI002/actions';
 import useGetListPostOffice from 'hooks/useGetListPostOffice';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ExportExcelWithTemplate from 'components/Button/ExportExcelWithTemplate';
 import { makeSelectorBPRoleId, makeSelectorMaBP } from 'redux/auth/selectors';
 import convertMoneyToString from 'utils/convertMoneyToString';
-import { numberFormat } from 'utils/common';
+import { numberFormat, getCurrentPostOfficeCode } from 'utils/common';
 import { renderHeader } from 'utils/exportExcelHelper';
 import routesMap from 'utils/routesMap';
 import { action_ZFI007M } from 'redux/ZFI007M/actions';
@@ -800,33 +801,31 @@ const TopControllers = (props: Props): JSX.Element => {
     workbook.deleteSheet(SHEET_1);
   }
 
-  const userLogin = useSelector(state => get(state, 'auth.user', null));
-  const [data, setData] = useState({ Username: '', BPOrg: '' });
-
-  useEffect(() => {
-    const data = {
-      Username: get(userLogin, 'profile.preferred_username', ''),
-      BPOrg: get(userLogin, 'profile.bporg', ''),
-    };
-    setData(data);
-  }, [userLogin]);
-
-  const { profileUser } = useGetListPostOffice(data);
+  const profileUser = useGetListPostOffice();
+  const postOffices = profileUser && profileUser.PostOffices ? profileUser.PostOffices : [];
+  const [currentPostOfficeCode, setCurrentPostOfficeCode] = useState('');
 
   function handleChangeBuuCuc(e: { target: { value: string } }): void {
-    const data = {
-      Username: get(userLogin, 'profile.preferred_username', ''),
-      BPOrg: e.target.value,
-    };
-    setData(data);
+    const currentPostOffice = postOffices.filter(item => item.PostOfficeCode === e.target.value)[0];
+    localStorage.setItem('currentPostOffice', JSON.stringify(currentPostOffice));
+    setCurrentPostOfficeCode(e.target.value);
   }
 
-  const postOffices = profileUser && profileUser.PostOffices ? profileUser.PostOffices : [];
+  useEffect(() => {
+    if (postOffices.length) localStorage.setItem('currentPostOffice', JSON.stringify(postOffices[0]));
+  }, [postOffices]);
+
+  const code = getCurrentPostOfficeCode();
+
+  useEffect(() => {
+    setCurrentPostOfficeCode(code);
+    dispatch(action_ZFI002());
+  }, [code, dispatch]);
 
   return (
     <>
       {/*<ButtonExportExcelBangKe className="ml-2" disabled={noBangKeChecked} ids={checkedBangKe} />*/}
-      <Input type="select" onChange={handleChangeBuuCuc}>
+      <Input type="select" onChange={handleChangeBuuCuc} value={currentPostOfficeCode}>
         {postOffices.map((item: PostOfficeType) => {
           return (
             <option key={item.PostOfficeCode} value={item.PostOfficeCode}>

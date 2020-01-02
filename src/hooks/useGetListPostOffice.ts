@@ -15,14 +15,13 @@ interface ProfileUserType {
   PostOffices: PostOfficeType[];
 }
 
-interface DataType {
-  Username: string;
-  BPOrg: string;
-}
-
-function useGetListPostOffice(data: DataType): { profileUser: ProfileUserType | null } {
+function useGetListPostOffice(): ProfileUserType | null {
   const [profileUser, setProfileUser] = useState(null);
   const userLogin = useSelector(state => get(state, 'auth.user', null));
+  const data = {
+    Username: get(userLogin, 'profile.preferred_username', ''),
+    BPOrg: get(userLogin, 'profile.bporg', ''),
+  };
 
   useEffect(() => {
     axios
@@ -38,8 +37,8 @@ function useGetListPostOffice(data: DataType): { profileUser: ProfileUserType | 
         setProfileUser(get(res, 'data', null));
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
-  return { profileUser };
+  }, []);
+  return profileUser;
 }
 
 export default useGetListPostOffice;
