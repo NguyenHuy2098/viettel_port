@@ -41,6 +41,7 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
   const [denKy, setDenKy] = useState<string>(moment().format('YYYYMM'));
   const [idSearch, setIdSearch] = useState<string>('');
   const [typeSearch, setTypeSearch] = useState<string>('');
+  const [currentBuuCuc, setCurrentBuuCuc] = useState<string>('');
   const [checkedBangKe, setCheckedBangKe] = useState<string[]>([]);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
   const [deleteTorId, setDeleteTorId] = useState<string>('');
@@ -116,12 +117,13 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
           BK_ID: toUpper(trim(idSearch)),
           BK_STATUS: typeSearch,
           IV_NO_PER_PAGE: pageItems,
+          MA_BUU_CUC: currentBuuCuc,
           ...payload,
         }),
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tuKy, denKy, idSearch, typeSearch, pageItems],
+    [currentBuuCuc, tuKy, denKy, idSearch, typeSearch, pageItems],
   );
 
   const [resetCurrentPage, setResetCurrentPage] = useState<boolean>(true);
@@ -259,7 +261,11 @@ const DanhSachBangKe: React.FC<Props> = (props: Props): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Kê khai chi phí thường xuyên')}</h1>
         <div className="sipTitleRightBlock">
-          <TopControllers checkedBangKe={checkedBangKe} noBangKeChecked={noBangKeChecked} />
+          <TopControllers
+            checkedBangKe={checkedBangKe}
+            noBangKeChecked={noBangKeChecked}
+            onChangeBuuCuc={setCurrentBuuCuc}
+          />
         </div>
       </Row>
 
