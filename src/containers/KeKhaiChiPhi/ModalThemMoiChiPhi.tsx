@@ -5,7 +5,9 @@ import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
 import numeral from 'numeral';
 import moment from 'moment';
-import { get, trim, toString, isEmpty, replace } from 'lodash';
+import { get, trim, toString, isEmpty, replace, size } from 'lodash';
+import { REACT_APP_DRIVE_URL } from 'utils/env';
+
 import { schema } from './ThemMoiChiPhiValidator';
 
 interface Props {
@@ -75,6 +77,11 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
   function handleChangeMaSoThue(e: React.FormEvent<HTMLInputElement>): void {
     setIsSubmit(true);
     setMaSoThue(e.currentTarget.value);
+    if (size(e.currentTarget.value) === 0) {
+      setMauHoaDon('');
+      setKyHieu('');
+      setSoHoaDon('');
+    }
   }
 
   function handleChangeTenNguoiBan(e: React.FormEvent<HTMLInputElement>): void {
@@ -249,11 +256,23 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
           <span className="color-red">{get(errors, 'NGUOI_BAN', '')}</span>
         </FormGroup>
         <FormGroup>
-          <Input type="text" value={mauHoaDon} onChange={handleChangeMauNguoiBan} placeholder="Mẫu hóa đơn" />
+          <Input
+            type="text"
+            value={mauHoaDon}
+            onChange={handleChangeMauNguoiBan}
+            disabled={size(maSoThue) === 0}
+            placeholder="Mẫu hóa đơn"
+          />
           <span className="color-red">{get(errors, 'MAU_HD', '')}</span>
         </FormGroup>
         <FormGroup>
-          <Input type="text" value={kyHieu} onChange={handleChangeKyHieu} placeholder="Ký hiệu" />
+          <Input
+            type="text"
+            value={kyHieu}
+            onChange={handleChangeKyHieu}
+            disabled={size(maSoThue) === 0}
+            placeholder="Ký hiệu"
+          />
           <span className="color-red">{get(errors, 'KIHIEU_HD', '')}</span>
         </FormGroup>
         <FormGroup className="sapFicoEditModalDatepickerContainer">
@@ -267,7 +286,13 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
           <span className="color-red">{get(errors, 'NGAY_HD', '')}</span>
         </FormGroup>
         <FormGroup>
-          <Input type="text" value={soHoaDon} onChange={handleChangeSoHoaDon} placeholder="Số hoá đơn" />
+          <Input
+            type="text"
+            value={soHoaDon}
+            onChange={handleChangeSoHoaDon}
+            disabled={size(maSoThue) === 0}
+            placeholder="Số hoá đơn"
+          />
           <span className="color-red">{get(errors, 'SO_HD', '')}</span>
         </FormGroup>
         <FormGroup>
@@ -318,7 +343,14 @@ const ModalThemMoiChiPhi: React.FC<Props> = ({
           </Col>
         </Row>
         <FormGroup>
-          <Input type="text" value={linkUrl} onChange={handleChangeLinkUrl} placeholder="Link URL" />
+          <div className="input-group">
+            <Input type="text" value={linkUrl} onChange={handleChangeLinkUrl} placeholder="Link URL" />
+            <div className="input-group-append">
+              <a color="primary" className="ml-2 uploadFile info" target="_blank" href={REACT_APP_DRIVE_URL}>
+                <i className="fa fa-cloud-upload"></i>
+              </a>
+            </div>
+          </div>
           <span className="color-red">{get(errors, 'URL', '')}</span>
         </FormGroup>
       </Form>

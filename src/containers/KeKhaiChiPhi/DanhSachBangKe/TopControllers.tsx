@@ -18,6 +18,7 @@ import { renderHeader } from 'utils/exportExcelHelper';
 import routesMap from 'utils/routesMap';
 import { action_ZFI007M } from 'redux/ZFI007M/actions';
 import { select_ZFI007M_collection } from 'redux/ZFI007M/selectors';
+import { REACT_APP_DRIVE_URL } from 'utils/env';
 import PrintableBangKe from '../PrintableBangKe';
 
 interface PostOfficeType {
@@ -836,6 +837,10 @@ const TopControllers = (props: Props): JSX.Element => {
           );
         })}
       </Input>
+      <a color="primary" className="ml-2 uploadFile" target="_blank" href={REACT_APP_DRIVE_URL}>
+        <i className="fa fa-cloud-upload"></i>
+        {t('Tải file lên')}
+      </a>
       <ExportExcelWithTemplate
         handleData={handleData}
         urlTemplate={`${window.location.origin}/CPTX-template.xlsx`}
