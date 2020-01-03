@@ -838,8 +838,7 @@ const TopControllers = (props: Props): JSX.Element => {
         })}
       </Input>
       <a
-        color="primary"
-        className="ml-2 uploadFile"
+        className="ml-2 btn btn-primary uploadFile"
         target="_blank"
         rel="noopener noreferrer"
         href={REACT_APP_DRIVE_URL}
