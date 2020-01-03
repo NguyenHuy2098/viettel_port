@@ -1,9 +1,8 @@
 const moment = require('moment');
-const version = require('./package').version;
 
 const defaultEnv = {
   REACT_APP_BUILD_TIME: moment().format(),
-  REACT_APP_VERSION: version,
+  REACT_APP_VERSION: process.env.CI_COMMIT_REF_NAME || process.env.CI_COMMIT_SHORT_SHA || '-',
 };
 
 module.exports = {
