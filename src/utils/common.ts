@@ -148,10 +148,9 @@ export function getPageItems(): string {
 }
 
 export function getCurrentPostOfficeCode(): string {
-  let code = '';
   try {
     const currentPostOffice = JSON.parse(localStorage.getItem('currentPostOffice') || '');
-    code = get(currentPostOffice, 'PostOfficeCode', '');
+    return get(currentPostOffice, 'PostOfficeCode', '');
   } catch (error) {}
-  return code;
+  return '';
 }

@@ -41,7 +41,6 @@ interface PostOfficeType {
 interface Props {
   checkedBangKe: string[];
   noBangKeChecked?: boolean;
-  onChangeBuuCuc: (buuCuc: string) => void;
 }
 
 const SHEET_0 = 'Status 2,3';
@@ -50,7 +49,7 @@ const SHEET_1 = 'status 0,1';
 // eslint-disable-next-line max-lines-per-function
 const TopControllers = (props: Props): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { checkedBangKe, noBangKeChecked, onChangeBuuCuc } = props;
+  const { checkedBangKe, noBangKeChecked } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const maBP = useSelector(makeSelectorMaBP);
@@ -811,7 +810,6 @@ const TopControllers = (props: Props): JSX.Element => {
     const currentPostOffice = postOffices.filter(item => item.PostOfficeCode === e.target.value)[0];
     localStorage.setItem('currentPostOffice', JSON.stringify(currentPostOffice));
     setCurrentPostOfficeCode(e.target.value);
-    onChangeBuuCuc(e.target.value);
   }
 
   useEffect(() => {
