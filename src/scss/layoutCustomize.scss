@@ -1230,10 +1230,15 @@ html:not([dir='rtl']) .sidebar {
     width: 100%;
   }
   .sipTitleRightBlock {
-    display: block;
     flex: 0 0 100%;
     max-width: 100%;
     text-align: right;
+    flex-wrap: wrap;
+    select.form-control {
+      width: 150px;
+      display: inline-block;
+    }
+
     & > * {
       margin-bottom: 5px;
     }

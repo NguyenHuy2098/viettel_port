@@ -478,20 +478,16 @@
   transform: rotate(-90deg);
 }
 .uploadFile {
-  display: block;
-  border: 1px solid #329f99;
-  border-radius: 4px;
+  display: inline-block;
   text-decoration: none !important;
-  padding: 4px;
-  padding-top: 5px;
-  color: #ffffff;
-  background: #329f99;
+  max-width: 120px;
 }
 .uploadFile:hover{
   color:#ffffff ;
 }
 .uploadFile i{
   font-size: 18px;
+  padding-right: 8px;
 }
 a.ml-2.uploadFile.info {
   margin-left: 0 !important;
