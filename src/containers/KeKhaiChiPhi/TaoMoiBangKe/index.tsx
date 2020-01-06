@@ -108,7 +108,12 @@ const TaoMoiBangKe = (): JSX.Element => {
 
   const renderFirstControllers = (): JSX.Element => (
     <>
-      <a color="primary" className="btn btn-primary" href="/templates/SAP_FICO_Temp CPTX.xlsx" download>
+      <a
+        color="primary"
+        className="btn btn-primary"
+        href="http://drive.viettelpost.vn/s/itfx4SJdBGiD2jf/download"
+        download
+      >
         <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExcelWhite.svg'} />
         {t('Lấy file mẫu')}
       </a>
