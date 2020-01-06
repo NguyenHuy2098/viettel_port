@@ -16,7 +16,7 @@ module.exports = {
   },
   production: {
     ...defaultEnv,
-    GENERATE_SOURCEMAP: 'false',
+    // GENERATE_SOURCEMAP: 'false',
     REACT_APP_ENV: 'production',
     REACT_APP_VERSION: process.env.CI_COMMIT_REF_NAME,
   },
