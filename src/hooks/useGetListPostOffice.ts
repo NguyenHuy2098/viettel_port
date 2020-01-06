@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { get } from 'lodash';
 import axios from 'axios';
+import { get } from 'lodash';
+import url from 'url';
+import { REACT_APP_SSO_API_URL } from 'utils/env';
 
 interface PostOfficeType {
   PostOfficeCode: string;
@@ -26,7 +28,7 @@ function useGetListPostOffice(): ProfileUserType | null {
   useEffect(() => {
     axios
       .request({
-        url: 'https://prigw.viettelpost.vn/api/Users/GetProfileByUsername',
+        url: url.resolve(REACT_APP_SSO_API_URL, 'Users/GetProfileByUsername'),
         headers: {
           Authorization: 'Bearer ' + get(userLogin, 'user.access_token', ''),
         },
