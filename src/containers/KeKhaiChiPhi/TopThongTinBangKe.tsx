@@ -8,7 +8,7 @@ import { select_ZFI007_header } from 'redux/ZFI007/selectors';
 import moment from 'moment';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import numeral from 'numeral';
-import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorCurrentPostOffice, makeSelectorPreferredUsername } from 'redux/auth/selectors';
 
 interface Props {
   data: API.LISTMTDETAILRECEIVER[];
@@ -31,7 +31,7 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
     [data],
   );
 
-  const currentPostOffice = JSON.parse(localStorage.getItem('currentPostOffice') || '');
+  const currentPostOffice = useSelector(makeSelectorCurrentPostOffice);
 
   return (
     <Row>
@@ -60,7 +60,7 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
         </div>
         <div className="sipFicoBangKeInformation">
           <div>{t('Đơn vị')}:</div>
-          <span className="text-bold">{get(currentPostOffice, 'PostOfficeCode', '')}</span>
+          <span className="text-bold">{currentPostOffice}</span>
         </div>
       </Col>
       <Col xs={12} xl={4}>
