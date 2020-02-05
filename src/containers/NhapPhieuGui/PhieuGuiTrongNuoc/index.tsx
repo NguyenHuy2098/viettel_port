@@ -877,7 +877,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                   },
                 ),
               );
-              setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '');
               toggleSenderAddress();
               triggerValidateAndPriceCalculate();
             },
@@ -979,7 +979,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                   },
                 ),
               );
-              setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '.');
+              setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '');
               toggleReceiverAddress();
               triggerValidateAndPriceCalculate();
             },
