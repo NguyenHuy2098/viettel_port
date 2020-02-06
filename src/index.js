@@ -15,7 +15,8 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // Learn more about service workers: http://bit.ly/CRA-PWA
 
 if (process.env.REACT_APP_ENV === 'production') {
-  serviceWorker.register();
+  // serviceWorker.register();
+  serviceWorker.unregister();
   Sentry.init({ dsn: process.env.REACT_APP_SENTRY_DSN });
 } else {
   serviceWorker.unregister();
