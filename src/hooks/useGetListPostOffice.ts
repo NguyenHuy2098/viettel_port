@@ -30,7 +30,7 @@ function useGetListPostOffice(): ProfileUserType | null {
       .request({
         url: url.resolve(REACT_APP_SSO_API_URL, 'Users/GetProfileByUsername'),
         headers: {
-          Authorization: 'Bearer ' + get(userLogin, 'user.access_token', ''),
+          Authorization: 'Bearer ' + get(userLogin, 'access_token', ''),
         },
         method: 'post',
         data,
