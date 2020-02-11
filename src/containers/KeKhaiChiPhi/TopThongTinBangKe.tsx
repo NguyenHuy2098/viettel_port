@@ -8,7 +8,7 @@ import { select_ZFI007_header } from 'redux/ZFI007/selectors';
 import moment from 'moment';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import numeral from 'numeral';
-import { makeSelectorCurrentPostOffice, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
 
 interface Props {
   data: API.LISTMTDETAILRECEIVER[];
@@ -30,8 +30,11 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
       ),
     [data],
   );
+  const currentPostOfficeGetInLocalStorage = localStorage.getItem('currentPostOffice');
 
-  const currentPostOffice = useSelector(makeSelectorCurrentPostOffice);
+  const currentPostOffice = useMemo(() => {
+    return get(JSON.parse(currentPostOfficeGetInLocalStorage || ''), 'PostOfficeName');
+  }, [currentPostOfficeGetInLocalStorage]);
 
   return (
     <Row>
