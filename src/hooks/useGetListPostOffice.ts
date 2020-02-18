@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { get } from 'lodash';
-import url from 'url';
-import { REACT_APP_SSO_API_URL } from 'utils/env';
+import { ssoApi } from '../utils/request';
 
 interface PostOfficeType {
   PostOfficeCode: string;
@@ -26,18 +24,9 @@ function useGetListPostOffice(): ProfileUserType | null {
   };
 
   useEffect(() => {
-    axios
-      .request({
-        url: url.resolve(REACT_APP_SSO_API_URL, 'Users/GetProfileByUsername'),
-        headers: {
-          Authorization: 'Bearer ' + get(userLogin, 'access_token', ''),
-        },
-        method: 'post',
-        data,
-      })
-      .then(res => {
-        setProfileUser(get(res, 'data', null));
-      });
+    ssoApi.post('Users/GetProfileByUsername', data).then(res => {
+      setProfileUser(get(res, 'data', null));
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return profileUser;

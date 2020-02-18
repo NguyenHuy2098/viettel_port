@@ -1,7 +1,12 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { get, merge } from 'lodash';
 import store from 'redux/store';
-import { REACT_APP_API_ENDPOINT, REACT_APP_LOCATION_API_ENDPOINT, REACT_APP_COMMODITY_API_ENDPOINT } from './env';
+import {
+  REACT_APP_API_ENDPOINT,
+  REACT_APP_LOCATION_API_ENDPOINT,
+  REACT_APP_COMMODITY_API_ENDPOINT,
+  REACT_APP_SSO_API_URL,
+} from './env';
 import { throwErrorIfMalformed } from './errorHelpers';
 
 /**
@@ -66,6 +71,22 @@ export const crmCommodityApi = axios.create({
 });
 
 crmCommodityApi.interceptors.request.use(
+  (config: AxiosRequestConfig): AxiosRequestConfig => {
+    return configure(config);
+  },
+  (error): Promise<Error> => {
+    return Promise.reject(error);
+  },
+);
+
+/**
+ * SSO API instance
+ */
+export const ssoApi = axios.create({
+  baseURL: REACT_APP_SSO_API_URL,
+});
+
+ssoApi.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
     return configure(config);
   },
