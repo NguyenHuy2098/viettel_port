@@ -709,7 +709,7 @@ declare namespace API {
     /**
      *
      */
-    MT_ZTMI024_OUT?: MTZTMI024OUT;
+    MT_ZTMI024_1_OUT?: MTZTMI024OUT;
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
     Messages?: string[];
@@ -897,10 +897,6 @@ declare namespace API {
      *
      */
     IV_NO_PER_PAGE?: string;
-    /**
-     * Số trang
-     */
-    POSITION?: string;
     /**
      * Số kiện/trang
      */
@@ -1339,6 +1335,11 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+  export interface MT205RECEIVER {
+    EV_CODE?: string;
+    EV_MESSAGE?: string;
+    Row?: RowMT205RECEIVER[];
+  }
   export interface MTBKRECEIVER {
     List?: ListMTBKRECEIVER[];
     /**
@@ -1473,7 +1474,8 @@ declare namespace API {
     /**
      *
      */
-    Row?: RowResponseZTMI024;
+    Row?: RowResponseZTMI024[];
+    Paging?: Paging;
   }
   export interface MTZTMI027OUT {
     EV_ERROR?: number; // int32
@@ -1518,7 +1520,7 @@ declare namespace API {
   }
   export interface MTZTMI038OUT {
     EV_ERROR?: number; // int32
-    Row?: RowResponseZTMI038;
+    Row?: RowResponseZTMI038[];
   }
   export interface MTZTMI039OUT {
     /**
@@ -1539,6 +1541,7 @@ declare namespace API {
      *
      */
     ev_error?: string;
+    Paging?: Paging[];
   }
   export interface MTZTMI045OUT {
     /**
@@ -1727,6 +1730,16 @@ declare namespace API {
     USERID?: string;
     LOCID?: string;
   }
+  export interface RowMT205RECEIVER {
+    HUB?: string;
+    LINE_CODE?: string;
+    LINE_NAME?: string;
+    PST_CODE?: string;
+    PST_NAME?: string;
+    USER?: string;
+    PHONE?: string;
+    TIMESTAMP?: string;
+  }
   export interface RowMTZFII016OUT {
     KUNNR?: string;
     TOTAL_DATRA?: string;
@@ -1911,6 +1924,7 @@ declare namespace API {
     LOG_LOCID_SRC?: string;
     LOG_LOCID_DES?: string;
     EXEC_CONT?: string;
+    NEXT_LOC?: string;
     ZONLO?: string;
     CHILDS?: Child[];
     TOR_TYPE?: string;
@@ -1946,6 +1960,7 @@ declare namespace API {
     VEHICLE_ID?: string;
     DRIVER_CODE?: string;
     DRIVER_NAME?: string;
+    TRANS_TIME?: string;
   }
   export interface RowMTZTMI049OUT {
     Name?: string;
@@ -2246,6 +2261,10 @@ declare namespace API {
      * Child count ( trường hợp FU ko đếm child)
      */
     CHILD_COUNT?: string;
+    /**
+     * Mã FWO
+     */
+    FWO_ID?: string;
   }
   export interface RowResponseZTMI024 {
     /**
@@ -2462,6 +2481,16 @@ declare namespace API {
     SHIPPER_NAME?: string;
     SERVICE_TYPE?: string;
     SERVICE_TYPE_NAME?: string;
+    LOC_ID?: string;
+  }
+  export interface RowSIOAZTMI068 {
+    SERVICE_TYPE?: string;
+    SRC_CITY?: string;
+    DST_CITY?: string;
+    SRC_DIST?: string;
+    DST_DIST?: string;
+    SRC_WARD?: string;
+    DST_WARD?: string;
   }
   export interface RowZFII016 {
     KUNNR?: string;
@@ -2541,7 +2570,8 @@ declare namespace API {
     /**
      * Lấy toàn bộ mã dịch vụ
      */
-    GET?: {};
+    GET?: string;
+    row?: RowSIOAZTMI068[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
@@ -2696,11 +2726,13 @@ declare namespace API {
     /**
      * Trạng thái
      */
-    ZVTP_CUST_STATS?: number; // int32
+    ZVTP_CUST_STATUS?: number; // int32
     /**
      *
      */
     HDR_COD?: string;
+    GRO_WEI_VAL?: string;
+    GRO_WEI_UNI?: string;
   }
   export interface TITEM {
     /**
@@ -2759,9 +2791,10 @@ declare namespace API {
      * Đơn vị
      */
     MEASUOM?: string;
+    ITEM_STATUS?: number; // int32
   }
   export interface TITEMZTMI067OUT {
-    LOC_SEQS?: string;
+    LOC_SEQ?: string;
     LOCATION_ID?: string;
     LOCATION_ADDRESS?: string;
     DEPARTURE_TIME?: string;
@@ -2996,6 +3029,21 @@ declare namespace API {
     row?: RowMTZTMI067OUT[];
     RETURN_MESSAGE?: RETURNMESSAGE[];
     Paging?: Paging[];
+  }
+  export interface ZTMI205Request {
+    HUB?: string;
+    LINE_CODE?: string;
+    LanguageId?: string;
+    LanguageDefaultId?: string;
+    readonly LanguageCurrentId?: string;
+  }
+  export interface ZTMI205Response {
+    MT_205_RECEIVER?: MT205RECEIVER;
+    Status?: boolean;
+    ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
+    Messages?: string[];
+    ObjectId?: string;
+    Version?: number; // int32
   }
   export interface ZTMI213Request {
     /**
@@ -3801,6 +3849,17 @@ declare namespace Paths {
     }
     namespace Responses {
       export type $200 = Definitions.ZFI007MResponse;
+    }
+  }
+  namespace ZTMI205 {
+    export interface BodyParameters {
+      request?: Parameters.Request;
+    }
+    namespace Parameters {
+      export type Request = Definitions.ZTMI205Request;
+    }
+    namespace Responses {
+      export type $200 = Definitions.ZTMI205Response;
     }
   }
   namespace ZTMI213 {

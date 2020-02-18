@@ -128,7 +128,6 @@
     "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand",
-    "generate-type-api": "npx dtsgenerator --out src/@types/types.d.ts --url https://se.publicapi-in.viettelpost.vn/swagger/v1/swagger.json",
     "tsc": "tsc -p ./ --noEmit --skipLibCheck",
     "tsc:watch": "npm run tsc -- --watch",
     "update": "npx ncu && npx ncu -u && yarn",

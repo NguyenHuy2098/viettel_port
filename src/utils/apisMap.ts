@@ -39,6 +39,8 @@ const sapApis = [
 
 const crmApis = ['suggest'];
 
+const ssoApis = ['Users/GetProfileByUsername'];
+
 /**
  * Convert api name array to apis map
  * Ex: { "MIOA_ZTMI016": "https://viettelpost.vn/api/MIOA_ZTMI016" }
@@ -50,6 +52,10 @@ export const sapApiMap = zipObject(
 export const crmApiMap = zipObject(
   crmApis,
   map(crmApis, (item: string): string => url.resolve('/', item)),
+);
+export const ssoApiMap = zipObject(
+  ssoApis,
+  map(ssoApis, (item: string): string => url.resolve('/', item)),
 );
 export const crmApiMapParam = 'suggest/';
 
