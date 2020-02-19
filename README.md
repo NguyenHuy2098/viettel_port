@@ -72,9 +72,13 @@ $ git clone https://github.com/coreui/coreui-free-react-admin-template.git my-pr
 
 # go into app's directory
 $ cd my-project
+```
 
+Create an `.env` file at project root before starting development. You can get the `.env` file content from here: https://git.viettelpost.vn/san/sip-admin/wikis/Default-.env-file.
+
+``` bash
 # install app's dependencies
-$ npm install
+$ yarn install
 ```
 
 ## Create React App
@@ -87,7 +91,7 @@ see also:
 
 ``` bash
 # dev server  with hot reload at http://localhost:3000
-$ npm start
+$ yarn start
 ```
 
 Navigate to [http://localhost:3000](http://localhost:3000). The app will automatically reload if you change any of the source files.
@@ -98,7 +102,7 @@ Run `build` to build the project. The build artifacts will be stored in the `bui
 
 ```bash
 # build for production with minification
-$ npm run build
+$ yarn build
 ```
 
 ## What's included
