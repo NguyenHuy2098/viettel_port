@@ -27,6 +27,7 @@ const DefaultLayout: React.FC = (props): JSX.Element => {
 
   useEffect(() => {
     dispatch(action_GET_PROFILE_BY_USERNAME({}, {}, {}));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
