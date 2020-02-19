@@ -2,6 +2,7 @@ import { combineReducers, Reducer } from 'redux';
 import { reducer as oidcReducer, UserState } from 'redux-oidc';
 import { connectRouter, RouterState } from 'connected-react-router';
 import { History } from 'history';
+import GetProfileByUsername from './GetProfileByUsername/reducers';
 import MIOA_ZTMI023 from './MIOA_ZTMI023/reducers';
 import MIOA_ZTMI031 from './MIOA_ZTMI031/reducers';
 import MIOA_ZTMI035 from './MIOA_ZTMI035/reducers';
@@ -26,6 +27,7 @@ import ZFI007M from './ZFI007M/reducers';
 interface RootState {
   auth: UserState;
   router: RouterState;
+  profileByUsername: SSOAPI.UserSapMappingGetByUsernameResponse;
   MIOA_ZTMI023: MIOAZTMI023StateType;
   MIOA_ZTMI035: MIOAZTMI035StateType;
   MIOA_ZTMI046: MIOAZTMI046StateType;
@@ -52,6 +54,7 @@ function createRootReducers(history: History): Reducer<RootState> {
   return combineReducers<RootState>({
     auth: oidcReducer,
     router: connectRouter(history),
+    profileByUsername: GetProfileByUsername,
     MIOA_ZTMI023,
     MIOA_ZTMI031,
     MIOA_ZTMI035,

@@ -36,6 +36,7 @@ import watch_ZFI007M_SagaAsync from './ZFI007M/sagas';
 import watch_LocationSuggest from './LocationSuggest/sagas';
 import watch_LocationSuggestDetail from './LocationSuggestDetail/sagas';
 import watch_CommoditySuggest from './CommoditySuggest/sagas';
+import watch_GetProfileByUsername from './GetProfileByUsername/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -75,5 +76,6 @@ export default function* rootSagas(): SagaIterator {
     call(watch_LocationSuggest),
     call(watch_LocationSuggestDetail),
     call(watch_CommoditySuggest),
+    call(watch_GetProfileByUsername),
   ]);
 }
