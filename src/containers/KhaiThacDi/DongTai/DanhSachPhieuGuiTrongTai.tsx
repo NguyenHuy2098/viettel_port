@@ -19,7 +19,7 @@ import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
 import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { useSipDataType } from 'hooks/useTranslations';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
@@ -45,7 +45,7 @@ let forwardingItemList: ForwardingItem[] = [];
 const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
 
   const idTai = get(props, 'match.params.idTai', '');
   const dataTai = useSelector(makeSelector046RowFirstChild);

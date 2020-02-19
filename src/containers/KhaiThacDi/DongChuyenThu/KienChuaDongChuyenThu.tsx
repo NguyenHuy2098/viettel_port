@@ -15,7 +15,7 @@ import DataTable from 'components/DataTable';
 import Search from 'components/Input/Search';
 import ModalPopupConfirm from 'components/Modal/ModalPopupConfirm';
 import Pagination from 'components/Pagination';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorZTMI236OUTPagingTotalPage, makeSelectorZTMI236OUTRow } from 'redux/ZTMI236/selectors';
@@ -33,7 +33,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const [selectedKienIds, setSelectedKienIds] = useState<string[]>([]);
-  const maBP = useSelector(makeSelectorMaBP);
+  const maBP = useSelector(makeSelectorBPOrg);
   const totalPage = useSelector(makeSelectorZTMI236OUTPagingTotalPage);
   const listKienChuaDongChuyenThu = useSelector(makeSelectorZTMI236OUTRow);
 

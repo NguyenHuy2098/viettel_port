@@ -16,7 +16,7 @@ import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { toast } from 'react-toastify';
 import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import HttpRequestError from 'utils/HttpRequetsError';
 import { toastError, toastSuccess } from 'components/Toast';
 import ModalThemPhieugui from './ModalThemPhieuGui';
@@ -29,7 +29,7 @@ interface Props {
 const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
 
   const getStatusDisplay = useCallback((statusCode: string) => {
     // if (statusCode === '301') return 'Chờ lấy hàng';

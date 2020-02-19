@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container } from 'reactstrap';
 import { get } from 'lodash';
 import * as router from 'react-router-dom';
@@ -11,7 +11,10 @@ import {
   AppSidebarNav2 as AppSidebarNav,
   // @ts-ignore
 } from '@coreui/react';
+import { useDispatch } from 'react-redux';
+
 import Switcher from 'components/Switcher';
+import { action_GET_PROFILE_BY_USERNAME } from 'redux/GetProfileByUsername/actions';
 import DefaultHeader from './DefaultHeader';
 import useNavs from './useNavs';
 import useRoutes from './useRoutes';
@@ -20,6 +23,11 @@ import useRoutes from './useRoutes';
 const DefaultLayout: React.FC = (props): JSX.Element => {
   const navs = useNavs();
   const routes = useRoutes();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(action_GET_PROFILE_BY_USERNAME({}, {}, {}));
+  }, []);
 
   return (
     <div className="app">

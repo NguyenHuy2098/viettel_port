@@ -43,7 +43,7 @@ import {
   action_GET_WARD,
 } from 'redux/LocationSearch/actions';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems';
 import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/common';
@@ -58,7 +58,7 @@ let dichVuCongThem: string[] = [];
 const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const isMounted = useIsMounted();
 
   const idDonHang = get(props, 'match.params.idDonHang', '');

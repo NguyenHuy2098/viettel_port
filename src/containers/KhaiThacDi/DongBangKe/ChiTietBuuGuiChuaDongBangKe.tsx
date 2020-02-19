@@ -15,7 +15,7 @@ import ButtonDongBangKe from 'components/Button/ChiTietBuuGuiChuaDongBangKe/Butt
 import ButtonDongTai from 'components/Button/ChiTietBuuGuiChuaDongBangKe/ButtonDongTai';
 import DataTable from 'components/DataTable';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { action_ZTMI241 } from 'redux/ZTMI241/actions';
@@ -42,7 +42,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
     undefined,
   );
 
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const des = get(props, 'location.state.des', '');
   const commLocGroup = get(props, 'location.state.COMM_LOC_GROUP', '');
 

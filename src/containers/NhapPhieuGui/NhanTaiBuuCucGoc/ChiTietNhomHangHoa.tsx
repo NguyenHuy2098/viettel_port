@@ -16,7 +16,7 @@ import DataTable from 'components/DataTable';
 import SelectForwardingItemModal from 'components/Modal/ModalChuyenVao';
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
 import CreateForwardingItemModal from 'components/Modal/ModalTaoMoi';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
@@ -41,7 +41,7 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
   const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
 
   const idBangKe = get(props, 'match.params.idBangKe', '');
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const listTai = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.TAO_MOI));
   const [tab] = useState(1);
   const childs = get(props, 'location.state', []);

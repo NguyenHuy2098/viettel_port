@@ -9,7 +9,8 @@ import XLSX from 'xlsx';
 import { badgeFicoStateMap } from 'utils/common';
 import { toastError, toastInfo } from 'components/Toast';
 import { action_ZFI007M } from 'redux/ZFI007M/actions';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 
 interface Props extends ButtonProps {
   ids?: string[];
@@ -21,7 +22,7 @@ const ButtonExportExcelBangKe = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const useId = useSelector(makeSelectorPreferredUsername);
-  const maBP = useSelector(makeSelectorMaBP);
+  const maBP = useSelector(makeSelectorBPOrg);
 
   const handleGetCollectionError = (error: Error): void => {
     toastError(error.message);

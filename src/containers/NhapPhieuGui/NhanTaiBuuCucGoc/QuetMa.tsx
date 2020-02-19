@@ -15,7 +15,8 @@ import { action_MIOA_ZTMI235 } from 'redux/ZTMI235/actions';
 import { action_ZTMI239 } from 'redux/ZTMI239/actions';
 // import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_ZTMI240 } from 'redux/ZTMI240/actions';
 import { SipDataState, SipDataType } from 'utils/enums';
 
@@ -24,7 +25,7 @@ const QuetMa: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   // const _dataNhanChuyenThu = useSelector(makeSelectorListChuyenThu);
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const userId = useSelector(makeSelectorPreferredUsername);
   const [dataNhanChuyenThu, setDataNhanChuyenThu] = useState<API.RowResponseZTMI023OUT[]>([]);
   const [codeChuyenThu, setCodeChuyenThu] = useState<string>('');

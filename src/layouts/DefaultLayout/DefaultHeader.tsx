@@ -12,6 +12,7 @@ import HeaderSearch from 'components/HeaderSearch';
 import { logout } from 'redux/auth/actions';
 import { makeSelectorProfile } from 'redux/auth/selectors';
 import routesMap from 'utils/routesMap';
+import { action_RESET_PROFILE_BY_USERNAME } from 'redux/GetProfileByUsername/actions';
 import ModalAbout from '../../components/Modal/ModalAbout';
 
 interface Props {
@@ -28,7 +29,16 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const { t, i18n } = useTranslation();
 
   const handleLogout = (): void => {
-    dispatch(logout({}));
+    dispatch(
+      logout(
+        {},
+        {
+          onSuccess: () => {
+            dispatch(action_RESET_PROFILE_BY_USERNAME());
+          },
+        },
+      ),
+    );
   };
 
   const toggleDropdownOpenNotifications = (): void => {

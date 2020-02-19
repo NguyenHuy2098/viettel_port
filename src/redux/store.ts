@@ -21,6 +21,7 @@ const store = configureStore({
 store.subscribe((): void => {
   saveState({
     auth: store.getState().auth,
+    profileByUsername: store.getState().profileByUsername,
   });
 });
 

@@ -9,13 +9,13 @@ import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorBangKeChuaDongTai, makeSelectorCountBangKeChuaDongTai } from 'redux/MIOA_ZTMI047/selectors';
 import { Cell } from 'react-table';
 import DataTable from 'components/DataTable';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
 
   const listBangKeChuaDongTai = useSelector(makeSelectorBangKeChuaDongTai);
   const countBangKeChuaDongTai = useSelector(makeSelectorCountBangKeChuaDongTai);

@@ -27,7 +27,7 @@ import {
 import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
 import { action_LOCATIONSUGGEST } from 'redux/LocationSuggest/actions';
@@ -57,7 +57,7 @@ interface Props {
 const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const isMounted = useIsMounted();
   const sortedCountryList = sortBy(countryList, ['NATIONAL_NAME']);
 

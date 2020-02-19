@@ -11,7 +11,8 @@ import { action_ZFI002 } from 'redux/ZFI002/actions';
 import useGetListPostOffice from 'hooks/useGetListPostOffice';
 import ButtonPrintable from 'components/Button/ButtonPrintable';
 import ExportExcelWithTemplate from 'components/Button/ExportExcelWithTemplate';
-import { makeSelectorBPRoleId, makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPRoleId } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import convertMoneyToString from 'utils/convertMoneyToString';
 import { numberFormat, getCurrentPostOfficeCode } from 'utils/common';
 import { renderHeader } from 'utils/exportExcelHelper';
@@ -52,7 +53,7 @@ const TopControllers = (props: Props): JSX.Element => {
   const { checkedBangKe, noBangKeChecked } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const maBP = useSelector(makeSelectorMaBP);
+  const maBP = useSelector(makeSelectorBPOrg);
   const BPRoleId = useSelector(makeSelectorBPRoleId);
   const lists = useSelector(select_ZFI007M_collection);
 

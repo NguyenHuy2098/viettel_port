@@ -16,7 +16,7 @@ import { selectPhanCongPhat, selectPhanCongPhatCount } from 'redux/MIOA_ZTMI040/
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI055 } from 'redux/MIOA_ZTMI055/actions';
 import { action_MIOA_ZTMI054 } from 'redux/MIOA_ZTMI054/actions';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { toastError, toastSuccess } from 'components/Toast';
 import HttpRequestError from 'utils/HttpRequetsError';
 
@@ -28,7 +28,7 @@ interface Props {
 const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
 
   const getStatusDisplay = useCallback((statusCode: string) => {
     // if (statusCode === '605') return 'Chờ phát';
