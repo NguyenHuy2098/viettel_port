@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 
-import { makeSelectorCurrentPostOffice, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { ssoApiMap } from 'utils/apisMap';
 import HttpRequestError from 'utils/HttpRequetsError';
 import { ssoApi } from 'utils/request';
@@ -11,7 +11,7 @@ export async function post_GetProfileByUsername(
 ): Promise<SSOAPI.UserSapMappingGetByUsernameResponse> {
   const { data } = await ssoApi.post(ssoApiMap['Users/GetProfileByUsername'], {
     Username: select(makeSelectorPreferredUsername),
-    BPOrg: select(makeSelectorCurrentPostOffice),
+    BPOrg: '',
     ...payload,
   });
   if (get(data, 'ErrorCode') === 0) return data;
