@@ -6,7 +6,7 @@ import { map, filter } from 'lodash';
 
 import { makeSelectorGet_MT_ZTMI054_OUT } from 'redux/MIOA_ZTMI054/selectors';
 import { action_MIOA_ZTMI054 } from '../../redux/MIOA_ZTMI054/actions';
-import { makeSelectorMaBP } from '../../redux/auth/selectors';
+import { makeSelectorBPOrg } from '../../redux/GetProfileByUsername/selectors';
 
 interface Props extends ButtonProps {
   onApplyChosen: (IV_PARTY_ID: string) => void;
@@ -19,7 +19,7 @@ interface Props extends ButtonProps {
 const ButtonChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
   const { onApplyChosen, currentUserId, disabled, modalProps, ...rest } = props;
   const { t } = useTranslation();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
 
   const dispatch = useDispatch();
 

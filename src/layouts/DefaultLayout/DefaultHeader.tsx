@@ -1,32 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
-import { Badge, DropdownItem, DropdownMenu, DropdownToggle, Nav, NavItem, ButtonDropdown } from 'reactstrap';
+import {
+  Badge,
+  DropdownItem,
+  DropdownMenu,
+  DropdownToggle,
+  Nav,
+  NavItem,
+  ButtonDropdown,
+  Input,
+  FormGroup,
+} from 'reactstrap';
 // @ts-ignore
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 
 import logo from 'assets/img/logo.png';
 import HeaderSearch from 'components/HeaderSearch';
 import { logout } from 'redux/auth/actions';
 import { makeSelectorProfile } from 'redux/auth/selectors';
 import routesMap from 'utils/routesMap';
-import { action_RESET_PROFILE_BY_USERNAME } from 'redux/GetProfileByUsername/actions';
-import ModalAbout from '../../components/Modal/ModalAbout';
+import {
+  action_GET_PROFILE_BY_USERNAME,
+  action_UPDATE_CURRENT_POST_OFFICE,
+  actionRESET_PROFILE_BY_USERNAME,
+} from 'redux/GetProfileByUsername/actions';
+import ModalAbout from 'components/Modal/ModalAbout';
+import useGetListPostOffice from 'hooks/useGetListPostOffice';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
+import ChangeCurrentPostOfficeConfirmModal from './ChangeCurrentPostOfficeConFirmModal';
 
 interface Props {
   url: string;
+}
+interface PostOfficeType {
+  PostOfficeCode: string;
+  PostOfficeName: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
   const dispatch = useDispatch();
   const profile = useSelector(makeSelectorProfile);
+  const currentPostOfficeCode = useSelector(makeSelectorBPOrg);
   const [showModalAbout, setShowModalAbout] = useState<boolean>(false);
   const [dropdownOpenMenu, setDropdownOpenMenu] = useState<boolean>(false);
   const [dropdownOpenNotifications, setDropdownOpenNotifications] = useState<boolean>(false);
   const { t, i18n } = useTranslation();
+  const profileUser = useGetListPostOffice();
+  const postOffices = profileUser && profileUser.PostOffices ? profileUser.PostOffices : [];
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+  const [tempCurrentPostOfficeCode, setTempCurrentPostOfficeCode] = useState<string>('');
+
+  const toggleConfirmModal = (): void => {
+    setShowConfirmModal(!showConfirmModal);
+  };
 
   const handleLogout = (): void => {
     dispatch(
@@ -34,7 +64,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
         {},
         {
           onSuccess: () => {
-            dispatch(action_RESET_PROFILE_BY_USERNAME());
+            dispatch(actionRESET_PROFILE_BY_USERNAME());
           },
         },
       ),
@@ -169,6 +199,22 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
           <img src={'../../assets/img/icon/iconClock.svg'} alt="VTPostek" />
         </NavLink>
       </NavItem>
+      <FormGroup className="sipHeaderSearch">
+        <Input type="select" onChange={handleChangeBuuCuc} value={currentPostOfficeCode}>
+          {postOffices.map((item: PostOfficeType) => {
+            return (
+              <option key={item.PostOfficeCode} value={item.PostOfficeCode}>
+                {item.PostOfficeName + ' - ' + item.PostOfficeCode}
+              </option>
+            );
+          })}
+        </Input>
+      </FormGroup>
+      <ChangeCurrentPostOfficeConfirmModal
+        onHide={toggleConfirmModal}
+        visible={showConfirmModal}
+        doSomeThing={dispatchActionGetProfileByUserName}
+      />
       <NavItem className="sipHeaderNoti hide">{renderHeaderNotifications()}</NavItem>
       {/* eslint-disable-next-line react/jsx-no-bind */}
       <NavItem style={{ cursor: 'pointer' }} onClick={(): void => handleChangeLanguage(lang)}>
@@ -177,6 +223,21 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
       <NavItem>{renderHeaderUser()}</NavItem>
     </Nav>
   );
+
+  function handleChangeBuuCuc(e: { target: { value: string } }): void {
+    toggleConfirmModal();
+    setTempCurrentPostOfficeCode(e.target.value);
+  }
+
+  function dispatchActionGetProfileByUserName(): void {
+    dispatch(action_GET_PROFILE_BY_USERNAME({ BPOrg: tempCurrentPostOfficeCode }, {}, {}));
+  }
+
+  useEffect(() => {
+    if (isEmpty(currentPostOfficeCode)) {
+      dispatch(action_UPDATE_CURRENT_POST_OFFICE({ currentPostOffice: postOffices[0] }));
+    }
+  }, [postOffices]);
 
   return (
     <>
@@ -190,6 +251,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
       <ModalAbout toggle={toggleModalAbout} visible={showModalAbout} />
 
       <HeaderSearch url={props.url} />
+
       {renderNav()}
     </>
   );

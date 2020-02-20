@@ -27,7 +27,7 @@ import ZFI007M from './ZFI007M/reducers';
 interface RootState {
   auth: UserState;
   router: RouterState;
-  profileByUsername: SSOAPI.UserSapMappingGetByUsernameResponse;
+  profileByUsername: GetProfileByUsernameStateType;
   MIOA_ZTMI023: MIOAZTMI023StateType;
   MIOA_ZTMI035: MIOAZTMI035StateType;
   MIOA_ZTMI046: MIOAZTMI046StateType;

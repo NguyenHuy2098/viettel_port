@@ -6,8 +6,8 @@ import { get, toString } from 'lodash';
 import { select } from 'utils/stateHelpers';
 import { DONG_TAI_VAO_CHUYEN_THU_CO_SAN, DONG_TAI_VAO_CHUYEN_THU_TAO_MOI } from './secondaryActions';
 import { post_MIOA_ZTMI016 } from '../MIOA_ZTMI016/helpers';
-import { makeSelectorMaBP } from '../auth/selectors';
 import { IV_FLAG, SipDataType } from '../../utils/enums';
+import { makeSelectorBPOrg } from '../GetProfileByUsername/selectors';
 
 // eslint-disable-next-line max-lines-per-function
 function* takeActionDongTaiVaoChuyenThuCoSan(action: UnfoldSagaActionType): Iterable<SagaIterator> {
@@ -15,7 +15,7 @@ function* takeActionDongTaiVaoChuyenThuCoSan(action: UnfoldSagaActionType): Iter
     {
       // eslint-disable-next-line max-lines-per-function
       handler: async (): Promise<API.MIOAZTMI016Response> => {
-        const userMaBp = select(makeSelectorMaBP);
+        const userMaBp = select(makeSelectorBPOrg);
         const { firstSelectedBangKe, forwardingItemListState, selectedChuyenThu } = action.payload;
 
         // tao tai moi voi diem den la diem den cua bang ke hien tai
@@ -77,7 +77,7 @@ function* takeActionDongTaiVaoChuyenThuMoiTao(action: UnfoldSagaActionType): Ite
     {
       // eslint-disable-next-line max-lines-per-function
       handler: async (): Promise<API.MIOAZTMI016Response> => {
-        const userMaBp = select(makeSelectorMaBP);
+        const userMaBp = select(makeSelectorBPOrg);
         const { firstSelectedBangKe, locNo, description, forwardingItemListState } = action.payload;
 
         // tao 1 tai voi diem den duoc chon

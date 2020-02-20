@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { get, join, map, toString, trim } from 'lodash';
 import moment from 'moment';
 
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { SipFlowType } from 'utils/enums';
@@ -40,7 +40,7 @@ const SelectForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
   } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const [listItems, setListItems] = useState<API.RowMTZTMI047OUT[]>([]);
   const [radioTorId, setRadioTorId] = useState<string>('');
 

@@ -146,11 +146,3 @@ export const pageItemsDefault = '20';
 export function getPageItems(): string {
   return parse_query_string('pageitems', pageItemsDefault);
 }
-
-export function getCurrentPostOfficeCode(): string {
-  try {
-    const currentPostOffice = JSON.parse(localStorage.getItem('currentPostOffice') || '');
-    return get(currentPostOffice, 'PostOfficeCode', '');
-  } catch (error) {}
-  return '';
-}

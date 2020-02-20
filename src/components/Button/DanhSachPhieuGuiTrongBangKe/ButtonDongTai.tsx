@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { get, trim, toNumber, size } from 'lodash';
 
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
@@ -34,7 +34,7 @@ const ButtonDongTai: React.FC<Props> = ({
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedChuyenThu, setSelectedChuyenthu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const listChuyenThu = useSelector(makeSelectorRow(SipDataType.CHUYEN_THU, SipDataState.TAO_MOI));
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
 

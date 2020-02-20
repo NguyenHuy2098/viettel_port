@@ -1,17 +1,33 @@
 import { createActionTypeOnSuccess, UnfoldSagaActionType } from 'redux-unfold-saga';
 import produce from 'immer';
-import { ACTION_GET_PROFILE_BY_USERNAME, ACTION_RESET_PROFILE_BY_USERNAME } from './actions';
+import { find } from 'lodash';
+import {
+  ACTION_GET_PROFILE_BY_USERNAME,
+  ACTION_RESET_PROFILE_BY_USERNAME,
+  ACTION_UPDATE_CURRENT_POST_OFFICE,
+} from './actions';
 
-export default function(state = {}, action: UnfoldSagaActionType): SSOAPI.UserSapMappingGetByUsernameResponse {
+export const defaultState: GetProfileByUsernameStateType = {
+  response: {},
+  currentPostOffice: '',
+};
+
+export default function(state = defaultState, action: UnfoldSagaActionType): GetProfileByUsernameStateType {
   return produce(
     state,
-    (draftState: SSOAPI.UserSapMappingGetByUsernameResponse): SSOAPI.UserSapMappingGetByUsernameResponse => {
+    (draftState: GetProfileByUsernameStateType): GetProfileByUsernameStateType => {
       switch (action.type) {
         case createActionTypeOnSuccess(ACTION_GET_PROFILE_BY_USERNAME): {
-          return action.payload;
+          draftState.response = action.payload;
+          const currentPostOffice = find(action.payload.PostOffices, ['PostOfficeCode', action.payload.BPOrg]);
+          draftState.currentPostOffice = currentPostOffice;
+          return draftState;
         }
+        case ACTION_UPDATE_CURRENT_POST_OFFICE:
+          draftState.currentPostOffice = action.payload.currentPostOffice;
+          return draftState;
         case ACTION_RESET_PROFILE_BY_USERNAME:
-          return {};
+          return defaultState;
         default:
           return draftState;
       }

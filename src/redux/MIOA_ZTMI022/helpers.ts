@@ -1,12 +1,13 @@
 import { get, toNumber } from 'lodash';
 
-import { makeSelectorMaBP, makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
 import { select } from 'utils/stateHelpers';
+import { makeSelectorBPOrg } from '../GetProfileByUsername/selectors';
 
 export async function post_MIOA_ZTMI022(payload: Partial<API.RowRequestZTMI022>): Promise<API.MIOAZTMI022Response> {
-  const maBP = select(makeSelectorMaBP);
+  const maBP = select(makeSelectorBPOrg);
   const userId = select(makeSelectorPreferredUsername);
   const { data } = await sapApi.post(sapApiMap.MIOA_ZTMI022, {
     row: {

@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { get, isEmpty, isString, join, noop, toString } from 'lodash';
 
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { action_MIOA_ZTMI022 } from 'redux/MIOA_ZTMI022/actions';
 import { IV_FLAG, SipDataState, SipDataType, SipFlowType } from 'utils/enums';
@@ -38,7 +38,7 @@ const ButtonDongChuyenThu = (props: Props): JSX.Element => {
   } = props;
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const [processing, setProcessing] = useState<boolean>(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [selectedChuyenThu, setSelectedChuyenThu] = useState<API.RowMTZTMI047OUT | undefined>(undefined);

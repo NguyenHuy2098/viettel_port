@@ -4,7 +4,6 @@ import { takeEvery } from 'redux-saga/effects';
 import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
 import { get, includes, toString } from 'lodash';
 
-import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { IV_FLAG, SipDataState, SipDataType } from 'utils/enums';
 import { select } from 'utils/stateHelpers';
 // import { sleep } from 'utils/common';
@@ -20,6 +19,7 @@ import {
 import { post_MIOA_ZTMI016 } from '../MIOA_ZTMI016/helpers';
 import { post_MIOA_ZTMI022 } from '../MIOA_ZTMI022/helpers';
 import { post_MIOA_ZTMI023 } from '../MIOA_ZTMI023/helpers';
+import { makeSelectorBPOrg } from '../GetProfileByUsername/selectors';
 
 /**
  * 1. MIOA_ZTMI016 - Tạo mới chuyến thư
@@ -30,7 +30,7 @@ function* takeDongChuyenThu(action: UnfoldSagaActionType): SagaIterator {
   yield unfoldSaga(
     {
       handler: async (): Promise<API.MIOAZTMI016Response> => {
-        const maBP = select(makeSelectorMaBP);
+        const maBP = select(makeSelectorBPOrg);
         const dataChuyenThuTaoMoi = await post_MIOA_ZTMI016({
           IV_FLAG: '1',
           IV_SLOCATION: maBP,
@@ -197,7 +197,7 @@ function* takeDongBangKeVaoTaiCoSan(action: UnfoldSagaActionType): SagaIterator 
       // eslint-disable-next-line max-lines-per-function
       handler: async (): Promise<API.MIOAZTMI016Response> => {
         const { selectedTai, des, forwardingItemListState } = action.payload;
-        const maBP = select(makeSelectorMaBP);
+        const maBP = select(makeSelectorBPOrg);
         /// tao 1 bang ke voi diem den la diem den cua danh sach buu gui ben ngoai
         const data0 = await post_MIOA_ZTMI016({
           IV_FLAG: toString(IV_FLAG.TAO),
@@ -259,7 +259,7 @@ function* takeDongBangKeVaoTaiMoiTao(action: UnfoldSagaActionType): SagaIterator
     {
       // eslint-disable-next-line max-lines-per-function
       handler: async (): Promise<API.MIOAZTMI016Response> => {
-        const maBP = select(makeSelectorMaBP);
+        const maBP = select(makeSelectorBPOrg);
         const { locNo, description, forwardingItemListState, des } = action.payload;
         //tao bang ke voi diem den la diem den cua danh sach buu gui ben ngoai
         const data0 = await post_MIOA_ZTMI016({
@@ -344,7 +344,7 @@ function* takeActionDongTaiVaoChuyenThuCoSan(action: UnfoldSagaActionType): Saga
     {
       // eslint-disable-next-line max-lines-per-function
       handler: async (): Promise<API.MIOAZTMI016Response> => {
-        const maBP = select(makeSelectorMaBP);
+        const maBP = select(makeSelectorBPOrg);
         const { selectedChuyenThu, forwardingItemListState, des } = action.payload;
         // tao bang ke voi diem den la diem den cua danh sach buu gui ben ngoai
         const data0 = await post_MIOA_ZTMI016({
@@ -447,7 +447,7 @@ function* takeActionDongTaiVaoChuyenThuTaoMoi(action: UnfoldSagaActionType): Sag
     {
       // eslint-disable-next-line max-lines-per-function
       handler: async (): Promise<API.MIOAZTMI016Response> => {
-        const maBP = select(makeSelectorMaBP);
+        const maBP = select(makeSelectorBPOrg);
         const { locNo, description, forwardingItemListState, des } = action.payload;
         // tao bang ke voi diem den la diem den cua danh sach buu gui ben ngoai
         const data0 = await post_MIOA_ZTMI016({

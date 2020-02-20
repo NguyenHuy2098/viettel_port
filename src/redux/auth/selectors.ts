@@ -10,11 +10,6 @@ export const makeSelectorUser = (state: AppStateType): User | undefined => get(s
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const makeSelectorProfile = (state: AppStateType): any => get(makeSelectorUser(state), 'profile');
 
-export const makeSelectorMaBP = (state: AppStateType): string => {
-  return get(makeSelectorProfile(state), 'bp_org_unit');
-};
-export const makeSelectorCurrentPostOffice = (state: AppStateType): string => get(makeSelectorProfile(state), 'bporg');
-
 export const makeSelectorBPRoleId = (state: AppStateType): string => {
   return get(makeSelectorProfile(state), 'bp_role_id');
 };

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { get, toString, size } from 'lodash';
 
 import ModalTwoTab from 'components/DanhSachPhieuGuiTrongBangKe/ModalTwoTab';
-import { makeSelectorMaBP } from 'redux/auth/selectors';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI047 } from 'redux/MIOA_ZTMI047/actions';
 import { makeSelectorRow } from 'redux/MIOA_ZTMI047/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
@@ -32,7 +32,7 @@ const ButtonDongBangKe: React.FC<Props> = ({
   const [showModal, setShowModal] = useState<boolean>(false);
   const listTai = useSelector(makeSelectorRow(SipDataType.TAI, SipDataState.TAO_MOI));
   const dataBangKe = useSelector(makeSelector046RowFirstChild);
-  const userMaBp = useSelector(makeSelectorMaBP);
+  const userMaBp = useSelector(makeSelectorBPOrg);
   const [selectedTai, setSelectedTai] = useState<API.RowMTZTMI047OUT | undefined>(undefined);
 
   useEffect((): void => {

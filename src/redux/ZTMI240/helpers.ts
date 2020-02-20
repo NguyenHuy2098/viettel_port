@@ -1,15 +1,15 @@
 import { get, toNumber } from 'lodash';
 
-import { makeSelectorMaBP } from 'redux/auth/selectors';
 import { sapApiMap } from 'utils/apisMap';
 import { sapApi } from 'utils/request';
 import { select } from 'utils/stateHelpers';
 import { today } from 'utils/timeHelper';
+import { makeSelectorBPOrg } from '../GetProfileByUsername/selectors';
 
 export async function post_ZTMI240(payload: Partial<API.ZTMI240Request>): Promise<API.ZTMI240Response> {
   const { data } = await sapApi.post(sapApiMap.ZTMI240, {
     IV_FREIGHT_UNIT_STATUS: [],
-    IV_LOC_ID: select(makeSelectorMaBP),
+    IV_LOC_ID: select(makeSelectorBPOrg),
     IV_DATE: today,
     ...payload,
   });

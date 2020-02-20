@@ -3,12 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { Col, Row } from 'reactstrap';
 import { get, toNumber, sumBy } from 'lodash';
 import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 import { select_ZFI007_header } from 'redux/ZFI007/selectors';
-import moment from 'moment';
 import BadgeFicoBangKeStatus from 'components/Badge/BadgeFicoBangKeStatus';
 import numeral from 'numeral';
 import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
+import { makeSelectorCurrentPostOffice } from 'redux/GetProfileByUsername/selectors';
 
 interface Props {
   data: API.LISTMTDETAILRECEIVER[];
@@ -30,11 +31,11 @@ const TopThongTinBangKe = (props: Props): JSX.Element => {
       ),
     [data],
   );
-  const currentPostOfficeGetInLocalStorage = localStorage.getItem('currentPostOffice');
+  const currentPostOfficeInStore = useSelector(makeSelectorCurrentPostOffice);
 
   const currentPostOffice = useMemo(() => {
-    return get(JSON.parse(currentPostOfficeGetInLocalStorage || ''), 'PostOfficeName');
-  }, [currentPostOfficeGetInLocalStorage]);
+    return get(currentPostOfficeInStore, 'PostOfficeName');
+  }, [currentPostOfficeInStore]);
 
   return (
     <Row>
