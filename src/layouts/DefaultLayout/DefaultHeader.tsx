@@ -237,6 +237,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
     if (isEmpty(currentPostOfficeCode)) {
       dispatch(action_UPDATE_CURRENT_POST_OFFICE({ currentPostOffice: postOffices[0] }));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [postOffices]);
 
   return (
