@@ -59,7 +59,7 @@ const ButtonInputXlsxFile = (props: Props): JSX.Element => {
   return (
     <>
       <Input
-        accept=".xls,.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+        accept=".xls,.xlsx,.xlsm, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
         className="hide"
         id="xlsx-input"
         onChange={handleChange}

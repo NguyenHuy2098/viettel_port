@@ -32,7 +32,7 @@ export const schema = yup.object().shape({
       then: yup.string().required('Ký hiệu không được để trống'),
     })
     // .required('Ký hiệu không được để trống')
-    .max(7, 'Ký hiệu không được nhập quá 7 ký tự'),
+    .max(8, 'Ký hiệu không được nhập quá 8 ký tự'),
   MAU_HD: yup
     .string()
     .when('MST', {
