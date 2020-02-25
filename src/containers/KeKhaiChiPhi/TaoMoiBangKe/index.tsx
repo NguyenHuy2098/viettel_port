@@ -99,7 +99,7 @@ const TaoMoiBangKe = (): JSX.Element => {
   };
 
   const handleLuuBangKeSuccess = (data: API.ZFI003Response): void => {
-    dispatch(replace(generatePath(routesMap.CHI_TIET_BANG_KE, { idBangKe: get(data, 'MT_CRBK_RECEIVER.BK_ID') })));
+    dispatch(replace(generatePath(routesMap.CHI_TIET_BANG_KE, { idBangKe: get(data, 'MT_CRBK_RECEIVER.BK_ID', '') })));
   };
 
   const handleNopBangKeSuccess = (): void => {
@@ -168,7 +168,6 @@ const TaoMoiBangKe = (): JSX.Element => {
       }),
     );
   }
-
   const renderSecondControllers = (): JSX.Element => (
     <>
       <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} shouldConfirm={size(data) > 0} />

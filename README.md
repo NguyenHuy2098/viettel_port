@@ -98,7 +98,7 @@ Navigate to [http://localhost:3000](http://localhost:3000). The app will automat
 
 ### Build
 
-Run `build` to build the project. The build artifacts will be stored in the `build/` directory.
+Run `build` to build the project with coordinated env variables. The build artifacts will be stored in the `build/` directory.
 
 ```bash
 # build for production with minification

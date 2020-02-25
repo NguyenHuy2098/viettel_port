@@ -32,7 +32,9 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
 
   const handleFailure = (error: Error): void => {
     toastError(error.message);
-    if (isFunction(onFailure)) onFailure(error);
+    if (isFunction(onFailure)) {
+      onFailure(error);
+    }
   };
 
   const handleFinish = (): void => {
@@ -63,9 +65,9 @@ const ButtonLuuBangKe = (props: Props): JSX.Element => {
           item: items,
         },
         {
+          onSuccess: handleTaoMoiSuccess,
           onFailure: handleFailure,
           onFinish: handleFinish,
-          onSuccess: handleTaoMoiSuccess,
         },
         {},
       ),
