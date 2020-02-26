@@ -111,7 +111,7 @@ const TaoMoiBangKe = (): JSX.Element => {
       <a
         color="primary"
         className="btn btn-primary"
-        href="http://drive.viettelpost.vn/s/itfx4SJdBGiD2jf/download"
+        href="https://drive.viettelpost.vn/s/5WLRYmWriPY5mgk/download"
         download
       >
         <img alt="VTPostek" className="mr-2" src={'../../assets/img/icon/iconExcelWhite.svg'} />
