@@ -7,6 +7,7 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row, ListGroup, ListGroupItem } from 'reactstrap';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   concat,
   drop,
@@ -768,9 +769,18 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     }
   }
 
-  function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(event.currentTarget.value);
+  function handleChangeTextboxValue(
+    setValueFunction: Function,
+  ): (event: React.FormEvent<HTMLInputElement> | Event) => void {
+    return (event: React.FormEvent<HTMLInputElement> | Event): void => {
+      setValueFunction(get(event, 'currentTarget.value', ''));
+      triggerValidateAndPriceCalculate();
+    };
+  }
+
+  function handleChangeTypeaheadValue(setValueFunction: Function) {
+    return (input: string): void => {
+      setValueFunction(input);
       triggerValidateAndPriceCalculate();
     };
   }
@@ -805,15 +815,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   //_________________Location suggest event handle__________________________
-
-  const [countLocationSuggestSender, setCountLocationSuggestSender] = useState<number>(0);
   const [locationSuggestSender, setLocationSuggestSender] = useState<SuggestedItem[]>([]);
-  const handleKeyPressDiaChiSender = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    setCountLocationSuggestSender(countLocationSuggestSender + 1);
-  };
 
   React.useEffect((): void => {
-    if (countLocationSuggestSender > 0 && size(diaChiSender) > 0) {
+    if (size(diaChiSender) > 0) {
       dispatch(
         action_LOCATIONSUGGEST(
           { q: diaChiSender },
@@ -833,81 +838,73 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setLocationSuggestSender([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countLocationSuggestSender]);
+  }, [diaChiSender]);
 
   // eslint-disable-next-line max-lines-per-function
-  function handleChooseLocationSuggestSender(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
-    // eslint-disable-next-line max-lines-per-function
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
-        return item.id === id;
-      });
-      setDiaChiSender(get(thisItem, 'name', ''));
-      dispatch(
-        action_LOCATIONSUGGEST_DETAIL(
-          { id: get(thisItem, 'id', '') },
-          {
-            onSuccess: (data: DetailSuggestedLocation): void => {
-              if (!isMounted()) return;
-              const dataComponents = get(data, 'components', []);
-              const thisProvince = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'PROVINCE';
-              });
-              setProvinceIdSender(get(thisProvince, 'code', ''));
-              const thisDistrict = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'DISTRICT';
-              });
-              setDistrictIdSender(get(thisDistrict, 'code', ''));
-              const thisWard = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'WARD';
-              });
-              setWardIdSender(get(thisWard, 'code', ''));
-              const thisDetailAddress = join(
-                map(
-                  filter(dataComponents, (item: Component): boolean => {
-                    return (
-                      item.type !== 'PROVINCE' &&
-                      item.type !== 'DISTRICT' &&
-                      item.type !== 'WARD' &&
-                      item.type !== 'COUNTRY'
-                    );
-                  }),
-                  (item: Component): string => {
-                    return item.name;
-                  },
-                ),
-              );
-              setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '');
-              toggleSenderAddress();
-              triggerValidateAndPriceCalculate();
-            },
-            onFailure: (error: HttpRequestErrorType): void => {
-              if (!isMounted()) return;
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {t('Không lấy được thông tin địa chỉ.')}
-                </>,
-                {
-                  type: 'error',
+  function handleChooseLocationSuggestSender(items: { id: string }[]): void {
+    const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
+      return item.id === get(items, '0.id', '');
+    });
+    setDiaChiSender(get(thisItem, 'name', ''));
+    dispatch(
+      action_LOCATIONSUGGEST_DETAIL(
+        { id: get(thisItem, 'id', '') },
+        {
+          onSuccess: (data: DetailSuggestedLocation): void => {
+            if (!isMounted()) return;
+            const dataComponents = get(data, 'components', []);
+            const thisProvince = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'PROVINCE';
+            });
+            setProvinceIdSender(get(thisProvince, 'code', ''));
+            const thisDistrict = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'DISTRICT';
+            });
+            setDistrictIdSender(get(thisDistrict, 'code', ''));
+            const thisWard = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'WARD';
+            });
+            setWardIdSender(get(thisWard, 'code', ''));
+            const thisDetailAddress = join(
+              map(
+                filter(dataComponents, (item: Component): boolean => {
+                  return (
+                    item.type !== 'PROVINCE' &&
+                    item.type !== 'DISTRICT' &&
+                    item.type !== 'WARD' &&
+                    item.type !== 'COUNTRY'
+                  );
+                }),
+                (item: Component): string => {
+                  return item.name;
                 },
-              );
-            },
+              ),
+            );
+            setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '');
+            toggleSenderAddress();
+            triggerValidateAndPriceCalculate();
           },
-        ),
-      );
-      setLocationSuggestSender([]);
-    };
+          onFailure: (error: HttpRequestErrorType): void => {
+            if (!isMounted()) return;
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {t('Không lấy được thông tin địa chỉ.')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          },
+        },
+      ),
+    );
+    setLocationSuggestSender([]);
   }
 
   //________________________________RECEIVER
 
-  const [countLocationSuggestReceiver, setCountLocationSuggestReceiver] = useState<number>(0);
   const [locationSuggestReceiver, setLocationSuggestReceiver] = useState<SuggestedItem[]>([]);
-  const handleKeyPressDiaChiReceiver = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    setCountLocationSuggestReceiver(countLocationSuggestReceiver + 1);
-  };
-
   const handleHideChooseLocationDropdown = (): void => {
     setLocationSuggestSender([]);
     setLocationSuggestReceiver([]);
@@ -915,7 +912,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   React.useEffect((): void => {
-    if (countLocationSuggestReceiver > 0 && size(diaChiReceiver) > 0) {
+    if (size(diaChiReceiver) > 0) {
       dispatch(
         action_LOCATIONSUGGEST(
           { q: diaChiReceiver },
@@ -935,71 +932,68 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setLocationSuggestReceiver([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countLocationSuggestReceiver]);
+  }, [diaChiReceiver]);
 
   // eslint-disable-next-line max-lines-per-function
-  function handleChooseLocationSuggestReceiver(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
-    // eslint-disable-next-line max-lines-per-function
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      const thisItem = find(locationSuggestReceiver, (item: SuggestedItem): boolean => {
-        return item.id === id;
-      });
-      setDiaChiReceiver(get(thisItem, 'name', ''));
-      dispatch(
-        action_LOCATIONSUGGEST_DETAIL(
-          { id: get(thisItem, 'id', '') },
-          {
-            onSuccess: (data: DetailSuggestedLocation): void => {
-              if (!isMounted()) return;
-              const dataComponents = get(data, 'components');
-              const thisProvince = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'PROVINCE';
-              });
-              setProvinceIdReceiver(get(thisProvince, 'code', ''));
-              const thisDistrict = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'DISTRICT';
-              });
-              setDistrictIdReceiver(get(thisDistrict, 'code', ''));
-              const thisWard = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'WARD';
-              });
-              setWardIdReceiver(get(thisWard, 'code', ''));
-              const thisDetailAddress = join(
-                map(
-                  filter(dataComponents, (item: Component): boolean => {
-                    return (
-                      item.type !== 'PROVINCE' &&
-                      item.type !== 'DISTRICT' &&
-                      item.type !== 'WARD' &&
-                      item.type !== 'COUNTRY'
-                    );
-                  }),
-                  (item: Component): string => {
-                    return item.name;
-                  },
-                ),
-              );
-              setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '');
-              toggleReceiverAddress();
-              triggerValidateAndPriceCalculate();
-            },
-            onFailure: (error: HttpRequestErrorType): void => {
-              if (!isMounted()) return;
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {t('Không lấy được thông tin địa chỉ.')}
-                </>,
-                {
-                  type: 'error',
+  function handleChooseLocationSuggestReceiver(items: { id: string }[]): void {
+    const thisItem = find(locationSuggestReceiver, (item: SuggestedItem): boolean => {
+      return item.id === get(items, '0.id', '');
+    });
+    setDiaChiReceiver(get(thisItem, 'name', ''));
+    dispatch(
+      action_LOCATIONSUGGEST_DETAIL(
+        { id: get(thisItem, 'id', '') },
+        {
+          onSuccess: (data: DetailSuggestedLocation): void => {
+            if (!isMounted()) return;
+            const dataComponents = get(data, 'components');
+            const thisProvince = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'PROVINCE';
+            });
+            setProvinceIdReceiver(get(thisProvince, 'code', ''));
+            const thisDistrict = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'DISTRICT';
+            });
+            setDistrictIdReceiver(get(thisDistrict, 'code', ''));
+            const thisWard = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'WARD';
+            });
+            setWardIdReceiver(get(thisWard, 'code', ''));
+            const thisDetailAddress = join(
+              map(
+                filter(dataComponents, (item: Component): boolean => {
+                  return (
+                    item.type !== 'PROVINCE' &&
+                    item.type !== 'DISTRICT' &&
+                    item.type !== 'WARD' &&
+                    item.type !== 'COUNTRY'
+                  );
+                }),
+                (item: Component): string => {
+                  return item.name;
                 },
-              );
-            },
+              ),
+            );
+            setDetailAddressReceiver(trim(thisDetailAddress) ? thisDetailAddress : '');
+            toggleReceiverAddress();
+            triggerValidateAndPriceCalculate();
           },
-        ),
-      );
-      setLocationSuggestReceiver([]);
-    };
+          onFailure: (error: HttpRequestErrorType): void => {
+            if (!isMounted()) return;
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {t('Không lấy được thông tin địa chỉ.')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          },
+        },
+      ),
+    );
+    setLocationSuggestReceiver([]);
   }
 
   //_________________COMMODITY suggest event handle__________________________
@@ -1566,6 +1560,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // _____________________________________________________________________________
 
+  function renderLabelKey(option: { id: string; name: string }): string {
+    return get(option, 'name', '');
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderSendingCoupon(): JSX.Element {
     return (
@@ -1734,25 +1732,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <span className="color-red"> *</span>
             </Label>
             <Col lg="8">
-              <Input
-                type="text"
+              <Typeahead
+                id="locationSender"
+                onChange={handleChooseLocationSuggestSender}
+                filterBy={['name']}
+                labelKey={renderLabelKey}
+                onInputChange={handleChangeTypeaheadValue(setDiaChiSender)}
+                options={locationSuggestSender}
                 placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
-                value={diaChiSender}
-                onChange={handleChangeTextboxValue(setDiaChiSender)}
-                onKeyUp={handleKeyPressDiaChiSender}
               />
-              <ListGroup className="sipInputAddressDropdown">
-                {map(
-                  locationSuggestSender,
-                  (item: SuggestedItem, index: number): JSX.Element => {
-                    return (
-                      <ListGroupItem tag="button" key={index} onClick={handleChooseLocationSuggestSender(item.id)}>
-                        {get(item, 'name', '')}
-                      </ListGroupItem>
-                    );
-                  },
-                )}
-              </ListGroup>
               <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
               <p className="sipInputItemDescription">
                 ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
@@ -1883,25 +1871,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <span className="color-red"> *</span>
             </Label>
             <Col lg="8">
-              <Input
-                type="text"
+              <Typeahead
+                id="locationReceiver"
+                onChange={handleChooseLocationSuggestReceiver}
+                filterBy={['name']}
+                labelKey={renderLabelKey}
+                onInputChange={handleChangeTypeaheadValue(setDiaChiReceiver)}
+                options={locationSuggestReceiver}
                 placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
-                value={diaChiReceiver}
-                onChange={handleChangeTextboxValue(setDiaChiReceiver)}
-                onKeyUp={handleKeyPressDiaChiReceiver}
               />
-              <ListGroup className="sipInputAddressDropdown">
-                {map(
-                  locationSuggestReceiver,
-                  (item: SuggestedItem, index: number): JSX.Element => {
-                    return (
-                      <ListGroupItem tag="button" key={index} onClick={handleChooseLocationSuggestReceiver(item.id)}>
-                        {get(item, 'name', '')}
-                      </ListGroupItem>
-                    );
-                  },
-                )}
-              </ListGroup>
               <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiReceiver')}</div>
               <p className="sipInputItemDescription">
                 ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
@@ -2432,7 +2410,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         idPhieuGuiSuccess={maPhieuGui}
       />
       {size(locationSuggestSender) > 0 || size(locationSuggestReceiver) > 0 || size(commoditySuggest) > 0 ? (
-        <button className="sipInputAddressDropdownOverlay" onClick={handleHideChooseLocationDropdown}></button>
+        <button className="sipInputAddressDropdownOverlay hide" onClick={handleHideChooseLocationDropdown} />
       ) : (
         <></>
       )}
