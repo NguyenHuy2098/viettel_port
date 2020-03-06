@@ -7,7 +7,6 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row, ListGroup, ListGroupItem } from 'reactstrap';
-import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   concat,
   drop,
@@ -30,6 +29,7 @@ import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
+import Typeahead from 'components/Input/Typeahead';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
 import { action_LOCATIONSUGGEST } from 'redux/LocationSuggest/actions';
