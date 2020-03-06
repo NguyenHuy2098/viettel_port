@@ -778,9 +778,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
-  function handleChangeTypeaheadValue(setValueFunction: Function) {
+  function handleChangeTypeaheadInput(setValueFunction: Function) {
     return (input: string): void => {
       setValueFunction(input);
+      triggerValidateAndPriceCalculate();
+    };
+  }
+
+  function handleChangeTypeaheadValue(setValueFunction: Function): (items: TypeaheadOption[]) => void {
+    return (items: TypeaheadOption[]): void => {
+      setValueFunction(get(items, `0.id`, ''));
       triggerValidateAndPriceCalculate();
     };
   }
@@ -1735,7 +1742,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <Typeahead
                 id="locationSender"
                 onChange={handleChooseLocationSuggestSender}
-                onInputChange={handleChangeTypeaheadValue(setDiaChiSender)}
+                onInputChange={handleChangeTypeaheadInput(setDiaChiSender)}
                 options={map(locationSuggestSender, location => ({
                   id: get(location, 'id'),
                   label: get(location, 'name'),
@@ -1875,7 +1882,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <Typeahead
                 id="locationReceiver"
                 onChange={handleChooseLocationSuggestReceiver}
-                onInputChange={handleChangeTypeaheadValue(setDiaChiReceiver)}
+                onInputChange={handleChangeTypeaheadInput(setDiaChiReceiver)}
                 options={map(locationSuggestReceiver, location => ({
                   id: get(location, 'id'),
                   label: get(location, 'name'),
@@ -2090,22 +2097,53 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <Input type="select" value={loaiHangHoa} onChange={handleChangeTextboxValue(setLoaiHangHoa)}>
-              {loaiKienHang === 'V2' ? (
-                <option value="V04">{t('Thư/ Tài liệu')}</option>
-              ) : (
-                <>
-                  <option value="V01">{t('Thực phẩm')}</option>
-                  <option value="V02">{t('Đồ uống')}</option>
-                  <option value="V03">{t('Thiết bị điện tử')}</option>
-                  <option value="V04">{t('Thư/ Tài liệu')}</option>
-                  <option value="V05">{t('Vải, quần áo')}</option>
-                  <option value="V06">{t('Vắc xin')}</option>
-                  <option value="V07">{t('Hàng đông lạnh')}</option>
-                  <option value="V99">{t('Khác')}</option>
-                </>
-              )}
-            </Input>
+            <Typeahead
+              id="selectProductType"
+              // defaultSelected={[
+              //   {
+              //     id: 'V04',
+              //     label: 'Thư / Tài liệu',
+              //   },
+              // ]}
+              // filterBy={() => true}
+              labelKey={renderLabelKey}
+              onChange={handleChangeTypeaheadValue(setLoaiHangHoa)}
+              options={[
+                {
+                  id: 'V01',
+                  label: 'Thực phẩm',
+                },
+                {
+                  id: 'V02',
+                  label: 'Đồ uống',
+                },
+                {
+                  id: 'V03',
+                  label: 'Thiết bị điện tử',
+                },
+                {
+                  id: 'V04',
+                  label: 'Thư / Tài liệu',
+                },
+                {
+                  id: 'V05',
+                  label: 'Vải, quần áo',
+                },
+                {
+                  id: 'V06',
+                  label: 'Vắc xin',
+                },
+                {
+                  id: 'V07',
+                  label: 'Hàng đông lạnh',
+                },
+                {
+                  id: 'V99',
+                  label: 'Khác',
+                },
+              ]}
+              placeholder={t('Chọn loại hàng')}
+            />
           </Col>
         </Row>
         <Row className="sipInputItem">

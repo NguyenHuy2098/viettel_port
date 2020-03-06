@@ -7,6 +7,7 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Row, ListGroup, ListGroupItem } from 'reactstrap';
+import { Typeahead } from 'react-bootstrap-typeahead';
 import {
   drop,
   get,
@@ -291,7 +292,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [trongLuong, setTrongLuong] = useState<string>('');
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
-  const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_NAME', 'VN'));
+  const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_CODE', 'VN'));
   const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V01');
   const [choXemHang, setChoXemHang] = useState<string>('1');
@@ -710,6 +711,20 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     }
   }
 
+  function handleChangeTypeaheadInput(setValueFunction: Function) {
+    return (input: string): void => {
+      setValueFunction(input);
+      triggerValidateAndPriceCalculate();
+    };
+  }
+
+  function handleChangeTypeaheadValue(setValueFunction: Function): (items: TypeaheadOption[]) => void {
+    return (items: TypeaheadOption[]): void => {
+      setValueFunction(get(items, `0.id`, ''));
+      triggerValidateAndPriceCalculate();
+    };
+  }
+
   function handleChangeTextboxValue(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       setValueFunction(event.currentTarget.value);
@@ -719,11 +734,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   //_________________Location suggest event handle__________________________
 
-  const [countLocationSuggestSender, setCountLocationSuggestSender] = useState<number>(0);
   const [locationSuggestSender, setLocationSuggestSender] = useState<SuggestedItem[]>([]);
-  const handleKeyPressDiaChiSender = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    setCountLocationSuggestSender(countLocationSuggestSender + 1);
-  };
 
   const handleHideChooseLocationDropdown = (): void => {
     setLocationSuggestSender([]);
@@ -731,7 +742,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   React.useEffect((): void => {
-    if (countLocationSuggestSender > 0 && size(diaChiSender) > 0) {
+    if (size(diaChiSender) > 0) {
       dispatch(
         action_LOCATIONSUGGEST(
           { q: diaChiSender },
@@ -751,71 +762,68 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setLocationSuggestSender([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countLocationSuggestSender]);
+  }, [diaChiSender]);
 
   // eslint-disable-next-line max-lines-per-function
-  function handleChooseLocationSuggestSender(id: string): (event: React.FormEvent<HTMLInputElement>) => void {
-    // eslint-disable-next-line max-lines-per-function
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
-        return item.id === id;
-      });
-      setDiaChiSender(get(thisItem, 'name', ''));
-      dispatch(
-        action_LOCATIONSUGGEST_DETAIL(
-          { id: get(thisItem, 'id', '') },
-          {
-            onSuccess: (data: DetailSuggestedLocation): void => {
-              if (!isMounted()) return;
-              const dataComponents = get(data, 'components');
-              const thisProvince = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'PROVINCE';
-              });
-              setProvinceIdSender(get(thisProvince, 'code', ''));
-              const thisDistrict = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'DISTRICT';
-              });
-              setDistrictIdSender(get(thisDistrict, 'code', ''));
-              const thisWard = find(dataComponents, (item: Component): boolean => {
-                return item.type === 'WARD';
-              });
-              setWardIdSender(get(thisWard, 'code', ''));
-              const thisDetailAddress = join(
-                map(
-                  filter(dataComponents, (item: Component): boolean => {
-                    return (
-                      item.type !== 'PROVINCE' &&
-                      item.type !== 'DISTRICT' &&
-                      item.type !== 'WARD' &&
-                      item.type !== 'COUNTRY'
-                    );
-                  }),
-                  (item: Component): string => {
-                    return item.name;
-                  },
-                ),
-              );
-              setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
-              toggleSenderAddress();
-              triggerValidateAndPriceCalculate();
-            },
-            onFailure: (error: HttpRequestErrorType): void => {
-              if (!isMounted()) return;
-              toast(
-                <>
-                  <i className="fa fa-window-close-o mr-2" />
-                  {t('Không lấy được thông tin địa chỉ.')}
-                </>,
-                {
-                  type: 'error',
+  function handleChooseLocationSuggestSender(items: TypeaheadOption[]): void {
+    const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
+      return item.id === get(items, '0.id', '');
+    });
+    setDiaChiSender(get(thisItem, 'name', ''));
+    dispatch(
+      action_LOCATIONSUGGEST_DETAIL(
+        { id: get(thisItem, 'id', '') },
+        {
+          onSuccess: (data: DetailSuggestedLocation): void => {
+            if (!isMounted()) return;
+            const dataComponents = get(data, 'components');
+            const thisProvince = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'PROVINCE';
+            });
+            setProvinceIdSender(get(thisProvince, 'code', ''));
+            const thisDistrict = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'DISTRICT';
+            });
+            setDistrictIdSender(get(thisDistrict, 'code', ''));
+            const thisWard = find(dataComponents, (item: Component): boolean => {
+              return item.type === 'WARD';
+            });
+            setWardIdSender(get(thisWard, 'code', ''));
+            const thisDetailAddress = join(
+              map(
+                filter(dataComponents, (item: Component): boolean => {
+                  return (
+                    item.type !== 'PROVINCE' &&
+                    item.type !== 'DISTRICT' &&
+                    item.type !== 'WARD' &&
+                    item.type !== 'COUNTRY'
+                  );
+                }),
+                (item: Component): string => {
+                  return item.name;
                 },
-              );
-            },
+              ),
+            );
+            setDetailAddressSender(trim(thisDetailAddress) ? thisDetailAddress : '.');
+            toggleSenderAddress();
+            triggerValidateAndPriceCalculate();
           },
-        ),
-      );
-      setLocationSuggestSender([]);
-    };
+          onFailure: (error: HttpRequestErrorType): void => {
+            if (!isMounted()) return;
+            toast(
+              <>
+                <i className="fa fa-window-close-o mr-2" />
+                {t('Không lấy được thông tin địa chỉ.')}
+              </>,
+              {
+                type: 'error',
+              },
+            );
+          },
+        },
+      ),
+    );
+    setLocationSuggestSender([]);
   }
 
   //_________________COMMODITY suggest event handle__________________________
@@ -1219,6 +1227,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   // _____________________________________________________________________________
 
+  function renderLabelKey(option: TypeaheadOption): string {
+    return `${get(option, 'id')} - ${get(option, 'label')}`;
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderSendingCoupon(): JSX.Element {
     return (
@@ -1387,25 +1399,16 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               <span className="color-red"> *</span>
             </Label>
             <Col lg="8">
-              <Input
-                type="text"
+              <Typeahead
+                id="locationSender"
+                onChange={handleChooseLocationSuggestSender}
+                onInputChange={handleChangeTypeaheadInput(setDiaChiSender)}
+                options={map(locationSuggestSender, location => ({
+                  id: get(location, 'id'),
+                  label: get(location, 'name'),
+                }))}
                 placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
-                value={diaChiSender}
-                onChange={handleChangeTextboxValue(setDiaChiSender)}
-                onKeyUp={handleKeyPressDiaChiSender}
               />
-              <ListGroup className="sipInputAddressDropdown">
-                {map(
-                  locationSuggestSender,
-                  (item: SuggestedItem, index: number): JSX.Element => {
-                    return (
-                      <ListGroupItem tag="button" key={index} onClick={handleChooseLocationSuggestSender(item.id)}>
-                        {get(item, 'name', '')}
-                      </ListGroupItem>
-                    );
-                  },
-                )}
-              </ListGroup>
               <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
               <p className="sipInputItemDescription">
                 ({t('Nếu bạn không tìm thấy địa chỉ gợi ý')},{' '}
@@ -1479,15 +1482,15 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input type="select" value={quocGia} onChange={handleChangeTextboxValue(setQuocGia)}>
-              {map(sortedCountryList, (item: NationType, index: number) => {
-                return (
-                  <option key={index} value={item.NATIONAL_CODE}>
-                    {item.NATIONAL_NAME}
-                  </option>
-                );
-              })}
-            </Input>
+            <Typeahead
+              id="selectNations"
+              onChange={handleChangeTypeaheadValue(setQuocGia)}
+              options={map(sortedCountryList, (item: NationType) => ({
+                id: item.NATIONAL_CODE,
+                label: item.NATIONAL_NAME,
+              }))}
+              placeholder={t('Việt Nam')}
+            />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'hoTenSender')}</div>
           </Col>
         </Row>
@@ -1520,22 +1523,16 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input
-              type="select"
-              value={phuongThucVanChuyen}
-              onChange={handleChangeTextboxValue(setPhuongThucVanChuyen)}
-            >
-              {map(
-                transportMethodArr,
-                (item: TransportMethodItem): JSX.Element => {
-                  return (
-                    <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
-                      {item.SERVICE_TYPE_DES}
-                    </option>
-                  );
-                },
-              )}
-            </Input>
+            <Typeahead
+              id="selectService"
+              labelKey={renderLabelKey}
+              onChange={handleChangeTypeaheadValue(setPhuongThucVanChuyen)}
+              options={map(transportMethodArr, (item: TransportMethodItem) => ({
+                id: item.SERVICE_TYPE,
+                label: item.SERVICE_TYPE_DES,
+              }))}
+              placeholder={t('Chọn dịch vụ')}
+            />
           </Col>
         </Row>
       </div>
@@ -1615,22 +1612,53 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <Input type="select" value={loaiHangHoa} onChange={handleChangeTextboxValue(setLoaiHangHoa)}>
-              {loaiKienHang === 'V2' ? (
-                <option value="V04">{t('Thư/ Tài liệu')}</option>
-              ) : (
-                <>
-                  <option value="V01">{t('Thực phẩm')}</option>
-                  <option value="V02">{t('Đồ uống')}</option>
-                  <option value="V03">{t('Thiết bị điện tử')}</option>
-                  <option value="V04">{t('Thư/ Tài liệu')}</option>
-                  <option value="V05">{t('Vải, quần áo')}</option>
-                  <option value="V06">{t('Vắc xin')}</option>
-                  <option value="V07">{t('Hàng đông lạnh')}</option>
-                  <option value="V99">{t('Khác')}</option>
-                </>
-              )}
-            </Input>
+            <Typeahead
+              id="selectProductType"
+              // defaultSelected={[
+              //   {
+              //     id: 'V04',
+              //     label: 'Thư / Tài liệu',
+              //   },
+              // ]}
+              // filterBy={() => true}
+              labelKey={renderLabelKey}
+              onChange={handleChangeTypeaheadValue(setLoaiHangHoa)}
+              options={[
+                {
+                  id: 'V01',
+                  label: 'Thực phẩm',
+                },
+                {
+                  id: 'V02',
+                  label: 'Đồ uống',
+                },
+                {
+                  id: 'V03',
+                  label: 'Thiết bị điện tử',
+                },
+                {
+                  id: 'V04',
+                  label: 'Thư / Tài liệu',
+                },
+                {
+                  id: 'V05',
+                  label: 'Vải, quần áo',
+                },
+                {
+                  id: 'V06',
+                  label: 'Vắc xin',
+                },
+                {
+                  id: 'V07',
+                  label: 'Hàng đông lạnh',
+                },
+                {
+                  id: 'V99',
+                  label: 'Khác',
+                },
+              ]}
+              placeholder={t('Chọn loại hàng')}
+            />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -1815,7 +1843,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         idPhieuGuiSuccess={maPhieuGui}
       />
       {size(locationSuggestSender) > 0 || size(commoditySuggest) > 0 ? (
-        <button className="sipInputAddressDropdownOverlay" onClick={handleHideChooseLocationDropdown}></button>
+        <button className="sipInputAddressDropdownOverlay hide" onClick={handleHideChooseLocationDropdown}></button>
       ) : (
         <></>
       )}
