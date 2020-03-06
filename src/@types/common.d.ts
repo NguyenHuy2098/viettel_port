@@ -44,3 +44,8 @@ interface VtpAddressResponse {
   ObjectId?: any;
   Version: number;
 }
+
+interface TypeaheadOption {
+  id: string;
+  label: string;
+}

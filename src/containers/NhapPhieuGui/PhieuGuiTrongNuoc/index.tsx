@@ -79,10 +79,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //_____________________________________________________________
 
   const orderInformationSelector = useSelector(select_MT_ZTMI031_OUT);
-  const orderInformationInstaneSelector = useSelector(select_MT_ZTMI031_INSTANE);
+  const orderInformationInstanceSelector = useSelector(select_MT_ZTMI031_INSTANE);
 
   const orderInformation = isCreateNewForwardingOrder ? [] : orderInformationSelector;
-  const orderInformationInstane = isCreateNewForwardingOrder ? {} : orderInformationInstaneSelector;
+  const orderInformationInstance = isCreateNewForwardingOrder ? {} : orderInformationInstanceSelector;
 
   const [provinceSenderEdit, setProvinceSenderEdit] = useState<string>('');
   const [districtSenderEdit, setDistrictSenderEdit] = useState<string>('');
@@ -93,10 +93,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
-    if (orderInformationInstane.PROVINCE_ID_SOURCE) {
+    if (orderInformationInstance.PROVINCE_ID_SOURCE) {
       dispatch(
         action_GET_ADDRESS(
-          { Id: orderInformationInstane.PROVINCE_ID_SOURCE },
+          { Id: orderInformationInstance.PROVINCE_ID_SOURCE },
           {
             onSuccess: (data: VtpAddressResponse): void => {
               if (!isMounted()) return;
@@ -106,10 +106,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
     }
-    if (orderInformationInstane.DISTRICT_ID_SOURCE) {
+    if (orderInformationInstance.DISTRICT_ID_SOURCE) {
       dispatch(
         action_GET_ADDRESS(
-          { Id: orderInformationInstane.DISTRICT_ID_SOURCE },
+          { Id: orderInformationInstance.DISTRICT_ID_SOURCE },
           {
             onSuccess: (data: VtpAddressResponse): void => {
               if (!isMounted()) return;
@@ -119,10 +119,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
     }
-    if (orderInformationInstane.WARD_ID_SOURCE) {
+    if (orderInformationInstance.WARD_ID_SOURCE) {
       dispatch(
         action_GET_ADDRESS(
-          { Id: orderInformationInstane.WARD_ID_SOURCE },
+          { Id: orderInformationInstance.WARD_ID_SOURCE },
           {
             onSuccess: (data: VtpAddressResponse): void => {
               if (!isMounted()) return;
@@ -132,10 +132,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
     }
-    if (orderInformationInstane.PROVINCE_ID_DES) {
+    if (orderInformationInstance.PROVINCE_ID_DES) {
       dispatch(
         action_GET_ADDRESS(
-          { Id: orderInformationInstane.PROVINCE_ID_DES },
+          { Id: orderInformationInstance.PROVINCE_ID_DES },
           {
             onSuccess: (data: VtpAddressResponse): void => {
               if (!isMounted()) return;
@@ -145,10 +145,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
     }
-    if (orderInformationInstane.DISTRICT_ID_DES) {
+    if (orderInformationInstance.DISTRICT_ID_DES) {
       dispatch(
         action_GET_ADDRESS(
-          { Id: orderInformationInstane.DISTRICT_ID_DES },
+          { Id: orderInformationInstance.DISTRICT_ID_DES },
           {
             onSuccess: (data: VtpAddressResponse): void => {
               if (!isMounted()) return;
@@ -158,10 +158,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
     }
-    if (orderInformationInstane.WARD_ID_DES) {
+    if (orderInformationInstance.WARD_ID_DES) {
       dispatch(
         action_GET_ADDRESS(
-          { Id: orderInformationInstane.WARD_ID_DES },
+          { Id: orderInformationInstance.WARD_ID_DES },
           {
             onSuccess: (data: VtpAddressResponse): void => {
               if (!isMounted()) return;
@@ -172,7 +172,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderInformationInstane]);
+  }, [orderInformationInstance]);
 
   React.useEffect((): void => {
     if (!isCreateNewForwardingOrder) {
@@ -465,44 +465,44 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
     if (size(orderInformation)) {
-      setMaPhieuGui(get(orderInformationInstane, 'FWO', ''));
-      setDienThoaiSender(get(orderInformationInstane, 'MOBILE_PHONE_SRC', ''));
-      setHoTenSender(get(orderInformationInstane, 'SHIPER_NAME', ''));
+      setMaPhieuGui(get(orderInformationInstance, 'FWO', ''));
+      setDienThoaiSender(get(orderInformationInstance, 'MOBILE_PHONE_SRC', ''));
+      setHoTenSender(get(orderInformationInstance, 'SHIPER_NAME', ''));
       const thisDetailAddressSender =
-        (orderInformationInstane.HOUSE_NO_SOURCE ? toString(orderInformationInstane.HOUSE_NO_SOURCE) + ' ' : '') +
-        (orderInformationInstane.STREET_ID_SOURCE ? toString(orderInformationInstane.STREET_ID_SOURCE) : '');
+        (orderInformationInstance.HOUSE_NO_SOURCE ? toString(orderInformationInstance.HOUSE_NO_SOURCE) + ' ' : '') +
+        (orderInformationInstance.STREET_ID_SOURCE ? toString(orderInformationInstance.STREET_ID_SOURCE) : '');
       setDetailAddressSender(thisDetailAddressSender);
       setDiaChiSender(
         `${thisDetailAddressSender}${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
       );
-      setProvinceIdSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
-      setDistrictIdSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
-      setWardIdSender(toString(get(orderInformationInstane, 'WARD_ID_SOURCE', '')));
+      setProvinceIdSender(get(orderInformationInstance, 'PROVINCE_ID_SOURCE', ''));
+      setDistrictIdSender(get(orderInformationInstance, 'DISTRICT_ID_SOURCE', ''));
+      setWardIdSender(toString(get(orderInformationInstance, 'WARD_ID_SOURCE', '')));
       //__________________________________________________________
 
-      setDienThoaiReceiver(get(orderInformationInstane, 'MOBILE_PHONE_DES', ''));
-      setHoTenReceiver(get(orderInformationInstane, 'CONSIGNEE_NAME', ''));
+      setDienThoaiReceiver(get(orderInformationInstance, 'MOBILE_PHONE_DES', ''));
+      setHoTenReceiver(get(orderInformationInstance, 'CONSIGNEE_NAME', ''));
       const thisDetailAddressReceiver =
-        (orderInformationInstane.HOUSE_NO_DES ? toString(orderInformationInstane.HOUSE_NO_DES) + ' ' : '') +
-        (orderInformationInstane.STREET_ID_DES ? toString(orderInformationInstane.STREET_ID_DES) : '');
+        (orderInformationInstance.HOUSE_NO_DES ? toString(orderInformationInstance.HOUSE_NO_DES) + ' ' : '') +
+        (orderInformationInstance.STREET_ID_DES ? toString(orderInformationInstance.STREET_ID_DES) : '');
       setDetailAddressReceiver(thisDetailAddressReceiver);
       setDiaChiReceiver(
         `${thisDetailAddressReceiver}${' '}${wardReceiverEdit}${' '}${districtReceiverEdit}${' '}${provinceReceiverEdit}`,
       );
-      setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
-      setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
-      setWardIdReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
-      setTenHang(get(orderInformationInstane, 'ITEM_DESCRIPTION', ''));
-      setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(0) : '');
+      setProvinceIdReceiver(get(orderInformationInstance, 'PROVINCE_ID_DES', ''));
+      setDistrictIdReceiver(get(orderInformationInstance, 'DISTRICT_ID_DES', ''));
+      setWardIdReceiver(toString(get(orderInformationInstance, 'WARD_ID_DES', '')));
+      setTenHang(get(orderInformationInstance, 'ITEM_DESCRIPTION', ''));
+      setSoLuong(orderInformationInstance.Quantity ? parseFloat(orderInformationInstance.Quantity).toFixed(0) : '');
       setGiaTri('');
-      setTienThuHo(orderInformationInstane.COD ? toString(parseInt(orderInformationInstane.COD)) : '');
+      setTienThuHo(orderInformationInstance.COD ? toString(parseInt(orderInformationInstance.COD)) : '');
       setTrongLuong(
-        orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(0) : '',
+        orderInformationInstance.GROSS_WEIGHT ? parseFloat(orderInformationInstance.GROSS_WEIGHT).toFixed(0) : '',
       );
-      setKichThuocDai(orderInformationInstane.Length ? parseFloat(orderInformationInstane.Length).toFixed(0) : '');
-      setKichThuocRong(orderInformationInstane.Width ? parseFloat(orderInformationInstane.Width).toFixed(0) : '');
-      setKichThuocCao(orderInformationInstane.Height ? parseFloat(orderInformationInstane.Height).toFixed(0) : '');
-      const thisServiceType: string[] = drop(get(orderInformationInstane, 'SERVICE_TYPE', ''), 1);
+      setKichThuocDai(orderInformationInstance.Length ? parseFloat(orderInformationInstance.Length).toFixed(0) : '');
+      setKichThuocRong(orderInformationInstance.Width ? parseFloat(orderInformationInstance.Width).toFixed(0) : '');
+      setKichThuocCao(orderInformationInstance.Height ? parseFloat(orderInformationInstance.Height).toFixed(0) : '');
+      const thisServiceType: string[] = drop(get(orderInformationInstance, 'SERVICE_TYPE', ''), 1);
       const thisTransportServiceType =
         findIndex(thisServiceType, (item: string): boolean => {
           return item === '/';
@@ -572,7 +572,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    orderInformationInstane,
+    orderInformationInstance,
     orderInformation,
     provinceSenderEdit,
     provinceReceiverEdit,
@@ -785,9 +785,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
-  function handleChangeTransportMethod(setValueFunction: Function): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      setValueFunction(event.currentTarget.value);
+  function handleChangeTransportMethod(setValueFunction: Function): (items: TypeaheadOption[]) => void {
+    return (items: TypeaheadOption[]): void => {
+      setValueFunction(get(items, '0.id', ''));
       //trigger get Summary information dispatch
       setCountGetSummaryInformation(countGetSummaryInformation + 1);
     };
@@ -841,7 +841,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }, [diaChiSender]);
 
   // eslint-disable-next-line max-lines-per-function
-  function handleChooseLocationSuggestSender(items: { id: string }[]): void {
+  function handleChooseLocationSuggestSender(items: TypeaheadOption[]): void {
     const thisItem = find(locationSuggestSender, (item: SuggestedItem): boolean => {
       return item.id === get(items, '0.id', '');
     });
@@ -935,7 +935,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }, [diaChiReceiver]);
 
   // eslint-disable-next-line max-lines-per-function
-  function handleChooseLocationSuggestReceiver(items: { id: string }[]): void {
+  function handleChooseLocationSuggestReceiver(items: TypeaheadOption[]): void {
     const thisItem = find(locationSuggestReceiver, (item: SuggestedItem): boolean => {
       return item.id === get(items, '0.id', '');
     });
@@ -1560,8 +1560,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // _____________________________________________________________________________
 
-  function renderLabelKey(option: { id: string; name: string }): string {
-    return get(option, 'name', '');
+  function renderLabelKey(option: TypeaheadOption): string {
+    return `${get(option, 'id')} - ${get(option, 'label')}`;
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -1735,10 +1735,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <Typeahead
                 id="locationSender"
                 onChange={handleChooseLocationSuggestSender}
-                filterBy={['name']}
-                labelKey={renderLabelKey}
                 onInputChange={handleChangeTypeaheadValue(setDiaChiSender)}
-                options={locationSuggestSender}
+                options={map(locationSuggestSender, location => ({
+                  id: get(location, 'id'),
+                  label: get(location, 'name'),
+                }))}
                 placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
               />
               <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiSender')}</div>
@@ -1874,10 +1875,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <Typeahead
                 id="locationReceiver"
                 onChange={handleChooseLocationSuggestReceiver}
-                filterBy={['name']}
-                labelKey={renderLabelKey}
                 onInputChange={handleChangeTypeaheadValue(setDiaChiReceiver)}
-                options={locationSuggestReceiver}
+                options={map(locationSuggestReceiver, location => ({
+                  id: get(location, 'id'),
+                  label: get(location, 'name'),
+                }))}
                 placeholder={t('Nhập địa chỉ (tên đường, ngõ, hẻm, số nhà)')}
               />
               <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiReceiver')}</div>
@@ -1912,6 +1914,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  const loaiHinhDichVuListOptions: TypeaheadOption[] = React.useMemo(
+    () =>
+      map(loaiHinhDichVuList, (service: TransportMethodItem) => ({
+        id: service.SERVICE_TYPE,
+        label: service.SERVICE_TYPE_DES,
+      })),
+    [loaiHinhDichVuList],
+  );
+
   function renderSendingServices(): JSX.Element {
     return (
       <div className="sipInputBlock">
@@ -1922,22 +1933,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input
-              type="select"
-              value={phuongThucVanChuyen}
+            <Typeahead
+              id="selectService"
+              labelKey={renderLabelKey}
               onChange={handleChangeTransportMethod(setPhuongThucVanChuyen)}
-            >
-              {map(
-                loaiHinhDichVuList,
-                (item: TransportMethodItem): JSX.Element => {
-                  return (
-                    <option key={item.SERVICE_TYPE} value={item.SERVICE_TYPE}>
-                      {item.SERVICE_TYPE_DES}
-                    </option>
-                  );
-                },
-              )}
-            </Input>
+              options={loaiHinhDichVuListOptions}
+              placeholder={t('Chọn dịch vụ')}
+            />
           </Col>
         </Row>
       </div>
