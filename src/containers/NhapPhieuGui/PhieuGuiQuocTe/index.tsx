@@ -28,6 +28,7 @@ import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Typeahead from 'components/Input/Typeahead';
+import TypeaheadLoaiHoang from 'components/Input/TypeaheadLoaiHang';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
@@ -1612,53 +1613,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <Typeahead
-              id="selectProductType"
-              // defaultSelected={[
-              //   {
-              //     id: 'V04',
-              //     label: 'Thư / Tài liệu',
-              //   },
-              // ]}
-              // filterBy={() => true}
-              labelKey={renderLabelKey}
-              onChange={handleChangeTypeaheadValue(setLoaiHangHoa)}
-              options={[
-                {
-                  id: 'V01',
-                  label: 'Thực phẩm',
-                },
-                {
-                  id: 'V02',
-                  label: 'Đồ uống',
-                },
-                {
-                  id: 'V03',
-                  label: 'Thiết bị điện tử',
-                },
-                {
-                  id: 'V04',
-                  label: 'Thư / Tài liệu',
-                },
-                {
-                  id: 'V05',
-                  label: 'Vải, quần áo',
-                },
-                {
-                  id: 'V06',
-                  label: 'Vắc xin',
-                },
-                {
-                  id: 'V07',
-                  label: 'Hàng đông lạnh',
-                },
-                {
-                  id: 'V99',
-                  label: 'Khác',
-                },
-              ]}
-              placeholder={t('Chọn loại hàng')}
-            />
+            <TypeaheadLoaiHoang loaiKienHang={loaiKienHang} onChange={handleChangeTypeaheadValue(setLoaiHangHoa)} />
           </Col>
         </Row>
         <Row className="sipInputItem">

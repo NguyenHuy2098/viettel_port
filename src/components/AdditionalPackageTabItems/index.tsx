@@ -23,6 +23,7 @@ import { default as NumberFormat } from 'react-number-format';
 import { getValueOfNumberFormat, numberFormat } from 'utils/common';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+import TypeaheadLoaiHoang from '../Input/TypeaheadLoaiHang';
 
 interface Props {
   removePackageItem: (index: number) => void;
@@ -74,6 +75,16 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
   ): (event: React.FormEvent<HTMLInputElement>) => void {
     return (event: React.FormEvent<HTMLInputElement>): void => {
       onChangeValue(valueName, event.currentTarget.value, index);
+      // check validate
+      if (isSubmit) {
+        setCount(count + 1);
+      }
+    };
+  }
+
+  function handleChangeTypeaheadValue(valueName: string, index: number): (items: TypeaheadOption[]) => void {
+    return (items: TypeaheadOption[]): void => {
+      onChangeValue(valueName, get(items, '0.id', ''), index);
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -258,26 +269,10 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <Input
-              type="select"
-              value={item.COMMODITY_CODE}
-              onChange={handleChangeTextboxValue('COMMODITY_CODE', index)}
-            >
-              {item.COMMODITY_TYPE === 'V2' ? (
-                <option value="V04">{t('Thư/ Tài liệu')}</option>
-              ) : (
-                <>
-                  <option value="V01">{t('Thực phẩm')}</option>
-                  <option value="V02">{t('Đồ uống')}</option>
-                  <option value="V03">{t('Thiết bị điện tử')}</option>
-                  <option value="V04">{t('Thư/ Tài liệu')}</option>
-                  <option value="V05">{t('Vải, quần áo')}</option>
-                  <option value="V06">{t('Vắc xin')}</option>
-                  <option value="V07">{t('Hàng đông lạnh')}</option>
-                  <option value="V99">{t('Khác')}</option>
-                </>
-              )}
-            </Input>
+            <TypeaheadLoaiHoang
+              loaiKienHang={item.COMMODITY_TYPE}
+              onChange={handleChangeTypeaheadValue('COMMODITY_CODE', index)}
+            />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -440,7 +435,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
         )}
       </TabContent>
       {size(commoditySuggest) > 0 ? (
-        <button className="sipInputAddressDropdownOverlay" onClick={handleHideChooseDropdown}></button>
+        <button className="sipInputAddressDropdownOverlay hide" onClick={handleHideChooseDropdown}></button>
       ) : (
         <></>
       )}
