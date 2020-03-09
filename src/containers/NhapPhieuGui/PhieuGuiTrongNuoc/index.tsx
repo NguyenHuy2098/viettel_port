@@ -1814,7 +1814,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 handleChangeDistrict={handleChangeDistrictReceiver}
                 filteredDistricts={filteredDistrictReceiver}
                 districtErrorMessages={handleErrorMessage(errors, 'districtIdReceiver')}
-                wardId={wardIdSender}
+                wardId={wardIdReceiver}
                 handleChangeWard={handleChangeWardReceiver}
                 filteredWards={filteredWardReceiver}
                 wardErrorMessages={handleErrorMessage(errors, 'wardIdReceiver')}

@@ -1,7 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Col, Input, Row } from 'reactstrap';
-import { map } from 'lodash';
+import { filter, map } from 'lodash';
+import Typeahead from './Typeahead';
 
 interface Props {
   provinceId: string;
@@ -25,55 +26,51 @@ interface Props {
 const TypeaheadFullAddress = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
+  const mapVtpAddressToTypeaheadOption = (item: VtpAddress): TypeaheadOption => ({
+    id: item.I,
+    label: item.N,
+  });
+
+  const selectedProvince = React.useMemo(() => {
+    return map(filter(props.filteredProvinces, { I: props.provinceId }), mapVtpAddressToTypeaheadOption);
+  }, [props.provinceId, props.filteredProvinces]);
+
+  const selectedDistrict = React.useMemo(() => {
+    return map(filter(props.filteredDistricts, { I: props.districtId }), mapVtpAddressToTypeaheadOption);
+  }, [props.districtId, props.filteredDistricts]);
+
+  const selectedWard = React.useMemo(() => {
+    return map(filter(props.filteredWards, { I: props.wardId }), mapVtpAddressToTypeaheadOption);
+  }, [props.wardId, props.filteredWards]);
+
   return (
     <>
       <Row className="sipInputItemGroup">
         <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="provinceSelect" value={props.provinceId} onChange={props.handleChangeProvince}>
-            <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
-            {map(
-              props.filteredProvinces,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
+          <Typeahead
+            id="provinceSelect"
+            selected={selectedProvince}
+            options={map(props.filteredProvinces, mapVtpAddressToTypeaheadOption)}
+            placeholder={t('Thành Phố / Tỉnh')}
+          />
           <div className="sipInputItemError">{props.provinceErrorMessages}</div>
         </Col>
         <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="districtSelect" value={props.districtId} onChange={props.handleChangeDistrict}>
-            <option value="0">{t('Quận / Huyện')}</option>
-            {map(
-              props.filteredDistricts,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
+          <Typeahead
+            id="districtSelect"
+            selected={selectedDistrict}
+            options={map(props.filteredDistricts, mapVtpAddressToTypeaheadOption)}
+            placeholder={t('Quận / Huyện')}
+          />
           <div className="sipInputItemError">{props.districtErrorMessages}</div>
         </Col>
         <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="wardSelect" value={props.wardId} onChange={props.handleChangeWard}>
-            <option value="0">{t('Chọn Phường/ Xã')}</option>
-            {map(
-              props.filteredWards,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
+          <Typeahead
+            id="wardSelect"
+            selected={selectedWard}
+            options={map(props.filteredWards, mapVtpAddressToTypeaheadOption)}
+            placeholder={t('Phường / Xã')}
+          />
           <div className="sipInputItemError">{props.wardErrorMessages}</div>
         </Col>
       </Row>
