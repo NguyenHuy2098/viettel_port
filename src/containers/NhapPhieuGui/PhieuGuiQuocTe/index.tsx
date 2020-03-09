@@ -50,6 +50,7 @@ import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/
 import AdditionalPackageTabItemsInternational from 'components/AdditionalPackageTabItemsInternational';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 import { countryList } from './countryList';
+import TypeaheadFullAddress from '../../../components/Input/TypeaheadFullAdress';
 
 interface Props {
   match: match;
@@ -1288,62 +1289,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  function renderChoosingAddress(): JSX.Element {
-    return (
-      <Row className="sipInputItemGroup">
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="provinceSelect" value={provinceIdSender} onChange={handleChangeProvinceSender}>
-            <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
-            {map(
-              filteredProvinceSender,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'provinceIdSender')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="districtSelect" value={districtIdSender} onChange={handleChangeDistrictSender}>
-            <option value="0">{t('Quận / Huyện')}</option>
-            {map(
-              filteredDistrictSender,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'districtIdSender')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="wardSelect" value={wardIdSender} onChange={handleChangeWardSender}>
-            <option value="0">{t('Chọn Phường/ Xã')}</option>
-            {map(
-              filteredWardSender,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'wardIdSender')}</div>
-        </Col>
-      </Row>
-    );
-  }
-
-  // eslint-disable-next-line max-lines-per-function
   function renderSenderInput(): JSX.Element {
     return (
       <div className="sipInputBlock">
@@ -1427,14 +1372,23 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               <span className="color-red"> *</span>
             </Label>
             <Col lg="8">
-              {renderChoosingAddress()}
-              <Input
-                type="text"
-                placeholder={t('Nhập địa chỉ(tên đường, ngõ hẻm, số nhà)')}
-                value={detailAddressSender}
-                onChange={handleChangeTextboxValue(setDetailAddressSender)}
+              <TypeaheadFullAddress
+                provinceId={provinceIdSender}
+                handleChangeProvince={handleChangeProvinceSender}
+                filteredProvinces={filteredProvinceSender}
+                provinceErrorMessages={handleErrorMessage(errors, 'provinceIdSender')}
+                districtId={districtIdSender}
+                handleChangeDistrict={handleChangeDistrictSender}
+                filteredDistricts={filteredDistrictSender}
+                districtErrorMessages={handleErrorMessage(errors, 'districtIdSender')}
+                wardId={wardIdSender}
+                handleChangeWard={handleChangeWardSender}
+                filteredWards={filteredWardSender}
+                wardErrorMessages={handleErrorMessage(errors, 'wardIdSender')}
+                detailAddress={detailAddressSender}
+                onChangeDetailAddress={handleChangeTextboxValue(setDetailAddressSender)}
+                detailAddressErrorMessages={handleErrorMessage(errors, 'detailAddressSender')}
               />
-              <div className="sipInputItemError">{handleErrorMessage(errors, 'detailAddressSender')}</div>
             </Col>
           </Row>
         )}

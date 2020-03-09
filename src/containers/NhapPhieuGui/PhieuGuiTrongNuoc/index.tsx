@@ -29,7 +29,9 @@ import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
+import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems';
 import Typeahead from 'components/Input/Typeahead';
+import TypeaheadFullAddress from 'components/Input/TypeaheadFullAdress';
 import TypeaheadLoaiHoang from 'components/Input/TypeaheadLoaiHang';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
@@ -47,7 +49,6 @@ import {
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems';
 import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/common';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 
@@ -1628,62 +1629,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  function renderChoosingAddressSender(): JSX.Element {
-    return (
-      <Row className="sipInputItemGroup">
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="provinceSelect" value={provinceIdSender} onChange={handleChangeProvinceSender}>
-            <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
-            {map(
-              filteredProvinceSender,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'provinceIdSender')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="districtSelect" value={districtIdSender} onChange={handleChangeDistrictSender}>
-            <option value="0">{t('Quận / Huyện')}</option>
-            {map(
-              filteredDistrictSender,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'districtIdSender')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="wardSelect" value={wardIdSender} onChange={handleChangeWardSender}>
-            <option value="0">{t('Chọn Phường/ Xã')}</option>
-            {map(
-              filteredWardSender,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'wardIdSender')}</div>
-        </Col>
-      </Row>
-    );
-  }
-
-  // eslint-disable-next-line max-lines-per-function
   function renderSenderInput(): JSX.Element {
     return (
       <div className="sipInputBlock">
@@ -1767,74 +1712,27 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <span className="color-red"> *</span>
             </Label>
             <Col lg="8">
-              {renderChoosingAddressSender()}
-              <Input
-                type="text"
-                placeholder={t('Nhập địa chỉ(tên đường, ngõ hẻm, số nhà)')}
-                value={detailAddressSender}
-                onChange={handleChangeTextboxValue(setDetailAddressSender)}
+              <TypeaheadFullAddress
+                provinceId={provinceIdSender}
+                handleChangeProvince={handleChangeProvinceSender}
+                filteredProvinces={filteredProvinceSender}
+                provinceErrorMessages={handleErrorMessage(errors, 'provinceIdSender')}
+                districtId={districtIdSender}
+                handleChangeDistrict={handleChangeDistrictSender}
+                filteredDistricts={filteredDistrictSender}
+                districtErrorMessages={handleErrorMessage(errors, 'districtIdSender')}
+                wardId={wardIdSender}
+                handleChangeWard={handleChangeWardSender}
+                filteredWards={filteredWardSender}
+                wardErrorMessages={handleErrorMessage(errors, 'wardIdSender')}
+                detailAddress={detailAddressSender}
+                onChangeDetailAddress={handleChangeTextboxValue(setDetailAddressSender)}
+                detailAddressErrorMessages={handleErrorMessage(errors, 'detailAddressSender')}
               />
-              <div className="sipInputItemError">{handleErrorMessage(errors, 'detailAddressSender')}</div>
             </Col>
           </Row>
         )}
       </div>
-    );
-  }
-
-  // eslint-disable-next-line max-lines-per-function
-  function renderChoosingAddressReceiver(): JSX.Element {
-    return (
-      <Row className="sipInputItemGroup">
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="provinceSelect" value={provinceIdReceiver} onChange={handleChangeProvinceReceiver}>
-            <option value="0">{t('Chọn Thành phố/ Tỉnh')}</option>
-            {map(
-              filteredProvinceReceiver,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'provinceIdReceiver')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="districtSelect" value={districtIdReceiver} onChange={handleChangeDistrictReceiver}>
-            <option value="0">{t('Quận / Huyện')}</option>
-            {map(
-              filteredDistrictReceiver,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'districtIdReceiver')}</div>
-        </Col>
-        <Col xs="12" md="4" className="mb-2">
-          <Input type="select" id="wardSelect" value={wardIdReceiver} onChange={handleChangeWardReceiver}>
-            <option value="0">{t('Chọn Phường/ Xã')}</option>
-            {map(
-              filteredWardReceiver,
-              (item: VtpAddress, index: number): JSX.Element => {
-                return (
-                  <option key={index} value={item.I || undefined}>
-                    {item.N}
-                  </option>
-                );
-              },
-            )}
-          </Input>
-          <div className="sipInputItemError">{handleErrorMessage(errors, 'wardIdReceiver')}</div>
-        </Col>
-      </Row>
     );
   }
 
@@ -1907,14 +1805,23 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               <span className="color-red"> *</span>
             </Label>
             <Col lg="8">
-              {renderChoosingAddressReceiver()}
-              <Input
-                type="text"
-                placeholder={t('Nhập địa chỉ(tên đường, ngõ hẻm, số nhà)')}
-                value={detailAddressReceiver}
-                onChange={handleChangeTextboxValue(setDetailAddressReceiver)}
+              <TypeaheadFullAddress
+                provinceId={provinceIdReceiver}
+                handleChangeProvince={handleChangeProvinceReceiver}
+                filteredProvinces={filteredProvinceReceiver}
+                provinceErrorMessages={handleErrorMessage(errors, 'provinceIdReceiver')}
+                districtId={districtIdReceiver}
+                handleChangeDistrict={handleChangeDistrictReceiver}
+                filteredDistricts={filteredDistrictReceiver}
+                districtErrorMessages={handleErrorMessage(errors, 'districtIdReceiver')}
+                wardId={wardIdSender}
+                handleChangeWard={handleChangeWardReceiver}
+                filteredWards={filteredWardReceiver}
+                wardErrorMessages={handleErrorMessage(errors, 'wardIdReceiver')}
+                detailAddress={detailAddressReceiver}
+                onChangeDetailAddress={handleChangeTextboxValue(setDetailAddressReceiver)}
+                detailAddressErrorMessages={handleErrorMessage(errors, 'detailAddressReceiver')}
               />
-              <div className="sipInputItemError">{handleErrorMessage(errors, 'detailAddressReceiver')}</div>
             </Col>
           </Row>
         )}
