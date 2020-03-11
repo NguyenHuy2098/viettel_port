@@ -10,7 +10,7 @@ interface Props {
 }
 
 // eslint-disable-next-line max-lines-per-function
-const TypeaheadLoaiHoang = (props: Props): JSX.Element => {
+const TypeaheadLoaiHang = (props: Props): JSX.Element => {
   const { t } = useTranslation();
 
   const options = React.useMemo(() => {
@@ -81,4 +81,4 @@ const TypeaheadLoaiHoang = (props: Props): JSX.Element => {
   );
 };
 
-export default TypeaheadLoaiHoang;
+export default TypeaheadLoaiHang;

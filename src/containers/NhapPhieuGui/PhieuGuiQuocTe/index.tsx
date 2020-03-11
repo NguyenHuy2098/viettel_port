@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
-import { Button, Col, Input, Label, Row, ListGroup, ListGroupItem } from 'reactstrap';
+import { Button, Col, Input, Label, Row } from 'reactstrap';
 import {
   drop,
   get,
@@ -28,7 +28,9 @@ import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import Typeahead from 'components/Input/Typeahead';
-import TypeaheadLoaiHoang from 'components/Input/TypeaheadLoaiHang';
+import TypeaheadLoaiHang from 'components/Input/TypeaheadLoaiHang';
+import TypeaheadFullAddress from 'components/Input/TypeaheadFullAdress';
+import TypeaheadTenHang from 'components/Input/TypeaheadTenHang';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
@@ -44,13 +46,11 @@ import {
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
-// import { makeSelectProfile } from 'redux/auth/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/common';
 import AdditionalPackageTabItemsInternational from 'components/AdditionalPackageTabItemsInternational';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 import { countryList } from './countryList';
-import TypeaheadFullAddress from '../../../components/Input/TypeaheadFullAdress';
 
 interface Props {
   match: match;
@@ -830,14 +830,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   //_________________COMMODITY suggest event handle__________________________
 
-  const [countCommoditySuggest, setCountCommoditySuggest] = useState<number>(0);
   const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
-  const handleKeyPressHangHoa = (event: React.KeyboardEvent<HTMLInputElement>): void => {
-    setCountCommoditySuggest(countCommoditySuggest + 1);
-  };
 
   React.useEffect((): void => {
-    if (countCommoditySuggest > 0 && size(tenHang) > 0) {
+    if (size(tenHang) > 0) {
       dispatch(
         action_COMMODITY_SUGGEST(
           { q: tenHang },
@@ -857,18 +853,13 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setCommoditySuggest([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countCommoditySuggest]);
+  }, [tenHang]);
 
-  function handleChooseCommoditySuggest(
-    name: string,
-    price: number,
-  ): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      setTenHang(name);
-      setGiaTri(toString(price));
-      setCommoditySuggest([]);
-      triggerValidateAndPriceCalculate();
-    };
+  function handleChooseCommoditySuggest(items: TypeaheadOption[]): void {
+    setTenHang(get(items, '0.id', ''));
+    setGiaTri(toString(get(items, '0.price', '')));
+    setCommoditySuggest([]);
+    triggerValidateAndPriceCalculate();
   }
 
   //___________________________________________________________________
@@ -1567,7 +1558,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <TypeaheadLoaiHoang loaiKienHang={loaiKienHang} onChange={handleChangeTypeaheadValue(setLoaiHangHoa)} />
+            <TypeaheadLoaiHang loaiKienHang={loaiKienHang} onChange={handleChangeTypeaheadValue(setLoaiHangHoa)} />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -1576,35 +1567,40 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Nội dung hàng hoá')}
-              value={tenHang}
-              onChange={handleChangeTextboxValue(setTenHang)}
-              onKeyUp={handleKeyPressHangHoa}
+            {/*<Input*/}
+            {/*  type="text"*/}
+            {/*  placeholder={t('Nội dung hàng hoá')}*/}
+            {/*  value={tenHang}*/}
+            {/*  onChange={handleChangeTextboxValue(setTenHang)}*/}
+            {/*  onKeyUp={handleKeyPressHangHoa}*/}
+            {/*/>*/}
+            {/*<ListGroup className="sipInputAddressDropdown">*/}
+            {/*  {map(*/}
+            {/*    commoditySuggest,*/}
+            {/*    (item: CommoditySuggestedItem, index: number): JSX.Element => {*/}
+            {/*      return (*/}
+            {/*        <ListGroupItem*/}
+            {/*          tag="button"*/}
+            {/*          key={index}*/}
+            {/*          onClick={handleChooseCommoditySuggest(item.name, item.price)}*/}
+            {/*        >*/}
+            {/*          {get(item, 'name', '')} -{' '}*/}
+            {/*          <NumberFormat*/}
+            {/*            value={get(item, 'price', '')}*/}
+            {/*            displayType={'text'}*/}
+            {/*            thousandSeparator={true}*/}
+            {/*            suffix={' đ'}*/}
+            {/*          />*/}
+            {/*        </ListGroupItem>*/}
+            {/*      );*/}
+            {/*    },*/}
+            {/*  )}*/}
+            {/*</ListGroup>*/}
+            <TypeaheadTenHang
+              onChange={handleChooseCommoditySuggest}
+              onInputChange={handleChangeTypeaheadInput(setTenHang)}
+              suggestions={commoditySuggest}
             />
-            <ListGroup className="sipInputAddressDropdown">
-              {map(
-                commoditySuggest,
-                (item: CommoditySuggestedItem, index: number): JSX.Element => {
-                  return (
-                    <ListGroupItem
-                      tag="button"
-                      key={index}
-                      onClick={handleChooseCommoditySuggest(item.name, item.price)}
-                    >
-                      {get(item, 'name', '')} -{' '}
-                      <NumberFormat
-                        value={get(item, 'price', '')}
-                        displayType={'text'}
-                        thousandSeparator={true}
-                        suffix={' đ'}
-                      />
-                    </ListGroupItem>
-                  );
-                },
-              )}
-            </ListGroup>
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tenHang')}</div>
           </Col>
         </Row>
