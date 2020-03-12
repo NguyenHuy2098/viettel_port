@@ -10,6 +10,6 @@ export const action_GET_PROFILE_BY_USERNAME = createAction<SSOAPI.UserSapMapping
   ACTION_GET_PROFILE_BY_USERNAME,
 );
 
-export const actionRESET_PROFILE_BY_USERNAME = createAction(ACTION_RESET_PROFILE_BY_USERNAME);
+export const action_RESET_PROFILE_BY_USERNAME = createAction(ACTION_RESET_PROFILE_BY_USERNAME);
 
-export const action_UPDATE_CURRENT_POST_OFFICE = createAction(ACTION_UPDATE_CURRENT_POST_OFFICE);
+export const action_UPDATE_CURRENT_POST_OFFICE = createAction<SSOAPI.PostOffice, {}>(ACTION_UPDATE_CURRENT_POST_OFFICE);

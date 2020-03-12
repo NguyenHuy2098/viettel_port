@@ -15,7 +15,7 @@ import {
 } from 'reactstrap';
 // @ts-ignore
 import { AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-import { get, isEmpty } from 'lodash';
+import { find, get, isEmpty, map } from 'lodash';
 
 import logo from 'assets/img/logo.png';
 import HeaderSearch from 'components/HeaderSearch';
@@ -24,8 +24,8 @@ import { makeSelectorProfile } from 'redux/auth/selectors';
 import routesMap from 'utils/routesMap';
 import {
   action_GET_PROFILE_BY_USERNAME,
+  action_RESET_PROFILE_BY_USERNAME,
   action_UPDATE_CURRENT_POST_OFFICE,
-  actionRESET_PROFILE_BY_USERNAME,
 } from 'redux/GetProfileByUsername/actions';
 import ModalAbout from 'components/Modal/ModalAbout';
 import useGetListPostOffice from 'hooks/useGetListPostOffice';
@@ -64,7 +64,7 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
         {},
         {
           onSuccess: () => {
-            dispatch(actionRESET_PROFILE_BY_USERNAME());
+            dispatch(action_RESET_PROFILE_BY_USERNAME());
           },
         },
       ),
@@ -201,20 +201,21 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
       </NavItem>
       <FormGroup className="sipHeaderSearch">
         <Input type="select" onChange={handleChangeBuuCuc} value={currentPostOfficeCode}>
-          {postOffices.map((item: PostOfficeType) => {
-            return (
+          {map(
+            postOffices,
+            (item: PostOfficeType): JSX.Element => (
               <option key={item.PostOfficeCode} value={item.PostOfficeCode}>
                 {item.PostOfficeName + ' - ' + item.PostOfficeCode}
               </option>
-            );
-          })}
+            ),
+          )}
         </Input>
+        <ChangeCurrentPostOfficeConfirmModal
+          onHide={toggleConfirmModal}
+          visible={showConfirmModal}
+          doSomeThing={dispatchActionGetProfileByUserName}
+        />
       </FormGroup>
-      <ChangeCurrentPostOfficeConfirmModal
-        onHide={toggleConfirmModal}
-        visible={showConfirmModal}
-        doSomeThing={dispatchActionGetProfileByUserName}
-      />
       <NavItem className="sipHeaderNoti hide">{renderHeaderNotifications()}</NavItem>
       {/* eslint-disable-next-line react/jsx-no-bind */}
       <NavItem style={{ cursor: 'pointer' }} onClick={(): void => handleChangeLanguage(lang)}>
@@ -224,21 +225,36 @@ const DefaultHeader: React.FC<Props> = (props: Props): JSX.Element => {
     </Nav>
   );
 
-  function handleChangeBuuCuc(e: { target: { value: string } }): void {
+  function handleChangeBuuCuc(event: React.ChangeEvent<HTMLInputElement>): void {
     toggleConfirmModal();
-    setTempCurrentPostOfficeCode(e.target.value);
+    setTempCurrentPostOfficeCode(event.target.value);
   }
 
   function dispatchActionGetProfileByUserName(): void {
-    dispatch(action_GET_PROFILE_BY_USERNAME({ BPOrg: tempCurrentPostOfficeCode }, {}, {}));
+    dispatch(
+      action_GET_PROFILE_BY_USERNAME(
+        { BPOrg: tempCurrentPostOfficeCode },
+        {
+          onSuccess: (response: SSOAPI.UserSapMappingGetByUsernameResponse) => {
+            // Update info after change BPOrg because need to call API again for each change
+            dispatch(
+              action_UPDATE_CURRENT_POST_OFFICE(
+                find(response.PostOffices, ['PostOfficeCode', response.BPOrg]) || postOffices[0],
+              ),
+            );
+          },
+        },
+        {},
+      ),
+    );
   }
 
   useEffect(() => {
     if (isEmpty(currentPostOfficeCode)) {
-      dispatch(action_UPDATE_CURRENT_POST_OFFICE({ currentPostOffice: postOffices[0] }));
+      dispatch(action_UPDATE_CURRENT_POST_OFFICE(postOffices[0]));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postOffices]);
+  }, [currentPostOfficeCode, postOffices]);
 
   return (
     <>
