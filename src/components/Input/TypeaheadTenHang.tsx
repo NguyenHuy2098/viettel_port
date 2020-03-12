@@ -24,8 +24,8 @@ const TypeaheadTenHang = (props: Props): JSX.Element => {
     return (
       <Menu {...menuProps}>
         {results.map((result: TypeaheadOption, index: number) => (
-          <MenuItem option={result} position={index}>
-            {result.label} -{' '}
+          <MenuItem key={get(result, 'id', '')} option={result} position={index}>
+            {get(result, 'label', '')} -{' '}
             <NumberFormat
               value={get(result, 'price', '')}
               displayType={'text'}

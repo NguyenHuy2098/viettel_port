@@ -1,29 +1,17 @@
 /* eslint-disable max-lines */
-import React, { useState, FormEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { find, get, map, size, toString } from 'lodash';
-import {
-  TabContent,
-  TabPane,
-  Nav,
-  NavLink,
-  Button,
-  Row,
-  Col,
-  Label,
-  Input,
-  ListGroup,
-  ListGroupItem,
-} from 'reactstrap';
+import { TabContent, TabPane, Nav, NavLink, Button, Row, Col, Label, Input } from 'reactstrap';
 import classnames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
-import { default as NumberFormat } from 'react-number-format';
 
 import { getValueOfNumberFormat, numberFormat } from 'utils/common';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import TypeaheadLoaiHoang from '../Input/TypeaheadLoaiHang';
+import TypeaheadTenHang from '../Input/TypeaheadTenHang';
 
 interface Props {
   removePackageItem: (index: number) => void;
@@ -82,6 +70,17 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
     };
   }
 
+  function handleChangeTypeaheadInput(valueName: string, index: number) {
+    return (input: string): void => {
+      setCurrentTab(index);
+      onChangeValue(valueName, input, index);
+      // check validate
+      if (isSubmit) {
+        setCount(count + 1);
+      }
+    };
+  }
+
   function handleChangeTypeaheadValue(valueName: string, index: number): (items: TypeaheadOption[]) => void {
     return (items: TypeaheadOption[]): void => {
       onChangeValue(valueName, get(items, '0.id', ''), index);
@@ -121,7 +120,6 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
 
   //_________________COMMODITY suggest event handle__________________________
 
-  const [countCommoditySuggest, setCountCommoditySuggest] = useState<number>(0);
   const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(0);
 
@@ -129,16 +127,9 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
     setCommoditySuggest([]);
   };
 
-  function handleKeyPressHangHoa(index: number): (event: React.KeyboardEvent<HTMLInputElement>) => void {
-    return (event: React.KeyboardEvent<HTMLInputElement>): void => {
-      setCountCommoditySuggest(countCommoditySuggest + 1);
-      setCurrentTab(index);
-    };
-  }
-
-  React.useEffect((): void => {
+  useEffect((): void => {
     const thisDescription = get(data, `[${currentTab}].Description`, '');
-    if (countCommoditySuggest > 0 && size(thisDescription) > 0) {
+    if (size(thisDescription) > 0) {
       dispatch(
         action_COMMODITY_SUGGEST(
           { q: thisDescription },
@@ -156,18 +147,14 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
       setCommoditySuggest([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countCommoditySuggest, currentTab]);
+  }, [data, currentTab]);
 
-  function handleChooseCommoditySuggest(
-    name: string,
-    price: number,
-    index: number,
-  ): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
+  function handleChooseCommoditySuggest(index: number): (items: TypeaheadOption[]) => void {
+    return (items: TypeaheadOption[]): void => {
       setCommoditySuggest([]);
-      onChangeValue('Description', name, index);
-      onChangeValue('GOODS_VALUE', toString(price), index);
-      onChangeSuggestCommodity(name, toString(price), index);
+      onChangeValue('Description', get(items, '0.id', ''), index);
+      onChangeValue('GOODS_VALUE', toString(get(items, '0.price', '')), index);
+      onChangeSuggestCommodity(get(items, '0.id', ''), toString(get(items, '0.price', '')), index);
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -281,35 +268,11 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Nội dung hàng hoá')}
-              value={item.Description}
-              onChange={handleChangeTextboxValue('Description', index)}
-              onKeyUp={handleKeyPressHangHoa(index)}
+            <TypeaheadTenHang
+              onChange={handleChooseCommoditySuggest(index)}
+              onInputChange={handleChangeTypeaheadInput('Description', index)}
+              suggestions={commoditySuggest}
             />
-            <ListGroup className="sipInputAddressDropdown">
-              {map(
-                commoditySuggest,
-                (item: CommoditySuggestedItem, suggestedIndex: number): JSX.Element => {
-                  return (
-                    <ListGroupItem
-                      tag="button"
-                      key={suggestedIndex}
-                      onClick={handleChooseCommoditySuggest(item.name, item.price, index)}
-                    >
-                      {get(item, 'name', '')} -{' '}
-                      <NumberFormat
-                        value={get(item, 'price', '')}
-                        displayType={'text'}
-                        thousandSeparator={true}
-                        suffix={' đ'}
-                      />
-                    </ListGroupItem>
-                  );
-                },
-              )}
-            </ListGroup>
             <div className="sipInputItemError">{handleErrorMessage(index, 'Description')}</div>
           </Col>
         </Row>
