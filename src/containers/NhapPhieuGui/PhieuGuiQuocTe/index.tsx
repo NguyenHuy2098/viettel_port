@@ -1172,14 +1172,15 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, provinceIdSender, districtIdSender, wardIdSender, detailAddressSender]);
+  }, [provinceIdSender, districtIdSender, wardIdSender, detailAddressSender]);
 
-  const handleChangeProvinceSender = (event: React.FormEvent<HTMLInputElement>): void => {
-    setProvinceIdSender(event.currentTarget.value);
+  const handleChangeProvinceSender = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setProvinceIdSender(value);
     setDistrictIdSender('');
     setWardIdSender('');
-    if (event.currentTarget.value !== '') {
-      setFilteredDistrictSender(filter(fullDistrict, { P: event.currentTarget.value }));
+    if (value !== '') {
+      setFilteredDistrictSender(filter(fullDistrict, { P: value }));
     } else {
       setFilteredDistrictSender([]);
     }
@@ -1187,10 +1188,11 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   };
 
-  const handleChangeDistrictSender = (event: React.FormEvent<HTMLInputElement>): void => {
-    setDistrictIdSender(event.currentTarget.value);
-    if (event.currentTarget.value !== '') {
-      payloadWardSender.ParentId = event.currentTarget.value;
+  const handleChangeDistrictSender = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setDistrictIdSender(value);
+    if (value !== '') {
+      payloadWardSender.ParentId = value;
       dispatch(
         action_GET_WARD(payloadWardSender, {
           onSuccess: (data: VtpAddressResponse): void => {
@@ -1206,8 +1208,9 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   };
 
-  const handleChangeWardSender = (event: React.FormEvent<HTMLInputElement>): void => {
-    setWardIdSender(event.currentTarget.value);
+  const handleChangeWardSender = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setWardIdSender(value);
     triggerValidateAndPriceCalculate();
   };
 

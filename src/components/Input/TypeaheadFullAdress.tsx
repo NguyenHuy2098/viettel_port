@@ -6,15 +6,15 @@ import Typeahead from './Typeahead';
 
 interface Props {
   provinceId: string;
-  handleChangeProvince: (event: React.FormEvent<HTMLInputElement>) => void;
+  handleChangeProvince: (options: TypeaheadOption[]) => void;
   filteredProvinces: VtpAddress[];
   provinceErrorMessages: string | undefined;
   districtId: string;
-  handleChangeDistrict: (event: React.FormEvent<HTMLInputElement>) => void;
+  handleChangeDistrict: (options: TypeaheadOption[]) => void;
   filteredDistricts: VtpAddress[];
   districtErrorMessages: string | undefined;
   wardId: string;
-  handleChangeWard: (event: React.FormEvent<HTMLInputElement>) => void;
+  handleChangeWard: (options: TypeaheadOption[]) => void;
   filteredWards: VtpAddress[];
   wardErrorMessages: string | undefined;
   detailAddress: string;
@@ -50,6 +50,7 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
           <Typeahead
             id="provinceSelect"
             selected={selectedProvince}
+            onChange={props.handleChangeProvince}
             options={map(props.filteredProvinces, mapVtpAddressToTypeaheadOption)}
             placeholder={t('Thành Phố / Tỉnh')}
           />
@@ -59,6 +60,7 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
           <Typeahead
             id="districtSelect"
             selected={selectedDistrict}
+            onChange={props.handleChangeDistrict}
             options={map(props.filteredDistricts, mapVtpAddressToTypeaheadOption)}
             placeholder={t('Quận / Huyện')}
           />
@@ -68,6 +70,7 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
           <Typeahead
             id="wardSelect"
             selected={selectedWard}
+            onChange={props.handleChangeWard}
             options={map(props.filteredWards, mapVtpAddressToTypeaheadOption)}
             placeholder={t('Phường / Xã')}
           />

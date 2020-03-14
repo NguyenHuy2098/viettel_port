@@ -1393,12 +1393,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, provinceIdSender, districtIdSender, wardIdSender, detailAddressSender]);
 
-  const handleChangeProvinceSender = (event: React.FormEvent<HTMLInputElement>): void => {
-    setProvinceIdSender(event.currentTarget.value);
+  const handleChangeProvinceSender = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setProvinceIdSender(value);
     setDistrictIdSender('');
     setWardIdSender('');
-    if (event.currentTarget.value !== '') {
-      setFilteredDistrictSender(filter(fullDistrict, { P: event.currentTarget.value }));
+    if (value !== '') {
+      setFilteredDistrictSender(filter(fullDistrict, { P: value }));
     } else {
       setFilteredDistrictSender([]);
     }
@@ -1406,10 +1407,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   };
 
-  const handleChangeDistrictSender = (event: React.FormEvent<HTMLInputElement>): void => {
-    setDistrictIdSender(event.currentTarget.value);
-    if (event.currentTarget.value !== '') {
-      payloadWardSender.ParentId = event.currentTarget.value;
+  const handleChangeDistrictSender = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setDistrictIdSender(value);
+    if (value !== '') {
+      payloadWardSender.ParentId = value;
       dispatch(
         action_GET_WARD(payloadWardSender, {
           onSuccess: (data: VtpAddressResponse): void => {
@@ -1425,8 +1427,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   };
 
-  const handleChangeWardSender = (event: React.FormEvent<HTMLInputElement>): void => {
-    setWardIdSender(event.currentTarget.value);
+  const handleChangeWardSender = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setWardIdSender(value);
     triggerValidateAndPriceCalculate();
   };
 
@@ -1515,12 +1518,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, provinceIdReceiver, districtIdReceiver, wardIdReceiver, detailAddressReceiver]);
 
-  const handleChangeProvinceReceiver = (event: React.FormEvent<HTMLInputElement>): void => {
-    setProvinceIdReceiver(event.currentTarget.value);
+  const handleChangeProvinceReceiver = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setProvinceIdReceiver(value);
     setDistrictIdReceiver('');
     setWardIdReceiver('');
-    if (event.currentTarget.value !== '') {
-      setFilteredDistrictReceiver(filter(fullDistrict, { P: event.currentTarget.value }));
+    if (value !== '') {
+      setFilteredDistrictReceiver(filter(fullDistrict, { P: value }));
     } else {
       setFilteredDistrictReceiver([]);
     }
@@ -1528,10 +1532,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   };
 
-  const handleChangeDistrictReceiver = (event: React.FormEvent<HTMLInputElement>): void => {
-    setDistrictIdReceiver(event.currentTarget.value);
-    if (event.currentTarget.value !== '') {
-      payloadWardReceiver.ParentId = event.currentTarget.value;
+  const handleChangeDistrictReceiver = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setDistrictIdReceiver(value);
+    if (value !== '') {
+      payloadWardReceiver.ParentId = value;
       dispatch(
         action_GET_WARD(payloadWardReceiver, {
           onSuccess: (data: VtpAddressResponse): void => {
@@ -1547,8 +1552,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     triggerValidateAndPriceCalculate();
   };
 
-  const handleChangeWardReceiver = (event: React.FormEvent<HTMLInputElement>): void => {
-    setWardIdReceiver(event.currentTarget.value);
+  const handleChangeWardReceiver = (options: TypeaheadOption[]): void => {
+    const value = get(options, '0.id', '');
+    setWardIdReceiver(value);
     triggerValidateAndPriceCalculate();
   };
 
