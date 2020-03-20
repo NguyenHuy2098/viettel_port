@@ -1116,7 +1116,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       NAME_SHIPPER: trim(hoTenSender),
       NOTE: choXemHang === '1' ? trim(ghiChu) + ' - Cho xem hàng' : trim(ghiChu) + ' - Không cho xem hàng', // Ghi chú cho bưu gửi
       OLD_CAMPAIGN_ID: 0,
-      ORDERING_PARTY: '9999999999', // Mã đối tác sử dụng dịch vụ
+      ORDERING_PARTY: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Mã đối tác sử dụng dịch vụ
       ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
       PHONE_CONSIG: trim(dienThoaiReceiver),
       PHONE_OP: trim(dienThoaiSender),
