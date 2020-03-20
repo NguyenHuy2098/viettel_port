@@ -15,6 +15,7 @@ import {
   find,
   findIndex,
   forEach,
+  isEmpty,
   join,
   map,
   reduce,
@@ -2015,6 +2016,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <TypeaheadTenHang
               onChange={handleChooseCommoditySuggest}
               onInputChange={handleChangeTypeaheadInput(setTenHang)}
+              selected={isEmpty(tenHang) ? [] : undefined}
               suggestions={commoditySuggest}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tenHang')}</div>

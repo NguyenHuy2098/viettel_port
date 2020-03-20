@@ -9,6 +9,7 @@ interface Props {
   children?: JSX.Element;
   onChange: (selected: TypeaheadOption[]) => void;
   onInputChange: (input: string, event: Event) => void;
+  selected?: TypeaheadOption[];
   suggestions: CommoditySuggestedItem[];
 }
 
@@ -50,6 +51,7 @@ const TypeaheadTenHang = (props: Props): JSX.Element => {
         price: get(item, 'price'),
       }))}
       placeholder={t('Nội dung hàng hoá')}
+      selected={props.selected}
       renderMenu={renderMenu}
     />
   );
