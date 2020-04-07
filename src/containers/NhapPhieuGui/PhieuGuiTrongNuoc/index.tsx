@@ -1,7 +1,6 @@
 /* eslint-disable max-lines */
-import React, { useEffect } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FormEvent, useState } from 'react';
 import * as yup from 'yup';
 import produce from 'immer';
 import { match } from 'react-router-dom';
@@ -10,11 +9,11 @@ import { Button, Col, Input, Label, Row } from 'reactstrap';
 import {
   concat,
   drop,
-  get,
   filter,
   find,
   findIndex,
   forEach,
+  get,
   isEmpty,
   join,
   map,
@@ -41,17 +40,17 @@ import { action_LOCATIONSUGGEST } from 'redux/LocationSuggest/actions';
 import { action_LOCATIONSUGGEST_DETAIL } from 'redux/LocationSuggestDetail/actions';
 import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
-import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
+import { select_MT_ZTMI031_INSTANE, select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
 import {
   action_GET_ADDRESS,
-  action_GET_PROVINCE,
   action_GET_DISTRICT,
+  action_GET_PROVINCE,
   action_GET_WARD,
 } from 'redux/LocationSearch/actions';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/common';
+import { getAddressNameById, getValueOfNumberFormat, numberFormat } from 'utils/common';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 
 interface Props {
@@ -225,7 +224,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     tienThuHo: yup
       .number()
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số')),
+      .typeError(t('Vui lòng nhập định dạng số'))
+      .test('giatri-nhohon-tienThuHo', 'Giá trị phải nhỏ hơn thu hộ', function(value) {
+        const { giaTri } = this.parent.giaTri;
+        return value > giaTri;
+      }),
     trongLuong: yup
       .number()
       .required(t('Vui lòng nhập trọng lượng'))
@@ -289,6 +292,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [countGetSummaryInformation, setCountGetSummaryInformation] = useState<number>(0);
   //________Yup errors list after executing validating
   const [errors, setErrors] = useState<yup.ValidationError[]>([]);
+
   //________return corresponding error according to field name
   function handleErrorMessage(errors: yup.ValidationError[], errorName: string): string | undefined {
     return get(
@@ -298,6 +302,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       'message',
     );
   }
+
   //__________________________________________________________
   const [maPhieuGui, setMaPhieuGui] = useState<string>('');
   const [maKhachHang, setMaKhachHang] = useState<string>('');
@@ -392,12 +397,14 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     COD: tienThuHo,
     NET_WEIGHT: '',
   };
+
   function addNewPackageItem(): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       draftState.push(newPackageItem);
     });
     setPackageItemArr(newArr);
   }
+
   function removePackageItem(index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       draftState.splice(index, 1);
@@ -406,6 +413,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     //trigger get Summary information dispatch
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
   }
+
   function adjustPackageItemValue(valueName: string, value: string | undefined, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], valueName, value);
@@ -413,6 +421,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPackageItemArr(newArr);
     triggerValidateAndPriceCalculate();
   }
+
   function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], 'COMMODITY_TYPE', value);
@@ -423,6 +432,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPackageItemArr(newArr);
     triggerValidateAndPriceCalculate();
   }
+
   function adjustPackageItemSuggestCommodity(descriptionValue: string, goodsValue: string, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], 'Description', descriptionValue);
@@ -431,6 +441,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPackageItemArr(newArr);
     triggerValidateAndPriceCalculate();
   }
+
   function handleActiveTab(tab: string): void {
     setActiveTab(tab);
   }
@@ -1437,6 +1448,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //__________________ address popup events
 
   const [detailSender, setDetailSender] = useState<boolean>(false);
+
   function toggleSenderAddress(): void {
     setDetailSender(!detailSender);
   }
@@ -1562,6 +1574,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //__________________ address popup events
 
   const [detailReceiver, setDetailReceiver] = useState<boolean>(false);
+
   function toggleReceiverAddress(): void {
     setDetailReceiver(!detailReceiver);
   }
@@ -2266,11 +2279,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Phiếu gửi trong nước')}</h1>
       </Row>
-      {renderSendingCoupon()}
       <Row className="mb-3 sipOrderInputRow">
         {renderSendingCouponInfo()}
         {renderPackageInfo()}
       </Row>
+      {renderSendingCoupon()}
       <div className="display-block sipTitleRightBlock text-right sipOrderBtnSave">
         <Button className="ml-2" color="primary" onClick={handleClearData}>
           <img className="mr-2" src={'../../assets/img/icon/iconRefreshWhite.svg'} alt="VTPostek" />
