@@ -29,6 +29,7 @@ import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import DatePicker from 'react-datepicker';
+import classnames from 'classnames';
 import AdditionalPackageTabItems from 'components/AdditionalPackageTabItems';
 import Typeahead from 'components/Input/Typeahead';
 import TypeaheadFullAddress from 'components/Input/TypeaheadFullAdress';
@@ -354,6 +355,21 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [cuocChinh, setCuocChinh] = useState<string>('0 đ');
   const [cuocCongThem, setCuocCongThem] = useState<string>('0 đ');
   const [tongCuoc, setTongCuoc] = useState<string>('0 đ');
+
+  // _________________ handle state tab keyboard
+  const [focusElement, setFocusElement] = React.useState<string>('');
+  const handleKeyUp = (elementName: string) => (
+    event: React.KeyboardEvent<HTMLDivElement | HTMLInputElement>,
+  ): void => {
+    const key = event.key;
+    if (['Tab', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+      setFocusElement(elementName);
+    }
+  };
+
+  const handleClearFocusElement = (): void => {
+    setFocusElement('');
+  };
 
   //__________________ package item partial events
 
@@ -1313,7 +1329,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setUncheckAllAdditionalCheckbox(false);
     // setLoaiKienHang('V3');
     setNguoiThanhToan('F1');
-    setChoXemHang('');
+    setChoXemHang('1');
     setDiemGiaoNhan('ZPP');
     setGhiChu('');
     setActiveTab('1');
@@ -1883,17 +1899,30 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <i className="fa fa-angle-right ml-1 fa-lg" />
           </Button>
         </h3>
-        <Row className="sipInputItem sipOrderAdditionalServiceContainer">
+        <Row className="sipInputItem sipOrderAdditionalServiceContainer" onClick={handleClearFocusElement}>
           {map(
             dichVuCongThemList,
             (item: TransportMethodItem): JSX.Element => {
+              const isFocus = focusElement === item.SERVICE_TYPE;
               return (
-                <Label key={item.SERVICE_TYPE} check xl="4" md="6" xs="12" className="pt-0 pb-0 mb-3">
+                <Label
+                  key={item.SERVICE_TYPE}
+                  check
+                  xl="4"
+                  md="6"
+                  xs="12"
+                  className={classnames({
+                    'pt-0 pb-0 mb-3': true,
+                    'focus-item': isFocus,
+                  })}
+                >
                   <Input
                     checked={uncheckAllAdditionalCheckbox}
                     type="checkbox"
                     value={item.SERVICE_TYPE}
                     onChange={handleChangeAdditionalService}
+                    onKeyUp={handleKeyUp(item.SERVICE_TYPE)}
+                    onKeyDown={handleClearFocusElement}
                   />
                   <span className="font-xs">{item.SERVICE_TYPE_DES}</span>
                 </Label>
@@ -1962,30 +1991,53 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  // eslint-disable-next-line max-lines-per-function
   function renderPackageType(): JSX.Element {
+    const visiting = focusElement === 'packageType';
+    const focusMap = {
+      V3: visiting && loaiKienHang === 'V3',
+      V2: visiting && loaiKienHang === 'V2',
+      V1: visiting && loaiKienHang === 'V1',
+    };
     return (
       <Row>
         <Col lg="5" xs="12" className="pr-0">
-          <Label check xs="12" className="pl-0 pr-0">
+          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['V3'] })}>
             <Input
               type="radio"
               value="V3"
               name="packageType"
               defaultChecked
+              onKeyUp={handleKeyUp('packageType')}
+              onKeyDown={handleClearFocusElement}
               onChange={handleChangeTextboxValue(setLoaiKienHang)}
             />{' '}
             {t('Bưu gửi nhỏ')}
           </Label>
         </Col>
         <Col lg="3" xs="12" className="pr-0">
-          <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setLoaiKienHang)} />{' '}
+          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['V2'] })}>
+            <Input
+              type="radio"
+              onKeyUp={handleKeyUp('packageType')}
+              onKeyDown={handleClearFocusElement}
+              onChange={handleChangeTextboxValue(setLoaiKienHang)}
+              value="V2"
+              name="packageType"
+            />{' '}
             {t('Thư')}
           </Label>
         </Col>
         <Col lg="4" xs="12" className="pr-0">
-          <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V1" name="packageType" onChange={handleChangeTextboxValue(setLoaiKienHang)} />{' '}
+          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['V1'] })}>
+            <Input
+              onKeyUp={handleKeyUp('packageType')}
+              onChange={handleChangeTextboxValue(setLoaiKienHang)}
+              onKeyDown={handleClearFocusElement}
+              type="radio"
+              value="V1"
+              name="packageType"
+            />{' '}
             {t('Kiện')}
           </Label>
         </Col>
@@ -2108,6 +2160,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function renderFeePayment(): JSX.Element {
+    const visiting = focusElement === 'orderPayment';
+    const focusMap = {
+      F1: visiting && nguoiThanhToan === 'F1',
+      F2: visiting && nguoiThanhToan === 'F2',
+    };
     return (
       <div className="sipInputBlock">
         <h3>{t('Tiền phải thu & thanh toán cước')}</h3>
@@ -2131,11 +2188,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="4" xs="6">
-            <Label check xs="12" className="pl-0 pr-0">
+            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['F1'] })}>
               <Input
                 type="radio"
                 value="F1"
                 name="payer"
+                onKeyUp={handleKeyUp('orderPayment')}
+                onKeyDown={handleClearFocusElement}
                 defaultChecked
                 onChange={handleChangeTextboxValue(setNguoiThanhToan)}
               />{' '}
@@ -2143,8 +2202,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Label>
           </Col>
           <Col lg="4" xs="6">
-            <Label check xs="12" className="pl-0 pr-0">
-              <Input type="radio" value="F2" name="payer" onChange={handleChangeTextboxValue(setNguoiThanhToan)} />{' '}
+            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['F2'] })}>
+              <Input
+                type="radio"
+                onKeyUp={handleKeyUp('orderPayment')}
+                onKeyDown={handleClearFocusElement}
+                value="F2"
+                name="payer"
+                onChange={handleChangeTextboxValue(setNguoiThanhToan)}
+              />{' '}
               {t('Người nhận')}
             </Label>
           </Col>
@@ -2155,28 +2221,37 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function renderDeliveryRequirement(): JSX.Element {
+    const visiting = focusElement === 'deliveryRequirement';
+    const focusMap = {
+      1: visiting && choXemHang === '1',
+      2: visiting && choXemHang === '2',
+    };
     return (
       <div className="sipInputBlock">
         <h3>{t('Yêu cầu giao bưu gửi')}</h3>
         <Row className="sipInputItem">
           <Col lg="6" xs="12">
-            <Label check xs="12" className="pl-0 pr-0">
+            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['1'] })}>
               <Input
                 type="radio"
                 name="deliveryRequirement"
                 value="1"
                 defaultChecked
                 onChange={handleChangeTextboxValue(setChoXemHang)}
+                onKeyUp={handleKeyUp('deliveryRequirement')}
+                onKeyDown={handleClearFocusElement}
               />{' '}
               {t('Cho khách xem hàng')}
             </Label>
           </Col>
           <Col lg="6" xs="12">
-            <Label check xs="12" className="pl-0 pr-0">
+            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['2'] })}>
               <Input
                 type="radio"
                 name="deliveryRequirement"
                 value="2"
+                onKeyUp={handleKeyUp('deliveryRequirement')}
+                onKeyDown={handleClearFocusElement}
                 onChange={handleChangeTextboxValue(setChoXemHang)}
               />{' '}
               {t('Không cho khách xem hàng')}
@@ -2275,7 +2350,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   return (
-    <>
+    <div className="phieuGuiTrongNuoc" onKeyDown={handleClearFocusElement}>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Phiếu gửi trong nước')}</h1>
       </Row>
@@ -2305,7 +2380,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       ) : (
         <></>
       )}
-    </>
+    </div>
   );
 };
 

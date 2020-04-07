@@ -78,6 +78,35 @@
   }
 }
 
+.phieuGuiTrongNuoc {
+  .sipFlatBtn {
+    &:hover {
+      color: $secondary!important;
+      font-weight: bolder;
+    }
+    &:focus {
+      color: $secondary!important;
+      font-weight: bolder;
+    }
+  }
+  .form-check-label {
+    &:hover {
+      color: $secondary!important;
+    }
+    .font-xs {
+      &:hover {
+        color: $secondary!important;
+      }
+      &:focus {
+        color: $secondary!important;
+      }
+    }
+  }
+  .focus-item {
+    color: $secondary!important;
+  }
+}
+
 .sipOrderAdditionalServiceContainer {
   label.form-check-label {
     position: relative;
