@@ -5,6 +5,7 @@ import Typeahead from './Typeahead';
 
 interface Props {
   children?: JSX.Element;
+  value?: string;
   loaiKienHang?: string;
   onChange?: (selected: TypeaheadOption[]) => void;
 }
@@ -63,15 +64,24 @@ const TypeaheadLoaiHang = (props: Props): JSX.Element => {
     return `${get(option, 'id')} - ${get(option, 'label')}`;
   }
 
+  const filterByFields = ['label'];
+
+  const filterByCallback = (): boolean => {
+    return true;
+  };
+
+  const onchange = (): void => {
+    props.value = '';
+  };
+
   return (
     <Typeahead
       id="selectProductType"
-      // defaultSelected={[
-      //   {
-      //     id: 'V04',
-      //     label: 'Thư / Tài liệu',
-      //   },
-      // ]}
+      onChange={onchange}
+      filterBy={props.value ? filterByCallback : filterByFields}
+      defaultSelected={options.filter(item => {
+        return item.id === props.value;
+      })}
       // filterBy={() => true}
       labelKey={renderLabelKey}
       options={options}

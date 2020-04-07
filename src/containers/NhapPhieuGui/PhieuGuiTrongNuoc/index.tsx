@@ -23,6 +23,7 @@ import {
   slice,
   toString,
   trim,
+  first,
 } from 'lodash';
 import moment from 'moment';
 import useIsMounted from 'react-is-mounted-hook';
@@ -818,7 +819,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function handleChangeTypeaheadValue(setValueFunction: Function): (items: TypeaheadOption[]) => void {
     return (items: TypeaheadOption[]): void => {
-      setValueFunction(get(items, `0.id`, ''));
+      setValueFunction(get(first(items), `id`, ''));
       triggerValidateAndPriceCalculate();
     };
   }
@@ -2046,7 +2047,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  function renderPackageInfoDetail(): JSX.Element {
+  function renderPackageInfoDetail(loaiHangHoa: string): JSX.Element {
     return (
       <div className="sipInputBlock">
         <h3>
@@ -2069,7 +2070,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <TypeaheadLoaiHang loaiKienHang={loaiKienHang} onChange={handleChangeTypeaheadValue(setLoaiHangHoa)} />
+            <TypeaheadLoaiHang
+              loaiKienHang={loaiKienHang}
+              onChange={handleChangeTypeaheadValue(setLoaiHangHoa)}
+              value={loaiHangHoa}
+            />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -2325,11 +2330,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //   );
   // }
 
-  function renderPackageInfo(): JSX.Element {
+  function renderPackageInfo(loaiHangHoa: string): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
         <div className="sipContentContainer">
-          {renderPackageInfoDetail()}
+          {renderPackageInfoDetail(loaiHangHoa)}
           <AdditionalPackageTabItems
             removePackageItem={removePackageItem}
             data={packageItemArr}
@@ -2356,7 +2361,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <Row className="mb-3 sipOrderInputRow">
         {renderSendingCouponInfo()}
-        {renderPackageInfo()}
+        {renderPackageInfo(loaiHangHoa)}
       </Row>
       {renderSendingCoupon()}
       <div className="display-block sipTitleRightBlock text-right sipOrderBtnSave">
