@@ -371,7 +371,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
               <NavLink
                 className={classnames({
                   active: activeTab === toString(index + 1),
-                  deletablePackageItem: size(data) === 1,
+                  deletablePackageItem: true,
                 })}
                 onClick={toggleTab(toString(index + 1))}
                 key={index}
