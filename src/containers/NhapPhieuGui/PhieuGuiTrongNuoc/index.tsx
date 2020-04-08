@@ -791,7 +791,20 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count]);
 
-  function triggerValidateAndPriceCalculate(): void {
+  function triggerValidateAndPriceCalculate(fieldName?: string): void {
+    const ignoreFields = [
+      'senderPhoneInput',
+      'deliveryRequirementNoteInput',
+      'locationSenderInput',
+      'locationReceiverInput',
+      'senderNameInput',
+      'customerCodeInput',
+      'maPhieuGuiInput',
+    ];
+    if (fieldName && ignoreFields.includes(fieldName)) {
+      return;
+    }
+
     //trigger get Summary information dispatch
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
     // check validate
@@ -800,19 +813,29 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     }
   }
 
+  function triggerFollow(fieldName: string, value: string): void {
+    // Neu Loai kien hang la 'Thu', Loai hang = V04 - Thu tai lieu
+    if (fieldName === 'packageType' && value === 'V2') {
+      setLoaiHangHoa('V04');
+    }
+  }
+
   function handleChangeTextboxValue(
     setValueFunction: Function,
   ): (event: React.FormEvent<HTMLInputElement> | Event) => void {
     return (event: React.FormEvent<HTMLInputElement> | Event): void => {
-      setValueFunction(get(event, 'currentTarget.value', ''));
-      triggerValidateAndPriceCalculate();
+      const value = get(event, 'currentTarget.value', '');
+      const fieldName = get(event, 'currentTarget.name', '');
+      setValueFunction(value);
+      triggerValidateAndPriceCalculate(fieldName);
+      triggerFollow(fieldName, value);
     };
   }
 
-  function handleChangeTypeaheadInput(setValueFunction: Function) {
+  function handleChangeTypeaheadInput(setValueFunction: Function, fieldName?: string) {
     return (input: string): void => {
       setValueFunction(input);
-      triggerValidateAndPriceCalculate();
+      triggerValidateAndPriceCalculate(fieldName);
     };
   }
 
@@ -1327,7 +1350,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPhuongThucVanChuyen(get(loaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
-    // setLoaiKienHang('V3');
+    setLoaiKienHang('V3');
+    setLoaiHangHoa('V01');
     setNguoiThanhToan('F1');
     setChoXemHang('1');
     setDiemGiaoNhan('ZPP');
@@ -1669,6 +1693,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <Input
               type="text"
+              name="customerCodeInput"
               placeholder={t('Nhập mã khách hàng')}
               value={maKhachHang}
               onChange={handleChangeTextboxValue(setMaKhachHang)}
@@ -1684,6 +1709,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <Input
               type="text"
+              name="senderPhoneInput"
               placeholder={t('Nhập số điện thoại')}
               value={dienThoaiSender}
               onChange={handleChangeTextboxValue(setDienThoaiSender)}
@@ -1699,6 +1725,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <Input
               type="text"
+              name="senderNameInput"
               placeholder={t('Nhập họ tên')}
               value={hoTenSender}
               onChange={handleChangeTextboxValue(setHoTenSender)}
@@ -1715,8 +1742,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Col lg="8">
               <Typeahead
                 id="locationSender"
+                inputProps={{ name: 'locationSenderInput' }}
                 onChange={handleChooseLocationSuggestSender}
-                onInputChange={handleChangeTypeaheadInput(setDiaChiSender)}
+                onInputChange={handleChangeTypeaheadInput(setDiaChiSender, 'locationSenderInput')}
                 options={map(locationSuggestSender, location => ({
                   id: get(location, 'id'),
                   label: get(location, 'name'),
@@ -1808,8 +1836,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Col lg="8">
               <Typeahead
                 id="locationReceiver"
+                inputProps={{ name: 'locationReceiverInput' }}
                 onChange={handleChooseLocationSuggestReceiver}
-                onInputChange={handleChangeTypeaheadInput(setDiaChiReceiver)}
+                onInputChange={handleChangeTypeaheadInput(setDiaChiReceiver, 'locationReceiverInput')}
                 options={map(locationSuggestReceiver, location => ({
                   id: get(location, 'id'),
                   label: get(location, 'name'),
@@ -1945,7 +1974,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Mã phiếu gửi')}
               </Label>
               <Col lg="8">
-                <Input type="text" value={maPhieuGui} onChange={handleChangeTextboxValue(setMaPhieuGui)} />
+                <Input
+                  name="maPhieuGuiInput"
+                  type="text"
+                  value={maPhieuGui}
+                  onChange={handleChangeTextboxValue(setMaPhieuGui)}
+                />
               </Col>
             </Row>
           </div>
@@ -1993,21 +2027,21 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function renderPackageType(): JSX.Element {
-    const visiting = focusElement === 'packageType';
-    const focusMap = {
-      V3: visiting && loaiKienHang === 'V3',
-      V2: visiting && loaiKienHang === 'V2',
-      V1: visiting && loaiKienHang === 'V1',
+    const isFocused = focusElement === 'packageType';
+    const checkMap = {
+      V3: loaiKienHang === 'V3',
+      V2: loaiKienHang === 'V2',
+      V1: loaiKienHang === 'V1',
     };
     return (
       <Row>
         <Col lg="5" xs="12" className="pr-0">
-          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['V3'] })}>
+          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocused && checkMap['V3'] })}>
             <Input
               type="radio"
               value="V3"
               name="packageType"
-              defaultChecked
+              checked={checkMap['V3']}
               onKeyUp={handleKeyUp('packageType')}
               onKeyDown={handleClearFocusElement}
               onChange={handleChangeTextboxValue(setLoaiKienHang)}
@@ -2016,26 +2050,28 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           </Label>
         </Col>
         <Col lg="3" xs="12" className="pr-0">
-          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['V2'] })}>
+          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocused && checkMap['V2'] })}>
             <Input
               type="radio"
               onKeyUp={handleKeyUp('packageType')}
               onKeyDown={handleClearFocusElement}
               onChange={handleChangeTextboxValue(setLoaiKienHang)}
               value="V2"
+              checked={checkMap['V2']}
               name="packageType"
             />{' '}
             {t('Thư')}
           </Label>
         </Col>
         <Col lg="4" xs="12" className="pr-0">
-          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['V1'] })}>
+          <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocused && checkMap['V1'] })}>
             <Input
               onKeyUp={handleKeyUp('packageType')}
               onChange={handleChangeTextboxValue(setLoaiKienHang)}
               onKeyDown={handleClearFocusElement}
               type="radio"
               value="V1"
+              checked={checkMap['V1']}
               name="packageType"
             />{' '}
             {t('Kiện')}
@@ -2046,7 +2082,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  function renderPackageInfoDetail(loaiHangHoa: string): JSX.Element {
+  function renderPackageInfoDetail(): JSX.Element {
     return (
       <div className="sipInputBlock">
         <h3>
@@ -2165,9 +2201,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   // eslint-disable-next-line max-lines-per-function
   function renderFeePayment(): JSX.Element {
     const visiting = focusElement === 'orderPayment';
-    const focusMap = {
-      F1: visiting && nguoiThanhToan === 'F1',
-      F2: visiting && nguoiThanhToan === 'F2',
+    const checkMap = {
+      F1: nguoiThanhToan === 'F1',
+      F2: nguoiThanhToan === 'F2',
     };
     return (
       <div className="sipInputBlock">
@@ -2192,27 +2228,36 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="4" xs="6">
-            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['F1'] })}>
+            <Label
+              check
+              xs="12"
+              className={classnames({ 'pl-0 pr-0': true, 'focus-item': visiting && checkMap['F1'] })}
+            >
               <Input
                 type="radio"
                 value="F1"
                 name="payer"
                 onKeyUp={handleKeyUp('orderPayment')}
                 onKeyDown={handleClearFocusElement}
-                defaultChecked
+                checked={checkMap['F1']}
                 onChange={handleChangeTextboxValue(setNguoiThanhToan)}
               />{' '}
               {t('Người gửi')}
             </Label>
           </Col>
           <Col lg="4" xs="6">
-            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['F2'] })}>
+            <Label
+              check
+              xs="12"
+              className={classnames({ 'pl-0 pr-0': true, 'focus-item': visiting && checkMap['F2'] })}
+            >
               <Input
                 type="radio"
                 onKeyUp={handleKeyUp('orderPayment')}
                 onKeyDown={handleClearFocusElement}
                 value="F2"
                 name="payer"
+                checked={checkMap['F2']}
                 onChange={handleChangeTextboxValue(setNguoiThanhToan)}
               />{' '}
               {t('Người nhận')}
@@ -2225,22 +2270,26 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   function renderDeliveryRequirement(): JSX.Element {
-    const visiting = focusElement === 'deliveryRequirement';
-    const focusMap = {
-      1: visiting && choXemHang === '1',
-      2: visiting && choXemHang === '2',
+    const isFocus = focusElement === 'deliveryRequirement';
+    const checkMap = {
+      choXemHang: choXemHang === '1',
+      khongChoXemHang: choXemHang === '2',
     };
     return (
       <div className="sipInputBlock">
         <h3>{t('Yêu cầu giao bưu gửi')}</h3>
         <Row className="sipInputItem">
           <Col lg="6" xs="12">
-            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['1'] })}>
+            <Label
+              check
+              xs="12"
+              className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocus && checkMap['choXemHang'] })}
+            >
               <Input
                 type="radio"
                 name="deliveryRequirement"
                 value="1"
-                defaultChecked
+                checked={checkMap['choXemHang']}
                 onChange={handleChangeTextboxValue(setChoXemHang)}
                 onKeyUp={handleKeyUp('deliveryRequirement')}
                 onKeyDown={handleClearFocusElement}
@@ -2249,11 +2298,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Label>
           </Col>
           <Col lg="6" xs="12">
-            <Label check xs="12" className={classnames({ 'pl-0 pr-0': true, 'focus-item': focusMap['2'] })}>
+            <Label
+              check
+              xs="12"
+              className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocus && checkMap['khongChoXemHang'] })}
+            >
               <Input
                 type="radio"
                 name="deliveryRequirement"
                 value="2"
+                checked={checkMap['khongChoXemHang']}
                 onKeyUp={handleKeyUp('deliveryRequirement')}
                 onKeyDown={handleClearFocusElement}
                 onChange={handleChangeTextboxValue(setChoXemHang)}
@@ -2295,6 +2349,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <Input
               type="text"
+              name="deliveryRequirementNoteInput"
               value={ghiChu}
               onChange={handleChangeTextboxValue(setGhiChu)}
               placeholder={t('Nhập ghi chú')}
@@ -2329,11 +2384,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //   );
   // }
 
-  function renderPackageInfo(loaiHangHoa: string): JSX.Element {
+  function renderPackageInfo(): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
         <div className="sipContentContainer">
-          {renderPackageInfoDetail(loaiHangHoa)}
+          {renderPackageInfoDetail()}
           <AdditionalPackageTabItems
             removePackageItem={removePackageItem}
             data={packageItemArr}
@@ -2354,13 +2409,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   return (
-    <div className="phieuGuiTrongNuoc" onKeyDown={handleClearFocusElement}>
+    <div className="phieuGuiTrongNuoc" onKeyDown={handleClearFocusElement} onClick={handleClearFocusElement}>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Phiếu gửi trong nước')}</h1>
       </Row>
       <Row className="mb-3 sipOrderInputRow">
         {renderSendingCouponInfo()}
-        {renderPackageInfo(loaiHangHoa)}
+        {renderPackageInfo()}
       </Row>
       {renderSendingCoupon()}
       <div className="display-block sipTitleRightBlock text-right sipOrderBtnSave">
