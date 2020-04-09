@@ -1772,7 +1772,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Label>
             <Col lg="8">
               <TypeaheadFullAddress
-                focus={focusAdress == 'sender' ? true : false}
+                focus={focusAdress === 'sender' ? true : false}
                 provinceId={provinceIdSender}
                 handleChangeProvince={handleChangeProvinceSender}
                 filteredProvinces={filteredProvinceSender}
@@ -1868,7 +1868,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Col lg="8">
               <TypeaheadFullAddress
                 provinceId={provinceIdReceiver}
-                focus={focusAdress == 'receiver' ? true : false}
+                focus={focusAdress === 'receiver' ? true : false}
                 handleChangeProvince={handleChangeProvinceReceiver}
                 filteredProvinces={filteredProvinceReceiver}
                 provinceErrorMessages={handleErrorMessage(errors, 'provinceIdReceiver')}
