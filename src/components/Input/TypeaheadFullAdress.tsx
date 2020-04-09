@@ -20,6 +20,7 @@ interface Props {
   detailAddress: string;
   onChangeDetailAddress: (event: React.FormEvent<HTMLInputElement>) => void;
   detailAddressErrorMessages: string | undefined;
+  focus?: boolean;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -78,6 +79,8 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
         </Col>
       </Row>
       <Input
+        id="detailAddress"
+        autoFocus={props.focus}
         type="text"
         placeholder={t('Nhập địa chỉ (tên đường, ngõ hẻm, số nhà)')}
         value={props.detailAddress}

@@ -95,6 +95,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [provinceReceiverEdit, setProvinceReceiverEdit] = useState<string>('');
   const [districtReceiverEdit, setDistrictReceiverEdit] = useState<string>('');
   const [wardReceiverEdit, setWardReceiverEdit] = useState<string>('');
+  const [focusAdress, setFocusAdress] = useState<string>('');
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -337,7 +338,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V01');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('F1');
   const [choXemHang, setChoXemHang] = useState<string>('1');
-  const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZPP');
+  const [diemGiaoNhan, setDiemGiaoNhan] = useState<string>('ZPD');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
 
@@ -961,6 +962,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       ),
     );
     setLocationSuggestSender([]);
+    setFocusAdress('sender');
   }
 
   //________________________________RECEIVER
@@ -1055,6 +1057,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       ),
     );
     setLocationSuggestReceiver([]);
+    setFocusAdress('receiver');
   }
 
   //_________________COMMODITY suggest event handle__________________________
@@ -1769,6 +1772,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Label>
             <Col lg="8">
               <TypeaheadFullAddress
+                focus={focusAdress == 'sender' ? true : false}
                 provinceId={provinceIdSender}
                 handleChangeProvince={handleChangeProvinceSender}
                 filteredProvinces={filteredProvinceSender}
@@ -1864,6 +1868,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Col lg="8">
               <TypeaheadFullAddress
                 provinceId={provinceIdReceiver}
+                focus={focusAdress == 'receiver' ? true : false}
                 handleChangeProvince={handleChangeProvinceReceiver}
                 filteredProvinces={filteredProvinceReceiver}
                 provinceErrorMessages={handleErrorMessage(errors, 'provinceIdReceiver')}
@@ -2336,7 +2341,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Điểm giao nhận')}
           </Label>
           <Col lg="8">
-            <Input type="select" value={diemGiaoNhan} onChange={handleChangeTextboxValue(setDiemGiaoNhan)}>
+            <Input type="select" defaultValue={diemGiaoNhan} onChange={handleChangeTextboxValue(setDiemGiaoNhan)}>
               <option value="ZPP">{t('Giao hàng tại bưu cục')}</option>
               <option value="ZPD">{t('Giao hàng tại nhà')}</option>
             </Input>
