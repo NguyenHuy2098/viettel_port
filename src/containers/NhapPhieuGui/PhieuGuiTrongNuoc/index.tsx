@@ -95,7 +95,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [provinceReceiverEdit, setProvinceReceiverEdit] = useState<string>('');
   const [districtReceiverEdit, setDistrictReceiverEdit] = useState<string>('');
   const [wardReceiverEdit, setWardReceiverEdit] = useState<string>('');
-  const [focusAdress, setFocusAdress] = useState<string>('');
+  const [focusAddress, setFocusAdress] = useState<string>('');
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -802,16 +802,18 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       'customerCodeInput',
       'maPhieuGuiInput',
     ];
+
+    // check validate
+    if (isSubmit) {
+      setCount(count + 1);
+    }
+
     if (fieldName && ignoreFields.includes(fieldName)) {
       return;
     }
 
     //trigger get Summary information dispatch
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
-    // check validate
-    if (isSubmit) {
-      setCount(count + 1);
-    }
   }
 
   function triggerFollow(fieldName: string, value: string): void {
@@ -1772,7 +1774,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Label>
             <Col lg="8">
               <TypeaheadFullAddress
-                focus={focusAdress === 'sender' ? true : false}
+                focus={focusAddress === 'sender'}
                 provinceId={provinceIdSender}
                 handleChangeProvince={handleChangeProvinceSender}
                 filteredProvinces={filteredProvinceSender}
@@ -1868,7 +1870,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <Col lg="8">
               <TypeaheadFullAddress
                 provinceId={provinceIdReceiver}
-                focus={focusAdress === 'receiver' ? true : false}
+                focus={focusAddress === 'receiver'}
                 handleChangeProvince={handleChangeProvinceReceiver}
                 filteredProvinces={filteredProvinceReceiver}
                 provinceErrorMessages={handleErrorMessage(errors, 'provinceIdReceiver')}
