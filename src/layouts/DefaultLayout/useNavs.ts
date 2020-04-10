@@ -55,9 +55,6 @@ const nav = (t: TFunction): any => {
         name: t('Nhận tại bưu cục gốc'),
         icon: 'sipIcon-edit',
         url: routesMap.NHAP_PHIEU_GUI,
-        class: classNames({
-          hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
-        }),
         children: [
           {
             name: t('Phiếu gửi trong nước'),
@@ -66,14 +63,23 @@ const nav = (t: TFunction): any => {
           {
             name: 'Phiếu gửi quốc tế',
             url: routesMap.NHAP_PHIEU_GUI_QUOC_TE,
+            class: classNames({
+              hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+            }),
           },
           {
             name: t('Nhập từ file Excel'),
             url: routesMap.NHAP_TU_FILE_EXCEL,
+            class: classNames({
+              hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+            }),
           },
           {
             name: t('Quét mã bưu gửi'),
             url: routesMap.NHAN_TAI_BUU_CUC_GOC,
+            class: classNames({
+              hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+            }),
           },
         ],
       },
