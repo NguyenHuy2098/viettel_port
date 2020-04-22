@@ -250,7 +250,10 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Thời gian'),
-        accessor: 'TIME_DATE',
+        // accessor: 'TIME_DATE',
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
+          return moment(get(row, 'original.TIME_DATE'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY HH:mm:ss');
+        },
       },
       {
         Header: t('Tác động'),
