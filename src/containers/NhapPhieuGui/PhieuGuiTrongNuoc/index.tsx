@@ -227,10 +227,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     tienThuHo: yup
       .number()
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
-      .typeError(t('Vui lòng nhập định dạng số'))
-      .test('giatri-nhohon-tienThuHo', 'Giá trị phải nhỏ hơn thu hộ', function(value) {
-        return value > this.parent.giaTri;
-      }),
+      .typeError(t('Vui lòng nhập định dạng số')),
     trongLuong: yup
       .number()
       .required(t('Vui lòng nhập trọng lượng'))
