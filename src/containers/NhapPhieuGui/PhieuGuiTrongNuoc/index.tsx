@@ -1356,7 +1356,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setLoaiHangHoa('V01');
     setNguoiThanhToan('F1');
     setChoXemHang('1');
-    setDiemGiaoNhan('ZPP');
+    setDiemGiaoNhan('ZPD');
     setGhiChu('');
     setActiveTab('1');
     setPackageItemArr([]);
