@@ -42,12 +42,6 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const [districtReceiver, setDistrictReceiver] = useState<string>('');
   const [wardReceiver, setWardReceiver] = useState<string>('');
 
-  const torParentTypeName: { [index: string]: string } = {
-    ZC1: 'Bảng kê',
-    ZC2: 'Tải',
-    ZC3: 'Chuyến thư',
-  };
-
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
     if (packageInformation) {
@@ -286,7 +280,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           const type = get(row, 'original.Tor_parent_type');
           const tor = get(row, 'original.Tor_parent');
-          return <>{type && tor ? torParentTypeName[type] + ' ' + tor : ''}</>;
+          return <>{type && tor ? t(type) + ' ' + tor : ''}</>;
         },
       },
       {
