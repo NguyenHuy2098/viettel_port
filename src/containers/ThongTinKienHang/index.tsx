@@ -42,6 +42,12 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const [districtReceiver, setDistrictReceiver] = useState<string>('');
   const [wardReceiver, setWardReceiver] = useState<string>('');
 
+  const torParentTypeName: { [index: string]: string } = {
+    ZC1: 'Bảng kê',
+    ZC2: 'Tải',
+    ZC3: 'Chuyến thư',
+  };
+
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
     if (packageInformation) {
@@ -243,6 +249,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const columns = useMemo(
+    // eslint-disable-next-line max-lines-per-function
     () => [
       {
         Header: t('Mã bưu cục'),
@@ -277,7 +284,9 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
         Header: t('Thông tin bảng kê'),
         accessor: '',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Thiếu api</>;
+          const type = get(row, 'original.Tor_parent_type');
+          const tor = get(row, 'original.Tor_parent');
+          return <>{type && tor ? torParentTypeName[type] + ' ' + tor : ''}</>;
         },
       },
       {
@@ -485,17 +494,19 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Giá trị')}:
             </Col>
             <Col xs="12" sm="8">
-              50.000 đ (Api trả thiếu)
+              {packageInformation &&
+                packageInformation.GoodValue &&
+                parseFloat(packageInformation.GoodValue).toFixed(2)}
             </Col>
           </Row>
-          <Row className="sipInputItem">
-            <Col xs="12" sm="4">
-              {t('Cước phí')}:
-            </Col>
-            <Col xs="12" sm="8">
-              50.000 đ (chưa có yêu cầu)
-            </Col>
-          </Row>
+          {/*<Row className="sipInputItem">*/}
+          {/*  <Col xs="12" sm="4">*/}
+          {/*    {t('Cước phí')}:*/}
+          {/*  </Col>*/}
+          {/*  <Col xs="12" sm="8">*/}
+          {/*    50.000 đ (chưa có yêu cầu)*/}
+          {/*  </Col>*/}
+          {/*</Row>*/}
           <Row className="sipInputItem">
             <Col xs="12" sm="4">
               {t('Tiền thu hộ')}:

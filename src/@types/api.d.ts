@@ -3,10 +3,12 @@ declare namespace API {
   export interface BKINPUT {
     ID?: string;
   }
+
   export interface CHILD {
     USER?: string;
     NO_ITEM?: string;
   }
+
   export interface Child {
     TOR_ID?: string;
     TOR_TYPE?: string;
@@ -22,6 +24,7 @@ declare namespace API {
     DESCRIPTION?: string;
     child_count?: string;
   }
+
   export interface Childs {
     TOR_ID?: string;
     TOR_TYPE?: string;
@@ -29,14 +32,17 @@ declare namespace API {
     LIFECYCLE?: string;
     DESCRIPTION?: string;
   }
+
   export interface Collection {
     header?: HEADERMTDETAILRECEIVERM;
     list?: LISTMTDETAILRECEIVERM[];
     Paging?: PagingZTMI054;
   }
+
   export interface EVTRQIDERROR {
     TRQ_ID?: string;
   }
+
   export interface Execution {
     Event?: string;
     TIME_DATE?: string;
@@ -49,18 +55,22 @@ declare namespace API {
     NAME_CHANGED_BY?: string;
     MOB_CHANGED_BY?: string;
   }
+
   export interface GenUserRequest {
     Number?: number; // int32
   }
+
   export interface GenUserVoSoResponse {
     Users?: UserVoSoViewModel[];
   }
+
   export interface HEADER {
     MA_BUU_CUC?: string;
     USER_ID?: string;
     BK_MONTH?: string;
     BK_YEAR?: string;
   }
+
   export interface HEADERMTDETAILRECEIVER {
     BK_ID?: string;
     BK_YEAR?: string;
@@ -70,6 +80,7 @@ declare namespace API {
     CRE_TIME?: string;
     UDP_TIME?: string;
   }
+
   export interface HEADERMTDETAILRECEIVERM {
     BK_ID?: string;
     BK_YEAR?: string;
@@ -79,6 +90,7 @@ declare namespace API {
     CRE_TIME?: string;
     UDP_TIME?: string;
   }
+
   export interface ITEMBK {
     LINE_ITEM?: string;
     KHOAN_MUC?: string;
@@ -104,9 +116,11 @@ declare namespace API {
     SUM_AMOUNT_INIT?: string;
     NOTE?: string;
   }
+
   export interface ITEMDELBK {
     LINE?: string;
   }
+
   export interface ITEMMTZFII016OUT {
     ZUONR?: number; // int32
     BUDAT?: number; // int32
@@ -119,6 +133,7 @@ declare namespace API {
     AMT_D?: string;
     BUDAT_D?: string;
   }
+
   export interface ITEMRequestZTMI028 {
     /**
      * Mã bưu gửi bị lập biên bản
@@ -129,28 +144,34 @@ declare namespace API {
      */
     CONTENT?: string;
   }
+
   export interface ITFDELIVERY {
     CODE?: string;
     DESCRIPTION?: string;
   }
+
   export interface ITFPICK {
     CODE?: string;
     DESCRIPTION?: string;
   }
+
   export interface ITSFU {
     CODE?: number; // int32
     DESCRIPTION?: string;
   }
+
   export interface ITSFWO {
     CODE?: number; // int32
     DESCRIPTION?: string;
   }
+
   export interface IVTRQID {
     /**
      * Mã đơn hàng được phan công
      */
     TRQ_ID?: string;
   }
+
   export interface ItemMTZTMI011OUT {
     /**
      * Số tiền tương ứng với mã dịch vụ
@@ -165,11 +186,13 @@ declare namespace API {
      */
     CHARGE_TYPE?: string;
   }
+
   export interface ItemMTZTMI031OUT {
     AMOUNT_ITEM?: string;
     CURRENCY_ITEM?: string;
     CHARGE_TYPE?: string;
   }
+
   export interface ItemZTMI011 {
     item_cat?: string;
     Gross_weight?: string;
@@ -186,6 +209,7 @@ declare namespace API {
     Commodity_type?: string;
     Commodity_code?: string;
   }
+
   export interface ItemZTMI012 {
     Flag?: string;
     Packaging_material?: string;
@@ -208,16 +232,19 @@ declare namespace API {
     Commodity_type?: string;
     Commodity_code?: string;
   }
+
   export interface ItemZTMI094 {
     /**
      * Mã  FU - FU(30 và 58) - Freight_Unit(31)
      */
     FU_ID?: string;
   }
+
   export interface LIST {
     km_id?: string;
     km_text?: string;
   }
+
   export interface LISTMTDETAILRECEIVER {
     LINE_ITEM?: string;
     KHOAN_MUC?: string;
@@ -243,6 +270,7 @@ declare namespace API {
     SUM_AMOUNT_INIT?: string;
     NOTE?: string;
   }
+
   export interface LISTMTDETAILRECEIVERM {
     LINE_ITEM?: string;
     KHOAN_MUC?: string;
@@ -268,6 +296,7 @@ declare namespace API {
     SUM_AMOUNT_INIT?: string;
     NOTE?: string;
   }
+
   export interface ListMTBKRECEIVER {
     BK_ID?: string;
     BK_YEAR?: string;
@@ -278,12 +307,14 @@ declare namespace API {
     UDP_TIME?: string;
     UPD_BY?: string;
   }
+
   export interface LocationAddEsRequest {
     I?: string;
     N?: string;
     P?: string;
     type?: 1 | 2 | 3; // int32
   }
+
   export interface LocationAddEsResponse {
     Status?: boolean;
     ErrorCode?: 0 | 1 | 2 | 3 | 4; // int32
@@ -291,18 +322,21 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface LocationAutoAddEsRequest {
     /**
      * Loại địa chỉ: 1-Tỉnh, 2-Huyện, 3-Xã
      */
     typeLocation?: 1 | 2 | 3; // int32
   }
+
   export interface LocationEsModel {
     I?: string;
     N?: string;
     P?: string;
     type?: 1 | 2 | 3; // int32
   }
+
   export interface LocationGetsEsRequest {
     /**
      * Loại địa chỉ: 0: Tất cả, 1-Tỉnh, 2-Huyện, 3-Xã
@@ -313,6 +347,7 @@ declare namespace API {
     PageIndex?: number; // int32
     PageSize?: number; // int32
   }
+
   export interface LocationSearchEsResponse {
     LocationModels?: LocationEsModel[];
     PageIndex?: number; // int32
@@ -324,6 +359,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI011Request {
     /**
      * Mã loại đơn hàng: V001: Đơn hàng xã phường/xã của điểm nhận hàng
@@ -379,6 +415,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI011Response {
     /**
      *
@@ -390,6 +427,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI012Request {
     Order_Type?: string;
     Buyers_Reference_Number?: string;
@@ -454,6 +492,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI012Response {
     MT_ZTMI012_OUT?: MTZTMI012OUT;
     Status?: boolean;
@@ -462,6 +501,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI016Request {
     /**
      * 1 = Tạo
@@ -495,6 +535,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI016Response {
     /**
      *
@@ -506,6 +547,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI017Request {
     /**
      * C là tạo mới, M là modify, D là deletion
@@ -567,6 +609,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI017Response {
     /**
      *
@@ -578,6 +621,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI018Request {
     /**
      *
@@ -587,6 +631,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI018Response {
     /**
      *
@@ -598,6 +643,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI019Request {
     /**
      * Mã lệnh điều xe/ Mã chuyến thư
@@ -635,6 +681,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI019Response {
     /**
      *
@@ -646,6 +693,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI022Request {
     /**
      *
@@ -655,6 +703,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI022Response {
     /**
      *
@@ -666,6 +715,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI023Request {
     /**
      * Mã tải/kiện / bảng kê/ chuyến thư/ bưu gửi
@@ -679,6 +729,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI023Response {
     /**
      *
@@ -690,6 +741,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI024Request {
     /**
      * Mã chuyến bay
@@ -705,6 +757,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI024Response {
     /**
      *
@@ -716,6 +769,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI029Request {
     /**
      *
@@ -725,6 +779,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI029Response {
     /**
      * 01 : thành công, 00 : lỗi
@@ -740,12 +795,14 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI030Request {
     Row?: RowZTMI030;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI030Response {
     MT_ZTMI030_OUT?: MTZTMI030OUT;
     Status?: boolean;
@@ -754,6 +811,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI031Request {
     /**
      * Mã đơn hàng, tự sinh của hê thống
@@ -767,6 +825,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI031Response {
     MT_ZTMI031_OUT?: MTZTMI031OUT;
     Status?: boolean;
@@ -775,6 +834,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI035Request {
     /**
      *
@@ -786,6 +846,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI035Response {
     MT_ZTMI035_OUT?: MTZTMI035OUT;
     Status?: boolean;
@@ -794,6 +855,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI036Request {
     /**
      * Mã bưu tá nhận hàng
@@ -819,6 +881,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI036Response {
     /**
      *
@@ -830,6 +893,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI038Request {
     /**
      *
@@ -839,6 +903,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI038Response {
     MT_ZTMI038_OUT?: MTZTMI038OUT;
     Status?: boolean;
@@ -847,12 +912,14 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI039Request {
     row?: RowMIOAZTMI039Request[];
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI039Response {
     /**
      *
@@ -864,6 +931,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI040Request {
     /**
      * Mã trạng thái trong đó 604 là chờ giao; 818 là chờ giao chuyển hoàn; 607, 609, 610 là chưa giao được, 820 là chưa giao chuyển hoàn được; 606 là phát thành công; 819 là chuyển hoàn thành công
@@ -905,6 +973,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI040Response {
     /**
      *
@@ -916,6 +985,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI045Request {
     /**
      *
@@ -928,6 +998,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI045Response {
     /**
      *
@@ -939,6 +1010,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI045V03Request {
     Row?: RowZTMI045[];
     /**
@@ -949,6 +1021,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI045V03Response {
     MT_ZTMI045_OUT?: MTZTMI045V03OUT;
     Status?: boolean;
@@ -957,6 +1030,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI046Request {
     /**
      * Mã tải/ tải gom/ bảng kê
@@ -968,6 +1042,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI046Response {
     MT_ZTMI046_OUT?: MTZTMI046OUT;
     Status?: boolean;
@@ -976,6 +1051,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI047Request {
     /**
      * Mã tải/bảng kê/ chuyến thư
@@ -1011,6 +1087,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI047Response {
     MT_ZTMI047_OUT?: MTZTMI047OUT;
     Status?: boolean;
@@ -1019,6 +1096,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI048Request {
     /**
      *
@@ -1050,6 +1128,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI048Response {
     MT_ZTMI048_OUT?: MTZTMI048OUT;
     Status?: boolean;
@@ -1058,6 +1137,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI049Request {
     /**
      * Nếu là null thi lấy hết, nếu <> null thi lấy theo tất cả các xe co location nhap vao
@@ -1069,6 +1149,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI049Response {
     MT_ZTMI049_OUT?: MTZTMI049OUT;
     Status?: boolean;
@@ -1077,9 +1158,11 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI051Request {
     row?: RowZTMI051;
   }
+
   export interface MIOAZTMI051Response {
     MT_ZTMI051_OUT?: MTZTMI051OUT;
     Status?: boolean;
@@ -1088,6 +1171,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI054Request {
     /**
      * Mã địa điểm bưu cục
@@ -1097,6 +1181,7 @@ declare namespace API {
     IV_PAGENO?: string;
     IV_NO_PER_PAGE?: string;
   }
+
   export interface MIOAZTMI054Response {
     MT_ZTMI054_OUT?: MTZTMI054OUT;
     Status?: boolean;
@@ -1105,12 +1190,14 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI054Row {
     /**
      *
      */
     iv_position?: string;
   }
+
   export interface MIOAZTMI055Request {
     /**
      * Loại phan công (ZTM001: Phân công nhận; ZTM002: Phân công giao)
@@ -1132,6 +1219,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI055Response {
     MT_ZTMI055_OUT?: MTZTMI055OUT;
     Status?: boolean;
@@ -1140,6 +1228,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI058Request {
     /**
      * Số điện thoại người nhận
@@ -1189,6 +1278,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI058Response {
     MT_ZTMI058_OUT?: MTZTMI058OUT;
     Status?: boolean;
@@ -1197,6 +1287,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI062Request {
     /**
      * Mã kho (Required: SAP tự sinh mã)
@@ -1271,6 +1362,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI062Response {
     MT_ZTMI062_OUT?: MTZTMI062OUT;
     Status?: boolean;
@@ -1279,6 +1371,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI063Request {
     /**
      *
@@ -1293,6 +1386,7 @@ declare namespace API {
      */
     IV_USER?: string;
   }
+
   export interface MIOAZTMI063Response {
     MT_ZTMI063_OUT?: ZTMI063OUT;
     Status?: boolean;
@@ -1301,6 +1395,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI067Request {
     IV_DEPART_DATE?: string;
     IV_SCH_TYPE?: string;
@@ -1308,6 +1403,7 @@ declare namespace API {
     IV_PAGENO?: string;
     IV_NO_PER_PAGE?: string;
   }
+
   export interface MIOAZTMI067Response {
     MT_ZTMI067_OUT?: ZTMI067OUT;
     Status?: boolean;
@@ -1316,6 +1412,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MIOAZTMI094Request {
     /**
      * Số đơn hàng
@@ -1326,6 +1423,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface MIOAZTMI094Response {
     EV_ERROR?: string;
     Row?: RowZTMI094OUT;
@@ -1335,11 +1433,13 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MT205RECEIVER {
     EV_CODE?: string;
     EV_MESSAGE?: string;
     Row?: RowMT205RECEIVER[];
   }
+
   export interface MTBKRECEIVER {
     List?: ListMTBKRECEIVER[];
     /**
@@ -1349,6 +1449,7 @@ declare namespace API {
     EV_MESSAGE?: string;
     Paging?: PagingZTMI054;
   }
+
   export interface MTCRBKRECEIVER {
     BK_ID?: string;
     /**
@@ -1357,10 +1458,12 @@ declare namespace API {
     EV_ERROR?: number; // int32
     EV_MESSAGE?: string;
   }
+
   export interface MTDELRECEIVER {
     EV_ERROR?: number; // int32
     EV_MESSAGE?: string;
   }
+
   export interface MTDETAILRECEIVER {
     header?: HEADERMTDETAILRECEIVER;
     list?: LISTMTDETAILRECEIVER[];
@@ -1368,28 +1471,34 @@ declare namespace API {
     EV_MESSAGE?: string;
     Paging?: PagingZTMI054;
   }
+
   export interface MTDETAILRECEIVERM {
     collection?: Collection[];
     EV_ERROR?: number; // int32
     EV_MESSAGE?: string;
   }
+
   export interface MTKMRECEIVER {
     list?: LIST[];
     EV_ERROR?: number; // int32
     EV_MESSAGE?: string;
   }
+
   export interface MTSUBMITRECEIVER {
     EV_ERROR?: number; // int32
     EV_MESSAGE?: string;
   }
+
   export interface MTUDPRECEIVER {
     EV_ERROR?: number; // int32
     EV_MESSAGE?: string;
   }
+
   export interface MTZFII016OUT {
     Row?: RowMTZFII016OUT;
     PAGING?: PagingZTMI054;
   }
+
   export interface MTZTMI011OUT {
     /**
      *
@@ -1400,12 +1509,14 @@ declare namespace API {
      */
     Row?: RowMTZTMI011OUT[];
   }
+
   export interface MTZTMI012OUT {
     EV_ERROR?: string;
     FWO_ID?: string;
     Amount?: number; // int32
     Currency?: string;
   }
+
   export interface MTZTMI016OUT {
     /**
      *
@@ -1420,6 +1531,7 @@ declare namespace API {
      */
     RETURN_MESSAGE?: RETURNMESSAGE[];
   }
+
   export interface MTZTMI017OUT {
     /**
      *
@@ -1430,6 +1542,7 @@ declare namespace API {
      */
     RETURN_MESSAGE?: RETURNMESSAGE[];
   }
+
   export interface MTZTMI018OUT {
     /**
      * Nếu 00 thì là lỗi, 01 thì OK
@@ -1440,6 +1553,7 @@ declare namespace API {
      */
     Row?: RowResponseZTMI018OUT;
   }
+
   export interface MTZTMI019OUT {
     /**
      *
@@ -1450,12 +1564,14 @@ declare namespace API {
      */
     RETURN_MESSAGE?: RETURNMESSAGE[];
   }
+
   export interface MTZTMI022OUT {
     /**
      * 0: Là lỗi, 1: là OK
      */
     EV_ERROR?: number; // int32
   }
+
   export interface MTZTMI023OUT {
     /**
      *
@@ -1466,6 +1582,7 @@ declare namespace API {
      */
     row?: RowResponseZTMI023OUT[];
   }
+
   export interface MTZTMI024OUT {
     /**
      * 01 : thành công, 00 : lỗi
@@ -1477,23 +1594,28 @@ declare namespace API {
     Row?: RowResponseZTMI024[];
     Paging?: Paging;
   }
+
   export interface MTZTMI027OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+
   export interface MTZTMI028OUT {
     Error?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+
   export interface MTZTMI030OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI030OUT[];
     Paging?: PAGING;
   }
+
   export interface MTZTMI031OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI031OUT[];
   }
+
   export interface MTZTMI035OUT {
     EV_ERROR?: string;
     row?: RowResponseZTMI035[];
@@ -1504,6 +1626,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface MTZTMI036OUT {
     /**
      * 01 – Thành công, 00 – Lỗi
@@ -1518,10 +1641,12 @@ declare namespace API {
      */
     row?: TDATAResponseZTMI036[];
   }
+
   export interface MTZTMI038OUT {
     EV_ERROR?: number; // int32
     Row?: RowResponseZTMI038[];
   }
+
   export interface MTZTMI039OUT {
     /**
      *
@@ -1532,6 +1657,7 @@ declare namespace API {
      */
     row?: RowResponseZTMI039[];
   }
+
   export interface MTZTMI040OUT {
     /**
      *
@@ -1543,6 +1669,7 @@ declare namespace API {
     ev_error?: string;
     Paging?: Paging[];
   }
+
   export interface MTZTMI045OUT {
     /**
      * 01 là thành công, 00 là lỗi
@@ -1554,97 +1681,116 @@ declare namespace API {
     Row?: RowMTZTMI045OUT[];
     Paging?: Paging[];
   }
+
   export interface MTZTMI045V03OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI045V03OUT[];
   }
+
   export interface MTZTMI046OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI046OUT[];
     Paging?: PagingZTMI054;
   }
+
   export interface MTZTMI047OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI047OUT[];
     Paging?: Paging;
   }
+
   export interface MTZTMI048OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI048OUT[];
     Paging?: PagingZTMI054[];
   }
+
   export interface MTZTMI049OUT {
     Ev_error?: number; // int32
     Row?: RowMTZTMI049OUT[];
     Paging?: PagingZTMI054[];
   }
+
   export interface MTZTMI051OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
   }
+
   export interface MTZTMI054OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI054OUT[];
     PAGING?: PagingZTMI054[];
   }
+
   export interface MTZTMI055OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
     EV_TRQ_ID_ERROR?: EVTRQIDERROR[];
   }
+
   export interface MTZTMI058OUT {
     EV_ERROR?: string;
     Row?: RowMTZTMI058OUT[];
     Paging?: PAGING[];
   }
+
   export interface MTZTMI062OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+
   export interface MTZTMI068OUT {
     EV_ERROR?: number; // int32
     Row?: RowMTZTMI068OUT[];
   }
+
   export interface MTZTMI213OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE;
     Row?: RowMTZTMI213OUT[];
   }
+
   export interface MTZTMI229OUT {
     EV_ERROR?: number; // int32
     DIMENSION_WEIGHT?: string;
     WEIGHT_UOM?: string;
     RETURN_MESSAGE?: RETURNMESSAGE;
   }
+
   export interface MTZTMI236OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
     Row?: RowMTZTMI236OUT[];
     PAGING?: PagingZTMI054;
   }
+
   export interface MTZTMI239OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
     PACKAGE_ID?: string;
     CONTENT?: string;
   }
+
   export interface MTZTMI240OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
     Row?: RowMTZTMI240OUT[];
   }
+
   export interface MTZTMI241OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
     Row?: RowMTZTMI241OUT[];
     PAGING?: PagingZTMI054;
   }
+
   export interface PAGING {
     IV_PAGENO?: number; // int32
     IV_NO_PER_PAGE?: number; // int32
     EV_TOTAL_PAGE?: string;
     EV_TOTAL_ITEM?: string;
   }
+
   export interface Paging {
     /**
      *
@@ -1663,6 +1809,7 @@ declare namespace API {
      */
     EV_TOTAL_ITEM?: string;
   }
+
   export interface PagingZTMI054 {
     /**
      *
@@ -1681,11 +1828,13 @@ declare namespace API {
      */
     EV_TOTAL_ITEM?: string;
   }
+
   export interface RECEIVER {
     RECEIVER_NAME?: string;
     RECEIVER_PHONE?: string;
     RECEIVER_ADDRESS?: string;
   }
+
   export interface RETURNMESSAGE {
     /**
      * Loại lỗi (E- Error; S-Success, W- Warning, I- Info, A- Abort)
@@ -1718,6 +1867,7 @@ declare namespace API {
      */
     MESSAGE_V3?: string;
   }
+
   export interface RowMIOAZTMI039Request {
     FWO_no?: string;
     FU_NO?: string;
@@ -1730,6 +1880,7 @@ declare namespace API {
     USERID?: string;
     LOCID?: string;
   }
+
   export interface RowMT205RECEIVER {
     HUB?: string;
     LINE_CODE?: string;
@@ -1740,18 +1891,21 @@ declare namespace API {
     PHONE?: string;
     TIMESTAMP?: string;
   }
+
   export interface RowMTZFII016OUT {
     KUNNR?: string;
     TOTAL_DATRA?: string;
     TOTAL_CHUA_TRA?: string;
     Item?: ITEMMTZFII016OUT[];
   }
+
   export interface RowMTZTMI011OUT {
     /**
      *
      */
     Item?: ItemMTZTMI011OUT[];
   }
+
   export interface RowMTZTMI030OUT {
     TRQ_TYPE?: string;
     TRQ_ID?: string;
@@ -1769,6 +1923,7 @@ declare namespace API {
     FU?: string;
     PACKAGE_ID?: string;
   }
+
   export interface RowMTZTMI031OUT {
     FWO?: string;
     ORDERING_PARTY?: string;
@@ -1828,7 +1983,12 @@ declare namespace API {
     PUB_FEE?: string;
     IMPORT_TAX?: string;
     HEADER_NOTE?: string;
+    GoodValue?: string;
+    CCode_type?: string;
+    CCode?: string;
+    CCode_des?: string;
   }
+
   export interface RowMTZTMI045OUT {
     /**
      * Loại địa điểm
@@ -1895,6 +2055,7 @@ declare namespace API {
      */
     PARTNER?: string;
   }
+
   export interface RowMTZTMI045V03OUT {
     LOCTYPE?: string;
     LOCNO?: string;
@@ -1915,6 +2076,7 @@ declare namespace API {
     SMTP_ADDR?: string;
     NAME?: string;
   }
+
   export interface RowMTZTMI046OUT {
     TOR_ID?: string;
     LIFECYCLE?: number; // int32
@@ -1929,6 +2091,7 @@ declare namespace API {
     CHILDS?: Child[];
     TOR_TYPE?: string;
   }
+
   export interface RowMTZTMI047OUT {
     TOR_ID?: string;
     LIFECYCLE?: number; // int32
@@ -1945,6 +2108,7 @@ declare namespace API {
     Childs?: Childs[];
     TOR_TYPE?: string;
   }
+
   export interface RowMTZTMI048OUT {
     TOR_ID?: string;
     STATUS_ID?: number; // int32
@@ -1962,6 +2126,7 @@ declare namespace API {
     DRIVER_NAME?: string;
     TRANS_TIME?: string;
   }
+
   export interface RowMTZTMI049OUT {
     Name?: string;
     PlateNumber?: string;
@@ -1972,6 +2137,7 @@ declare namespace API {
     OWNER?: string;
     LEASE_CONTRACT_REF?: string;
   }
+
   export interface RowMTZTMI054OUT {
     LOCNO?: string;
     UNAME?: string;
@@ -1979,6 +2145,7 @@ declare namespace API {
     POSITION?: string;
     BP?: string;
   }
+
   export interface RowMTZTMI058OUT {
     FWO_TYPE?: string;
     FWO?: string;
@@ -1996,6 +2163,7 @@ declare namespace API {
     UOM?: string;
     SENDER_ADDRESS?: string;
   }
+
   export interface RowMTZTMI067OUT {
     DEPART_DATE?: string;
     SCH_TYPE?: string;
@@ -2003,6 +2171,7 @@ declare namespace API {
     DESCRIPTION?: string;
     T_ITEM?: TITEMZTMI067OUT[];
   }
+
   export interface RowMTZTMI068OUT {
     SERVICE_TYPE?: string;
     SERVICE_TYPE_DES?: string;
@@ -2010,6 +2179,7 @@ declare namespace API {
     SERVICE_GROUP_DES?: string;
     TARGET_TIME?: string;
   }
+
   export interface RowMTZTMI213OUT {
     FREIGHT_UNIT?: string;
     PACKAGE_ID?: string;
@@ -2018,6 +2188,7 @@ declare namespace API {
     GROSS_WEIGHT?: string;
     WEIGHT_UOM?: string;
   }
+
   export interface RowMTZTMI236OUT {
     PACKAGE_ID?: string;
     FREIGHT_UNIT?: string;
@@ -2032,11 +2203,13 @@ declare namespace API {
     SENDER?: SENDER;
     RECEIVER?: RECEIVER;
   }
+
   export interface RowMTZTMI240OUT {
     COMM_LOC_GROUP?: string;
     TOTAL_ITEM?: string;
     CHILD?: CHILD[];
   }
+
   export interface RowMTZTMI241OUT {
     FREIGHT_UNIT?: string;
     PACKAGE_ID?: string;
@@ -2048,6 +2221,7 @@ declare namespace API {
     MANIFEST_LOC?: string;
     CREATED_ON?: string;
   }
+
   export interface RowRequestZTMI018 {
     /**
      * Mã chuyển thư
@@ -2066,6 +2240,7 @@ declare namespace API {
      */
     FREIGH_STATUS?: string;
   }
+
   export interface RowRequestZTMI022 {
     /**
      * Số tải, kiện
@@ -2088,12 +2263,14 @@ declare namespace API {
      */
     LOC_ID?: string;
   }
+
   export interface RowRequestZTMI027 {
     FU_NO?: string;
     TRANS_ACTIVITY?: string;
     LOC_ID?: string;
     USER_ID?: string;
   }
+
   export interface RowRequestZTMI029 {
     /**
      * Mã đơn hàng
@@ -2120,24 +2297,28 @@ declare namespace API {
      */
     IV_TAX?: string;
   }
+
   export interface RowRequestZTMI035 {
     /**
      * Mã User
      */
     USER_ID?: string;
   }
+
   export interface RowRequestZTMI045 {
     /**
      * Loại địa điểm (Ví dụ V001 là bưu cục, V002 là cửa hàng….), lưu ý chọn trong danh sách location type đã được định nghĩa từ trước
      */
     IV_LOCTYPE?: string;
   }
+
   export interface RowRequestZTMI063 {
     /**
      *
      */
     TOR_ID?: string;
   }
+
   export interface RowResponseZTMI018OUT {
     /**
      *
@@ -2152,6 +2333,7 @@ declare namespace API {
      */
     Number?: string;
   }
+
   export interface RowResponseZTMI023OUT {
     /**
      * Mã tải/kiện/bảng kê/ chuyến thư
@@ -2266,6 +2448,7 @@ declare namespace API {
      */
     FWO_ID?: string;
   }
+
   export interface RowResponseZTMI024 {
     /**
      * Trạng thái air freight order
@@ -2305,6 +2488,7 @@ declare namespace API {
     LOG_LOC_IDSTL?: string;
     T_ITEM?: TITEMResponseZTMI024[];
   }
+
   export interface RowResponseZTMI029 {
     /**
      *
@@ -2323,6 +2507,7 @@ declare namespace API {
      */
     MSG?: string;
   }
+
   export interface RowResponseZTMI035 {
     SHIPPER_ID?: string;
     TEL_NUMBER_SRC?: string;
@@ -2348,18 +2533,21 @@ declare namespace API {
     TIMEZONE?: string;
     LOC_ID?: string;
   }
+
   export interface RowResponseZTMI038 {
     IT_FDELIVERY?: ITFDELIVERY[];
     IT_FPICK?: ITFPICK[];
     IT_SFWO?: ITSFWO[];
     IT_SFU?: ITSFU[];
   }
+
   export interface RowResponseZTMI039 {
     /**
      *
      */
     message?: string;
   }
+
   export interface RowResponseZTMI040 {
     /**
      * Username của bưu tá giao hàng
@@ -2483,6 +2671,7 @@ declare namespace API {
     SERVICE_TYPE_NAME?: string;
     LOC_ID?: string;
   }
+
   export interface RowSIOAZTMI068 {
     SERVICE_TYPE?: string;
     SRC_CITY?: string;
@@ -2492,6 +2681,7 @@ declare namespace API {
     SRC_WARD?: string;
     DST_WARD?: string;
   }
+
   export interface RowZFII016 {
     KUNNR?: string;
     FROM_DATE?: string;
@@ -2500,6 +2690,7 @@ declare namespace API {
     IV_PAGE_NO?: string;
     IV_NO_PER_PAGE?: string;
   }
+
   export interface RowZTMI030 {
     CUSID?: string;
     SENDER_PHONE?: string;
@@ -2514,12 +2705,14 @@ declare namespace API {
     IV_PAGENO?: string;
     IV_NO_PER_PAGE?: string;
   }
+
   export interface RowZTMI045 {
     /**
      * Loại địa điểm(V001,V002,V003,V004,V005,V006,V007,V008,V009,V010)
      */
     IV_LOCTYPE?: string;
   }
+
   export interface RowZTMI051 {
     FO_NO?: string;
     CU_FU_NO?: string;
@@ -2528,22 +2721,26 @@ declare namespace API {
     USER_ID?: string;
     LOC_ID?: string;
   }
+
   export interface RowZTMI094OUT {
     Message?: string;
     Id?: string;
     Number?: string;
   }
+
   export interface SENDER {
     SENDER_NAME?: string;
     SENDER_PHONE?: string;
     SENDER_ADDRESS?: string;
   }
+
   export interface SIOAZFII016Request {
     Row?: RowZFII016;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface SIOAZFII016Response {
     MT_ZFII016_OUT?: MTZFII016OUT;
     Status?: boolean;
@@ -2552,12 +2749,14 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface SIOAZTMI027Request {
     Row?: RowRequestZTMI027;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface SIOAZTMI027Response {
     MT_ZTMI027_OUT?: MTZTMI027OUT;
     Status?: boolean;
@@ -2566,6 +2765,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface SIOAZTMI068Request {
     /**
      * Lấy toàn bộ mã dịch vụ
@@ -2576,6 +2776,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface SIOAZTMI068Response {
     MT_ZTMI068_OUT?: MTZTMI068OUT;
     Status?: boolean;
@@ -2584,6 +2785,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface SIOZTMI028Request {
     /**
      * Các giá trị: 01-Tạo; 02 – Thay đổi thông tin; 03 – Thuyết minh; 04 – Kết luận
@@ -2634,6 +2836,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface SIOZTMI028Response {
     MT_ZTMI028_OUT?: MTZTMI028OUT;
     Status?: boolean;
@@ -2642,6 +2845,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface TDATAResponseZTMI036 {
     /**
      * Mã người gửi
@@ -2734,6 +2938,7 @@ declare namespace API {
     GRO_WEI_VAL?: string;
     GRO_WEI_UNI?: string;
   }
+
   export interface TITEM {
     /**
      * Mã item (bảng kê hoặc bưu gửi
@@ -2744,6 +2949,7 @@ declare namespace API {
      */
     ITEM_TYPE?: string;
   }
+
   export interface TITEMRequestZTMI017 {
     /**
      * Mã item
@@ -2754,6 +2960,7 @@ declare namespace API {
      */
     ITEM_TYPE?: string;
   }
+
   export interface TITEMResponseZTMI024 {
     /**
      * Mã air freight order
@@ -2793,6 +3000,7 @@ declare namespace API {
     MEASUOM?: string;
     ITEM_STATUS?: number; // int32
   }
+
   export interface TITEMZTMI067OUT {
     LOC_SEQ?: string;
     LOCATION_ID?: string;
@@ -2803,11 +3011,13 @@ declare namespace API {
     DISTANCE?: string;
     DISTANCE_UOM?: string;
   }
+
   export interface UserSapMappingGetRequest {
     UserName?: string;
     Email?: string;
     Phone?: string;
   }
+
   export interface UserSapMappingGetResponse {
     User?: UserViewModel;
     Status?: boolean;
@@ -2816,6 +3026,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface UserViewModel {
     UserId?: string;
     SapUserId?: string;
@@ -2831,6 +3042,7 @@ declare namespace API {
     FullName?: string;
     Language?: string;
   }
+
   export interface UserVoSoAddOrChangeRequest {
     Check?: string;
     ProvinceId?: string;
@@ -2847,6 +3059,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface UserVoSoAddOrChangeResponse {
     Message?: string;
     Success?: boolean;
@@ -2857,6 +3070,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface UserVoSoViewModel {
     Check?: string;
     ProvinceId?: string;
@@ -2870,11 +3084,13 @@ declare namespace API {
     Phone?: string;
     Address?: string;
   }
+
   export interface UsersGetBPCodeRequest {
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface UsersGetBPCodeResponse {
     User?: UserViewModel;
     Status?: boolean;
@@ -2883,12 +3099,14 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI001Request {
     KM_FLAG?: string;
     LanguageId?: string;
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI001Response {
     MT_KM_RECEIVER?: MTKMRECEIVER;
     Status?: boolean;
@@ -2897,6 +3115,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI002Request {
     TU_KY?: string;
     DEN_KY?: string;
@@ -2909,6 +3128,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI002Response {
     /**
      *
@@ -2920,6 +3140,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI003Request {
     header?: HEADER;
     item?: ITEMBK[];
@@ -2927,6 +3148,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI003Response {
     /**
      *
@@ -2938,6 +3160,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI004Request {
     BK_ID?: string;
     ITEM?: ITEMDELBK[];
@@ -2945,6 +3168,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI004Response {
     MT_DEL_RECEIVER?: MTDELRECEIVER;
     Status?: boolean;
@@ -2953,6 +3177,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI005Request {
     BK_ID?: string;
     MA_BUU_CUC?: string;
@@ -2962,6 +3187,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI005Response {
     MT_UDP_RECEIVER?: MTUDPRECEIVER;
     Status?: boolean;
@@ -2970,6 +3196,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI006Request {
     BK_ID?: string;
     MA_BUU_CUC?: string;
@@ -2978,6 +3205,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI006Response {
     MT_SUBMIT_RECEIVER?: MTSUBMITRECEIVER;
     Status?: boolean;
@@ -2986,6 +3214,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI007MRequest {
     MA_BUU_CUC?: string;
     BK_INPUT?: BKINPUT[];
@@ -2995,6 +3224,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI007MResponse {
     MT_DETAIL_RECEIVER_M?: MTDETAILRECEIVERM;
     Status?: boolean;
@@ -3003,6 +3233,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZFI007Request {
     MA_BUU_CUC?: string;
     BK_ID?: string;
@@ -3012,6 +3243,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZFI007Response {
     MT_DETAIL_RECEIVER?: MTDETAILRECEIVER;
     Status?: boolean;
@@ -3020,16 +3252,19 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI063OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
   }
+
   export interface ZTMI067OUT {
     EV_ERROR?: number; // int32
     row?: RowMTZTMI067OUT[];
     RETURN_MESSAGE?: RETURNMESSAGE[];
     Paging?: Paging[];
   }
+
   export interface ZTMI205Request {
     HUB?: string;
     LINE_CODE?: string;
@@ -3037,6 +3272,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZTMI205Response {
     MT_205_RECEIVER?: MT205RECEIVER;
     Status?: boolean;
@@ -3045,6 +3281,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI213Request {
     /**
      * Mã kiện cần tách
@@ -3055,6 +3292,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZTMI213Response {
     MT_ZTMI213_OUT?: MTZTMI213OUT;
     Status?: boolean;
@@ -3063,6 +3301,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI213Row {
     /**
      * Số lượng 1 kiện con cần tách
@@ -3081,6 +3320,7 @@ declare namespace API {
      */
     WEIGHT_UOM?: string;
   }
+
   export interface ZTMI229Request {
     /**
      * Mã tỉnh/thành phố
@@ -3122,6 +3362,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZTMI229Response {
     MT_ZTMI229_OUT?: MTZTMI229OUT;
     Status?: boolean;
@@ -3130,6 +3371,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI235Response {
     maBuuPham?: string;
     loaiHangHoa?: string;
@@ -3143,6 +3385,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI236Request {
     /**
      * Mã bưu gửi
@@ -3180,6 +3423,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZTMI236Response {
     MT_ZTMI236_OUT?: MTZTMI236OUT;
     Status?: boolean;
@@ -3188,6 +3432,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI239Request {
     /**
      * Mã bưu gửi
@@ -3221,6 +3466,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZTMI239Response {
     MT_ZTMI239_OUT?: MTZTMI239OUT;
     Status?: boolean;
@@ -3229,6 +3475,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI240Request {
     /**
      * Trạng thái bưu gửi
@@ -3246,6 +3493,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZTMI240Response {
     MT_ZTMI240_OUT?: MTZTMI240OUT;
     Status?: boolean;
@@ -3254,6 +3502,7 @@ declare namespace API {
     ObjectId?: string;
     Version?: number; // int32
   }
+
   export interface ZTMI241Request {
     /**
      * Mã bưu gửi
@@ -3291,6 +3540,7 @@ declare namespace API {
     LanguageDefaultId?: string;
     readonly LanguageCurrentId?: string;
   }
+
   export interface ZTMI241Response {
     MT_ZTMI241_OUT?: MTZTMI241OUT;
     Status?: boolean;
@@ -3305,6 +3555,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.LocationAddEsRequest;
     }
@@ -3316,6 +3567,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.GenUserRequest;
     }
@@ -3327,6 +3579,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.LocationAutoAddEsRequest;
     }
@@ -3338,6 +3591,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.UsersGetBPCodeRequest;
     }
@@ -3349,6 +3603,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.UserSapMappingGetRequest;
     }
@@ -3360,6 +3615,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI011Request;
     }
@@ -3371,6 +3627,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI012Request;
     }
@@ -3382,6 +3639,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI016Request;
     }
@@ -3393,6 +3651,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI017Request;
     }
@@ -3404,6 +3663,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI018Request;
     }
@@ -3415,6 +3675,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI019Request;
     }
@@ -3426,6 +3687,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI022Request;
     }
@@ -3437,6 +3699,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI023Request;
     }
@@ -3448,6 +3711,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI024Request;
     }
@@ -3459,6 +3723,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI029Request;
     }
@@ -3470,6 +3735,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI030Request;
     }
@@ -3481,6 +3747,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI031Request;
     }
@@ -3492,6 +3759,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI035Request;
     }
@@ -3503,6 +3771,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI036Request;
     }
@@ -3514,6 +3783,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI038Request;
     }
@@ -3525,6 +3795,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI039Request;
     }
@@ -3536,6 +3807,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI040Request;
     }
@@ -3547,6 +3819,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI045Request;
     }
@@ -3558,6 +3831,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI045V03Request;
     }
@@ -3569,6 +3843,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI046Request;
     }
@@ -3580,6 +3855,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI047Request;
     }
@@ -3591,6 +3867,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI048Request;
     }
@@ -3602,6 +3879,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI049Request;
     }
@@ -3613,6 +3891,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI051Request;
     }
@@ -3624,6 +3903,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI054Request;
     }
@@ -3635,6 +3915,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI055Request;
     }
@@ -3646,6 +3927,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI058Request;
     }
@@ -3657,6 +3939,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI062Request;
     }
@@ -3668,6 +3951,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI063Request;
     }
@@ -3679,6 +3963,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI067Request;
     }
@@ -3690,6 +3975,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.MIOAZTMI094Request;
     }
@@ -3701,6 +3987,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.SIOAZFII016Request;
     }
@@ -3712,6 +3999,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.SIOAZTMI027Request;
     }
@@ -3723,6 +4011,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.SIOAZTMI068Request;
     }
@@ -3734,6 +4023,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.SIOZTMI028Request;
     }
@@ -3745,6 +4035,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.LocationGetsEsRequest;
     }
@@ -3756,6 +4047,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.UserVoSoAddOrChangeRequest;
     }
@@ -3767,6 +4059,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI001Request;
     }
@@ -3778,6 +4071,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI002Request;
     }
@@ -3789,6 +4083,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI003Request;
     }
@@ -3800,6 +4095,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI004Request;
     }
@@ -3811,6 +4107,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI005Request;
     }
@@ -3822,6 +4119,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI006Request;
     }
@@ -3833,6 +4131,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI007Request;
     }
@@ -3844,6 +4143,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZFI007MRequest;
     }
@@ -3855,6 +4155,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZTMI205Request;
     }
@@ -3866,6 +4167,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZTMI213Request;
     }
@@ -3877,6 +4179,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZTMI229Request;
     }
@@ -3893,6 +4196,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZTMI236Request;
     }
@@ -3904,6 +4208,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZTMI239Request;
     }
@@ -3915,6 +4220,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZTMI240Request;
     }
@@ -3926,6 +4232,7 @@ declare namespace Paths {
     export interface BodyParameters {
       request?: Parameters.Request;
     }
+
     namespace Parameters {
       export type Request = Definitions.ZTMI241Request;
     }
