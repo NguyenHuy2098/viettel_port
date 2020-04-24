@@ -29,6 +29,7 @@ const QuetMa: React.FC = (): JSX.Element => {
   const userId = useSelector(makeSelectorPreferredUsername);
   const [dataNhanChuyenThu, setDataNhanChuyenThu] = useState<API.RowResponseZTMI023OUT[]>([]);
   const [codeChuyenThu, setCodeChuyenThu] = useState<string>('');
+  const [totalRecords, setTotalRecords] = useState(0);
 
   // eslint-disable-next-line max-lines-per-function
   function handleSearchCodeChuyenThu(): void {
@@ -55,6 +56,8 @@ const QuetMa: React.FC = (): JSX.Element => {
               } else {
                 if (get(data, 'MT_ZTMI023_OUT.row[0].TO_LOG_ID', '').search(userMaBp) !== -1) {
                   if (get(data, 'MT_ZTMI023_OUT.row[0].ZVTP_CUST_STATUS', 0) === 304) {
+                    setTotalRecords(totalRecords + 1);
+
                     const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
                     dispatch(
                       action_MIOA_ZTMI063(
@@ -320,7 +323,7 @@ const QuetMa: React.FC = (): JSX.Element => {
             Quét mã
           </Button>
         </div>
-        <p className="pull-right m-0">Tổng số: 50</p>
+        <p className="pull-right m-0">Tổng số: {totalRecords}</p>
       </div>
     );
   }
