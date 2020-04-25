@@ -5,13 +5,15 @@ import * as yup from 'yup';
 import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Nav, NavItem, NavLink, Row } from 'reactstrap';
+import { Menu, MenuItem, Typeahead as RootTypeahead, TypeaheadResult } from 'react-bootstrap-typeahead';
 import {
   concat,
   drop,
   filter,
   find,
   findIndex,
+  first,
   forEach,
   get,
   isEmpty,
@@ -23,7 +25,6 @@ import {
   slice,
   toString,
   trim,
-  first,
 } from 'lodash';
 import moment from 'moment';
 import useIsMounted from 'react-is-mounted-hook';
@@ -54,6 +55,7 @@ import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { getAddressNameById, getValueOfNumberFormat, numberFormat } from 'utils/common';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
+import './style.scss';
 
 interface Props {
   match: match;
@@ -1970,7 +1972,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function renderSendingCouponInfo(): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
-        <div className="sipContentContainer">
+        <div className="sipContentContainer2">
           <div className="sipInputBlock">
             <h3>{t('Thông tin phiếu gửi')}</h3>
             <Row className="sipInputItem">
@@ -1987,10 +1989,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
             </Row>
           </div>
-          {renderSenderInput()}
-          {renderReceiverInput()}
-          {renderDeliveryRequirement()}
         </div>
+        <div className="sipContentContainer2">{renderSenderInput()}</div>
+        <div className="sipContentContainer2">{renderReceiverInput()}</div>
+        <div className="sipContentContainer2">{renderDeliveryRequirement()}</div>
       </Col>
     );
   }
@@ -2227,11 +2229,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         {/*  </Col>*/}
         {/*</Row>*/}
         <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Thanh toán cước')}
-            <span className="color-red"> *</span>
-          </Label>
-          <Col lg="4" xs="6">
+          {/*<Label xs="12" lg="12">*/}
+          {/*  {t('Thanh toán cước')}*/}
+          {/*  <span className="color-red"> *</span>*/}
+          {/*</Label>*/}
+          <Col lg="12" xs="12">
             <Label
               check
               xs="12"
@@ -2249,7 +2251,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Người gửi')}
             </Label>
           </Col>
-          <Col lg="4" xs="6">
+          <Col lg="12" xs="12">
             <Label
               check
               xs="12"
@@ -2272,52 +2274,65 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  // eslint-disable-next-line max-lines-per-function
-  function renderDeliveryRequirement(): JSX.Element {
+  function renderBillBlock(): JSX.Element {
     const isFocus = focusElement === 'deliveryRequirement';
     const checkMap = {
       choXemHang: choXemHang === '1',
       khongChoXemHang: choXemHang === '2',
     };
     return (
+      <Row className="sipInputItem">
+        <Col lg="12" xs="12">
+          <h3>{t('Yêu cầu giao bưu gửi')}</h3>
+          <Label
+            check
+            xs="12"
+            className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocus && checkMap['choXemHang'] })}
+          >
+            <Input
+              type="radio"
+              name="deliveryRequirement"
+              value="1"
+              checked={checkMap['choXemHang']}
+              onChange={handleChangeTextboxValue(setChoXemHang)}
+              onKeyUp={handleKeyUp('deliveryRequirement')}
+              onKeyDown={handleClearFocusElement}
+            />{' '}
+            {t('Cho khách xem hàng')}
+          </Label>
+        </Col>
+        <Col lg="12" xs="12">
+          <Label
+            check
+            xs="12"
+            className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocus && checkMap['khongChoXemHang'] })}
+          >
+            <Input
+              type="radio"
+              name="deliveryRequirement"
+              value="2"
+              checked={checkMap['khongChoXemHang']}
+              onKeyUp={handleKeyUp('deliveryRequirement')}
+              onKeyDown={handleClearFocusElement}
+              onChange={handleChangeTextboxValue(setChoXemHang)}
+            />{' '}
+            {t('Không cho khách xem hàng')}
+          </Label>
+        </Col>
+      </Row>
+    );
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  function renderDeliveryRequirement(): JSX.Element {
+    return (
       <div className="sipInputBlock">
-        <h3>{t('Yêu cầu giao bưu gửi')}</h3>
-        <Row className="sipInputItem">
-          <Col lg="6" xs="12">
-            <Label
-              check
-              xs="12"
-              className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocus && checkMap['choXemHang'] })}
-            >
-              <Input
-                type="radio"
-                name="deliveryRequirement"
-                value="1"
-                checked={checkMap['choXemHang']}
-                onChange={handleChangeTextboxValue(setChoXemHang)}
-                onKeyUp={handleKeyUp('deliveryRequirement')}
-                onKeyDown={handleClearFocusElement}
-              />{' '}
-              {t('Cho khách xem hàng')}
-            </Label>
+        <Row>
+          <Col lg="6" xs="6">
+            {renderBillBlock()}
           </Col>
-          <Col lg="6" xs="12">
-            <Label
-              check
-              xs="12"
-              className={classnames({ 'pl-0 pr-0': true, 'focus-item': isFocus && checkMap['khongChoXemHang'] })}
-            >
-              <Input
-                type="radio"
-                name="deliveryRequirement"
-                value="2"
-                checked={checkMap['khongChoXemHang']}
-                onKeyUp={handleKeyUp('deliveryRequirement')}
-                onKeyDown={handleClearFocusElement}
-                onChange={handleChangeTextboxValue(setChoXemHang)}
-              />{' '}
-              {t('Không cho khách xem hàng')}
-            </Label>
+          <Col lg="6" xs="6">
+            {renderFeePayment()}
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -2388,10 +2403,38 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //   );
   // }
 
+  // eslint-disable-next-line
+  function renderSuggetTemplate(results: Array<TypeaheadResult<TypeaheadOption>>, menuProps: any): JSX.Element {
+    return (
+      <Menu {...menuProps}>
+        <div className="sipTabContainer">
+          <Nav tabs fill={true}>
+            <NavItem>
+              <NavLink value={1} className={classnames({ active: true })}>
+                {t('Mẫu')}
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink value={2}>{t('Hay dùng')}</NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink value={3}>{t('Gần đây')}</NavLink>
+            </NavItem>
+          </Nav>
+        </div>
+        {results.map((result, index) => (
+          <MenuItem option={result.id} position={index}>
+            result.label
+          </MenuItem>
+        ))}
+      </Menu>
+    );
+  }
+
   function renderPackageInfo(): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
-        <div className="sipContentContainer">
+        <div className="sipContentContainer2">
           {renderPackageInfoDetail()}
           <AdditionalPackageTabItems
             removePackageItem={removePackageItem}
@@ -2404,9 +2447,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             activeTab={activeTab}
             setActiveTab={handleActiveTab}
           />
+        </div>
+        <div className="sipContentContainer2">
           {renderSendingServices()}
           {renderAdditionalServices()}
-          {renderFeePayment()}
+          {/*{renderFeePayment()}*/}
         </div>
       </Col>
     );
@@ -2415,7 +2460,26 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   return (
     <div className="phieuGuiTrongNuoc" onKeyDown={handleClearFocusElement} onClick={handleClearFocusElement}>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Phiếu gửi trong nước')}</h1>
+        <Col lg="2" xs="3">
+          <h1 className="sipTitle">{t('Phiếu gửi trong nước')}</h1>
+        </Col>
+        <Col lg="4" xs="3">
+          <RootTypeahead
+            id="tet"
+            options={[]}
+            placeholder={'Tạo phiếu gửi theo biểu mẫu'}
+            renderMenu={renderSuggetTemplate}
+          >
+            <span
+              style={{
+                position: 'absolute',
+                right: '8px',
+                top: '12px',
+              }}
+              className="fa fa-caret-down"
+            />
+          </RootTypeahead>
+        </Col>
       </Row>
       <Row className="mb-3 sipOrderInputRow">
         {renderSendingCouponInfo()}
