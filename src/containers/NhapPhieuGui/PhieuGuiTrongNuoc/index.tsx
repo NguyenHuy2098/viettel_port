@@ -1109,37 +1109,38 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }, [keywords, tab]);
 
   function templateOrderSuggest(keywords: string, type: number): void {
+    let payload = {};
     switch (type) {
       case 1:
         break;
       case 2:
+        if (size(keywords)) {
+          payload = { q: keywords };
+        }
         dispatch(
-          action_MOST_ORDER_SUGGEST(
-            { q: keywords },
-            {
-              onSuccess: (data: OrderSuggestedItem): void => {
-                if (!isMounted()) return;
-              },
-              onFailure: (error: HttpRequestErrorType): void => {
-                if (!isMounted()) return;
-              },
+          action_MOST_ORDER_SUGGEST(payload, {
+            onSuccess: (data: OrderSuggestedItem): void => {
+              if (!isMounted()) return;
             },
-          ),
+            onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
+            },
+          }),
         );
         break;
       case 3:
+        if (size(keywords)) {
+          payload = { q: keywords };
+        }
         dispatch(
-          action_RECENT_ORDER_SUGGEST(
-            { q: keywords },
-            {
-              onSuccess: (data: OrderSuggestedItem): void => {
-                if (!isMounted()) return;
-              },
-              onFailure: (error: HttpRequestErrorType): void => {
-                if (!isMounted()) return;
-              },
+          action_RECENT_ORDER_SUGGEST(payload, {
+            onSuccess: (data: OrderSuggestedItem): void => {
+              if (!isMounted()) return;
             },
-          ),
+            onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
+            },
+          }),
         );
         break;
     }
@@ -1793,6 +1794,22 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     return <div>{get(person, 'phone') + ' * ' + get(person, 'code') + ' * ' + get(person, 'name')}</div>;
   }
 
+  function handleSelectedSender(selected: Person[]): void {
+    if (size(selected)) {
+      setDienThoaiSender(selected[0].phone);
+      setHoTenSender(selected[0].name);
+      setMaKhachHangGui(selected[0].code);
+    }
+  }
+
+  function handleSelectedReceiver(selected: Person[]): void {
+    if (size(selected)) {
+      setDienThoaiSender(selected[0].phone);
+      setHoTenSender(selected[0].name);
+      setMaKhachHangGui(selected[0].code);
+    }
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderSenderInput(): JSX.Element {
     return (
@@ -1801,13 +1818,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Tìm kiếm nhanh')}
-            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <RootTypeahead
               id="suggestSender"
               onInputChange={setSenderKeywords}
               options={senderSuggest}
+              onChange={handleSelectedSender}
               renderMenuItemChildren={renderTypeaheadPerson}
               placeholder={t('Nhập mã khách hàng/Tên/Số ĐT')}
             />
@@ -1929,13 +1946,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Tìm kiếm nhanh')}
-            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <RootTypeahead
               id="suggestSender"
               onInputChange={setReceiverKeywords}
               options={receiverSuggest}
+              onChange={handleSelectedReceiver}
               renderMenuItemChildren={renderTypeaheadPerson}
               placeholder={t('Nhập mã khách hàng/Tên/Số ĐT')}
             />
