@@ -1167,7 +1167,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setSenderSuggest([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [senderKeywords, isMounted]);
+  }, [senderKeywords]);
 
   React.useEffect((): void => {
     if (size(receiverKeywords) > 0) {
