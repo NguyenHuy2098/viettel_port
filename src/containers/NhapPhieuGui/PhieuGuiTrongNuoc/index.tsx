@@ -52,6 +52,8 @@ import {
 } from 'redux/LocationSearch/actions';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
+import { action_MOST_ORDER_SUGGEST, action_RECENT_ORDER_SUGGEST } from 'redux/OrderSuggest/actions';
+import { action_SENDER_SUGGEST, action_RECEIVER_SUGGEST } from 'redux/PersonSuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { getAddressNameById, getValueOfNumberFormat, numberFormat } from 'utils/common';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
@@ -98,6 +100,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [districtReceiverEdit, setDistrictReceiverEdit] = useState<string>('');
   const [wardReceiverEdit, setWardReceiverEdit] = useState<string>('');
   const [focusAddress, setFocusAdress] = useState<string>('');
+  const [tab, setTab] = useState<number>(1);
+  const [keywords, setKeywords] = useState<string>('');
+  const [senderKeywords, setSenderKeywords] = useState<string>('');
+  // const [selectedSenderSuggest, setSelectedSenderSuggest] = useState<Person>();
+  const [senderSuggest, setSenderSuggest] = useState<Person[]>([]);
+
+  const [receiverKeywords, setReceiverKeywords] = useState<string>('');
+  // const [selectedReceiverSuggest, setReceiverSenderSuggest] = useState<Person>();
+  const [receiverSuggest, setReceiverSuggest] = useState<Person[]>([]);
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -306,7 +317,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   //__________________________________________________________
   const [maPhieuGui, setMaPhieuGui] = useState<string>('');
-  const [maKhachHang, setMaKhachHang] = useState<string>('');
+  const [maKhachHangGui, setMaKhachHangGui] = useState<string>('');
+  const [maKhachHangNhan, setMaKhachHangNhan] = useState<string>('');
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
   const [hoTenSender, setHoTenSender] = useState<string>('');
   const [diaChiSender, setDiaChiSender] = useState<string>('');
@@ -463,7 +475,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   const validateData = {
-    maKhachHang: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang),
+    maKhachHang: trim(maKhachHangGui) === '' ? '9999999999' : trim(maKhachHangGui),
     dienThoaiSender: trim(dienThoaiSender),
     hoTenSender: trim(hoTenSender),
     diaChiSender: trim(diaChiSender),
@@ -497,6 +509,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   React.useEffect((): void => {
     if (size(orderInformation)) {
       setMaPhieuGui(get(orderInformationInstance, 'FWO', ''));
+      setMaKhachHangGui(get(orderInformationInstance, 'SHIPER_ID', ''));
       setDienThoaiSender(get(orderInformationInstance, 'MOBILE_PHONE_SRC', ''));
       setHoTenSender(get(orderInformationInstance, 'SHIPER_NAME', ''));
       const thisDetailAddressSender =
@@ -506,11 +519,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setDiaChiSender(
         `${thisDetailAddressSender}${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
       );
+      setDetailSender(true);
       setProvinceIdSender(get(orderInformationInstance, 'PROVINCE_ID_SOURCE', ''));
       setDistrictIdSender(get(orderInformationInstance, 'DISTRICT_ID_SOURCE', ''));
       setWardIdSender(toString(get(orderInformationInstance, 'WARD_ID_SOURCE', '')));
       //__________________________________________________________
-
+      setMaKhachHangNhan(get(orderInformationInstance, 'CONSIGNEE_ID', ''));
       setDienThoaiReceiver(get(orderInformationInstance, 'MOBILE_PHONE_DES', ''));
       setHoTenReceiver(get(orderInformationInstance, 'CONSIGNEE_NAME', ''));
       const thisDetailAddressReceiver =
@@ -520,12 +534,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setDiaChiReceiver(
         `${thisDetailAddressReceiver}${' '}${wardReceiverEdit}${' '}${districtReceiverEdit}${' '}${provinceReceiverEdit}`,
       );
+      setDetailReceiver(true);
       setProvinceIdReceiver(get(orderInformationInstance, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstance, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstance, 'WARD_ID_DES', '')));
       setTenHang(get(orderInformationInstance, 'ITEM_DESCRIPTION', ''));
       setSoLuong(orderInformationInstance.Quantity ? parseFloat(orderInformationInstance.Quantity).toFixed(0) : '');
-      setGiaTri('');
+      setGiaTri(orderInformationInstance.GoodValue ? toString(parseInt(orderInformationInstance.GoodValue)) : '');
       setTienThuHo(orderInformationInstance.COD ? toString(parseInt(orderInformationInstance.COD)) : '');
       setTrongLuong(
         orderInformationInstance.GROSS_WEIGHT ? parseFloat(orderInformationInstance.GROSS_WEIGHT).toFixed(0) : '',
@@ -652,7 +667,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       Destination_Ward: wardIdReceiver,
       loc_id: '',
       Movement_type: diemGiaoNhan,
-      Ordering_party: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang),
+      Ordering_party: trim(maKhachHangGui) === '' ? '9999999999' : trim(maKhachHangGui),
       Item: newArr011,
       Sales_org: '',
       // Service_group: servicePayload ? servicePayload.SERVICE_GROUP : '',
@@ -1088,6 +1103,94 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tenHang]);
 
+  React.useEffect((): void => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    templateOrderSuggest(keywords, tab);
+  }, [keywords, tab]);
+
+  function templateOrderSuggest(keywords: string, type: number): void {
+    switch (type) {
+      case 1:
+        break;
+      case 2:
+        dispatch(
+          action_MOST_ORDER_SUGGEST(
+            { q: keywords },
+            {
+              onSuccess: (data: OrderSuggestedItem): void => {
+                if (!isMounted()) return;
+              },
+              onFailure: (error: HttpRequestErrorType): void => {
+                if (!isMounted()) return;
+              },
+            },
+          ),
+        );
+        break;
+      case 3:
+        dispatch(
+          action_RECENT_ORDER_SUGGEST(
+            { q: keywords },
+            {
+              onSuccess: (data: OrderSuggestedItem): void => {
+                if (!isMounted()) return;
+              },
+              onFailure: (error: HttpRequestErrorType): void => {
+                if (!isMounted()) return;
+              },
+            },
+          ),
+        );
+        break;
+    }
+  }
+
+  React.useEffect((): void => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (size(senderKeywords) > 0) {
+      dispatch(
+        action_SENDER_SUGGEST(
+          { q: senderKeywords },
+          {
+            onSuccess: (data: Person): void => {
+              if (!isMounted()) return;
+              setSenderSuggest(get(data, 'items'));
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
+              setSenderSuggest([]);
+            },
+          },
+        ),
+      );
+    } else {
+      setSenderSuggest([]);
+    }
+  }, [senderKeywords]);
+
+  React.useEffect((): void => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if (size(receiverKeywords) > 0) {
+      dispatch(
+        action_RECEIVER_SUGGEST(
+          { q: receiverKeywords },
+          {
+            onSuccess: (data: Person): void => {
+              if (!isMounted()) return;
+              setReceiverSuggest(get(data, 'items'));
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
+              setReceiverSuggest([]);
+            },
+          },
+        ),
+      );
+    } else {
+      setSenderSuggest([]);
+    }
+  }, [receiverKeywords]);
+
   function handleChooseCommoditySuggest(items: TypeaheadOption[]): void {
     setTenHang(get(items, '0.id', ''));
     setGiaTri(toString(get(items, '0.price', '')));
@@ -1133,7 +1236,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE ? trim(getValueOfNumberFormat(item.QUANTITY_OF_PACKAGE)) : '',
           Description: item.Description,
           NET_WEIGHT_OF_UNIT: item.NET_WEIGHT_OF_UNIT,
-          Currency: item.Currency,
+          Currency: 'VND',
           GROSS_WEIGHT_OF_UNIT: item.GROSS_WEIGHT_OF_UNIT,
           Flag: item.Flag, // I : insert, U: Update, D: delete, trong trường hợp tạo mới đơn thì không cần truyền
           COD: item.COD ? trim(getValueOfNumberFormat(item.COD)) : '',
@@ -1144,6 +1247,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     }
     const payloadPackageItemArr = concat(dataPackageItemArrUnformattedNumber, additionalServicePayloadList);
     const payload = {
+      FWO: isCreateNewForwardingOrder ? null : get(orderInformationInstance, 'FWO'),
       ADDRESS_CONSIG: '',
       ADDRESS_OP: trim(diaChiSender),
       ADDRESS_SHIPPER: trim(diaChiSender),
@@ -1151,7 +1255,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       CAMPAIGN: '',
       CITY_DES: trim(provinceIdReceiver), // nhận trong trường hợp khách hàng vãng lai
       CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
-      CONSIGNEE: '9999999999',
+      CONSIGNEE: trim(maKhachHangNhan) === '' ? '9999999999' : trim(maKhachHangNhan),
       COUNTRY_DES: 'VN',
       COUNTRY_SRC: 'VN', // Mã đất nước gửi trong trường hợp khách hàng vãng lai
       CUS_ID: '', // Mã user trên hệ thống APP/Web
@@ -1171,7 +1275,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       NAME_SHIPPER: trim(hoTenSender),
       NOTE: choXemHang === '1' ? trim(ghiChu) + ' - Cho xem hàng' : trim(ghiChu) + ' - Không cho xem hàng', // Ghi chú cho bưu gửi
       OLD_CAMPAIGN_ID: 0,
-      ORDERING_PARTY: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Mã đối tác sử dụng dịch vụ
+      ORDERING_PARTY: trim(maKhachHangGui) === '' ? '9999999999' : trim(maKhachHangGui), // Mã đối tác sử dụng dịch vụ
       ORDER_TYPE: 'V001', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
       PHONE_CONSIG: trim(dienThoaiReceiver),
       PHONE_OP: trim(dienThoaiSender),
@@ -1181,7 +1285,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       REQUEST_PICK_DATE: null,
       REQUEST_DELIV_DATE: moment(thoiGianPhat).format('YYYYMMDDHHmmss'),
       SALE_OFFICE: userMaBp, // mã bưu cục
-      SHIPPER: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Người gửi hàng- mã BP
+      SHIPPER: trim(maKhachHangGui) === '' ? '9999999999' : trim(maKhachHangGui), // Người gửi hàng- mã BP
       SOURCE_TYPE: '03', // nguồn tạo từ APP/Web hoặc từ ecommerce
       STREET_NAME_DES: trim(detailAddressReceiver), // Địa chỉ nhận trong trường hợp vãng lai
       STREET_NAME_SRC: trim(detailAddressSender), // trong trường hợp khách hàng vãng lai
@@ -1327,7 +1431,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setIsSubmit(false);
     setErrors([]);
     setMaPhieuGui('');
-    setMaKhachHang('');
+    setMaKhachHangGui('');
+    setMaKhachHangNhan('');
     setDienThoaiSender('');
     setHoTenSender('');
     setDiaChiSender('');
@@ -1684,11 +1789,30 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  function renderTypeaheadPerson(person: Person): JSX.Element {
+    return <div>{get(person, 'phone') + ' * ' + get(person, 'code') + ' * ' + get(person, 'name')}</div>;
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderSenderInput(): JSX.Element {
     return (
       <div className="sipInputBlock">
         <h3>{t('Người gửi')}</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Tìm kiếm nhanh')}
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <RootTypeahead
+              id="suggestSender"
+              onInputChange={setSenderKeywords}
+              options={senderSuggest}
+              renderMenuItemChildren={renderTypeaheadPerson}
+              placeholder={t('Nhập mã khách hàng/Tên/Số ĐT')}
+            />
+          </Col>
+        </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Mã khách hàng')}
@@ -1699,8 +1823,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               type="text"
               name="customerCodeInput"
               placeholder={t('Nhập mã khách hàng')}
-              value={maKhachHang}
-              onChange={handleChangeTextboxValue(setMaKhachHang)}
+              value={maKhachHangGui}
+              onChange={handleChangeTextboxValue(setMaKhachHangGui)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'maKhachHang')}</div>
           </Col>
@@ -1802,6 +1926,37 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <div className="sipInputBlock">
         <h3>{t('Người nhận')}</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Tìm kiếm nhanh')}
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <RootTypeahead
+              id="suggestSender"
+              onInputChange={setReceiverKeywords}
+              options={receiverSuggest}
+              renderMenuItemChildren={renderTypeaheadPerson}
+              placeholder={t('Nhập mã khách hàng/Tên/Số ĐT')}
+            />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Mã khách hàng')}
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input
+              type="text"
+              name="customerCodeInput"
+              placeholder={t('Nhập mã khách hàng')}
+              value={maKhachHangNhan}
+              onChange={handleChangeTextboxValue(setMaKhachHangNhan)}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(errors, 'maKhachHang')}</div>
+          </Col>
+        </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Điện thoại')}
@@ -2403,6 +2558,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //   );
   // }
 
+  function handleChangeTab(event: React.MouseEvent): void {
+    setTab(Number(event.currentTarget.getAttribute('value')));
+  }
+
   // eslint-disable-next-line
   function renderSuggetTemplate(results: Array<TypeaheadResult<TypeaheadOption>>, menuProps: any): JSX.Element {
     return (
@@ -2410,15 +2569,19 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <div className="sipTabContainer">
           <Nav tabs fill={true}>
             <NavItem>
-              <NavLink value={1} className={classnames({ active: true })}>
+              <NavLink value={1} className={classnames({ active: tab === 1 })} onClick={handleChangeTab}>
                 {t('Mẫu')}
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink value={2}>{t('Hay dùng')}</NavLink>
+              <NavLink value={2} className={classnames({ active: tab === 2 })} onClick={handleChangeTab}>
+                {t('Hay dùng')}
+              </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink value={3}>{t('Gần đây')}</NavLink>
+              <NavLink value={3} className={classnames({ active: tab === 3 })} onClick={handleChangeTab}>
+                {t('Gần đây')}
+              </NavLink>
             </NavItem>
           </Nav>
         </div>
@@ -2468,6 +2631,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             id="tet"
             options={[]}
             placeholder={'Tạo phiếu gửi theo biểu mẫu'}
+            onInputChange={setKeywords}
             renderMenu={renderSuggetTemplate}
           >
             <span

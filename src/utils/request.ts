@@ -6,6 +6,7 @@ import {
   REACT_APP_LOCATION_API_ENDPOINT,
   REACT_APP_COMMODITY_API_ENDPOINT,
   REACT_APP_SSO_API_URL,
+  REACT_APP_BACKEND_API_ENDPOINT,
 } from './env';
 import { throwErrorIfMalformed } from './errorHelpers';
 
@@ -71,6 +72,19 @@ export const crmCommodityApi = axios.create({
 });
 
 crmCommodityApi.interceptors.request.use(
+  (config: AxiosRequestConfig): AxiosRequestConfig => {
+    return configure(config);
+  },
+  (error): Promise<Error> => {
+    return Promise.reject(error);
+  },
+);
+
+export const crmBackendApi = axios.create({
+  baseURL: REACT_APP_BACKEND_API_ENDPOINT,
+});
+
+crmBackendApi.interceptors.request.use(
   (config: AxiosRequestConfig): AxiosRequestConfig => {
     return configure(config);
   },
