@@ -1104,8 +1104,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }, [tenHang]);
 
   React.useEffect((): void => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     templateOrderSuggest(keywords, tab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keywords, tab]);
 
   function templateOrderSuggest(keywords: string, type: number): void {
@@ -1147,7 +1147,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   React.useEffect((): void => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     if (size(senderKeywords) > 0) {
       dispatch(
         action_SENDER_SUGGEST(
@@ -1167,10 +1166,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     } else {
       setSenderSuggest([]);
     }
-  }, [senderKeywords]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [senderKeywords, isMounted]);
 
   React.useEffect((): void => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     if (size(receiverKeywords) > 0) {
       dispatch(
         action_RECEIVER_SUGGEST(
@@ -1190,6 +1189,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     } else {
       setSenderSuggest([]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [receiverKeywords]);
 
   function handleChooseCommoditySuggest(items: TypeaheadOption[]): void {
