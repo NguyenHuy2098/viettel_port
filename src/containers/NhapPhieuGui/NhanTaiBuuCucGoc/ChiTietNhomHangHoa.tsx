@@ -225,7 +225,18 @@ function ChiTietNhomHangHoa(props: Props): JSX.Element {
           // Add các bưu gửi được tích chọn bên ngoài vào bảng kê vừa tạo
           dispatch(
             action_MIOA_ZTMI016(payload016Update, {
+              // eslint-disable-next-line max-lines-per-function
               onSuccess: (data: API.MIOAZTMI016Response): void => {
+                toast(
+                  <>
+                    <i className="fa check mr-2" />
+                    {`Bưu gửi được gán vào bảng kê ${maBangKeVuaTao} thành công!`}
+                  </>,
+                  {
+                    containerId: 'DanhSachPhieuGuiTrongBangKe',
+                    type: 'success',
+                  },
+                );
                 const payload016Update2 = {
                   IV_FLAG: IV_FLAG.SUA,
                   IV_TOR_TYPE: SipDataType.TAI,
