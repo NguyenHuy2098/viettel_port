@@ -46,7 +46,7 @@ const TypeaheadTenHang = (props: Props): JSX.Element => {
       onChange={props.onChange}
       onInputChange={props.onInputChange}
       options={map(props.suggestions, item => ({
-        id: get(item, 'name'),
+        id: get(item, 'name') + get(item, 'price'),
         label: get(item, 'name'),
         price: get(item, 'price'),
       }))}

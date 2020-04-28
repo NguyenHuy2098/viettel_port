@@ -227,6 +227,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     wardIdReceiver: yup.string().required(t('Vui lòng nhập phường/xã')),
     detailAddressReceiver: yup.string().required(t('Vui lòng nhập địa chỉ chi tiết')),
     tenHang: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
+    loaiHangHoa: yup.string().required(t('Vui lòng nhập nhóm hàng hóa')),
     soLuong: yup
       .number()
       .required(t('Vui lòng nhập số lượng'))
@@ -317,6 +318,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   //__________________________________________________________
   const [maPhieuGui, setMaPhieuGui] = useState<string>('');
+  const [maBuuPham, setMaBuuPham] = useState<string>('');
   const [maKhachHangGui, setMaKhachHangGui] = useState<string>('');
   const [maKhachHangNhan, setMaKhachHangNhan] = useState<string>('');
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
@@ -491,6 +493,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     wardIdReceiver,
     detailAddressReceiver: trim(detailAddressReceiver),
     tenHang: trim(tenHang),
+    loaiHangHoa: trim(loaiHangHoa),
     soLuong: trim(soLuong) === '' ? undefined : trim(getValueOfNumberFormat(soLuong)),
     giaTri: trim(giaTri) === '' ? undefined : trim(getValueOfNumberFormat(giaTri)),
     tienThuHo: trim(tienThuHo) === '' ? undefined : trim(getValueOfNumberFormat(tienThuHo)),
@@ -538,9 +541,14 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceIdReceiver(get(orderInformationInstance, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstance, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstance, 'WARD_ID_DES', '')));
+      setMaBuuPham(get(orderInformationInstance, 'PACKAGE_ID', ''));
       setTenHang(get(orderInformationInstance, 'ITEM_DESCRIPTION', ''));
       setSoLuong(orderInformationInstance.Quantity ? parseFloat(orderInformationInstance.Quantity).toFixed(0) : '');
       setGiaTri(orderInformationInstance.GoodValue ? toString(parseInt(orderInformationInstance.GoodValue)) : '');
+      if (tenHang === get(orderInformationInstance, 'ITEM_DESCRIPTION', '')) {
+        setSelectedCommodity([{ id: tenHang, label: tenHang }]);
+        setCommoditySuggest([{ name: tenHang, description: tenHang, price: 0 }]);
+      }
       setTienThuHo(orderInformationInstance.COD ? toString(parseInt(orderInformationInstance.COD)) : '');
       setTrongLuong(
         orderInformationInstance.GROSS_WEIGHT ? parseFloat(orderInformationInstance.GROSS_WEIGHT).toFixed(0) : '',
@@ -1079,9 +1087,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   //_________________COMMODITY suggest event handle__________________________
 
   const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
+  const [selectedCommodity, setSelectedCommodity] = useState<TypeaheadOption[]>([]);
 
   React.useEffect((): void => {
-    if (size(tenHang) > 0) {
+    if (size(tenHang) > 0 && (size(selectedCommodity) == 0 || selectedCommodity[0].label != tenHang)) {
       dispatch(
         action_COMMODITY_SUGGEST(
           { q: tenHang },
@@ -1196,6 +1205,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setTenHang(get(items, '0.id', ''));
     setGiaTri(toString(get(items, '0.price', '')));
     setCommoditySuggest([]);
+    setSelectedCommodity(items);
     triggerValidateAndPriceCalculate();
   }
 
@@ -1225,6 +1235,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       forEach(dataPackageItemArr, (item: PackageItemInputType): void => {
         const newPackageItemTemp = {
           Width: item.Width ? trim(getValueOfNumberFormat(item.Width)) : '',
+
           COMMODITY_CODE: item.COMMODITY_CODE,
           COMMODITY_TYPE: item.COMMODITY_TYPE, // Nhóm hàng hóa (tham chiếu trong bảng)
           PACKAGE_TYPE: item.PACKAGE_TYPE, // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
@@ -1460,6 +1471,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPhuongThucVanChuyen(get(loaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
+    setMaBuuPham('');
     setLoaiKienHang('V3');
     setLoaiHangHoa('V01');
     setNguoiThanhToan('F1');
@@ -2088,6 +2100,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               labelKey={renderLabelKey}
               onChange={handleChangeTransportMethod(setPhuongThucVanChuyen)}
               options={loaiHinhDichVuListOptions}
+              selected={loaiHinhDichVuListOptions.filter(item => {
+                return item.id === phuongThucVanChuyen;
+              })}
               placeholder={t('Chọn dịch vụ')}
             />
           </Col>
@@ -2144,24 +2159,24 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function renderSendingCouponInfo(): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
-        <div className="sipContentContainer2">
-          <div className="sipInputBlock">
-            <h3>{t('Thông tin phiếu gửi')}</h3>
-            <Row className="sipInputItem">
-              <Label xs="12" lg="4">
-                {t('Mã phiếu gửi')}
-              </Label>
-              <Col lg="8">
-                <Input
-                  name="maPhieuGuiInput"
-                  type="text"
-                  value={maPhieuGui}
-                  onChange={handleChangeTextboxValue(setMaPhieuGui)}
-                />
-              </Col>
-            </Row>
-          </div>
-        </div>
+        {/*<div className="sipContentContainer2">*/}
+        {/*  <div className="sipInputBlock">*/}
+        {/*    <h3>{t('Thông tin phiếu gửi')}</h3>*/}
+        {/*    <Row className="sipInputItem">*/}
+        {/*      <Label xs="12" lg="4">*/}
+        {/*        {t('Mã phiếu gửi')}*/}
+        {/*      </Label>*/}
+        {/*      <Col lg="8">*/}
+        {/*        <Input*/}
+        {/*          name="maPhieuGuiInput"*/}
+        {/*          type="text"*/}
+        {/*          value={maPhieuGui}*/}
+        {/*          onChange={handleChangeTextboxValue(setMaPhieuGui)}*/}
+        {/*        />*/}
+        {/*      </Col>*/}
+        {/*    </Row>*/}
+        {/*  </div>*/}
+        {/*</div>*/}
         <div className="sipContentContainer2">{renderSenderInput()}</div>
         <div className="sipContentContainer2">{renderReceiverInput()}</div>
         <div className="sipContentContainer2">{renderDeliveryRequirement()}</div>
@@ -2272,10 +2287,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         </h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Loại kiện hàng')}
+            {t('Mã bưu phẩm')}
           </Label>
-          <Col lg={8} xs={12}>
-            {renderPackageType()}
+          <Col lg="8">
+            <Input
+              name="maBuuPhamInput"
+              type="text"
+              value={maBuuPham}
+              onChange={handleChangeTextboxValue(setMaBuuPham)}
+            />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -2283,26 +2303,36 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <TypeaheadLoaiHang
-              loaiKienHang={loaiKienHang}
-              onChange={handleChangeTypeaheadValue(setLoaiHangHoa)}
-              value={loaiHangHoa}
-            />
+            {renderPackageType()}
           </Col>
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            Tên hàng
+            {t('Tên hàng')}
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <TypeaheadTenHang
               onChange={handleChooseCommoditySuggest}
               onInputChange={handleChangeTypeaheadInput(setTenHang)}
-              selected={isEmpty(tenHang) ? [] : undefined}
+              selected={isEmpty(tenHang) ? [] : selectedCommodity}
               suggestions={commoditySuggest}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tenHang')}</div>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Nhóm hàng')}
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg={8} xs={12}>
+            <TypeaheadLoaiHang
+              loaiKienHang={loaiKienHang}
+              onChange={handleChangeTypeaheadValue(setLoaiHangHoa)}
+              value={loaiHangHoa}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(errors, 'loaiHangHoa')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -2322,29 +2352,32 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Giá trị & thu hộ')}
+            {t('Giá trị hàng hóa')}
+            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Row className="sipInputItemGroup">
-              <Col xs="12" md="6" className="mb-2">
-                <Input
-                  type="text"
-                  placeholder={t('Nhập giá trị (đ)')}
-                  value={giaTri === '' ? giaTri : numberFormat(getValueOfNumberFormat(giaTri))}
-                  onChange={handleChangeTextboxValue(setGiaTri)}
-                />
-                <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
-              </Col>
-              <Col xs="12" md="6" className="mb-2">
-                <Input
-                  type="text"
-                  placeholder={t('Nhập tiền thu hộ (đ)')}
-                  value={tienThuHo === '' ? tienThuHo : numberFormat(getValueOfNumberFormat(tienThuHo))}
-                  onChange={handleChangeTextboxValue(setTienThuHo)}
-                />
-                <div className="sipInputItemError">{handleErrorMessage(errors, 'tienThuHo')}</div>
-              </Col>
-            </Row>
+            <Input
+              type="text"
+              placeholder={t('Nhập giá trị (đ)')}
+              value={giaTri === '' ? giaTri : numberFormat(getValueOfNumberFormat(giaTri))}
+              onChange={handleChangeTextboxValue(setGiaTri)}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Tiền thu hộ')}
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input
+              type="text"
+              placeholder={t('Nhập tiền thu hộ (đ)')}
+              value={tienThuHo === '' ? tienThuHo : numberFormat(getValueOfNumberFormat(tienThuHo))}
+              onChange={handleChangeTextboxValue(setTienThuHo)}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(errors, 'tienThuHo')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">
