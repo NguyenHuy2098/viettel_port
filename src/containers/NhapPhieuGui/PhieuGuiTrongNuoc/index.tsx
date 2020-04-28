@@ -1090,7 +1090,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [selectedCommodity, setSelectedCommodity] = useState<TypeaheadOption[]>([]);
 
   React.useEffect((): void => {
-    if (size(tenHang) > 0 && (size(selectedCommodity) == 0 || selectedCommodity[0].label != tenHang)) {
+    if (size(tenHang) > 0 && (size(selectedCommodity) === 0 || selectedCommodity[0].label !== tenHang)) {
       dispatch(
         action_COMMODITY_SUGGEST(
           { q: tenHang },
