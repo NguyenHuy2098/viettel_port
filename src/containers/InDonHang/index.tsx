@@ -7,9 +7,10 @@ import { match } from 'react-router-dom';
 import qs from 'query-string';
 import { get } from 'lodash';
 import { printHtml } from 'utils/printOrder';
-
 import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
+
+import './styles.scss';
 
 interface Props {
   match: match;
