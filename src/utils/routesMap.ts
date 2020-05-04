@@ -149,6 +149,7 @@ export default {
   THONG_TIN_KIEN_HANG: '/thong-tin-kien-hang/:idDonHang/:idKienHang',
   THONG_TIN_DON_HANG_NEW: '/thong-tin-don-hang-new',
   THONG_TIN_DON_HANG: '/thong-tin-don-hang/:idDonHang',
+  IN_DON_HANG: '/in-don-hang/:idDonHang',
   THONG_TIN_DON_HANG_ORIGIN: '/thong-tin-don-hang',
   THONG_TIN_KIEN_HANG_ORIGIN: '/thong-tin-kien-hang',
   /**

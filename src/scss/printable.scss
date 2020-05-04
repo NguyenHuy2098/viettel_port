@@ -44,3 +44,66 @@
 .bang-ke-header tr th {
   vertical-align: top !important;
 }
+.orderPrintBody .container {
+  background-color: #ffff;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 11px;
+  width: 10cm;
+  height: 14.3cm;
+  overflow: scroll;
+  p {
+    margin: 0.05cm 0;
+  }
+  h5 {
+    font-size: 11px;
+  }
+  .part-1 {
+    height: 1.2cm;
+    h5 {
+      margin: 0.1cm 0!important;
+    }
+  }
+  .part-2 {
+    height: 2.5cm;
+    p {
+      margin: 0;
+    }
+  }
+  .part-3 {
+    height: 3.2cm;
+    table {
+      margin-top: 0.1cm;
+    }
+    table td {
+      padding: 0 0.5cm
+    }
+    .part-3-right {
+      padding: 0;
+      p, strong {
+        padding: 0 0.2cm;
+      }
+    }
+  }
+  .part-n-1 {
+    height: 3.3cm;
+    .sender-sign-box {
+      height: 1.4cm;
+    }
+  }
+  .part-end {
+    height: 0.5cm;
+    padding: 0!important;
+    p {
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
+
+@media print {
+  .orderPrintBody .container {
+    width: 10cm!important;
+    min-width: 10cm!important;
+    height: 14.3cm!important;
+  }
+}
