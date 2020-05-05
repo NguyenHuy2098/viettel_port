@@ -710,11 +710,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             0,
           );
           setCuocChinh(toString(cuocChinhAmount) + ' đ');
+          const ignoreAddedService = [ 'GBP' ];
           const cuocCongThemAmount = reduce(
             data,
             (total: number, item: API.ItemMTZTMI011OUT): number => {
               return findIndex(dichVuCongThem, (itemDichVuCongThem: string): boolean => {
-                return itemDichVuCongThem === item.CHARGE_TYPE;
+                return (itemDichVuCongThem === item.CHARGE_TYPE && !ignoreAddedService.includes(item.CHARGE_TYPE));
               }) !== -1
                 ? total + parseInt(item.AMOUNT_ITEM || '')
                 : total;
