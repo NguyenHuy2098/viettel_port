@@ -2787,7 +2787,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         return item.type === 'STREET';
       });
       setDetailAddressSender(get(thisStreetSender, 'name', ''));
-      toggleSenderAddress();
+      setDetailSender(true);
       //__________________________________________________________
       setDienThoaiReceiver(get(selectedTemplate, '0.receiver.phone'));
       setHoTenReceiver(get(selectedTemplate, '0.receiver.name'));
@@ -2810,7 +2810,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         return item.type === 'STREET';
       });
       setDetailAddressReceiver(get(thisStreetReceive, 'name', ''));
-      toggleReceiverAddress();
+      setDetailReceiver(true);
       setTenHang(get(selectedTemplate, '0.packages.0.name', ''));
       setCommoditySuggest([
         {
@@ -2836,7 +2836,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setDiemGiaoNhan(get(selectedTemplate, '0.movementType'));
       setNguoiThanhToan(get(selectedTemplate, '0.freightTerm'));
     }
-  }, selectedTemplate);
+  }, [selectedTemplate]);
 
   function handleSelectedTemplate(selected: OrderSuggestedItem[]): void {
     if (size(selected)) {
