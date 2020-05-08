@@ -129,6 +129,8 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
   useEffect(() => {
     JsBarcode('#barcode', idChuyenThu, {
       displayValue: false,
+      height: 65,
+      margin: 5,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idChuyenThu, type]);
@@ -164,11 +166,15 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
     return (
       <tbody>
         <tr>
-          <td className="border-0">{wardReceiver}</td>
+          <td className="border-0">
+            <strong>{wardReceiver}</strong>
+          </td>
           <td className="border-0">Tỉnh phát:</td>
         </tr>
         <tr>
-          <td className="border-0">{districtReceiver}</td>
+          <td className="border-0">
+            <strong>{districtReceiver}</strong>
+          </td>
           <td className="border-0">
             <strong>{provinceReceiver}</strong>
           </td>
@@ -179,22 +185,22 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
 
   function renderKhachHangNhan(): JSX.Element {
     return (
-      <Row className="border-bottom">
+      <Row className="border-bottom part-3">
         <Col xs={3} className="border-right pt-2">
           <p>{t('Khách hàng nhận')}</p>
         </Col>
-        <Col xs={9} className="pt-2">
+        <Col xs={9} className="pt-2 part-3-right">
           <p>Người nhận : {get(data, 'CONSIGNEE_NAME')}</p>
           <p>Điện thoại: {get(data, 'MOBILE_PHONE_DES')}</p>
-          <p>
+          <strong>
             Đia chỉ:
             {`${get(data, 'HOUSE_NO_DES') ? get(data, 'HOUSE_NO_DES') : ''}${' '}
                   ${get(data, 'STREET_ID_DES') ? get(data, 'STREET_ID_DES') : ''}${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
                   ${provinceReceiver}`}
-          </p>
-          <table className="table">{renderTableBody()}</table>
+          </strong>
+          <table className="table border-top">{renderTableBody()}</table>
         </Col>
       </Row>
     );
@@ -203,7 +209,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
   return (
     <Container>
       <Col className="border">
-        <Row className="p-1 border-bottom">
+        <Row className="p-1 border-bottom part-1">
           <Col xs={6} className="">
             <h5 className="font-weight-bold mt-2">
               {t('Dịch vụ')}: {get(data, 'SERVICE_TYPE')}
@@ -217,7 +223,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             <p>Điện thoại: -/- </p>
           </Col>
         </Row>
-        <Row className="border-bottom text-center">
+        <Row className="border-bottom text-center part-2">
           <Col xs={12} className="text-center">
             <p className="">
               <img className="" id="barcode" alt="barcode" />
@@ -262,8 +268,8 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
             {/*  {get(infoChuyenThu, 'TOR_ID')}*/}
             {/*</div>*/}
           </Col>
-          <Col xs={6} className="border-right pt-2">
-            <div className="pb-lg-5">
+          <Col xs={6} className="border-right pt-2 part-n-1">
+            <div className="pb-lg-5 sender-sign-box">
               <p>{t('Chữ ký người gửi')} : </p>
             </div>
             <div className="pb-lg-5">
@@ -272,7 +278,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
           </Col>
         </Row>
         <Row className="">
-          <Col xs={12} className="text-center pt-2">
+          <Col xs={12} className="part-end text-center pt-2">
             <p>www.viettelpost.com.vn - Hotline: 190.8095</p>
           </Col>
         </Row>

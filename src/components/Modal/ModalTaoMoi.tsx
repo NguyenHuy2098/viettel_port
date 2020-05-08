@@ -1,11 +1,12 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, FormGroup, Label, Input } from 'reactstrap';
-import { get, map } from 'lodash';
+import { get, first } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
+import TypeaheadDiemDen from 'components/Input/TypeaheadDiemDen';
 
 interface Props {
   onHide: () => void;
@@ -74,8 +75,8 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     };
   }
 
-  const handleChangePostOffice = (event: React.FormEvent<HTMLInputElement>): void => {
-    setDestination(event.currentTarget.value);
+  const handleChangePostOffice = (items: TypeaheadOption[]) : void => {
+    setDestination(get(first(items), 'id', ''));
   };
 
   return (
@@ -84,15 +85,11 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       <ModalBody>
         <FormGroup>
           <Label>{t('Chọn điểm đến')}</Label>
-          <Input type="select" onChange={handleChangePostOffice} defaultValue={destination}>
-            {map(postOfficeList, (item: API.RowMTZTMI045OUT, index: number) => {
-              return (
-                <option key={index} value={item.LOCNO}>
-                  {item.LOCNO}
-                </option>
-              );
-            })}
-          </Input>
+          <TypeaheadDiemDen
+              postOfficeList={postOfficeList}
+              onChange={handleChangePostOffice}
+              value={destination}
+          />
         </FormGroup>
         <FormGroup>
           <Label>{t('Ghi chú')}</Label>

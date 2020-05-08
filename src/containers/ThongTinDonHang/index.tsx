@@ -3,15 +3,13 @@ import React, { useMemo, useState } from 'react';
 import { Button, Row, Col, Fade } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { generatePath, match } from 'react-router-dom';
+import { generatePath, match, Link } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
 import { drop, findIndex, get, size, slice } from 'lodash';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
-import PrintableModal from 'components/Button/ButtonPrintable';
 import DataTable from 'components/DataTable';
-import PrintableThongTinDonHang from 'components/Printable/PrintableThongTinDonHang';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
@@ -139,23 +137,23 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
   };
 
-  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
-    <PrintableModal
-      btnProps={{
-        className: 'SipTableFunctionIcon',
-        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
-      }}
-      modalProps={{
-        size: 'lg',
-      }}
-      modalBodyProps={{
-        children: <PrintableThongTinDonHang idDonHang={idDonHang} idChuyenThu={idChuyenThu} type="TTDH" />,
-      }}
-      modalHeaderProps={{
-        children: t('In Thông Tin Đơn Hàng'),
-      }}
-    />
-  );
+  // const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+  //   <PrintableModal
+  //     btnProps={{
+  //       className: 'SipTableFunctionIcon',
+  //       children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
+  //     }}
+  //     modalProps={{
+  //       size: 'lg',
+  //     }}
+  //     modalBodyProps={{
+  //       children: <PrintableThongTinDonHang idDonHang={idDonHang} idChuyenThu={idChuyenThu} type="TTDH" />,
+  //     }}
+  //     modalHeaderProps={{
+  //       children: t('In Thông Tin Đơn Hàng'),
+  //     }}
+  //   />
+  // );
 
   const columns = useMemo(
     // eslint-disable-next-line max-lines-per-function
@@ -224,9 +222,15 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Quản trị'),
         accessor: '',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return renderPrintButton(get(row, 'values.PACKAGE_ID', ''));
-        },
+        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => (
+          <Link
+            className="SipTableFunctionIcon"
+            to={`/in-don-hang/${idDonHang}?idChuyenThu=${get(row, 'values.PACKAGE_ID', '')}`}
+            target="_blank"
+          >
+            <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
+          </Link>
+        ),
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps

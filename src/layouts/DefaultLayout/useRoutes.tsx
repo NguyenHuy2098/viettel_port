@@ -67,6 +67,7 @@ const PhanCongPhatNhan = lazy(() => import('containers/KhaiThacDen/PhanCongPhatN
 
 const ThongTinKienHang = lazy(() => import('containers/ThongTinKienHang'));
 const ThongTinDonHang = lazy(() => import('containers/ThongTinDonHang'));
+const InDonHang = lazy(() => import('containers/InDonHang'));
 const ThongTinDonHangNew = lazy(() => import('containers/ThongTinDonHangNew'));
 const PageNoData = lazy(() => import('containers/PageNoData'));
 const Home = lazy(() => import('containers/Home'));
@@ -162,6 +163,7 @@ const routes = (t: TFunction): SIPRoutePropsType[] => {
     { path: routesMap.TIEP_XUC_KHACH_HANG, name: t('Tiếp xúc khách hàng'), component: TiepXucKhachHang },
     { path: routesMap.THONG_TIN_KIEN_HANG, name: t('Thông tin kiện hàng'), component: ThongTinKienHang },
     { path: routesMap.THONG_TIN_DON_HANG, name: t('Thông tin đơn hàng'), component: ThongTinDonHang },
+    { path: routesMap.IN_DON_HANG, name: t('In đơn hàng'), component: InDonHang },
     { path: routesMap.THONG_TIN_DON_HANG_NEW, name: t('Thông tin đơn hàng new'), component: ThongTinDonHangNew },
     { path: routesMap.TACH_PHIEU_GUI, name: t('Tách phiếu gửi'), component: TachPhieuGui },
     { path: routesMap.BIEN_BAN_NOI_BO, name: t('Biên bản nội bộ'), component: BienBanNoiBo },
