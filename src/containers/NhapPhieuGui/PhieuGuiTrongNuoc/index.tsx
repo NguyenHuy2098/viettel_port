@@ -2836,7 +2836,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setDiemGiaoNhan(get(selectedTemplate, '0.movementType'));
       setNguoiThanhToan(get(selectedTemplate, '0.freightTerm'));
     }
-  }, [selectedTemplate]);
+  }, selectedTemplate);
 
   function handleSelectedTemplate(selected: OrderSuggestedItem[]): void {
     if (size(selected)) {
