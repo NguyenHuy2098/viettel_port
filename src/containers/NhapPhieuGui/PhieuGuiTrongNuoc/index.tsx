@@ -6,7 +6,13 @@ import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
 import { Button, Col, Input, Label, Nav, NavItem, NavLink, Row } from 'reactstrap';
-import { Menu, MenuItem, Typeahead as RootTypeahead, TypeaheadResult } from 'react-bootstrap-typeahead';
+import {
+  Menu,
+  MenuItem,
+  Typeahead as RootTypeahead,
+  TypeaheadMenuProps,
+  TypeaheadResult,
+} from 'react-bootstrap-typeahead';
 import {
   concat,
   drop,
@@ -51,7 +57,7 @@ import {
   action_GET_WARD,
 } from 'redux/LocationSearch/actions';
 import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
-import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
+import { makeSelectorBPOrg, makeSelectorCurrentPostOffice } from 'redux/GetProfileByUsername/selectors';
 import { action_MOST_ORDER_SUGGEST, action_RECENT_ORDER_SUGGEST } from 'redux/OrderSuggest/actions';
 import { action_SENDER_SUGGEST, action_RECEIVER_SUGGEST } from 'redux/PersonSuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
@@ -109,6 +115,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [receiverKeywords, setReceiverKeywords] = useState<string>('');
   // const [selectedReceiverSuggest, setReceiverSenderSuggest] = useState<Person>();
   const [receiverSuggest, setReceiverSuggest] = useState<Person[]>([]);
+
+  const [listTemplates, setListTemplates] = useState<OrderSuggestedItem[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<OrderSuggestedItem[]>();
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -1101,7 +1110,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             },
             onFailure: (error: HttpRequestErrorType): void => {
               if (!isMounted()) return;
-              setCommoditySuggest([]);
             },
           },
         ),
@@ -1118,52 +1126,59 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }, [keywords, tab]);
 
   function templateOrderSuggest(keywords: string, type: number): void {
-    let payload = {};
-    switch (type) {
-      case 1:
-        break;
-      case 2:
-        if (size(keywords)) {
-          payload = { q: keywords };
-        }
-        dispatch(
-          action_MOST_ORDER_SUGGEST(payload, {
-            onSuccess: (data: OrderSuggestedItem): void => {
-              if (!isMounted()) return;
-            },
-            onFailure: (error: HttpRequestErrorType): void => {
-              if (!isMounted()) return;
-            },
-          }),
-        );
-        break;
-      case 3:
-        if (size(keywords)) {
-          payload = { q: keywords };
-        }
-        dispatch(
-          action_RECENT_ORDER_SUGGEST(payload, {
-            onSuccess: (data: OrderSuggestedItem): void => {
-              if (!isMounted()) return;
-            },
-            onFailure: (error: HttpRequestErrorType): void => {
-              if (!isMounted()) return;
-            },
-          }),
-        );
-        break;
+    if (currentPostOfficeInStore) {
+      const payload = { postoffice: currentPostOfficeInStore.PostOfficeCode };
+      switch (type) {
+        case 1:
+          break;
+        case 2:
+          if (size(keywords)) {
+            Object.assign(payload, { q: keywords });
+          }
+          dispatch(
+            action_MOST_ORDER_SUGGEST(payload, {
+              onSuccess: (data: OrderSuggestedItem[]): void => {
+                if (!isMounted()) return;
+              },
+              onFailure: (error: HttpRequestErrorType): void => {
+                if (!isMounted()) return;
+              },
+            }),
+          );
+          break;
+        case 3:
+          if (size(keywords)) {
+            Object.assign(payload, { q: keywords });
+          }
+          dispatch(
+            action_RECENT_ORDER_SUGGEST(payload, {
+              onSuccess: (data: OrderSuggestedItem[]): void => {
+                if (!isMounted()) return;
+                setListTemplates(data);
+              },
+              onFailure: (error: HttpRequestErrorType): void => {
+                if (!isMounted()) return;
+              },
+            }),
+          );
+          break;
+        default:
+          setListTemplates([]);
+      }
     }
   }
 
+  const currentPostOfficeInStore = useSelector(makeSelectorCurrentPostOffice);
+
   React.useEffect((): void => {
-    if (size(senderKeywords) > 0) {
+    if (size(senderKeywords) > 0 && currentPostOfficeInStore) {
       dispatch(
         action_SENDER_SUGGEST(
-          { q: senderKeywords },
+          { q: senderKeywords, postoffice: currentPostOfficeInStore.PostOfficeCode },
           {
-            onSuccess: (data: Person): void => {
+            onSuccess: (data: Person[]): void => {
               if (!isMounted()) return;
-              setSenderSuggest(get(data, 'items'));
+              setSenderSuggest(data);
             },
             onFailure: (error: HttpRequestErrorType): void => {
               if (!isMounted()) return;
@@ -1176,10 +1191,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setSenderSuggest([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [senderKeywords]);
+  }, [senderKeywords, currentPostOfficeInStore]);
 
   React.useEffect((): void => {
-    if (size(receiverKeywords) > 0) {
+    if (size(receiverKeywords) > 0 && currentPostOfficeInStore) {
       dispatch(
         action_RECEIVER_SUGGEST(
           { q: receiverKeywords },
@@ -1199,14 +1214,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setSenderSuggest([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [receiverKeywords]);
+  }, [receiverKeywords, currentPostOfficeInStore]);
 
   function handleChooseCommoditySuggest(items: TypeaheadOption[]): void {
-    setTenHang(get(items, '0.id', ''));
-    setGiaTri(toString(get(items, '0.price', '')));
-    setCommoditySuggest([]);
-    setSelectedCommodity(items);
-    triggerValidateAndPriceCalculate();
+    if (size(items)) {
+      setTenHang(get(items, '0.id', ''));
+      setGiaTri(toString(get(items, '0.price', '')));
+      setCommoditySuggest([]);
+      setSelectedCommodity(items);
+      triggerValidateAndPriceCalculate();
+    }
   }
 
   //___________________________________________________________________
@@ -1439,6 +1456,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     }
   }
 
+  // eslint-disable-next-line max-lines-per-function
   function handleClearData(): void {
     setIsSubmit(false);
     setErrors([]);
@@ -1486,6 +1504,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setCuocCongThem('0 đ');
     setTongCuoc('0 đ');
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
+    setSelectedTemplate([]);
+    setKeywords('');
+    setTab(0);
   }
 
   //__________________________________________________________________________
@@ -1802,24 +1823,77 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  function renderTypeaheadPerson(person: Person): JSX.Element {
-    return <div>{get(person, 'phone') + ' * ' + get(person, 'code') + ' * ' + get(person, 'name')}</div>;
+  function renderTypeaheadPerson(
+    option: TypeaheadResult<Person>,
+    props: TypeaheadMenuProps<Person>,
+    index: number,
+  ): JSX.Element {
+    return (
+      <div>
+        <Row style={{ fontWeight: 'bold' }}>
+          {get(option, 'phone') + ' * ' + get(option, 'code') + ' * ' + get(option, 'name')}
+        </Row>
+        <Row>{get(option, 'addr.formattedAddress')}</Row>
+      </div>
+    );
   }
 
   function handleSelectedSender(selected: Person[]): void {
     if (size(selected)) {
-      setDienThoaiSender(selected[0].phone);
-      setHoTenSender(selected[0].name);
-      setMaKhachHangGui(selected[0].code);
+      setDienThoaiSender(get(selected, '0.phone'));
+      setHoTenSender(get(selected, '0.name'));
+      setMaKhachHangGui(get(selected, '0.code'));
+      //address
+      const dataComponents = get(selected, '0.addr.components', []);
+      const thisProvince = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'PROVINCE';
+      });
+      setProvinceIdSender(get(thisProvince, 'code', ''));
+      const thisDistrict = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'DISTRICT';
+      });
+      setDistrictIdSender(get(thisDistrict, 'code', ''));
+      const thisWard = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'WARD';
+      });
+      setWardIdSender(get(thisWard, 'code', ''));
+      const thisStreet = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'STREET';
+      });
+      setDetailAddressSender(get(thisStreet, 'name', ''));
+      toggleSenderAddress();
     }
   }
 
   function handleSelectedReceiver(selected: Person[]): void {
     if (size(selected)) {
-      setDienThoaiSender(selected[0].phone);
-      setHoTenSender(selected[0].name);
-      setMaKhachHangGui(selected[0].code);
+      setDienThoaiReceiver(get(selected, '0.phone'));
+      setHoTenReceiver(get(selected, '0.name'));
+      setMaKhachHangNhan(get(selected, '0.code'));
+      //address
+      const dataComponents = get(selected, '0.addr.components', []);
+      const thisProvince = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'PROVINCE';
+      });
+      setProvinceIdReceiver(get(thisProvince, 'code', ''));
+      const thisDistrict = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'DISTRICT';
+      });
+      setDistrictIdReceiver(get(thisDistrict, 'code', ''));
+      const thisWard = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'WARD';
+      });
+      setWardIdReceiver(get(thisWard, 'code', ''));
+      const thisStreet = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'STREET';
+      });
+      setDetailAddressReceiver(get(thisStreet, 'name', ''));
+      toggleReceiverAddress();
     }
+  }
+
+  function labelKeyPerson(option: Person): string {
+    return `${option.phone} * ${option.code} * ${option.name}`;
   }
 
   // eslint-disable-next-line max-lines-per-function
@@ -1834,6 +1908,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <RootTypeahead
               id="suggestSender"
+              labelKey={labelKeyPerson}
               onInputChange={setSenderKeywords}
               options={senderSuggest}
               onChange={handleSelectedSender}
@@ -1962,6 +2037,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <RootTypeahead
               id="suggestSender"
+              labelKey={labelKeyPerson}
               onInputChange={setReceiverKeywords}
               options={receiverSuggest}
               onChange={handleSelectedReceiver}
@@ -2613,7 +2689,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   // eslint-disable-next-line
-  function renderSuggetTemplate(results: Array<TypeaheadResult<TypeaheadOption>>, menuProps: any): JSX.Element {
+  function renderSuggetTemplate(results: Array<TypeaheadResult<OrderSuggestedItem>>, menuProps: any): JSX.Element {
     return (
       <Menu {...menuProps}>
         <div className="sipTabContainer">
@@ -2636,8 +2712,25 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           </Nav>
         </div>
         {results.map((result, index) => (
-          <MenuItem option={result.id} position={index}>
-            result.label
+          <MenuItem key={get(result, 'id')} option={result} position={index}>
+            <Row>
+              <span>{get(result, 'packages.0.name')}</span>
+              <span
+                style={{
+                  right: 0,
+                  position: 'absolute',
+                  color: 'green',
+                  marginRight: '10px',
+                }}
+              >
+                {get(result, 'packages.0.weight', '0') + '' + get(result, 'packages.0.weightUnit')}
+              </span>
+            </Row>
+            <Row>
+              <span style={{ color: '#a3a3a3' }}>
+                {get(result, 'sender.name') + ' - ' + get(result, 'sender.phone')}
+              </span>
+            </Row>
           </MenuItem>
         ))}
       </Menu>
@@ -2670,6 +2763,91 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  // eslint-disable-next-line max-lines-per-function
+  React.useEffect((): void => {
+    if (selectedTemplate && size(selectedTemplate)) {
+      setDienThoaiSender(get(selectedTemplate, '0.sender.phone'));
+      setHoTenSender(get(selectedTemplate, '0.sender.name'));
+      setMaKhachHangGui(get(selectedTemplate, '0.sender.code', '9999999999'));
+      //address
+      const dataComponentsSender = get(selectedTemplate, '0.sender.addr.components', []);
+      const thisProvinceSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'PROVINCE';
+      });
+      setProvinceIdSender(get(thisProvinceSender, 'code', ''));
+      const thisDistrictSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'DISTRICT';
+      });
+      setDistrictIdSender(get(thisDistrictSender, 'code', ''));
+      const thisWardSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'WARD';
+      });
+      setWardIdSender(get(thisWardSender, 'code', ''));
+      const thisStreetSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'STREET';
+      });
+      setDetailAddressSender(get(thisStreetSender, 'name', ''));
+      toggleSenderAddress();
+      //__________________________________________________________
+      setDienThoaiReceiver(get(selectedTemplate, '0.receiver.phone'));
+      setHoTenReceiver(get(selectedTemplate, '0.receiver.name'));
+      setMaKhachHangNhan(get(selectedTemplate, '0.receiver.code', '9999999999'));
+      //address
+      const dataComponentsReceive = get(selectedTemplate, '0.receiver.addr.components', []);
+      const thisProvinceReceive = find(dataComponentsReceive, (item: Component): boolean => {
+        return item.type === 'PROVINCE';
+      });
+      setProvinceIdReceiver(get(thisProvinceReceive, 'code', ''));
+      const thisDistrictReceive = find(dataComponentsReceive, (item: Component): boolean => {
+        return item.type === 'DISTRICT';
+      });
+      setDistrictIdReceiver(get(thisDistrictReceive, 'code', ''));
+      const thisWardReceive = find(dataComponentsReceive, (item: Component): boolean => {
+        return item.type === 'WARD';
+      });
+      setWardIdReceiver(get(thisWardReceive, 'code', ''));
+      const thisStreetReceive = find(dataComponentsReceive, (item: Component): boolean => {
+        return item.type === 'STREET';
+      });
+      setDetailAddressReceiver(get(thisStreetReceive, 'name', ''));
+      toggleReceiverAddress();
+      setTenHang(get(selectedTemplate, '0.packages.0.name', ''));
+      setCommoditySuggest([
+        {
+          name: get(selectedTemplate, '0.packages.0.name', ''),
+          description: get(selectedTemplate, '0.packages.0.name', ''),
+          price: 0,
+        },
+      ]);
+      setSelectedCommodity([
+        {
+          id: get(selectedTemplate, '0.packages.0.name', ''),
+          label: get(selectedTemplate, '0.packages.0.name', ''),
+        },
+      ]);
+      setSoLuong(get(selectedTemplate, '0.packages.0.quantity', 0));
+      setGiaTri(get(selectedTemplate, '0.packages.0.goodsValue', 0));
+      setTienThuHo(get(selectedTemplate, '0.packages.0.cod', 0));
+      setTrongLuong(get(selectedTemplate, '0.packages.0.weight', '0'));
+      setKichThuocDai(get(selectedTemplate, '0.packages.0.length', '0'));
+      setKichThuocRong(get(selectedTemplate, '0.packages.0.width', '0'));
+      setKichThuocCao(get(selectedTemplate, '0.packages.0.height', '0'));
+      setPhuongThucVanChuyen(get(selectedTemplate, '0.services.0'));
+      setDiemGiaoNhan(get(selectedTemplate, '0.movementType'));
+      setNguoiThanhToan(get(selectedTemplate, '0.freightTerm'));
+    }
+  }, [selectedTemplate]);
+
+  function handleSelectedTemplate(selected: OrderSuggestedItem[]): void {
+    if (size(selected)) {
+      setSelectedTemplate(selected);
+    }
+  }
+
+  function labelKeyTemplate(option: OrderSuggestedItem): string {
+    return `${get(option, 'id')}`;
+  }
+
   return (
     <div className="phieuGuiTrongNuoc" onKeyDown={handleClearFocusElement} onClick={handleClearFocusElement}>
       <Row className="mb-3 sipTitleContainer">
@@ -2679,10 +2857,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <Col lg="4" xs="3">
           <RootTypeahead
             id="tet"
-            options={[]}
+            labelKey={labelKeyTemplate}
+            options={listTemplates}
             placeholder={'Tạo phiếu gửi theo biểu mẫu'}
             onInputChange={setKeywords}
             renderMenu={renderSuggetTemplate}
+            onChange={handleSelectedTemplate}
+            selected={selectedTemplate}
           >
             <span
               style={{

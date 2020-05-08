@@ -13,7 +13,7 @@ function* takeGet_RECENT_ORDER_SUGGEST(action: UnfoldSagaActionType): Iterable<S
         const { data } = await crmBackendApi.get('/order/v1.0/orders/recent', {
           params: action.payload,
         });
-        if (size(data.items)) return data;
+        if (size(data)) return data;
         throw new HttpRequestError(data.ErrorCode, data.Messages);
       },
       key: action.type,
@@ -29,7 +29,7 @@ function* takeGet_MOST_ORDER_SUGGEST(action: UnfoldSagaActionType): Iterable<Sag
         const { data } = await crmBackendApi.get('/order/v1.0/orders/most', {
           params: action.payload,
         });
-        if (size(data.items)) return data;
+        if (size(data)) return data;
         throw new HttpRequestError(data.ErrorCode, data.Messages);
       },
       key: action.type,

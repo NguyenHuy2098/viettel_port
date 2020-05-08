@@ -13,7 +13,7 @@ function* takeGet_SENDER_SUGGEST(action: UnfoldSagaActionType): Iterable<SagaIte
         const { data } = await crmBackendApi.get('/order/v1.0/sender/_suggest', {
           params: action.payload,
         });
-        if (size(data.items)) return data;
+        if (size(data)) return data;
         throw new HttpRequestError(data.ErrorCode, data.Messages);
       },
       key: action.type,
@@ -29,7 +29,7 @@ function* takeGet_RECEIVER_SUGGEST(action: UnfoldSagaActionType): Iterable<SagaI
         const { data } = await crmBackendApi.get('/order/v1.0/receiver/_suggest', {
           params: action.payload,
         });
-        if (size(data.items)) return data;
+        if (size(data)) return data;
         throw new HttpRequestError(data.ErrorCode, data.Messages);
       },
       key: action.type,
