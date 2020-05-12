@@ -1178,7 +1178,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           {
             onSuccess: (data: Person[]): void => {
               if (!isMounted()) return;
-              setSenderSuggest(data);
+              setSenderSuggest(get(data, 'items', []));
             },
             onFailure: (error: HttpRequestErrorType): void => {
               if (!isMounted()) return;
@@ -1199,9 +1199,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         action_RECEIVER_SUGGEST(
           { q: receiverKeywords },
           {
-            onSuccess: (data: Person): void => {
+            onSuccess: (data: Person[]): void => {
               if (!isMounted()) return;
-              setReceiverSuggest(get(data, 'items'));
+              if (size(data) > 0) {
+                setReceiverSuggest(get(data, 'items', []));
+              }
             },
             onFailure: (error: HttpRequestErrorType): void => {
               if (!isMounted()) return;
