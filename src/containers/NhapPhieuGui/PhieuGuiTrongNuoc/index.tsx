@@ -1127,14 +1127,15 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function templateOrderSuggest(keywords: string, type: number): void {
     if (currentPostOfficeInStore) {
-      const payload = { postoffice: currentPostOfficeInStore.PostOfficeCode };
+      let payload = { postoffice: 'CAL' };
       switch (type) {
         case 1:
           break;
         case 2:
           if (size(keywords)) {
-            Object.assign(payload, { q: keywords });
+            payload = Object.assign(payload, { q: keywords });
           }
+          debugger;
           dispatch(
             action_MOST_ORDER_SUGGEST(payload, {
               onSuccess: (data: OrderSuggestedItem[]): void => {
@@ -1147,8 +1148,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           );
           break;
         case 3:
+          debugger;
           if (size(keywords)) {
-            Object.assign(payload, { q: keywords });
+            payload = Object.assign(payload, { q: keywords });
           }
           dispatch(
             action_RECENT_ORDER_SUGGEST(payload, {
@@ -1178,7 +1180,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           {
             onSuccess: (data: Person[]): void => {
               if (!isMounted()) return;
-              setSenderSuggest(get(data, 'items', []));
+              setSenderSuggest(data);
             },
             onFailure: (error: HttpRequestErrorType): void => {
               if (!isMounted()) return;
@@ -1202,7 +1204,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             onSuccess: (data: Person[]): void => {
               if (!isMounted()) return;
               if (size(data) > 0) {
-                setReceiverSuggest(get(data, 'items', []));
+                setReceiverSuggest(data);
               }
             },
             onFailure: (error: HttpRequestErrorType): void => {
