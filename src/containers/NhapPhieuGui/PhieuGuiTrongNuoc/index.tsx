@@ -378,6 +378,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [cuocChinh, setCuocChinh] = useState<string>('0 đ');
   const [cuocCongThem, setCuocCongThem] = useState<string>('0 đ');
   const [tongCuoc, setTongCuoc] = useState<string>('0 đ');
+  const [tienPhuPhi, setTienPhuPhi] = useState<string>('');
 
   // _________________ handle state tab keyboard
   const [focusElement, setFocusElement] = React.useState<string>('');
@@ -718,7 +719,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             0,
           );
           setCuocCongThem(toString(cuocCongThemAmount) + ' đ');
-          setTongCuoc(cuocChinhAmount + cuocCongThemAmount + ' đ');
+          setTongCuoc(cuocChinhAmount + cuocCongThemAmount + tienPhuPhi + ' đ');
         },
       }),
     );
@@ -1199,7 +1200,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     if (size(receiverKeywords) > 0 && currentPostOfficeInStore) {
       dispatch(
         action_RECEIVER_SUGGEST(
-          { q: receiverKeywords },
+          { q: receiverKeywords, postoffice: currentPostOfficeInStore.PostOfficeCode, sender: maKhachHangGui },
           {
             onSuccess: (data: Person[]): void => {
               if (!isMounted()) return;
@@ -1807,9 +1808,20 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               />
             </Col>
           </Row>
-        </Row>
-        <div className="sipLine row" />
-        <Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5" xl={7}>
+              {t('Phụ phí')}
+              {t('HYPHEN', ':')}
+            </Col>
+            <Col xs="7" xl={5} className="text-semibold">
+              <Input
+                type="text"
+                placeholder={t('Nhập phụ phí (đ)')}
+                value={tienPhuPhi === '' ? tienPhuPhi : numberFormat(getValueOfNumberFormat(tienPhuPhi))}
+                onChange={handleChangeTextboxValue(setTienPhuPhi)}
+              />
+            </Col>
+          </Row>
           <Row className="sipSendingCouponItem mb-3">
             <Col xs="5">{t('Tổng cước')}</Col>
             <Col xs="7" className="color-orange text-semibold">
