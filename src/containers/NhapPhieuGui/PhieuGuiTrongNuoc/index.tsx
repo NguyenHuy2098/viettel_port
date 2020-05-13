@@ -1879,6 +1879,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setDetailAddressSender(get(thisStreet, 'name', ''));
       toggleSenderAddress();
       setSenderKeywords('');
+      setFocusAdress('sender');
     }
   }
 
@@ -1906,6 +1907,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       });
       setDetailAddressReceiver(get(thisStreet, 'name', ''));
       toggleReceiverAddress();
+      setFocusAdress('receiver');
     }
   }
 
