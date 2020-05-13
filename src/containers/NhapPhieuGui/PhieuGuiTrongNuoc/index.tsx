@@ -719,7 +719,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             0,
           );
           setCuocCongThem(toString(cuocCongThemAmount) + ' đ');
-          setTongCuoc(cuocChinhAmount + cuocCongThemAmount + tienPhuPhi + ' đ');
+          setTongCuoc(cuocChinhAmount + cuocCongThemAmount + parseInt(tienPhuPhi) + ' đ');
         },
       }),
     );
