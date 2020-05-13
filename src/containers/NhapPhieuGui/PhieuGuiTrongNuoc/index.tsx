@@ -1878,6 +1878,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       });
       setDetailAddressSender(get(thisStreet, 'name', ''));
       toggleSenderAddress();
+      setSenderKeywords('');
     }
   }
 
@@ -1927,6 +1928,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               labelKey={labelKeyPerson}
               onInputChange={setSenderKeywords}
               options={senderSuggest}
+              selected={[]}
               onChange={handleSelectedSender}
               renderMenuItemChildren={renderTypeaheadPerson}
               placeholder={t('Nhập mã khách hàng/Tên/Số ĐT')}
@@ -2056,6 +2058,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               labelKey={labelKeyPerson}
               onInputChange={setReceiverKeywords}
               options={receiverSuggest}
+              selected={[]}
               onChange={handleSelectedReceiver}
               renderMenuItemChildren={renderTypeaheadPerson}
               placeholder={t('Nhập mã khách hàng/Tên/Số ĐT')}
