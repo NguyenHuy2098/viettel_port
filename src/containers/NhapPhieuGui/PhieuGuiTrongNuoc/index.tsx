@@ -2373,13 +2373,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function renderPackageInfoDetail(): JSX.Element {
     return (
       <div className="sipInputBlock">
-        <h3>
-          {t('Thông tin hàng hóa')}
-          <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
-            <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
-            {t('Thêm')}
-          </Button>
-        </h3>
+        <h3>{t('Thông tin hàng hóa')}</h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Mã bưu phẩm')}
@@ -2500,6 +2494,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           </Label>
           <Col lg="8">{renderPackageSize()}</Col>
         </Row>
+        <h3>
+          <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
+            <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
+            {t('Thêm')}
+          </Button>
+        </h3>
       </div>
     );
   }
