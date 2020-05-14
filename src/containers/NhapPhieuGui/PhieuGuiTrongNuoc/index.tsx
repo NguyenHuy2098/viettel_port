@@ -719,7 +719,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             0,
           );
           setCuocCongThem(toString(cuocCongThemAmount) + ' đ');
-          setTongCuoc(cuocChinhAmount + cuocCongThemAmount + parseInt(tienPhuPhi) + ' đ');
+          const tienPhuPhiAmount = isEmpty(tienPhuPhi) ? 0 : parseInt(getValueOfNumberFormat(tienPhuPhi));
+          setTongCuoc(cuocChinhAmount + cuocCongThemAmount + tienPhuPhiAmount + ' đ');
         },
       }),
     );
@@ -1793,7 +1794,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               />
             </Col>
           </Row>
-          <Row className="sipSendingCouponItem">
+          <Row className="sipSendingCouponItem" xl={4}>
             <Col xs="5" xl={7}>
               {t('Cước cộng thêm')}
               {t('HYPHEN', ':')}
@@ -1809,12 +1810,13 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
           </Row>
           <Row className="sipSendingCouponItem">
-            <Col xs="5" xl={7}>
+            <Col xs="5" xl={4}>
               {t('Phụ phí')}
               {t('HYPHEN', ':')}
             </Col>
-            <Col xs="7" xl={5} className="text-semibold">
+            <Col xs="7" xl={8} className="text-semibold">
               <Input
+                className="text-semibold"
                 type="text"
                 placeholder={t('Nhập phụ phí (đ)')}
                 value={tienPhuPhi === '' ? tienPhuPhi : numberFormat(getValueOfNumberFormat(tienPhuPhi))}
