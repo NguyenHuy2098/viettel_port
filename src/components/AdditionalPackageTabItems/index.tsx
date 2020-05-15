@@ -202,7 +202,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
     return (
       <Row className="sipInputItem">
         <Label xs="12" lg="4">
-          {t('Loại kiện hàng')}
+          {t('Loại hàng')}
         </Label>
         <Col lg={8} xs={12}>
           <Row>
@@ -250,18 +250,19 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
   function renderTabContent(index: number, item: PackageItemInputType): JSX.Element {
     return (
       <div className="sipInputBlock">
-        {renderPackageType(index)}
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Loại hàng')}
+            {t('Mã bưu phẩm')}
           </Label>
-          <Col lg={8} xs={12}>
-            <TypeaheadLoaiHoang
-              loaiKienHang={item.COMMODITY_TYPE}
-              onChange={handleChangeTypeaheadValue('COMMODITY_CODE', index)}
+          <Col lg="8">
+            <Input
+              name={`maBuuPhamInput_${index}`}
+              type="text"
+              onChange={handleChangeTextboxValue('package_ID', index)}
             />
           </Col>
         </Row>
+        {renderPackageType(index)}
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             Tên hàng
@@ -274,6 +275,17 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
               suggestions={commoditySuggest}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'Description')}</div>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Nhóm hàng')}
+          </Label>
+          <Col lg={8} xs={12}>
+            <TypeaheadLoaiHoang
+              loaiKienHang={item.COMMODITY_TYPE}
+              onChange={handleChangeTypeaheadValue('COMMODITY_CODE', index)}
+            />
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -297,33 +309,32 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Giá trị & thu hộ')}
+            {t('Giá trị hàng hóa')}
           </Label>
           <Col lg="8">
-            <Row className="sipInputItemGroup">
-              <Col xs="12" md="6" className="mb-2">
-                <Input
-                  type="text"
-                  placeholder={t('Nhập giá trị (đ)')}
-                  value={
-                    get(item, 'GOODS_VALUE') === ''
-                      ? ''
-                      : numberFormat(getValueOfNumberFormat(get(item, 'GOODS_VALUE', '')))
-                  }
-                  onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
-                />
-                <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
-              </Col>
-              <Col xs="12" md="6" className="mb-2">
-                <Input
-                  type="text"
-                  placeholder={t('Nhập tiền thu hộ (đ)')}
-                  value={get(item, 'COD') === '' ? '' : numberFormat(getValueOfNumberFormat(get(item, 'COD', '')))}
-                  onChange={handleChangeTextboxValue('COD', index)}
-                />
-                <div className="sipInputItemError">{handleErrorMessage(index, 'COD')}</div>
-              </Col>
-            </Row>
+            <Input
+              type="text"
+              placeholder={t('Nhập giá trị (đ)')}
+              value={
+                get(item, 'GOODS_VALUE') === ''
+                  ? ''
+                  : numberFormat(getValueOfNumberFormat(get(item, 'GOODS_VALUE', '')))
+              }
+              onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
+            />
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Tiền thu hộ')}
+          </Label>
+          <Col lg="8">
+            <Input
+              type="text"
+              placeholder={t('Nhập tiền thu hộ (đ)')}
+              value={get(item, 'COD') === '' ? '' : numberFormat(getValueOfNumberFormat(get(item, 'COD', '')))}
+              onChange={handleChangeTextboxValue('COD', index)}
+            />
           </Col>
         </Row>
         <Row className="sipInputItem">

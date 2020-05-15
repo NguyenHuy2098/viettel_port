@@ -355,7 +355,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   // const [maKhuyenMai, setMaKhuyenMai] = useState<string>('');
   const [thoiGianPhat, setThoiGianPhat] = useState<Date>(new Date());
   //_____non-validated items
-  const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
+  const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('VCN');
   const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V01');
   const [nguoiThanhToan, setNguoiThanhToan] = useState<string>('F1');
@@ -752,7 +752,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               (item: TransportMethodItem): boolean => item.SERVICE_GROUP === 'V04',
             );
             setDichVuCongThemList(thisDichVuCongThemList);
-            setPhuongThucVanChuyen(get(thisLoaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
+            setPhuongThucVanChuyen('VCN');
           },
         },
       ),
@@ -1129,7 +1129,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function templateOrderSuggest(keywords: string, type: number): void {
     if (currentPostOfficeInStore) {
-      let payload = { postoffice: 'CAL' };
+      let payload = { postoffice: currentPostOfficeInStore.PostOfficeCode };
       switch (type) {
         case 1:
           break;
@@ -1233,7 +1233,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   //___________________________________________________________________
-
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
     const additionalServicePayloadList: PackageItemInputType[] = [];
@@ -1258,7 +1257,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       forEach(dataPackageItemArr, (item: PackageItemInputType): void => {
         const newPackageItemTemp = {
           Width: item.Width ? trim(getValueOfNumberFormat(item.Width)) : '',
-
+          package_ID: item.package_ID,
           COMMODITY_CODE: item.COMMODITY_CODE,
           COMMODITY_TYPE: item.COMMODITY_TYPE, // Nhóm hàng hóa (tham chiếu trong bảng)
           PACKAGE_TYPE: item.PACKAGE_TYPE, // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
@@ -1492,7 +1491,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setKichThuocRong('');
     setKichThuocCao('');
     setThoiGianPhat(new Date());
-    setPhuongThucVanChuyen(get(loaiHinhDichVuList, '[0].SERVICE_TYPE', ''));
+    setPhuongThucVanChuyen('VCN');
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
     setMaBuuPham('');
@@ -2187,7 +2186,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function renderSendingServices(): JSX.Element {
     return (
       <div className="sipInputBlock">
-        <h3>{t('Dịch vụ')}</h3>
+        <h3>{t('Dịch vụ 111')}</h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Chọn dịch vụ')}

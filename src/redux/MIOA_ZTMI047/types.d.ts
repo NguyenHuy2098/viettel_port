@@ -20,6 +20,7 @@ interface ForwardingItem {
 }
 
 interface PackageItemInputType {
+  package_ID?: string;
   Flag?: string;
   PACKAGING_MATERIAL?: string;
   Description?: string;
