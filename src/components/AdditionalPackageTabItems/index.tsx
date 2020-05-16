@@ -249,7 +249,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
   // eslint-disable-next-line max-lines-per-function
   function renderTabContent(index: number, item: PackageItemInputType): JSX.Element {
     return (
-      <div className="sipInputBlock">
+      <div>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Mã bưu phẩm')}

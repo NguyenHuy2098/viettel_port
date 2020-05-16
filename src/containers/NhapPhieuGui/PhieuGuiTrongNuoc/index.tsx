@@ -2219,7 +2219,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function renderSendingServices(): JSX.Element {
     return (
       <div className="sipInputBlock">
-        <h3>{t('Dịch vụ 111')}</h3>
+        <h3>{t('Dịch vụ')}</h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Chọn dịch vụ')}
@@ -2408,7 +2408,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   // eslint-disable-next-line max-lines-per-function
   function renderPackageInfoDetail(): JSX.Element {
     return (
-      <div className="sipInputBlock">
+      <div>
         <h3>{t('Thông tin hàng hóa')}</h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
@@ -2530,12 +2530,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           </Label>
           <Col lg="8">{renderPackageSize()}</Col>
         </Row>
-        <h3>
-          <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
-            <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
-            {t('Thêm')}
-          </Button>
-        </h3>
       </div>
     );
   }
@@ -2796,18 +2790,26 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
         <div className="sipContentContainer2">
-          {renderPackageInfoDetail()}
-          <AdditionalPackageTabItems
-            removePackageItem={removePackageItem}
-            data={packageItemArr}
-            onChangeValue={adjustPackageItemValue}
-            onChangeCommodityType={adjustPackageItemCommodityType}
-            onChangeSuggestCommodity={adjustPackageItemSuggestCommodity}
-            isSubmit={isSubmit}
-            packageItemErrorsList={packageItemErrorsList}
-            activeTab={activeTab}
-            setActiveTab={handleActiveTab}
-          />
+          <div className="sipInputBlock">
+            {renderPackageInfoDetail()}
+            <AdditionalPackageTabItems
+              removePackageItem={removePackageItem}
+              data={packageItemArr}
+              onChangeValue={adjustPackageItemValue}
+              onChangeCommodityType={adjustPackageItemCommodityType}
+              onChangeSuggestCommodity={adjustPackageItemSuggestCommodity}
+              isSubmit={isSubmit}
+              packageItemErrorsList={packageItemErrorsList}
+              activeTab={activeTab}
+              setActiveTab={handleActiveTab}
+            />
+            <h3 style={{ minHeight: '25px' }}>
+              <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
+                <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
+                {t('Thêm')}
+              </Button>
+            </h3>
+          </div>
         </div>
         <div className="sipContentContainer2">
           {renderSendingServices()}
