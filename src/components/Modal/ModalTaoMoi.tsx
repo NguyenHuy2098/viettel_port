@@ -75,7 +75,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
     };
   }
 
-  const handleChangePostOffice = (items: TypeaheadOption[]) : void => {
+  const handleChangePostOffice = (items: TypeaheadOption[]): void => {
     setDestination(get(first(items), 'id', ''));
   };
 
@@ -85,11 +85,7 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
       <ModalBody>
         <FormGroup>
           <Label>{t('Chọn điểm đến')}</Label>
-          <TypeaheadDiemDen
-              postOfficeList={postOfficeList}
-              onChange={handleChangePostOffice}
-              value={destination}
-          />
+          <TypeaheadDiemDen postOfficeList={postOfficeList} onChange={handleChangePostOffice} value={destination} />
         </FormGroup>
         <FormGroup>
           <Label>{t('Ghi chú')}</Label>

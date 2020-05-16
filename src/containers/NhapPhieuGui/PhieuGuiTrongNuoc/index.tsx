@@ -560,6 +560,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         setCommoditySuggest([{ name: tenHang, description: tenHang, price: 0 }]);
       }
       setTienThuHo(orderInformationInstance.COD ? toString(parseInt(orderInformationInstance.COD)) : '');
+      if (orderInformationInstance.COD) {
+        dichVuCongThem.push('COD');
+      }
       setTrongLuong(
         orderInformationInstance.GROSS_WEIGHT ? parseFloat(orderInformationInstance.GROSS_WEIGHT).toFixed(0) : '',
       );
@@ -868,6 +871,35 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     };
   }
 
+  function handleChangeTienThuHo(): (event: React.FormEvent<HTMLInputElement> | Event) => void {
+    return (event: React.FormEvent<HTMLInputElement> | Event): void => {
+      const value = get(event, 'currentTarget.value', '');
+      const fieldName = get(event, 'currentTarget.name', '');
+      setTienThuHo(value);
+      if (isEmpty(value) || value === '0') {
+        dichVuCongThem = dichVuCongThem.filter(it => it !== 'COD');
+      } else if (!dichVuCongThem.includes('COD')) {
+        dichVuCongThem.push('COD');
+      }
+      triggerValidateAndPriceCalculate(fieldName);
+      triggerFollow(fieldName, value);
+    };
+  }
+
+  // function handleChangeTienThuHo(): (event: React.FormEvent<HTMLInputElement> | Event) => void {
+  //   return (event: React.FormEvent<HTMLInputElement> | Event): void => {
+  //     const value = get(event, 'currentTarget.value', '');
+  //     const fieldName = get(event, 'currentTarget.name', '');
+  //     console.log('setTienThuHo', value);
+  //     setTienThuHo(value);
+  //     if (!dichVuCongThem.includes('COD')) {
+  //       dichVuCongThem.push('COD');
+  //     }
+  //     // triggerValidateAndPriceCalculate(fieldName);
+  //     // triggerFollow(fieldName, value);
+  //   };
+  // }
+
   function handleChangeTypeaheadInput(setValueFunction: Function, fieldName?: string) {
     return (input: string): void => {
       setValueFunction(input);
@@ -1137,7 +1169,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           if (size(keywords)) {
             payload = Object.assign(payload, { q: keywords });
           }
-          debugger;
           dispatch(
             action_MOST_ORDER_SUGGEST(payload, {
               onSuccess: (data: OrderSuggestedItem[]): void => {
@@ -1150,7 +1181,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           );
           break;
         case 3:
-          debugger;
           if (size(keywords)) {
             payload = Object.assign(payload, { q: keywords });
           }
@@ -1848,7 +1878,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <div>
         <Row style={{ fontWeight: 'bold' }}>
-          {get(option, 'phone') + ' * ' + get(option, 'code') + ' * ' + get(option, 'name')}
+          {get(option, 'phone') +
+            (isEmpty(get(option, 'code')) ? '' : ' * ' + get(option, 'code')) +
+            ' * ' +
+            get(option, 'name')}
         </Row>
         <Row>{get(option, 'addr.formattedAddress')}</Row>
       </div>
@@ -2237,7 +2270,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                   })}
                 >
                   <Input
-                    checked={uncheckAllAdditionalCheckbox}
+                    checked={!uncheckAllAdditionalCheckbox && dichVuCongThem.includes(item.SERVICE_TYPE)}
                     type="checkbox"
                     value={item.SERVICE_TYPE}
                     onChange={handleChangeAdditionalService}
@@ -2467,7 +2500,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               type="text"
               placeholder={t('Nhập tiền thu hộ (đ)')}
               value={tienThuHo === '' ? tienThuHo : numberFormat(getValueOfNumberFormat(tienThuHo))}
-              onChange={handleChangeTextboxValue(setTienThuHo)}
+              onChange={handleChangeTienThuHo()}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tienThuHo')}</div>
           </Col>
@@ -2850,6 +2883,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setSoLuong(get(selectedTemplate, '0.packages.0.quantity', 0));
       setGiaTri(get(selectedTemplate, '0.packages.0.goodsValue', 0));
       setTienThuHo(get(selectedTemplate, '0.packages.0.cod', 0));
+      if (get(selectedTemplate, '0.packages.0.cod', 0) > 0) {
+        dichVuCongThem.push('COD');
+      }
       setTrongLuong(get(selectedTemplate, '0.packages.0.weight', '0'));
       setKichThuocDai(get(selectedTemplate, '0.packages.0.length', '0'));
       setKichThuocRong(get(selectedTemplate, '0.packages.0.width', '0'));
@@ -2857,7 +2893,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setPhuongThucVanChuyen(get(selectedTemplate, '0.services.0'));
       setDiemGiaoNhan(get(selectedTemplate, '0.movementType'));
       setNguoiThanhToan(get(selectedTemplate, '0.freightTerm'));
+      triggerValidateAndPriceCalculate();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTemplate]);
 
   function handleSelectedTemplate(selected: OrderSuggestedItem[]): void {
