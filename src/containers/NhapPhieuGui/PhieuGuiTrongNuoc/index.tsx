@@ -64,6 +64,7 @@ import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { getAddressNameById, getValueOfNumberFormat, numberFormat } from 'utils/common';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 import './style.scss';
+import { action_ZTMI229 } from '../../../redux/ZTMI229/actions';
 
 interface Props {
   match: match;
@@ -459,7 +460,51 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       set(draftState[index], valueName, value);
     });
     setPackageItemArr(newArr);
+    switch (valueName) {
+      case 'Length':
+        callDimensionWeight(
+          value,
+          get(packageItemArr[index], 'Width'),
+          get(packageItemArr[index], 'Hight'),
+          value,
+          'Length',
+          index,
+        );
+        break;
+      case 'Width':
+        callDimensionWeight(
+          get(packageItemArr[index], 'Length'),
+          value,
+          get(packageItemArr[index], 'Hight'),
+          value,
+          'Width',
+          index,
+        );
+        break;
+      case 'Hight':
+        callDimensionWeight(
+          get(packageItemArr[index], 'Length'),
+          get(packageItemArr[index], 'Width'),
+          value,
+          value,
+          'Hight',
+          index,
+        );
+        break;
+    }
     triggerValidateAndPriceCalculate();
+  }
+
+  function setDimensionValue(value: string, sourceValue?: string, valueName?: string, index?: number): void {
+    if (valueName && index !== undefined && index >= 0) {
+      const newArr = produce(packageItemArr, (draftState): void => {
+        set(draftState[index], 'DIMENSION_WEIGHT', value);
+        set(draftState[index], valueName, sourceValue);
+      });
+      setPackageItemArr(newArr);
+    } else {
+      setTrongLuongQuyDoi(value);
+    }
   }
 
   function adjustPackageItemCommodityType(value: string | undefined, index: number): void {
@@ -710,12 +755,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             0,
           );
           setCuocChinh(toString(cuocChinhAmount) + ' đ');
-          const ignoreAddedService = [ 'GBP' ];
+          const ignoreAddedService = ['GBP'];
           const cuocCongThemAmount = reduce(
             data,
             (total: number, item: API.ItemMTZTMI011OUT): number => {
               return findIndex(dichVuCongThem, (itemDichVuCongThem: string): boolean => {
-                return (itemDichVuCongThem === item.CHARGE_TYPE && !ignoreAddedService.includes(item.CHARGE_TYPE));
+                return itemDichVuCongThem === item.CHARGE_TYPE && !ignoreAddedService.includes(item.CHARGE_TYPE);
               }) !== -1
                 ? total + parseInt(item.AMOUNT_ITEM || '')
                 : total;
@@ -1543,6 +1588,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setSelectedTemplate([]);
     setKeywords('');
     setTab(0);
+    setDetailSender(false);
+    setDetailReceiver(false);
   }
 
   //__________________________________________________________________________
@@ -2316,6 +2363,68 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  const [trongLuongQuyDoi, setTrongLuongQuyDoi] = useState<string>('');
+
+  // eslint-disable-next-line max-lines-per-function
+  const callDimensionWeight = async (
+    kichThuocDai: string | undefined,
+    kichThuocRong: string | undefined,
+    kichThuocCao: string | undefined,
+    item?: string,
+    valueName?: string,
+    index?: number,
+  ): Promise<void> => {
+    if (
+      size(kichThuocDai) > 0 &&
+      size(kichThuocCao) > 0 &&
+      size(kichThuocRong) > 0 &&
+      size(provinceIdSender) > 0 &&
+      size(districtIdSender) > 0 &&
+      size(wardIdSender) > 0 &&
+      size(phuongThucVanChuyen) > 0
+    ) {
+      dispatch(
+        action_ZTMI229(
+          {
+            CityID: provinceIdSender,
+            DistrictID: districtIdSender,
+            Ward: wardIdSender,
+            OrderingParty: maKhachHangGui,
+            Length: kichThuocDai,
+            Width: kichThuocRong,
+            Height: kichThuocCao,
+            ServiceType: phuongThucVanChuyen,
+            Unit: 'CM',
+          },
+          {
+            onSuccess: (data: API.ZTMI229Response): void => {
+              if (!isMounted()) return;
+              if (data.MT_ZTMI229_OUT && data.MT_ZTMI229_OUT.DIMENSION_WEIGHT) {
+                setDimensionValue(
+                  data.MT_ZTMI229_OUT.WEIGHT_UOM === 'KG'
+                    ? parseFloat(getValueOfNumberFormat(data.MT_ZTMI229_OUT.DIMENSION_WEIGHT)) * 1000 +
+                        data.MT_ZTMI229_OUT.WEIGHT_UOM
+                    : data.MT_ZTMI229_OUT.DIMENSION_WEIGHT + data.MT_ZTMI229_OUT.WEIGHT_UOM,
+                  item,
+                  valueName,
+                  index,
+                );
+              }
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
+            },
+          },
+        ),
+      );
+    }
+  };
+
+  React.useEffect((): void => {
+    callDimensionWeight(kichThuocDai, kichThuocRong, kichThuocCao);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kichThuocDai, kichThuocCao, kichThuocRong]);
+
   function renderPackageSize(): JSX.Element {
     return (
       <Row className="sipInputItemGroup">
@@ -2521,7 +2630,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
             <p className="sipInputItemDescription text-right">
               Trọng lượng quy đổi: &nbsp;
-              <span className="text-semibold color-bluegreen font-italic">500g</span>
+              <span className="text-semibold color-bluegreen font-italic">{trongLuongQuyDoi}</span>
             </p>
           </Col>
         </Row>

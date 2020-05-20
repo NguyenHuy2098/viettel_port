@@ -25,3 +25,4 @@ package-lock.json
 
 # Auto generated types
 /src/@types/types.d.ts
+/prod.env
