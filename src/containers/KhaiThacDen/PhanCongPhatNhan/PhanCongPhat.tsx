@@ -118,13 +118,13 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
       dispatch(
         action_MIOA_ZTMI040(
           {
+            ...payload,
             FU_STATUS: '605,806',
             Delivery_postman: userIdSelected,
             IV_PAGENO: '1',
             IV_NO_PER_PAGE: pageItems,
             Vourcher: 'N',
             Return: 'N',
-            ...payload,
           },
           {
             onFinish: () => {

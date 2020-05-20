@@ -173,9 +173,11 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       },
       {
         Header: t('Giá trị'),
-        accessor: '',
-        Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return <>Thiếu Api</>;
+        accessor: 'GoodValue',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Cell: ({ row }: any): JSX.Element => {
+          const GoodValue = get(row, 'values.GoodValue', '');
+          return <>{GoodValue ? GoodValue : ''}</>;
         },
       },
       {
