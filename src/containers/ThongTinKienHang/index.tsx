@@ -13,6 +13,9 @@ import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
 import routesMap from 'utils/routesMap';
 import { Cell } from 'react-table';
 import moment from 'moment';
+import { numberFormat } from 'utils/common';
+import { findCountry } from 'containers/NhapPhieuGui/PhieuGuiQuocTe/countryList';
+import ButtonGoBack from 'components/Button/ButtonGoBack';
 
 interface Props {
   match: match;
@@ -38,13 +41,18 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const [provinceSender, setProvinceSender] = useState<string>('');
   const [districtSender, setDistrictSender] = useState<string>('');
   const [wardSender, setWardSender] = useState<string>('');
+  const [countrySender, setCountrySender] = useState<string>('');
   const [provinceReceiver, setProvinceReceiver] = useState<string>('');
   const [districtReceiver, setDistrictReceiver] = useState<string>('');
   const [wardReceiver, setWardReceiver] = useState<string>('');
+  const [countryReceiver, setcountryReceiver] = useState<string>('');
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
     if (packageInformation) {
+      if (packageInformation.COUNTRY_ID_SOURCE) {
+        setCountrySender(findCountry(packageInformation.COUNTRY_ID_SOURCE));
+      }
       if (packageInformation.PROVINCE_ID_SOURCE) {
         dispatch(
           action_GET_ADDRESS(
@@ -80,6 +88,9 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
             },
           ),
         );
+      }
+      if (packageInformation.COUNTRY_ID_DES) {
+        setcountryReceiver(findCountry(packageInformation.COUNTRY_ID_DES));
       }
       if (packageInformation.PROVINCE_ID_DES) {
         dispatch(
@@ -234,10 +245,6 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch]);
 
-  const handleBackToOrderInformation = (): void => {
-    dispatch(push(generatePath(routesMap.THONG_TIN_DON_HANG, { idDonHang })));
-  };
-
   const handleGotoEditForwardingOrder = (): void => {
     dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
   };
@@ -253,7 +260,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
         Header: t('Thời gian'),
         // accessor: 'TIME_DATE',
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): string => {
-          return moment(get(row, 'original.TIME_DATE'), 'YYYYMMDDHHmmss').format('DD/MM/YYYY HH:mm:ss');
+          return moment(get(row, 'original.TIME_DATE'), 'YYYYMMDDHHmmss').format('HH:mm DD/MM/YYYY');
         },
       },
       {
@@ -333,7 +340,8 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                 {t('Ngày tạo')}:
               </Col>
               <Col xs="12" sm="7">
-                {packageInformation && moment(packageInformation.CREATED_ON, 'YYYYMMDDHHmmss').format('DD/MM/YYYY')}
+                {packageInformation &&
+                  moment(packageInformation.CREATED_ON, 'YYYYMMDDHHmmss').format(' HH:mm:ss DD/MM/YYYY')}
               </Col>
             </Row>
             <Row className="sipInputItem">
@@ -400,7 +408,8 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
                   ${packageInformation.STREET_ID_SOURCE ? packageInformation.STREET_ID_SOURCE : ''}${' '}
                   ${wardSender}${' '}
                   ${districtSender}${' '}
-                  ${provinceSender}`}
+                  ${provinceSender}${' '}
+                  ${countrySender}`}
               </Col>
             </Row>
           </div>
@@ -437,12 +446,12 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               </Col>
               <Col xs="12" sm="7">
                 {packageInformation &&
-                  `${packageInformation.HOUSE_NO_DES ? packageInformation.HOUSE_NO_DES : ''}${
-                    packageInformation.STREET_ID_DES ? packageInformation.STREET_ID_DES : ''
-                  }${' '}
+                  `${packageInformation.HOUSE_NO_DES ? packageInformation.HOUSE_NO_DES : ''}${' '}
+                  ${packageInformation.STREET_ID_DES ? packageInformation.STREET_ID_DES : ''}${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
-                  ${provinceReceiver}`}
+                  ${provinceReceiver}${' '}
+                  ${countryReceiver}`}
               </Col>
             </Row>
           </div>
@@ -470,9 +479,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Trọng lượng')}:
             </Col>
             <Col xs="12" sm="8">
-              {packageInformation &&
-                packageInformation.GROSS_WEIGHT &&
-                parseFloat(packageInformation.GROSS_WEIGHT).toFixed(2)}
+              {packageInformation && packageInformation.GROSS_WEIGHT && parseInt(packageInformation.GROSS_WEIGHT)} g
             </Col>
           </Row>
           <Row className="sipInputItem">
@@ -480,7 +487,7 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Số lượng')}:
             </Col>
             <Col xs="12" sm="8">
-              {packageInformation && packageInformation.Quantity && parseFloat(packageInformation.Quantity).toFixed(2)}
+              {packageInformation && packageInformation.Quantity && parseFloat(packageInformation.Quantity).toFixed(0)}
             </Col>
           </Row>
           <Row className="sipInputItem">
@@ -488,25 +495,23 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
               {t('Giá trị')}:
             </Col>
             <Col xs="12" sm="8">
-              {packageInformation &&
-                packageInformation.GoodValue &&
-                parseFloat(packageInformation.GoodValue).toFixed(2)}
+              {packageInformation && packageInformation.GoodValue && numberFormat(packageInformation.GoodValue)} đ
             </Col>
           </Row>
-          {/*<Row className="sipInputItem">*/}
-          {/*  <Col xs="12" sm="4">*/}
-          {/*    {t('Cước phí')}:*/}
-          {/*  </Col>*/}
-          {/*  <Col xs="12" sm="8">*/}
-          {/*    50.000 đ (chưa có yêu cầu)*/}
-          {/*  </Col>*/}
-          {/*</Row>*/}
+          {/* <Row className="sipInputItem">
+            <Col xs="12" sm="4">
+              {t('Cước phí')}:
+            </Col>
+            <Col xs="12" sm="8">
+              23.500 đ (chưa có yêu cầu)
+            </Col>
+          </Row> */}
           <Row className="sipInputItem">
             <Col xs="12" sm="4">
               {t('Tiền thu hộ')}:
             </Col>
             <Col xs="12" sm="8">
-              {packageInformation && packageInformation.COD && parseInt(packageInformation.COD)}
+              {packageInformation && packageInformation.COD && numberFormat(packageInformation.COD)} đ
             </Col>
           </Row>
         </div>
@@ -586,10 +591,8 @@ const PackageInformation: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">
-          <Button onClick={handleBackToOrderInformation} className="sipTitleBtnBack">
-            <img className="backIcon" src={'../../assets/img/icon/iconArrowLeft.svg'} alt="VTPostek" />
-          </Button>
-          {t('Thông tin kiện hàng')}
+          <ButtonGoBack />
+          {t('Thông tin đơn hàng')}
         </h1>
         <div className="sipTitleRightBlock">
           <Button className="ml-2" color="primary" onClick={handleGotoEditForwardingOrder}>

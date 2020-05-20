@@ -1987,6 +1987,7 @@ declare namespace API {
     CCode_type?: string;
     CCode?: string;
     CCode_des?: string;
+    Trq_type?: string;
   }
 
   export interface RowMTZTMI045OUT {

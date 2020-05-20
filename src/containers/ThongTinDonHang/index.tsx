@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, match, Link } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { drop, findIndex, get, size, slice } from 'lodash';
+import { drop, findIndex, get, size, slice, find } from 'lodash';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
@@ -14,9 +14,18 @@ import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
 import routesMap from 'utils/routesMap';
+import { numberFormat } from 'utils/common';
+
+import { findCountry } from 'containers/NhapPhieuGui/PhieuGuiQuocTe/countryList';
+// import { Typeahead as RootTypeahead } from 'react-bootstrap-typeahead';
 
 interface Props {
   match: match;
+}
+
+interface TrqType {
+  id: string;
+  description: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -29,12 +38,19 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const [provinceSender, setProvinceSender] = useState<string>('');
   const [districtSender, setDistrictSender] = useState<string>('');
   const [wardSender, setWardSender] = useState<string>('');
+  const [countrySender, setCountrySender] = useState<string>('');
   const [provinceReceiver, setProvinceReceiver] = useState<string>('');
   const [districtReceiver, setDistrictReceiver] = useState<string>('');
   const [wardReceiver, setWardReceiver] = useState<string>('');
+  const [countryReceiver, setcountryReceiver] = useState<string>('');
+
+  // const [listLocation, setListLocation] = useState<OrderSuggestedItem[]>([]);
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
+    if (orderInformationInstane.COUNTRY_ID_SOURCE) {
+      setCountrySender(findCountry(orderInformationInstane.COUNTRY_ID_SOURCE));
+    }
     if (orderInformationInstane) {
       if (orderInformationInstane.PROVINCE_ID_SOURCE) {
         dispatch(
@@ -71,6 +87,9 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
             },
           ),
         );
+      }
+      if (orderInformationInstane.COUNTRY_ID_DES) {
+        setcountryReceiver(findCountry(orderInformationInstane.COUNTRY_ID_DES));
       }
       if (orderInformationInstane.PROVINCE_ID_DES) {
         dispatch(
@@ -126,7 +145,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(
       push(
         generatePath(routesMap.THONG_TIN_KIEN_HANG, {
-          idDonHang: idDonHang,
+          idDonHang: item.FWO,
           idKienHang: item.PACKAGE_ID,
         }),
       ),
@@ -136,6 +155,37 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const handleGotoEditForwardingOrder = (): void => {
     dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
   };
+
+  const trqType: TrqType[] = [
+    {
+      id: 'V001',
+      description: t('Đơn gốc'),
+    },
+    {
+      id: 'V002',
+      description: t('Đơn gốc'),
+    },
+    {
+      id: 'V003',
+      description: t('Đơn gốc'),
+    },
+    {
+      id: 'V004',
+      description: t('Đơn gốc'),
+    },
+    {
+      id: 'V005',
+      description: t('Đơn gốc'),
+    },
+    {
+      id: 'V009',
+      description: t('Chuyển hoàn'),
+    },
+    {
+      id: 'V010',
+      description: t('Chuyển tiếp'),
+    },
+  ];
 
   // const renderPrintButton = (idChuyenThu: string): JSX.Element => (
   //   <PrintableModal
@@ -177,7 +227,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Cell: ({ row }: any): JSX.Element => {
           const GoodValue = get(row, 'values.GoodValue', '');
-          return <>{GoodValue ? GoodValue : ''}</>;
+          return <>{GoodValue ? numberFormat(GoodValue) : ''}</>;
         },
       },
       {
@@ -186,7 +236,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         Cell: ({ row }: any): JSX.Element => {
           const thisWeight = get(row, 'values.GROSS_WEIGHT', '');
-          return <>{thisWeight ? parseFloat(thisWeight).toFixed(2) : ''}</>;
+          return <>{thisWeight ? parseFloat(thisWeight).toFixed(0) : ''} g</>;
         },
       },
       {
@@ -217,6 +267,24 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                     }),
                   )
                 : serviceType}
+            </>
+          );
+        },
+      },
+      {
+        Header: t('Loại'),
+        accessor: 'Trq_type',
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        Cell: ({ row }: any): JSX.Element => {
+          return (
+            <>
+              {get(
+                find(trqType, (item: TrqType): boolean => {
+                  return item.id === get(row, 'values.Trq_type', '');
+                }),
+                'description',
+                '',
+              )}
             </>
           );
         },
@@ -279,7 +347,8 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                   ${orderInformationInstane.STREET_ID_SOURCE ? orderInformationInstane.STREET_ID_SOURCE : ''}${' '}
                   ${wardSender}${' '}
                   ${districtSender}${' '}
-                  ${provinceSender}`}
+                  ${provinceSender}${' '}
+                  ${countrySender}`}
               </Col>
             </Row>
           </div>
@@ -321,7 +390,8 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
                   }${' '}
                   ${wardReceiver}${' '}
                   ${districtReceiver}${' '}
-                  ${provinceReceiver}`}
+                  ${provinceReceiver}${' '}
+                  ${countryReceiver}`}
               </Col>
             </Row>
           </div>
@@ -334,18 +404,36 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
     <>
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">{t('Thông tin đơn hàng')}</h1>
+        {/* <RootTypeahead
+          id="location"
+          //  labelKey={labelKeyLocation}
+          options={listLocation}
+          placeholder="Chọn đơn vị"
+        // onInputChange={setKeywords}
+        //  onChange={handleSelectedLocation}
+        //  selected={selectedLocation}
+        >
+          <span
+            style={{
+              position: 'absolute',
+              right: '8px',
+              top: '10px',
+            }}
+            className="fa fa-caret-down"
+          />
+        </RootTypeahead> */}
         <div className="sipTitleRightBlock">
+          <Button className="ml-2" color="primary">
+            <img src={'../../assets/img/icon/iconTachKien.svg'} alt="VTPostek" />
+            {t('Tách kiện')}
+          </Button>
           <Button className="ml-2" color="primary" onClick={handleGotoEditForwardingOrder}>
             <i className="fa fa-pencil mr-2" />
-            Sửa phiếu gửi
+            {t('Sửa phiếu gửi')}
           </Button>
           <Button className="ml-2" color="primary">
-            <i className="fa fa-barcode mr-2" />
-            In mã vạch
-          </Button>
-          <Button className="ml-2" color="primary">
-            <i className="fa fa-print mr-2" />
-            In mã phiếu
+            <img src={'../../assets/img/icon/iconInBuuGui.svg'} alt="VTPostek" />
+            {t('In bưu gửi')}
           </Button>
         </div>
       </Row>
@@ -353,7 +441,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
         {renderSenderCustomer()}
         {renderReceiveCustomer()}
       </Row>
-      <h1 className="sipTitle">{t('Danh sách kiện hàng')}</h1>
+      <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
       {renderTable()}
     </>
   ) : (
