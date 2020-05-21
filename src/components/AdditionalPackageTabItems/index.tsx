@@ -195,6 +195,12 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
           />
           <div className="sipInputItemError">{handleErrorMessage(index, 'Hight')}</div>
         </Col>
+        <p className="sipInputItemDescription text-left" style={{ paddingLeft: '0.35rem' }}>
+          Trọng lượng quy đổi: &nbsp;
+          <span className="text-semibold color-bluegreen font-italic" style={{ color: 'green' }}>
+            {get(item, 'DIMENSION_WEIGHT', '0 G')}
+          </span>
+        </p>
       </Row>
     );
   }
@@ -358,10 +364,6 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
               onChange={handleChangeTextboxValue('GROSS_WEIGHT', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'GROSS_WEIGHT')}</div>
-            <p className="sipInputItemDescription text-right">
-              Trọng lượng quy đổi: &nbsp;
-              <span className="text-semibold color-bluegreen font-italic">{get(item, 'DIMENSION_WEIGHT', '')}</span>
-            </p>
           </Col>
         </Row>
         <Row className="sipInputItem mb-0">
