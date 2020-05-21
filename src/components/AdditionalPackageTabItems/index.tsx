@@ -281,12 +281,15 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Nhóm hàng')}
+            <span className="color-red"> *</span>
           </Label>
           <Col lg={8} xs={12}>
             <TypeaheadLoaiHoang
               loaiKienHang={item.COMMODITY_TYPE}
+              value={get(item, 'COMMODITY_CODE')}
               onChange={handleChangeTypeaheadValue('COMMODITY_CODE', index)}
             />
+            <div className="sipInputItemError">{handleErrorMessage(index, 'Description')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">

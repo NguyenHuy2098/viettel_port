@@ -278,6 +278,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       .number()
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
       .typeError(t('Vui lòng nhập định dạng số')),
+    COMMODITY_CODE: yup.string().required(t('Vui lòng nhập nhóm hàng hóa')),
     QUANTITY_OF_PACKAGE: yup
       .number()
       .required(t('Vui lòng nhập số lượng'))
@@ -2165,7 +2166,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Mã khách hàng')}
-            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <Input
@@ -2528,6 +2528,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  function onChangeTenhang(input: string): void {
+    setSelectedCommodity([]);
+    setTenHang(input);
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderPackageInfoDetail(): JSX.Element {
     return (
@@ -2562,7 +2567,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           <Col lg="8">
             <TypeaheadTenHang
               onChange={handleChooseCommoditySuggest}
-              onInputChange={handleChangeTypeaheadInput(setTenHang)}
+              onInputChange={handleChangeTypeaheadInput(onChangeTenhang)}
               selected={isEmpty(tenHang) ? [] : selectedCommodity}
               suggestions={commoditySuggest}
             />
@@ -2601,7 +2606,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Giá trị hàng hóa')}
-            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <Input
@@ -2616,7 +2620,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Tiền thu hộ')}
-            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <Input
