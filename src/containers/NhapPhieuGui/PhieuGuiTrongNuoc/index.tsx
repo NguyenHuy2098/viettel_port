@@ -61,7 +61,7 @@ import { makeSelectorBPOrg, makeSelectorCurrentPostOffice } from 'redux/GetProfi
 import { action_MOST_ORDER_SUGGEST, action_RECENT_ORDER_SUGGEST } from 'redux/OrderSuggest/actions';
 import { action_SENDER_SUGGEST, action_RECEIVER_SUGGEST } from 'redux/PersonSuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
-import { getAddressNameById, getValueOfNumberFormat, numberFormat } from 'utils/common';
+import { formatNumber, getAddressNameById, getValueOfNumberFormat, numberFormat } from 'utils/common';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 import './style.scss';
 import { action_ZTMI229 } from '../../../redux/ZTMI229/actions';
@@ -1471,6 +1471,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           Flag: 'I',
           PACKAGING_MATERIAL: '',
           Description: item.Description,
+          COMMODITY_CODE: item.COMMODITY_CODE,
           PACKAGE_TYPE: '',
           QUANTITY_OF_PACKAGE: item.QUANTITY_OF_PACKAGE === '' ? undefined : item.QUANTITY_OF_PACKAGE,
           QUANTITY_OF_UNIT: '',
@@ -2376,7 +2377,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  const [trongLuongQuyDoi, setTrongLuongQuyDoi] = useState<string>('');
+  const [trongLuongQuyDoi, setTrongLuongQuyDoi] = useState<string>('0 G');
 
   // eslint-disable-next-line max-lines-per-function
   const callDimensionWeight = async (
@@ -2415,9 +2416,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               if (data.MT_ZTMI229_OUT && data.MT_ZTMI229_OUT.DIMENSION_WEIGHT) {
                 setDimensionValue(
                   data.MT_ZTMI229_OUT.WEIGHT_UOM === 'KG'
-                    ? parseFloat(getValueOfNumberFormat(data.MT_ZTMI229_OUT.DIMENSION_WEIGHT)) * 1000 +
+                    ? formatNumber(parseFloat(getValueOfNumberFormat(data.MT_ZTMI229_OUT.DIMENSION_WEIGHT)) * 1000) +
+                        ' ' +
                         data.MT_ZTMI229_OUT.WEIGHT_UOM
-                    : data.MT_ZTMI229_OUT.DIMENSION_WEIGHT + data.MT_ZTMI229_OUT.WEIGHT_UOM,
+                    : formatNumber(parseFloat(getValueOfNumberFormat(data.MT_ZTMI229_OUT.DIMENSION_WEIGHT))) +
+                        ' ' +
+                        data.MT_ZTMI229_OUT.WEIGHT_UOM,
                   item,
                   valueName,
                   index,
@@ -2430,6 +2434,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           },
         ),
       );
+    } else {
+      setDimensionValue('0 G', item, valueName, index);
     }
   };
 
@@ -2468,6 +2474,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           />
           <div className="sipInputItemError">{handleErrorMessage(errors, 'kichThuocCao')}</div>
         </Col>
+        <p className="sipInputItemDescription text-left" style={{ paddingLeft: '0.35rem' }}>
+          Trọng lượng quy đổi: &nbsp;
+          <span className="text-semibold color-bluegreen font-italic" style={{ color: 'green' }}>
+            {trongLuongQuyDoi}
+          </span>
+        </p>
       </Row>
     );
   }
@@ -2644,10 +2656,6 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeTextboxValue(setTrongLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'trongLuong')}</div>
-            <p className="sipInputItemDescription text-right">
-              Trọng lượng quy đổi: &nbsp;
-              <span className="text-semibold color-bluegreen font-italic">{trongLuongQuyDoi}</span>
-            </p>
           </Col>
         </Row>
         <Row className="sipInputItem mb-0">
