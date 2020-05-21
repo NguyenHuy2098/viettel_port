@@ -493,7 +493,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         break;
       case 'COD':
         const checkItem = packageItemArr.filter(
-          (it, indx) => !isEmpty(it.COD) && indx != index && parseFloat(getValueOfNumberFormat(it.COD + '')) > 0,
+          (it, indx) => !isEmpty(it.COD) && indx !== index && parseFloat(getValueOfNumberFormat(it.COD + '')) > 0,
         );
         if ((isEmpty(value) || value === '0') && (isEmpty(tienThuHo) || tienThuHo === '0') && isEmpty(checkItem)) {
           dichVuCongThem = dichVuCongThem.filter(it => it !== 'COD');
