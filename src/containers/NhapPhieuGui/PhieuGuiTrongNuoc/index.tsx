@@ -491,6 +491,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           index,
         );
         break;
+      case 'COD':
+        const checkItem = packageItemArr.filter(
+          (it, indx) => !isEmpty(it.COD) && indx !== index && parseFloat(getValueOfNumberFormat(it.COD + '')) > 0,
+        );
+        if ((isEmpty(value) || value === '0') && (isEmpty(tienThuHo) || tienThuHo === '0') && isEmpty(checkItem)) {
+          dichVuCongThem = dichVuCongThem.filter(it => it !== 'COD');
+        } else if (!dichVuCongThem.includes('COD')) {
+          dichVuCongThem.push('COD');
+        }
+        break;
     }
     triggerValidateAndPriceCalculate();
   }
@@ -922,7 +932,10 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       const value = get(event, 'currentTarget.value', '');
       const fieldName = get(event, 'currentTarget.name', '');
       setTienThuHo(value);
-      if (isEmpty(value) || value === '0') {
+      const checkItem = packageItemArr.filter(
+        it => !isEmpty(it.COD) && parseFloat(getValueOfNumberFormat(it.COD + '')) > 0,
+      );
+      if ((isEmpty(value) || value === '0') && isEmpty(checkItem)) {
         dichVuCongThem = dichVuCongThem.filter(it => it !== 'COD');
       } else if (!dichVuCongThem.includes('COD')) {
         dichVuCongThem.push('COD');
