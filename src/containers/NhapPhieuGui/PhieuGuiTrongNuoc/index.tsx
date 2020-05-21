@@ -1983,7 +1983,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     if (size(selected)) {
       setDienThoaiReceiver(get(selected, '0.phone'));
       setHoTenReceiver(get(selected, '0.name'));
-      setMaKhachHangNhan(get(selected, '0.code'));
+      setMaKhachHangNhan(get(selected, '0.code', '9999999999'));
       //address
       const dataComponents = get(selected, '0.addr.components', []);
       const thisProvince = find(dataComponents, (item: Component): boolean => {
