@@ -857,6 +857,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           PACKAGING_MATERIAL: '',
           Description: item.Description,
           PACKAGE_TYPE: '',
+          COMMODITY_CODE: item.COMMODITY_CODE,
           QUANTITY_OF_PACKAGE:
             trim(item.QUANTITY_OF_PACKAGE) === ''
               ? undefined
