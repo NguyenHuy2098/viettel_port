@@ -1,7 +1,4 @@
-/* eslint-disable react/jsx-no-bind */
-/* eslint-disable max-lines-per-function */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Row, Label, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { get, toNumber, toLower, map, toString, forEach, includes } from 'lodash';
@@ -9,11 +6,12 @@ import { toast } from 'react-toastify';
 import { default as NumberFormat, NumberFormatValues } from 'react-number-format';
 import { action_ZTMI213 } from 'redux/ZTMI213/actions';
 import { useDispatch } from 'react-redux';
+import { toastError } from '../../utils/commonJsx';
 
 interface Props {
   modalDivideCoupon: boolean;
-  infoPackages: any;
-  thongTinPhieuGui: any;
+  infoPackages: SubPackage[];
+  thongTinPhieuGui: API.RowMTZTMI031OUT[];
   handleClickDelete: (deleteQuantity: number) => void;
   toggle: () => void;
 }
@@ -23,9 +21,10 @@ interface SubPackage {
   QUANTITY_UOM: string;
   GROSS_WEIGHT: number;
   WEIGHT_UOM: string;
-  CHECKED: boolean;
+  CHECKED?: boolean;
 }
 
+// eslint-disable-next-line max-lines-per-function
 const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
@@ -67,6 +66,15 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
       setDeleteQuantity(deleteQuantity - 1);
     }
   }
+
+  function getOnChangeChecked(subPackage: SubPackage) {
+    return (e: ChangeEvent<HTMLInputElement>): void => {
+      handleChangeCheckBox(e.target.checked);
+      trackCheckedItem[subPackage.ID] = e.target.checked;
+      setTrackCheckedItem(trackCheckedItem);
+    };
+  }
+
   const renderTableRows = (): React.ReactNode => {
     return map(
       subPackages,
@@ -80,12 +88,7 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
                   value={subPackage.ID}
                   type="checkbox"
                   checked={trackCheckedItem[subPackage.ID] || false}
-                  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-                  onChange={e => {
-                    handleChangeCheckBox(e.target.checked);
-                    trackCheckedItem[subPackage.ID] = e.target.checked;
-                    setTrackCheckedItem(trackCheckedItem);
-                  }}
+                  onChange={getOnChangeChecked(subPackage)}
                 />
               </Label>
               Bưu gửi {index + 1}
@@ -134,60 +137,23 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
   const dispatchActionApi_ZTMI213 = (): void => {
     for (let i = 0; i < subPackages.length; i++) {
       if (subPackages[i].QUANTITY === 0) {
-        toast(
-          <>
-            <i className="fa fa-window-close-o mr-2" />
-            {t('Số lượng bưu gửi phải khác 0')}
-          </>,
-          {
-            containerId: 'ModalDivideConpon',
-            type: 'error',
-          },
-        );
+        toastError(t('Số lượng bưu gửi phải khác 0'));
         return;
       }
       if (subPackages[i].GROSS_WEIGHT === 0) {
-        toast(
-          <>
-            <i className="fa fa-window-close-o mr-2" />
-            {t('Trọng lượng bưu gửi phải khác 0')}
-          </>,
-          {
-            containerId: 'ModalDivideConpon',
-            type: 'error',
-          },
-        );
+        toastError(t('Trọng lượng bưu gửi phải khác 0'));
         return;
       }
     }
     if (totalQuantityInvalid(subPackages)) {
-      toast(
-        <>
-          <i className="fa fa-window-close-o mr-2" />
-          {t('Tổng số lượng tách không hợp lệ ')}
-        </>,
-        {
-          containerId: 'ModalDivideConpon',
-          type: 'error',
-        },
-      );
+      toastError(t('Tổng số lượng tách không hợp lệ '));
       return;
     }
 
     if (totalWeightInvalid(subPackages)) {
-      toast(
-        <>
-          <i className="fa fa-window-close-o mr-2" />
-          {t('Tổng khối lượng tách không hợp lệ ')}
-        </>,
-        {
-          containerId: 'ModalDivideConpon',
-          type: 'error',
-        },
-      );
+      toastError(t('Tổng khối lượng tách không hợp lệ '));
       return;
     }
-
     dispatch(
       action_ZTMI213(
         {
@@ -208,26 +174,24 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
             );
             props.toggle();
             window.location.reload();
-            // setDivideQuantity(0);
-            // setShowListCoupon(true);
           },
           onFailure: (error: Error): void => {
             const errorMessage = get(error, 'messages', 'Đã có lỗi xảy ra ');
-            toast(
-              <>
-                <i className="fa fa-window-close-o mr-2" />
-                {includes(errorMessage, '306') ? t('Chỉ cho phép tách kiện ở trạng thái 306') : errorMessage}
-              </>,
-              {
-                containerId: 'ModalDivideConpon',
-                type: 'error',
-              },
-            );
+            const message = includes(errorMessage, '306') ? t('Chỉ cho phép tách kiện ở trạng thái 306') : errorMessage;
+            toastError(message);
           },
         },
       ),
     );
   };
+
+  function getHandleDelete() {
+    return (): void => {
+      props.handleClickDelete(deleteQuantity);
+      setTrackCheckedItem(new Array(subPackages.length - deleteQuantity));
+      setDeleteQuantity(0);
+    };
+  }
 
   return (
     <Modal isOpen={props.modalDivideCoupon} className="sipModalCouponInfo" toggle={props.toggle}>
@@ -251,16 +215,7 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
         </Row>
       </ModalBody>
       <ModalFooter>
-        <Button
-          color="danger"
-          disabled={deleteQuantity === 0}
-          // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-          onClick={() => {
-            props.handleClickDelete(deleteQuantity);
-            setTrackCheckedItem(new Array(subPackages.length - deleteQuantity));
-            setDeleteQuantity(0);
-          }}
-        >
+        <Button color="danger" disabled={deleteQuantity === 0} onClick={getHandleDelete()}>
           {t('Xóa')}
         </Button>
         <Button color="primary" onClick={dispatchActionApi_ZTMI213}>

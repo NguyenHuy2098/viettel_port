@@ -3,13 +3,12 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Row, Label, In
 import { useTranslation } from 'react-i18next';
 import { get, trim, toNumber, toLower, round, floor, isInteger, size } from 'lodash';
 import moment from 'moment';
-import { toast } from 'react-toastify';
 import ModalDivideCoupon from './ModalDivideCoupon';
+import { toastError } from '../../utils/commonJsx';
 
 interface Props {
   modalCouponInfo: boolean;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  couponInfomation: any;
+  couponInfomation: API.RowMTZTMI031OUT[];
   toggle: () => void;
 }
 
@@ -19,6 +18,7 @@ interface SubPackage {
   QUANTITY_UOM: string;
   GROSS_WEIGHT: number;
   WEIGHT_UOM: string;
+  CHECKED?: boolean;
 }
 // eslint-disable-next-line max-lines-per-function
 const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
@@ -47,7 +47,6 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
     return false;
   }, [divideQuantity]);
 
-  // eslint-disable-next-line max-lines-per-function
   const handleDevideCoupon = useCallback((): void => {
     if (size(thongTinPhieuGui) === 1 && isInteger(divideQuantity)) {
       const newSubPackages: SubPackage[] = [];
@@ -61,13 +60,11 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
         });
       } else {
         let soGoiConLai = toNumber(thongTinPhieuGui[0].Quantity);
-        // const khoiLuongMotGoi = toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / toNumber(thongTinPhieuGui[0].Quantity);
         const soLuongGoiTrongMotGio = floor(toNumber(thongTinPhieuGui[0].Quantity) / divideQuantity);
         for (let i = 0; i < divideQuantity; i++) {
           if (i === divideQuantity - 1) {
             newSubPackages.push({
               ID: i,
-              // GROSS_WEIGHT: khoiLuongMotGoi * soGoiConLai,
               GROSS_WEIGHT:
                 toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) -
                 round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity) * (divideQuantity - 1),
@@ -78,7 +75,6 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
           } else {
             newSubPackages.push({
               ID: i,
-              // GROSS_WEIGHT: khoiLuongMotGoi * soLuongGoiTrongMotGio,
               GROSS_WEIGHT: round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity),
               QUANTITY: soLuongGoiTrongMotGio,
               QUANTITY_UOM: 'EA',
@@ -93,31 +89,12 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
       props.toggle();
     } else {
       if (!isInteger(divideQuantity)) {
-        toast(
-          <>
-            <i className="fa fa-window-close-o mr-2" />
-            {t('Số lượng tách phải là số nguyên')}
-          </>,
-          {
-            containerId: 'ModalCouponInfo',
-            type: 'error',
-          },
-        );
+        toastError(t('Số lượng tách phải là số nguyên'));
       } else {
-        toast(
-          <>
-            <i className="fa fa-window-close-o mr-2" />
-            {t('Phiếu gửi không đủ tiêu chí để tách')}
-          </>,
-          {
-            containerId: 'ModalCouponInfo',
-            type: 'error',
-          },
-        );
+        toastError(t('Phiếu gửi không đủ tiêu chí để tách'));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [thongTinPhieuGui, divideQuantity]);
+  }, [thongTinPhieuGui, divideQuantity, props, t]);
 
   useEffect(() => {
     if (size(thongTinPhieuGui) === 1 && isInteger(divideQuantity)) {
@@ -161,8 +138,7 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
       }
       setSubPackages(newSubPackages);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [divideQuantity]);
+  }, [divideQuantity, thongTinPhieuGui]);
 
   const modalBody = (): JSX.Element => (
     <Row className="sipPackageInfo">
