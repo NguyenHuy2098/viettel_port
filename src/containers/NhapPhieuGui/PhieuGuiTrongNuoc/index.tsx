@@ -2467,6 +2467,22 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           {
             onSuccess: (data: API.ZTMI229Response): void => {
               if (!isMounted()) return;
+              if (
+                data.MT_ZTMI229_OUT &&
+                data.MT_ZTMI229_OUT.RETURN_MESSAGE &&
+                data.MT_ZTMI229_OUT.RETURN_MESSAGE.TYPE === 'E'
+              ) {
+                toast(
+                  <>
+                    <i className="fa fa-window-close-o mr-2" />
+                    {t(data.MT_ZTMI229_OUT.RETURN_MESSAGE.MESSAGE || 'Lỗi quy đổi trọng lượng')}
+                  </>,
+                  {
+                    type: 'error',
+                  },
+                );
+                return;
+              }
               if (data.MT_ZTMI229_OUT && data.MT_ZTMI229_OUT.DIMENSION_WEIGHT) {
                 setDimensionValue(
                   data.MT_ZTMI229_OUT.WEIGHT_UOM === 'KG'
@@ -2505,7 +2521,16 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       kichThuocCao,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [provinceIdSender, districtIdSender, wardIdSender, maKhachHangGui, kichThuocDai, kichThuocCao, kichThuocRong]);
+  }, [
+    provinceIdSender,
+    phuongThucVanChuyen,
+    districtIdSender,
+    wardIdSender,
+    maKhachHangGui,
+    kichThuocDai,
+    kichThuocCao,
+    kichThuocRong,
+  ]);
 
   function renderPackageSize(): JSX.Element {
     return (
