@@ -301,7 +301,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           onSuccess: (data: API.ZTMI213Response): void => {
             toast(
               <>
-                <i className="fa fa-window-close-o mr-2" />
+                <i className="fa fa-check-square mr-2" />
                 {t('Tách kiện thành công')}
               </>,
               {
@@ -315,7 +315,6 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           },
           onFailure: (error: Error): void => {
             const errorMessage = get(error, 'messages', 'Đã có lỗi xảy ra ');
-
             toast(
               <>
                 <i className="fa fa-window-close-o mr-2" />
@@ -378,7 +377,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         <Col lg="4" xl={5} xs="12">
           <Row>
             <Col xs="4">{t('Mã phiếu')}: </Col>
-            <Col xs="7">{get(thongTinPhieuGui[0], 'FWO', '')}</Col>
+            <Col xs="7">{toNumber(get(thongTinPhieuGui[0], 'FWO', ''))}</Col>
           </Row>
 
           <Row>
@@ -469,18 +468,17 @@ const SplitCoupon: React.FC = (): JSX.Element => {
   };
 
   const columns = useMemo(
-    //eslint-disable-next-line max-lines-per-function
     () => [
-      {
-        id: 'select',
-        Cell: ({ row }: Cell<API.Child>): JSX.Element => {
-          return (
-            <Label check>
-              <Input type="checkbox" onClick={noop} />
-            </Label>
-          );
-        },
-      },
+      // {
+      //   id: 'select',
+      //   Cell: ({ row }: Cell<API.Child>): JSX.Element => {
+      //     return (
+      //       <Label check>
+      //         <Input type="checkbox" onClick={noop} />
+      //       </Label>
+      //     );
+      //   },
+      // },
       {
         Header: t('Mã bưu gửi'),
         accessor: 'PACKAGE_ID',

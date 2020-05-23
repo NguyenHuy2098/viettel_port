@@ -15,7 +15,8 @@ import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTM
 import { action_GET_ADDRESS } from 'redux/LocationSearch/actions';
 import routesMap from 'utils/routesMap';
 import { numberFormat } from 'utils/common';
-
+import ModalCouponInfomation from './ModalCouponInfomation';
+// eslint-disable-next-line import/imports-first
 import { findCountry } from 'containers/NhapPhieuGui/PhieuGuiQuocTe/countryList';
 // import { Typeahead as RootTypeahead } from 'react-bootstrap-typeahead';
 
@@ -28,6 +29,13 @@ interface TrqType {
   description: string;
 }
 
+interface SubPackage {
+  ID: number;
+  QUANTITY: number;
+  QUANTITY_UOM: string;
+  GROSS_WEIGHT: number;
+  WEIGHT_UOM: string;
+}
 // eslint-disable-next-line max-lines-per-function
 const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
@@ -43,8 +51,13 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   const [districtReceiver, setDistrictReceiver] = useState<string>('');
   const [wardReceiver, setWardReceiver] = useState<string>('');
   const [countryReceiver, setcountryReceiver] = useState<string>('');
+  const [visableCouponInfo, setVisableCouponInfo] = useState<boolean>(false);
 
   // const [listLocation, setListLocation] = useState<OrderSuggestedItem[]>([]);
+
+  function toggleCouponInfo(): void {
+    setVisableCouponInfo(!visableCouponInfo);
+  }
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -154,6 +167,10 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
 
   const handleGotoEditForwardingOrder = (): void => {
     dispatch(push(generatePath(routesMap.PHIEU_GUI_TRONG_NUOC, { idDonHang })));
+  };
+
+  const handleGotoTachKien = (): void => {
+    setVisableCouponInfo(true);
   };
 
   const trqType: TrqType[] = [
@@ -422,7 +439,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
           />
         </RootTypeahead> */}
         <div className="sipTitleRightBlock">
-          <Button className="ml-2" color="primary">
+          <Button className="ml-2" color="primary" onClick={handleGotoTachKien}>
             <img src={'../../assets/img/icon/iconTachKien.svg'} alt="VTPostek" />
             {t('Tách kiện')}
           </Button>
@@ -442,6 +459,11 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
       </Row>
       <h1 className="sipTitle">{t('Danh sách phiếu gửi')}</h1>
       {renderTable()}
+      <ModalCouponInfomation
+        couponInfomation={orderInformation}
+        modalCouponInfo={visableCouponInfo}
+        toggle={toggleCouponInfo}
+      />
     </>
   ) : (
     <Fade in={true} timeout={1000}>
