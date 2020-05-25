@@ -456,6 +456,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
   }
 
+  //eslint-disable-next-line max-lines-per-function
   function adjustPackageItemValue(valueName: string, value: string | undefined, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
       set(draftState[index], valueName, value);
@@ -464,6 +465,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     switch (valueName) {
       case 'Length':
         callDimensionWeight(
+          provinceIdSender,
+          districtIdSender,
+          wardIdSender,
+          maKhachHangGui,
+          phuongThucVanChuyen,
           value,
           get(packageItemArr[index], 'Width'),
           get(packageItemArr[index], 'Hight'),
@@ -474,6 +480,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         break;
       case 'Width':
         callDimensionWeight(
+          provinceIdSender,
+          districtIdSender,
+          wardIdSender,
+          maKhachHangGui,
+          phuongThucVanChuyen,
           get(packageItemArr[index], 'Length'),
           value,
           get(packageItemArr[index], 'Hight'),
@@ -484,6 +495,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         break;
       case 'Hight':
         callDimensionWeight(
+          provinceIdSender,
+          districtIdSender,
+          wardIdSender,
+          maKhachHangGui,
+          phuongThucVanChuyen,
           get(packageItemArr[index], 'Length'),
           get(packageItemArr[index], 'Width'),
           value,
@@ -507,10 +523,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   function setDimensionValue(value: string, sourceValue?: string, valueName?: string, index?: number): void {
-    if (valueName && index !== undefined && index >= 0) {
+    if (index !== undefined && index >= 0) {
       const newArr = produce(packageItemArr, (draftState): void => {
         set(draftState[index], 'DIMENSION_WEIGHT', value);
-        set(draftState[index], valueName, sourceValue);
+        if (valueName) {
+          set(draftState[index], valueName, sourceValue);
+        }
       });
       setPackageItemArr(newArr);
     } else {
@@ -839,6 +857,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           PACKAGING_MATERIAL: '',
           Description: item.Description,
           PACKAGE_TYPE: '',
+          COMMODITY_CODE: item.COMMODITY_CODE,
           QUANTITY_OF_PACKAGE:
             trim(item.QUANTITY_OF_PACKAGE) === ''
               ? undefined
@@ -977,6 +996,36 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function handleChangeTransportMethod(setValueFunction: Function): (items: TypeaheadOption[]) => void {
     return (items: TypeaheadOption[]): void => {
       setValueFunction(get(items, '0.id', ''));
+      callDimensionWeight(
+        provinceIdSender,
+        districtIdSender,
+        wardIdSender,
+        maKhachHangGui,
+        get(items, '0.id', ''),
+        kichThuocDai,
+        kichThuocRong,
+        kichThuocCao,
+      );
+
+      const newArr = produce(packageItemArr, (draftState): void => {
+        draftState.map((it, idx) => {
+          callDimensionWeight(
+            provinceIdSender,
+            districtIdSender,
+            wardIdSender,
+            maKhachHangGui,
+            get(items, '0.id', ''),
+            get(packageItemArr[idx], 'Length'),
+            get(packageItemArr[idx], 'Width'),
+            get(packageItemArr[idx], 'Hight'),
+            undefined,
+            undefined,
+            idx,
+          );
+          return it;
+        });
+      });
+      setPackageItemArr(newArr);
       //trigger get Summary information dispatch
       setCountGetSummaryInformation(countGetSummaryInformation + 1);
     };
@@ -2381,6 +2430,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   // eslint-disable-next-line max-lines-per-function
   const callDimensionWeight = async (
+    provinceIdSender: string,
+    districtIdSender: string,
+    wardIdSender: string,
+    maKhachHangGui: string,
+    phuongThucVanChuyen: string,
     kichThuocDai: string | undefined,
     kichThuocRong: string | undefined,
     kichThuocCao: string | undefined,
@@ -2413,6 +2467,22 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           {
             onSuccess: (data: API.ZTMI229Response): void => {
               if (!isMounted()) return;
+              if (
+                data.MT_ZTMI229_OUT &&
+                data.MT_ZTMI229_OUT.RETURN_MESSAGE &&
+                data.MT_ZTMI229_OUT.RETURN_MESSAGE.TYPE === 'E'
+              ) {
+                toast(
+                  <>
+                    <i className="fa fa-window-close-o mr-2" />
+                    {t(data.MT_ZTMI229_OUT.RETURN_MESSAGE.MESSAGE || 'Lỗi quy đổi trọng lượng')}
+                  </>,
+                  {
+                    type: 'error',
+                  },
+                );
+                return;
+              }
               if (data.MT_ZTMI229_OUT && data.MT_ZTMI229_OUT.DIMENSION_WEIGHT) {
                 setDimensionValue(
                   data.MT_ZTMI229_OUT.WEIGHT_UOM === 'KG'
@@ -2440,9 +2510,27 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   React.useEffect((): void => {
-    callDimensionWeight(kichThuocDai, kichThuocRong, kichThuocCao);
+    callDimensionWeight(
+      provinceIdSender,
+      districtIdSender,
+      wardIdSender,
+      maKhachHangGui,
+      phuongThucVanChuyen,
+      kichThuocDai,
+      kichThuocRong,
+      kichThuocCao,
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [kichThuocDai, kichThuocCao, kichThuocRong]);
+  }, [
+    provinceIdSender,
+    phuongThucVanChuyen,
+    districtIdSender,
+    wardIdSender,
+    maKhachHangGui,
+    kichThuocDai,
+    kichThuocCao,
+    kichThuocRong,
+  ]);
 
   function renderPackageSize(): JSX.Element {
     return (

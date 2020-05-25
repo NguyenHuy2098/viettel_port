@@ -295,7 +295,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
               value={get(item, 'COMMODITY_CODE')}
               onChange={handleChangeTypeaheadValue('COMMODITY_CODE', index)}
             />
-            <div className="sipInputItemError">{handleErrorMessage(index, 'Description')}</div>
+            <div className="sipInputItemError">{handleErrorMessage(index, 'COMMODITY_CODE')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">

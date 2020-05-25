@@ -1,7 +1,16 @@
 .cursor-pointer {
   cursor: pointer;
 }
-
+.sipLabel{
+  color: #299F9A,
+}
+.sipPackageInfo {
+  background: #fff;
+  border-radius: 3px;
+  .col_lg_4{
+    color: #299F9A
+  }
+}
 .sipSummaryContent {
   box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
   border-radius: 3px;
