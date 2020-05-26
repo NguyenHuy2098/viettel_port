@@ -188,7 +188,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       (subPackage: SubPackage, index: number): JSX.Element => {
         return (
           <Row className="mb-2" key={index}>
-            <Col xs="4" lg="4">
+            <Col xs="3" lg="3" style={{ paddingLeft: 45, alignSelf: 'center' }}>
               Bưu gửi {index + 1}
             </Col>
             <Col xs="4" lg="4">
@@ -197,6 +197,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 type="text"
                 value={toString(subPackage.QUANTITY)}
                 onChange={handleOnChangeQuantiy(subPackage.ID)}
+                style={{ width: '60%' }}
               />
             </Col>
             <Col xs="4" lg="4">
@@ -205,6 +206,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 value={subPackage.GROSS_WEIGHT}
                 suffix={` ${toLower(thongTinPhieuGui[0].WEIGHT_UOM)}`}
                 onValueChange={handleChangeWeight(subPackage.ID)}
+                style={{ width: '60%' }}
               />
             </Col>
           </Row>
@@ -344,15 +346,15 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           </div>
         </Row>
         <Row className="sipSummaryContent">
-          <Col lg="8" xs="12">
+          <Col lg="12" xs="12">
             <Row className="color-bluegreen mb-3">
-              <Col xs="4" lg="4">
+              <Col className="sipLabel" xs="3" lg="3">
                 {t('Mã phiếu gửi')}
               </Col>
-              <Col xs="4" lg="4">
+              <Col className="sipLabel" xs="4" lg="4">
                 {t('Số lượng')}
               </Col>
-              <Col xs="4" lg="4">
+              <Col className="sipLabel" xs="4" lg="4">
                 {t('Trọng lượng')}
               </Col>
             </Row>
@@ -377,12 +379,14 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         <Col lg="4" xl={5} xs="12">
           <Row>
             <Col xs="4">{t('Mã phiếu')}: </Col>
-            <Col xs="7">{toNumber(get(thongTinPhieuGui[0], 'FWO', ''))}</Col>
+            <Col style={{ fontWeight: 600 }} xs="7">
+              {toNumber(get(thongTinPhieuGui[0], 'FWO', ''))}
+            </Col>
           </Row>
 
           <Row>
             <Col xs="4">{t('Ngày gửi')}: </Col>
-            <Col xs="7">
+            <Col style={{ fontWeight: 600 }} xs="7">
               {moment(trim(get(thongTinPhieuGui[0], 'CREATED_ON'), ''), 'YYYYMMDD').format('DD/MM/YYYY')}
             </Col>
           </Row>
@@ -390,13 +394,17 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         <Col lg="4" xs="12" xl={5}>
           <Row>
             <Col xs="4">{t('Số lượng')}: </Col>
-            <Col xs="7">{toNumber(get(thongTinPhieuGui[0], 'Quantity', '0'))}</Col>
+            <Col style={{ fontWeight: 600 }} xs="7">
+              {toNumber(get(thongTinPhieuGui[0], 'Quantity', '0'))}
+            </Col>
           </Row>
           <Row>
             <Col xs="4">{t('Trọng lượng')}: </Col>
-            <Col xs="7">{`${toNumber(get(thongTinPhieuGui[0], 'GROSS_WEIGHT', '0'))} ${toLower(
-              get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
-            )}`}</Col>
+            <Col style={{ fontWeight: 600 }} xs="7">
+              {`${toNumber(get(thongTinPhieuGui[0], 'GROSS_WEIGHT', '0'))} ${toLower(
+                get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
+              )}`}
+            </Col>
           </Row>
         </Col>
         <Col xs={12} className="mt-3">
@@ -515,8 +523,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         },
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [t],
   );
 
   return (
@@ -548,7 +555,6 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           <DataTable columns={columns} data={ZTMI213_ResponseRow} onRowClick={noop} />
         </Row>
       )}
-
       <ToastContainer containerId={'SplitCoupon'} />
     </div>
   );
