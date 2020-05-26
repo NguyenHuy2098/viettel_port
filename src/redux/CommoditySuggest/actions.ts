@@ -1,5 +1,7 @@
 import { createAction } from 'redux-unfold-saga';
 
 export const ACTION_COMMODITY_SUGGEST = 'ACTION_COMMODITY_SUGGEST';
+export const ACTION_COMMODITY_SUGGEST_INTER = 'ACTION_COMMODITY_SUGGEST_INTER';
 
 export const action_COMMODITY_SUGGEST = createAction(ACTION_COMMODITY_SUGGEST);
+export const action_COMMODITY_SUGGEST_INTER = createAction(ACTION_COMMODITY_SUGGEST_INTER);
