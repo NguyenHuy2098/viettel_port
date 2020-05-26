@@ -48,7 +48,7 @@ const ButtonChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
     onApplyChosen(idUserSelected || '');
     setModalCreateNew(!modalCreateNew);
   };
-  const listStaff = filter(useSelector(makeSelectorGet_MT_ZTMI054_OUT), item => item.UNAME !== currentUserId);
+  const listStaff = filter(useSelector(makeSelectorGet_MT_ZTMI054_OUT), item => item.BP !== currentUserId);
 
   const handleChangeSelectUser = useCallback(
     (id: string | undefined) => (): void => {
@@ -71,13 +71,13 @@ const ButtonChonNhanVien: React.FC<Props> = (props: Props): JSX.Element => {
         <ModalBody>
           {map(listStaff, item => {
             return (
-              <Label check xs="12" className="pl-0 pr-0 ipOptionNV" key={item.UNAME}>
+              <Label check xs="12" className="pl-0 pr-0 ipOptionNV" key={item.BP}>
                 <Input
                   type="radio"
                   name="deliveryRequirement"
-                  checked={item.UNAME === idUserSelected}
-                  value={item.UNAME}
-                  onChange={handleChangeSelectUser(item.UNAME)}
+                  checked={item.BP === idUserSelected}
+                  value={item.BP}
+                  onChange={handleChangeSelectUser(item.BP)}
                 />{' '}
                 {item.NAME_TEXT}
                 <span className="pl-4-5 display-block">
