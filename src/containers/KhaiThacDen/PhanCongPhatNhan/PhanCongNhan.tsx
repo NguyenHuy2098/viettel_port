@@ -187,7 +187,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   const listStaff = useSelector(makeSelectorGet_MT_ZTMI054_OUT);
 
   const findBPFromUser = (userName: string): string | undefined => {
-    const user = find(listStaff, { UNAME: userName });
+    const user = find(listStaff, { BP: userName });
     if (user) return user.BP;
     return;
   };
@@ -247,7 +247,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
                 {/* eslint-disable-next-line react/jsx-max-depth */}
                 <option value={''}>{t('Chọn nhân viên')}</option>
                 {map(listStaff, item => (
-                  <option value={item.UNAME} key={item.UNAME}>
+                  <option value={item.BP} key={item.BP}>
                     {item.NAME_TEXT}
                   </option>
                 ))}
