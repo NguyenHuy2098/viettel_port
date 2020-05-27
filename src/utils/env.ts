@@ -14,6 +14,7 @@ export const REACT_APP_SSO_URL = process.env.REACT_APP_SSO_URL;
 export const REACT_APP_SSO_CLIENT_ID = process.env.REACT_APP_SSO_CLIENT_ID;
 export const REACT_APP_SSO_CLIENT_SECRET = process.env.REACT_APP_SSO_CLIENT_SECRET;
 export const REACT_APP_SSO_API_URL = process.env.REACT_APP_SSO_API_URL || '';
+export const REACT_APP_API_LVC = process.env.REACT_APP_API_LVC;
 
 export const IS_DEVELOPMENT_ENV = REACT_APP_ENV === 'development';
 export const IS_PRODUCTION_ENV = REACT_APP_ENV === 'production';

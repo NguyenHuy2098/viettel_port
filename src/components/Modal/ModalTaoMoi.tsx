@@ -7,6 +7,7 @@ import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import TypeaheadDiemDen from 'components/Input/TypeaheadDiemDen';
+import { toast } from 'react-toastify';
 
 interface Props {
   onHide: () => void;
@@ -55,10 +56,28 @@ const CreateForwardingItemModal: React.FC<Props> = (props: Props): JSX.Element =
         onSuccess: (data: API.MIOAZTMI016Response): void => {
           onSuccessCreated();
           const thisId = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU', '');
-          alert(`Tạo thành công! Mã: ${thisId}`);
+          toast(
+            <>
+              <i className="fa fa-check-square mr-2" />
+              {t('Tạo bảng kê')} {thisId} {t('thành công')}
+            </>,
+            {
+              type: 'success',
+            },
+          );
+          // alert(`Tạo thành công! Mã: ${thisId}`);
         },
         onFailure: (): void => {
-          alert(t('Có lỗi xảy ra!'));
+          toast(
+            <>
+              <i className="fa fa-window-close mr-2" />
+              {t('Đã có lỗi xảy ra ')}
+            </>,
+            {
+              type: 'error',
+            },
+          );
+          // alert(t('Có lỗi xảy ra!'));
         },
         onFinish: (): void => {
           setNote('');

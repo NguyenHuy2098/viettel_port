@@ -7,6 +7,7 @@ import {
   REACT_APP_COMMODITY_API_ENDPOINT,
   REACT_APP_SSO_API_URL,
   REACT_APP_BACKEND_API_ENDPOINT,
+  REACT_APP_API_LVC,
 } from './env';
 import { throwErrorIfMalformed } from './errorHelpers';
 
@@ -93,6 +94,19 @@ crmBackendApi.interceptors.request.use(
   },
 );
 
+export const lvcSapApi = axios.create({
+  baseURL: REACT_APP_API_LVC,
+});
+
+lvcSapApi.interceptors.request.use(
+  (config: AxiosRequestConfig): AxiosRequestConfig => {
+    return configure(config);
+  },
+  (error): Promise<Error> => {
+    return Promise.reject(error);
+  },
+);
+
 /**
  * SSO API instance
  */
@@ -110,6 +124,7 @@ ssoApi.interceptors.request.use(
 );
 
 export default {
+  lvcSapApi,
   sapApi,
   crmApi,
   crmCommodityApi,

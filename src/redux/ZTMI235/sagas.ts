@@ -1,8 +1,8 @@
 import { SagaIterator } from 'redux-saga';
 import { takeLatest } from 'redux-saga/effects';
 import { unfoldSaga, UnfoldSagaActionType } from 'redux-unfold-saga';
-import { sapApiMap } from 'utils/apisMap';
-import { sapApi } from 'utils/request';
+// import { sapApiMap } from 'utils/apisMap';
+import { lvcSapApi } from 'utils/request';
 import HttpRequestError from 'utils/HttpRequetsError';
 import { ACTION_MIOA_ZTMI235 } from './actions';
 
@@ -10,11 +10,13 @@ function* takeGet_MIOA_ZTMI235(action: UnfoldSagaActionType): Iterable<SagaItera
   yield unfoldSaga(
     {
       handler: async (): Promise<ZTMI235Response> => {
-        const { data } = await sapApi.get(sapApiMap.ZTMI235, {
+        const res = await lvcSapApi.get('lvc', {
           params: action.payload,
         });
-        if (data.Status) return data;
-        throw new HttpRequestError(data.ErrorCode, data.Messages);
+        if (res.status === 200) {
+          return res.data;
+        }
+        throw new HttpRequestError(res.data.ErrorCode, res.data.Messages);
       },
       key: action.type,
     },

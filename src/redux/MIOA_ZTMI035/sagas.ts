@@ -21,7 +21,7 @@ function* takeGet_MIOA_ZTMI035(action: UnfoldSagaActionType): Iterable<SagaItera
       key: action.type,
     },
     action.callbacks,
-    action.options,
+    // action.options,
   );
 }
 
