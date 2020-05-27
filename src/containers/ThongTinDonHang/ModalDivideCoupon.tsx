@@ -82,7 +82,7 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
         // console.log(subPackage, 'sub');
         return (
           <Row className="mb-2" key={index}>
-            <Col xs="4" lg="4">
+            <Col xs="4" lg="4" style={{ alignSelf: 'center' }}>
               <Label check>
                 <Input
                   value={subPackage.ID}
@@ -99,6 +99,7 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
                 type="text"
                 value={toString(subPackage.QUANTITY)}
                 onChange={handleOnChangeQuantiy(subPackage.ID)}
+                style={{ width: 165 }}
               />
             </Col>
             <Col xs="4" lg="4">
@@ -106,6 +107,7 @@ const ModalDivideConpon: React.FC<Props> = (props): JSX.Element => {
                 className="text-center form-control"
                 value={subPackage.GROSS_WEIGHT}
                 suffix={` ${toLower(props.thongTinPhieuGui[0].WEIGHT_UOM)}`}
+                style={{ width: 165 }}
                 onValueChange={handleChangeWeight(subPackage.ID)}
               />
             </Col>

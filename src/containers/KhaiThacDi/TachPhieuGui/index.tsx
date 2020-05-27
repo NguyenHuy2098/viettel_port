@@ -188,7 +188,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
       (subPackage: SubPackage, index: number): JSX.Element => {
         return (
           <Row className="mb-2" key={index}>
-            <Col xs="4" lg="4">
+            <Col xs="3" lg="3" style={{ paddingLeft: 45, alignSelf: 'center' }}>
               Bưu gửi {index + 1}
             </Col>
             <Col xs="4" lg="4">
@@ -197,6 +197,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 type="text"
                 value={toString(subPackage.QUANTITY)}
                 onChange={handleOnChangeQuantiy(subPackage.ID)}
+                style={{ width: '60%' }}
               />
             </Col>
             <Col xs="4" lg="4">
@@ -205,6 +206,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
                 value={subPackage.GROSS_WEIGHT}
                 suffix={` ${toLower(thongTinPhieuGui[0].WEIGHT_UOM)}`}
                 onValueChange={handleChangeWeight(subPackage.ID)}
+                style={{ width: '60%' }}
               />
             </Col>
           </Row>
@@ -344,9 +346,9 @@ const SplitCoupon: React.FC = (): JSX.Element => {
           </div>
         </Row>
         <Row className="sipSummaryContent">
-          <Col lg="8" xs="12">
+          <Col lg="12" xs="12">
             <Row className="color-bluegreen mb-3">
-              <Col className="sipLabel" xs="4" lg="4">
+              <Col className="sipLabel" xs="3" lg="3">
                 {t('Mã phiếu gửi')}
               </Col>
               <Col className="sipLabel" xs="4" lg="4">
@@ -521,8 +523,7 @@ const SplitCoupon: React.FC = (): JSX.Element => {
         },
       },
     ],
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [],
+    [t],
   );
 
   return (
