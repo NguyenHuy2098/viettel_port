@@ -1,4 +1,4 @@
-import { get, size } from 'lodash';
+import { get } from 'lodash';
 import { AppStateType } from 'redux/store';
 
 export const select_MIOA_ZTMI040 = (state: AppStateType): MIOAZTMI040StateType => {
@@ -9,7 +9,7 @@ export const selectPhanCongPhat = (state: AppStateType): API.RowResponseZTMI040[
   get(select_MIOA_ZTMI040(state), 'response.MT_ZTMI040_OUT.row', []) || [];
 
 export function selectPhanCongPhatListCount(state: AppStateType): number {
-  return size(selectPhanCongPhat(state));
+  return parseInt(get(state, 'MIOA_ZTMI040.response.MT_ZTMI040_OUT.Paging[0].EV_TOTAL_ITEM', 0));
 }
 
 export const selectPhanCongPhatCount = (state: AppStateType): number => {

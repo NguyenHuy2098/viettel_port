@@ -75,7 +75,7 @@ const QuetMa: React.FC = (): JSX.Element => {
                               if (get(dataChuyenThu, 'MT_ZTMI023_OUT.row[0].TOR_TYPE', '') === 'ZBIG') {
                                 toast(
                                   <>
-                                    <i className="fa fa-window-close-o mr-2" />
+                                    <i className="fa fa-check-square mr-2" />
                                     {t('Thành công!')}
                                   </>,
                                   {
@@ -89,13 +89,13 @@ const QuetMa: React.FC = (): JSX.Element => {
                                 );
                               } else {
                                 const payload235 = {
-                                  MaBuuPham: get(data023, 'PACKAGE_ID', ''),
-                                  GTC: get(data023, 'DEFINE_GTC', ''),
-                                  COMTYPE: get(data023, 'CCODE_TYPE', ''),
-                                  NHOMDICHVU: get(data023, 'SERVGROUP', ''),
-                                  LOAIDICHVU: get(data023, 'TRANSSRVREQ_CODE', ''),
-                                  DIEMDI: get(data023, 'RECENT_LOC', ''),
-                                  TINHDEN: get(data023, 'DEST_LOC', ''),
+                                  mabuupham: get(data023, 'PACKAGE_ID', ''),
+                                  gtc: get(data023, 'DEFINE_GTC', ''),
+                                  comtype: get(data023, 'CCODE_TYPE', ''),
+                                  nhomdichvu: get(data023, 'SERVGROUP', ''),
+                                  loaidichvu: get(data023, 'TRANSSRVREQ_CODE', ''),
+                                  diemdi: get(data023, 'RECENT_LOC', ''),
+                                  tinhden: get(data023, 'DEST_LOC', ''),
                                 };
                                 dispatch(
                                   action_MIOA_ZTMI235(payload235, {
@@ -117,12 +117,13 @@ const QuetMa: React.FC = (): JSX.Element => {
                                             setTimeout(function() {
                                               toast(
                                                 <>
-                                                  <i className="fa fa-window-close-o mr-2" />
-                                                  {get(
+                                                  <i className="fa fa-check-square mr-2" />
+                                                  {t('Thành công!')}
+                                                  {/* {get(
                                                     data,
                                                     'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE',
                                                     t('Thành công!'),
-                                                  )}
+                                                  )} */}
                                                 </>,
                                                 {
                                                   type: 'success',

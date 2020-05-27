@@ -30,6 +30,12 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
 
   function toggleModalDivide(): void {
     setModalDivideCoupon(!modalDivideCoupon);
+    setDivideQuantity(0);
+  }
+
+  function toggleModal(): void {
+    props.toggle();
+    setDivideQuantity(0);
   }
 
   const handleClickDelete = (deleteQuantity: number): void => {
@@ -172,7 +178,7 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
       </Col>
       <Col xs={12} className="mt-3" style={{ marginLeft: 15, alignItems: 'center' }}>
         <Row>
-          <Label>{t('Số lượng tách')}</Label>
+          <Label style={{ alignSelf: 'center', margin: 0 }}>{t('Số lượng tách')}</Label>
           <div className="sipInputQuantity">
             <Input type="number" onChange={handerEnterDivideQuantity} value={divideQuantity} />
           </div>
@@ -183,8 +189,8 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
 
   return (
     <>
-      <Modal isOpen={props.modalCouponInfo} toggle={props.toggle} className="sipModalCouponInfo">
-        <ModalHeader toggle={props.toggle}>{t('Tách kiện')}</ModalHeader>
+      <Modal isOpen={props.modalCouponInfo} toggle={toggleModal} className="sipModalCouponInfo">
+        <ModalHeader toggle={toggleModal}>{t('Tách kiện')}</ModalHeader>
         <ModalBody>{modalBody()}</ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={handleDevideCoupon} disabled={disableButtonTachPhieu}>
