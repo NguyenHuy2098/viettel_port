@@ -6,7 +6,14 @@ import * as yup from 'yup';
 import produce from 'immer';
 import { match } from 'react-router-dom';
 import { default as NumberFormat } from 'react-number-format';
-import { Button, Col, Input, Label, Row } from 'reactstrap';
+import { Button, Col, Input, Label, Nav, NavItem, NavLink, Row } from 'reactstrap';
+import {
+  Menu,
+  MenuItem,
+  Typeahead as RootTypeahead,
+  TypeaheadMenuProps,
+  TypeaheadResult,
+} from 'react-bootstrap-typeahead';
 import {
   drop,
   get,
@@ -23,15 +30,18 @@ import {
   sortBy,
   toString,
   trim,
+  isEmpty,
 } from 'lodash';
 import useIsMounted from 'react-is-mounted-hook';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import classnames from 'classnames';
 import Typeahead from 'components/Input/Typeahead';
 import TypeaheadLoaiHang from 'components/Input/TypeaheadLoaiHang';
 import TypeaheadFullAddress from 'components/Input/TypeaheadFullAdress';
-import TypeaheadTenHang from 'components/Input/TypeaheadTenHang';
-import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
+import TypeaheadTenHangInter from 'components/Input/TypeaheadTenHangInter';
+import TypeaheadPhone from 'components/Input/TypeaheadPhone';
+import { makeSelectorBPOrg, makeSelectorCurrentPostOffice } from 'redux/GetProfileByUsername/selectors';
 import { action_MIOA_ZTMI012 } from 'redux/MIOA_ZTMI012/actions';
 import { action_MIOA_ZTMI011 } from 'redux/MIOA_ZTMI011/actions';
 import { action_LOCATIONSUGGEST } from 'redux/LocationSuggest/actions';
@@ -43,7 +53,9 @@ import {
   action_GET_DISTRICT,
   action_GET_WARD,
 } from 'redux/LocationSearch/actions';
-import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
+import { action_SENDER_SUGGEST, action_RECEIVER_SUGGEST } from 'redux/PersonSuggest/actions';
+import { action_MOST_ORDER_SUGGEST, action_RECENT_ORDER_SUGGEST } from 'redux/OrderSuggest/actions';
+import { action_COMMODITY_SUGGEST_INTER } from 'redux/CommoditySuggest/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
 import { select_MT_ZTMI031_OUT, select_MT_ZTMI031_INSTANE } from 'redux/MIOA_ZTMI031/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
@@ -51,6 +63,8 @@ import { getAddressNameById, numberFormat, getValueOfNumberFormat } from 'utils/
 import AdditionalPackageTabItemsInternational from 'components/AdditionalPackageTabItemsInternational';
 import ModalAddNewSuccess from './ModalAddNewSuccess';
 import { countryList } from './countryList';
+
+import './style.scss';
 
 interface Props {
   match: match;
@@ -86,12 +100,27 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const orderInformation = isCreateNewForwardingOrder ? [] : orderInformationSelector;
   const orderInformationInstane = isCreateNewForwardingOrder ? {} : orderInformationInstaneSelector;
 
+  const [senderKeywords, setSenderKeywords] = useState<string>('');
+
   const [provinceSenderEdit, setProvinceSenderEdit] = useState<string>('');
   const [districtSenderEdit, setDistrictSenderEdit] = useState<string>('');
   const [wardSenderEdit, setWardSenderEdit] = useState<string>('');
   const [provinceReceiverEdit, setProvinceReceiverEdit] = useState<string>('');
   const [districtReceiverEdit, setDistrictReceiverEdit] = useState<string>('');
   const [wardReceiverEdit, setWardReceiverEdit] = useState<string>('');
+  const [focusAddress, setFocusAdress] = useState<string>('');
+
+  const [keywords, setKeywords] = useState<string>('');
+  const [tab, setTab] = useState<number>(1);
+
+  const [tienPhuPhi, setTienPhuPhi] = useState<string>('');
+  const [senderSuggest, setSenderSuggest] = useState<Person[]>([]);
+  const [receiverSuggest, setReceiverSuggest] = useState<Person[]>([]);
+
+  const [listTemplates, setListTemplates] = useState<OrderSuggestedItem[]>([]);
+  const [selectedTemplate, setSelectedTemplate] = useState<OrderSuggestedItem[]>();
+  const [trongLuongTemplate, setTrongLuongTemplate] = useState<number>(0);
+  // const [nhomHang, setNhomHang] = useState<string>('');
 
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
@@ -179,6 +208,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   React.useEffect((): void => {
     if (!isCreateNewForwardingOrder) {
       dispatch(action_MIOA_ZTMI031(payloadOrderInfoFirstLoad));
+    } else {
+      handleClearData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [idDonHang]);
@@ -204,6 +235,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       .matches(isWorldPhone, t('Vui lòng nhập đúng định dạng số điện thoại')),
     hoTenReceiver: yup.string().required(t('Vui lòng nhập họ tên')),
     diaChiReceiver: yup.string().required(t('Vui lòng nhập địa chỉ')),
+    quocGia: yup.string().required(t('Vui lòng nhập quốc gia')),
     tenHang: yup.string().required(t('Vui lòng nhập tên hàng hóa')),
     soLuong: yup
       .number()
@@ -219,6 +251,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       .number()
       .required(t('Vui lòng nhập trọng lượng'))
       .min(0, t('Vui lòng nhập số lớn hơn 0'))
+      .min(trongLuongTemplate, t('Vui lòng nhập trọng lượng lớn hơn hoặc bằng trọng lượng đơn hàng'))
       .typeError(t('Vui lòng nhập định dạng số')),
   });
 
@@ -285,7 +318,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [hoTenReceiver, setHoTenReceiver] = useState<string>('');
   const [diaChiReceiver, setDiaChiReceiver] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  // const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>(''); // temporary hide
+  //  const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>('');
   const [districtIdReceiver, setDistrictIdReceiver] = useState<string>('');
   const [wardIdReceiver, setWardIdReceiver] = useState<string>('');
   const [detailAddressReceiver, setDetailAddressReceiver] = useState<string>('');
@@ -293,12 +326,13 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [soLuong, setSoLuong] = useState<string>('');
   const [giaTri, setGiaTri] = useState<string>('');
   const [trongLuong, setTrongLuong] = useState<string>('');
+
   //_____non-validated items
   const [phuongThucVanChuyen, setPhuongThucVanChuyen] = useState<string>('');
-  const [quocGia, setQuocGia] = useState<string>(get(sortedCountryList, '[0].NATIONAL_CODE', 'VN'));
-  const [loaiKienHang, setLoaiKienHang] = useState<string>('V3');
+  const [quocGia, setQuocGia] = useState<string>('');
+  const [nhomHang, setNhomHang] = useState<string>('V3');
   const [loaiHangHoa, setLoaiHangHoa] = useState<string>('V01');
-  const [choXemHang, setChoXemHang] = useState<string>('1');
+  //const [choXemHang, setChoXemHang] = useState<string>('1');
   const [ghiChu, setGhiChu] = useState<string>('');
   //______ Transport method
 
@@ -338,8 +372,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     NET_WEIGHT: '',
   };
   const firstPackageItem = {
-    COMMODITY_CODE: loaiKienHang === 'V2' ? 'V04' : loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
-    COMMODITY_TYPE: loaiKienHang, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_CODE: nhomHang === 'V2' ? 'V04' : loaiHangHoa, // Nhóm hàng hóa (tham chiếu trong bảng)
+    COMMODITY_TYPE: nhomHang, // Nhóm hàng hóa (tham chiếu trong bảng)
     PACKAGE_TYPE: '', // Loại vật liệu đóng gói lấy từ danh mục  V01: Hộp, V02 : Túi, V03: Bọc chống sốc, V04: Bọc xốp, V99 : các loại các (O)
     QUANTITY_OF_UNIT: 'EA', // Đơn vị bưu gửi, luôn là EA
     GOODS_VALUE: getValueOfNumberFormat(giaTri),
@@ -410,6 +444,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     dienThoaiReceiver: trim(dienThoaiReceiver),
     hoTenReceiver: trim(hoTenReceiver),
     diaChiReceiver: trim(diaChiReceiver),
+    quocGia: trim(quocGia),
     tenHang: trim(tenHang),
     soLuong: trim(soLuong) === '' ? undefined : getValueOfNumberFormat(trim(soLuong)),
     giaTri: trim(giaTri) === '' ? undefined : getValueOfNumberFormat(trim(giaTri)),
@@ -420,6 +455,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   //eslint-disable-next-line max-lines-per-function
   React.useEffect((): void => {
     if (size(orderInformation)) {
+      setMaKhachHang(get(orderInformationInstane, 'CONSIGNEE_ID', ''));
       setMaPhieuGui(get(orderInformationInstane, 'FWO', ''));
       setDienThoaiSender(get(orderInformationInstane, 'MOBILE_PHONE_SRC', ''));
       setHoTenSender(get(orderInformationInstane, 'SHIPER_NAME', ''));
@@ -430,26 +466,45 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setDiaChiSender(
         `${thisDetailAddressSender}${' '}${wardSenderEdit}${' '}${districtSenderEdit}${' '}${provinceSenderEdit}`,
       );
+      setDetailSender(true);
       setProvinceIdSender(get(orderInformationInstane, 'PROVINCE_ID_SOURCE', ''));
       setDistrictIdSender(get(orderInformationInstane, 'DISTRICT_ID_SOURCE', ''));
       setWardIdSender(toString(get(orderInformationInstane, 'WARD_ID_SOURCE', '')));
+
       setDienThoaiReceiver(get(orderInformationInstane, 'MOBILE_PHONE_DES', ''));
       setHoTenReceiver(get(orderInformationInstane, 'CONSIGNEE_NAME', ''));
       setDiaChiReceiver(
-        `${orderInformationInstane.HOUSE_NO_SOURCE}${orderInformationInstane.STREET_ID_SOURCE}${wardReceiverEdit}${districtReceiverEdit}${provinceReceiverEdit}`,
+        `${orderInformationInstane.HOUSE_NO_DES}${orderInformationInstane.STREET_ID_DES}${wardReceiverEdit}${districtReceiverEdit}${provinceReceiverEdit}`,
       );
-      // setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', '')); // temporary hide
+
+      setSelectedCommodityPhone([{ id: dienThoaiReceiver, label: dienThoaiReceiver }]);
+
+      //  setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
+      setQuocGia(toString(get(orderInformationInstane, 'COUNTRY_ID_DES', '')));
       setDetailAddressReceiver(
         get(orderInformationInstane, 'HOUSE_NO_DES', '') + ' ' + get(orderInformationInstane, 'STREET_ID_DES', ''),
       );
       setTenHang(get(orderInformationInstane, 'ITEM_DESCRIPTION', ''));
       setSoLuong(orderInformationInstane.Quantity ? parseFloat(orderInformationInstane.Quantity).toFixed(0) : '');
-      setGiaTri('');
+      setGiaTri(orderInformationInstane.GoodValue ? toString(parseInt(orderInformationInstane.GoodValue)) : '');
+      if (tenHang === get(orderInformationInstane, 'ITEM_DESCRIPTION', '')) {
+        setSelectedCommodity([{ id: tenHang, label: tenHang }]);
+        setCommoditySuggest([
+          {
+            goodsValue: 0,
+            weight: 0,
+            name: tenHang,
+            quantity: 0,
+            commodityType: '',
+          },
+        ]);
+      }
       setTrongLuong(
         orderInformationInstane.GROSS_WEIGHT ? parseFloat(orderInformationInstane.GROSS_WEIGHT).toFixed(0) : '',
       );
+      setLoaiHangHoa(get(orderInformationInstane, 'COMMODITY_TYPE', 'V01'));
       const thisServiceType: string[] = drop(get(orderInformationInstane, 'SERVICE_TYPE', ''), 1);
       const thisTransportServiceType =
         findIndex(thisServiceType, (item: string): boolean => {
@@ -831,17 +886,70 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
   //_________________COMMODITY suggest event handle__________________________
 
-  const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
+  const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItemInter[]>([]);
+  const [selectedCommodity, setSelectedCommodity] = useState<TypeaheadOption[]>([]);
+
+  const [selectedCommodityPhone, setSelectedCommodityPhone] = useState<TypeaheadOption[]>([]);
 
   React.useEffect((): void => {
-    if (size(tenHang) > 0) {
+    templateOrderSuggest(keywords, tab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [keywords, tab]);
+
+  function templateOrderSuggest(keywords: string, type: number): void {
+    if (currentPostOfficeInStore) {
+      let payload = { postoffice: currentPostOfficeInStore.PostOfficeCode };
+      switch (type) {
+        case 1:
+          break;
+        case 2:
+          if (size(keywords)) {
+            payload = Object.assign(payload, { q: keywords });
+          }
+          dispatch(
+            action_MOST_ORDER_SUGGEST(payload, {
+              onSuccess: (data: OrderSuggestedItem[]): void => {
+                if (!isMounted()) return;
+              },
+              onFailure: (error: HttpRequestErrorType): void => {
+                if (!isMounted()) return;
+              },
+            }),
+          );
+          break;
+        case 3:
+          if (size(keywords)) {
+            payload = Object.assign(payload, { q: keywords });
+          }
+          dispatch(
+            action_RECENT_ORDER_SUGGEST(payload, {
+              onSuccess: (data: OrderSuggestedItem[]): void => {
+                if (!isMounted()) return;
+                setListTemplates(data);
+              },
+              onFailure: (error: HttpRequestErrorType): void => {
+                if (!isMounted()) return;
+              },
+            }),
+          );
+          break;
+        default:
+          setListTemplates([]);
+      }
+    }
+  }
+
+  const currentPostOfficeInStore = useSelector(makeSelectorCurrentPostOffice);
+
+  React.useEffect((): void => {
+    if (size(tenHang) > 0 && (size(selectedCommodity) === 0 || selectedCommodity[0].label !== tenHang)) {
       dispatch(
-        action_COMMODITY_SUGGEST(
-          { q: tenHang },
+        action_COMMODITY_SUGGEST_INTER(
+          { q: tenHang, postoffice: get(currentPostOfficeInStore, 'PostOfficeCode', ''), sender: maKhachHang },
           {
-            onSuccess: (data: SuggestedCommodity): void => {
+            onSuccess: (data: CommoditySuggestedItemInter[]): void => {
               if (!isMounted()) return;
-              setCommoditySuggest(get(data, 'items'));
+              setCommoditySuggest(data);
             },
             onFailure: (error: HttpRequestErrorType): void => {
               if (!isMounted()) return;
@@ -856,11 +964,58 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tenHang]);
 
+  React.useEffect((): void => {
+    if (size(senderKeywords) > 0 && currentPostOfficeInStore) {
+      dispatch(
+        action_SENDER_SUGGEST(
+          { q: senderKeywords, postoffice: currentPostOfficeInStore.PostOfficeCode },
+          {
+            onSuccess: (data: Person[]): void => {
+              if (!isMounted()) return;
+              setSenderSuggest(data);
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
+              setSenderSuggest([]);
+            },
+          },
+        ),
+      );
+    } else {
+      setSenderSuggest([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [senderKeywords, currentPostOfficeInStore]);
+
   function handleChooseCommoditySuggest(items: TypeaheadOption[]): void {
-    setTenHang(get(items, '0.id', ''));
-    setGiaTri(toString(get(items, '0.price', '')));
-    setCommoditySuggest([]);
-    triggerValidateAndPriceCalculate();
+    if (size(items)) {
+      setTenHang(get(items, '0.label', ''));
+      setGiaTri(toString(get(items, '0.goodsValue', '')));
+      setSoLuong(toString(get(items, '0.quantity', '')));
+      setNhomHang(get(items, '0.commodityType', nhomHang));
+      setTrongLuong(get(items, '0.weight'));
+      setTrongLuongTemplate(get(items, '0.weight', 0));
+      setCommoditySuggest([]);
+      setSelectedCommodity(items);
+      triggerValidateAndPriceCalculate();
+    }
+  }
+
+  function handleChooseCommoditySuggestPhone(items: TypeaheadOption[]): void {
+    if (size(items)) {
+      setDienThoaiReceiver(get(items, '0.label', ''));
+      setHoTenReceiver(toString(get(items, '0.name', '')));
+      const thisValue = get(items, '0.address');
+      setDiaChiReceiver(thisValue);
+      setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
+      setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
+      setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
+      //  setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
+      setDescription(join(slice(thisValue, 150, 190), ''));
+      setReceiverSuggest([]);
+      setSelectedCommodityPhone(items);
+      // triggerValidateAndPriceCalculate();
+    }
   }
 
   //___________________________________________________________________
@@ -871,10 +1026,39 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
     setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
     setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
-    // setProvinceIdReceiver(join(slice(thisValue, 110, 150), '')); // temporary hide
+    //  setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
     setDescription(join(slice(thisValue, 150, 190), ''));
     triggerValidateAndPriceCalculate();
   }
+
+  React.useEffect((): void => {
+    if (
+      size(dienThoaiReceiver) > 0 &&
+      (size(selectedCommodityPhone) === 0 || selectedCommodityPhone[0].label !== dienThoaiReceiver) &&
+      currentPostOfficeInStore
+    ) {
+      dispatch(
+        action_RECEIVER_SUGGEST(
+          { q: dienThoaiReceiver, postoffice: currentPostOfficeInStore.PostOfficeCode, sender: maKhachHang },
+          {
+            onSuccess: (data: Person[]): void => {
+              if (!isMounted()) return;
+              if (size(data) > 0) {
+                setReceiverSuggest(data);
+              }
+            },
+            onFailure: (error: HttpRequestErrorType): void => {
+              if (!isMounted()) return;
+              setReceiverSuggest([]);
+            },
+          },
+        ),
+      );
+    } else {
+      setSenderSuggest([]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dienThoaiReceiver, currentPostOfficeInStore]);
 
   // eslint-disable-next-line max-lines-per-function
   function handleSaveForwardingOrder(): void {
@@ -894,7 +1078,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       BUYERS_REFERENCE_NUMBER: trim(maPhieuGui),
       CAMPAIGN: '',
       CITY_DES: trim(quocGia), // khi đơn quốc tế thì truyền city_des= country_des
-      // CITY_NAME: trim(provinceIdReceiver),
+      //  CITY_NAME: trim(provinceIdReceiver),
       CITY_NAME: 'Singapore', // tạm thời để là "Singapore" sau này sửa lại thì cho dòng trên vào
       CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
       CONSIGNEE: '9999999999',
@@ -921,7 +1105,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       NAME_CONSIG: trim(hoTenReceiver),
       NAME_OP: trim(hoTenSender),
       NAME_SHIPPER: trim(hoTenSender),
-      NOTE: choXemHang === '1' ? trim(ghiChu) + ' - Cho xem hàng' : trim(ghiChu) + ' - Không cho xem hàng', // Ghi chú cho bưu gửi
+      NOTE: trim(ghiChu), // Ghi chú cho bưu gửi
       OLD_CAMPAIGN_ID: 0,
       ORDERING_PARTY: trim(maKhachHang) === '' ? '9999999999' : trim(maKhachHang), // Mã đối tác sử dụng dịch vụ
       ORDER_TYPE: 'V004', // Loại đơn gửi  V001 : Phiếu gửi nội địa, V002 : Phiếu gửi nội địa theo lô(hiện tại app không sử dụng), V003 : Phiều gửi quốc tế (tờ khai riêng, hiện tại app chưa có tính năng này), V004 : Phiếu gửi quốc tế (tờ khai chung)
@@ -1081,10 +1265,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setSoLuong('');
     setGiaTri('');
     setTrongLuong('');
-    setPhuongThucVanChuyen('VCN');
-    // setLoaiKienHang('V3');
+    setPhuongThucVanChuyen('DHL');
+    // setNhomHang('V3');
     // setNguoiThanhToan('PP');
-    setChoXemHang('');
+    //setChoXemHang('');
     setGhiChu('');
     setActiveTab('1');
     setPackageItemArr([]);
@@ -1094,6 +1278,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setCuocCongThem('0 đ');
     setTongCuoc('0 đ');
     setCountGetSummaryInformation(countGetSummaryInformation + 1);
+    setDetailSender(false);
   }
 
   //__________________________________________________________________________
@@ -1263,9 +1448,21 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               />
             </Col>
           </Row>
-        </Row>
-        <div className="sipLine row" />
-        <Row>
+          <Row className="sipSendingCouponItem">
+            <Col xs="5" xl={3}>
+              {t('Phụ phí')}
+              {t('HYPHEN', ':')}
+            </Col>
+            <Col xs="7" xl={8} className="text-semibold">
+              <Input
+                className="text-semibold"
+                type="text"
+                placeholder={t('Nhập phụ phí (đ)')}
+                value={tienPhuPhi === '' ? tienPhuPhi : numberFormat(getValueOfNumberFormat(tienPhuPhi))}
+                onChange={handleChangeTextboxValue(setTienPhuPhi)}
+              />
+            </Col>
+          </Row>
           <Row className="sipSendingCouponItem mb-3">
             <Col xs="5">{t('Tổng cước')}</Col>
             <Col xs="7" className="color-orange text-semibold">
@@ -1283,11 +1480,122 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  function renderTypeaheadPerson(
+    option: TypeaheadResult<Person>,
+    props: TypeaheadMenuProps<Person>,
+    index: number,
+  ): JSX.Element {
+    return (
+      <div>
+        <Row style={{ fontWeight: 'bold' }}>
+          {get(option, 'phone') +
+            (isEmpty(get(option, 'code')) ? '' : ' * ' + get(option, 'code')) +
+            ' * ' +
+            get(option, 'name')}
+        </Row>
+        <Row>{get(option, 'addr.formattedAddress')}</Row>
+      </div>
+    );
+  }
+
+  function handleSelectedSender(selected: Person[]): void {
+    if (size(selected)) {
+      setDienThoaiSender(get(selected, '0.phone'));
+      setHoTenSender(get(selected, '0.name'));
+      setMaKhachHang(get(selected, '0.code'));
+      //address
+      const dataComponents = get(selected, '0.addr.components', []);
+      const thisProvince = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'PROVINCE';
+      });
+      setProvinceIdSender(get(thisProvince, 'code', ''));
+      const thisDistrict = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'DISTRICT';
+      });
+      setDistrictIdSender(get(thisDistrict, 'code', ''));
+      const thisWard = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'WARD';
+      });
+      setWardIdSender(get(thisWard, 'code', ''));
+      const thisStreet = find(dataComponents, (item: Component): boolean => {
+        return item.type === 'STREET';
+      });
+      setDetailAddressSender(get(thisStreet, 'name', ''));
+      toggleSenderAddress();
+      setSenderKeywords('');
+      setFocusAdress('sender');
+    }
+  }
+
+  // function handleSelectedReceiver(selected: Person[]): void {
+  //   if (size(selected)) {
+  //     setDienThoaiReceiver(get(selected, '0.phone'));
+  //     setHoTenReceiver(get(selected, '0.name'));
+  //     const thisValue = get(selected, '0.addr.formattedAddress');
+  //     setDiaChiReceiver(thisValue);
+  //     setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
+  //     setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
+  //     setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
+  //     setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
+  //     setDescription(join(slice(thisValue, 150, 190), ''));
+  //     //address
+  //     // const dataComponents = get(selected, '0.addr.components', []);
+  //     // const thisProvince = find(dataComponents, (item: Component): boolean => {
+  //     //   return item.type === 'PROVINCE';
+  //     // });
+  //     // setProvinceIdReceiver(get(thisProvince, 'code', ''));
+  //     // const thisDistrict = find(dataComponents, (item: Component): boolean => {
+  //     //   return item.type === 'DISTRICT';
+  //     // });
+  //     // setDistrictIdReceiver(get(thisDistrict, 'code', ''));
+  //     // const thisWard = find(dataComponents, (item: Component): boolean => {
+  //     //   return item.type === 'WARD';
+  //     // });
+  //     // setWardIdReceiver(get(thisWard, 'code', ''));
+  //     // const thisStreet = find(dataComponents, (item: Component): boolean => {
+  //     //   return item.type === 'STREET';
+  //     // });
+  //     // setDetailAddressReceiver(get(thisStreet, 'name', ''));
+  //     // toggleReceiverAddress();
+  //     // setFocusAdress('receiver');
+  //   }
+  // }
+
+  function labelKeyPerson(option: Person): string {
+    return `${option.phone}`;
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderSenderInput(): JSX.Element {
     return (
       <div className="sipInputBlock">
         <h3>{t('Người gửi')}</h3>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Tìm kiếm nhanh')}
+          </Label>
+          <Col lg="8">
+            <RootTypeahead
+              id="suggestSender"
+              labelKey={labelKeyPerson}
+              onInputChange={setSenderKeywords}
+              options={senderSuggest}
+              selected={[]}
+              onChange={handleSelectedSender}
+              renderMenuItemChildren={renderTypeaheadPerson}
+              placeholder={t('Nhập mã khách hàng/Tên/Số ĐT')}
+            >
+              <span
+                style={{
+                  position: 'absolute',
+                  right: '8px',
+                  top: '12px',
+                }}
+                className="fa fa-caret-down"
+              />
+            </RootTypeahead>
+          </Col>
+        </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Mã khách hàng')}
@@ -1368,6 +1676,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             </Label>
             <Col lg="8">
               <TypeaheadFullAddress
+                focus={focusAddress === 'sender'}
                 provinceId={provinceIdSender}
                 handleChangeProvince={handleChangeProvinceSender}
                 filteredProvinces={filteredProvinceSender}
@@ -1402,11 +1711,29 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Input
+            {/* <Input
               type="text"
               placeholder={t('Nhập số điện thoại')}
               value={dienThoaiReceiver}
               onChange={handleChangeTextboxValue(setDienThoaiReceiver)}
+            /> */}
+            {/* <RootTypeahead
+              id="receiverSuggest"
+              labelKey={labelKeyPerson}
+              onInputChange={setDienThoaiReceiver}
+              options={receiverSuggest}
+              selected={isEmpty(dienThoaiReceiver) ? [] : receiverSuggest.filter(item => {
+                return item.phone === dienThoaiReceiver;
+              })}
+              onChange={handleSelectedReceiver}
+              renderMenuItemChildren={renderTypeaheadPerson}
+              placeholder={t('Nhập số điện thoại')}
+            /> */}
+            <TypeaheadPhone
+              onChange={handleChooseCommoditySuggestPhone}
+              onInputChange={handleChangeTypeaheadInput(onChangePhone)}
+              selected={isEmpty(dienThoaiReceiver) ? [] : selectedCommodityPhone}
+              suggestions={receiverSuggest}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'dienThoaiReceiver')}</div>
           </Col>
@@ -1432,16 +1759,16 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <Typeahead
+            <RootTypeahead
               id="selectNations"
               onChange={handleChangeTypeaheadValue(setQuocGia)}
               options={map(sortedCountryList, (item: NationType) => ({
                 id: item.NATIONAL_CODE,
                 label: item.NATIONAL_NAME,
               }))}
-              placeholder={t('Việt Nam')}
+              placeholder={t('Nhập nước đến')}
             />
-            <div className="sipInputItemError">{handleErrorMessage(errors, 'hoTenSender')}</div>
+            <div className="sipInputItemError">{handleErrorMessage(errors, 'quocGia')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem mb-0">
@@ -1453,7 +1780,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             <Input
               type="text"
               placeholder={t('Nhập địa chỉ')}
-              value={diaChiReceiver}
+              value={diaChiReceiver ? diaChiReceiver : ''}
               onChange={handleChangeReceiverAddress}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'diaChiReceiver')}</div>
@@ -1462,6 +1789,15 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       </div>
     );
   }
+
+  const loaiHinhDichVuListOptions: TypeaheadOption[] = React.useMemo(
+    () =>
+      map(transportMethodArr, (service: TransportMethodItem) => ({
+        id: service.SERVICE_TYPE,
+        label: service.SERVICE_TYPE_DES,
+      })),
+    [transportMethodArr],
+  );
 
   function renderSendingServices(): JSX.Element {
     return (
@@ -1477,10 +1813,10 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               id="selectService"
               labelKey={renderLabelKey}
               onChange={handleChangeTypeaheadValue(setPhuongThucVanChuyen)}
-              options={map(transportMethodArr, (item: TransportMethodItem) => ({
-                id: item.SERVICE_TYPE,
-                label: item.SERVICE_TYPE_DES,
-              }))}
+              options={loaiHinhDichVuListOptions}
+              selected={loaiHinhDichVuListOptions.filter(item => {
+                return item.id === phuongThucVanChuyen;
+              })}
               placeholder={t('Chọn dịch vụ')}
             />
           </Col>
@@ -1492,23 +1828,19 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   function renderSendingCouponInfo(): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
-        <div className="sipContentContainer">
-          <div className="sipInputBlock">
-            <h3>{t('Thông tin phiếu gửi')}</h3>
-            <Row className="sipInputItem">
-              <Label xs="12" lg="4">
-                {t('Mã phiếu gửi')}
-              </Label>
-              <Col lg="8">
-                <Input type="text" value={maPhieuGui} onChange={handleChangeTextboxValue(setMaPhieuGui)} />
-                <div className="sipInputItemError">{handleErrorMessage(errors, 'maPhieuGui')}</div>
-              </Col>
-            </Row>
-          </div>
-          {renderSenderInput()}
-          {renderReceiverInput()}
-          {renderSendingServices()}
+        <div className="sipContentContainer2">
+          <Row className="sipInputBlock1">
+            <Label xs="12" lg="4">
+              <h3>{t('Mã phiếu gửi')}</h3>
+            </Label>
+            <Col lg="8">
+              <Input type="text" value={maPhieuGui} onChange={handleChangeTextboxValue(setMaPhieuGui)} />
+              <div className="sipInputItemError">{handleErrorMessage(errors, 'maPhieuGui')}</div>
+            </Col>
+          </Row>
         </div>
+        <div className="sipContentContainer2">{renderSenderInput()}</div>
+        <div className="sipContentContainer2">{renderReceiverInput()}</div>
       </Col>
     );
   }
@@ -1520,17 +1852,17 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
           <Label check xs="12" className="pl-0 pr-0">
             <Input
               type="radio"
-              value="V3"
+              value="V03"
               name="packageType"
               defaultChecked
-              onChange={handleChangeTextboxValue(setLoaiKienHang)}
+              onChange={handleChangeTextboxValue(setNhomHang)}
             />{' '}
-            {t('Bưu gửi nhỏ')}
+            {t('Hàng hóa')}
           </Label>
         </Col>
         <Col lg="3" xs="12" className="pr-0">
           <Label check xs="12" className="pl-0 pr-0">
-            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setLoaiKienHang)} />{' '}
+            <Input type="radio" value="V2" name="packageType" onChange={handleChangeTextboxValue(setNhomHang)} />{' '}
             {t('Thư')}
           </Label>
         </Col>
@@ -1538,31 +1870,27 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  function onChangeTenhang(input: string): void {
+    setSelectedCommodity([]);
+    setTenHang(input);
+  }
+
+  function onChangePhone(input: string): void {
+    setSelectedCommodityPhone([]);
+    setDienThoaiReceiver(input);
+  }
+
   // eslint-disable-next-line max-lines-per-function
   function renderPackageInfoDetail(): JSX.Element {
     return (
       <div className="sipInputBlock">
-        <h3>
-          {t('Thông tin hàng hóa')}
-          <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
-            <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
-            {t('Thêm')}
-          </Button>
-        </h3>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Loại kiện hàng')}
-          </Label>
-          <Col lg={8} xs={12}>
-            {renderPackageType()}
-          </Col>
-        </Row>
+        <h3>{t('Thông tin hàng hóa')}</h3>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Loại hàng')}
           </Label>
           <Col lg={8} xs={12}>
-            <TypeaheadLoaiHang loaiKienHang={loaiKienHang} onChange={handleChangeTypeaheadValue(setLoaiHangHoa)} />
+            {renderPackageType()}
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -1600,26 +1928,26 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
             {/*    },*/}
             {/*  )}*/}
             {/*</ListGroup>*/}
-            <TypeaheadTenHang
+            <TypeaheadTenHangInter
               onChange={handleChooseCommoditySuggest}
-              onInputChange={handleChangeTypeaheadInput(setTenHang)}
+              onInputChange={handleChangeTypeaheadInput(onChangeTenhang)}
               suggestions={commoditySuggest}
+              selected={isEmpty(tenHang) ? [] : selectedCommodity}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'tenHang')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Giá trị')}
+            {t('Nhóm hàng')}
+            <span className="color-red"> *</span>
           </Label>
-          <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Nhập giá trị (đ)')}
-              value={giaTri === '' ? giaTri : numberFormat(getValueOfNumberFormat(giaTri))}
-              onChange={handleChangeTextboxValue(setGiaTri)}
+          <Col lg={8} xs={12}>
+            <TypeaheadLoaiHang
+              loaiKienHang={nhomHang}
+              onChange={handleChangeTypeaheadValue(setLoaiHangHoa)}
+              value={loaiHangHoa}
             />
-            <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -1635,6 +1963,21 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               onChange={handleChangeTextboxValue(setSoLuong)}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'soLuong')}</div>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Giá trị hàng hóa')}
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input
+              type="text"
+              placeholder={t('Nhập giá trị (đ)')}
+              value={giaTri === '' ? giaTri : numberFormat(getValueOfNumberFormat(giaTri))}
+              onChange={handleChangeTextboxValue(setGiaTri)}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(errors, 'giaTri')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -1657,84 +2000,248 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   // eslint-disable-next-line max-lines-per-function
-  function renderDeliveryRequirement(): JSX.Element {
+  function renderNote(): JSX.Element {
     return (
-      <div className="sipInputBlock">
-        <h3>{t('Yêu cầu giao bưu gửi')}</h3>
-        <Row className="sipInputItem">
-          <Col lg="6" xs="12">
-            <Label check xs="12" className="pl-0 pr-0">
-              <Input
-                type="radio"
-                name="deliveryRequirement"
-                value="1"
-                defaultChecked
-                onChange={handleChangeTextboxValue(setChoXemHang)}
-              />{' '}
-              {t('Cho khách xem hàng')}
-            </Label>
-          </Col>
-          <Col lg="6" xs="12">
-            <Label check xs="12" className="pl-0 pr-0">
-              <Input
-                type="radio"
-                name="deliveryRequirement"
-                value="2"
-                onChange={handleChangeTextboxValue(setChoXemHang)}
-              />{' '}
-              {t('Không cho khách xem hàng')}
-            </Label>
-          </Col>
-        </Row>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Ghi chú khác')}
-          </Label>
-          <Col lg="8">
-            <Input
-              type="text"
-              value={ghiChu}
-              onChange={handleChangeTextboxValue(setGhiChu)}
-              placeholder={t('Nhập ghi chú')}
-            />
-          </Col>
-        </Row>
-      </div>
+      <Row className="sipInputBlock1">
+        <Label xs="12" lg="4">
+          <h3>{t('Ghi chú khác')}</h3>
+        </Label>
+        <Col lg="8">
+          <Input type="text" value={ghiChu} onChange={handleChangeTextboxValue(setGhiChu)} />
+          <div className="sipInputItemError">{handleErrorMessage(errors, 'maPhieuGui')}</div>
+        </Col>
+      </Row>
     );
   }
 
   function renderPackageInfo(): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
-        <div className="sipContentContainer">
-          {renderPackageInfoDetail()}
-          <AdditionalPackageTabItemsInternational
-            removePackageItem={removePackageItem}
-            data={packageItemArr}
-            onChangeValue={adjustPackageItemValue}
-            onChangeCommodityType={adjustPackageItemCommodityType}
-            onChangeSuggestCommodity={adjustPackageItemSuggestCommodity}
-            isSubmit={isSubmit}
-            packageItemErrorsList={packageItemErrorsList}
-            activeTab={activeTab}
-            setActiveTab={handleActiveTab}
-          />
-          {renderDeliveryRequirement()}
+        <div className="sipContentContainer2">
+          <div className="sipInputBlock">
+            {renderPackageInfoDetail()}
+            <AdditionalPackageTabItemsInternational
+              removePackageItem={removePackageItem}
+              data={packageItemArr}
+              onChangeValue={adjustPackageItemValue}
+              onChangeCommodityType={adjustPackageItemCommodityType}
+              onChangeSuggestCommodity={adjustPackageItemSuggestCommodity}
+              isSubmit={isSubmit}
+              packageItemErrorsList={packageItemErrorsList}
+              activeTab={activeTab}
+              setActiveTab={handleActiveTab}
+            />
+            <h3 style={{ minHeight: '25px' }}>
+              <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>
+                <img src={'../../assets/img/icon/iconPlus.svg'} alt="VTPostek" />
+                {t('Thêm hàng hóa')}
+              </Button>
+            </h3>
+          </div>
         </div>
+        <div className="sipContentContainer2">{renderSendingServices()}</div>
+        <div className="sipContentContainer2">{renderNote()}</div>
       </Col>
+    );
+  }
+
+  function handleChangeTab(event: React.MouseEvent): void {
+    setTab(Number(event.currentTarget.getAttribute('value')));
+    setListTemplates([]);
+  }
+
+  // eslint-disable-next-line max-lines-per-function
+  React.useEffect((): void => {
+    if (selectedTemplate && size(selectedTemplate)) {
+      setDienThoaiSender(get(selectedTemplate, '0.sender.phone'));
+      setHoTenSender(get(selectedTemplate, '0.sender.name'));
+      setMaKhachHang(get(selectedTemplate, '0.sender.code', '9999999999'));
+      //address
+      const dataComponentsSender = get(selectedTemplate, '0.sender.addr.components', []);
+      const thisProvinceSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'PROVINCE';
+      });
+      setProvinceIdSender(get(thisProvinceSender, 'code', ''));
+      const thisDistrictSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'DISTRICT';
+      });
+      setDistrictIdSender(get(thisDistrictSender, 'code', ''));
+      const thisWardSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'WARD';
+      });
+      setWardIdSender(get(thisWardSender, 'code', ''));
+      const thisStreetSender = find(dataComponentsSender, (item: Component): boolean => {
+        return item.type === 'STREET';
+      });
+      setDetailAddressSender(get(thisStreetSender, 'name', ''));
+      setDetailSender(true);
+      //__________________________________________________________
+      setDienThoaiReceiver(get(selectedTemplate, '0.receiver.phone'));
+      setHoTenReceiver(get(selectedTemplate, '0.receiver.name'));
+
+      const thisValue = get(selectedTemplate, '0.receiver.addr.formattedAddress');
+      setDiaChiReceiver(thisValue);
+      setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
+      setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
+      setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
+      //  setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
+      setDescription(join(slice(thisValue, 150, 190), ''));
+      //address
+      // const dataComponentsReceive = get(selectedTemplate, '0.receiver.addr.components', []);
+      // const thisProvinceReceive = find(dataComponentsReceive, (item: Component): boolean => {
+      //   return item.type === 'PROVINCE';
+      // });
+      // setProvinceIdReceiver(get(thisProvinceReceive, 'code', ''));
+      // const thisDistrictReceive = find(dataComponentsReceive, (item: Component): boolean => {
+      //   return item.type === 'DISTRICT';
+      // });
+      // setDistrictIdReceiver(get(thisDistrictReceive, 'code', ''));
+      // const thisWardReceive = find(dataComponentsReceive, (item: Component): boolean => {
+      //   return item.type === 'WARD';
+      // });
+      // setWardIdReceiver(get(thisWardReceive, 'code', ''));
+      // const thisStreetReceive = find(dataComponentsReceive, (item: Component): boolean => {
+      //   return item.type === 'STREET';
+      // });
+      // setDetailAddressReceiver(get(thisStreetReceive, 'name', ''));
+      setTenHang(get(selectedTemplate, '0.packages.0.name', ''));
+      // setCommoditySuggest([
+      //   {
+      //     name: get(selectedTemplate, '0.packages.0.name', ''),
+      //     description: get(selectedTemplate, '0.packages.0.name', ''),
+      //     price: 0,
+      //   },
+      // ]);
+      setCommoditySuggest([
+        {
+          goodsValue: 0,
+          weight: 0,
+          name: tenHang,
+          quantity: 0,
+          commodityType: '',
+        },
+      ]);
+      setSelectedCommodity([
+        {
+          id: get(selectedTemplate, '0.packages.0.name', ''),
+          label: get(selectedTemplate, '0.packages.0.name', ''),
+        },
+      ]);
+      setSelectedCommodityPhone([
+        {
+          id: get(selectedTemplate, '0.receiver.phone', ''),
+          label: get(selectedTemplate, '0.receiver.phone', ''),
+        },
+      ]);
+      setSoLuong(get(selectedTemplate, '0.packages.0.quantity', 0));
+      setGiaTri(get(selectedTemplate, '0.packages.0.goodsValue', 0));
+
+      setTrongLuong(get(selectedTemplate, '0.packages.0.weight', ''));
+      setTrongLuongTemplate(get(selectedTemplate, '0.packages.0.weight', 0));
+      setNhomHang(get(selectedTemplate, '0.packages.0.commodityType', 'V3'));
+      // setKichThuocDai(get(selectedTemplate, '0.packages.0.length', '0'));
+      // setKichThuocRong(get(selectedTemplate, '0.packages.0.width', '0'));
+      // setKichThuocCao(get(selectedTemplate, '0.packages.0.height', '0'));
+      setPhuongThucVanChuyen(get(selectedTemplate, '0.services.0'));
+      // setDiemGiaoNhan(get(selectedTemplate, '0.movementType'));
+      // setNguoiThanhToan(get(selectedTemplate, '0.freightTerm'));
+      triggerValidateAndPriceCalculate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedTemplate]);
+
+  function handleSelectedTemplate(selected: OrderSuggestedItem[]): void {
+    if (size(selected)) {
+      setSelectedTemplate(selected);
+    }
+  }
+
+  function labelKeyTemplate(option: OrderSuggestedItem): string {
+    return `${get(option, 'id')}`;
+  }
+
+  // eslint-disable-next-line
+  function renderSuggetTemplate(results: Array<TypeaheadResult<OrderSuggestedItem>>, menuProps: any): JSX.Element {
+    return (
+      <Menu {...menuProps}>
+        <div className="sipTabContainer">
+          <Nav tabs fill={true}>
+            <NavItem>
+              <NavLink value={1} className={classnames({ active: tab === 1 })} onClick={handleChangeTab}>
+                {t('Mẫu')}
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink value={2} className={classnames({ active: tab === 2 })} onClick={handleChangeTab}>
+                {t('Hay dùng')}
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink value={3} className={classnames({ active: tab === 3 })} onClick={handleChangeTab}>
+                {t('Gần đây')}
+              </NavLink>
+            </NavItem>
+          </Nav>
+        </div>
+        {results.map((result, index) => (
+          <MenuItem key={get(result, 'id')} option={result} position={index}>
+            <Row>
+              <span>{get(result, 'packages.0.name')}</span>
+              <span
+                style={{
+                  right: 0,
+                  position: 'absolute',
+                  color: 'green',
+                  marginRight: '10px',
+                }}
+              >
+                {get(result, 'packages.0.weight', '0') + '' + get(result, 'packages.0.weightUnit')}
+              </span>
+            </Row>
+            <Row>
+              <span style={{ color: '#a3a3a3' }}>
+                {get(result, 'sender.name') + ' - ' + get(result, 'sender.phone')}
+              </span>
+            </Row>
+          </MenuItem>
+        ))}
+      </Menu>
     );
   }
 
   return (
     <>
       <Row className="mb-3 sipTitleContainer">
-        <h1 className="sipTitle">{t('Phiếu gửi quốc tế')}</h1>
+        <Col lg="2" xs="3">
+          <h1 className="sipTitle">{t('Phiếu gửi quốc tế')}</h1>
+        </Col>
+        <Col lg="4" xs="3">
+          <RootTypeahead
+            id="tet"
+            labelKey={labelKeyTemplate}
+            options={listTemplates}
+            placeholder={'Tạo phiếu gửi theo biểu mẫu'}
+            onInputChange={setKeywords}
+            renderMenu={renderSuggetTemplate}
+            onChange={handleSelectedTemplate}
+            selected={selectedTemplate}
+          >
+            <span
+              style={{
+                position: 'absolute',
+                right: '8px',
+                top: '12px',
+              }}
+              className="fa fa-caret-down"
+            />
+          </RootTypeahead>
+        </Col>
       </Row>
-      {renderSendingCoupon()}
       <Row className="mb-3 sipOrderInputRow">
         {renderSendingCouponInfo()}
         {renderPackageInfo()}
       </Row>
+      {renderSendingCoupon()}
       <div className="display-block sipTitleRightBlock text-right sipOrderBtnSave">
         <Button className="ml-2" color="primary" onClick={handleClearData}>
           <img className="mr-2" src={'../../assets/img/icon/iconRefreshWhite.svg'} alt="VTPostek" />
