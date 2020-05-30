@@ -329,7 +329,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   //__________________________________________________________
   const [maPhieuGui, setMaPhieuGui] = useState<string>('');
-  const [maBuuPham, setMaBuuPham] = useState<string>('');
+  // const [maBuuPham, setMaBuuPham] = useState<string>('');
   const [maKhachHangGui, setMaKhachHangGui] = useState<string>('');
   const [maKhachHangNhan, setMaKhachHangNhan] = useState<string>('');
   const [dienThoaiSender, setDienThoaiSender] = useState<string>('');
@@ -625,7 +625,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setProvinceIdReceiver(get(orderInformationInstance, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstance, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstance, 'WARD_ID_DES', '')));
-      setMaBuuPham(get(orderInformationInstance, 'PACKAGE_ID', ''));
+      // setMaBuuPham(get(orderInformationInstance, 'PACKAGE_ID', ''));
       setTenHang(get(orderInformationInstance, 'ITEM_DESCRIPTION', ''));
       setSoLuong(orderInformationInstance.Quantity ? parseFloat(orderInformationInstance.Quantity).toFixed(0) : '');
       setGiaTri(orderInformationInstance.GoodValue ? toString(parseInt(orderInformationInstance.GoodValue)) : '');
@@ -1634,7 +1634,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     setPhuongThucVanChuyen('VCN');
     dichVuCongThem = [];
     setUncheckAllAdditionalCheckbox(false);
-    setMaBuuPham('');
+    // setMaBuuPham('');
     setLoaiKienHang('V3');
     setLoaiHangHoa('V01');
     setNguoiThanhToan('F1');
@@ -2401,24 +2401,23 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   function renderSendingCouponInfo(): JSX.Element {
     return (
       <Col className="sipOrderInputCol" xl="6" xs="12">
-        {/*<div className="sipContentContainer2">*/}
-        {/*  <div className="sipInputBlock">*/}
-        {/*    <h3>{t('Thông tin phiếu gửi')}</h3>*/}
-        {/*    <Row className="sipInputItem">*/}
-        {/*      <Label xs="12" lg="4">*/}
-        {/*        {t('Mã phiếu gửi')}*/}
-        {/*      </Label>*/}
-        {/*      <Col lg="8">*/}
-        {/*        <Input*/}
-        {/*          name="maPhieuGuiInput"*/}
-        {/*          type="text"*/}
-        {/*          value={maPhieuGui}*/}
-        {/*          onChange={handleChangeTextboxValue(setMaPhieuGui)}*/}
-        {/*        />*/}
-        {/*      </Col>*/}
-        {/*    </Row>*/}
-        {/*  </div>*/}
-        {/*</div>*/}
+        <div className="sipContentContainer2">
+          <div className="sipInputBlock">
+            <Row className="sipInputItem">
+              <Label xs="12" lg="4" style={{ color: '#299f9a', fontSize: '14px', fontWeight: 600 }}>
+                {t('Mã phiếu gửi')}
+              </Label>
+              <Col lg="8">
+                <Input
+                  name="maPhieuGuiInput"
+                  type="text"
+                  value={maPhieuGui}
+                  onChange={handleChangeTextboxValue(setMaPhieuGui)}
+                />
+              </Col>
+            </Row>
+          </div>
+        </div>
         <div className="sipContentContainer2">{renderSenderInput()}</div>
         <div className="sipContentContainer2">{renderReceiverInput()}</div>
         <div className="sipContentContainer2">{renderDeliveryRequirement()}</div>
@@ -2638,19 +2637,19 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <div>
         <h3>{t('Thông tin hàng hóa')}</h3>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Mã bưu phẩm')}
-          </Label>
-          <Col lg="8">
-            <Input
-              name="maBuuPhamInput"
-              type="text"
-              value={maBuuPham}
-              onChange={handleChangeTextboxValue(setMaBuuPham)}
-            />
-          </Col>
-        </Row>
+        {/*<Row className="sipInputItem">*/}
+        {/*  <Label xs="12" lg="4">*/}
+        {/*    {t('Mã bưu phẩm')}*/}
+        {/*  </Label>*/}
+        {/*  <Col lg="8">*/}
+        {/*    <Input*/}
+        {/*      name="maBuuPhamInput"*/}
+        {/*      type="text"*/}
+        {/*      value={maBuuPham}*/}
+        {/*      onChange={handleChangeTextboxValue(setMaBuuPham)}*/}
+        {/*    />*/}
+        {/*  </Col>*/}
+        {/*</Row>*/}
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Loại hàng')}
