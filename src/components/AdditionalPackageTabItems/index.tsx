@@ -257,18 +257,18 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
   function renderTabContent(index: number, item: PackageItemInputType): JSX.Element {
     return (
       <div>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
-            {t('Mã bưu phẩm')}
-          </Label>
-          <Col lg="8">
-            <Input
-              name={`maBuuPhamInput_${index}`}
-              type="text"
-              onChange={handleChangeTextboxValue('package_ID', index)}
-            />
-          </Col>
-        </Row>
+        {/*<Row className="sipInputItem">*/}
+        {/*  <Label xs="12" lg="4">*/}
+        {/*    {t('Mã bưu phẩm')}*/}
+        {/*  </Label>*/}
+        {/*  <Col lg="8">*/}
+        {/*    <Input*/}
+        {/*      name={`maBuuPhamInput_${index}`}*/}
+        {/*      type="text"*/}
+        {/*      onChange={handleChangeTextboxValue('package_ID', index)}*/}
+        {/*    />*/}
+        {/*  </Col>*/}
+        {/*</Row>*/}
         {renderPackageType(index)}
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
