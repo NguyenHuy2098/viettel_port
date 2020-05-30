@@ -22,13 +22,7 @@ interface ItemProps {
 }
 
 function Item(props: ItemProps): JSX.Element {
-  const child = props.child;
-  const tab = props.tab;
-  const handleChangeTab = props.handleChangeTab;
-  const index = props.index;
-  const userMaBp = props.userMaBp;
-  const commLocGroup = props.commLocGroup;
-  const { updateNavTab } = props;
+  const { updateNavTab, child, tab, handleChangeTab, index, userMaBp, commLocGroup } = props;
   const dispatch = useDispatch();
 
   const [count, setCount] = React.useState<number>(0);
