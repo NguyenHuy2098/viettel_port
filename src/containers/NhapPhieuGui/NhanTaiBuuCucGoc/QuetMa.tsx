@@ -72,11 +72,11 @@ const QuetMa: React.FC = (): JSX.Element => {
                           // eslint-disable-next-line max-lines-per-function
                           onSuccess: (data: API.MIOAZTMI063Response): void => {
                             if (data.Status) {
-                              if (get(dataChuyenThu, 'MT_ZTMI023_OUT.row[0].TOR_TYPE', '') === 'ZBIG') {
+                              if (get(data023, 'TOR_TYPE', '') === 'ZBIG') {
                                 toast(
                                   <>
                                     <i className="fa fa-check-square mr-2" />
-                                    {t('Thành công!')}
+                                    {t('Quét bưu gửi')} {get(data023, 'PACKAGE_ID', '')} {t('thành công')}
                                   </>,
                                   {
                                     type: 'success',
@@ -115,10 +115,11 @@ const QuetMa: React.FC = (): JSX.Element => {
                                           onSuccess: (data: API.ZTMI239Response): void => {
                                             setDataNhanChuyenThu(get(dataChuyenThu, 'MT_ZTMI023_OUT.row', []));
                                             setTimeout(function() {
+                                              const thisId = get(data, 'MT_ZTMI239_OUT.PACKAGE_ID', '');
                                               toast(
                                                 <>
                                                   <i className="fa fa-check-square mr-2" />
-                                                  {t('Thành công!')}
+                                                  {t('Quét bưu gửi')} {thisId} {t('thành công')}
                                                   {/* {get(
                                                     data,
                                                     'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE',

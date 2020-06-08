@@ -13,16 +13,18 @@ import Pagination from 'components/Pagination';
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
 import FadedNoData from 'components/NoData/FadedNodata';
-import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+// import DeleteConfirmModal from 'components/Modal/ModalConfirmDelete';
+import ButtonPrintable from 'components/Button/ButtonPrintable';
+import PrintBangKeChiTiet from 'components/Printable/PrintBangKeChiTiet';
 import { useSipDataType } from 'hooks/useTranslations';
 import { action_MIOA_ZTMI046 } from 'redux/MIOA_ZTMI046/actions';
-import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
+// import { action_MIOA_ZTMI016 } from 'redux/MIOA_ZTMI016/actions';
 import {
   makeSelector046RowFirstChild,
   makeSelector046ListChildren,
   makeSelector046TotalPage,
 } from 'redux/MIOA_ZTMI046/selectors';
-import { HttpRequestErrorType } from 'utils/HttpRequetsError';
+// import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { SipDataType } from 'utils/enums';
 
 interface Props {
@@ -56,8 +58,8 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     },
   );
 
-  const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
-  const [deleteTorId, setDeleteTorId] = useState<string>('');
+  // const [deleteConfirmModal, setDeleteConfirmModal] = useState<boolean>(false);
+  // const [deleteTorId, setDeleteTorId] = useState<string>('');
   const [torIdSearch, setTorIdSearch] = useState<string>('');
   const [dataTable, setDataTable] = useState<API.Child[]>([]);
   const [dataTableCount, setDataTableCount] = useState<number>(0);
@@ -95,17 +97,17 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     }
   }
 
-  function toggleDeleteConfirmModal(): void {
-    setDeleteConfirmModal(!deleteConfirmModal);
-  }
+  // function toggleDeleteConfirmModal(): void {
+  //   setDeleteConfirmModal(!deleteConfirmModal);
+  // }
 
-  function handleDeleteItem(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
-    return (event: React.FormEvent<HTMLInputElement>): void => {
-      event.stopPropagation();
-      setDeleteTorId(torId);
-      toggleDeleteConfirmModal();
-    };
-  }
+  // function handleDeleteItem(torId: string): (event: React.FormEvent<HTMLInputElement>) => void {
+  //   return (event: React.FormEvent<HTMLInputElement>): void => {
+  //     event.stopPropagation();
+  //     setDeleteTorId(torId);
+  //     toggleDeleteConfirmModal();
+  //   };
+  // }
 
   const getListPhieuGui = (payload = {}): void => {
     const payload046 = {
@@ -123,32 +125,48 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
     getListPhieuGui(payload);
   };
 
-  const handleDeleteForwardingOrder = (torId: string): void => {
-    const payload = {
-      IV_FLAG: '3',
-      IV_TOR_ID_CU: torId,
-      IV_SLOCATION: '',
-      IV_DLOCATION: '',
-      IV_DESCRIPTION: '',
-      T_ITEM: [
-        {
-          ITEM_ID: '',
-          ITEM_TYPE: '',
-        },
-      ],
-    };
-    dispatch(
-      action_MIOA_ZTMI016(payload, {
-        onSuccess: (): void => {
-          alert(t('Xóa thành công!'));
-        },
-        onFailure: (error: HttpRequestErrorType): void => {
-          alert(error.messages);
-        },
-        onFinish: (): void => getListPhieuGui(),
-      }),
-    );
-  };
+  const renderPrintButton = (idChuyenThu: string): JSX.Element => (
+    <ButtonPrintable
+      btnProps={{
+        title: t('In'),
+        className: 'SipTableFunctionIcon',
+        children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
+      }}
+      modalBodyProps={{
+        children: <PrintBangKeChiTiet idChuyenThu={idChuyenThu} />,
+      }}
+      modalHeaderProps={{
+        children: t('In danh sách bưu gửi của bảng kê'),
+      }}
+    />
+  );
+
+  // const handleDeleteForwardingOrder = (torId: string): void => {
+  //   const payload = {
+  //     IV_FLAG: '3',
+  //     IV_TOR_ID_CU: torId,
+  //     IV_SLOCATION: '',
+  //     IV_DLOCATION: '',
+  //     IV_DESCRIPTION: '',
+  //     T_ITEM: [
+  //       {
+  //         ITEM_ID: '',
+  //         ITEM_TYPE: '',
+  //       },
+  //     ],
+  //   };
+  //   dispatch(
+  //     action_MIOA_ZTMI016(payload, {
+  //       onSuccess: (): void => {
+  //         alert(t('Xóa thành công!'));
+  //       },
+  //       onFailure: (error: HttpRequestErrorType): void => {
+  //         alert(error.messages);
+  //       },
+  //       onFinish: (): void => getListPhieuGui(),
+  //     }),
+  //   );
+  // };
 
   useEffect((): void => {
     getListPhieuGui();
@@ -271,13 +289,7 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
       {
         Header: t('Quản trị'),
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
-          return (
-            <>
-              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'original.TOR_ID', ''))}>
-                <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
-              </Button>
-            </>
-          );
+          return renderPrintButton(get(row, 'original.TOR_ID', ''));
         },
       },
     ],
@@ -299,12 +311,12 @@ const DanhSachPhieuGuiTrongBangKeDaDong: React.FC<Props> = (props: Props): JSX.E
           onThisPaginationChange={onPaginationChange}
         />
       </Row>
-      <DeleteConfirmModal
+      {/* <DeleteConfirmModal
         visible={deleteConfirmModal}
         onDelete={handleDeleteForwardingOrder}
         onHide={toggleDeleteConfirmModal}
         torId={deleteTorId}
-      />
+      /> */}
     </>
   ) : (
     <FadedNoData />
