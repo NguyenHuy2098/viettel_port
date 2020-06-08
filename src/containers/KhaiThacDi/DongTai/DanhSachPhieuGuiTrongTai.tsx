@@ -264,7 +264,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           <ButtonGoBack />
           {t('Danh sách bảng kê trong tải')}
         </h1>
-        <div className="sipTitleRightBlock">
+        <div className="sipTitleRightBlock" title={t('In')}>
           <Button className="sipTitleRightBlockBtnIcon">
             <i className="fa fa-print" />
           </Button>
@@ -592,6 +592,7 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
     <ButtonPrintable
       btnProps={{
+        title: t('In'),
         className: 'SipTableFunctionIcon',
         children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
@@ -653,7 +654,11 @@ const DanhSachPhieuGuiTrongTai: React.FC<Props> = (props: Props): JSX.Element =>
           return (
             <>
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
-              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
+              <Button
+                className="SipTableFunctionIcon"
+                onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}
+                title={t('Xóa')}
+              >
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>

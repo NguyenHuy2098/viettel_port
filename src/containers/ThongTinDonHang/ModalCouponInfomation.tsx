@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Row, Label, Input } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
-import { get, trim, toNumber, toLower, round, floor, isInteger, size } from 'lodash';
+import { get, trim, toNumber, toLower, round, floor, isInteger } from 'lodash';
 import moment from 'moment';
 import ModalDivideCoupon from './ModalDivideCoupon';
 import { toastError } from '../../utils/commonJsx';
@@ -54,92 +54,79 @@ const ModalCouponInfo: React.FC<Props> = (props): JSX.Element => {
   }, [divideQuantity]);
 
   const handleDevideCoupon = useCallback((): void => {
-    if (size(thongTinPhieuGui) === 1 && isInteger(divideQuantity)) {
+    if (isInteger(divideQuantity)) {
       const newSubPackages: SubPackage[] = [];
       if (toNumber(thongTinPhieuGui[0].Quantity) < divideQuantity) {
-        newSubPackages.push({
-          ID: 0,
-          GROSS_WEIGHT: toNumber(thongTinPhieuGui[0].GROSS_WEIGHT),
-          QUANTITY: toNumber(thongTinPhieuGui[0].Quantity),
-          QUANTITY_UOM: 'EA',
-          WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
-        });
-      } else {
-        let soGoiConLai = toNumber(thongTinPhieuGui[0].Quantity);
-        const soLuongGoiTrongMotGio = floor(toNumber(thongTinPhieuGui[0].Quantity) / divideQuantity);
-        for (let i = 0; i < divideQuantity; i++) {
-          if (i === divideQuantity - 1) {
-            newSubPackages.push({
-              ID: i,
-              GROSS_WEIGHT:
-                toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) -
-                round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity) * (divideQuantity - 1),
-              QUANTITY: soGoiConLai,
-              QUANTITY_UOM: 'EA',
-              WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
-            });
-          } else {
-            newSubPackages.push({
-              ID: i,
-              GROSS_WEIGHT: round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity),
-              QUANTITY: soLuongGoiTrongMotGio,
-              QUANTITY_UOM: 'EA',
-              WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
-            });
-            soGoiConLai -= soLuongGoiTrongMotGio;
-          }
+        setDivideQuantity(toNumber(thongTinPhieuGui[0].Quantity));
+        // newSubPackages.push({
+        //   ID: 0,
+        //   GROSS_WEIGHT: toNumber(thongTinPhieuGui[0].GROSS_WEIGHT),
+        //   QUANTITY: toNumber(thongTinPhieuGui[0].Quantity),
+        //   QUANTITY_UOM: 'EA',
+        //   WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
+        // });
+      }
+      let soGoiConLai = toNumber(thongTinPhieuGui[0].Quantity);
+      const soLuongGoiTrongMotGio = floor(toNumber(thongTinPhieuGui[0].Quantity) / divideQuantity);
+      for (let i = 0; i < divideQuantity; i++) {
+        if (i === divideQuantity - 1) {
+          newSubPackages.push({
+            ID: i,
+            GROSS_WEIGHT:
+              toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) -
+              round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity) * (divideQuantity - 1),
+            QUANTITY: soGoiConLai,
+            QUANTITY_UOM: 'EA',
+            WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
+          });
+        } else {
+          newSubPackages.push({
+            ID: i,
+            GROSS_WEIGHT: round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity),
+            QUANTITY: soLuongGoiTrongMotGio,
+            QUANTITY_UOM: 'EA',
+            WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
+          });
+          soGoiConLai -= soLuongGoiTrongMotGio;
         }
       }
+
       setSubPackages(newSubPackages);
       setModalDivideCoupon(true);
       props.toggle();
     } else {
-      if (!isInteger(divideQuantity)) {
-        toastError(t('Số lượng tách phải là số nguyên'));
-      } else {
-        toastError(t('Phiếu gửi không đủ tiêu chí để tách'));
-      }
+      toastError(t('Số lượng tách phải là số nguyên'));
     }
   }, [thongTinPhieuGui, divideQuantity, props, t]);
 
   useEffect(() => {
-    if (size(thongTinPhieuGui) === 1 && isInteger(divideQuantity)) {
+    if (isInteger(divideQuantity)) {
       const newSubPackages: SubPackage[] = [];
-      if (toNumber(thongTinPhieuGui[0].Quantity) < divideQuantity) {
-        newSubPackages.push({
-          ID: 0,
-          GROSS_WEIGHT: toNumber(thongTinPhieuGui[0].GROSS_WEIGHT),
-          QUANTITY: toNumber(thongTinPhieuGui[0].Quantity),
-          QUANTITY_UOM: 'EA',
-          WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
-        });
-      } else {
-        let soGoiConLai = toNumber(thongTinPhieuGui[0].Quantity);
-        // const khoiLuongMotGoi = toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / toNumber(thongTinPhieuGui[0].Quantity);
-        const soLuongGoiTrongMotGio = floor(toNumber(thongTinPhieuGui[0].Quantity) / divideQuantity);
-        for (let i = 0; i < divideQuantity; i++) {
-          if (i === divideQuantity - 1) {
-            newSubPackages.push({
-              ID: i,
-              // GROSS_WEIGHT: khoiLuongMotGoi * soGoiConLai,
-              GROSS_WEIGHT:
-                toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) -
-                round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity) * (divideQuantity - 1),
-              QUANTITY: soGoiConLai,
-              QUANTITY_UOM: 'EA',
-              WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
-            });
-          } else {
-            newSubPackages.push({
-              ID: i,
-              // GROSS_WEIGHT: khoiLuongMotGoi * soLuongGoiTrongMotGio,
-              GROSS_WEIGHT: round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity),
-              QUANTITY: soLuongGoiTrongMotGio,
-              QUANTITY_UOM: 'EA',
-              WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
-            });
-            soGoiConLai -= soLuongGoiTrongMotGio;
-          }
+      let soGoiConLai = toNumber(thongTinPhieuGui[0].Quantity);
+      // const khoiLuongMotGoi = toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / toNumber(thongTinPhieuGui[0].Quantity);
+      const soLuongGoiTrongMotGio = floor(toNumber(thongTinPhieuGui[0].Quantity) / divideQuantity);
+      for (let i = 0; i < divideQuantity; i++) {
+        if (i === divideQuantity - 1) {
+          newSubPackages.push({
+            ID: i,
+            // GROSS_WEIGHT: khoiLuongMotGoi * soGoiConLai,
+            GROSS_WEIGHT:
+              toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) -
+              round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity) * (divideQuantity - 1),
+            QUANTITY: soGoiConLai,
+            QUANTITY_UOM: 'EA',
+            WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
+          });
+        } else {
+          newSubPackages.push({
+            ID: i,
+            // GROSS_WEIGHT: khoiLuongMotGoi * soLuongGoiTrongMotGio,
+            GROSS_WEIGHT: round(toNumber(thongTinPhieuGui[0].GROSS_WEIGHT) / divideQuantity),
+            QUANTITY: soLuongGoiTrongMotGio,
+            QUANTITY_UOM: 'EA',
+            WEIGHT_UOM: get(thongTinPhieuGui[0], 'WEIGHT_UOM', ''),
+          });
+          soGoiConLai -= soLuongGoiTrongMotGio;
         }
       }
       setSubPackages(newSubPackages);

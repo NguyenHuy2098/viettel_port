@@ -294,10 +294,10 @@ const QuetMa: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon">
+              <Button className="SipTableFunctionIcon" title={t('Sửa')}>
                 <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
-              <Button className="SipTableFunctionIcon">
+              <Button className="SipTableFunctionIcon" title={t('Xóa')}>
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>

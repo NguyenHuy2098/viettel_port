@@ -106,13 +106,13 @@ const BuuGuiChuaDongTai: React.FC = (): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={printBangKe(row.original)}>
+              <Button className="SipTableFunctionIcon" onClick={printBangKe(row.original)} title={t('In')}>
                 <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
               </Button>
-              <Button className="SipTableFunctionIcon" onClick={editBangKe(row.original)}>
+              <Button className="SipTableFunctionIcon" onClick={editBangKe(row.original)} title={t('Sửa')}>
                 <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
-              <Button className="SipTableFunctionIcon" onClick={deleteBangKe(row.original)}>
+              <Button className="SipTableFunctionIcon" onClick={deleteBangKe(row.original)} title={t('Xóa')}>
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>

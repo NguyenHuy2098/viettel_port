@@ -138,6 +138,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
     <ButtonPrintable
       btnProps={{
+        title: t('In'),
         className: 'SipTableFunctionIcon',
         children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
@@ -152,6 +153,7 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
   const inMaCoTaiButton = (idTai: string): JSX.Element => (
     <ButtonPrintable
       btnProps={{
+        title: t('In mã'),
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-barcode fa-lg color-blue" />,
       }}
@@ -206,10 +208,14 @@ const TaiChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
             <>
               {inMaCoTaiButton(get(row, 'values.TOR_ID', ''))}
               {renderPrintButton(get(row, 'values.TOR_ID', ''))}
-              <Button className="SipTableFunctionIcon" onClick={editTai(row.original)}>
+              <Button className="SipTableFunctionIcon" onClick={editTai(row.original)} title={t('Sửa')}>
                 <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
-              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
+              <Button
+                className="SipTableFunctionIcon"
+                onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}
+                title={t('Xóa')}
+              >
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>

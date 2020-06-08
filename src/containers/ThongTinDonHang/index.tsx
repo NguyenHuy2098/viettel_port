@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { generatePath, match, Link } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { drop, findIndex, get, size, slice, find } from 'lodash';
+import { drop, findIndex, get, size, slice, find, toNumber } from 'lodash';
 
 import ButtonGoBack from 'components/Button/ButtonGoBack';
 import DataTable from 'components/DataTable';
@@ -19,6 +19,7 @@ import ModalCouponInfomation from './ModalCouponInfomation';
 // eslint-disable-next-line import/imports-first
 import { findCountry } from 'containers/NhapPhieuGui/PhieuGuiQuocTe/countryList';
 // import { Typeahead as RootTypeahead } from 'react-bootstrap-typeahead';
+import { toastError } from '../../utils/commonJsx';
 
 interface Props {
   match: match;
@@ -170,7 +171,17 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
   };
 
   const handleGotoTachKien = (): void => {
-    setVisableCouponInfo(true);
+    if (
+      size(orderInformation) === 1 &&
+      toNumber(orderInformation[0].Quantity) > 1 &&
+      orderInformation[0].FU_STATUS === '306'
+    ) {
+      setVisableCouponInfo(true);
+    } else if (orderInformation[0].FU_STATUS !== '306') {
+      toastError(t('Chỉ cho phép tách kiện ở trạng thái 306'));
+    } else {
+      toastError(t('Phiếu gửi không đủ tiêu chí để tách'));
+    }
   };
 
   const trqType: TrqType[] = [

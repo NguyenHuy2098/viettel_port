@@ -142,6 +142,7 @@ const ChuyenThuChuaHoanThanh: React.FC<Props> = (props: Props): JSX.Element => {
             <>
               <ButtonPrintable
                 btnProps={{
+                  title: t('In'),
                   className: 'SipTableFunctionIcon',
                   children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
                 }}
@@ -152,10 +153,14 @@ const ChuyenThuChuaHoanThanh: React.FC<Props> = (props: Props): JSX.Element => {
                   children: t('In thông tin chuyến thư'),
                 }}
               />
-              <Button className="SipTableFunctionIcon">
+              <Button className="SipTableFunctionIcon" title={t('Sửa')}>
                 <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
-              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}>
+              <Button
+                className="SipTableFunctionIcon"
+                onClick={handleDeleteItem(get(row, 'values.TOR_ID', ''))}
+                title={t('Xóa')}
+              >
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>

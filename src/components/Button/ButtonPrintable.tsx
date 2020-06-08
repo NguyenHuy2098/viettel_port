@@ -58,7 +58,7 @@ const ButtonPrintable = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Button onClick={handleToggleShowModal} {...btnProps} />
+      <Button title={get(btnProps, 'title')} onClick={handleToggleShowModal} {...btnProps} />
       <Modal isOpen={visible} size="xl" toggle={handleToggleVisible} {...modalProps}>
         <ModalHeader toggle={handleToggleVisible} {...modalHeaderProps}>
           {get(modalHeaderProps, 'children', 'Title')}

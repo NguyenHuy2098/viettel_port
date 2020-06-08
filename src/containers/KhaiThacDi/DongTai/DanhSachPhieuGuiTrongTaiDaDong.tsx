@@ -135,7 +135,7 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
           {t('Danh sách bảng kê trong tải')}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
+          <Button className="sipTitleRightBlockBtnIcon" title={t('In')}>
             <i className="fa fa-print" />
           </Button>
         </div>
@@ -199,6 +199,7 @@ const DanhSachPhieuGuiTrongTaiDaDong: React.FC<Props> = (props: Props): JSX.Elem
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
     <ButtonPrintable
       btnProps={{
+        title: t('In'),
         className: 'SipTableFunctionIcon',
         children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}

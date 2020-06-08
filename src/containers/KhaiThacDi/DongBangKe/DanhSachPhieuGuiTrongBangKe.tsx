@@ -199,7 +199,7 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
           {t('Danh sách phiếu gửi trong bảng kê')}
         </h1>
         <div className="sipTitleRightBlock">
-          <Button className="sipTitleRightBlockBtnIcon">
+          <Button className="sipTitleRightBlockBtnIcon" title={t('In')}>
             <i className="fa fa-print" />
           </Button>
           <Button
@@ -336,10 +336,14 @@ const DanhSachPhieuGuiTrongBangKe: React.FC<Props> = (props: Props): JSX.Element
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={printTable(get(row, 'original'))}>
+              <Button className="SipTableFunctionIcon" onClick={printTable(get(row, 'original'))} title={t('In')}>
                 <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
               </Button>
-              <Button className="SipTableFunctionIcon" onClick={handleDeleteItem(get(row, 'original.TOR_ID', ''))}>
+              <Button
+                className="SipTableFunctionIcon"
+                onClick={handleDeleteItem(get(row, 'original.TOR_ID', ''))}
+                title={t('Xoá')}
+              >
                 <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />
               </Button>
             </>

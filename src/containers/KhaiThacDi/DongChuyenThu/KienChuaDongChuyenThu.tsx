@@ -150,7 +150,7 @@ const KienChuaDongChuyenThu: React.FC<Props> = (props: Props): JSX.Element => {
         Cell: ({ row }: Cell<API.RowMTZTMI047OUT>): JSX.Element => {
           return (
             <>
-              <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(row.original)}>
+              <Button className="SipTableFunctionIcon" onClick={handleRedirectDetail(row.original)} title={t('Sửa')}>
                 <img src={'../../assets/img/icon/iconPencil.svg'} alt="VTPostek" />
               </Button>
               <ModalPopupConfirm handleDoSomething={handleDeleteKien} />

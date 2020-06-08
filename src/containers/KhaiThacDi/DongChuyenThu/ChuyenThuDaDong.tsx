@@ -96,6 +96,7 @@ const ChuyenThuDaDong: React.FC<Props> = (props: Props): JSX.Element => {
           return (
             <ButtonPrintable
               btnProps={{
+                title: t('In'),
                 className: 'SipTableFunctionIcon',
                 children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
               }}

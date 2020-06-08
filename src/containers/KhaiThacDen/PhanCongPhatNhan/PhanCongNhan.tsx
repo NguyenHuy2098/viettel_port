@@ -127,7 +127,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
                 // setDataSelected([]);
               },
             },
-            { stateless: true },
+            // { stateless: true },
           ),
         );
       }

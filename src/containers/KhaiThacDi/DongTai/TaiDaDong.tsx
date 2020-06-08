@@ -95,6 +95,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
   const renderPrintButton = (idChuyenThu: string): JSX.Element => (
     <ButtonPrintable
       btnProps={{
+        title: t('In'),
         className: 'SipTableFunctionIcon',
         children: <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />,
       }}
@@ -109,6 +110,7 @@ const TaiDaDong: React.FC = (): JSX.Element => {
   const inMaCoTaiButton = (idTai: string): JSX.Element => (
     <ButtonPrintable
       btnProps={{
+        title: t('In mã'),
         className: 'SipTableFunctionIcon',
         children: <i className="fa fa-barcode fa-lg color-blue" />,
       }}

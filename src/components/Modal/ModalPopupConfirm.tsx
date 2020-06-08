@@ -28,7 +28,11 @@ const ModalPopupConfirm: React.FC<Props> = (props: Props): JSX.Element => {
 
   return (
     <>
-      <Button className={props.classNameBtn ? props.classNameBtn : 'SipTableFunctionIcon'} onClick={toggle}>
+      <Button
+        className={props.classNameBtn ? props.classNameBtn : 'SipTableFunctionIcon'}
+        onClick={toggle}
+        title={t('Xóa')}
+      >
         {props.buttonLabel ? props.buttonLabel : <img src={'../../assets/img/icon/iconRemove.svg'} alt="VTPostek" />}
       </Button>
       <Modal isOpen={modal} toggle={toggle} className={props.className ? props.className : 'sipTitleModalCreateNew'}>
