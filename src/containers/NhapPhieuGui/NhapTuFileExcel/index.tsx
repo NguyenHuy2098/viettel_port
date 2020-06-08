@@ -10,6 +10,10 @@ import DonHopLe from './DonHopLe';
 const InputRevenue: React.FC = (): JSX.Element => {
   const { t } = useTranslation();
   const [tab, setTab] = useState<number>(1);
+
+  function downloadFile(): void {
+    window.location.href = '../../templates/VTP_MAU_EXCEL_V1.11.xlsx';
+  }
   function handleChangeTab(tab: number): void {
     setTab(tab);
   }
@@ -18,7 +22,7 @@ const InputRevenue: React.FC = (): JSX.Element => {
       <Row className="mb-3 sipTitleContainer">
         <h1 className="sipTitle">Nhập từ file excel</h1>
         <div className="sipTitleRightBlock">
-          <Button className="ml-2" color="primary">
+          <Button className="ml-2" color="primary" onClick={downloadFile}>
             <i className="fa fa-file-excel-o mr-2" />
             Lấy file mẫu
           </Button>
