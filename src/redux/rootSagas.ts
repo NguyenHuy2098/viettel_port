@@ -40,6 +40,7 @@ import watch_CommoditySuggest from './CommoditySuggest/sagas';
 import watch_GetProfileByUsername from './GetProfileByUsername/sagas';
 import watch_GetOrderSuggest from './OrderSuggest/sagas';
 import watch_GetPersonSuggest from './PersonSuggest/sagas';
+import watch_ValidateImport from './ValidateImport/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -83,5 +84,6 @@ export default function* rootSagas(): SagaIterator {
     call(watch_GetProfileByUsername),
     call(watch_GetOrderSuggest),
     call(watch_GetPersonSuggest),
+    call(watch_ValidateImport),
   ]);
 }

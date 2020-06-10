@@ -94,6 +94,19 @@ crmBackendApi.interceptors.request.use(
   },
 );
 
+export const crmValidate = axios.create({
+  baseURL: 'http://192.168.5.58:8000',
+});
+
+crmValidate.interceptors.request.use(
+  (config: AxiosRequestConfig): AxiosRequestConfig => {
+    return configure(config);
+  },
+  (error): Promise<Error> => {
+    return Promise.reject(error);
+  },
+);
+
 export const lvcSapApi = axios.create({
   baseURL: REACT_APP_API_LVC,
 });

@@ -48,6 +48,40 @@ export function validateXlsxBangKe(workSheet: WorkSheet): boolean {
   );
 }
 
+export function validateXlsxNhapDon(workSheet: WorkSheet): boolean {
+  return (
+    get(workSheet, 'A7.v') === 'STT' &&
+    get(workSheet, 'B7.v') === 'Mã KH' &&
+    get(workSheet, 'C7.v') === 'Mã đơn hàng ' &&
+    get(workSheet, 'D7.v') === 'Tên người nhận (*)' &&
+    get(workSheet, 'E7.v') === 'Số ĐT người nhận (*)' &&
+    get(workSheet, 'F7.v') === 'Địa chỉ nhận (*)' &&
+    get(workSheet, 'G7.v') === 'Tỉnh đến (*)' &&
+    get(workSheet, 'H7.v') === 'Quận/Huyện đến (*)' &&
+    get(workSheet, 'I7.v') === 'Phường/Xã đến' &&
+    get(workSheet, 'J7.v') === 'Nhóm hàng hóa (*)' &&
+    get(workSheet, 'K7.v') === 'Loại hàng hóa (*)' &&
+    get(workSheet, 'L7.v') === 'Tên hàng hóa (*)' &&
+    get(workSheet, 'M7.v') === 'Số lượng' &&
+    get(workSheet, 'N7.v') === 'Trọng lượng (gram) (*)' &&
+    get(workSheet, 'O7.v') === 'Giá trị hàng (VND)' &&
+    get(workSheet, 'P7.v') === 'Tiền thu hộ COD (VND)' &&
+    get(workSheet, 'Q7.v') === 'Dịch vụ (*)' &&
+    get(workSheet, 'R7.v') === 'Dài (cm)' &&
+    get(workSheet, 'S7.v') === 'Rộng (cm)' &&
+    get(workSheet, 'T7.v') === 'Cao (cm)' &&
+    get(workSheet, 'U7.v') === 'Dịch vụ cộng thêm ' &&
+    get(workSheet, 'V7.v') === 'Người trả cước' &&
+    get(workSheet, 'W7.v') === 'Địa điểm giao nhận hàng' &&
+    get(workSheet, 'X7.v') === 'Ghi chú' &&
+    get(workSheet, 'Y7.v') === 'Thời gian giao' &&
+    get(workSheet, 'Z7.v') === 'ID tỉnh' &&
+    get(workSheet, 'AA7.v') === 'Mã tỉnh' &&
+    get(workSheet, 'AB7.v') === 'Mã huyện' &&
+    get(workSheet, 'AC7.v') === 'Mã xã'
+  );
+}
+
 const BKRowSchema = yup.object().shape({
   'Hàng hóa, dịch vụ': yup.string().required(`Trường "Hàng hóa, dịch vụ" không được để trống`),
   'Hàng hóa, dịch vụ chưa thuế': yup.number().required(`Trường "Hàng hóa, dịch vụ chưa thuế" chưa đúng định dạng`),
@@ -69,10 +103,34 @@ const BKRowSchema = yup.object().shape({
   'Tổng cộng': yup.number().required(`Trường "Tổng cộng" không được để trống`),
 });
 
+const BKRowSchemaTaoDon = yup.object().shape({
+  // 'Tên người nhận (*)': yup.string().required(`Trường "Hàng hóa, dịch vụ" không được để trống`),
+  // 'Số ĐT người nhận (*)': yup.string().required(`Trường "Hàng hóa, dịch vụ chưa thuế" chưa đúng định dạng`),
+  // 'Nhóm hàng hóa (*)': yup.string().required(`Trường "Khoản mục chi phí" không được để trống`),
+  // 'Loại hàng hóa (*)': yup.string().required(`Trường "Ký hiệu hóa đơn" không được để trống`),
+  // 'Tên hàng hóa (*)': yup.string().required(`Trường "Mã số thuế người bán" không được để trống`),
+  // 'Trọng lượng (gram) (*)': yup.string().required(`Trường "Mẫu hóa đơn" không được để trống`),
+  // 'Dịch vụ (*)': yup.string().required(`Trường "Ngày hóa đơn" không được để trống`),
+  // 'Địa chỉ nhận (*)': yup.string().required(`Trường "Phụ phí" không đúng định dạng`),
+  // 'Tỉnh đến (*)': yup.string().required(`Trường "Số hóa đơn" không được để trống`),
+  // 'Quận/Huyện đến (*)': yup.string().required(`Trường "Thuế GTGT" không được để trống`),
+});
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const validateBKRow = (row: any): boolean => {
   try {
     BKRowSchema.validateSync(row);
+  } catch (error) {
+    toastError(error.message);
+    return false;
+  }
+  return true;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const validateBKRowTaoDon = (row: any): boolean => {
+  try {
+    BKRowSchemaTaoDon.validateSync(row);
   } catch (error) {
     toastError(error.message);
     return false;
@@ -104,6 +162,125 @@ export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
   };
 }
 
+// eslint-disable-next-line
+export function transformXlsxRowToTaoDonItem(row: any): any {
+  const address: string = get(row, 'Địa chỉ nhận (*)', '');
+  let street = '';
+  if (address.indexOf(',') > 0) street = address.slice(0, address.indexOf(','));
+
+  let dichVuCongThem: string = get(row, 'Dịch vụ cộng thêm ', '');
+  const listDichVuCongThem: string[] = [];
+  const index = 0;
+  while (dichVuCongThem.length > 0) {
+    if (dichVuCongThem.indexOf(' ') > 0) {
+      listDichVuCongThem.push(dichVuCongThem.slice(index, dichVuCongThem.indexOf(' ')));
+      dichVuCongThem = dichVuCongThem.replace(dichVuCongThem.slice(index, dichVuCongThem.indexOf(' ') + 1), '');
+      //  index = dichVuCongThem.indexOf(" ") + 1;
+    } else {
+      listDichVuCongThem.push(dichVuCongThem.slice(index, dichVuCongThem.length));
+      dichVuCongThem = dichVuCongThem.replace(dichVuCongThem.slice(index, dichVuCongThem.length), '');
+      //  index = dichVuCongThem.length;
+    }
+  }
+  const service = {
+    SERVICE_TYPE: get(row, 'Dịch vụ (*)', ''), // chuyen sang ma
+    QUANTITY_OF_PACKAGE: '1',
+    QUANTITY_OF_UNIT: 'ST',
+  };
+
+  const item = {
+    Width: get(row, 'Rộng (cm)', ''),
+    COMMODITY_CODE: get(row, 'Loại hàng hóa (*)', ''), // chuyen sang ma
+    COMMODITY_TYPE: get(row, 'Nhóm hàng hóa (*)', ''), // chuyen sang ma
+    PACKAGE_TYPE: '',
+    QUANTITY_OF_UNIT: 'EA',
+    GOODS_VALUE: get(row, 'Giá trị hàng (VND)', '0'),
+    GROSS_WEIGHT: get(row, 'Trọng lượng (gram) (*)', ''),
+    Length: get(row, 'Dài (cm)', ''),
+    Hight: get(row, 'Cao (cm)', ''),
+    PACKAGING_MATERIAL: '',
+    QUANTITY_OF_PACKAGE: get(row, 'Số lượng', ''),
+    Description: get(row, 'Tên hàng hóa (*)', ''),
+    NET_WEIGHT_OF_UNIT: '',
+    Currency: 'VND',
+    GROSS_WEIGHT_OF_UNIT: 'G',
+    Flag: '',
+    COD: get(row, 'Tiền thu hộ COD (VND)', ''),
+    NET_WEIGHT: '',
+    NHOM_HANG_HOA: get(row, 'Nhóm hàng hóa (*)', ''),
+    LOAI_HANG_HOA: get(row, 'Loại hàng hóa (*)', ''),
+  };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const listDonHang: any[] = [];
+  listDonHang.push(item);
+  listDonHang.push(service);
+
+  for (let index = 0; index < listDichVuCongThem.length; index++) {
+    listDonHang.push({
+      SERVICE_TYPE: listDichVuCongThem[index], // chuyen sang ma
+      QUANTITY_OF_PACKAGE: '1',
+      QUANTITY_OF_UNIT: 'ST',
+    });
+  }
+
+  return {
+    STT: get(row, 'STT', ''),
+    FWO: get(row, 'Mã đơn hàng ', ''),
+    ADDRESS_CONSIG: '',
+    ADDRESS_OP: get(row, 'Địa chỉ nhận (*)', ''),
+    ADDRESS_SHIPPER: '',
+    BUYERS_REFERENCE_NUMBER: '',
+    CAMPAIGN: '',
+    CITY_DES: get(row, 'ID tỉnh', ''),
+    CITY_SRC: '',
+    CONSIGNEE: get(row, 'Mã KH', ''),
+    COUNTRY_DES: 'VN',
+    COUNTRY_SRC: 'VN',
+    CUS_ID: '',
+    DISTRICT_DES: get(row, 'Mã huyện', ''),
+    DISTRICT_SRC: '',
+    EMAIL_CONSIG: '',
+    EMAIL_OP: '',
+    EMAIL_SHIPPER: '',
+    FREIGH_TERM: get(row, 'Người trả cước', 'Người gửi trả') === 'Người gửi trả' ? 'F1' : 'F2',
+    HOUSE_ID_SRC: '',
+    HOUSE_ID_DES: '',
+    ITEM: listDonHang,
+    LOCATION_ID_SRC: '',
+    MOVEMENT_TYPE:
+      get(row, 'Địa điểm giao nhận hàng', 'Giao nhận hàng tại nhà') === 'Giao nhận hàng tại nhà' ? 'ZDD' : 'ZPP',
+    NAME_CONSIG: get(row, 'Tên người nhận (*)', ''),
+    NAME_OP: '',
+    NAME_SHIPPER: '',
+    NOTE: get(row, 'Ghi chú', ''),
+    OLD_CAMPAIGN_ID: 0,
+    ORDERING_PARTY: '',
+    ORDER_TYPE: 'V001',
+    PHONE_CONSIG: get(row, 'Số ĐT người nhận (*)', ''),
+    PHONE_OP: '',
+    PHONE_SHIPPER: '',
+    POSTAL_CODE_DES: '',
+    POSTAL_CODE_SRC: '',
+    REQUEST_PICK_DATE: null,
+    REQUEST_DELIV_DATE: get(row, 'Thời gian giao', 'Cả ngày'),
+    SALE_OFFICE: 'CAL',
+    SHIPPER: '',
+    SOURCE_TYPE: '03',
+    STREET_NAME_DES: street,
+    STREET_NAME_SRC: '',
+    TEL_DES: get(row, 'Số ĐT người nhận (*)', ''),
+    TEL_SRC: '',
+    TRANSPORTATION_MODE: '01',
+    WARD_DES: get(row, 'Mã xã', ''),
+    WARD_SRC: '',
+    NGUOI_TRA_CUOC: get(row, 'Người trả cước', 'Người gửi trả cước'),
+    STATUS: 'LOADING...',
+    errorMes: '',
+    DATE_IMPORT: moment(Date.now()).format('YYYYMMDDHHmmss'),
+    POSTOFFICE: '',
+    BPCode: '',
+  };
+}
 export function formatNumber(value: number): string {
   let str = numeral(value).format('0,0');
   const newchar = '.';

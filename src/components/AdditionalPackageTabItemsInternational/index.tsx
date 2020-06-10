@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { makeSelectorCurrentPostOffice } from 'redux/GetProfileByUsername/selectors';
+import { useDispatch, useSelector } from 'react-redux';
 import { find, get, map, size, toString } from 'lodash';
 import { TabContent, TabPane, Nav, NavLink, Button, Row, Col, Label, Input } from 'reactstrap';
 import classnames from 'classnames';
@@ -8,27 +9,30 @@ import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 import { getValueOfNumberFormat, numberFormat } from 'utils/common';
-import { action_COMMODITY_SUGGEST } from 'redux/CommoditySuggest/actions';
+import { action_COMMODITY_SUGGEST_INTER } from 'redux/CommoditySuggest/actions';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import TypeaheadLoaiHoang from '../Input/TypeaheadLoaiHang';
-import TypeaheadTenHang from '../Input/TypeaheadTenHang';
+import TypeaheadTenHangInter from '../Input/TypeaheadTenHangInter';
 
 interface Props {
   removePackageItem: (index: number) => void;
   data: PackageItemInputType[];
   onChangeValue: (valueName: string, value: string | undefined, index: number) => void;
   onChangeCommodityType: (value: string, index: number) => void;
-  onChangeSuggestCommodity: (descriptionValue: string, goodsValue: string, index: number) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChangeSuggestCommodity: (item: any, index: number) => void;
   isSubmit: boolean;
   packageItemErrorsList: PackageItemErrors[];
   activeTab: string;
   setActiveTab: (tab: string) => void;
+  maKhachHang: string;
 }
 
 // eslint-disable-next-line max-lines-per-function
 const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const currentPostOfficeInStore = useSelector(makeSelectorCurrentPostOffice);
   const {
     activeTab,
     setActiveTab,
@@ -38,6 +42,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
     packageItemErrorsList,
     onChangeCommodityType,
     onChangeSuggestCommodity,
+    maKhachHang,
   } = props;
 
   //________hook to trigger input focus validating
@@ -121,7 +126,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
 
   //_________________COMMODITY suggest event handle__________________________
 
-  const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
+  const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItemInter[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(0);
 
   const handleHideChooseDropdown = (): void => {
@@ -132,11 +137,11 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
     const thisDescription = get(data, `[${currentTab}].Description`, '');
     if (size(thisDescription) > 0) {
       dispatch(
-        action_COMMODITY_SUGGEST(
-          { q: thisDescription },
+        action_COMMODITY_SUGGEST_INTER(
+          { q: thisDescription, postoffice: get(currentPostOfficeInStore, 'PostOfficeCode', ''), sender: maKhachHang },
           {
-            onSuccess: (data: SuggestedCommodity): void => {
-              setCommoditySuggest(get(data, 'items'));
+            onSuccess: (data: CommoditySuggestedItemInter[]): void => {
+              setCommoditySuggest(data);
             },
             onFailure: (error: HttpRequestErrorType): void => {
               setCommoditySuggest([]);
@@ -153,9 +158,12 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
   function handleChooseCommoditySuggest(index: number): (items: TypeaheadOption[]) => void {
     return (items: TypeaheadOption[]): void => {
       setCommoditySuggest([]);
-      onChangeValue('Description', get(items, '0.id', ''), index);
-      onChangeValue('GOODS_VALUE', toString(get(items, '0.price', '')), index);
-      onChangeSuggestCommodity(get(items, '0.id', ''), toString(get(items, '0.price', '')), index);
+      onChangeValue('Description', get(items, '0.label', ''), index);
+      onChangeValue('GOODS_VALUE', toString(get(items, '0.goodsValue', '')), index);
+      onChangeValue('QUANTITY_OF_PACKAGE', toString(get(items, '0.quantity', '')), index);
+      //  onChangeValue('COMMODITY_CODE', toString(get(items, '0.commodityCode', '')), index);
+      onChangeValue('GROSS_WEIGHT', toString(get(items, '0.weight', '')), index);
+      onChangeSuggestCommodity(items, index);
       // check validate
       if (isSubmit) {
         setCount(count + 1);
@@ -169,7 +177,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
     return (
       <Row className="sipInputItem">
         <Label xs="12" lg="4">
-          {t('Loại kiện hàng')}
+          {t('Loại hàng')}
         </Label>
         <Col lg={8} xs={12}>
           <Row>
@@ -182,7 +190,7 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
                   defaultChecked
                   onChange={handleChangeCommodityType(index)}
                 />{' '}
-                {t('Bưu gửi nhỏ')}
+                {t('Hàng hóa')}
               </Label>
             </Col>
             <Col lg="3" xs="12" className="pr-0">
@@ -209,22 +217,11 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
         {renderPackageType(index)}
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Loại hàng')}
-          </Label>
-          <Col lg={8} xs={12}>
-            <TypeaheadLoaiHoang
-              loaiKienHang={item.COMMODITY_TYPE}
-              onChange={handleChangeTypeaheadValue('COMMODITY_CODE', index)}
-            />
-          </Col>
-        </Row>
-        <Row className="sipInputItem">
-          <Label xs="12" lg="4">
             Tên hàng
             <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
-            <TypeaheadTenHang
+            <TypeaheadTenHangInter
               onChange={handleChooseCommoditySuggest(index)}
               onInputChange={handleChangeTypeaheadInput('Description', index)}
               suggestions={commoditySuggest}
@@ -234,20 +231,15 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
         </Row>
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
-            {t('Giá trị')}
+            {t('Nhóm hàng')}
+            <span className="color-red"> *</span>
           </Label>
-          <Col lg="8">
-            <Input
-              type="text"
-              placeholder={t('Nhập giá trị (đ)')}
-              value={
-                get(item, 'GOODS_VALUE') === ''
-                  ? ''
-                  : numberFormat(getValueOfNumberFormat(get(item, 'GOODS_VALUE', '')))
-              }
-              onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
+          <Col lg={8} xs={12}>
+            <TypeaheadLoaiHoang
+              loaiKienHang={item.COMMODITY_TYPE}
+              onChange={handleChangeTypeaheadValue('COMMODITY_CODE', index)}
+              value={get(item, 'COMMODITY_CODE')}
             />
-            <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">
@@ -267,6 +259,25 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
               onChange={handleChangeTextboxValue('QUANTITY_OF_PACKAGE', index)}
             />
             <div className="sipInputItemError">{handleErrorMessage(index, 'QUANTITY_OF_PACKAGE')}</div>
+          </Col>
+        </Row>
+        <Row className="sipInputItem">
+          <Label xs="12" lg="4">
+            {t('Giá trị hàng hóa')}
+            <span className="color-red"> *</span>
+          </Label>
+          <Col lg="8">
+            <Input
+              type="text"
+              placeholder={t('Nhập giá trị (đ)')}
+              value={
+                get(item, 'GOODS_VALUE') === ''
+                  ? ''
+                  : numberFormat(getValueOfNumberFormat(get(item, 'GOODS_VALUE', '')))
+              }
+              onChange={handleChangeTextboxValue('GOODS_VALUE', index)}
+            />
+            <div className="sipInputItemError">{handleErrorMessage(index, 'GOODS_VALUE')}</div>
           </Col>
         </Row>
         <Row className="sipInputItem">

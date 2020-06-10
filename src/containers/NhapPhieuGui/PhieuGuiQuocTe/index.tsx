@@ -419,10 +419,14 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setPackageItemArr(newArr);
     triggerValidateAndPriceCalculate();
   }
-  function adjustPackageItemSuggestCommodity(descriptionValue: string, goodsValue: string, index: number): void {
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  function adjustPackageItemSuggestCommodity(item: any, index: number): void {
     const newArr = produce(packageItemArr, (draftState): void => {
-      set(draftState[index], 'Description', descriptionValue);
-      set(draftState[index], 'GOODS_VALUE', goodsValue);
+      set(draftState[index], 'Description', get(item, '0.label', ''));
+      set(draftState[index], 'GOODS_VALUE', toString(get(item, '0.goodsValue', '')));
+      set(draftState[index], 'QUANTITY_OF_PACKAGE', toString(get(item, '0.quantity', '')));
+      set(draftState[index], 'GROSS_WEIGHT', toString(get(item, '0.weight', '')));
+      //  set(draftState[index], 'COMMODITY_CODE', toString(get(item, '0.commodityCode', nhomHang)));
     });
     setPackageItemArr(newArr);
     triggerValidateAndPriceCalculate();
@@ -2030,6 +2034,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               packageItemErrorsList={packageItemErrorsList}
               activeTab={activeTab}
               setActiveTab={handleActiveTab}
+              maKhachHang={maKhachHang}
             />
             <h3 style={{ minHeight: '25px' }}>
               <Button className="addNewPackageTabItemBtn" onClick={addNewPackageItem}>

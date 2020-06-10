@@ -8,3 +8,7 @@ export function makeSelectorBPOrg(state: AppStateType): string {
 export function makeSelectorCurrentPostOffice(state: AppStateType): SSOAPI.PostOffice | undefined {
   return get(state, 'profileByUsername.currentPostOffice', undefined);
 }
+
+export function makeSelectorBPCode(state: AppStateType): string {
+  return get(state, 'profileByUsername.response.BPCode', '');
+}
