@@ -264,7 +264,6 @@ const AdditionalPackageTabItemsInternational: React.FC<Props> = (props: Props): 
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Giá trị hàng hóa')}
-            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <Input
