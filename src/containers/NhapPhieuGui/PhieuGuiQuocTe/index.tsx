@@ -1972,7 +1972,6 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
         <Row className="sipInputItem">
           <Label xs="12" lg="4">
             {t('Giá trị hàng hóa')}
-            <span className="color-red"> *</span>
           </Label>
           <Col lg="8">
             <Input
