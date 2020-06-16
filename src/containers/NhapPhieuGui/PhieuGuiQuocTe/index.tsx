@@ -38,7 +38,7 @@ import { useTranslation } from 'react-i18next';
 import classnames from 'classnames';
 import Typeahead from 'components/Input/Typeahead';
 import TypeaheadLoaiHang from 'components/Input/TypeaheadLoaiHang';
-import TypeaheadFullAddress from 'components/Input/TypeaheadFullAdress';
+import TypeaheadFullAddress from 'components/Input/TypeaheadFullAdressInter';
 import TypeaheadTenHangInter from 'components/Input/TypeaheadTenHangInter';
 import TypeaheadPhone from 'components/Input/TypeaheadPhone';
 import { makeSelectorBPOrg, makeSelectorCurrentPostOffice } from 'redux/GetProfileByUsername/selectors';
@@ -1803,6 +1803,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     [transportMethodArr],
   );
 
+  const filterByFields = ['label'];
+
+  const filterByCallback = (): boolean => {
+    return true;
+  };
+
   function renderSendingServices(): JSX.Element {
     return (
       <div className="sipInputBlock">
@@ -1821,6 +1827,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
               selected={loaiHinhDichVuListOptions.filter(item => {
                 return item.id === phuongThucVanChuyen;
               })}
+              filterBy={phuongThucVanChuyen ? filterByCallback : filterByFields}
               placeholder={t('Chọn dịch vụ')}
             />
           </Col>
