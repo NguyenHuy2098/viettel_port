@@ -1771,6 +1771,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
                 label: item.NATIONAL_NAME,
               }))}
               placeholder={t('Nhập nước đến')}
+              filterBy={quocGia ? filterByCallback : filterByFields}
             />
             <div className="sipInputItemError">{handleErrorMessage(errors, 'quocGia')}</div>
           </Col>
