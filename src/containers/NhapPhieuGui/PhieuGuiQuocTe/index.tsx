@@ -318,7 +318,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
   const [hoTenReceiver, setHoTenReceiver] = useState<string>('');
   const [diaChiReceiver, setDiaChiReceiver] = useState<string>('');
   const [description, setDescription] = useState<string>('');
-  //  const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>('');
+  const [provinceIdReceiver, setProvinceIdReceiver] = useState<string>('');
   const [districtIdReceiver, setDistrictIdReceiver] = useState<string>('');
   const [wardIdReceiver, setWardIdReceiver] = useState<string>('');
   const [detailAddressReceiver, setDetailAddressReceiver] = useState<string>('');
@@ -483,7 +483,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
 
       setSelectedCommodityPhone([{ id: dienThoaiReceiver, label: dienThoaiReceiver }]);
 
-      //  setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
+      setProvinceIdReceiver(get(orderInformationInstane, 'PROVINCE_ID_DES', ''));
       setDistrictIdReceiver(get(orderInformationInstane, 'DISTRICT_ID_DES', ''));
       setWardIdReceiver(toString(get(orderInformationInstane, 'WARD_ID_DES', '')));
       setQuocGia(toString(get(orderInformationInstane, 'COUNTRY_ID_DES', '')));
@@ -1014,7 +1014,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
       setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
       setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
-      //  setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
+      setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
       setDescription(join(slice(thisValue, 150, 190), ''));
       setReceiverSuggest([]);
       setSelectedCommodityPhone(items);
@@ -1030,7 +1030,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
     setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
     setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
-    //  setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
+    setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
     setDescription(join(slice(thisValue, 150, 190), ''));
     triggerValidateAndPriceCalculate();
   }
@@ -1082,8 +1082,8 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       BUYERS_REFERENCE_NUMBER: trim(maPhieuGui),
       CAMPAIGN: '',
       CITY_DES: trim(quocGia), // khi đơn quốc tế thì truyền city_des= country_des
-      //  CITY_NAME: trim(provinceIdReceiver),
-      CITY_NAME: 'Singapore', // tạm thời để là "Singapore" sau này sửa lại thì cho dòng trên vào
+      CITY_NAME: trim(provinceIdReceiver),
+      //CITY_NAME: 'Singapore', // tạm thời để là "Singapore" sau này sửa lại thì cho dòng trên vào
       CITY_SRC: trim(provinceIdSender), // trong trường hợp khách hàng vãng lai
       CONSIGNEE: '9999999999',
       COUNTRY_DES: trim(quocGia),
@@ -2096,7 +2096,7 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
       setDetailAddressReceiver(join(slice(thisValue, 0, 10), ''));
       setWardIdReceiver(join(slice(thisValue, 10, 70), ''));
       setDistrictIdReceiver(join(slice(thisValue, 70, 110), ''));
-      //  setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
+      setProvinceIdReceiver(join(slice(thisValue, 110, 150), ''));
       setDescription(join(slice(thisValue, 150, 190), ''));
       //address
       // const dataComponentsReceive = get(selectedTemplate, '0.receiver.addr.components', []);
