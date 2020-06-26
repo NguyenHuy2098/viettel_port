@@ -267,10 +267,10 @@ const DonHopLe: React.FC<Props> = (props: Props): JSX.Element => {
         Header: t('Mã khách hàng'),
         accessor: 'CONSIGNEE',
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        Cell: ({ row }: any): JSX.Element => {
-          const Consignee = get(row, 'original.CONSIGNEE', '');
-          return <>{Consignee === '9999999999' ? '' : Consignee}</>;
-        },
+        // Cell: ({ row }: any): JSX.Element => {
+        //   const Consignee = get(row, 'original.CONSIGNEE', '');
+        //   return <>{Consignee === '9999999999' ? '' : Consignee}</>;
+        // },
       },
       {
         Header: t('Mã phiếu gửi'),
