@@ -110,7 +110,9 @@ const HistoryImport: React.FC<Props> = (props: Props): JSX.Element => {
       {
         Header: t('Ngày tải lên'),
         Cell: ({ row }: Cell<HistoryImport>): JSX.Element => {
-          const datetime = moment(get(row.original, 'dt_upload', ''), moment.ISO_8601).format('YYYY-MM-DD HH:mm:ss');
+          const datetime = moment(get(row.original, 'dt_upload', ''), moment.ISO_8601)
+            .utc()
+            .format('YYYY-MM-DD HH:mm:ss');
           return <>{datetime}</>;
         },
       },
