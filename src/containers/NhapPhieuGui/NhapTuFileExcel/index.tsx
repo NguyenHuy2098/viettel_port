@@ -1,36 +1,48 @@
 import React from 'react';
 // import { useTranslation } from 'react-i18next';
-import { Button, Nav, NavItem, NavLink, Row, TabContent, TabPane } from 'reactstrap';
-import classNames from 'classnames';
+import { Badge, Button, Row } from 'reactstrap';
 import XLSX, { WorkBook } from 'xlsx';
 import { map, size, get } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { toastError } from 'components/Toast';
-import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFile';
+import { useDispatch } from 'react-redux';
+import { action_IMPORT_EXCEL } from 'redux/ImportExcelFile/actions';
+import { toast } from 'react-toastify';
+import TabView from 'components/Tab/TabView';
+import ButtonInputXlsxFile from 'components/Button/ButtonInputXlsxFileTaoDon';
 import { transformXlsxRowToTaoDonItem, validateXlsxNhapDon } from 'utils/common';
 import DonHopLe from './DonHopLe';
+import LichSuTaiFile from './LichSuTaiFile';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface Props {}
 // eslint-disable-next-line max-lines-per-function
-const InputRevenue: React.FC = (): JSX.Element => {
+const InputRevenue: React.FC<Props> = (props: Props): JSX.Element => {
   const { t } = useTranslation();
-  const [tab, setTab] = useState<number>(1);
-  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const dispatch = useDispatch();
+  // const [tab, setTab] = useState<number>(1);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [data, setData] = useState<any>([]);
   const [checkedValues, setcheckedValues] = useState<string[]>([]);
-  function handleChangeTab(tab: number): void {
-    setTab(tab);
-  }
+  const [resetCheckbox, setResetCheckbox] = useState<boolean>(false);
+  const [countData, setCountData] = useState<number>(0);
+  const getLocation = get(props, 'location.search', '');
+
   function downloadFile(): void {
     window.location.href = '../../templates/VTP_MAU_EXCEL_V1.11.xlsx';
   }
-  const handleChangeFile = (workbook: WorkBook): void => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleChangeFile = (workbook: WorkBook, infoExcel: any): void => {
     const firstSheetName = workbook.SheetNames[0];
     const workSheet = workbook.Sheets[firstSheetName];
     if (validateXlsxNhapDon(workSheet)) {
       const sheetData = XLSX.utils.sheet_to_json(workSheet, { range: 6 });
       const listData = map(
-        sheetData.filter(item => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        sheetData.filter((item: any) => {
+          item.FileName = infoExcel.fileName;
+          item.Id = infoExcel.id;
           return get(item, 'Tên người nhận (*)', '') !== '';
         }),
       );
@@ -47,6 +59,10 @@ const InputRevenue: React.FC = (): JSX.Element => {
       toastError(t('File tải lên không đúng format. Vui lòng tải file mẫu.'));
     }
   };
+
+  function updateCountData(count: number): void {
+    setCountData(count);
+  }
   function getDataFormImport(checkedValues: string[]): void {
     setcheckedValues(checkedValues);
   }
@@ -56,6 +72,31 @@ const InputRevenue: React.FC = (): JSX.Element => {
       const dataPayload = data.find((item1: ImportDataType) => item1.STT.toString() === item);
       payload.push(dataPayload);
     });
+    setResetCheckbox(!resetCheckbox);
+    let payloadImport = [];
+    for (let index = 0; index < payload.length; index++) {
+      payloadImport.push(payload[index]);
+      if (payloadImport.length === Math.round(payload.length / 4) + 1 || index === payload.length - 1) {
+        dispatch(
+          action_IMPORT_EXCEL(payloadImport, {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            onSuccess: (data: any): void => {
+              if (index === payload.length - 1)
+                toast(
+                  <>
+                    <i className="fa fa-window-close-o mr-2" />
+                    {t('Đang tạo đơn')}
+                  </>,
+                  {
+                    type: 'warning',
+                  },
+                );
+            },
+          }),
+        );
+        payloadImport = [];
+      }
+    }
   }
   function renderTitle(): JSX.Element {
     return (
@@ -67,7 +108,7 @@ const InputRevenue: React.FC = (): JSX.Element => {
             Lấy file mẫu
           </Button>
           <ButtonInputXlsxFile extension="xlsx" onChange={handleChangeFile} shouldConfirm={size(data) > 0} />
-          <Button className="ml-2" color="primary" onClick={createData}>
+          <Button className="ml-2" color="primary" onClick={createData} disabled={size(checkedValues) === 0}>
             <i className="fa fa-pencil mr-2" />
             Tạo đơn
           </Button>
@@ -80,31 +121,29 @@ const InputRevenue: React.FC = (): JSX.Element => {
     <>
       {renderTitle()}
       <div className="sipTabContainer sipFlatContainer">
-        <Nav tabs>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 1 })}
-              onClick={React.useCallback((): void => handleChangeTab(1), [])}
-            >
-              Upload File
-              {/* <Badge color="primary">01</Badge> */}
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink
-              className={classNames({ active: tab === 2 })}
-              onClick={React.useCallback((): void => handleChangeTab(2), [])}
-            >
-              {t('Lịch sử tải lên')}
-            </NavLink>
-          </NavItem>
-        </Nav>
-        <TabContent activeTab={tab} className="sipFlatContainer">
-          <TabPane tabId={1}>
-            <DonHopLe data={data} getDataFormImport={getDataFormImport} />
-          </TabPane>
-          <TabPane tabId={2}>tab 2</TabPane>
-        </TabContent>
+        <TabView
+          navs={[
+            {
+              children: <>{t('Upload File')}</>,
+            },
+            {
+              children: (
+                <>
+                  {t('Lịch sử tải lên')}
+                  <Badge color="primary">{countData}</Badge>
+                </>
+              ),
+            },
+          ]}
+          tabs={[
+            {
+              children: <DonHopLe data={data} getDataFormImport={getDataFormImport} resetCheckbox={resetCheckbox} />,
+            },
+            {
+              children: <LichSuTaiFile updateCount={updateCountData} getTab={getLocation} />,
+            },
+          ]}
+        />
       </div>
     </>
   );

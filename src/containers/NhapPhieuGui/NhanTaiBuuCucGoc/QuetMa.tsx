@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input, Row } from 'reactstrap';
 import { Cell } from 'react-table';
 import { toast } from 'react-toastify';
-import { get, toString } from 'lodash';
+import { get, toString, map } from 'lodash';
 import moment from 'moment';
 
 import DataTable from 'components/DataTable';
@@ -13,7 +13,6 @@ import { action_MIOA_ZTMI023 } from 'redux/MIOA_ZTMI023/actions';
 import { action_MIOA_ZTMI063 } from 'redux/MIOA_ZTMI063/actions';
 import { action_MIOA_ZTMI235 } from 'redux/ZTMI235/actions';
 import { action_ZTMI239 } from 'redux/ZTMI239/actions';
-// import { makeSelectorListChuyenThu } from 'redux/MIOA_ZTMI023/selectors';
 import { HttpRequestErrorType } from 'utils/HttpRequetsError';
 import { makeSelectorPreferredUsername } from 'redux/auth/selectors';
 import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
@@ -56,8 +55,6 @@ const QuetMa: React.FC = (): JSX.Element => {
               } else {
                 if (get(data, 'MT_ZTMI023_OUT.row[0].TO_LOG_ID', '').search(userMaBp) !== -1) {
                   if (get(data, 'MT_ZTMI023_OUT.row[0].ZVTP_CUST_STATUS', 0) === 304) {
-                    setTotalRecords(totalRecords + 1);
-
                     const data023 = get(data, 'MT_ZTMI023_OUT.row[0]', '');
                     dispatch(
                       action_MIOA_ZTMI063(
@@ -113,18 +110,20 @@ const QuetMa: React.FC = (): JSX.Element => {
                                       dispatch(
                                         action_ZTMI239(payload239, {
                                           onSuccess: (data: API.ZTMI239Response): void => {
-                                            setDataNhanChuyenThu(get(dataChuyenThu, 'MT_ZTMI023_OUT.row', []));
+                                            dataNhanChuyenThu.push(get(dataChuyenThu, 'MT_ZTMI023_OUT.row[0]', {}));
+                                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                            const data1 = map(dataNhanChuyenThu, (item: any) => {
+                                              return item;
+                                            });
+                                            // setDataNhanChuyenThu(get(dataChuyenThu, 'MT_ZTMI023_OUT.row', []));
+                                            setDataNhanChuyenThu(data1);
+                                            setTotalRecords(data1.length);
                                             setTimeout(function() {
                                               const thisId = get(data, 'MT_ZTMI239_OUT.PACKAGE_ID', '');
                                               toast(
                                                 <>
                                                   <i className="fa fa-check-square mr-2" />
                                                   {t('Quét bưu gửi')} {thisId} {t('thành công')}
-                                                  {/* {get(
-                                                    data,
-                                                    'MT_ZTMI239_OUT.RETURN_MESSAGE[0].MESSAGE',
-                                                    t('Thành công!'),
-                                                  )} */}
                                                 </>,
                                                 {
                                                   type: 'success',
@@ -307,9 +306,8 @@ const QuetMa: React.FC = (): JSX.Element => {
       },
     ],
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [dataNhanChuyenThu],
+    [],
   );
-
   function renderForwardingOrderCodeScan(): JSX.Element {
     return (
       <div className="sipContentContainer">

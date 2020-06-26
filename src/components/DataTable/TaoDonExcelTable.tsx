@@ -1,7 +1,20 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { Input, Label, Table } from 'reactstrap';
 import { Row as TableRow, TableOptions, useTable } from 'react-table';
-import { concat, difference, get, includes, isEmpty, isFunction, isString, map, noop, pull, size } from 'lodash';
+import {
+  concat,
+  difference,
+  get,
+  includes,
+  isEmpty,
+  isFunction,
+  isString,
+  map,
+  noop,
+  pull,
+  size,
+  filter,
+} from 'lodash';
 import produce from 'immer';
 
 import NoData from './NoData';
@@ -16,6 +29,7 @@ interface Props extends TableOptions<any> {
   showCheckboxes?: boolean;
   renderCheckboxValues?: string | ((item: any) => string);
   resetCheckbox?: boolean;
+  dataAll?: ImportDataType[];
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
@@ -31,24 +45,30 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     showCheckboxes,
     renderCheckboxValues,
     resetCheckbox,
+    dataAll,
   } = props;
 
   if (showCheckboxes === true && !isString(renderCheckboxValues) && !isFunction(renderCheckboxValues)) {
     throw new Error('renderCheckboxValues is required if showCheckboxes is true.');
   }
-
   // Use the state and functions returned from useTable to build your UI
   const { getTableProps, headerGroups, rows, prepareRow } = useTable({ columns, data });
 
   const [checkedValues, setCheckedValues] = useState<string[]>([]);
+  const dataStatusOk = map(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    filter(dataAll, (item: any) => {
+      return item.STATUS === 'OK';
+    }),
+  );
 
   useEffect(() => {
     setCheckedValues([]);
   }, [resetCheckbox]);
 
   const currentPageCheckboxValues = useMemo(() => {
-    if (isString(renderCheckboxValues)) return map(data, renderCheckboxValues);
-    if (isFunction(renderCheckboxValues)) return map(data, renderCheckboxValues);
+    if (isString(renderCheckboxValues)) return map(dataStatusOk, renderCheckboxValues);
+    if (isFunction(renderCheckboxValues)) return map(dataStatusOk, renderCheckboxValues);
     return [];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
@@ -62,7 +82,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getCheckboxValue = (row: TableRow<any>): string => {
     if (isString(renderCheckboxValues)) {
-      return get(row, `original.STT`) || '';
+      return get(row, `original.${renderCheckboxValues}`) || '';
     } else if (isFunction(renderCheckboxValues)) {
       return renderCheckboxValues(row);
     }
@@ -113,12 +133,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
     <th>
       {showCheckAll && (
         <Label check>
-          <Input
-            checked={isPageAllChecked && !!size(data)}
-            type="checkbox"
-            onChange={handleCheckAllRows}
-            hidden={true}
-          />
+          <Input checked={isPageAllChecked && !!size(dataStatusOk)} type="checkbox" onChange={handleCheckAllRows} />
         </Label>
       )}
     </th>
@@ -134,7 +149,8 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             checked={includes(checkedValues, value.toString())}
             onChange={handleCheckRow(get(row, 'original'), row)}
             type="checkbox"
-            value={get(row, 'original.STT')}
+            value={value.toString()}
+            disabled={!(get(row, 'original.STATUS', '') === 'OK')}
           />
         </Label>
       </td>
@@ -157,7 +173,7 @@ const DataTable: React.FC<Props> = (props: Props): JSX.Element => {
             </tr>
           ))}
         </thead>
-        <tbody style={{ wordBreak: 'normal' }}>
+        <tbody style={{ wordBreak: 'normal', whiteSpace: 'nowrap' }}>
           {rows.map((row, index) => {
             return (
               prepareRow(row) || (

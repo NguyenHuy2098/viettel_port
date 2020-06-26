@@ -3,9 +3,10 @@ import numeral from 'numeral';
 import { WorkSheet } from 'xlsx';
 import uuid from 'uuid';
 import * as yup from 'yup';
-import { find, get, isEmpty, isObject, split, toNumber } from 'lodash';
+import { find, get, isEmpty, isObject, split, toNumber, filter } from 'lodash';
 import parse_query_string from './parse_query_string';
 import { toastError } from '../components/Toast';
+import { loaiHangHoaList, nhomHangHoaList } from '../containers/NhapPhieuGui/NhapTuFileExcel/LoaiHangHoa';
 
 export const cleanAccents = (str: string): string => {
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, 'a');
@@ -164,6 +165,12 @@ export function transformXlsxRowToBangKeItem(row: any): API.ITEMBK {
 
 // eslint-disable-next-line
 export function transformXlsxRowToTaoDonItem(row: any): any {
+  const SDT: string = get(row, 'Số ĐT người nhận (*)', '');
+  const FWO_ID = get(row, 'Mã đơn hàng ', '');
+  const COD = get(row, 'Tiền thu hộ COD (VND)', '');
+  const VALUE = get(row, 'Giá trị hàng (VND)', '0');
+  const WEIGHT = get(row, 'Trọng lượng (gram) (*)', '');
+
   const address: string = get(row, 'Địa chỉ nhận (*)', '');
   let street = '';
   if (address.indexOf(',') > 0) street = address.slice(0, address.indexOf(','));
@@ -187,15 +194,23 @@ export function transformXlsxRowToTaoDonItem(row: any): any {
     QUANTITY_OF_PACKAGE: '1',
     QUANTITY_OF_UNIT: 'ST',
   };
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const nhomHangHoa = filter(nhomHangHoaList, (item: any) => {
+    return item.label === get(row, 'Nhóm hàng hóa (*)', '');
+  })[0];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const loaiHangHoa = filter(loaiHangHoaList, (item: any) => {
+    return item.label === get(row, 'Loại hàng hóa (*)', '');
+  })[0];
 
   const item = {
     Width: get(row, 'Rộng (cm)', ''),
-    COMMODITY_CODE: get(row, 'Loại hàng hóa (*)', ''), // chuyen sang ma
-    COMMODITY_TYPE: get(row, 'Nhóm hàng hóa (*)', ''), // chuyen sang ma
+    COMMODITY_CODE: get(loaiHangHoa, 'id', ''),
+    COMMODITY_TYPE: get(nhomHangHoa, 'id', ''),
     PACKAGE_TYPE: '',
     QUANTITY_OF_UNIT: 'EA',
-    GOODS_VALUE: get(row, 'Giá trị hàng (VND)', '0'),
-    GROSS_WEIGHT: get(row, 'Trọng lượng (gram) (*)', ''),
+    GOODS_VALUE: VALUE,
+    GROSS_WEIGHT: WEIGHT,
     Length: get(row, 'Dài (cm)', ''),
     Hight: get(row, 'Cao (cm)', ''),
     PACKAGING_MATERIAL: '',
@@ -205,7 +220,7 @@ export function transformXlsxRowToTaoDonItem(row: any): any {
     Currency: 'VND',
     GROSS_WEIGHT_OF_UNIT: 'G',
     Flag: '',
-    COD: get(row, 'Tiền thu hộ COD (VND)', ''),
+    COD: COD,
     NET_WEIGHT: '',
     NHOM_HANG_HOA: get(row, 'Nhóm hàng hóa (*)', ''),
     LOAI_HANG_HOA: get(row, 'Loại hàng hóa (*)', ''),
@@ -222,18 +237,20 @@ export function transformXlsxRowToTaoDonItem(row: any): any {
       QUANTITY_OF_UNIT: 'ST',
     });
   }
+  const SoTT = get(row, 'STT', '');
 
   return {
-    STT: get(row, 'STT', ''),
-    FWO: get(row, 'Mã đơn hàng ', ''),
-    ADDRESS_CONSIG: '',
-    ADDRESS_OP: get(row, 'Địa chỉ nhận (*)', ''),
+    STT: SoTT.toString(),
+    ID: get(row, 'Id', ''),
+    FWO: FWO_ID.toString(),
+    ADDRESS_CONSIG: get(row, 'Địa chỉ nhận (*)', ''),
+    ADDRESS_OP: '',
     ADDRESS_SHIPPER: '',
     BUYERS_REFERENCE_NUMBER: '',
     CAMPAIGN: '',
     CITY_DES: get(row, 'ID tỉnh', ''),
     CITY_SRC: '',
-    CONSIGNEE: get(row, 'Mã KH', ''),
+    CONSIGNEE: get(row, 'Mã KH', '') === '' ? '9999999999' : get(row, 'Mã KH', ''),
     COUNTRY_DES: 'VN',
     COUNTRY_SRC: 'VN',
     CUS_ID: '',
@@ -242,7 +259,8 @@ export function transformXlsxRowToTaoDonItem(row: any): any {
     EMAIL_CONSIG: '',
     EMAIL_OP: '',
     EMAIL_SHIPPER: '',
-    FREIGH_TERM: get(row, 'Người trả cước', 'Người gửi trả') === 'Người gửi trả' ? 'F1' : 'F2',
+    FREIGH_TERM:
+      get(row, 'Người trả cước', '') === '' ? '' : get(row, 'Người trả cước', '') === 'Người gửi trả' ? 'F1' : 'F2',
     HOUSE_ID_SRC: '',
     HOUSE_ID_DES: '',
     ITEM: listDonHang,
@@ -256,7 +274,7 @@ export function transformXlsxRowToTaoDonItem(row: any): any {
     OLD_CAMPAIGN_ID: 0,
     ORDERING_PARTY: '',
     ORDER_TYPE: 'V001',
-    PHONE_CONSIG: get(row, 'Số ĐT người nhận (*)', ''),
+    PHONE_CONSIG: SDT.split(' ').join(''),
     PHONE_OP: '',
     PHONE_SHIPPER: '',
     POSTAL_CODE_DES: '',
@@ -268,17 +286,20 @@ export function transformXlsxRowToTaoDonItem(row: any): any {
     SOURCE_TYPE: '03',
     STREET_NAME_DES: street,
     STREET_NAME_SRC: '',
-    TEL_DES: get(row, 'Số ĐT người nhận (*)', ''),
+    TEL_DES: SDT.split(' ').join(''),
     TEL_SRC: '',
     TRANSPORTATION_MODE: '01',
     WARD_DES: get(row, 'Mã xã', ''),
     WARD_SRC: '',
-    NGUOI_TRA_CUOC: get(row, 'Người trả cước', 'Người gửi trả cước'),
+    NGUOI_TRA_CUOC: get(row, 'Người trả cước', ''),
+    FILE_NAME: get(row, 'FileName', ''),
     STATUS: 'LOADING...',
     errorMes: '',
-    DATE_IMPORT: moment(Date.now()).format('YYYYMMDDHHmmss'),
+    DATE_IMPORT: moment(Date.now()).format('YYYY-MM-DD HH:mm:ss'),
     POSTOFFICE: '',
     BPCode: '',
+    TOTAL_ORDER: 0,
+    AMOUNT_ITEM: '',
   };
 }
 export function formatNumber(value: number): string {

@@ -24,6 +24,7 @@ const BaoCao = lazy(() => import('containers/BaoCao'));
 const PhieuGuiTrongNuoc = lazy(() => import('containers/NhapPhieuGui/PhieuGuiTrongNuoc'));
 const PhieuGuiQuocTe = lazy(() => import('containers/NhapPhieuGui/PhieuGuiQuocTe'));
 const NhapTuFileExcel = lazy(() => import('containers/NhapPhieuGui/NhapTuFileExcel'));
+const ChiTietLichSu = lazy(() => import('containers/NhapPhieuGui/NhapTuFileExcel/ChiTietLichSu'));
 const NhanTaiBuuCucGoc = lazy(() => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc'));
 const ChiTietNhomHangHoa = lazy(() => import('containers/NhapPhieuGui/NhanTaiBuuCucGoc/ChiTietNhomHangHoa'));
 
@@ -106,6 +107,11 @@ const routes = (t: TFunction): SIPRoutePropsType[] => {
       path: routesMap.PHIEU_GUI_QUOC_TE,
       name: t('Phiếu gửi trong nước'),
       component: PhieuGuiQuocTe,
+    },
+    {
+      path: routesMap.CHI_TIET_LICH_SU,
+      name: t('Phiếu gửi trong nước'),
+      component: ChiTietLichSu,
     },
     { path: routesMap.DONG_BANG_KE_NOI_TINH, name: t('Đóng bảng kê nội tỉnh'), component: DongBangKeNoiTinh },
     { path: routesMap.DONG_BANG_KE, name: t('Đóng bảng kê'), component: DongBangKe },

@@ -33,6 +33,7 @@ export const PHIEU_GUI_TRONG_NUOC = `${NHAP_PHIEU_GUI}/phieu-gui-trong-nuoc/:idD
 export const NHAP_PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te/tao-don`;
 export const PHIEU_GUI_QUOC_TE = `${NHAP_PHIEU_GUI}/phieu-gui-quoc-te/:idDonHang`;
 export const NHAP_TU_FILE_EXCEL = `${NHAP_PHIEU_GUI}/nhap-tu-file-excel`;
+export const CHI_TIET_LICH_SU = `${NHAP_PHIEU_GUI}/chi-tiet-lich-su/:created_dt&:id`;
 export const NHAN_TAI_BUU_CUC_GOC = `${NHAP_PHIEU_GUI}/nhan-tai-buu-cuc-goc`;
 export const CHI_TIET_NHOM_HANG_HOA = `${NHAP_PHIEU_GUI}/chi-tiet-nhom-hang-hoa`;
 
@@ -112,6 +113,7 @@ export default {
   NHAP_PHIEU_GUI_QUOC_TE,
   PHIEU_GUI_QUOC_TE,
   NHAP_TU_FILE_EXCEL,
+  CHI_TIET_LICH_SU,
   NHAN_TAI_BUU_CUC_GOC,
   CHI_TIET_NHOM_HANG_HOA,
   /**

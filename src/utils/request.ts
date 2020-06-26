@@ -8,6 +8,7 @@ import {
   REACT_APP_SSO_API_URL,
   REACT_APP_BACKEND_API_ENDPOINT,
   REACT_APP_API_LVC,
+  REACT_APP_API_IMPORT_EXCEL,
 } from './env';
 import { throwErrorIfMalformed } from './errorHelpers';
 
@@ -95,7 +96,7 @@ crmBackendApi.interceptors.request.use(
 );
 
 export const crmValidate = axios.create({
-  baseURL: 'http://192.168.5.58:8000',
+  baseURL: REACT_APP_API_IMPORT_EXCEL,
 });
 
 crmValidate.interceptors.request.use(

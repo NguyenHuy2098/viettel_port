@@ -41,6 +41,9 @@ import watch_GetProfileByUsername from './GetProfileByUsername/sagas';
 import watch_GetOrderSuggest from './OrderSuggest/sagas';
 import watch_GetPersonSuggest from './PersonSuggest/sagas';
 import watch_ValidateImport from './ValidateImport/sagas';
+import watch_ImportExcel from './ImportExcelFile/sagas';
+import watch_GetHistoryImport from './GetHistoryImportFile/sagas';
+import watch_GetHistoryDetail from './GetHistoryDetail/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -85,5 +88,8 @@ export default function* rootSagas(): SagaIterator {
     call(watch_GetOrderSuggest),
     call(watch_GetPersonSuggest),
     call(watch_ValidateImport),
+    call(watch_ImportExcel),
+    call(watch_GetHistoryImport),
+    call(watch_GetHistoryDetail),
   ]);
 }

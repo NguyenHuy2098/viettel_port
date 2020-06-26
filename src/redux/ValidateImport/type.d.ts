@@ -1,5 +1,6 @@
 interface ImportDataType {
   STT: string;
+  ID: string;
   FWO: string;
   ADDRESS_CONSIG: string;
   ADDRESS_OP: string;
@@ -76,9 +77,12 @@ interface ImportDataType {
   WARD_DES: string;
   WARD_SRC: string;
   NGUOI_TRA_CUOC: string;
+  FILE_NAME: string;
   STATUS: string;
   errorMes: string;
   DATE_IMPORT: string;
   POSTOFFICE: string;
   BPCode: string;
+  TOTAL_ORDER: number;
+  AMOUNT_ITEM: string;
 }
