@@ -17,7 +17,7 @@ const TypeaheadDiemDen = (props: Props): JSX.Element => {
   const options = React.useMemo(() => {
     return map(props.postOfficeList, (item, index) => ({
       id: item.LOCNO || String(index),
-      label: item.LOCNO || '-',
+      label: item.DESCR40 || '-',
     }));
   }, [props.postOfficeList]);
 
@@ -27,10 +27,14 @@ const TypeaheadDiemDen = (props: Props): JSX.Element => {
 
   const filterByFields = ['label'];
 
+  const filterByCallback = (): boolean => {
+    return true;
+  };
+
   return (
     <Typeahead
       id="chonDiemDen"
-      filterBy={filterByFields}
+      filterBy={props.value ? filterByCallback : filterByFields}
       defaultSelected={options.filter(item => {
         return item.id === props.value;
       })}

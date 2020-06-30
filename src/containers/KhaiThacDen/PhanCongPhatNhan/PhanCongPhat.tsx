@@ -4,7 +4,7 @@ import { Button, Row, Input, Col } from 'reactstrap';
 import { useTranslation } from 'react-i18next';
 import { match, RouteComponentProps, withRouter } from 'react-router-dom';
 import { Cell } from 'react-table';
-import { get, map, find, size } from 'lodash';
+import { get, map, find, size, trim } from 'lodash';
 import moment from 'moment';
 import { getPageItems } from 'utils/common';
 
@@ -120,7 +120,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
           {
             ...payload,
             FU_STATUS: '605,806',
-            Delivery_postman: userIdSelected,
+            Delivery_postman: findBPFromUser(userIdSelected),
             IV_PAGENO: '1',
             IV_NO_PER_PAGE: pageItems,
             Vourcher: 'N',
@@ -161,7 +161,9 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
   }, []);
 
   const findBPFromUser = (userName: string): string | undefined => {
-    const user = find(listStaff, { UNAME: userName });
+    const user = find(listStaff, function(o) {
+      return trim(o.NAME_TEXT) === userName;
+    });
     if (user) return user.BP;
     return;
   };
@@ -176,7 +178,7 @@ const PhanCongPhat: React.FC<Props> = (props: Props): JSX.Element => {
             TRQ_ID: itemPhanConPhat && itemPhanConPhat.FWO,
           };
         }),
-        IV_PARTY_ID: findBPFromUser(IV_PARTY_ID),
+        IV_PARTY_ID: IV_PARTY_ID,
         IV_UNAME: userIdSelected,
       };
       dispatch(

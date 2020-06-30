@@ -18,10 +18,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import { useSelector } from 'react-redux';
-import { map, get } from 'lodash';
+import { map, get, first } from 'lodash';
 
 import { makeSelectorGet_MT_ZTMI045_OUT } from 'redux/MIOA_ZTMI045/selectors';
 import { toast } from 'react-toastify';
+import TypeaheadDiemDen from 'components/Input/TypeaheadDiemDen';
 
 interface Props {
   onHide: () => void;
@@ -104,8 +105,12 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
     );
   };
 
-  const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSelselectedPlace(event.currentTarget.value);
+  // const handleChangeOption = (event: React.ChangeEvent<HTMLInputElement>): void => {
+  //   setSelselectedPlace(event.currentTarget.value);
+  // };
+
+  const handleChangePostOffice = (items: TypeaheadOption[]): void => {
+    setSelselectedPlace(get(first(items), 'id', ''));
   };
 
   const renderTab2 = (): JSX.Element => {
@@ -119,7 +124,10 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
                 <span className="color-red pl-2">*</span>
               </p>
             </Label>
-            <Input
+            <div className="col-8">
+              <TypeaheadDiemDen postOfficeList={listDiemDen} onChange={handleChangePostOffice} value={selectedPlace} />
+            </div>
+            {/* <Input
               type="select"
               name="select"
               id="exampleSelect"
@@ -134,20 +142,21 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
                   </option>
                 );
               })}
-            </Input>
+            </Input> */}
           </FormGroup>
           <FormGroup style={{ display: 'flex', flexDirection: 'row' }}>
             <Label for="exampleText" className="col-4">
               {t('Ghi chú')}
             </Label>
-            <Input
-              type="textarea"
-              name="text"
-              id="exampleText"
-              placeholder="Nhập ghi chú...(Không bắt buộc)"
-              className="col-8"
-              onChange={handleChangeGhiChu}
-            />
+            <div className="col-8">
+              <Input
+                type="textarea"
+                name="text"
+                id="exampleText"
+                placeholder="Nhập ghi chú...(Không bắt buộc)"
+                onChange={handleChangeGhiChu}
+              />
+            </div>
           </FormGroup>
         </Form>
       </div>
