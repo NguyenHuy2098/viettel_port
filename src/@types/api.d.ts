@@ -1780,7 +1780,7 @@ declare namespace API {
   export interface MTZTMI241OUT {
     EV_ERROR?: number; // int32
     RETURN_MESSAGE?: RETURNMESSAGE[];
-    Row?: RowMTZTMI241OUT[];
+    row?: RowMTZTMI241OUT[];
     PAGING?: PagingZTMI054;
   }
 

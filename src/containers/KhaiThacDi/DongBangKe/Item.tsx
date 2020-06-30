@@ -43,7 +43,7 @@ function Item(props: ItemProps): JSX.Element {
           payload,
           {
             onSuccess: (res: API.MTZTMI241OUT): void => {
-              setCount(size(res.Row));
+              setCount(size(res.row));
             },
           },
           { stateless: true },

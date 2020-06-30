@@ -51,6 +51,11 @@ const ModalTwoTab: React.FC<Props> = (props: Props): JSX.Element => {
     setTab(tab);
   }
 
+  React.useEffect((): void => {
+    setSelselectedPlace(get(listDiemDen, '[0].LOCNO', ''));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listDiemDen]);
+
   const handleChooseItem = useCallback(
     (item: API.RowMTZTMI047OUT) => (): void => {
       props.onChooseItemInFirstTab(item);

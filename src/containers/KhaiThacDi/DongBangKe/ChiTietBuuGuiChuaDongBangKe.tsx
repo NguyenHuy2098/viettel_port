@@ -110,7 +110,7 @@ function ChiTietBuuGuiChuaDongBangKe(props: Props): JSX.Element {
 
   const data = useSelector(select_ZTMI241);
 
-  const dataRow = get(data, 'Row', []);
+  const dataRow = get(data, 'row', []);
 
   function handleSelectBangKeItem(values: string[]): void {
     setCheckedBuuGui(values);

@@ -63,10 +63,13 @@ const ButtonDongBangKe = ({ callbackWhenDone, des, disabled, forwardingItemListS
           { selectedTai, des, forwardingItemListState },
           {
             onSuccess: (data: API.MIOAZTMI016Response): void => {
+              const Id_cu = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
               toast(
                 <>
-                  <i className="fa check mr-2" />
-                  {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                  <i className="fa fa-check-square mr-2" />
+                  {t('Bưu gửi được gán vào bảng kê')}
+                  {Id_cu}
+                  {t('thành công')}
                 </>,
                 {
                   type: 'success',
@@ -99,10 +102,13 @@ const ButtonDongBangKe = ({ callbackWhenDone, des, disabled, forwardingItemListS
         { locNo, description, forwardingItemListState, des },
         {
           onSuccess: (data: API.MIOAZTMI016Response): void => {
+            const Id_cu = get(data, 'MT_ZTMI016_OUT.IV_TOR_ID_CU');
             toast(
               <>
                 <i className="fa check mr-2" />
-                {get(data, 'MT_ZTMI016_OUT.RETURN_MESSAGE[0].MESSAGE')}
+                {t('Bưu gửi được gán vào bảng kê')}
+                {Id_cu}
+                {t('thành công')}
               </>,
               {
                 type: 'success',

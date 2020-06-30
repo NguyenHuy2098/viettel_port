@@ -6,7 +6,7 @@ import { generatePath, withRouter } from 'react-router-dom';
 import { RouteComponentProps } from 'react-router-dom';
 import { Cell } from 'react-table';
 import { push } from 'connected-react-router';
-import { ceil, filter, get, includes } from 'lodash';
+import { ceil, filter, get, includes, trim } from 'lodash';
 import moment from 'moment';
 
 import ButtonPrintable from 'components/Button/ButtonPrintable';
@@ -118,7 +118,7 @@ const TaiKienDaNhan: React.FC<Props> = (props: Props): JSX.Element => {
   );
 
   const handleChangeSearchText = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setSearchText(event.target.value);
+    setSearchText(trim(event.target.value));
   };
 
   const redirectToThongTinTai = useCallback(
