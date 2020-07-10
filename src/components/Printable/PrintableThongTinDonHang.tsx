@@ -167,18 +167,20 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
       <tbody>
         <tr>
           <td className="border-0">
-            <strong>{wardReceiver}</strong>
+            <strong>
+              {wardReceiver} {districtReceiver}
+            </strong>
           </td>
-          <td className="border-0">Tỉnh phát:</td>
+          <td className="border-0">Tỉnh phát: {provinceReceiver}</td>
         </tr>
-        <tr>
+        {/* <tr>
           <td className="border-0">
             <strong>{districtReceiver}</strong>
           </td>
           <td className="border-0">
             <strong>{provinceReceiver}</strong>
           </td>
-        </tr>
+        </tr> */}
       </tbody>
     );
   };
@@ -207,7 +209,7 @@ const PrintableThongTinDonHang = (props: Props): JSX.Element => {
   }
 
   return (
-    <Container>
+    <Container style={{ overflow: 'auto' }}>
       <Col className="border">
         <Row className="p-1 border-bottom part-1">
           <Col xs={6} className="">
