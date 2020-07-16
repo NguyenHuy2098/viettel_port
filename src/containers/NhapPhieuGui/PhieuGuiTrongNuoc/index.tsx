@@ -1282,6 +1282,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             action_MOST_ORDER_SUGGEST(payload, {
               onSuccess: (data: OrderSuggestedItem[]): void => {
                 if (!isMounted()) return;
+                setListTemplates(data);
               },
               onFailure: (error: HttpRequestErrorType): void => {
                 if (!isMounted()) return;
@@ -2318,6 +2319,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  const filterByFields = ['label'];
+
+  const filterByCallback = (): boolean => {
+    return true;
+  };
+
   const loaiHinhDichVuListOptions: TypeaheadOption[] = React.useMemo(
     () =>
       map(loaiHinhDichVuList, (service: TransportMethodItem) => ({
@@ -2345,6 +2352,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
               selected={loaiHinhDichVuListOptions.filter(item => {
                 return item.id === phuongThucVanChuyen;
               })}
+              filterBy={phuongThucVanChuyen ? filterByCallback : filterByFields}
               placeholder={t('Chọn dịch vụ')}
             />
           </Col>
@@ -2906,9 +2914,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             {t('Điểm giao nhận')}
           </Label>
           <Col lg="8">
-            <Input type="select" defaultValue={diemGiaoNhan} onChange={handleChangeTextboxValue(setDiemGiaoNhan)}>
-              <option value="ZPP">{t('Giao hàng tại bưu cục')}</option>
+            <Input type="select" value={diemGiaoNhan} onChange={handleChangeTextboxValue(setDiemGiaoNhan)}>
               <option value="ZPD">{t('Giao hàng tại nhà')}</option>
+              <option value="ZPP">{t('Giao hàng tại bưu cục')}</option>
             </Input>
           </Col>
         </Row>
@@ -2955,6 +2963,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   // }
 
   function handleChangeTab(event: React.MouseEvent): void {
+    setListTemplates([]);
     setTab(Number(event.currentTarget.getAttribute('value')));
   }
 
@@ -2984,8 +2993,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         {results.map((result, index) => (
           <MenuItem key={get(result, 'id')} option={result} position={index}>
             <Row>
-              <span>{get(result, 'packages.0.name')}</span>
-              <span
+              <div style={{ maxWidth: 250, whiteSpace: 'pre-wrap' }}>{get(result, 'packages.0.name', '')}</div>
+              <div
                 style={{
                   right: 0,
                   position: 'absolute',
@@ -2993,12 +3002,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                   marginRight: '10px',
                 }}
               >
-                {get(result, 'packages.0.weight', '0') + '' + get(result, 'packages.0.weightUnit')}
-              </span>
+                {get(result, 'packages.0.weight', '0') + '' + get(result, 'packages.0.weightUnit', '')}
+              </div>
             </Row>
             <Row>
               <span style={{ color: '#a3a3a3' }}>
-                {get(result, 'sender.name') + ' - ' + get(result, 'sender.phone')}
+                {get(result, 'sender.name', '') + ' - ' + get(result, 'sender.phone', '')}
               </span>
             </Row>
           </MenuItem>
@@ -3110,13 +3119,20 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         dichVuCongThem.push('COD');
       }
       setTrongLuong(get(selectedTemplate, '0.packages.0.weight', '0'));
-      setKichThuocDai(get(selectedTemplate, '0.packages.0.length', '0'));
-      setKichThuocRong(get(selectedTemplate, '0.packages.0.width', '0'));
-      setKichThuocCao(get(selectedTemplate, '0.packages.0.height', '0'));
+      setKichThuocDai(get(selectedTemplate, '0.packages.0.length', ''));
+      setKichThuocRong(get(selectedTemplate, '0.packages.0.width', ''));
+      setKichThuocCao(get(selectedTemplate, '0.packages.0.height', ''));
       setPhuongThucVanChuyen(get(selectedTemplate, '0.services.0'));
       setDiemGiaoNhan(get(selectedTemplate, '0.movementType'));
+
       setNguoiThanhToan(get(selectedTemplate, '0.freightTerm'));
+      // const arr = get(selectedTemplate, '0.packages', []);
+      // arr.shift();
+      // setPackageItemArr(arr);
       triggerValidateAndPriceCalculate();
+      setSelectedTemplate([]);
+    } else {
+      return;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTemplate]);
@@ -3143,7 +3159,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             labelKey={labelKeyTemplate}
             options={listTemplates}
             placeholder={'Tạo phiếu gửi theo biểu mẫu'}
-            onInputChange={setKeywords}
+            // onInputChange={setKeywords('')}
             renderMenu={renderSuggetTemplate}
             onChange={handleSelectedTemplate}
             selected={selectedTemplate}

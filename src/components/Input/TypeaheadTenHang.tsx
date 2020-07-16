@@ -6,6 +6,7 @@ import { default as NumberFormat } from 'react-number-format';
 import Typeahead from './Typeahead';
 
 interface Props {
+  value?: string;
   children?: JSX.Element;
   onChange: (selected: TypeaheadOption[]) => void;
   onInputChange: (input: string, event: Event) => void;
@@ -53,6 +54,7 @@ const TypeaheadTenHang = (props: Props): JSX.Element => {
       placeholder={t('Nội dung hàng hoá')}
       selected={props.selected}
       renderMenu={renderMenu}
+      // defaultSelected={props.value}
     />
   );
 };

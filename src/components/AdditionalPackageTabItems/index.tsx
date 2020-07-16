@@ -123,6 +123,8 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
 
   const [commoditySuggest, setCommoditySuggest] = useState<CommoditySuggestedItem[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(0);
+  // const [tenHang, setTenHang] = useState<string>('');
+  // const [selectedCommodity, setSelectedCommodity] = useState<TypeaheadOption[]>([]);
 
   const handleHideChooseDropdown = (): void => {
     setCommoditySuggest([]);
@@ -277,6 +279,8 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
           </Label>
           <Col lg="8">
             <TypeaheadTenHang
+              // value={get(item, 'Description', '')}
+              selected={get(item, 'Description') ? [] : [{ id: 'name', label: 'name' }]}
               onChange={handleChooseCommoditySuggest(index)}
               onInputChange={handleChangeTypeaheadInput('Description', index)}
               suggestions={commoditySuggest}
@@ -404,7 +408,18 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
       </Nav>
       <TabContent activeTab={activeTab} className="packageTabContent">
         {map(
-          data,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data.map((item: any) => {
+            return {
+              ...item,
+              GROSS_WEIGHT: get(item, 'weight', ''),
+              COD: get(item, 'cod', 0),
+              GOODS_VALUE: get(item, 'goodsValue', 0),
+              QUANTITY_OF_PACKAGE: get(item, 'quantity', 0),
+              Description: get(item, 'name', ''),
+              COMMODITY_CODE: get(item, 'loaiHangHoa', 'V01'),
+            };
+          }),
           (item: PackageItemInputType, index: number): JSX.Element => {
             return (
               <TabPane tabId={toString(index + 1)} key={index}>
