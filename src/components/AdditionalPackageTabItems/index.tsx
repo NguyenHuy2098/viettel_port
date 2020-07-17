@@ -279,7 +279,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
           </Label>
           <Col lg="8">
             <TypeaheadTenHang
-              // value={get(item, 'Description', '')}
+              value={get(item, 'Description', '')}
               selected={get(item, 'Description') ? [] : [{ id: 'name', label: 'name' }]}
               onChange={handleChooseCommoditySuggest(index)}
               onInputChange={handleChangeTypeaheadInput('Description', index)}
@@ -409,17 +409,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
       <TabContent activeTab={activeTab} className="packageTabContent">
         {map(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data.map((item: any) => {
-            return {
-              ...item,
-              GROSS_WEIGHT: get(item, 'weight', ''),
-              COD: get(item, 'cod', 0),
-              GOODS_VALUE: get(item, 'goodsValue', 0),
-              QUANTITY_OF_PACKAGE: get(item, 'quantity', 0),
-              Description: get(item, 'name', ''),
-              COMMODITY_CODE: get(item, 'loaiHangHoa', 'V01'),
-            };
-          }),
+          data,
           (item: PackageItemInputType, index: number): JSX.Element => {
             return (
               <TabPane tabId={toString(index + 1)} key={index}>

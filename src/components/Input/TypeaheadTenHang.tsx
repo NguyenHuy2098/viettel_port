@@ -54,7 +54,7 @@ const TypeaheadTenHang = (props: Props): JSX.Element => {
       placeholder={t('Nội dung hàng hoá')}
       selected={props.selected}
       renderMenu={renderMenu}
-      // defaultSelected={props.value}
+      defaultInputValue={props.value}
     />
   );
 };
