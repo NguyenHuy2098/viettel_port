@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import { useTranslation } from 'react-i18next';
 import { Badge, Button, Row } from 'reactstrap';
 import XLSX, { WorkBook } from 'xlsx';
@@ -6,7 +6,9 @@ import { map, size, get } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { toastError } from 'components/Toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { action_MIOA_ZTMI045 } from 'redux/MIOA_ZTMI045/actions';
+import { makeSelectorBPOrg } from 'redux/GetProfileByUsername/selectors';
 import { action_IMPORT_EXCEL } from 'redux/ImportExcelFile/actions';
 import { toast } from 'react-toastify';
 import TabView from 'components/Tab/TabView';
@@ -26,8 +28,36 @@ const InputRevenue: React.FC<Props> = (props: Props): JSX.Element => {
   const [data, setData] = useState<any>([]);
   const [checkedValues, setcheckedValues] = useState<string[]>([]);
   const [resetCheckbox, setResetCheckbox] = useState<boolean>(false);
+  const [infoPostOffice, setInfoPostOffice] = useState<API.RowMTZTMI045OUT>({});
   const [countData, setCountData] = useState<number>(0);
   const getLocation = get(props, 'location.search', '');
+  const userMaBp = useSelector(makeSelectorBPOrg);
+  const getInfoOffice = (): void => {
+    dispatch(
+      action_MIOA_ZTMI045(
+        {
+          row: [
+            {
+              IV_LOCTYPE: 'V001',
+            },
+          ],
+          IV_BP: userMaBp,
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '2000',
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI045Response): void => {
+            setInfoPostOffice(get(data, 'MT_ZTMI045_OUT.Row.0', {}));
+          },
+        },
+      ),
+    );
+  };
+
+  useEffect((): void => {
+    getInfoOffice();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function downloadFile(): void {
     window.location.href = '../../templates/VTP_MAU_EXCEL_V1.11.xlsx';
@@ -43,6 +73,11 @@ const InputRevenue: React.FC<Props> = (props: Props): JSX.Element => {
         sheetData.filter((item: any) => {
           item.FileName = infoExcel.fileName;
           item.Id = infoExcel.id;
+          item.DISTRICT_SRC = get(infoPostOffice, 'DISTRICT', '');
+          item.CITY_SRC = get(infoPostOffice, 'CITY', '');
+          item.COUNTRY_SRC = get(infoPostOffice, 'COUNTRY', '');
+          item.POSTOFFICE = get(infoPostOffice, 'LOCNO', '');
+          item.STREET_SRC = get(infoPostOffice, 'STREET', '');
           return get(item, 'Tên người nhận (*)', '') !== '';
         }),
       );
