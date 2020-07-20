@@ -280,7 +280,7 @@ const AdditionalPackageTabItems: React.FC<Props> = (props: Props): JSX.Element =
           <Col lg="8">
             <TypeaheadTenHang
               value={get(item, 'Description', '')}
-              selected={get(item, 'Description') ? [] : [{ id: 'name', label: 'name' }]}
+              // selected={get(item, 'Description') ? [] : [{ id: 'name', label: 'name' }]}
               onChange={handleChooseCommoditySuggest(index)}
               onInputChange={handleChangeTypeaheadInput('Description', index)}
               suggestions={commoditySuggest}

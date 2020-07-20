@@ -44,6 +44,12 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
     return map(filter(props.filteredWards, { I: props.wardId }), mapVtpAddressToTypeaheadOption);
   }, [props.wardId, props.filteredWards]);
 
+  const filterByFields = ['label'];
+
+  const filterByCallback = (): boolean => {
+    return true;
+  };
+
   return (
     <>
       <Row className="sipInputItemGroup">
@@ -54,6 +60,7 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
             onChange={props.handleChangeProvince}
             options={map(props.filteredProvinces, mapVtpAddressToTypeaheadOption)}
             placeholder={t('Thành Phố / Tỉnh')}
+            filterBy={props.provinceId ? filterByCallback : filterByFields}
           />
           <div className="sipInputItemError">{props.provinceErrorMessages}</div>
         </Col>
@@ -64,6 +71,7 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
             onChange={props.handleChangeDistrict}
             options={map(props.filteredDistricts, mapVtpAddressToTypeaheadOption)}
             placeholder={t('Quận / Huyện')}
+            filterBy={props.districtId ? filterByCallback : filterByFields}
           />
           <div className="sipInputItemError">{props.districtErrorMessages}</div>
         </Col>
@@ -74,6 +82,7 @@ const TypeaheadFullAddress = (props: Props): JSX.Element => {
             onChange={props.handleChangeWard}
             options={map(props.filteredWards, mapVtpAddressToTypeaheadOption)}
             placeholder={t('Phường / Xã')}
+            filterBy={props.wardId ? filterByCallback : filterByFields}
           />
           <div className="sipInputItemError">{props.wardErrorMessages}</div>
         </Col>

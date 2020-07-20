@@ -1357,7 +1357,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         ),
       );
     } else {
-      setSenderSuggest([]);
+      setReceiverSuggest([]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [receiverKeywords, currentPostOfficeInStore]);
@@ -1991,9 +1991,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     return (
       <div>
         <Row style={{ fontWeight: 'bold' }}>
-          {get(option, 'phone') +
-            (isEmpty(get(option, 'code')) ? '' : ' * ' + get(option, 'code')) +
-            ' * ' +
+          {(get(option, 'phone') ? get(option, 'phone') + ' * ' : '') +
+            (isEmpty(get(option, 'code')) ? '' : get(option, 'code') + ' * ') +
             get(option, 'name')}
         </Row>
         <Row>{get(option, 'addr.formattedAddress')}</Row>
@@ -2973,11 +2972,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       <Menu {...menuProps}>
         <div className="sipTabContainer">
           <Nav tabs fill={true}>
-            <NavItem>
+            {/* <NavItem>
               <NavLink value={1} className={classnames({ active: tab === 1 })} onClick={handleChangeTab}>
                 {t('Mẫu')}
               </NavLink>
-            </NavItem>
+            </NavItem> */}
             <NavItem>
               <NavLink value={2} className={classnames({ active: tab === 2 })} onClick={handleChangeTab}>
                 {t('Hay dùng')}
@@ -2993,7 +2992,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         {results.map((result, index) => (
           <MenuItem key={get(result, 'id')} option={result} position={index}>
             <Row>
-              <div style={{ maxWidth: 250, whiteSpace: 'pre-wrap' }}>{get(result, 'packages.0.name', '')}</div>
+              <div style={{ maxWidth: '80%', whiteSpace: 'pre-wrap' }}>{get(result, 'packages.0.name', '')}</div>
               <div
                 style={{
                   right: 0,
