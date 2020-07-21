@@ -1781,7 +1781,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [detailSender, setDetailSender] = useState<boolean>(false);
 
   function toggleSenderAddress(): void {
-    setDetailSender(!detailSender);
+    if (detailAddressSender === '') setDetailSender(!detailSender);
   }
 
   //__________________________________________________________________________
@@ -1907,7 +1907,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   const [detailReceiver, setDetailReceiver] = useState<boolean>(false);
 
   function toggleReceiverAddress(): void {
-    setDetailReceiver(!detailReceiver);
+    if (detailAddressReceiver === '') setDetailReceiver(!detailReceiver);
   }
 
   // _____________________________________________________________________________
@@ -2002,9 +2002,9 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
   function handleSelectedSender(selected: Person[]): void {
     if (size(selected)) {
-      setDienThoaiSender(get(selected, '0.phone'));
-      setHoTenSender(get(selected, '0.name'));
-      setMaKhachHangGui(get(selected, '0.code'));
+      setDienThoaiSender(get(selected, '0.phone', ''));
+      setHoTenSender(get(selected, '0.name', ''));
+      setMaKhachHangGui(get(selected, '0.code', '9999999999'));
       //address
       const dataComponents = get(selected, '0.addr.components', []);
       const thisProvince = find(dataComponents, (item: Component): boolean => {
