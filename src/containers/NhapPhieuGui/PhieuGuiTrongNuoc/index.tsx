@@ -3174,8 +3174,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
   }
 
   function labelKeyTemplate(option: OrderSuggestedItem): string {
+    // console.log(option, 'option');
+
     return `${get(option, 'id')}`;
   }
+  // console.log(listTemplates, 'toamhhhhhhhhhh');
 
   return (
     <div className="phieuGuiTrongNuoc" onKeyDown={handleClearFocusElement} onClick={handleClearFocusElement}>
@@ -3189,7 +3192,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             labelKey={labelKeyTemplate}
             options={listTemplates}
             placeholder={'Tạo phiếu gửi theo biểu mẫu'}
-            // onInputChange={setKeywords('')}
+            // onInputChange={setKeywords}
             renderMenu={renderSuggetTemplate}
             onChange={handleSelectedTemplate}
             selected={selectedTemplate}
