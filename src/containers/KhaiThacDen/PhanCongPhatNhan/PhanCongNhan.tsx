@@ -65,7 +65,7 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
   useEffect((): void => {
     dispatchAPI035();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageItems, userIdSelected]);
+  }, [userIdSelected]);
 
   const handleSearchUser = useCallback(() => {
     dispatchAPI035();
@@ -74,16 +74,23 @@ const PhanCongNhan: React.FC<Props> = (props: Props): JSX.Element => {
 
   const dispatchApi054 = (): void => {
     dispatch(
-      action_MIOA_ZTMI054({
-        iv_post: userMaBp,
-        row: [
-          {
-            iv_position: 'NVBH',
+      action_MIOA_ZTMI054(
+        {
+          iv_post: userMaBp,
+          row: [
+            {
+              iv_position: 'NVBH',
+            },
+          ],
+          IV_PAGENO: '1',
+          IV_NO_PER_PAGE: '10',
+        },
+        {
+          onSuccess: (data: API.MIOAZTMI054Response): void => {
+            setUserIdSelected(get(data, 'MT_ZTMI054_OUT.Row[0].BP', ''));
           },
-        ],
-        IV_PAGENO: '1',
-        IV_NO_PER_PAGE: '10',
-      }),
+        },
+      ),
     );
   };
 
