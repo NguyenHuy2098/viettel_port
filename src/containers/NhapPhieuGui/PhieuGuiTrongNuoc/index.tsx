@@ -3075,8 +3075,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       setDetailAddressSender(get(thisStreetSender, 'name', ''));
       setDetailSender(true);
       //__________________________________________________________
-      setDienThoaiReceiver(get(selectedTemplate, '0.receiver.phone'));
-      setHoTenReceiver(get(selectedTemplate, '0.receiver.name'));
+      setDienThoaiReceiver(get(selectedTemplate, '0.receiver.phone', ''));
+      setHoTenReceiver(get(selectedTemplate, '0.receiver.name', ''));
       setMaKhachHangNhan(get(selectedTemplate, '0.receiver.code', '9999999999'));
       //address
       const dataComponentsReceive = get(selectedTemplate, '0.receiver.addr.components', []);
@@ -3126,35 +3126,39 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
 
       setNguoiThanhToan(get(selectedTemplate, '0.freightTerm'));
       const arr = get(selectedTemplate, '0.packages', []);
-      arr.shift();
-      setPackageItemArr(
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        arr.map((item: any) => {
-          return {
-            ...item,
-            GROSS_WEIGHT: get(item, 'weight', ''),
-            COD: get(item, 'cod', 0),
-            GOODS_VALUE: get(item, 'goodsValue', 0),
-            QUANTITY_OF_PACKAGE: get(item, 'quantity', 0),
-            Description: get(item, 'name', ''),
-            COMMODITY_CODE: get(item, 'commodityCode', 'V01'),
-            COMMODITY_TYPE: get(item, 'commodityType', 'V3'),
-            Flag: '',
-            NET_WEIGHT_OF_UNIT: '',
-            GROSS_WEIGHT_OF_UNIT: get(item, 'weightUnit', 'G'),
-            NET_WEIGHT: '',
-            PACKAGE_TYPE: get(item, 'packageType', ''),
-            PACKAGING_MATERIAL: '',
-            QUANTITY_OF_UNIT: 'EA',
-            Width: get(item, 'width', '0'),
-            Hight: get(item, 'height', '0'),
-            Length: get(item, 'length', '0'),
-          };
-        }),
-      );
+      if (arr.length > 1) {
+        arr.shift();
+        setPackageItemArr(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          arr.map((item: any) => {
+            return {
+              ...item,
+              GROSS_WEIGHT: get(item, 'weight', ''),
+              COD: get(item, 'cod', 0),
+              GOODS_VALUE: get(item, 'goodsValue', 0),
+              QUANTITY_OF_PACKAGE: get(item, 'quantity', 0),
+              Description: get(item, 'name', ''),
+              COMMODITY_CODE: get(item, 'commodityCode', 'V01'),
+              COMMODITY_TYPE: get(item, 'commodityType', 'V3'),
+              Flag: '',
+              NET_WEIGHT_OF_UNIT: '',
+              GROSS_WEIGHT_OF_UNIT: get(item, 'weightUnit', 'G'),
+              NET_WEIGHT: '',
+              PACKAGE_TYPE: get(item, 'packageType', ''),
+              PACKAGING_MATERIAL: '',
+              QUANTITY_OF_UNIT: 'EA',
+              Width: get(item, 'width', '0'),
+              Hight: get(item, 'height', '0'),
+              Length: get(item, 'length', '0'),
+            };
+          }),
+        );
+      }
       const services = get(selectedTemplate, '0.services', []);
-      services.shift();
-      dichVuCongThem = services;
+      if (services.length > 1) {
+        services.shift();
+        dichVuCongThem = services;
+      }
       triggerValidateAndPriceCalculate();
       setSelectedTemplate([]);
     } else {
