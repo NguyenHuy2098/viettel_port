@@ -326,7 +326,7 @@ const OrderInformation: React.FC<Props> = (props: Props): JSX.Element => {
             to={`/in-don-hang/${idDonHang}?idChuyenThu=${get(row, 'values.PACKAGE_ID', '')}`}
             target="_blank"
           >
-            <img src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
+            <img title="In" src={'../../assets/img/icon/iconPrint.svg'} alt="VTPostek" />
           </Link>
         ),
       },
