@@ -1520,7 +1520,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
         let payload063 = {row: {TOR_ID: torID}, IV_LOC_ID: currentPostOfficeInStore?.PostOfficeCode, IV_USER: ""}
         dispatch(action_MIOA_ZTMI063(payload063 , {
           onSuccess:(data063: API.MIOAZTMI063Response): void =>{
-            console.log("data063 : ", data063)
+            // console.log("data063 : ", data063)
           }
         }))
       }
