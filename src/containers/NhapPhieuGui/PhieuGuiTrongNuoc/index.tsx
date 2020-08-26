@@ -49,6 +49,7 @@ import { action_LOCATIONSUGGEST } from 'redux/LocationSuggest/actions';
 import { action_LOCATIONSUGGEST_DETAIL } from 'redux/LocationSuggestDetail/actions';
 import { action_GET_TRANSPORT_METHOD } from 'redux/SIOA_ZTMI068/actions';
 import { action_MIOA_ZTMI031 } from 'redux/MIOA_ZTMI031/actions';
+import { action_MIOA_ZTMI063 } from "redux/MIOA_ZTMI063/actions";
 import { select_MT_ZTMI031_INSTANE, select_MT_ZTMI031_OUT } from 'redux/MIOA_ZTMI031/selectors';
 import {
   action_GET_ADDRESS,
@@ -1499,6 +1500,7 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           } else {
             const idPhieuGuiSuccess = get(data, 'MT_ZTMI012_OUT.FWO_ID', '');
             setMaPhieuGui(idPhieuGuiSuccess);
+            call063(idPhieuGuiSuccess);
             toggleModalApiCreateSuccess();
           }
         },
@@ -1509,6 +1511,21 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
+  function call063(pwo_id :string): void{
+    let payload031 = {FWO_ID: pwo_id, BUYER_REFERENCE_NUMBER: ""}
+    dispatch(action_MIOA_ZTMI031 (payload031, {
+      onSuccess: (data: API.MIOAZTMI031Response): void => {
+        const thisData = get(data, 'MT_ZTMI031_OUT.Row', []);
+        const torID = thisData[0].FREIGHT_UNIT
+        let payload063 = {row: {TOR_ID: torID}, IV_LOC_ID: currentPostOfficeInStore?.PostOfficeCode, IV_USER: ""}
+        dispatch(action_MIOA_ZTMI063(payload063 , {
+          onSuccess:(data063: API.MIOAZTMI063Response): void =>{
+            console.log("data063 : ", data063)
+          }
+        }))
+      }
+    }))
+  }
   // eslint-disable-next-line max-lines-per-function
   function handleValidate(e: FormEvent): void {
     e.preventDefault();
