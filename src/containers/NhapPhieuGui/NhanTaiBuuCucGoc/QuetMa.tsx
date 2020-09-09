@@ -59,9 +59,9 @@ const QuetMa: React.FC = (): JSX.Element => {
                     dispatch(
                       action_MIOA_ZTMI063(
                         {
-                          row: {
+                          row: [{
                             TOR_ID: get(data023, 'TOR_ID', ''),
-                          },
+                          }],
                           IV_LOC_ID: userMaBp,
                           IV_USER: userId,
                         },

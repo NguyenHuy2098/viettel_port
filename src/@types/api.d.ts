@@ -1376,7 +1376,7 @@ declare namespace API {
     /**
      *
      */
-    row?: RowRequestZTMI063;
+    row?: RowRequestZTMI063[];
     /**
      * Mã bưu cục
      */

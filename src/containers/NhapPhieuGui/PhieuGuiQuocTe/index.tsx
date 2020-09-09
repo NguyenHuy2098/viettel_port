@@ -1163,8 +1163,12 @@ const PhieuGuiQuocTe: React.FC<Props> = (props: Props): JSX.Element => {
     dispatch(action_MIOA_ZTMI031 (payload031, {
       onSuccess: (data: API.MIOAZTMI031Response): void => {
         const thisData = get(data, 'MT_ZTMI031_OUT.Row', []);
-        const torID = thisData[0].FREIGHT_UNIT
-        let payload063 = {row: {TOR_ID: torID}, IV_LOC_ID: currentPostOfficeInStore?.PostOfficeCode, IV_USER: ""}
+        let torIDs = []
+        for(let e of thisData){
+          let objTor = { TOR_ID: e.FREIGHT_UNIT }
+          torIDs.push(objTor)
+        }
+        let payload063 = {row: torIDs, IV_LOC_ID: currentPostOfficeInStore?.PostOfficeCode, IV_USER: ""}
         dispatch(action_MIOA_ZTMI063(payload063 , {
           onSuccess:(data063: API.MIOAZTMI063Response): void =>{
             // console.log("data063 : ", data063)

@@ -650,12 +650,12 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
           return item === '/';
         }) !== -1
           ? slice(
-              thisServiceType,
-              0,
-              findIndex(thisServiceType, (item: string): boolean => {
-                return item === '/';
-              }),
-            )
+            thisServiceType,
+            0,
+            findIndex(thisServiceType, (item: string): boolean => {
+              return item === '/';
+            }),
+          )
           : thisServiceType;
       setPhuongThucVanChuyen(join(thisTransportServiceType, ''));
       // dichVuCongThem = [];
@@ -1511,15 +1511,20 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
     );
   }
 
-  function call063(pwo_id :string): void{
-    let payload031 = {FWO_ID: pwo_id, BUYER_REFERENCE_NUMBER: ""}
-    dispatch(action_MIOA_ZTMI031 (payload031, {
+  function call063(pwo_id: string): void {
+    let payload031 = { FWO_ID: pwo_id, BUYER_REFERENCE_NUMBER: "" }
+    dispatch(action_MIOA_ZTMI031(payload031, {
       onSuccess: (data: API.MIOAZTMI031Response): void => {
         const thisData = get(data, 'MT_ZTMI031_OUT.Row', []);
-        const torID = thisData[0].FREIGHT_UNIT
-        let payload063 = {row: {TOR_ID: torID}, IV_LOC_ID: currentPostOfficeInStore?.PostOfficeCode, IV_USER: ""}
-        dispatch(action_MIOA_ZTMI063(payload063 , {
-          onSuccess:(data063: API.MIOAZTMI063Response): void =>{
+        let torIDs = []
+        for (let e of thisData) {
+          let objTor = { TOR_ID: e.FREIGHT_UNIT }
+          torIDs.push(objTor)
+        }
+        let payload063 = { row: torIDs, IV_LOC_ID: currentPostOfficeInStore?.PostOfficeCode, IV_USER: "" }
+        // console.log("payload063 : " + JSON.stringify(payload063))
+        dispatch(action_MIOA_ZTMI063(payload063, {
+          onSuccess: (data063: API.MIOAZTMI063Response): void => {
             // console.log("data063 : ", data063)
           }
         }))
@@ -2177,33 +2182,33 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
           </Row>
         ) : (
-          <Row className="sipInputItem mb-0">
-            <Label xs="12" lg="4">
-              {t('Địa chỉ')}
-              <span className="color-red"> *</span>
-            </Label>
-            <Col lg="8">
-              <TypeaheadFullAddress
-                focus={focusAddress === 'sender'}
-                provinceId={provinceIdSender}
-                handleChangeProvince={handleChangeProvinceSender}
-                filteredProvinces={filteredProvinceSender}
-                provinceErrorMessages={handleErrorMessage(errors, 'provinceIdSender')}
-                districtId={districtIdSender}
-                handleChangeDistrict={handleChangeDistrictSender}
-                filteredDistricts={filteredDistrictSender}
-                districtErrorMessages={handleErrorMessage(errors, 'districtIdSender')}
-                wardId={wardIdSender}
-                handleChangeWard={handleChangeWardSender}
-                filteredWards={filteredWardSender}
-                wardErrorMessages={handleErrorMessage(errors, 'wardIdSender')}
-                detailAddress={detailAddressSender}
-                onChangeDetailAddress={handleChangeTextboxValue(setDetailAddressSender)}
-                detailAddressErrorMessages={handleErrorMessage(errors, 'detailAddressSender')}
-              />
-            </Col>
-          </Row>
-        )}
+            <Row className="sipInputItem mb-0">
+              <Label xs="12" lg="4">
+                {t('Địa chỉ')}
+                <span className="color-red"> *</span>
+              </Label>
+              <Col lg="8">
+                <TypeaheadFullAddress
+                  focus={focusAddress === 'sender'}
+                  provinceId={provinceIdSender}
+                  handleChangeProvince={handleChangeProvinceSender}
+                  filteredProvinces={filteredProvinceSender}
+                  provinceErrorMessages={handleErrorMessage(errors, 'provinceIdSender')}
+                  districtId={districtIdSender}
+                  handleChangeDistrict={handleChangeDistrictSender}
+                  filteredDistricts={filteredDistrictSender}
+                  districtErrorMessages={handleErrorMessage(errors, 'districtIdSender')}
+                  wardId={wardIdSender}
+                  handleChangeWard={handleChangeWardSender}
+                  filteredWards={filteredWardSender}
+                  wardErrorMessages={handleErrorMessage(errors, 'wardIdSender')}
+                  detailAddress={detailAddressSender}
+                  onChangeDetailAddress={handleChangeTextboxValue(setDetailAddressSender)}
+                  detailAddressErrorMessages={handleErrorMessage(errors, 'detailAddressSender')}
+                />
+              </Col>
+            </Row>
+          )}
       </div>
     );
   }
@@ -2304,33 +2309,33 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
             </Col>
           </Row>
         ) : (
-          <Row className="sipInputItem mb-0">
-            <Label xs="12" lg="4">
-              {t('Địa chỉ')}
-              <span className="color-red"> *</span>
-            </Label>
-            <Col lg="8">
-              <TypeaheadFullAddress
-                provinceId={provinceIdReceiver}
-                focus={focusAddress === 'receiver'}
-                handleChangeProvince={handleChangeProvinceReceiver}
-                filteredProvinces={filteredProvinceReceiver}
-                provinceErrorMessages={handleErrorMessage(errors, 'provinceIdReceiver')}
-                districtId={districtIdReceiver}
-                handleChangeDistrict={handleChangeDistrictReceiver}
-                filteredDistricts={filteredDistrictReceiver}
-                districtErrorMessages={handleErrorMessage(errors, 'districtIdReceiver')}
-                wardId={wardIdReceiver}
-                handleChangeWard={handleChangeWardReceiver}
-                filteredWards={filteredWardReceiver}
-                wardErrorMessages={handleErrorMessage(errors, 'wardIdReceiver')}
-                detailAddress={detailAddressReceiver}
-                onChangeDetailAddress={handleChangeTextboxValue(setDetailAddressReceiver)}
-                detailAddressErrorMessages={handleErrorMessage(errors, 'detailAddressReceiver')}
-              />
-            </Col>
-          </Row>
-        )}
+            <Row className="sipInputItem mb-0">
+              <Label xs="12" lg="4">
+                {t('Địa chỉ')}
+                <span className="color-red"> *</span>
+              </Label>
+              <Col lg="8">
+                <TypeaheadFullAddress
+                  provinceId={provinceIdReceiver}
+                  focus={focusAddress === 'receiver'}
+                  handleChangeProvince={handleChangeProvinceReceiver}
+                  filteredProvinces={filteredProvinceReceiver}
+                  provinceErrorMessages={handleErrorMessage(errors, 'provinceIdReceiver')}
+                  districtId={districtIdReceiver}
+                  handleChangeDistrict={handleChangeDistrictReceiver}
+                  filteredDistricts={filteredDistrictReceiver}
+                  districtErrorMessages={handleErrorMessage(errors, 'districtIdReceiver')}
+                  wardId={wardIdReceiver}
+                  handleChangeWard={handleChangeWardReceiver}
+                  filteredWards={filteredWardReceiver}
+                  wardErrorMessages={handleErrorMessage(errors, 'wardIdReceiver')}
+                  detailAddress={detailAddressReceiver}
+                  onChangeDetailAddress={handleChangeTextboxValue(setDetailAddressReceiver)}
+                  detailAddressErrorMessages={handleErrorMessage(errors, 'detailAddressReceiver')}
+                />
+              </Col>
+            </Row>
+          )}
       </div>
     );
   }
@@ -2510,11 +2515,11 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
                 setDimensionValue(
                   data.MT_ZTMI229_OUT.WEIGHT_UOM === 'KG'
                     ? formatNumber(parseFloat(getValueOfNumberFormat(data.MT_ZTMI229_OUT.DIMENSION_WEIGHT)) * 1000) +
-                        ' ' +
-                        data.MT_ZTMI229_OUT.WEIGHT_UOM
+                    ' ' +
+                    data.MT_ZTMI229_OUT.WEIGHT_UOM
                     : formatNumber(parseFloat(getValueOfNumberFormat(data.MT_ZTMI229_OUT.DIMENSION_WEIGHT))) +
-                        ' ' +
-                        data.MT_ZTMI229_OUT.WEIGHT_UOM,
+                    ' ' +
+                    data.MT_ZTMI229_OUT.WEIGHT_UOM,
                   item,
                   valueName,
                   index,
@@ -3249,8 +3254,8 @@ const PhieuGuiTrongNuoc: React.FC<Props> = (props: Props): JSX.Element => {
       {size(locationSuggestSender) > 0 || size(locationSuggestReceiver) > 0 || size(commoditySuggest) > 0 ? (
         <button className="sipInputAddressDropdownOverlay hide" onClick={handleHideChooseLocationDropdown} />
       ) : (
-        <></>
-      )}
+          <></>
+        )}
     </div>
   );
 };
