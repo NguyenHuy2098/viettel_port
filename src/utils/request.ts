@@ -9,6 +9,7 @@ import {
   REACT_APP_BACKEND_API_ENDPOINT,
   REACT_APP_API_LVC,
   REACT_APP_API_IMPORT_EXCEL,
+  REACT_APP_CONG_NO_BUU_TA,
 } from './env';
 import { throwErrorIfMalformed } from './errorHelpers';
 
@@ -61,6 +62,10 @@ sapApi.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export const testApi = axios.create({
+  baseURL: REACT_APP_CONG_NO_BUU_TA,
+});
 
 /**
  * CRM API instance

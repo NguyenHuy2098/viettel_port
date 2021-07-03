@@ -44,6 +44,7 @@ import watch_ValidateImport from './ValidateImport/sagas';
 import watch_ImportExcel from './ImportExcelFile/sagas';
 import watch_GetHistoryImport from './GetHistoryImportFile/sagas';
 import watch_GetHistoryDetail from './GetHistoryDetail/sagas';
+import takeGet_COD_Chua_Chot from './CongNoBuuTa/sagas';
 
 export default function* rootSagas(): SagaIterator {
   yield all([
@@ -91,5 +92,6 @@ export default function* rootSagas(): SagaIterator {
     call(watch_ImportExcel),
     call(watch_GetHistoryImport),
     call(watch_GetHistoryDetail),
+    call(takeGet_COD_Chua_Chot),
   ]);
 }

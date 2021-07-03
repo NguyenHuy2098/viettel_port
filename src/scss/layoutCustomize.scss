@@ -499,6 +499,62 @@ input.form-control:-moz-placeholder {
     }
   }
 }
+
+.sipTableContainerCustom {
+  display: block;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(159, 163, 183, 0.51053);
+  border-radius: 3px;
+  width: 100%;
+  overflow: auto;
+  margin: 0 0 15px;
+  .table {
+    color: #191919;
+    margin: 0;
+    min-width: 800px;
+    .row {
+      margin-left: -10px;
+      margin-right: -10px;
+    }
+    th {
+      border-top: none;
+      color: $primary;
+      font-weight: 600;
+    }
+    th,
+    td {
+      padding: 3px;
+      vertical-align: middle;
+      &:first-child {
+        padding: 8px 10px 8px 20px;
+      }
+    }
+    .SipTableFunctionIcon {
+      white-space: nowrap;
+      .btn {
+        padding: 0;
+        background: none !important;
+        border: none;
+        box-shadow: none;
+        margin: 0 5px;
+        font-size: 12px;
+        height: 28px;
+        min-height: 0;
+      }
+    }
+    .SipTableFunctionIcon {
+      padding: 0;
+      background: none !important;
+      border: none;
+      box-shadow: none;
+      margin: 0 5px;
+      font-size: 12px;
+      height: 28px;
+      min-height: 0;
+    }
+  }
+}
+
 .sipTableContainerAmountListContainer {
   position: relative;
   padding-right: 120px;

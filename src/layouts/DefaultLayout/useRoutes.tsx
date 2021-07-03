@@ -79,7 +79,8 @@ const TaoMoiBangKe = lazy(() => import('containers/KeKhaiChiPhi/TaoMoiBangKe'));
 const ChiTietBangKe = lazy(() => import('containers/KeKhaiChiPhi/ChiTietBangKe'));
 
 /* eslint-enable @typescript-eslint/no-explicit-any */
-
+const CongNoBuuTa = lazy(() => import('containers/Gach/CongNoBuuTa'));
+const ChiCOD = lazy(() => import('containers/Gach/ChiCOD'));
 // eslint-disable-next-line max-lines-per-function
 const routes = (t: TFunction): SIPRoutePropsType[] => {
   return [
@@ -190,6 +191,8 @@ const routes = (t: TFunction): SIPRoutePropsType[] => {
       name: t('Chi tiết nhóm hàng hóa'),
       component: ChiTietBuuGuiChuaDongBangKe,
     },
+    { path: routesMap.CONG_NO_BUU_TA, name: t('Công nợ bưu tá'), component: CongNoBuuTa },
+    { path: routesMap.CHI_COD, name: t('Chi COD'), component: ChiCOD },
   ];
 };
 

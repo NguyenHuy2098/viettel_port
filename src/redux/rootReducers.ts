@@ -23,6 +23,7 @@ import ZFI005 from './ZFI005/reducers';
 import ZFI006 from './ZFI006/reducers';
 import ZFI007 from './ZFI007/reducers';
 import ZFI007M from './ZFI007M/reducers';
+import GACH from './CongNoBuuTa/reducers';
 
 interface RootState {
   auth: UserState;
@@ -48,6 +49,7 @@ interface RootState {
   ZFI006: ZFI006StateType;
   ZFI007: ZFI007StateType;
   ZFI007M: ZFI007MStateType;
+  GACH: CODCHUACHOT;
 }
 
 function createRootReducers(history: History): Reducer<RootState> {
@@ -75,6 +77,7 @@ function createRootReducers(history: History): Reducer<RootState> {
     ZFI006,
     ZFI007,
     ZFI007M,
+    GACH,
   });
 }
 

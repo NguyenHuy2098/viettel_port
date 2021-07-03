@@ -64,6 +64,10 @@ export const KE_KHAI_CHI_PHI = `/ke-khai-chi-phi`;
 export const TAO_MOI_BANG_KE = `${KE_KHAI_CHI_PHI}/tao-moi-bang-ke`;
 export const CHI_TIET_BANG_KE = `${KE_KHAI_CHI_PHI}/chi-tiet-bang-ke/:idBangKe`;
 
+export const GACH = `/Gach`;
+export const CONG_NO_BUU_TA = `${GACH}/cong-no-buu-ta`;
+export const CHI_COD = `${GACH}/chi-cod/:idBangKe`;
+
 export default {
   ROOT: '/',
   HOME: '/home',
@@ -160,4 +164,7 @@ export default {
   KE_KHAI_CHI_PHI,
   TAO_MOI_BANG_KE,
   CHI_TIET_BANG_KE,
+
+  CONG_NO_BUU_TA,
+  CHI_COD,
 };

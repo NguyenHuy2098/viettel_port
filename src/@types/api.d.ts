@@ -4,6 +4,10 @@ declare namespace API {
     ID?: string;
   }
 
+  export interface TEST {
+    id?: number;
+  }
+
   export interface CHILD {
     USER?: string;
     NO_ITEM?: string;

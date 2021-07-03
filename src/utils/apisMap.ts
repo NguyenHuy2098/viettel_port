@@ -36,6 +36,7 @@ const sapApis = [
   'ZFI006',
   'ZFI007',
   'ZFI007M',
+  'thu_tien_buu_ta',
 ];
 
 const crmApis = ['suggest'];

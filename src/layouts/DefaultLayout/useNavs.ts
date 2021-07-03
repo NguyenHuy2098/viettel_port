@@ -156,6 +156,24 @@ const nav = (t: TFunction): any => {
         icon: 'sipIcon-money',
         url: routesMap.KE_KHAI_CHI_PHI,
       },
+      {
+        name: t('Gạch'),
+        icon: 'sipIcon-package',
+        url: routesMap.KHAI_THAC_DEN,
+        // class: classNames({
+        //   hide: IS_PRODUCTION_ENV || IS_QAS_ENV,
+        // }),
+        children: [
+          {
+            name: t('Công nợ bưu tá'),
+            url: routesMap.CONG_NO_BUU_TA,
+          },
+          {
+            name: t('Chi COD'),
+            url: routesMap.CHI_COD,
+          },
+        ],
+      },
       // {
       //   name: t('Báo cáo'),
       //   icon: 'fa fa-sticky-note-o',
